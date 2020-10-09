@@ -1,4 +1,7 @@
 ﻿
+using Domain.Entities.Helpers;
+using System.Runtime.Remoting.Messaging;
+
 namespace Domain.Entities.ValueObjects
 {
     public class MoneyCategory
@@ -31,8 +34,17 @@ namespace Domain.Entities.ValueObjects
             Category = category;
         }
 
-        public int Count { set => count = value; }
+        public int Count { get => count; set => count = value; }
         public int Amount { get => Category * count; }
+
+        /// <summary>
+        /// 表示用金額の文字列を返します。
+        /// </summary>
+        /// <returns></returns>
+        public string AmountWithUnit()
+        {
+            return AmountHelper.AmountWithUnit(Amount);
+        }
 
     }
 }
