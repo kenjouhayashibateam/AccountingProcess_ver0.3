@@ -30,6 +30,15 @@ namespace Domain.Entities
             MoneyCategorys.Add(Denomination.FiftyYenBundle, new MoneyCategory(50 * BundleCount));
             MoneyCategorys.Add(Denomination.OneHundredYenBundle, new MoneyCategory(100 * BundleCount));
             MoneyCategorys.Add(Denomination.FiveHundredYenBundle, new MoneyCategory(500 * BundleCount));
+
+            OtherMoneys[0] = new OtherMoney();
+            OtherMoneys[1] = new OtherMoney();
+            OtherMoneys[2] = new OtherMoney();
+            OtherMoneys[3] = new OtherMoney();
+            OtherMoneys[4] = new OtherMoney();
+            OtherMoneys[5] = new OtherMoney();
+            OtherMoneys[6] = new OtherMoney();
+            OtherMoneys[7] = new OtherMoney();
         }
 
         public int GetTotalAmount()

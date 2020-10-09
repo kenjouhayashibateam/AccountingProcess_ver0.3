@@ -517,7 +517,10 @@ namespace WPF.ViewModels
             {
                 myCashBox.OtherMoneys[otherMoneyNumber-1].Amount = int.Parse(value);
             }
-            
+            else
+            {
+                myCashBox.OtherMoneys[otherMoneyNumber - 1].Amount = 0;
+            }
             TotalAmount = myCashBox.GetTotalAmountWithUnit();
         }
 
