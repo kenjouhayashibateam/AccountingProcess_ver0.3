@@ -5,6 +5,7 @@ using Domain.Entities;
 using static Domain.Entities.ValueObjects.MoneyCategory;
 using Infrastructure;
 using Microsoft.VisualBasic;
+using static Domain.Entities.ValueObjects.OtherMoney;
 
 namespace WPF.ViewModels
 {
@@ -511,8 +512,18 @@ namespace WPF.ViewModels
         private void SetOtherMoneyAmount(string value, int otherMoneyNumber, ref string otherMoneyAmountDisplayValue)
         {
             otherMoneyAmountDisplayValue = int.TryParse(value, out int i) ? i.ToString("N0") : string.Empty;
-            myCashBox.OtherMoneys[otherMoneyNumber - 1] = i;
+
+            if(otherMoneyAmountDisplayValue!=string.Empty)
+            {
+                myCashBox.OtherMoneys[otherMoneyNumber-1].Amount = int.Parse(value);
+            }
+            
             TotalAmount = myCashBox.GetTotalAmountWithUnit();
+        }
+
+        private void SetOtherMontyTitle(string value,int otherMoneyNumber)
+        {
+            myCashBox.OtherMoneys[otherMoneyNumber - 1].Title = value;
         }
 
         /// <summary>
@@ -524,6 +535,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle1 = value;
+                SetOtherMontyTitle(value, 1);
                 CallPropertyChanged();
             }
         }
@@ -550,6 +562,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle2 = value;
+                SetOtherMontyTitle(value, 2);
                 CallPropertyChanged();
             }
         }
@@ -576,6 +589,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle3 = value;
+                SetOtherMontyTitle(value, 3);
                 CallPropertyChanged();
             }
         }
@@ -602,6 +616,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle4 = value;
+                SetOtherMontyTitle(value, 4);
                 CallPropertyChanged();
             }
         }
@@ -628,6 +643,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle5 = value;
+                SetOtherMontyTitle(value, 5);
                 CallPropertyChanged();
             }
         }
@@ -654,6 +670,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle6 = value;
+                SetOtherMontyTitle(value, 6);
                 CallPropertyChanged();
             }
         }
@@ -680,6 +697,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle7 = value;
+                SetOtherMontyTitle(value, 7);
                 CallPropertyChanged();
             }
         }
@@ -706,6 +724,7 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle8 = value;
+                SetOtherMontyTitle(value, 8);
                 CallPropertyChanged();
             }
         }

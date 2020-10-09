@@ -3,14 +3,15 @@ using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 using static Domain.Entities.ValueObjects.MoneyCategory;
+using static Domain.Entities.ValueObjects.OtherMoney;
 
 namespace Domain.Entities
 {
     public class Cashbox
     {
         public static int BundleCount = 50;
-        public int[] OtherMoneys = new int[8];
         public Dictionary<Denomination, MoneyCategory> MoneyCategorys = new Dictionary<Denomination, MoneyCategory>();
+        public OtherMoney[] OtherMoneys = new OtherMoney[8];
 
         public Cashbox()
         {
@@ -33,7 +34,12 @@ namespace Domain.Entities
 
         public int GetTotalAmount()
         {
-            int I = OtherMoneys.Sum();
+            int I = 0;
+
+            foreach(OtherMoney om in OtherMoneys)
+            {
+                I += om.Amount;
+            }
 
             foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys)
             {

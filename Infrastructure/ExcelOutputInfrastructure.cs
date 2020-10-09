@@ -1,14 +1,10 @@
 ﻿using System;
 using Domain.Entities;
-using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using ClosedXML.Excel;
-using System.IO;
-using Microsoft.Office.Interop;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.VisualBasic;
-using DocumentFormat.OpenXml.Spreadsheet;
-using ClosedXML;
+using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
 namespace Infrastructure
 {
@@ -33,30 +29,6 @@ namespace Infrastructure
         {
             myWorkbooks.Open(openPath);
             App.Visible = true;
-            //try
-            //{
-            //    myWorkbook = new XLWorkbook();
-
-            //    bool setInstance = true;
-            //    FileStream fs = new FileStream(openPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            //    myWorkbook = new XLWorkbook(fs, XLEventTracking.Disabled);
-            //    foreach (IXLWorksheet worksheet in myWorkbook.Worksheets)
-            //    {
-            //        if (worksheet.Name == "test")
-            //        {
-            //            setInstance = false;
-            //        }
-            //    }
-            //    if (setInstance)
-            //    {
-            //        myWorkbook.AddWorksheet("test");
-            //    }
-            //    myWorkbook.SaveAs(fs);
-            //}
-            //catch (InvalidCastException e)
-            //{
-            //    Logger.Log(ILogger.LogInfomation.ERROR, e.Message);
-            //}
         }
 
         private void ExcelClose()
@@ -208,57 +180,59 @@ namespace Infrastructure
             myWorksheet.Range(myWorksheet.Cell(4, 2), myWorksheet.Cell(12, 2)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             myWorksheet.Range(myWorksheet.Cell(4, 2), myWorksheet.Cell(12, 2)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(4, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.TenThousandYen].Count;
-            myWorksheet.Cell(5, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveThousandYen].Count;
-            myWorksheet.Cell(6, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneThousandYen].Count;
-            myWorksheet.Cell(7, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveHundredYen].Count;
-            myWorksheet.Cell(8, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneHundredYen].Count;
-            myWorksheet.Cell(9, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiftyYen].Count;
-            myWorksheet.Cell(10, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.TenYen].Count;
-            myWorksheet.Cell(11, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveYen].Count;
-            myWorksheet.Cell(12, 2).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneYen].Count;
+            myWorksheet.Cell(4, 2).Value = cashbox.MoneyCategorys[TenThousandYen].Count;
+            myWorksheet.Cell(5, 2).Value = cashbox.MoneyCategorys[FiveThousandYen].Count;
+            myWorksheet.Cell(6, 2).Value = cashbox.MoneyCategorys[OneThousandYen].Count;
+            myWorksheet.Cell(7, 2).Value = cashbox.MoneyCategorys[FiveHundredYen].Count;
+            myWorksheet.Cell(8, 2).Value = cashbox.MoneyCategorys[OneHundredYen].Count;
+            myWorksheet.Cell(9, 2).Value = cashbox.MoneyCategorys[FiftyYen].Count;
+            myWorksheet.Cell(10, 2).Value = cashbox.MoneyCategorys[TenYen].Count;
+            myWorksheet.Cell(11, 2).Value = cashbox.MoneyCategorys[FiveYen].Count;
+            myWorksheet.Cell(12, 2).Value = cashbox.MoneyCategorys[OneYen].Count;
 
             myWorksheet.Range(myWorksheet.Cell(4, 3), myWorksheet.Cell(12, 3)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             myWorksheet.Range(myWorksheet.Cell(4, 3), myWorksheet.Cell(12, 3)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(4, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.TenThousandYen].AmountWithUnit();
-            myWorksheet.Cell(5, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveThousandYen].AmountWithUnit();
-            myWorksheet.Cell(6, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneThousandYen].AmountWithUnit();
-            myWorksheet.Cell(7, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveHundredYen].AmountWithUnit();
-            myWorksheet.Cell(8, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneHundredYen].AmountWithUnit();
-            myWorksheet.Cell(9, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiftyYen].AmountWithUnit();
-            myWorksheet.Cell(10, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.TenYen].AmountWithUnit();
-            myWorksheet.Cell(11, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveYen].AmountWithUnit();
-            myWorksheet.Cell(12, 3).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneYen].AmountWithUnit();
+            myWorksheet.Cell(4, 3).Value = cashbox.MoneyCategorys[TenThousandYen].AmountWithUnit();
+            myWorksheet.Cell(5, 3).Value = cashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
+            myWorksheet.Cell(6, 3).Value = cashbox.MoneyCategorys[OneThousandYen].AmountWithUnit();
+            myWorksheet.Cell(7, 3).Value = cashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
+            myWorksheet.Cell(8, 3).Value = cashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
+            myWorksheet.Cell(9, 3).Value = cashbox.MoneyCategorys[FiftyYen].AmountWithUnit();
+            myWorksheet.Cell(10, 3).Value = cashbox.MoneyCategorys[TenYen].AmountWithUnit();
+            myWorksheet.Cell(11, 3).Value = cashbox.MoneyCategorys[FiveYen].AmountWithUnit();
+            myWorksheet.Cell(12, 3).Value = cashbox.MoneyCategorys[OneYen].AmountWithUnit();
 
             myWorksheet.Range(myWorksheet.Cell(7, 5), myWorksheet.Cell(7, 12)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             myWorksheet.Range(myWorksheet.Cell(7, 5), myWorksheet.Cell(7, 12)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(7, 5).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveHundredYenBundle].Count;
-            myWorksheet.Cell(8, 5).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneHundredYenBundle].Count;
-            myWorksheet.Cell(9, 5).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiftyYenBundle].Count;
-            myWorksheet.Cell(10, 5).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.TenYenBundle].Count;
-            myWorksheet.Cell(11, 5).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveYenBundle].Count;
-            myWorksheet.Cell(12, 5).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneYenBundle].Count;
+            myWorksheet.Cell(7, 5).Value = cashbox.MoneyCategorys[FiveHundredYenBundle].Count;
+            myWorksheet.Cell(8, 5).Value = cashbox.MoneyCategorys[OneHundredYenBundle].Count;
+            myWorksheet.Cell(9, 5).Value = cashbox.MoneyCategorys[FiftyYenBundle].Count;
+            myWorksheet.Cell(10, 5).Value = cashbox.MoneyCategorys[TenYenBundle].Count;
+            myWorksheet.Cell(11, 5).Value = cashbox.MoneyCategorys[FiveYenBundle].Count;
+            myWorksheet.Cell(12, 5).Value = cashbox.MoneyCategorys[OneYenBundle].Count;
 
             myWorksheet.Range(myWorksheet.Cell(7, 6), myWorksheet.Cell(12, 6)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             myWorksheet.Range(myWorksheet.Cell(7, 6), myWorksheet.Cell(12, 6)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(7, 6).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveHundredYenBundle].AmountWithUnit();
-            myWorksheet.Cell(8, 6).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneHundredYenBundle].AmountWithUnit();
-            myWorksheet.Cell(9, 6).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiftyYenBundle].AmountWithUnit();
-            myWorksheet.Cell(10, 6).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.TenYenBundle].AmountWithUnit();
-            myWorksheet.Cell(11, 6).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.FiveYenBundle].AmountWithUnit();
-            myWorksheet.Cell(12, 6).Value = cashbox.MoneyCategorys[MoneyCategory.Denomination.OneYenBundle].AmountWithUnit();
+            myWorksheet.Cell(7, 6).Value = cashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
+            myWorksheet.Cell(8, 6).Value = cashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
+            myWorksheet.Cell(9, 6).Value = cashbox.MoneyCategorys[FiftyYenBundle].AmountWithUnit();
+            myWorksheet.Cell(10, 6).Value = cashbox.MoneyCategorys[TenYenBundle].AmountWithUnit();
+            myWorksheet.Cell(11, 6).Value = cashbox.MoneyCategorys[FiveYenBundle].AmountWithUnit();
+            myWorksheet.Cell(12, 6).Value = cashbox.MoneyCategorys[OneYenBundle].AmountWithUnit();
 
             myWorksheet.Cell(14, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
             myWorksheet.Cell(14, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
             myWorksheet.Cell(14, 1).Value = "金庫等";
 
-            for(int i=0;i<cashbox.OtherMoneys.Length;i++)
+            for (int i = 0; i < cashbox.OtherMoneys.Length; i++)
             {
-
+                if(i<4)
+                {
+                }
             }
 
             myWorksheet.Cell(20, 1).Style.Font.Bold = true;

@@ -46,6 +46,7 @@
     <Compile Include="Entities\CashBox.cs" />
     <Compile Include="Entities\Helpers\AmountHelper.cs" />
     <Compile Include="Entities\ValueObjects\MoneyCategory.cs" />
+    <Compile Include="Entities\ValueObjects\OtherMoney.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
