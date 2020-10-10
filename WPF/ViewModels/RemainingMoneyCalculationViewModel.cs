@@ -754,8 +754,8 @@ namespace WPF.ViewModels
         private string otherMoneyAmountDisplayValue6;
         private string otherMoneyAmountDisplayValue7;
         private string otherMoneyAmountDisplayValue8;
-        private string otherMoneyTitle1 = "青蓮堂";
-        private string otherMoneyTitle2 = "香華売り場";
+        private string otherMoneyTitle1;
+        private string otherMoneyTitle2;
         private string otherMoneyTitle3;
         private string otherMoneyTitle4;
         private string otherMoneyTitle5;
@@ -770,6 +770,10 @@ namespace WPF.ViewModels
 
             //引数()=>{}の意味　小辻さんに質問する
             OutputCommand = new DelegateCommand(() => { Output(); }, () => { return true; });
+            OtherMoneyTitle1 = "青蓮堂";
+            OtherMoneyTitle2 = "香華売り場";
+            OtherMoneyTitle3 = "春秋庵";
+            OtherMoneyTitle4 = "石材工事部";
         }
 
         public RemainingMoneyCalculationViewModel() : this(new ExcelOutputInfrastructure()) { }

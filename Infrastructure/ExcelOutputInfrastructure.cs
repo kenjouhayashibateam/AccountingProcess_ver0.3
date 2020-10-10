@@ -5,6 +5,7 @@ using ClosedXML.Excel;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.VisualBasic;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
+using ClosedXML;
 
 namespace Infrastructure
 {
@@ -27,7 +28,7 @@ namespace Infrastructure
 
         private void ExcelOpen()
         {
-            myWorkbooks.Open(openPath);
+            myWorkbooks.Open(Filename: openPath, ReadOnly: true);
             App.Visible = true;
         }
 
@@ -82,15 +83,17 @@ namespace Infrastructure
             myWorksheet.Range(myWorksheet.Cell(16, 2), myWorksheet.Cell(16, 3)).Merge();
             myWorksheet.Range(myWorksheet.Cell(17, 2), myWorksheet.Cell(17, 3)).Merge();
             myWorksheet.Range(myWorksheet.Cell(18, 2), myWorksheet.Cell(18, 3)).Merge();
+            myWorksheet.Range(myWorksheet.Cell(19, 2), myWorksheet.Cell(19, 3)).Merge();
 
             myWorksheet.Range(myWorksheet.Cell(15, 5), myWorksheet.Cell(15, 7)).Merge();
             myWorksheet.Range(myWorksheet.Cell(16, 5), myWorksheet.Cell(16, 7)).Merge();
             myWorksheet.Range(myWorksheet.Cell(17, 5), myWorksheet.Cell(17, 7)).Merge();
             myWorksheet.Range(myWorksheet.Cell(18, 5), myWorksheet.Cell(18, 7)).Merge();
-            myWorksheet.Range(myWorksheet.Cell(20, 1), myWorksheet.Cell(20, 7)).Merge();
+            myWorksheet.Range(myWorksheet.Cell(19, 5), myWorksheet.Cell(19, 7)).Merge();
+            myWorksheet.Range(myWorksheet.Cell(21, 1), myWorksheet.Cell(21, 7)).Merge();
 
-            Double[] RowSizes = new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 32.25 };
-            Double[] ColumnSizes =new Double[] { 10.38, 6.88, 14.38, 10.38, 6.75, 6.75, 6.75 };
+            Double[] RowSizes = new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75,18.75, 32.25 };
+            Double[] ColumnSizes =new Double[] { 12.86, 6.88, 14.38, 12.86, 6.75, 6.75, 6.75 };
 
             for(int i=0;i<RowSizes.Length;i++)
             {
@@ -120,11 +123,12 @@ namespace Infrastructure
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-            myWorksheet.Range(myWorksheet.Cell(15,1),myWorksheet.Cell(18,7)).Style
+            myWorksheet.Range(myWorksheet.Cell(15,1),myWorksheet.Cell(19,7)).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
+            myWorksheet.Range(myWorksheet.Cell(15, 4), myWorksheet.Cell(19, 4)).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
 
             DateTime Now = DateTime.Now;
 
@@ -203,8 +207,8 @@ namespace Infrastructure
             myWorksheet.Cell(11, 3).Value = cashbox.MoneyCategorys[FiveYen].AmountWithUnit();
             myWorksheet.Cell(12, 3).Value = cashbox.MoneyCategorys[OneYen].AmountWithUnit();
 
-            myWorksheet.Range(myWorksheet.Cell(7, 5), myWorksheet.Cell(7, 12)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            myWorksheet.Range(myWorksheet.Cell(7, 5), myWorksheet.Cell(7, 12)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            myWorksheet.Range(myWorksheet.Cell(7, 5), myWorksheet.Cell(12, 12)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            myWorksheet.Range(myWorksheet.Cell(7, 5), myWorksheet.Cell(12, 12)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
             myWorksheet.Cell(7, 5).Value = cashbox.MoneyCategorys[FiveHundredYenBundle].Count;
             myWorksheet.Cell(8, 5).Value = cashbox.MoneyCategorys[OneHundredYenBundle].Count;
@@ -225,26 +229,44 @@ namespace Infrastructure
 
             myWorksheet.Cell(14, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
             myWorksheet.Cell(14, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            myWorksheet.Range(myWorksheet.Cell(15, 1), myWorksheet.Cell(19, 7)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            myWorksheet.Range(myWorksheet.Cell(15, 1), myWorksheet.Cell(15, 7)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            myWorksheet.Range(myWorksheet.Cell(16, 1), myWorksheet.Cell(19, 1)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            myWorksheet.Range(myWorksheet.Cell(16, 2), myWorksheet.Cell(19, 2)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            myWorksheet.Range(myWorksheet.Cell(16, 4), myWorksheet.Cell(19, 4)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            myWorksheet.Range(myWorksheet.Cell(16, 5), myWorksheet.Cell(19, 5)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
 
             myWorksheet.Cell(14, 1).Value = "金庫等";
+            myWorksheet.Cell(15, 1).Value = "内容";
+            myWorksheet.Cell(15, 2).Value = "金額";
+            myWorksheet.Cell(15, 4).Value = "内容";
+            myWorksheet.Cell(15, 5).Value = "金額";
 
             for (int i = 0; i < cashbox.OtherMoneys.Length; i++)
             {
                 if(i<4)
                 {
+                    myWorksheet.Cell(16 + i, 1).Value = cashbox.OtherMoneys[i].Title;
+                    myWorksheet.Cell(16 + i, 2).Value = cashbox.OtherMoneys[i].AmountWithUnit();
+                }
+                else
+                {
+                    myWorksheet.Cell(16 + (i - 4), 4).Value = cashbox.OtherMoneys[i].Title;
+                    myWorksheet.Cell(16 + (i - 4), 5).Value = cashbox.OtherMoneys[i].AmountWithUnit();
                 }
             }
 
-            myWorksheet.Cell(20, 1).Style.Font.Bold = true;
-            myWorksheet.Cell(20, 1).Style.Font.FontSize = 20;
-            myWorksheet.Cell(20, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            myWorksheet.Cell(20, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            myWorksheet.Cell(21, 1).Style.Font.Bold = true;
+            myWorksheet.Cell(21, 1).Style.Font.FontSize = 20;
+            myWorksheet.Cell(21, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            myWorksheet.Cell(21, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(20, 1).Value = $"合計　{cashbox.GetTotalAmountWithUnit()}";
+            myWorksheet.Cell(21, 1).Value = $"合計　{cashbox.GetTotalAmountWithUnit()}";
 
             myWorkbook.SaveAs(openPath);
             ExcelOpen();
         }
+
         private double ToInch(double x)
         {
             return x * 0.39370;
