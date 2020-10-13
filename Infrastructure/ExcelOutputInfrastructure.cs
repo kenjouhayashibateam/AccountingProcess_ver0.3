@@ -6,6 +6,7 @@ using Microsoft.Office.Interop.Excel;
 using Microsoft.VisualBasic;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using ClosedXML;
+using System.Runtime.Remoting.Messaging;
 
 namespace Infrastructure
 {
@@ -26,15 +27,39 @@ namespace Infrastructure
 
         public ExcelOutputInfrastructure() : this(new LogFile()) { }
 
+        ~ExcelOutputInfrastructure()
+        {
+            if(App==null)
+            {
+                return;
+            }
+            if(App.Workbooks.Count==0)
+            {
+                App.Quit();
+            }
+        }
+
         private void ExcelOpen()
         {
             myWorkbooks.Open(Filename: openPath, ReadOnly: true);
             App.Visible = true;
         }
 
+        private void CallExcelApplication()
+        {
+            try
+            {
+                App = (Application)Interaction.GetObject(Class : "Excel.Application");
+            }
+            catch
+            {
+                App = new Application();
+            }
+        }
+
         private void ExcelClose()
         {
-            App = (Application)Interaction.GetObject(Class : "Excel.Application");
+            CallExcelApplication();
 
             myWorkbooks = App.Workbooks;
 
@@ -167,19 +192,19 @@ namespace Infrastructure
             myWorksheet.Range(myWorksheet.Cell(6, 4), myWorksheet.Cell(6, 6)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             myWorksheet.Range(myWorksheet.Cell(6, 4), myWorksheet.Cell(6, 6)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(6, 4).Value = "束金種";
+            myWorksheet.Cell(6, 4).Value = $"{Cashbox.BundleCount}枚束";
             myWorksheet.Cell(6, 5).Value = "数量";
             myWorksheet.Cell(6, 6).Value = "金額";
 
             myWorksheet.Range(myWorksheet.Cell(7, 4), myWorksheet.Cell(12, 4)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             myWorksheet.Range(myWorksheet.Cell(7, 4), myWorksheet.Cell(12, 4)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-            myWorksheet.Cell(7, 4).Value = "500円束";
-            myWorksheet.Cell(8, 4).Value = "100円束";
-            myWorksheet.Cell(9, 4).Value = "50円束";
-            myWorksheet.Cell(10, 4).Value = "10円束";
-            myWorksheet.Cell(11, 4).Value = "5円束";
-            myWorksheet.Cell(12, 4).Value = "1円束";
+            myWorksheet.Cell(7, 4).Value = "500円";
+            myWorksheet.Cell(8, 4).Value = "100円";
+            myWorksheet.Cell(9, 4).Value = "50円";
+            myWorksheet.Cell(10, 4).Value = "10円";
+            myWorksheet.Cell(11, 4).Value = "5円";
+            myWorksheet.Cell(12, 4).Value = "1円";
 
             myWorksheet.Range(myWorksheet.Cell(4, 2), myWorksheet.Cell(12, 2)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             myWorksheet.Range(myWorksheet.Cell(4, 2), myWorksheet.Cell(12, 2)).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
@@ -236,7 +261,7 @@ namespace Infrastructure
             myWorksheet.Range(myWorksheet.Cell(16, 4), myWorksheet.Cell(19, 4)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
             myWorksheet.Range(myWorksheet.Cell(16, 5), myWorksheet.Cell(19, 5)).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
 
-            myWorksheet.Cell(14, 1).Value = "金庫等";
+            myWorksheet.Cell(14, 1).Value = "釣り銭等";
             myWorksheet.Cell(15, 1).Value = "内容";
             myWorksheet.Cell(15, 2).Value = "金額";
             myWorksheet.Cell(15, 4).Value = "内容";

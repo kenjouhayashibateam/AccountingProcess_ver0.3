@@ -17,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="1.5*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="0.3*"/>
         </Grid.RowDefinitions>
         <GroupBox x:Name="MoneyCountGroupBox" Header="数量計算" Grid.Row="0" Margin="5">
@@ -81,23 +81,23 @@
                 <TextBlock Text="十円" Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,1"/>
                 <TextBlock Text="五円" Grid.Column="0" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,1"/>
                 <TextBlock Text="一円" Grid.Column="0" Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,1"/>
-                <TextBox x:Name="TenThousandYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding TenThousandYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" />
+                <TextBox x:Name="TenThousandYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding TenThousandYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" />
                 <TextBlock Text="{Binding TenThousandYenAmountWithUnit,Mode=OneWay}"  Grid.Row="1" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="FiveThousandYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiveThousandYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="FiveThousandYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="2" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiveThousandYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiveThousandYenAmountWithUnit,Mode=OneWay}"  Grid.Row="2" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="OneThousandYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="3" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding OneThousandYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="OneThousandYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="3" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding OneThousandYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding OneThousandYenAmountWithUnit,Mode=OneWay}"  Grid.Row="3" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="FiveHundredYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="4" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiveHundredYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="FiveHundredYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="4" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiveHundredYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiveHundredYenAmountWithUnit,Mode=OneWay}"  Grid.Row="4" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="OneHundredYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="5" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding OneHundredYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="OneHundredYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="5" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding OneHundredYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding OneHundredYenAmountWithUnit,Mode=OneWay}"  Grid.Row="5" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="FiftyYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="6" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiftyYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="FiftyYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="6" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiftyYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiftyYenAmountWithUnit,Mode=OneWay}"  Grid.Row="6" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="TenYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="7" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding TenYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="TenYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="7" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding TenYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding TenYenAmountWithUnit,Mode=OneWay}"  Grid.Row="7" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="FiveYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="8" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiveYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="FiveYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="8" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding FiveYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiveYenAmountWithUnit,Mode=OneWay}"  Grid.Row="8" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <TextBox x:Name="OneYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="9" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding OneYenCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
+                <TextBox x:Name="OneYenTextBox" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Grid.Row="9" Grid.Column="1" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding OneYenCount, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding OneYenAmountWithUnit,Mode=OneWay}"  Grid.Row="9" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Grid>
         </GroupBox>
@@ -141,27 +141,27 @@
                 <Label Content="金種" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center"/>
                 <Label Content="数量" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center"/>
                 <Label Content="金額" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center"/>
-                <Label Content="五百円束" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right"/>
-                <TextBox x:Name="FiveHundredYenBundleTextBox" Grid.Column="1" Grid.Row="1" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding FiveHundredYenBundleCount}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                <Label Content="五百円" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right"/>
+                <TextBox x:Name="FiveHundredYenBundleTextBox" Grid.Column="1" Grid.Row="1" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding FiveHundredYenBundleCount, UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiveHundredYenBundleAmountWithUnit,Mode=OneWay}"  Grid.Row="1" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <Label Content="百円束" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right"/>
-                <TextBox x:Name="OneHundredYenBundleTextBox" Grid.Column="1" Grid.Row="2" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding OneHundredYenBundleCount}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                <Label Content="百円" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right"/>
+                <TextBox x:Name="OneHundredYenBundleTextBox" Grid.Column="1" Grid.Row="2" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding OneHundredYenBundleCount, UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding OneHundredYenBundleAmountWithUnit,Mode=OneWay}"  Grid.Row="2" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <Label Content="五十円束" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right"/>
-                <TextBox x:Name="FiftyYenBundleTextBox" Grid.Column="1" Grid.Row="3" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding FiftyYenBundleCount}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                <Label Content="五十円" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right"/>
+                <TextBox x:Name="FiftyYenBundleTextBox" Grid.Column="1" Grid.Row="3" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding FiftyYenBundleCount, UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiftyYenBundleAmountWithUnit,Mode=OneWay}"  Grid.Row="3" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <Label Content="十円束" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TenYenBundleTextBox" Grid.Column="1" Grid.Row="4" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding TenYenBundleCount}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                <Label Content="十円" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right"/>
+                <TextBox x:Name="TenYenBundleTextBox" Grid.Column="1" Grid.Row="4" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding TenYenBundleCount, UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding TenYenBundleAmountWithUnit,Mode=OneWay}"  Grid.Row="4" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <Label Content="五円束" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right"/>
-                <TextBox x:Name="FiveYenBundleTextBox" Grid.Column="1" Grid.Row="5" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding FiveYenBundleCount}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                <Label Content="五円" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right"/>
+                <TextBox x:Name="FiveYenBundleTextBox" Grid.Column="1" Grid.Row="5" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding FiveYenBundleCount, UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding FiveYenBundleAmountWithUnit,Mode=OneWay}"  Grid.Row="5" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                <Label Content="一円束" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="OneYenBundleTextBox" Grid.Column="1" Grid.Row="6" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding OneYenBundleCount}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                <Label Content="一円" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right"/>
+                <TextBox x:Name="OneYenBundleTextBox" Grid.Column="1" Grid.Row="6" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Margin="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Text="{Binding OneYenBundleCount, UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                 <TextBlock Text="{Binding OneYenBundleAmountWithUnit,Mode=OneWay}"  Grid.Row="6" Grid.Column="2" Margin="3,2" VerticalAlignment="Center" HorizontalAlignment="Center" />
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="OtherMoneyGroupBox" Grid.Row="2" Header="その他金庫等" Margin="5">
+        <GroupBox x:Name="OtherMoneyGroupBox" Grid.Row="2" Header="その他釣り銭等" Margin="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -176,17 +176,23 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Column="0" Grid.Row="0" BorderBrush="Black" BorderThickness="1"/>
-                <Border Grid.Column="1" Grid.Row="0" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Column="2" Grid.Row="0" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Column="3" Grid.Row="0" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Column="4" Grid.Row="0" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Column="2" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Column="3" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Column="4" Grid.Row="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                <Button x:Name="OtherMoneyContentsDefaultInput" Grid.Row="0" Grid.Column="1" Content="規定値入力" Margin="20,3">
+                    <Button.InputBindings>
+                        <MouseBinding Command="{Binding SetOtherMoneyDefaultTitleCommand}" MouseAction="LeftClick"/>
+                    </Button.InputBindings>
+                </Button> 
+                <Button x:Name="OtherMoneyContentsClearButton" Grid.Row="0" Grid.Column="4" Content="クリア" Margin="20,3">
+                    <Button.InputBindings>
+                        <MouseBinding Command="{Binding OtherMoneyContentsClearCommand}" MouseAction="LeftClick"/>
+                    </Button.InputBindings>
+                </Button>
+                <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" BorderThickness="1"/>
+                <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                <Border Grid.Column="2" Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                <Border Grid.Column="3" Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                <Border Grid.Column="4" Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
                 <Border Grid.Column="0" Grid.Row="2" BorderBrush="Black" BorderThickness="1,0,1,1"/>
                 <Border Grid.Column="1" Grid.Row="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
                 <Border Grid.Column="2" Grid.Row="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
@@ -202,80 +208,85 @@
                 <Border Grid.Column="2" Grid.Row="4" BorderBrush="Black" BorderThickness="0,0,1,1"/>
                 <Border Grid.Column="3" Grid.Row="4" BorderBrush="Black" BorderThickness="0,0,1,1"/>
                 <Border Grid.Column="4" Grid.Row="4" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="内容" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="金額" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="3" Text="内容" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="0" Grid.Column="4" Text="金額" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox x:Name="OtherMoneyTitle1TextBox" Text="{Binding OtherMoneyTitle1}"  Grid.Row="1" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
-                <Grid Grid.Row="1" Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="8*"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount1TextBox" Text="{Binding OtherMoneyAmountDisplayValue1}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
-                    <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                </Grid>
-                <TextBox x:Name="OtherMoneyTitle2TextBox" Text="{Binding OtherMoneyTitle2}" Grid.Row="2" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <Border Grid.Column="0" Grid.Row="5" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                <Border Grid.Column="1" Grid.Row="5" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                <Border Grid.Column="2" Grid.Row="5" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                <Border Grid.Column="3" Grid.Row="5" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                <Border Grid.Column="4" Grid.Row="5" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="内容" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="金額" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="内容" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="金額" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox x:Name="OtherMoneyTitle1TextBox" Text="{Binding OtherMoneyTitle1}"  Grid.Row="2" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
                 <Grid Grid.Row="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount2TextBox" Text="{Binding OtherMoneyAmountDisplayValue2}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount1TextBox" Text="{Binding OtherMoneyAmountDisplayValue1, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
-                <TextBox x:Name="OtherMoneyTitle3TextBox" Text="{Binding OtherMoneyTitle3}" Grid.Row="3" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <TextBox x:Name="OtherMoneyTitle2TextBox" Text="{Binding OtherMoneyTitle2}" Grid.Row="3" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
                 <Grid Grid.Row="3" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount3TextBox" Text="{Binding OtherMoneyAmountDisplayValue3}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount2TextBox" Text="{Binding OtherMoneyAmountDisplayValue2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
-                <TextBox x:Name="OtherMoneyTitle4TextBox" Text="{Binding OtherMoneyTitle4}" Grid.Row="4" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <TextBox x:Name="OtherMoneyTitle3TextBox" Text="{Binding OtherMoneyTitle3}" Grid.Row="4" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
                 <Grid Grid.Row="4" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount4TextBox" Text="{Binding OtherMoneyAmountDisplayValue4}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount3TextBox" Text="{Binding OtherMoneyAmountDisplayValue3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
-                <TextBox x:Name="OtherMoneyTitle5TextBox" Text="{Binding OtherMoneyTitle5}" Grid.Row="1" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
-                <Grid Grid.Row="1" Grid.Column="4">
+                <TextBox x:Name="OtherMoneyTitle4TextBox" Text="{Binding OtherMoneyTitle4}" Grid.Row="5" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <Grid Grid.Row="5" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount5TextBox" Text="{Binding OtherMoneyAmountDisplayValue5}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount4TextBox" Text="{Binding OtherMoneyAmountDisplayValue4, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
-                <TextBox x:Name="OtherMoneyTitle6TextBox" Text="{Binding OtherMoneyTitle6}" Grid.Row="2" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <TextBox x:Name="OtherMoneyTitle5TextBox" Text="{Binding OtherMoneyTitle5}" Grid.Row="2" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
                 <Grid Grid.Row="2" Grid.Column="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount6TextBox" Text="{Binding OtherMoneyAmountDisplayValue6}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount5TextBox" Text="{Binding OtherMoneyAmountDisplayValue5, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
-                <TextBox x:Name="OtherMoneyTitle7TextBox" Text="{Binding OtherMoneyTitle7}" Grid.Row="3" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <TextBox x:Name="OtherMoneyTitle6TextBox" Text="{Binding OtherMoneyTitle6}" Grid.Row="3" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
                 <Grid Grid.Row="3" Grid.Column="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount7TextBox" Text="{Binding OtherMoneyAmountDisplayValue7}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount6TextBox" Text="{Binding OtherMoneyAmountDisplayValue6, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
-                <TextBox x:Name="OtherMoneyTitle8TextBox" Text="{Binding OtherMoneyTitle8}" Grid.Row="4" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <TextBox x:Name="OtherMoneyTitle7TextBox" Text="{Binding OtherMoneyTitle7}" Grid.Row="4" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
                 <Grid Grid.Row="4" Grid.Column="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount8TextBox" Text="{Binding OtherMoneyAmountDisplayValue8}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount7TextBox" Text="{Binding OtherMoneyAmountDisplayValue7, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBox x:Name="OtherMoneyTitle8TextBox" Text="{Binding OtherMoneyTitle8}" Grid.Row="5" Grid.Column="3" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>
+                <Grid Grid.Row="5" Grid.Column="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="OtherMoneyAmount8TextBox" Text="{Binding OtherMoneyAmountDisplayValue8, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
             </Grid>
@@ -289,7 +300,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="合計金額 : " Margin="10" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" FontWeight="Bold"/>
             <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
-            <Button x:Name="OutputButton" Content="出力" Grid.Column="2" Margin="5">
+            <Button x:Name="OutputButton" Content="{Binding OutputButtonText}" IsEnabled="{Binding OutputButtonEnabled}" Grid.Column="2" Margin="5">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding OutputCommand}" MouseAction="LeftClick"/>
                 </Button.InputBindings>

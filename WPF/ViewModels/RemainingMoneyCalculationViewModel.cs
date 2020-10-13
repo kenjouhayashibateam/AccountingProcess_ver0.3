@@ -6,6 +6,8 @@ using static Domain.Entities.ValueObjects.MoneyCategory;
 using Infrastructure;
 using Microsoft.VisualBasic;
 using static Domain.Entities.ValueObjects.OtherMoney;
+using System.Threading.Tasks;
+using Domain.Entities.ValueObjects;
 
 namespace WPF.ViewModels
 {
@@ -17,8 +19,10 @@ namespace WPF.ViewModels
         private readonly Cashbox myCashBox = new Cashbox();
         private readonly IDataOutput DataOutput;
         public DelegateCommand OutputCommand { get; }
+        private bool outputButtonEnabled;
+        private string outputButtonText;
 
-        #region
+        #region AmountAndCount
         //表示用金額
         private string oneYenBundleAmountWithUnit;
         private string fiveYenBundleAmountWithUnit;
@@ -511,11 +515,13 @@ namespace WPF.ViewModels
         /// <param name="otherMoneyAmountDisplayValue">表示用金額</param>
         private void SetOtherMoneyAmount(string value, int otherMoneyNumber, ref string otherMoneyAmountDisplayValue)
         {
-            otherMoneyAmountDisplayValue = int.TryParse(value, out int i) ? i.ToString("N0") : string.Empty;
+            string s = value.Replace(",", string.Empty);
+
+            otherMoneyAmountDisplayValue = int.TryParse(s, out int i) ? i.ToString("N0") : string.Empty;
 
             if(otherMoneyAmountDisplayValue!=string.Empty)
             {
-                myCashBox.OtherMoneys[otherMoneyNumber-1].Amount = int.Parse(value);
+                myCashBox.OtherMoneys[otherMoneyNumber-1].Amount = int.Parse(s);
             }
             else
             {
@@ -745,7 +751,30 @@ namespace WPF.ViewModels
             }
         }
 
-        #region
+        public bool OutputButtonEnabled
+        {
+            get => outputButtonEnabled;
+            set
+            {
+                outputButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+
+        public string OutputButtonText
+        {
+            get => outputButtonText;
+            set
+            {
+                outputButtonText = value;
+                CallPropertyChanged();
+            }
+        }
+
+        public DelegateCommand OtherMoneyContentsClearCommand { get ; }
+        public DelegateCommand SetOtherMoneyDefaultTitleCommand { get ; }
+
+        #region OtherMoneyContents
         private string otherMoneyAmountDisplayValue1;
         private string otherMoneyAmountDisplayValue2;
         private string otherMoneyAmountDisplayValue3;
@@ -770,17 +799,58 @@ namespace WPF.ViewModels
 
             //引数()=>{}の意味　小辻さんに質問する
             OutputCommand = new DelegateCommand(() => { Output(); }, () => { return true; });
+            OtherMoneyContentsClearCommand = new DelegateCommand(() => { OtherMoneyContentsClear(); }, () => { return true; });
+            SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => { SetOtherMoneyTitleDefault(); }, () => { return true; });
+            OutputButtonEnabled = true;
+            OutputButtonText = "出力";
             OtherMoneyTitle1 = "青蓮堂";
             OtherMoneyTitle2 = "香華売り場";
             OtherMoneyTitle3 = "春秋庵";
             OtherMoneyTitle4 = "石材工事部";
         }
 
+        public void OtherMoneyContentsClear()
+        {
+            OtherMoneyAmountDisplayValue1 = string.Empty;
+            OtherMoneyAmountDisplayValue2 = string.Empty;
+            OtherMoneyAmountDisplayValue3 = string.Empty;
+            OtherMoneyAmountDisplayValue4 = string.Empty;
+            OtherMoneyAmountDisplayValue5 = string.Empty;
+            OtherMoneyAmountDisplayValue6 = string.Empty;
+            OtherMoneyAmountDisplayValue7 = string.Empty;
+            OtherMoneyAmountDisplayValue8 = string.Empty;
+            OtherMoneyTitle1 = string.Empty;
+            OtherMoneyTitle2 = string.Empty;
+            OtherMoneyTitle3 = string.Empty;
+            OtherMoneyTitle4 = string.Empty;
+            OtherMoneyTitle5 = string.Empty;
+            OtherMoneyTitle6 = string.Empty;
+            OtherMoneyTitle7 = string.Empty;
+            OtherMoneyTitle8 = string.Empty;
+        }
+
+        public void SetOtherMoneyTitleDefault()
+        {
+            OutputButtonText = "出力";
+            OtherMoneyTitle1 = "青蓮堂";
+            OtherMoneyTitle2 = "香華売り場";
+            OtherMoneyTitle3 = "春秋庵";
+            OtherMoneyTitle4 = "石材工事部";
+            OtherMoneyTitle5 = string.Empty;
+            OtherMoneyTitle6 = string.Empty;
+            OtherMoneyTitle7 = string.Empty;
+            OtherMoneyTitle8 = string.Empty;
+        }
+
         public RemainingMoneyCalculationViewModel() : this(new ExcelOutputInfrastructure()) { }
 
-        public void Output()
+        public async void Output()
         {
-            DataOutput.CashBoxDataOutput(myCashBox);
+            OutputButtonEnabled = false;
+            OutputButtonText = "出力中";
+            await Task.Run(()=>DataOutput.CashBoxDataOutput(myCashBox));      
+            OutputButtonEnabled = true;
+            OutputButtonText = "出力";
         }
 
     }

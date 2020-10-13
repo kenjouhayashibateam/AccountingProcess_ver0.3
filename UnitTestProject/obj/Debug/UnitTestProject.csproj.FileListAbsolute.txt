@@ -60,3 +60,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\D
 C:\Users\001\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\春秋苑経理システム.exe
 C:\Users\001\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\春秋苑経理システム.pdb
 C:\Users\001\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\春秋苑経理システム.exe.config
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\UnitTestProject.dll.config
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\Infrastructure.dll.config

@@ -1,6 +1,4 @@
-﻿
-using Domain.Entities.Helpers;
-using System.Runtime.Remoting.Messaging;
+﻿using Domain.Entities.Helpers;
 
 namespace Domain.Entities.ValueObjects
 {

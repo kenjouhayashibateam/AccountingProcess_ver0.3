@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\
 WPF
 none
 false
 DEBUG;TRACE
-C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\App.xaml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
 2166768462
 
 101858650911
-15-727871609
+15-83715979
 Views\MainWindow.xaml;Views\RemainingMoneyCalculationView.xaml;
 
 False
