@@ -40,3 +40,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\bin\De
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\Infrastructure.dll.config
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\System.IO.Packaging.xml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\Infrastructure.dll.config
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\System.IO.Packaging.xml

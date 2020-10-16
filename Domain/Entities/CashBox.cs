@@ -1,9 +1,7 @@
 ﻿using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
-using System.Linq;
 using static Domain.Entities.ValueObjects.MoneyCategory;
-using static Domain.Entities.ValueObjects.OtherMoney;
 
 namespace Domain.Entities
 {

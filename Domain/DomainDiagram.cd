@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Domain.Entities.Cashbox">
+    <Position X="5.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAEgAAAAAAAAAAAAAIAAAAQAAAAAAA=</HashCode>
+      <FileName>Entities\CashBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.Helpers.AmountHelper">
+    <Position X="2.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Helpers\AmountHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.ValueObjects.MoneyCategory">
+    <Position X="8.5" Y="0.5" Width="2" />
+    <NestedTypes>
+      <Enum Name="Domain.Entities.ValueObjects.MoneyCategory.Denomination" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Entities\ValueObjects\MoneyCategory.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAASACAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Entities\ValueObjects\MoneyCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Entities.ValueObjects.OtherMoney">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAACACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ValueObjects\OtherMoney.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Domain.Properties.Resources" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Domain.Repositories.IDataOutput" Collapsed="true">
+    <Position X="6.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\IDataOutput.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Domain.Repositories.ILogger" Collapsed="true">
+    <Position X="1.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\ILogger.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

@@ -1,13 +1,9 @@
-﻿using Domain;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using WPF.ViewModels.Commands;
 using Domain.Entities;
 using static Domain.Entities.ValueObjects.MoneyCategory;
 using Infrastructure;
-using Microsoft.VisualBasic;
-using static Domain.Entities.ValueObjects.OtherMoney;
 using System.Threading.Tasks;
-using Domain.Entities.ValueObjects;
 
 namespace WPF.ViewModels
 {
@@ -797,10 +793,9 @@ namespace WPF.ViewModels
         {
             DataOutput = dataOutput;
 
-            //引数()=>{}の意味　小辻さんに質問する
-            OutputCommand = new DelegateCommand(() => { Output(); }, () => { return true; });
-            OtherMoneyContentsClearCommand = new DelegateCommand(() => { OtherMoneyContentsClear(); }, () => { return true; });
-            SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => { SetOtherMoneyTitleDefault(); }, () => { return true; });
+            OutputCommand = new DelegateCommand(() => Output(), () =>  true );
+            OtherMoneyContentsClearCommand = new DelegateCommand(() => OtherMoneyContentsClear(), () => true);
+            SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () =>  true);
             OutputButtonEnabled = true;
             OutputButtonText = "出力";
             OtherMoneyTitle1 = "青蓮堂";

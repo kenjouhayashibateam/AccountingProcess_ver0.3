@@ -25,13 +25,6 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\M
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RemainingMoneyCalculationView.g.cs
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\App.g.cs
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF_MarkupCompile.cache
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF_MarkupCompile.lref
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.exe
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.pdb
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\WPF.exe.config
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\WPF.exe
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\WPF.pdb
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Domain.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Infrastructure.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\ClosedXML.dll
@@ -45,7 +38,6 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Documen
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\ExcelNumberFormat.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\MainWindow.baml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RemainingMoneyCalculationView.baml
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.g.resources
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.Properties.Resources.resources
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.GenerateResource.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CoreCompileInputs.cache
@@ -59,3 +51,12 @@ C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理
 C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\Infrastructure.dll.config
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\春秋苑経理システム.exe.config
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\春秋苑経理システム.exe
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\春秋苑経理システム.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Infrastructure.dll.config
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム_MarkupCompile.cache
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム_MarkupCompile.lref
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.g.resources
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
