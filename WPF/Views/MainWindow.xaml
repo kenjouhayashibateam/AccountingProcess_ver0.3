@@ -4,9 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:b="clr-namespace:WPF.Views.Behaviors"
+        xmlns:vm="clr-namespace:WPF.ViewModels"
+
         mc:Ignorable="d"
+
         Title="春秋苑経理システム" Height="450" Width="800">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding ShowForm}">
+            <b:ShowDiarog/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
+
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowForm}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowFormCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
+
     <Grid>
-        <Button x:Name="ShowRemainingMoneyCalculationView" Content="金庫金額計算" Margin="350,180" Click="ShowRemainingMoneyCalculationView_Click" />
+        <Button x:Name="ShowRemainingMoneyCalculationView" Content="金庫金額計算" Margin="350,180" >
+            <ib:Interaction.Triggers>
+                <ib:EventTrigger EventName="Click">
+                    <ib:InvokeCommandAction Command="{Binding ShowRemainingMoneyCalculation}"/>
+                </ib:EventTrigger>
+            </ib:Interaction.Triggers>
+        </Button>
     </Grid>
 </Window>

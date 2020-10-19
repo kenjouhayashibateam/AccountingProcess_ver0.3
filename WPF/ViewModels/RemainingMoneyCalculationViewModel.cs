@@ -515,9 +515,9 @@ namespace WPF.ViewModels
 
             otherMoneyAmountDisplayValue = int.TryParse(s, out int i) ? i.ToString("N0") : string.Empty;
 
-            if(otherMoneyAmountDisplayValue!=string.Empty)
+            if (otherMoneyAmountDisplayValue != string.Empty)
             {
-                myCashBox.OtherMoneys[otherMoneyNumber-1].Amount = int.Parse(s);
+                myCashBox.OtherMoneys[otherMoneyNumber - 1].Amount = int.Parse(s);
             }
             else
             {
@@ -526,7 +526,7 @@ namespace WPF.ViewModels
             TotalAmount = myCashBox.GetTotalAmountWithUnit();
         }
 
-        private void SetOtherMontyTitle(string value,int otherMoneyNumber)
+        private void SetOtherMontyTitle(string value, int otherMoneyNumber)
         {
             myCashBox.OtherMoneys[otherMoneyNumber - 1].Title = value;
         }
@@ -767,8 +767,8 @@ namespace WPF.ViewModels
             }
         }
 
-        public DelegateCommand OtherMoneyContentsClearCommand { get ; }
-        public DelegateCommand SetOtherMoneyDefaultTitleCommand { get ; }
+        public DelegateCommand OtherMoneyContentsClearCommand { get; }
+        public DelegateCommand SetOtherMoneyDefaultTitleCommand { get; }
 
         #region OtherMoneyContents
         private string otherMoneyAmountDisplayValue1;
@@ -793,9 +793,9 @@ namespace WPF.ViewModels
         {
             DataOutput = dataOutput;
 
-            OutputCommand = new DelegateCommand(() => Output(), () =>  true );
+            OutputCommand = new DelegateCommand(() => Output(), () => true);
             OtherMoneyContentsClearCommand = new DelegateCommand(() => OtherMoneyContentsClear(), () => true);
-            SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () =>  true);
+            SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
             OutputButtonEnabled = true;
             OutputButtonText = "出力";
             OtherMoneyTitle1 = "青蓮堂";
@@ -843,7 +843,7 @@ namespace WPF.ViewModels
         {
             OutputButtonEnabled = false;
             OutputButtonText = "出力中";
-            await Task.Run(()=>DataOutput.CashBoxDataOutput(myCashBox));      
+            await Task.Run(() => DataOutput.CashBoxDataOutput(myCashBox));
             OutputButtonEnabled = true;
             OutputButtonText = "出力";
         }
