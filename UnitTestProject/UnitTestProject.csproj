@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\ValueObjects\MoneyCategoryTests.cs" />
+    <Compile Include="Entities\ValueObjects\OtherMoneyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModelTests.cs" />
   </ItemGroup>

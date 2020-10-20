@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WPF.Behavior
+namespace WPF.Views.Behaviors
 {
     public static class TextBoxAttachment
     {

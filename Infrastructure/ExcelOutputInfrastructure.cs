@@ -23,7 +23,7 @@ namespace Infrastructure
             Logger = logger;
         }
 
-        public ExcelOutputInfrastructure() : this(new LogFile()) { }
+        public ExcelOutputInfrastructure() : this(new LogFileInfrastructure()) { }
 
         ~ExcelOutputInfrastructure()
         {

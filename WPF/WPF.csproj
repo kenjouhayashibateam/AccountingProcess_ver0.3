@@ -70,8 +70,12 @@
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
+    <Compile Include="Views\Behaviors\MessageBoxBehavior.cs" />
     <Compile Include="Views\Behaviors\ShowDiarog.cs" />
     <Compile Include="Views\Behaviors\TextBoxAttachment.cs" />
+    <Compile Include="Views\Behaviors\WindowClosingBehavior.cs" />
+    <Compile Include="Views\Datas\IClosing.cs" />
+    <Compile Include="Views\Datas\MessageBoxInfo.cs" />
     <Compile Include="Views\Datas\ShowFormData.cs" />
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">
       <DependentUpon>RemainingMoneyCalculationView.xaml</DependentUpon>

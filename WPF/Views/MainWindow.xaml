@@ -16,15 +16,25 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
+    <i:Interaction.Behaviors>
+        <b:WindowClosingBehavior/>
+    </i:Interaction.Behaviors>
+    
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowForm}">
             <b:ShowDiarog/>
+        </interactions:PropertyChangedTrigger>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageInfo}">
+            <b:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
 
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowForm}" Value="true">
             <ib:InvokeCommandAction Command="{Binding ShowFormCommand}"/>
+        </ib:DataTrigger>
+        <ib:DataTrigger Binding="{Binding CallClosingMessage}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
 

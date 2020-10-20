@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
         xmlns:vm="clr-namespace:WPF.ViewModels"
-        xmlns:behavior="clr-namespace:WPF.Behavior"
+        xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         Title="金庫金額計算表" Height="800" Width="400" WindowStartupLocation="CenterOwner">
 
     <Window.DataContext>

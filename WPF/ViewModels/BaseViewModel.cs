@@ -14,18 +14,9 @@ namespace WPF.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public DelegateCommand ShowFormCommand { get; set; }
-        private ShowFormData showForm;
         private bool callShowForm;
 
-        public ShowFormData ShowForm
-        {
-            get => showForm;
-            set
-            {
-                showForm = value;
-                CallPropertyChanged();
-            }
-        }
+        public ShowFormData ShowForm { get; set; }
 
         public bool CallShowForm
         {

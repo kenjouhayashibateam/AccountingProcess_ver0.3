@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Infrastructure
 {
-    class LogFile : ILogger
+    class LogFileInfrastructure : ILogger
     {
         public void Log(ILogger.LogInfomation info, string message)
         {
