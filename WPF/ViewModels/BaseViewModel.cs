@@ -13,7 +13,7 @@ namespace WPF.ViewModels
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public DelegateCommand ShowFormCommand;
+        public DelegateCommand ShowFormCommand { get; set; }
         private ShowFormData showForm;
         private bool callShowForm;
 
@@ -58,16 +58,19 @@ namespace WPF.ViewModels
 
         protected void CreateShowFormCommand(Window myForm)
         {
-            ShowFormCommand = new DelegateCommand(() =>
-            {
-                ShowForm = new ShowFormData()
-                {
-                    FormData = myForm
-                };
-
-                CallPropertyChanged(nameof(ShowForm));
-            }, () => true);
+            ShowFormCommand = new DelegateCommand(() =>SetShowForm(myForm) , () => true);
+            CallPropertyChanged(nameof(ShowFormCommand));
             CallShowForm = true;
+        }
+
+        private void SetShowForm(Window myForm)
+        {
+            ShowForm = new ShowFormData()
+            {
+                FormData = myForm
+            };
+
+            CallPropertyChanged(nameof(ShowForm));
         }
     }
 }

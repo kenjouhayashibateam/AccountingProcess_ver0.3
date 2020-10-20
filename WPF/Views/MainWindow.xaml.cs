@@ -24,12 +24,5 @@ namespace WPF.Views
         {
             InitializeComponent();
         }
-
-        private void ShowRemainingMoneyCalculationView_Click(object sender, RoutedEventArgs e)
-        {
-            //画面遷移のプログラムを作る時に削除する
-            RemainingMoneyCalculationView rmc = new RemainingMoneyCalculationView();
-            rmc.ShowDialog();
-        }
     }
 }

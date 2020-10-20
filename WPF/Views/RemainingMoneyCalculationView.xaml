@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:behavior="clr-namespace:WPF.Behavior"
-        Title="金庫金額計算表" Height="800" Width="400">
+        Title="金庫金額計算表" Height="800" Width="400" WindowStartupLocation="CenterOwner">
 
     <Window.DataContext>
         <vm:RemainingMoneyCalculationViewModel/>

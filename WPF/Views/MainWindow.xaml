@@ -9,10 +9,8 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
-
         mc:Ignorable="d"
-
-        Title="春秋苑経理システム" Height="450" Width="800">
+        Title="春秋苑経理システム" Height="450" Width="800" WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -32,11 +30,9 @@
 
     <Grid>
         <Button x:Name="ShowRemainingMoneyCalculationView" Content="金庫金額計算" Margin="350,180" >
-            <ib:Interaction.Triggers>
-                <ib:EventTrigger EventName="Click">
-                    <ib:InvokeCommandAction Command="{Binding ShowRemainingMoneyCalculation}"/>
-                </ib:EventTrigger>
-            </ib:Interaction.Triggers>
+            <Button.InputBindings>
+                <MouseBinding Command="{Binding ShowRemainingMoneyCalculation}" MouseAction="LeftClick"/>
+            </Button.InputBindings>
         </Button>
     </Grid>
 </Window>

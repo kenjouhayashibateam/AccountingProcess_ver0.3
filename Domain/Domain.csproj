@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Entities\CashBox.cs" />
     <Compile Include="Entities\Helpers\AmountHelper.cs" />
+    <Compile Include="Entities\Slip.cs" />
     <Compile Include="Entities\ValueObjects\MoneyCategory.cs" />
     <Compile Include="Entities\ValueObjects\OtherMoney.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,6 +54,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\IDataBaseConnect.cs" />
     <Compile Include="Repositories\IDataOutput.cs" />
     <Compile Include="Repositories\ILogger.cs" />
   </ItemGroup>

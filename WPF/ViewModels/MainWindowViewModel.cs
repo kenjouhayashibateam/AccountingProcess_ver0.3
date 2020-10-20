@@ -1,37 +1,24 @@
-﻿using System.Windows.Input;
+﻿using System.Linq.Expressions;
+using System.Windows.Input;
 using WPF.ViewModels.Commands;
 
 namespace WPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        private bool callRemainingMoneyCalculation=false;
-        private ICommand showRemainingMoneyCalculation;
+        public DelegateCommand ShowRemainingMoneyCalculation { get; }
 
-        public bool CallRemainingMoneyCalculation
+        public MainWindowViewModel()
         {
-            get => callRemainingMoneyCalculation;
-            set
-            {
-                callRemainingMoneyCalculation = value;
-                CallPropertyChanged();
-            }
+            ShowRemainingMoneyCalculation= new DelegateCommand(                () => SetShowRemainingMoneyCalculationView(),
+                () => true
+                );
         }
 
-        public ICommand ShowRemainingMoneyCalculation
+        private void SetShowRemainingMoneyCalculationView()
         {
-            get
-            {
-                showRemainingMoneyCalculation = new DelegateCommand(() =>
-                {
-                    CreateShowFormCommand(new Views.RemainingMoneyCalculationView());
-                    CallShowForm = true;
-                    CallPropertyChanged();
-                },
-                () => true);
-                return showRemainingMoneyCalculation;
-            }
-            set => showRemainingMoneyCalculation = value;
+            CreateShowFormCommand(new Views.RemainingMoneyCalculationView());
+            CallPropertyChanged(nameof(ShowRemainingMoneyCalculation));
         }
     }
 }
