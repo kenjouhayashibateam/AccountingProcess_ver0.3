@@ -24,5 +24,10 @@ namespace WPF.Views
         {
             InitializeComponent();
         }
+
+        private void WindowCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

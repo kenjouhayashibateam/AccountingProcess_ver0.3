@@ -14,9 +14,5 @@ namespace Domain.Entities.ValueObjects
         /// 場所
         /// </summary>
         public readonly string Location;
-
-
-        
-
     }
 }

@@ -39,10 +39,42 @@
     </ib:Interaction.Triggers>
 
     <Grid>
-        <Button x:Name="ShowRemainingMoneyCalculationView" Content="金庫金額計算" Margin="350,180" >
-            <Button.InputBindings>
-                <MouseBinding Command="{Binding ShowRemainingMoneyCalculation}" MouseAction="LeftClick"/>
-            </Button.InputBindings>
-        </Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理をする場所を選んでください">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton Content="管理事務所" Grid.Column="0" IsChecked="{Binding KanriJimushoChecked}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">
+                    <RadioButton.InputBindings>
+                        <MouseBinding Command="{Binding SetKanriJimushoIDCommand}" MouseAction="LeftClick"/>
+                    </RadioButton.InputBindings>
+                </RadioButton>
+                <RadioButton Content="青蓮堂" Grid.Column="1" IsChecked="{Binding ShorendoChecked}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10">
+                    <RadioButton.InputBindings>
+                        <MouseBinding Command="{Binding SetShorendoIDCommand}" MouseAction="LeftClick"/>
+                    </RadioButton.InputBindings>
+                </RadioButton>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="1" IsEnabled="{Binding ProcessFeatureEnabled}">
+            <Button x:Name="ShowRemainingMoneyCalculationViewButton" Grid.Row="0" Content="金庫金額計算" Margin="350,120" >
+                <Button.InputBindings>
+                    <MouseBinding Command="{Binding ShowRemainingMoneyCalculation}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>            
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="WindowCloseButton" Grid.Column="1" Content="閉じる"  Margin="10,25" Click="WindowCloseButton_Click"/>
+        </Grid>
     </Grid>
 </Window>
