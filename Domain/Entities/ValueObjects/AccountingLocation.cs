@@ -1,4 +1,7 @@
 ﻿
+using Domain.Repositories;
+using System.Runtime.InteropServices;
+
 namespace Domain.Entities.ValueObjects
 {
     /// <summary>

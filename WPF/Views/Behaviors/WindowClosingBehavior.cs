@@ -5,6 +5,9 @@ using WPF.Views.Datas;
 
 namespace WPF.Views.Behaviors
 {
+    /// <summary>
+    /// Windowを閉じるのをキャンセルさせるBehavior
+    /// </summary>
     public class WindowClosingBehavior:Behavior<Window>
     {
         protected override void OnAttached()

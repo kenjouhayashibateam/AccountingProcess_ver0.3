@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using WPF.ViewModels.Commands;
+using WPF.Views;
 using WPF.Views.Datas;
 
 namespace WPF.ViewModels
@@ -13,11 +14,11 @@ namespace WPF.ViewModels
         private bool processFeatureEnabled;
         private int locationID;
 
-
         public DelegateCommand SetKanriJimushoIDCommand { get; }
         public DelegateCommand SetShorendoIDCommand { get; }
         public DelegateCommand ShowRemainingMoneyCalculation { get; }
-        
+        public DelegateCommand MessageBoxCommand { get; }
+
         public MainWindowViewModel()
         {
             ShowRemainingMoneyCalculation =
@@ -49,7 +50,6 @@ namespace WPF.ViewModels
             CallPropertyChanged(nameof(MessageInfo));
         }
 
-        public DelegateCommand MessageBoxCommand { get; }
 
         public MessageBoxInfo MessageInfo
         {

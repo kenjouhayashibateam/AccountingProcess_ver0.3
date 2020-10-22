@@ -74,3 +74,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csp
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\test.g.cs
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\test.baml

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities.ValueObjects;
 
 namespace Domain.Repositories
 {
     /// <summary>
     /// データベースに接続します。
     /// </summary>
-    interface IDataBaseConnect
+    public interface IDataBaseConnect
     {
+        public void Registration(AccountingLocation accountingLocation);
     }
 }
