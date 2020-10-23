@@ -61,6 +61,15 @@ namespace Infrastructure.Properties {
         }
         
         /// <summary>
+        ///   &quot;PROVIDER=SQLOLEDB;SERVER=192.168.44.163\SQLEXPRESS2014;DATABASE=AccountingProcessDataBase;user id=sa;password=sqlserver&quot; に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string DATABASECONNECTIONSTRING {
+            get {
+                return ResourceManager.GetString("DATABASECONNECTIONSTRING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   .\logs\ExceptionLogs.txt に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string LogFilePath {

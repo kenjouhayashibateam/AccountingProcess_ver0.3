@@ -66,10 +66,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\AccountingLocationManagementViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
+    <Compile Include="ViewModels\Commands\ScreenTransition.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
+    <Compile Include="Views\AccountingLocationManagementView.xaml.cs">
+      <DependentUpon>AccountingLocationManagementView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Behaviors\MessageBoxBehavior.cs" />
     <Compile Include="Views\Behaviors\ShowDiarog.cs" />
     <Compile Include="Views\Behaviors\TextBoxAttachment.cs" />
@@ -80,6 +85,10 @@
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">
       <DependentUpon>RemainingMoneyCalculationView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\AccountingLocationManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

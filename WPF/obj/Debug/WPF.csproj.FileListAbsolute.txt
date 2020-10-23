@@ -76,3 +76,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋�
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\test.g.cs
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\test.baml
+C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\AccountingLocationManagementView.g.cs
+C:\Users\001\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\AccountingLocationManagementView.baml

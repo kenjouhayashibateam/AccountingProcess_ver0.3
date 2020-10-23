@@ -12,5 +12,4 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Doma
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.pdb
-C:\Users\001\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csprojAssemblyReference.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csprojAssemblyReference.cache

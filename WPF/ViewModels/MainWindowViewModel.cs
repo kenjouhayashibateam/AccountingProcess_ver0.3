@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
 using System.Windows;
 using WPF.ViewModels.Commands;
@@ -13,10 +14,12 @@ namespace WPF.ViewModels
         private bool callClosingMessage;
         private bool processFeatureEnabled;
         private int locationID;
+        private readonly ScreenTransition screenTransition = new ScreenTransition();
 
         public DelegateCommand SetKanriJimushoIDCommand { get; }
         public DelegateCommand SetShorendoIDCommand { get; }
         public DelegateCommand ShowRemainingMoneyCalculation { get; }
+        public DelegateCommand ShowAccountingLocationManagement { get; }
         public DelegateCommand MessageBoxCommand { get; }
 
         public MainWindowViewModel()
@@ -29,11 +32,19 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetKanriJimushoID(), () => true);
             SetShorendoIDCommand =
                 new DelegateCommand(() => SetShorendoID(), () => true);
+            ShowAccountingLocationManagement =
+                new DelegateCommand(() => SetShowAccountingLocationManagementView(), () => true);
+        }
+
+        private void SetShowAccountingLocationManagementView()
+        {
+            CreateShowFormCommand(screenTransition.AccountingLocationManagement());
+            CallPropertyChanged();
         }
 
         private void SetShowRemainingMoneyCalculationView()
         {
-            CreateShowFormCommand(new Views.RemainingMoneyCalculationView());
+            CreateShowFormCommand(screenTransition.RemainingMoneyCalculation());
             CallPropertyChanged();
         }
 
