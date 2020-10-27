@@ -81,9 +81,9 @@
         </GroupBox>
         <GroupBox x:Name="DataManagementGroupBox" Header="各種管理" Grid.Row="2" Margin="5">
             <Grid>
-                <Button x:Name="ShowAccountingManagementViewButton" Grid.Row="0" Grid.Column="0" Content="経理担当場所管理（未実装）" Margin="300,20">
+                <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="0" Content="データ管理（未実装）" Margin="300,20">
                     <Button.InputBindings>
-                        <MouseBinding Command="{Binding ShowAccountingLocationManagement}" MouseAction="LeftClick"/>
+                        <MouseBinding Command="{Binding ShowDataManagement}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
             </Grid>
@@ -93,7 +93,7 @@
                 <ColumnDefinition Width="9*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="WindowCloseButton" Grid.Column="1" Content="閉じる"  Margin="10,25" Click="WindowCloseButton_Click"/>
+            <Button x:Name="WindowCloseButton" Grid.Column="1" Content="閉じる"  Margin="10,15" Click="WindowCloseButton_Click"/>
         </Grid>
     </Grid>
 </Window>

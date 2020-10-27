@@ -1,9 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Entities.ValueObjects;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Windows;
 using WPF.ViewModels.Commands;
-using WPF.Views;
 using WPF.Views.Datas;
 
 namespace WPF.ViewModels
@@ -19,7 +16,7 @@ namespace WPF.ViewModels
         public DelegateCommand SetKanriJimushoIDCommand { get; }
         public DelegateCommand SetShorendoIDCommand { get; }
         public DelegateCommand ShowRemainingMoneyCalculation { get; }
-        public DelegateCommand ShowAccountingLocationManagement { get; }
+        public DelegateCommand ShowDataManagement { get; }
         public DelegateCommand MessageBoxCommand { get; }
 
         public MainWindowViewModel()
@@ -32,13 +29,13 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetKanriJimushoID(), () => true);
             SetShorendoIDCommand =
                 new DelegateCommand(() => SetShorendoID(), () => true);
-            ShowAccountingLocationManagement =
-                new DelegateCommand(() => SetShowAccountingLocationManagementView(), () => true);
+            ShowDataManagement =
+                new DelegateCommand(() => SetShowDataManagementView(), () => true);
         }
 
-        private void SetShowAccountingLocationManagementView()
+        private void SetShowDataManagementView()
         {
-            CreateShowFormCommand(screenTransition.AccountingLocationManagement());
+            CreateShowFormCommand(screenTransition.DataManagement());
             CallPropertyChanged();
         }
 
@@ -149,5 +146,9 @@ namespace WPF.ViewModels
             return MessageInfo.Result != MessageBoxResult.Yes;
         }
 
+        public override void ValidationProperty(string propertyName, object value)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

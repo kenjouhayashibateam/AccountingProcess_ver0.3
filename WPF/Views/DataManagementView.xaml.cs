@@ -17,11 +17,16 @@ namespace WPF.Views
     /// <summary>
     /// AccountingLocationManagementView.xaml の相互作用ロジック
     /// </summary>
-    public partial class AccountingLocationManagementView : Window
+    public partial class DataManagementView : Window
     {
-        public AccountingLocationManagementView()
+        public DataManagementView()
         {
             InitializeComponent();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -4,6 +4,7 @@ using Domain.Entities;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Infrastructure;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace WPF.ViewModels
 {
@@ -881,5 +882,9 @@ namespace WPF.ViewModels
             OutputButtonText = "出力";
         }
 
+        public override void ValidationProperty(string propertyName, object value)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

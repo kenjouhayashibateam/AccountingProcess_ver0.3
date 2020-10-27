@@ -13,10 +13,11 @@ namespace WPF.Views.Behaviors
             ShowFormData showForm = (ShowFormData)e.NewValue;
             Window Parent = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
 
-            Parent.ShowInTaskbar = false;
             showForm.FormData.Owner = Parent;
+            showForm.FormData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            showForm.FormData.Owner.Visibility = Visibility.Hidden;
             showForm.FormData.ShowDialog();
-            Parent.ShowInTaskbar = true;
+            showForm.FormData.Owner.Visibility = Visibility.Visible;
         }
     }
 }

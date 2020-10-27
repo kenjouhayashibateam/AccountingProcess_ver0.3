@@ -17,9 +17,9 @@ namespace WPF.ViewModels.Commands
             return new RemainingMoneyCalculationView();
         }
 
-        public AccountingLocationManagementView AccountingLocationManagement()
+        public DataManagementView DataManagement()
         {
-            return new AccountingLocationManagementView();
+            return new DataManagementView();
         }
     }
 }
