@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Repositories;
+using Infrastructure;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,7 +44,7 @@ namespace WPF.ViewModels
         {
             get
             {
-                return currentErrors.Count > 0;
+                return CurrentErrors.Count > 0;
             }
         }
         
@@ -81,26 +83,26 @@ namespace WPF.ViewModels
 
         public IEnumerable GetErrors(string propertyName)
         {
-            if (!currentErrors.ContainsKey(propertyName))
+            if (!CurrentErrors.ContainsKey(propertyName))
                 return null;
 
-            return currentErrors[propertyName];
+            return CurrentErrors[propertyName];
         }
 
-        public Dictionary<string, string> currentErrors=new Dictionary<string, string>();
+        public Dictionary<string, string> CurrentErrors=new Dictionary<string, string>();
 
         protected void AddError(string propertyName,string error)
         {
-            if (!currentErrors.ContainsKey(propertyName))
-                currentErrors.Add(propertyName, error);
+            if (!CurrentErrors.ContainsKey(propertyName))
+                CurrentErrors.Add(propertyName, error);
 
             OnErrorsChanged(propertyName);
         }
 
         protected void RemoveError(string propertyName)
         {
-            if (currentErrors.ContainsKey(propertyName))
-                currentErrors.Remove(propertyName);
+            if (CurrentErrors.ContainsKey(propertyName))
+                CurrentErrors.Remove(propertyName);
 
             OnErrorsChanged(propertyName);
         }

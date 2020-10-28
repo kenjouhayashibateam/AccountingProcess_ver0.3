@@ -11,8 +11,8 @@
     <Window.DataContext>
         <vm:DataManagementViewModel/>
     </Window.DataContext>
-    
-    <Grid>
+
+     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="6*"/>
@@ -24,11 +24,15 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton Content="登録" Grid.Column="0" IsChecked="False" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    
+                <RadioButton Content="登録" Grid.Column="0" IsChecked="{Binding IsCheckedRegistration}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <RadioButton.InputBindings>
+                        <MouseBinding Command="{Binding SetDataRegistrationCommand}" MouseAction="LeftClick"/>
+                    </RadioButton.InputBindings>
                 </RadioButton>
                 <RadioButton Content="更新" Grid.Column="1" IsChecked="False" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    
+                    <RadioButton.InputBindings>
+                        <MouseBinding Command="{Binding SetDataUpdateCommand}" MouseAction="LeftClick"/>
+                    </RadioButton.InputBindings>
                 </RadioButton>
             </Grid>
         </GroupBox>
@@ -47,34 +51,43 @@
                         <GroupBox Header="詳細" Margin="5" Grid.Row="0">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="9*"/>
                                     <RowDefinition Height="1*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Text="{Binding RepIDField}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Text="担当者名" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsReadOnly="{Binding IsRepDataLock}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
-                                <TextBlock Text="パスワード" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                <TextBox x:Name="CurrentPasswordTextBox" Grid.Row="5" Margin="5" Text="{Binding RepCurrentPassword}" InputMethod.PreferredImeState="Off" />
-                                <TextBlock Text="新パスワード" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                <TextBox x:Name="NewPasswordTextBox" Grid.Row="7" Margin="5" Text="{Binding RepNewPassword}" IsEnabled="{Binding IsRepPasswordLock}"/>
-                                <Grid Grid.Row="8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="再入力" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                    
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Text="{Binding RepIDField}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <TextBlock Text="担当者名" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsReadOnly="{Binding IsRepDataLock}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
+                                    <TextBlock Text="パスワード" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="CurrentPasswordTextBox" Grid.Row="5" Margin="5" Text="{Binding RepCurrentPassword}" InputMethod.PreferredImeState="Off" />
+                                    <TextBlock Text="新パスワード" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
+                                    <TextBox x:Name="NewPasswordTextBox" Grid.Row="7" Margin="5" ToolTip="{Binding NewPasswordTooltip}" Text="{Binding RepNewPassword}" IsEnabled="{Binding IsRepPasswordLock}"/>
+                                    <Grid Grid.Row="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="再入力" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
+                                        <TextBlock Grid.Column="1" Foreground="Red"/>
+                                    </Grid>
+                                    <TextBox x:Name="ReenterPasswordTextBox" Grid.Row="9" Margin="5" Text="{Binding RepReenterPassword,ValidatesOnDataErrors=True}" InputMethod.PreferredImeState="Off"/>
                                 </Grid>
-                                <TextBox x:Name="ReenterPasswordTextBox" Grid.Row="9" Margin="5" Text="{Binding RepReenterPassword}" InputMethod.PreferredImeState="Off"/>
+                                <Button x:Name="RepRegistrationButton" Grid.Row="1" Margin="15,5" Content="{Binding DataOperationButtonContent}">
+                                    
+                                </Button>
                             </Grid>
                         </GroupBox>
                     </Grid>

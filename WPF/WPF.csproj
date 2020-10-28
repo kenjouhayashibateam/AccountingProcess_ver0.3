@@ -81,6 +81,7 @@
     <Compile Include="Views\Behaviors\TextBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\WindowClosingBehavior.cs" />
     <Compile Include="Views\Datas\IClosing.cs" />
+    <Compile Include="Views\Datas\InputValidation.cs" />
     <Compile Include="Views\Datas\MessageBoxInfo.cs" />
     <Compile Include="Views\Datas\ShowFormData.cs" />
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">

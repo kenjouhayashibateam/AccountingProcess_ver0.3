@@ -62,6 +62,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultInfrastructure.cs" />
     <Compile Include="ExcelOutputInfrastructure.cs" />
     <Compile Include="LogFileInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

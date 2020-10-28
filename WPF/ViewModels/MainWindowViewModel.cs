@@ -7,11 +7,15 @@ namespace WPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel, IClosing
     {
+        #region Properties
         private MessageBoxInfo messageInfo;
         private bool callClosingMessage;
         private bool processFeatureEnabled;
         private int locationID;
         private readonly ScreenTransition screenTransition = new ScreenTransition();
+        private bool shorendoChecked;
+        private bool kanriJimushoChecked;
+        #endregion
 
         public DelegateCommand SetKanriJimushoIDCommand { get; }
         public DelegateCommand SetShorendoIDCommand { get; }
@@ -124,9 +128,6 @@ namespace WPF.ViewModels
             }
         }
 
-        private bool shorendoChecked;
-
-        private bool kanriJimushoChecked;
 
         private void SetKanriJimushoID()
         {

@@ -839,7 +839,7 @@ namespace WPF.ViewModels
             OtherMoneyAmountDisplayValue8 = myCashbox.OtherMoneys[7].AmountWithUnit();
         }
 
-        public void OtherMoneyContentsClear()
+        private void OtherMoneyContentsClear()
         {
             OtherMoneyAmountDisplayValue1 = string.Empty;
             OtherMoneyAmountDisplayValue2 = string.Empty;
@@ -859,7 +859,7 @@ namespace WPF.ViewModels
             OtherMoneyTitle8 = string.Empty;
         }
 
-        public void SetOtherMoneyTitleDefault()
+        private void SetOtherMoneyTitleDefault()
         {
             OtherMoneyTitle1 = "青蓮堂";
             OtherMoneyTitle2 = "香華売り場";
@@ -871,7 +871,7 @@ namespace WPF.ViewModels
             OtherMoneyTitle8 = string.Empty;
         }
 
-        public RemainingMoneyCalculationViewModel() : this(new ExcelOutputInfrastructure()) { }
+        public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
 
         public async void Output()
         {
