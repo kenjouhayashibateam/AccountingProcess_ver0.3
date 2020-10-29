@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
 using WPF.ViewModels.Commands;
+using WPF.Views.Behaviors;
 
 namespace WPF.ViewModels
 {
@@ -21,7 +22,7 @@ namespace WPF.ViewModels
         private string newPasswordTooltip;
         private string reenterPasswordTooltip;
         private string dataOperationButtonContent;
-        private bool isCheckedRegistration=true;
+        private bool isCheckedRegistration;
         private bool isCheckdUpdate;
         private string referenceRep;
         private bool repValidity;
@@ -37,12 +38,18 @@ namespace WPF.ViewModels
             更新
         }
 
-        private readonly Rep CurrentRep = new Rep();
+        public readonly Rep CurrentRep;
 
         public DataManagementViewModel()
         {
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
+            SetDataOperation(DataOperation.登録);
+            CurrentRep = new Rep
+            {
+                Name = "a a",
+                Password = "aaa"
+            };
         }
 
         public DelegateCommand SetDataRegistrationCommand { get; }
@@ -102,10 +109,16 @@ namespace WPF.ViewModels
             set
             {
                 repReenterPassword = value;
+                if(CurrentRep.Password==value)
+                {
+                    IsRepPasswordLock = true;
+                }
                 ValidationProperty(nameof(RepReenterPassword), value);
                 CallPropertyChanged();
             }
         }
+
+       
 
         public bool IsValidity
         {
