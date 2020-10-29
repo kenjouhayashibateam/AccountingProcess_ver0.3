@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="データ管理" Height="500" Width="400" WindowStartupLocation="CenterOwner">
+        Title="データ管理" Height="600" Width="400" WindowStartupLocation="CenterOwner">
 
     <Window.DataContext>
         <vm:DataManagementViewModel/>
@@ -15,7 +15,7 @@
      <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="6*"/>
+            <RowDefinition Height="7*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="データ操作" Grid.Row="0" Margin="5">
@@ -71,7 +71,7 @@
                                     <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Text="担当者名" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsReadOnly="{Binding IsRepDataLock}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
-                                    <TextBlock Text="パスワード" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
+                                    <TextBlock Text="パスワード(変更の際に入力)" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBox x:Name="CurrentPasswordTextBox" Grid.Row="5" Margin="5" Text="{Binding RepCurrentPassword}" InputMethod.PreferredImeState="Off" />
                                     <TextBlock Text="新パスワード" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBox x:Name="NewPasswordTextBox" Grid.Row="7" Margin="5" ToolTip="{Binding NewPasswordTooltip}" Text="{Binding RepNewPassword}" IsEnabled="{Binding IsRepPasswordLock}"/>
@@ -94,12 +94,27 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
-                        <GroupBox Header="検索">
+                        <GroupBox Header="検索" Margin="5">
                             <Grid>
-
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="検索ワード" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                                <TextBox x:Name="ReferenceRepTextBox" Grid.Row="1" Text="{Binding ReferenceRep}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,2"/>
+                                <CheckBox Content="有効のデータのみ表示" Grid.Row="2" IsChecked="{Binding RepValidity}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                             </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="1" Header="一覧" Margin="5">
+                            <DataGrid x:Name="RepListDataGrid" Margin="1" >
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Header="有効性" Width="2*"/>
+                                    <DataGridTextColumn Header="担当者名" Width="5*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </GroupBox>
                     </Grid>
                 </Grid>

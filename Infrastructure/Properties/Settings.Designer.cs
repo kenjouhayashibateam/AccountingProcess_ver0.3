@@ -27,7 +27,7 @@ namespace Infrastructure.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.163\\SQLEXPRESS2014;Initial Catalog=AccountingProcessDataBa" +
-            "se;User ID=sa;Password=sqlserver")]
+            "se;User ID=application_connect;Password=shunjuen9773466")]
         public string AccountingProcessConnection {
             get {
                 return ((string)(this["AccountingProcessConnection"]));

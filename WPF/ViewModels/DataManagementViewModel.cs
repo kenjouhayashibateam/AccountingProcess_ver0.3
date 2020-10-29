@@ -21,9 +21,15 @@ namespace WPF.ViewModels
         private string newPasswordTooltip;
         private string reenterPasswordTooltip;
         private string dataOperationButtonContent;
-        private bool isCheckedRegistration;
+        private bool isCheckedRegistration=true;
         private bool isCheckdUpdate;
+        private string referenceRep;
+        private bool repValidity;
+        public Dictionary<string, Rep> RepList = new Dictionary<string, Rep>();
+      
         #endregion
+
+        
 
         private enum DataOperation
         {
@@ -177,6 +183,26 @@ namespace WPF.ViewModels
             set
             {
                 isCheckdUpdate = value;
+                CallPropertyChanged();
+            }
+        }
+
+        public string ReferenceRep
+        {
+            get => referenceRep;
+            set
+            {
+                referenceRep = value;
+                CallPropertyChanged();
+            }
+        }
+
+        public bool RepValidity
+        {
+            get => repValidity;
+            set
+            {
+                repValidity = value;
                 CallPropertyChanged();
             }
         }
