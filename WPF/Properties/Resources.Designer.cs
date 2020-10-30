@@ -69,5 +69,23 @@ namespace WPF.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   入力必須項目です。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string NullErrorInfo {
+            get {
+                return ResourceManager.GetString("NullErrorInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワードが違います。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string PasswordErrorInfo {
+            get {
+                return ResourceManager.GetString("PasswordErrorInfo", resourceCulture);
+            }
+        }
     }
 }

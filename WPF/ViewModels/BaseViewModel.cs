@@ -1,11 +1,8 @@
-﻿using Domain.Repositories;
-using Infrastructure;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
@@ -122,6 +119,11 @@ namespace WPF.ViewModels
             {
                 RemoveError(propertyName);
             }
+        }
+
+        protected void Invoke(string propertyName)
+        {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

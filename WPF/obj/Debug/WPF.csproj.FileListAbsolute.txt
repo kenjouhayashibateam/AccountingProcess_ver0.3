@@ -79,3 +79,4 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\DataManag
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\DataManagementView.g.cs
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\DataManagementView.baml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\CypherBoxControl.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\CypherBoxControl.dll

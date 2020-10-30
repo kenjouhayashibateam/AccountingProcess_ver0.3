@@ -12,7 +12,7 @@ namespace Infrastructure
 
         private readonly SqlConnection Cn = new SqlConnection();
         private SqlCommand Cmd;
-        private SqlDataReader DataReader;
+        private readonly SqlDataReader DataReader;
 
         public SQLServerConnectInfrastructure()
         {

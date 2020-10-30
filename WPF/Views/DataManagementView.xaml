@@ -30,7 +30,7 @@
                         <MouseBinding Command="{Binding SetDataRegistrationCommand}" MouseAction="LeftClick"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
-                <RadioButton Content="更新" Grid.Column="1" IsChecked="False" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <RadioButton Content="更新" Grid.Column="1" IsChecked="{Binding IsCheckedUpdate}" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <RadioButton.InputBindings>
                         <MouseBinding Command="{Binding SetDataUpdateCommand}" MouseAction="LeftClick"/>
                     </RadioButton.InputBindings>
@@ -71,32 +71,41 @@
                                     <TextBlock Grid.Row="0" Text="{Binding RepIDField}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Text="担当者名" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsReadOnly="{Binding IsRepDataLock}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
+                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsReadOnly="{Binding IsRepNameDataReadOnly}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
                                     <TextBlock Text="パスワード(変更の際に入力)" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                    <TextBox x:Name="CurrentPasswordTextBox" Grid.Row="5" Margin="5" Text="{Binding RepCurrentPassword}" InputMethod.PreferredImeState="Off" />
-                                    <TextBlock Text="新パスワード" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                    <TextBox x:Name="NewPasswordTextBox" Grid.Row="7" Margin="5" Text="{Binding RepNewPassword}" IsEnabled="{Binding IsRepPasswordLock}"/>
-                                    <Grid Grid.Row="8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="1*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="再入力" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                        <TextBlock Grid.Column="1" Foreground="Red"/>
-                                    </Grid>
-                                    <!--<control:CypherBox x:Name="ReenterPasswordTextBox" Grid.Row="9" Margin="5"  ="{Binding CurrentRep.Password}" InputMethod.PreferredImeState="Off"/>-->
-                                    <Grid Grid.Row="9" Margin="1" >
+                                    <Grid Grid.Row="5" Margin="5" IsEnabled="{Binding IsRepPasswordEnabled}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition></ColumnDefinition>
                                             <ColumnDefinition Width="24"></ColumnDefinition>
                                             <ColumnDefinition Width="10"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
-                                        <Border Grid.ColumnSpan="3" BorderBrush="#FFABADB3" BorderThickness="1" CornerRadius="5"></Border>
-                                        <control:CypherBox VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                           CypherText="{Binding Password2,Mode=TwoWay}" BorderThickness="0"
-                           Placeholder="your password" ShowPlainText="{Binding ShowPassword2,Mode=OneWay}"/>
+                                        <Border Grid.ColumnSpan="3" BorderBrush="{Binding CurrentRepPasswordBorderBrush}" Background="{Binding CurrentRepPasswordBackground}"  BorderThickness="1" CornerRadius="5" ></Border>
+                                        <control:CypherBox x:Name="RepCurrentPasswordCypherBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                                           CypherText="{Binding RepCurrentPassword,Mode=TwoWay}" BorderThickness="0"
+                                                           Placeholder="your password" ShowPlainText="{Binding CurrentPasswordCharCheck,Mode=OneWay}"/>
 
-                                        <Button Grid.Column="1" Command="{Binding ShowPassword2Command}">
+                                        <Button Grid.Column="1" Command="{Binding RepCurrentPasswordCharCheckedReversCommand}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Image Source="../Resources/eye.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
+
+                                    <TextBlock Text="新パスワード" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
+                                    <Grid Grid.Row="7" Margin="5"  IsEnabled="{Binding IsRepNewPasswordEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition></ColumnDefinition>
+                                            <ColumnDefinition Width="24"></ColumnDefinition>
+                                            <ColumnDefinition Width="10"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.ColumnSpan="3" BorderBrush="{Binding NewRepPasswordBorderBrush}" Background="{Binding NewRepPasswordBackground}" BorderThickness="1" CornerRadius="5"></Border>
+                                        <control:CypherBox x:Name="RepNewPasswordCypherBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                                           CypherText="{Binding RepNewPassword,Mode=TwoWay}" BorderThickness="0"
+                                                           Placeholder="your password" ShowPlainText="{Binding NewPasswordCharCheck,Mode=OneWay}"/>
+
+                                        <Button Grid.Column="1" Command="{Binding RepNewPasswordCharCheckedReversCommand}">
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
                                                     <Image Source="../Resources/eye.png"/>
@@ -106,12 +115,14 @@
                                     </Grid>
                                 </Grid>
                                 <Button x:Name="RepRegistrationButton" Grid.Row="1" Margin="15,5" Content="{Binding DataOperationButtonContent}">
-                                    
+                                    <Button.InputBindings>
+                                        <MouseBinding Command="{Binding RepRegistrationCommand}" MouseAction="LeftClick"/>
+                                    </Button.InputBindings>
                                 </Button>
                             </Grid>
                         </GroupBox>
                     </Grid>
-                    <Grid Grid.Column="1">
+                    <Grid Grid.Column="1" IsEnabled="{Binding IsReferenceMenuEnabled}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="3*"/>
@@ -129,10 +140,16 @@
                             </Grid>
                         </GroupBox>
                         <GroupBox Grid.Row="1" Header="一覧" Margin="5">
-                            <DataGrid x:Name="RepListDataGrid" Margin="1" >
+                            <DataGrid x:Name="RepListDataGrid" Margin="1" ItemsSource="{Binding RepList}" SelectedItem="{Binding CurrentRep}" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
-                                    <DataGridCheckBoxColumn Header="有効性" Width="2*"/>
-                                    <DataGridTextColumn Header="担当者名" Width="5*"/>
+                                    <DataGridTemplateColumn Header="有効性" Width="2*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsValidity}" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="担当者名" Width="4*" Binding="{Binding Name}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>
