@@ -71,7 +71,7 @@
                                     <TextBlock Grid.Row="0" Text="{Binding RepIDField}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Text="担当者名" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsReadOnly="{Binding IsRepNameDataReadOnly}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
+                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsEnabled="{Binding IsRepNameDataEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
                                     <TextBlock Text="パスワード(変更の際に入力)" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <Grid Grid.Row="5" Margin="5" IsEnabled="{Binding IsRepPasswordEnabled}">
                                         <Grid.ColumnDefinitions>
@@ -145,11 +145,11 @@
                                     <DataGridTemplateColumn Header="有効性" Width="2*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox IsChecked="{Binding IsValidity}" HorizontalAlignment="Center"/>
+                                                <CheckBox IsChecked="{Binding IsValidity}" IsEnabled="False" HorizontalAlignment="Center"/>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="担当者名" Width="4*" Binding="{Binding Name}"/>
+                                    <DataGridTextColumn Header="担当者名" Width="4*" IsReadOnly="True" Binding="{Binding Name}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>

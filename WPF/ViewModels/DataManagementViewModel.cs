@@ -1,9 +1,8 @@
 ﻿using Domain.Entities.ValueObjects;
-using System.Collections.Generic;
 using WPF.ViewModels.Commands;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System;
+using Domain.Repositories;
+using Infrastructure;
 
 namespace WPF.ViewModels
 {
@@ -38,8 +37,9 @@ namespace WPF.ViewModels
         private readonly string TrueControlBackground = "#FFFFFF";
         private readonly string FalseControlBackground = "#A9A9A9";
         private bool isReferenceMenuEnabled;
-        private Rep currentRep;
+        private Rep currentRep=new Rep(string.Empty,string.Empty,string.Empty,false);
         private ObservableCollection<Rep> repList;
+        private IDataBaseConnect DataBaseConnect;
         #endregion
 
         private enum DataOperation
@@ -48,24 +48,18 @@ namespace WPF.ViewModels
             更新
         }
 
-        public DataManagementViewModel()
+        public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
+
+        public DataManagementViewModel(IDataBaseConnect connecter)
         {
+            DataBaseConnect = connecter;
             RepList = new ObservableCollection<Rep>();
-            CurrentRep = new Rep(null, "a a", "aaa", true);
-            ListAdd(new Rep(null,"a a","aaa",true));
-            ListAdd(new Rep(null, "b b", "bbb", true));
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
             RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
             RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
             RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => true);
             SetDataOperation(DataOperation.登録);
-        }
-
-        public void ListAdd(Rep rep)
-        {
-            RepList.Add(rep);
-            CallPropertyChanged(nameof(RepList));
         }
 
         public DelegateCommand RepNewPasswordCharCheckedReversCommand { get; }
@@ -76,7 +70,7 @@ namespace WPF.ViewModels
 
         private void RepRegistration()
         {
-            ListAdd(new Rep(null, "c c", "ccc", true));
+            RepList.Add(new Rep(null, "c c", "ccc", true));
         }
 
         private void RepNewPasswordCharCheckedRevers() => NewPasswordCharCheck = !NewPasswordCharCheck;
@@ -113,8 +107,6 @@ namespace WPF.ViewModels
             IsRepPasswordEnabled = true;
             IsRepNewPasswordEnabled = false;
             IsReferenceMenuEnabled = true;
-            RepName = CurrentRep.Name;
-            IsValidity = CurrentRep.IsValidity;
         }
 
         private void SetFieldRegisterRep()
@@ -123,11 +115,15 @@ namespace WPF.ViewModels
             IsRepNameDataEnabled = true;
             IsRepPasswordEnabled = false;
             IsRepNewPasswordEnabled = true;
-            //ReferenceMenuの実装を終えて、CurrentRepが変化した際に値を反映できるようになったら削除
+            DetailClear();
+        }
+
+        private void DetailClear()
+        {
+            IsValidity = true;
             RepName = string.Empty;
             RepCurrentPassword = string.Empty;
-            RepNewPassword = string.Empty;
-            IsValidity = true;
+            CurrentRep = null;
         }
 
         public string RepIDField
@@ -360,10 +356,18 @@ namespace WPF.ViewModels
             set
             {
                 currentRep = value;
+                if (currentRep != null) SetRepDetailProperty();
                 CallPropertyChanged();
             }
         }
 
+        private void SetRepDetailProperty()
+        {
+            RepIDField = CurrentRep.RepID;
+            RepName = CurrentRep.Name;
+            IsValidity = CurrentRep.IsValidity;
+            RepCurrentPassword = string.Empty;
+        }
         public ObservableCollection<Rep> RepList
         {
             get => repList;
@@ -392,5 +396,7 @@ namespace WPF.ViewModels
                     break;
             }
         }
+
+       
     }
 }

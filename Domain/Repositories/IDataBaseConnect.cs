@@ -7,6 +7,6 @@ namespace Domain.Repositories
     /// </summary>
     public interface IDataBaseConnect
     {
-        public void Registration(Rep rep);
+        public int Registration(Rep rep);
     }
 }

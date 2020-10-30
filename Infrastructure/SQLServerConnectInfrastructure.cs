@@ -19,13 +19,13 @@ namespace Infrastructure
             Cn.ConnectionString = Properties.Settings.Default.AccountingProcessConnection;
         }
 
-        public void Registration(Rep rep)
+        public int Registration(Rep rep)
         {
             ADO_NewInstance_StoredProc("registration_rep");
             
             Cmd.Parameters.Add(new SqlParameter("@rep_name", rep.Name));
             Cmd.Parameters.Add(new SqlParameter("@rep_password", rep.Password));
-            Cmd.ExecuteNonQuery();
+            return Cmd.ExecuteNonQuery();
         }
 
         private void ADO_NewInstance_StoredProc(string commandText)
@@ -33,7 +33,8 @@ namespace Infrastructure
             Cmd = new SqlCommand()
             {
                 Connection = Cn,
-                CommandType = CommandType.StoredProcedure
+                CommandType = CommandType.StoredProcedure,
+                CommandText = commandText
             };
         }
 
