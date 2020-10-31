@@ -3,6 +3,7 @@ using WPF.ViewModels.Commands;
 using System.Collections.ObjectModel;
 using Domain.Repositories;
 using Infrastructure;
+using System;
 
 namespace WPF.ViewModels
 {
@@ -40,8 +41,12 @@ namespace WPF.ViewModels
         private Rep currentRep=new Rep(string.Empty,string.Empty,string.Empty,false);
         private ObservableCollection<Rep> repList;
         private IDataBaseConnect DataBaseConnect;
+        private bool isRepOperationButtonEnabled;
         #endregion
 
+        /// <summary>
+        /// データ操作の判別
+        /// </summary>
         private enum DataOperation
         {
             登録,
@@ -58,8 +63,9 @@ namespace WPF.ViewModels
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
             RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
             RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
-            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => true);
+            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => IsRepRegistrable());
             SetDataOperation(DataOperation.登録);
+            SetRepOperationButtonEnabled();
         }
 
         public DelegateCommand RepNewPasswordCharCheckedReversCommand { get; }
@@ -68,8 +74,16 @@ namespace WPF.ViewModels
         public DelegateCommand SetDataUpdateCommand { get; }
         public DelegateCommand RepRegistrationCommand { get; }
 
+        private bool IsRepRegistrable()
+        {
+            var repError = GetErrors(nameof(RepName));
+            if(repError==null)repError = GetErrors(nameof(RepNewPassword));
+            return repError == null;
+        }
+
         private void RepRegistration()
         {
+            RepList.Add(new Rep("aaa", "a a", "aaa", false));
             RepList.Add(new Rep(null, "c c", "ccc", true));
         }
 
@@ -107,6 +121,7 @@ namespace WPF.ViewModels
             IsRepPasswordEnabled = true;
             IsRepNewPasswordEnabled = false;
             IsReferenceMenuEnabled = true;
+            DetailClear();
         }
 
         private void SetFieldRegisterRep()
@@ -123,7 +138,8 @@ namespace WPF.ViewModels
             IsValidity = true;
             RepName = string.Empty;
             RepCurrentPassword = string.Empty;
-            CurrentRep = null;
+            RepNewPassword = string.Empty;
+            CurrentRep = new Rep(null, null, null, true);
         }
 
         public string RepIDField
@@ -143,6 +159,7 @@ namespace WPF.ViewModels
             {
                 repName = value;
                 ValidationProperty(nameof(RepName), value);
+                SetRepOperationButtonEnabled();
                 CallPropertyChanged();
             }
         }
@@ -166,6 +183,7 @@ namespace WPF.ViewModels
             {
                 repNewPassword = value;
                 ValidationProperty(nameof(RepNewPassword), value);
+                SetRepOperationButtonEnabled();
                 CallPropertyChanged();
             }
         }
@@ -378,6 +396,35 @@ namespace WPF.ViewModels
             }
         }
 
+        public bool IsRepOperationButtonEnabled
+        {
+            get => isRepOperationButtonEnabled;
+            set
+            {
+                isRepOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+
+        private void SetRepOperationButtonEnabled()
+        {
+            if (!HasErrors)
+            {
+                IsRepOperationButtonEnabled = true;
+                return;
+            }
+
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+                    IsRepOperationButtonEnabled = !(string.IsNullOrEmpty(RepName) | string.IsNullOrEmpty(RepNewPassword));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         public override void ValidationProperty(string propertyName, object value)
         {
             switch (propertyName)
@@ -395,8 +442,6 @@ namespace WPF.ViewModels
                 default:
                     break;
             }
-        }
-
-       
+        }       
     }
 }

@@ -71,7 +71,7 @@
                                     <TextBlock Grid.Row="0" Text="{Binding RepIDField}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Text="担当者名" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName}" Margin="5" IsEnabled="{Binding IsRepNameDataEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
+                                    <TextBox x:Name="RepNameTextBox" Grid.Row="3" Text="{Binding RepName, UpdateSourceTrigger=PropertyChanged}" Margin="5" IsEnabled="{Binding IsRepNameDataEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
                                     <TextBlock Text="パスワード(変更の際に入力)" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <Grid Grid.Row="5" Margin="5" IsEnabled="{Binding IsRepPasswordEnabled}">
                                         <Grid.ColumnDefinitions>
@@ -114,7 +114,7 @@
                                         </Button>
                                     </Grid>
                                 </Grid>
-                                <Button x:Name="RepRegistrationButton" Grid.Row="1" Margin="15,5" Content="{Binding DataOperationButtonContent}">
+                                <Button x:Name="RepRegistrationButton" Grid.Row="1" Margin="15,5" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsRepOperationButtonEnabled}">
                                     <Button.InputBindings>
                                         <MouseBinding Command="{Binding RepRegistrationCommand}" MouseAction="LeftClick"/>
                                     </Button.InputBindings>

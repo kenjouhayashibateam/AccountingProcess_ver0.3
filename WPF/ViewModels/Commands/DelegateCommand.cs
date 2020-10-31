@@ -5,7 +5,11 @@ namespace WPF.ViewModels.Commands
 {
     public class DelegateCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+         {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested += value; }
+        }
 
         private readonly Action _Execute;
         private readonly Func<bool> _CanExecute;
@@ -23,7 +27,7 @@ namespace WPF.ViewModels.Commands
 
         public bool CanExecute()
         {
-            return _CanExecute();
+           return _CanExecute();
         }
 
         public void Execute(object parameter)
@@ -34,6 +38,11 @@ namespace WPF.ViewModels.Commands
         public void Execute()
         {
             _Execute();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }
