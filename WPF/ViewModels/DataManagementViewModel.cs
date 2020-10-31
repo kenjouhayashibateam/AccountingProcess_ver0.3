@@ -13,22 +13,22 @@ namespace WPF.ViewModels
     public class DataManagementViewModel : BaseViewModel
     {
         #region Properties
+        #region RepProperties
         private string repIDField;
         private string repName;
         private string repCurrentPassword;
         private string repNewPassword;
-        private bool isValidity;
+        private bool isRepValidity;
         private bool isRepNameDataEnabled;
         private bool isRepPasswordEnabled;
         private bool isRepNewPasswordEnabled;
-        private string dataOperationButtonContent;
+        private string repDataOperationButtonContent;
         private bool isCheckedRegistration;
         private bool isCheckedUpdate;
         private string referenceRep;
         private bool repValidity;
         private bool newPasswordCharCheck;
         private bool currentPasswordCharCheck;
-        private DataOperation CurrentOperation;
         private string currentRepPasswordBorderBrush;
         private string currentRepPasswordBackground;
         private string newRepPasswordBorderBrush;
@@ -37,11 +37,13 @@ namespace WPF.ViewModels
         private readonly string FalseControlBorderBrush = "#FFABADB3";
         private readonly string TrueControlBackground = "#FFFFFF";
         private readonly string FalseControlBackground = "#A9A9A9";
-        private bool isReferenceMenuEnabled;
+        private bool isRepReferenceMenuEnabled;
         private Rep currentRep=new Rep(string.Empty,string.Empty,string.Empty,false);
         private ObservableCollection<Rep> repList;
-        private IDataBaseConnect DataBaseConnect;
         private bool isRepOperationButtonEnabled;
+        #endregion
+        private IDataBaseConnect DataBaseConnect;
+        private DataOperation CurrentOperation;
         #endregion
 
         /// <summary>
@@ -68,38 +70,22 @@ namespace WPF.ViewModels
             SetRepOperationButtonEnabled();
         }
 
-        public DelegateCommand RepNewPasswordCharCheckedReversCommand { get; }
-        public DelegateCommand RepCurrentPasswordCharCheckedReversCommand { get; }
-        public DelegateCommand SetDataRegistrationCommand { get; }
-        public DelegateCommand SetDataUpdateCommand { get; }
-        public DelegateCommand RepRegistrationCommand { get; }
-
-        private bool IsRepRegistrable()
-        {
-            var repError = GetErrors(nameof(RepName));
-            if(repError==null)repError = GetErrors(nameof(RepNewPassword));
-            return repError == null;
-        }
-
-        private void RepRegistration()
-        {
-            RepList.Add(new Rep("aaa", "a a", "aaa", false));
-            RepList.Add(new Rep(null, "c c", "ccc", true));
-        }
-
-        private void RepNewPasswordCharCheckedRevers() => NewPasswordCharCheck = !NewPasswordCharCheck;
-
-        private void RepCurrentPasswordCharCheckedRevers() => CurrentPasswordCharCheck = !CurrentPasswordCharCheck;
-
+        /// <summary>
+        /// データ操作のジャンルを切り替え、操作ボタンの表示文字列を入力し、コントロールの値をクリアして、Enableを設定します
+        /// </summary>
+        /// <param name="Operation"></param>
         private void SetDataOperation(DataOperation Operation)
         {
             CurrentOperation = Operation;
             IsCheckedRegistration = (Operation == DataOperation.登録);
             IsCheckedUpdate = (Operation == DataOperation.更新);
-            DataOperationButtonContent = Operation.ToString();
+            RepDataOperationButtonContent = Operation.ToString();
             SetDetailLocked();
         }
 
+        /// <summary>
+        /// データ操作のジャンルによって、各詳細のコントロールの値をクリア、Enableの設定をします
+        /// </summary>
         private void SetDetailLocked()
         {
             switch (CurrentOperation)
@@ -114,34 +100,116 @@ namespace WPF.ViewModels
                     break;
             }
         }
+        /// <summary>
+        /// データ操作の登録Checked
+        /// </summary>
+        public bool IsCheckedRegistration
+        {
+            get => isCheckedRegistration;
+            set
+            {
+                isCheckedRegistration = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// データ操作の更新Checked
+        /// </summary>
+        public bool IsCheckedUpdate
+        {
+            get => isCheckedUpdate;
+            set
+            {
+                isCheckedUpdate = value;
+                CallPropertyChanged();
+            }
+        }
 
+        #region RepOperation
+        /// <summary>
+        /// 新しいパスワード入力欄の文字を隠すかの可否を反転させるコマンド
+        /// </summary>
+        public DelegateCommand RepNewPasswordCharCheckedReversCommand { get; }
+        /// <summary>
+        /// 現在のパスワード入力欄の文字を隠すかの可否を反転させるコマンド
+        /// </summary>
+        public DelegateCommand RepCurrentPasswordCharCheckedReversCommand { get; }
+        /// <summary>
+        /// データ操作を「登録」にするコマンド
+        /// </summary>
+        public DelegateCommand SetDataRegistrationCommand { get; }
+        /// <summary>
+        /// データ操作を「更新」にするコマンド
+        /// </summary>
+        public DelegateCommand SetDataUpdateCommand { get; }
+        /// <summary>
+        /// 新規担当者登録コマンド
+        /// </summary>
+        public DelegateCommand RepRegistrationCommand { get; }
+
+        /// <summary>
+        /// 担当者登録コマンドのCanExecuteを切り替えます
+        /// </summary>
+        /// <returns></returns>
+        private bool IsRepRegistrable()
+        {
+            var repError = GetErrors(nameof(RepName));
+            if(repError==null)repError = GetErrors(nameof(RepNewPassword));
+            return repError == null;
+        }
+
+        /// <summary>
+        /// 担当者登録
+        /// </summary>
+        private void RepRegistration()
+        {
+            RepList.Add(new Rep("aaa", "a a", "aaa", false));
+            RepList.Add(new Rep(null, "c c", "ccc", true));
+        }
+        /// <summary>
+        /// 新しいパスワード入力欄の文字を隠すかのチェックを切り替えます
+        /// </summary>
+        private void RepNewPasswordCharCheckedRevers() => NewPasswordCharCheck = !NewPasswordCharCheck;
+        /// <summary>
+        /// 現在のパスワード入力欄の文字を隠すかのチェックを切り替えます
+        /// </summary>
+        private void RepCurrentPasswordCharCheckedRevers() => CurrentPasswordCharCheck = !CurrentPasswordCharCheck;
+        /// <summary>
+        /// 担当者管理の更新のためのコントロールのEnableを設定し、フィールドをクリアします
+        /// </summary>
         private void SetFieldUpdaterRep()
         {
             IsRepNameDataEnabled = false;
             IsRepPasswordEnabled = true;
             IsRepNewPasswordEnabled = false;
-            IsReferenceMenuEnabled = true;
-            DetailClear();
+            IsRepReferenceMenuEnabled = true;
+            RepDetailClear();
         }
-
+        /// <summary>
+        /// 担当者管理の登録のためのコントロールのEnableを設定し、フィールドをクリアします
+        /// </summary>
         private void SetFieldRegisterRep()
         {
-            IsReferenceMenuEnabled = false;
+            IsRepReferenceMenuEnabled = false;
             IsRepNameDataEnabled = true;
             IsRepPasswordEnabled = false;
             IsRepNewPasswordEnabled = true;
-            DetailClear();
+            RepDetailClear();
         }
-
-        private void DetailClear()
+        /// <summary>
+        /// 担当者管理のフィールドをクリアします
+        /// </summary>
+        private void RepDetailClear()
         {
-            IsValidity = true;
+            IsRepValidity = true;
             RepName = string.Empty;
             RepCurrentPassword = string.Empty;
             RepNewPassword = string.Empty;
             CurrentRep = new Rep(null, null, null, true);
         }
-
+        /// <summary>
+        /// 担当者ID
+        /// </summary>
         public string RepIDField
         {
             get => repIDField;
@@ -151,7 +219,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者名
+        /// </summary>
         public string RepName
         {
             get => repName;
@@ -163,7 +233,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 現在の担当者パスワード
+        /// </summary>
         public string RepCurrentPassword
         {
             get => repCurrentPassword;
@@ -175,7 +247,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 新しい担当者パスワード
+        /// </summary>
         public string RepNewPassword
         {
             get => repNewPassword;
@@ -187,17 +261,21 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-        public bool IsValidity
+        /// <summary>
+        /// 担当者データの有効性
+        /// </summary>
+        public bool IsRepValidity
         {
-            get => isValidity;
+            get => isRepValidity;
             set
             {
-                isValidity = value;
+                isRepValidity = value;
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者名欄のEnable設定
+        /// </summary>
         public bool IsRepNameDataEnabled
         {
             get => isRepNameDataEnabled;
@@ -207,8 +285,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-
+        /// <summary>
+        /// 担当者の現在のパスワード欄のEnable設定
+        /// </summary>
         public bool IsRepPasswordEnabled
         {
             get => isRepPasswordEnabled;
@@ -228,37 +307,21 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-        public string DataOperationButtonContent
+        /// <summary>
+        /// 担当者データ操作ボタンのContent
+        /// </summary>
+        public string RepDataOperationButtonContent
         {
-            get => dataOperationButtonContent;
+            get => repDataOperationButtonContent;
             set
             {
-                dataOperationButtonContent = value;
+                repDataOperationButtonContent = value;
                 CallPropertyChanged();
             }
         }
-
-        public bool IsCheckedRegistration
-        {
-            get => isCheckedRegistration;
-            set
-            {
-                isCheckedRegistration = value;
-                CallPropertyChanged();
-            }
-        }
-
-        public bool IsCheckedUpdate
-        {
-            get => isCheckedUpdate;
-            set
-            {
-                isCheckedUpdate = value;
-                CallPropertyChanged();
-            }
-        }
-
+        /// <summary>
+        /// 担当者検索文字列
+        /// </summary>
         public string ReferenceRep
         {
             get => referenceRep;
@@ -268,7 +331,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者データの有効性
+        /// </summary>
         public bool RepValidity
         {
             get => repValidity;
@@ -278,7 +343,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 新しいパスワード欄の文字を隠すかのチェック
+        /// </summary>
         public bool NewPasswordCharCheck
         {
             get => newPasswordCharCheck;
@@ -288,7 +355,9 @@ namespace WPF.ViewModels
                 Invoke(nameof(NewPasswordCharCheck));
             }
         }
-
+        /// <summary>
+        /// 現在のパスワードの文字を隠すかのチェック
+        /// </summary>
         public bool CurrentPasswordCharCheck
         {
             get => currentPasswordCharCheck;
@@ -298,7 +367,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 新しいパスワード欄のEnabled
+        /// </summary>
         public bool IsRepNewPasswordEnabled
         {
             get => isRepNewPasswordEnabled;
@@ -318,7 +389,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 現在のパスワード欄のボーダーの色
+        /// </summary>
         public string CurrentRepPasswordBorderBrush
         {
             get => currentRepPasswordBorderBrush;
@@ -328,7 +401,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 現在のパスワード欄の背景の色
+        /// </summary>
         public string CurrentRepPasswordBackground
         {
             get => currentRepPasswordBackground;
@@ -338,7 +413,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 新しいパスワード欄のボーダーの色
+        /// </summary>
         public string NewRepPasswordBorderBrush
         {
             get => newRepPasswordBorderBrush;
@@ -348,6 +425,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 新しいパスワード欄の背景の色
+        /// </summary>
         public string NewRepPasswordBackground
         {
             get => newRepPasswordBackground;
@@ -357,17 +437,21 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-        public bool IsReferenceMenuEnabled
+        /// <summary>
+        /// 担当者検索メニューEnabled
+        /// </summary>
+        public bool IsRepReferenceMenuEnabled
         {
-            get => isReferenceMenuEnabled;
+            get => isRepReferenceMenuEnabled;
             set
             {
-                isReferenceMenuEnabled = value;
+                isRepReferenceMenuEnabled = value;
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者詳細に表示されている担当者
+        /// </summary>
         public Rep CurrentRep
         {
             get => currentRep;
@@ -378,14 +462,19 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者詳細に担当者クラスのプロパティを代入します
+        /// </summary>
         private void SetRepDetailProperty()
         {
             RepIDField = CurrentRep.RepID;
             RepName = CurrentRep.Name;
-            IsValidity = CurrentRep.IsValidity;
+            IsRepValidity = CurrentRep.IsValidity;
             RepCurrentPassword = string.Empty;
         }
+        /// <summary>
+        /// 担当者リスト
+        /// </summary>
         public ObservableCollection<Rep> RepList
         {
             get => repList;
@@ -395,7 +484,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者データ操作ボタンEnabled
+        /// </summary>
         public bool IsRepOperationButtonEnabled
         {
             get => isRepOperationButtonEnabled;
@@ -405,7 +496,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 担当者データ操作ボタンのEnabledを設定します
+        /// </summary>
         private void SetRepOperationButtonEnabled()
         {
             if (!HasErrors)
@@ -424,6 +517,8 @@ namespace WPF.ViewModels
                     break;
             }
         }
+
+        #endregion
 
         public override void ValidationProperty(string propertyName, object value)
         {

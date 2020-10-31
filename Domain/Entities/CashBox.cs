@@ -7,11 +7,26 @@ using static System.Console;
 
 namespace Domain.Entities
 {
+    /// <summary>
+    /// 金庫クラス（シングルトン）
+    /// </summary>
     public sealed class Cashbox
     {
+        /// <summary>
+        /// 金銭束の枚数
+        /// </summary>
         public static int BundleCount = 50;
+        /// <summary>
+        /// 金種リスト
+        /// </summary>
         public  Dictionary<Denomination, MoneyCategory> MoneyCategorys = new Dictionary<Denomination, MoneyCategory>();
+        /// <summary>
+        /// その他の金銭リスト
+        /// </summary>
         public  OtherMoney[] OtherMoneys = new OtherMoney[8];
+        /// <summary>
+        /// メモリーに保持する金庫クラス
+        /// </summary>
         private readonly static Cashbox cashbox = new Cashbox();
 
         private Cashbox()
@@ -43,7 +58,9 @@ namespace Domain.Entities
 
             SetOtherMoneyTitleDefault();
         }
-
+        /// <summary>
+        /// その他釣り銭等欄にデフォルト値を入力します
+        /// </summary>
         public void SetOtherMoneyTitleDefault()
         {
             OtherMoneys[0].Title = "青蓮堂";
@@ -51,12 +68,18 @@ namespace Domain.Entities
             OtherMoneys[2].Title = "春秋庵";
             OtherMoneys[3].Title = "石材工事部";
         }
-
+        /// <summary>
+        /// 金庫クラスのインスタンスを取得します
+        /// </summary>
+        /// <returns></returns>
         public static Cashbox GetInstance()
         {
             return cashbox;
         }
-
+        /// <summary>
+        /// 送金額を取得します
+        /// </summary>
+        /// <returns></returns>
         public int GetTotalAmount()
         {
             int I = 0;
@@ -73,7 +96,10 @@ namespace Domain.Entities
 
             return I;
         }
-
+        /// <summary>
+        /// 総金額をカンマ区切り、単位をつけて返します
+        /// </summary>
+        /// <returns></returns>
         public string GetTotalAmountWithUnit() => AmountHelper.AmountWithUnit(GetTotalAmount());
     }
 }

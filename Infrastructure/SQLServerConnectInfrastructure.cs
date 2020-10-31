@@ -4,9 +4,11 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 
-
 namespace Infrastructure
 {
+    /// <summary>
+    /// SQLServer接続クラス
+    /// </summary>
     public class SQLServerConnectInfrastructure : IDataBaseConnect
     {
 
