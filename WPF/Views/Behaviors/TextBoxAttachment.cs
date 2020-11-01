@@ -3,13 +3,25 @@ using System.Windows.Controls;
 
 namespace WPF.Views.Behaviors
 {
+    /// <summary>
+    /// テキストボックス動作クラス
+    /// </summary>
     public static class TextBoxAttachment
     {
+        /// <summary>
+        /// GotFocus時にテキストをすべて選択にするかを返します
+        /// </summary>
+        /// <param name="obj">対象のテキストボックス</param>
+        /// <returns></returns>
         public static bool GetIsSelectAllOnGotFocus(DependencyObject obj)
         {
             return (bool)obj.GetValue(IsSelectAllOnGotFocusProperty);
         }
-
+        /// <summary>
+        /// GotFocus時にテキストをすべて選択した状態にします
+        /// </summary>
+        /// <param name="obj">対象のテキストボックス</param>
+        /// <param name="value"></param>
         public static void SetIsSelectAllOnGotFocus(DependencyObject obj, bool value)
         {
             obj.SetValue(IsSelectAllOnGotFocusProperty, value);

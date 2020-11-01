@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace WPF.ViewModels.Commands
 {
+    /// <summary>
+    /// デリゲートコマンドクラス
+    /// </summary>
     public class DelegateCommand : ICommand
     {
         public event EventHandler CanExecuteChanged

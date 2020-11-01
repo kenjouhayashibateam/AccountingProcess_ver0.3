@@ -8,16 +8,40 @@ using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
 namespace Infrastructure
 {
+    /// <summary>
+    /// エクセル出力クラス
+    /// </summary>
     public class ExcelOutputInfrastructure : IDataOutput
     {
-
+        /// <summary>
+        /// ClosedXML : ワークブック
+        /// </summary>
         private XLWorkbook myWorkbook;
+        /// <summary>
+        /// Excel : ワークブック
+        /// </summary>
         private Workbooks myWorkbooks;
+        /// <summary>
+        /// ClosedXML : ワークシート
+        /// </summary>
         private IXLWorksheet myWorksheet;
+        /// <summary>
+        /// ログインフラストラクチャ
+        /// </summary>
         private readonly ILogger Logger;
+        /// <summary>
+        /// エクセルアプリケーション
+        /// </summary>
         private Application App;
+        /// <summary>
+        /// エクセルファイルを保存しているフォルダのFullPath
+        /// </summary>
         private readonly string openPath = System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
 
+        /// <summary>
+        /// コンストラクタ　ログ保存のインフラストラクチャを設定します
+        /// </summary>
+        /// <param name="logger"></param>
         public ExcelOutputInfrastructure(ILogger logger)
         {
             Logger = logger;
@@ -25,6 +49,9 @@ namespace Infrastructure
 
         public ExcelOutputInfrastructure() : this(new LogFileInfrastructure()) { }
 
+        /// <summary>
+        /// デストラクタ　エクセルプロセスを開放します
+        /// </summary>
         ~ExcelOutputInfrastructure()
         {
             if(App==null)
@@ -36,13 +63,17 @@ namespace Infrastructure
                 App.Quit();
             }
         }
-
+        /// <summary>
+        /// データ出力エクセルファイルを開きます
+        /// </summary>
         private void ExcelOpen()
         {
             myWorkbooks.Open(Filename: openPath, ReadOnly: true);
             App.Visible = true;
         }
-
+        /// <summary>
+        /// エクセルアプリケーションを呼び出します
+        /// </summary>
         private void CallExcelApplication()
         {
             try
@@ -54,13 +85,15 @@ namespace Infrastructure
                 App = new Application();
             }
         }
-
+        /// <summary>
+        /// データ出力エクセルファイルを閉じます
+        /// </summary>
         private void ExcelClose()
         {
             CallExcelApplication();
 
             myWorkbooks = App.Workbooks;
-
+            //出力ファイルを検出して閉じる
             foreach(Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks)
             {
                 if (wb.Name==Properties.Resources.SaveFile)
@@ -68,13 +101,15 @@ namespace Infrastructure
                     wb.Close(SaveChanges:false);
                 }
             }
-
+            //開いているワークブックがなければエクセルアプリケーションを終了する
             if( myWorkbooks.Count==0)
             {
                 App.Quit();
             }    
         }
-
+        /// <summary>
+        /// 金庫データを出力します※テンプレートパターンを使ってリファクタリングする
+        /// </summary>
         public void CashBoxDataOutput()
         {
             Cashbox myCashbox = Cashbox.GetInstance();
@@ -291,7 +326,11 @@ namespace Infrastructure
             myWorkbook.SaveAs(openPath);
             ExcelOpen();
         }
-
+        /// <summary>
+        /// メートル法の数字をインチ法で返します
+        /// </summary>
+        /// <param name="x">メートル法での長さ</param>
+        /// <returns></returns>
         private double ToInch(double x)
         {
             return x * 0.39370;

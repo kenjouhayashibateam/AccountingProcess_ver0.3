@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WPF.Views;
+﻿using WPF.Views;
 
 namespace WPF.ViewModels.Commands
 {
     /// <summary>
-    /// 画面遷移を統括するクラス
+    /// 画面遷移統括クラス
     /// </summary>
     public class ScreenTransition
     {
+        /// <summary>
+        /// 金庫金額計算ビューを呼び出します
+        /// </summary>
+        /// <returns></returns>
         public RemainingMoneyCalculationView RemainingMoneyCalculation()
         {
             return new RemainingMoneyCalculationView();
         }
-
+        /// <summary>
+        /// データ管理ビューを呼び出します
+        /// </summary>
+        /// <returns></returns>
         public DataManagementView DataManagement()
         {
             return new DataManagementView();

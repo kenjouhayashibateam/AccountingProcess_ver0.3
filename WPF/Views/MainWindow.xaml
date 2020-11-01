@@ -21,7 +21,7 @@
     </i:Interaction.Behaviors>
     
     <i:Interaction.Triggers>
-        <interactions:PropertyChangedTrigger Binding="{Binding ShowForm}">
+        <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <b:ShowDiarog/>
         </interactions:PropertyChangedTrigger>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageInfo}">
@@ -30,8 +30,8 @@
     </i:Interaction.Triggers>
 
     <ib:Interaction.Triggers>
-        <ib:DataTrigger Binding="{Binding CallShowForm}" Value="true">
-            <ib:InvokeCommandAction Command="{Binding ShowFormCommand}"/>
+        <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
         </ib:DataTrigger>
         <ib:DataTrigger Binding="{Binding CallClosingMessage}" Value="true">
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
@@ -52,12 +52,12 @@
                 </Grid.ColumnDefinitions>
                 <RadioButton Content="管理事務所" Grid.Column="0" IsChecked="{Binding KanriJimushoChecked}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">
                     <RadioButton.InputBindings>
-                        <MouseBinding Command="{Binding SetKanriJimushoIDCommand}" MouseAction="LeftClick"/>
+                        <MouseBinding Command="{Binding SetLocationKanriJimushoCommand}" MouseAction="LeftClick"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
                 <RadioButton Content="青蓮堂" Grid.Column="1" IsChecked="{Binding ShorendoChecked}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10">
                     <RadioButton.InputBindings>
-                        <MouseBinding Command="{Binding SetShorendoIDCommand}" MouseAction="LeftClick"/>
+                        <MouseBinding Command="{Binding SetLodationShorendoCommand}" MouseAction="LeftClick"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
             </Grid>
@@ -71,7 +71,7 @@
                 <Grid>
                     <Button x:Name="ShowRemainingMoneyCalculationViewButton" Grid.Row="0" Grid.Column="0" Content="金庫金額計算" Margin="100,50" >
                         <Button.InputBindings>
-                            <MouseBinding Command="{Binding ShowRemainingMoneyCalculation}" MouseAction="LeftClick"/>
+                            <MouseBinding Command="{Binding ShowRemainingMoneyCalculationCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
                 </Grid>

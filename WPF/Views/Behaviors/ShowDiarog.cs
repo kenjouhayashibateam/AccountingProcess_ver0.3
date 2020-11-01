@@ -5,19 +5,26 @@ using WPF.Views.Datas;
 
 namespace WPF.Views.Behaviors
 {
+    /// <summary>
+    /// Window.ShowDialog動作
+    /// </summary>
     public class ShowDiarog : TriggerAction<FrameworkElement>
     {
+        /// <summary>
+        /// Window.ShowDialogを実行します
+        /// </summary>
+        /// <param name="parameter">実行するウィンドウデータ</param>
         protected override void Invoke(object parameter)
         {
             DependencyPropertyChangedEventArgs e = (DependencyPropertyChangedEventArgs)parameter;
-            ShowFormData showForm = (ShowFormData)e.NewValue;
+            ShowWindowData showForm = (ShowWindowData)e.NewValue;
             Window Parent = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
 
-            showForm.FormData.Owner = Parent;
-            showForm.FormData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            showForm.FormData.Owner.Visibility = Visibility.Hidden;
-            showForm.FormData.ShowDialog();
-            showForm.FormData.Owner.Visibility = Visibility.Visible;
+            showForm.WindowData.Owner = Parent;
+            showForm.WindowData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            showForm.WindowData.Owner.Visibility = Visibility.Hidden;
+            showForm.WindowData.ShowDialog();
+            showForm.WindowData.Owner.Visibility = Visibility.Visible;
         }
     }
 }

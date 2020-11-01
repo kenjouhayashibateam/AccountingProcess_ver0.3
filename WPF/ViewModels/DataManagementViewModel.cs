@@ -3,7 +3,7 @@ using WPF.ViewModels.Commands;
 using System.Collections.ObjectModel;
 using Domain.Repositories;
 using Infrastructure;
-using System;
+using System.Diagnostics;
 
 namespace WPF.ViewModels
 {
@@ -18,6 +18,7 @@ namespace WPF.ViewModels
         private string repName;
         private string repCurrentPassword;
         private string repNewPassword;
+        private string confirmationPassword;
         private bool isRepValidity;
         private bool isRepNameDataEnabled;
         private bool isRepPasswordEnabled;
@@ -29,6 +30,7 @@ namespace WPF.ViewModels
         private bool repValidity;
         private bool newPasswordCharCheck;
         private bool currentPasswordCharCheck;
+        private bool confirmationPasswordCharCheck;
         private string currentRepPasswordBorderBrush;
         private string currentRepPasswordBackground;
         private string newRepPasswordBorderBrush;
@@ -54,19 +56,19 @@ namespace WPF.ViewModels
             登録,
             更新
         }
-
         public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
-
+        /// <summary>
+        /// コンストラクタ　DataBaseConnectを設定、DelegateCommandのインスタンスを生成します
+        /// </summary>
+        /// <param name="connecter">接続するデータベース</param>
         public DataManagementViewModel(IDataBaseConnect connecter)
         {
             DataBaseConnect = connecter;
             RepList = new ObservableCollection<Rep>();
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
-            RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
-            RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
-            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => IsRepRegistrable());
             SetDataOperation(DataOperation.登録);
+            SetRepDelegateCommand();
             SetRepOperationButtonEnabled();
         }
 
@@ -127,25 +129,39 @@ namespace WPF.ViewModels
 
         #region RepOperation
         /// <summary>
+        /// 担当者DelegateCommandのインスタンスを生成します
+        /// </summary>
+        private void SetRepDelegateCommand()
+        {
+            RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
+            RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
+            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => IsRepRegistrable());
+            ConfirmationPasswordCheckedReversCommand = new DelegateCommand(() => ConfirmationPasswordCharCheckedRevers(), () => true);
+        }
+        /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかの可否を反転させるコマンド
         /// </summary>
-        public DelegateCommand RepNewPasswordCharCheckedReversCommand { get; }
+        public DelegateCommand RepNewPasswordCharCheckedReversCommand { get; set; }
+        /// <summary>
+        /// 再入力パスワード入力欄の文字を隠すかの可否を反転させるコマンド
+        /// </summary>
+        public DelegateCommand ConfirmationPasswordCheckedReversCommand { get; set; }
         /// <summary>
         /// 現在のパスワード入力欄の文字を隠すかの可否を反転させるコマンド
         /// </summary>
-        public DelegateCommand RepCurrentPasswordCharCheckedReversCommand { get; }
+        public DelegateCommand RepCurrentPasswordCharCheckedReversCommand { get; set; }
         /// <summary>
         /// データ操作を「登録」にするコマンド
         /// </summary>
-        public DelegateCommand SetDataRegistrationCommand { get; }
+        public DelegateCommand SetDataRegistrationCommand { get; set; }
         /// <summary>
         /// データ操作を「更新」にするコマンド
         /// </summary>
-        public DelegateCommand SetDataUpdateCommand { get; }
+        public DelegateCommand SetDataUpdateCommand { get; set; }
         /// <summary>
         /// 新規担当者登録コマンド
         /// </summary>
-        public DelegateCommand RepRegistrationCommand { get; }
+        public DelegateCommand RepRegistrationCommand { get; set; }
 
         /// <summary>
         /// 担当者登録コマンドのCanExecuteを切り替えます
@@ -155,6 +171,7 @@ namespace WPF.ViewModels
         {
             var repError = GetErrors(nameof(RepName));
             if(repError==null)repError = GetErrors(nameof(RepNewPassword));
+            if (repError == null) repError = GetErrors(nameof(ConfirmationPassword));
             return repError == null;
         }
 
@@ -163,13 +180,17 @@ namespace WPF.ViewModels
         /// </summary>
         private void RepRegistration()
         {
-            RepList.Add(new Rep("aaa", "a a", "aaa", false));
-            RepList.Add(new Rep(null, "c c", "ccc", true));
+
+            //DataBaseConnect.Registration(CurrentRep);
         }
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかのチェックを切り替えます
         /// </summary>
         private void RepNewPasswordCharCheckedRevers() => NewPasswordCharCheck = !NewPasswordCharCheck;
+        /// <summary>
+        /// 再入力パスワード入力欄の文字を隠すかのチェックを切り替えます
+        /// </summary>
+        private void ConfirmationPasswordCharCheckedRevers() => ConfirmationPasswordCharCheck = !ConfirmationPasswordCharCheck;
         /// <summary>
         /// 現在のパスワード入力欄の文字を隠すかのチェックを切り替えます
         /// </summary>
@@ -205,6 +226,7 @@ namespace WPF.ViewModels
             RepName = string.Empty;
             RepCurrentPassword = string.Empty;
             RepNewPassword = string.Empty;
+            ConfirmationPassword = string.Empty;
             CurrentRep = new Rep(null, null, null, true);
         }
         /// <summary>
@@ -352,7 +374,7 @@ namespace WPF.ViewModels
             set
             {
                 newPasswordCharCheck = value;
-                Invoke(nameof(NewPasswordCharCheck));
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -497,6 +519,33 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 再入力パスワード
+        /// </summary>
+        public string ConfirmationPassword
+        {
+            get => confirmationPassword;
+            set
+            {
+                confirmationPassword = value;
+                ValidationProperty(nameof(ConfirmationPassword), value);
+                SetRepOperationButtonEnabled();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 再入力パスワード欄の文字を隠すかのチェック
+        /// </summary>
+        public bool ConfirmationPasswordCharCheck
+        {
+            get => confirmationPasswordCharCheck;
+            set
+            {
+                confirmationPasswordCharCheck = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 担当者データ操作ボタンのEnabledを設定します
         /// </summary>
         private void SetRepOperationButtonEnabled()
@@ -510,7 +559,8 @@ namespace WPF.ViewModels
             switch(CurrentOperation)
             {
                 case DataOperation.登録:
-                    IsRepOperationButtonEnabled = !(string.IsNullOrEmpty(RepName) | string.IsNullOrEmpty(RepNewPassword));
+                    IsRepOperationButtonEnabled = !(string.IsNullOrEmpty(RepName) | string.IsNullOrEmpty(RepNewPassword) | string.IsNullOrEmpty(ConfirmationPassword));
+                    if(IsRepOperationButtonEnabled) IsRepOperationButtonEnabled= RepNewPassword == ConfirmationPassword;
                     break;
 
                 default:
@@ -533,7 +583,11 @@ namespace WPF.ViewModels
                 case nameof(RepNewPassword):
                     if(IsRepNewPasswordEnabled) ErrorsListOperation(string.IsNullOrEmpty(RepNewPassword), propertyName, Properties.Resources.NullErrorInfo);
                     break;
-
+                case nameof(ConfirmationPassword):
+                    if (!isRepNewPasswordEnabled) break;
+                    ErrorsListOperation(string.IsNullOrEmpty(ConfirmationPassword), propertyName, Properties.Resources.NullErrorInfo);
+                    if (GetErrors(propertyName)==null) ErrorsListOperation(RepNewPassword != ConfirmationPassword, propertyName, Properties.Resources.PasswordErrorInfo);
+                    break;
                 default:
                     break;
             }

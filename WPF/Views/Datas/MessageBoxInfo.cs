@@ -2,6 +2,9 @@
 
 namespace WPF.Views.Datas
 {
+    /// <summary>
+    /// メッセージボックス呼び出しクラス
+    /// </summary>
     public class MessageBoxInfo
     {
         /// <summary>

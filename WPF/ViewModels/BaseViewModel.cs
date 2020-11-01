@@ -14,29 +14,38 @@ namespace WPF.ViewModels
     /// </summary>
     public abstract class BaseViewModel : INotifyPropertyChanged,INotifyDataErrorInfo
     {
+        private bool callShowWindow;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        public DelegateCommand ShowFormCommand { get; set; }
-        private bool callShowForm;
-
-        public ShowFormData ShowForm { get; set; }
-
-        public bool CallShowForm
+        /// <summary>
+        /// フォーム表示コマンド
+        /// </summary>
+        public DelegateCommand ShowWindowCommand { get; set; }
+        /// <summary>
+        /// 表示するウィンドウデータ
+        /// </summary>
+        public ShowWindowData ShowWindow { get; set; }
+        /// <summary>
+        /// ウィンドウを表示するタイミングを管轄
+        /// </summary>
+        public bool CallShowWindow
         {
-            get => callShowForm;
+            get => callShowWindow;
             set
             {
-                if(callShowForm==value)
+                if(callShowWindow==value)
                 {
                     return;
                 }
-                callShowForm = value;
+                callShowWindow = value;
                 CallPropertyChanged();
-                callShowForm = false;
+                callShowWindow = false;
             }
         }
-
+        /// <summary>
+        /// エラーを所持しているかを返す
+        /// </summary>
         public bool HasErrors
         {
             get
@@ -44,7 +53,9 @@ namespace WPF.ViewModels
                 return CurrentErrors.Count > 0;
             }
         }
-        
+        /// <summary>
+        /// プロパティ変更通知イベントを呼び出します
+        /// </summary>
         protected void CallPropertyChanged()
         {
             StackFrame caller = new StackFrame(1);
@@ -54,30 +65,48 @@ namespace WPF.ViewModels
 
             CallPropertyChanged(propertyName);
         }
+        /// <summary>
+        /// 引数のプロパティの変更を通知します
+        /// </summary>
+        /// <param name="propertyName">プロパティ名</param>
         protected void CallPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        protected void CreateShowFormCommand(Window myForm)
+        /// <summary>
+        /// ウィンドウ表示コマンドを設定します
+        /// </summary>
+        /// <param name="window"></param>
+        protected void CreateShowWindowCommand(Window window)
         {
-            ShowFormCommand = new DelegateCommand(() =>SetShowForm(myForm) , () => true);
-            CallPropertyChanged(nameof(ShowFormCommand));
-            CallShowForm = true;
+            ShowWindowCommand = new DelegateCommand(() =>SetShowWindow(window) , () => true);
+            CallPropertyChanged(nameof(ShowWindowCommand));
+            CallShowWindow = true;
         }
-
-        private void SetShowForm(Window myForm)
+        /// <summary>
+        /// 表示するウィンドウを設定します
+        /// </summary>
+        /// <param name="window"></param>
+        private void SetShowWindow(Window window)
         {
-            ShowForm = new ShowFormData()
+            ShowWindow = new ShowWindowData()
             {
-                FormData = myForm
+                WindowData = window
             };
 
-            CallPropertyChanged(nameof(ShowForm));
+            CallPropertyChanged(nameof(ShowWindow));
         }
-
+        /// <summary>
+        /// プロパティを検証し、エラーがあればリストに追加します
+        /// </summary>
+        /// <param name="propertyName">検証するプロパティ名</param>
+        /// <param name="value">プロパティの値</param>
         public abstract void ValidationProperty(string propertyName, object value);
-
+        /// <summary>
+        /// 保持しているエラーを返します
+        /// </summary>
+        /// <param name="propertyName">取得するエラーのプロパティ名</param>
+        /// <returns></returns>
         public IEnumerable GetErrors(string propertyName)
         {
             if (!CurrentErrors.ContainsKey(propertyName))
@@ -85,9 +114,15 @@ namespace WPF.ViewModels
 
             return CurrentErrors[propertyName];
         }
-
+        /// <summary>
+        /// エラーリスト
+        /// </summary>
         public Dictionary<string, string> CurrentErrors=new Dictionary<string, string>();
-
+        /// <summary>
+        /// エラーを追加します
+        /// </summary>
+        /// <param name="propertyName">追加するエラーのプロパティ名</param>
+        /// <param name="error">エラー内容</param>
         protected void AddError(string propertyName,string error)
         {
             if (!CurrentErrors.ContainsKey(propertyName))
@@ -95,7 +130,10 @@ namespace WPF.ViewModels
 
             OnErrorsChanged(propertyName);
         }
-
+        /// <summary>
+        /// エラーを削除します
+        /// </summary>
+        /// <param name="propertyName">削除するエラーのプロパティ名</param>
         protected void RemoveError(string propertyName)
         {
             if (CurrentErrors.ContainsKey(propertyName))
@@ -103,12 +141,20 @@ namespace WPF.ViewModels
 
             OnErrorsChanged(propertyName);
         }
-
+        /// <summary>
+        /// エラーリストに要素が追加、削除されたことを通知するイベントを呼び出します
+        /// </summary>
+        /// <param name="proeprtyName">変化した要素のプロパティ名</param>
         protected void OnErrorsChanged(string proeprtyName)
         {
             this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(proeprtyName));
         }
-
+        /// <summary>
+        /// エラーリストを操作します
+        /// </summary>
+        /// <param name="hasError">プロパティがエラーかの判断</param>
+        /// <param name="propertyName">リストに追加、削除するプロパティ名</param>
+        /// <param name="exeption">エラー内容</param>
         protected void ErrorsListOperation(bool hasError, string propertyName,string exeption)
         {
             if(hasError)
@@ -120,10 +166,12 @@ namespace WPF.ViewModels
                 RemoveError(propertyName);
             }
         }
-
-        protected void Invoke(string propertyName)
+        /// <summary>
+        /// エラーをクリアします
+        /// </summary>
+        protected void ErrorsClear()
         {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            CurrentErrors.Clear();
         }
     }
 }

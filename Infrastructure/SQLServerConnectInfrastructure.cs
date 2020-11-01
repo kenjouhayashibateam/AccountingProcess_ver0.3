@@ -1,6 +1,5 @@
 ﻿using Domain.Entities.ValueObjects;
 using Domain.Repositories;
-using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -11,25 +10,42 @@ namespace Infrastructure
     /// </summary>
     public class SQLServerConnectInfrastructure : IDataBaseConnect
     {
-
         private readonly SqlConnection Cn = new SqlConnection();
         private SqlCommand Cmd;
         private readonly SqlDataReader DataReader;
 
+        /// <summary>
+        /// デストラクタ　SQLServerから切断します
+        /// </summary>
+        ~SQLServerConnectInfrastructure()
+        {
+            Cn.Close();
+        }
+        /// <summary>
+        /// コンストラクタ　SQLServerにログインする接続文字列を設定します
+        /// </summary>
         public SQLServerConnectInfrastructure()
         {
             Cn.ConnectionString = Properties.Settings.Default.AccountingProcessConnection;
         }
-
+        /// <summary>
+        /// 担当者登録
+        /// </summary>
+        /// <param name="rep">担当者</param>
+        /// <returns></returns>
         public int Registration(Rep rep)
         {
             ADO_NewInstance_StoredProc("registration_rep");
             
             Cmd.Parameters.Add(new SqlParameter("@rep_name", rep.Name));
             Cmd.Parameters.Add(new SqlParameter("@rep_password", rep.Password));
+            Cmd.Parameters.Add(new SqlParameter("@is_validity", rep.IsValidity));
             return Cmd.ExecuteNonQuery();
         }
-
+        /// <summary>
+        /// ストアドプロシージャを実行するコマンドを生成します
+        /// </summary>
+        /// <param name="commandText">ストアドプロシージャ名</param>
         private void ADO_NewInstance_StoredProc(string commandText)
         {
             Cmd = new SqlCommand()
@@ -39,23 +55,5 @@ namespace Infrastructure
                 CommandText = commandText
             };
         }
-
-
-
-
-        //public string Registration(AccountingLocation accountingLocation)
-        //{
-        //    Cn.Open();
-        //    Cmd.CommandText = "reference_location";
-        //    Cmd.Parameters.Add(new SqlParameter("@location_name","理"));
-
-        //    SqlDataReader dataReader=Cmd.ExecuteReader();
-
-        //    while(dataReader.Read())
-        //    {
-        //        return dataReader["LocationName"].ToString();
-        //    }
-        //    return string.Empty;
-        //}
     }
 }

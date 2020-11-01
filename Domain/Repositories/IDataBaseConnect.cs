@@ -3,7 +3,7 @@
 namespace Domain.Repositories
 {
     /// <summary>
-    /// データベースに接続します。
+    /// データベース接続
     /// </summary>
     public interface IDataBaseConnect
     {

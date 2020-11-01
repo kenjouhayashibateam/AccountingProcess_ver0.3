@@ -87,7 +87,7 @@
     <Compile Include="Views\Datas\IClosing.cs" />
     <Compile Include="Views\Datas\InputValidation.cs" />
     <Compile Include="Views\Datas\MessageBoxInfo.cs" />
-    <Compile Include="Views\Datas\ShowFormData.cs" />
+    <Compile Include="Views\Datas\ShowWindowData.cs" />
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">
       <DependentUpon>RemainingMoneyCalculationView.xaml</DependentUpon>
     </Compile>

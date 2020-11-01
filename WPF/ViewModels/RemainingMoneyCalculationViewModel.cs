@@ -4,7 +4,7 @@ using Domain.Entities;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Infrastructure;
 using System.Threading.Tasks;
-using System.Collections;
+using System.ComponentModel;
 
 namespace WPF.ViewModels
 {
@@ -13,9 +13,9 @@ namespace WPF.ViewModels
     /// </summary>
     public class RemainingMoneyCalculationViewModel : BaseViewModel
     {
+        #region Properties
         private readonly Cashbox myCashbox = Cashbox.GetInstance();
         private readonly IDataOutput DataOutput;
-        public DelegateCommand OutputCommand { get; }
         private bool outputButtonEnabled;
         private string outputButtonText="出力";
 
@@ -55,7 +55,29 @@ namespace WPF.ViewModels
         //総金額
         private string totalAmount;
         #endregion
-
+        #region OtherMoneyContents
+        private string otherMoneyAmountDisplayValue1;
+        private string otherMoneyAmountDisplayValue2;
+        private string otherMoneyAmountDisplayValue3;
+        private string otherMoneyAmountDisplayValue4;
+        private string otherMoneyAmountDisplayValue5;
+        private string otherMoneyAmountDisplayValue6;
+        private string otherMoneyAmountDisplayValue7;
+        private string otherMoneyAmountDisplayValue8;
+        private string otherMoneyTitle1;
+        private string otherMoneyTitle2;
+        private string otherMoneyTitle3;
+        private string otherMoneyTitle4;
+        private string otherMoneyTitle5;
+        private string otherMoneyTitle6;
+        private string otherMoneyTitle7;
+        private string otherMoneyTitle8;
+        #endregion
+        #endregion
+        /// <summary>
+        /// データ出力コマンド
+        /// </summary>
+        public DelegateCommand OutputCommand { get; }
         /// <summary>
         /// 1万円札の枚数
         /// </summary>
@@ -71,7 +93,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 5千円札の枚数
         /// </summary>
@@ -87,7 +108,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 千円札の枚数
         /// </summary>
@@ -103,7 +123,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 500円玉の枚数
         /// </summary>
@@ -119,7 +138,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 100円玉の枚数
         /// </summary>
@@ -135,7 +153,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 50円玉の枚数
         /// </summary>
@@ -151,7 +168,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 10円玉の枚数
         /// </summary>
@@ -167,7 +183,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 5円玉の枚数
         /// </summary>
@@ -183,7 +198,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 1円玉の枚数
         /// </summary>
@@ -199,7 +213,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用一万円札合計金額
         /// </summary>
@@ -212,7 +225,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用5千円札合計金額
         /// </summary>
@@ -225,7 +237,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用千円札合計金額
         /// </summary>
@@ -238,7 +249,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用500円玉合計金額
         /// </summary>
@@ -251,7 +261,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用100円玉合計金額
         /// </summary>
@@ -264,7 +273,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用10円玉合計金額
         /// </summary>
@@ -277,7 +285,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用5円玉合計金額
         /// </summary>
@@ -290,7 +297,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 1円玉合計金額
         /// </summary>
@@ -303,7 +309,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 50円玉合計金額
         /// </summary>
@@ -316,7 +321,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用総金額
         /// </summary>
@@ -329,7 +333,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 500円玉束数量
         /// </summary>
@@ -345,7 +348,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用500円玉束合計金額
         /// </summary>
@@ -358,7 +360,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 100円玉束数量
         /// </summary>
@@ -374,7 +375,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用100円玉束合計金額
         /// </summary>
@@ -387,7 +387,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 50円玉束数量
         /// </summary>
@@ -403,7 +402,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用50円玉束合計金額
         /// </summary>
@@ -416,7 +414,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 10円玉束数量
         /// </summary>
@@ -432,7 +429,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用10円玉束合計金額
         /// </summary>
@@ -445,7 +441,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 5円玉束数量
         /// </summary>
@@ -461,7 +456,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用5円玉束合計金額
         /// </summary>
@@ -474,7 +468,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 1円玉束数量
         /// </summary>
@@ -490,7 +483,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 表示用1円玉束合計金額
         /// </summary>
@@ -503,7 +495,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫の金額プロパティをセットします
         /// </summary>
@@ -526,12 +517,15 @@ namespace WPF.ViewModels
             }
             TotalAmount = myCashbox.GetTotalAmountWithUnit();
         }
-
+        /// <summary>
+        /// 各その他釣り銭等欄に内容を入力します
+        /// </summary>
+        /// <param name="value">内容</param>
+        /// <param name="otherMoneyNumber">欄のインデックス</param>
         private void SetOtherMontyTitle(string value, int otherMoneyNumber)
         {
             myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;
         }
-
         /// <summary>
         /// その他金庫等1の内容名
         /// </summary>
@@ -542,10 +536,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle1 = value;
                 SetOtherMontyTitle(value, 1);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等1　表示用金額
         /// </summary>
@@ -555,10 +549,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 1, ref otherMoneyAmountDisplayValue1);
+                ValidationProperty(nameof(OtherMoneyTitle1), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等2　内容名
         /// </summary>
@@ -569,10 +563,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle2 = value;
                 SetOtherMontyTitle(value, 2);
+                ValidationProperty(nameof(OtherMoneyTitle2), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等2　表示用金額
         /// </summary>
@@ -582,10 +576,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 2, ref otherMoneyAmountDisplayValue2);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue2), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等3　内容名
         /// </summary>
@@ -596,10 +590,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle3 = value;
                 SetOtherMontyTitle(value, 3);
+                ValidationProperty(nameof(OtherMoneyTitle3), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等3　表示用金額
         /// </summary>
@@ -609,10 +603,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 3, ref otherMoneyAmountDisplayValue3);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue3), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等4　内容名
         /// </summary>
@@ -623,10 +617,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle4 = value;
                 SetOtherMontyTitle(value, 4);
+                ValidationProperty(nameof(OtherMoneyTitle4), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等4　表示用金額
         /// </summary>
@@ -636,10 +630,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 4, ref otherMoneyAmountDisplayValue4);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue4), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等5　内容名
         /// </summary>
@@ -650,10 +644,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle5 = value;
                 SetOtherMontyTitle(value, 5);
+                ValidationProperty(nameof(OtherMoneyTitle5), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等5　表示用金額
         /// </summary>
@@ -663,10 +657,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 5, ref otherMoneyAmountDisplayValue5);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue5), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等6　内容名
         /// </summary>
@@ -677,10 +671,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle6 = value;
                 SetOtherMontyTitle(value, 6);
+                ValidationProperty(nameof(OtherMoneyTitle6), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等6　表示用金額
         /// </summary>
@@ -690,10 +684,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 6, ref otherMoneyAmountDisplayValue6);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue6), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等7　内容名
         /// </summary>
@@ -704,10 +698,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle7 = value;
                 SetOtherMontyTitle(value, 7);
+                ValidationProperty(nameof(OtherMoneyTitle7), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等7　表示用金額
         /// </summary>
@@ -717,10 +711,10 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 7, ref otherMoneyAmountDisplayValue7);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue7), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等8　内容名
         /// </summary>
@@ -731,10 +725,10 @@ namespace WPF.ViewModels
             {
                 otherMoneyTitle8 = value;
                 SetOtherMontyTitle(value, 8);
+                ValidationProperty(nameof(OtherMoneyTitle8), value);
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// その他金庫等8　表示用金額
         /// </summary>
@@ -744,10 +738,13 @@ namespace WPF.ViewModels
             set
             {
                 SetOtherMoneyAmount(value, 8, ref otherMoneyAmountDisplayValue8);
+                ValidationProperty(nameof(OtherMoneyAmountDisplayValue8), value);
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 出力ボタンEnabled
+        /// </summary>
         public bool OutputButtonEnabled
         {
             get => outputButtonEnabled;
@@ -757,7 +754,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 出力ボタンのテキスト
+        /// </summary>
         public string OutputButtonText
         {
             get => outputButtonText;
@@ -767,29 +766,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// その他釣り銭等メニューの内容をクリアするコマンド
+        /// </summary>
         public DelegateCommand OtherMoneyContentsClearCommand { get; }
+        /// <summary>
+        /// その他釣り銭等メニューの内容に規定値を入力するコマンド
+        /// </summary>
         public DelegateCommand SetOtherMoneyDefaultTitleCommand { get; }
-
-        #region OtherMoneyContents
-        private string otherMoneyAmountDisplayValue1;
-        private string otherMoneyAmountDisplayValue2;
-        private string otherMoneyAmountDisplayValue3;
-        private string otherMoneyAmountDisplayValue4;
-        private string otherMoneyAmountDisplayValue5;
-        private string otherMoneyAmountDisplayValue6;
-        private string otherMoneyAmountDisplayValue7;
-        private string otherMoneyAmountDisplayValue8;
-        private string otherMoneyTitle1;
-        private string otherMoneyTitle2;
-        private string otherMoneyTitle3;
-        private string otherMoneyTitle4;
-        private string otherMoneyTitle5;
-        private string otherMoneyTitle6;
-        private string otherMoneyTitle7;
-        private string otherMoneyTitle8;
-        #endregion
-
+        /// <summary>
+        /// コンストラクタ　DataOutput、各プロパティを設定、DelegateCommandのインスタンスを生成します
+        /// </summary>
+        /// <param name="dataOutput"></param>
         public RemainingMoneyCalculationViewModel(IDataOutput dataOutput)
         {
             DataOutput = dataOutput;
@@ -801,7 +789,9 @@ namespace WPF.ViewModels
             SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
             OutputButtonEnabled = true;
         }
-
+        /// <summary>
+        /// 各プロパティに値を入力します
+        /// </summary>
         private void SetProperty()
         {
             OneYenCount = myCashbox.MoneyCategorys[OneYen].Count;
@@ -838,7 +828,9 @@ namespace WPF.ViewModels
             OtherMoneyTitle8 = myCashbox.OtherMoneys[7].Title;
             OtherMoneyAmountDisplayValue8 = myCashbox.OtherMoneys[7].AmountWithUnit();
         }
-
+        /// <summary>
+        /// その他釣り銭等メニューの値をすべてクリアします
+        /// </summary>
         private void OtherMoneyContentsClear()
         {
             OtherMoneyAmountDisplayValue1 = string.Empty;
@@ -858,7 +850,9 @@ namespace WPF.ViewModels
             OtherMoneyTitle7 = string.Empty;
             OtherMoneyTitle8 = string.Empty;
         }
-
+        /// <summary>
+        /// その他釣り銭等メニューにデフォルトの値を入力します
+        /// </summary>
         private void SetOtherMoneyTitleDefault()
         {
             OtherMoneyTitle1 = "青蓮堂";
@@ -872,7 +866,9 @@ namespace WPF.ViewModels
         }
 
         public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
-
+        /// <summary>
+        /// 金庫金額の一覧を出力します
+        /// </summary>
         public async void Output()
         {
             OutputButtonEnabled = false;
@@ -884,7 +880,59 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            throw new System.NotImplementedException();
+            switch(propertyName)
+            {
+                case nameof(OtherMoneyTitle1):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle1) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1), nameof(OtherMoneyAmountDisplayValue1), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle2):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle2) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2), nameof(OtherMoneyAmountDisplayValue2), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle3):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle3) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3), nameof(OtherMoneyAmountDisplayValue3), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle4):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle4) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4), nameof(OtherMoneyAmountDisplayValue4), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle5):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle5) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5), nameof(OtherMoneyAmountDisplayValue5), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle6):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle6) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6), nameof(OtherMoneyAmountDisplayValue6), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle7):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle7) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7), nameof(OtherMoneyAmountDisplayValue7), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyTitle8):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle8) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8), nameof(OtherMoneyAmountDisplayValue8), "金額を入力して下さい");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue1):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1) & string.IsNullOrEmpty(OtherMoneyTitle1), nameof(OtherMoneyTitle1), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue2):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2) & string.IsNullOrEmpty(OtherMoneyTitle2), nameof(OtherMoneyTitle2), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue3):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3) & string.IsNullOrEmpty(OtherMoneyTitle3), nameof(OtherMoneyTitle3), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue4):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4) & string.IsNullOrEmpty(OtherMoneyTitle4), nameof(OtherMoneyTitle4), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue5):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5) & string.IsNullOrEmpty(OtherMoneyTitle5), nameof(OtherMoneyTitle5), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue6):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6) & string.IsNullOrEmpty(OtherMoneyTitle6), nameof(OtherMoneyTitle6), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue7):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7) & string.IsNullOrEmpty(OtherMoneyTitle7), nameof(OtherMoneyTitle7), "内容を入力してください");
+                    break;
+                case nameof(OtherMoneyAmountDisplayValue8):
+                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8) & string.IsNullOrEmpty(OtherMoneyTitle8), nameof(OtherMoneyTitle8), "内容を入力してください");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
