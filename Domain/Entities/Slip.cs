@@ -11,26 +11,26 @@ namespace Domain.Entities
         /// <summary>
         /// ID
         /// </summary>
-        public int SlipID;
-        public AccountingLocation Location;
+        public int SlipID { get; set; }
+        public AccountingLocation Location { get; set; }
         /// <summary>
         /// 伝票登録日
         /// </summary>
-        public DateTime RegistrationDate;
-        public CreditAccount CreditAccount;
-        public Content Content;
+        public DateTime RegistrationDate { get; set; }
+        public CreditAccount CreditAccount { get; set; }
+        public Content Content { get; set; }
         /// <summary>
         /// 内容詳細
         /// </summary>
-        public string Detail;
+        public string Detail { get; set; }
         /// <summary>
         /// 金額
         /// </summary>
-        public int Amount;
-        public Rep Rep;
+        public int Amount { get; set; }
+        public Rep Rep { get; set; }
         /// <summary>
         /// 出入金　入金はTrue、出勤はFalse
         /// </summary>
-        public bool IsPayment;
+        public bool IsPayment { get; set; }
     }
 }

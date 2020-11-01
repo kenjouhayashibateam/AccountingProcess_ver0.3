@@ -15,11 +15,11 @@ namespace Domain.Entities
         /// <summary>
         /// 金銭束の枚数
         /// </summary>
-        public static int BundleCount = 50;
+        public static int BundleCount { get=>50;}
         /// <summary>
         /// 金種リスト
         /// </summary>
-        public  Dictionary<Denomination, MoneyCategory> MoneyCategorys = new Dictionary<Denomination, MoneyCategory>();
+        public Dictionary<Denomination, MoneyCategory> MoneyCategorys = new Dictionary<Denomination, MoneyCategory>();
         /// <summary>
         /// その他の金銭リスト
         /// </summary>
