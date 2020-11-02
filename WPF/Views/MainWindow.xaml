@@ -24,7 +24,7 @@
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <b:ShowDiarog/>
         </interactions:PropertyChangedTrigger>
-        <interactions:PropertyChangedTrigger Binding="{Binding MessageInfo}">
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <b:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>

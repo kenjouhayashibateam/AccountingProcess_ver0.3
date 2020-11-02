@@ -3,7 +3,8 @@ using WPF.ViewModels.Commands;
 using System.Collections.ObjectModel;
 using Domain.Repositories;
 using Infrastructure;
-using System.Diagnostics;
+using WPF.Views.Datas;
+using System.Windows;
 
 namespace WPF.ViewModels
 {
@@ -14,35 +15,35 @@ namespace WPF.ViewModels
     {
         #region Properties
         #region RepProperties
-        private string repIDField;
-        private string repName;
-        private string repCurrentPassword;
-        private string repNewPassword;
-        private string confirmationPassword;
-        private bool isRepValidity;
-        private bool isRepNameDataEnabled;
-        private bool isRepPasswordEnabled;
-        private bool isRepNewPasswordEnabled;
-        private string repDataOperationButtonContent;
-        private bool isCheckedRegistration;
-        private bool isCheckedUpdate;
-        private string referenceRep;
-        private bool repValidity;
-        private bool newPasswordCharCheck;
-        private bool currentPasswordCharCheck;
-        private bool confirmationPasswordCharCheck;
-        private string currentRepPasswordBorderBrush;
-        private string currentRepPasswordBackground;
-        private string newRepPasswordBorderBrush;
-        private string newRepPasswordBackground;
+        private string _repIDField;
+        private string _repName;
+        private string _repCurrentPassword;
+        private string _repNewPassword;
+        private string _confirmationPassword;
+        private bool _isRepValidity;
+        private bool _isRepNameDataEnabled;
+        private bool _isRepPasswordEnabled;
+        private bool _isRepNewPasswordEnabled;
+        private string _repDataOperationButtonContent;
+        private bool _isCheckedRegistration;
+        private bool _isCheckedUpdate;
+        private string _referenceRep;
+        private bool _repValidity;
+        private bool _newPasswordCharCheck;
+        private bool _currentPasswordCharCheck;
+        private bool _confirmationPasswordCharCheck;
+        private string _currentRepPasswordBorderBrush;
+        private string _currentRepPasswordBackground;
+        private string _newRepPasswordBorderBrush;
+        private string _newRepPasswordBackground;
         private readonly string TrueControlBorderBrush = "#000000";
         private readonly string FalseControlBorderBrush = "#FFABADB3";
         private readonly string TrueControlBackground = "#FFFFFF";
         private readonly string FalseControlBackground = "#A9A9A9";
-        private bool isRepReferenceMenuEnabled;
-        private Rep currentRep=new Rep(string.Empty,string.Empty,string.Empty,false);
-        private ObservableCollection<Rep> repList;
-        private bool isRepOperationButtonEnabled;
+        private bool _isRepReferenceMenuEnabled;
+        private Rep _currentRep=new Rep(string.Empty,string.Empty,string.Empty,false);
+        private ObservableCollection<Rep> _repList;
+        private bool _isRepOperationButtonEnabled;
         #endregion
         private IDataBaseConnect DataBaseConnect;
         private DataOperation CurrentOperation;
@@ -107,10 +108,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsCheckedRegistration
         {
-            get => isCheckedRegistration;
+            get => _isCheckedRegistration;
             set
             {
-                isCheckedRegistration = value;
+                _isCheckedRegistration = value;
                 CallPropertyChanged();
             }
         }
@@ -119,12 +120,31 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsCheckedUpdate
         {
-            get => isCheckedUpdate;
+            get => _isCheckedUpdate;
             set
             {
-                isCheckedUpdate = value;
+                _isCheckedUpdate = value;
                 CallPropertyChanged();
             }
+        }
+        /// <summary>
+        /// 登録確認メッセージボックスを生成、呼び出します
+        /// </summary>
+        /// <param name="confirmationMessage">確認内容（プロパティ等）</param>
+        /// <param name="category">タイトルに表示するクラス名</param>
+        private MessageBoxResult CallConfirmationRegistration(string confirmationMessage,string titleRegistrationCategory)
+        {
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = confirmationMessage,
+                Title = $"{titleRegistrationCategory}登録確認",
+                Button = MessageBoxButton.OKCancel,
+                Image = MessageBoxImage.Question,
+            };
+            CallPropertyChanged(nameof(MessageBox));
+            CallShowMessageBox = true;
+
+            return MessageBox.Result;
         }
 
         #region RepOperation
@@ -135,8 +155,8 @@ namespace WPF.ViewModels
         {
             RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
             RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
-            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => IsRepRegistrable());
             ConfirmationPasswordCheckedReversCommand = new DelegateCommand(() => ConfirmationPasswordCharCheckedRevers(), () => true);
+            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => IsRepRegistrable());
         }
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかの可否を反転させるコマンド
@@ -162,11 +182,14 @@ namespace WPF.ViewModels
         /// 新規担当者登録コマンド
         /// </summary>
         public DelegateCommand RepRegistrationCommand { get; set; }
-
+        /// <summary>
+        /// 担当者データ更新コマンド
+        /// </summary>
+        public DelegateCommand RepUpdateCommand { get; set; }
         /// <summary>
         /// 担当者登録コマンドのCanExecuteを切り替えます
         /// </summary>
-        /// <returns></returns>
+        /// <returns>CanExecute</returns>
         private bool IsRepRegistrable()
         {
             var repError = GetErrors(nameof(RepName));
@@ -174,14 +197,28 @@ namespace WPF.ViewModels
             if (repError == null) repError = GetErrors(nameof(ConfirmationPassword));
             return repError == null;
         }
-
         /// <summary>
-        /// 担当者登録
+        /// 担当者を登録して、担当者一覧に加えます
         /// </summary>
         private void RepRegistration()
         {
-
+            CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity);
+            if (CallConfirmationRegistration
+                ($"担当者名 : {CurrentRep.Name}\r\nパスワード : {new string('*', RepNewPassword.Length)}\r\n有効性 : {CurrentRep.IsValidity}\r\n\r\n登録しますか？",
+                "担当者") == MessageBoxResult.Cancel)
+                return;
             //DataBaseConnect.Registration(CurrentRep);
+            RepDetailClear();
+        }
+        /// <summary>
+        /// 担当者データの変更、リストを最新データに更新します
+        /// </summary>
+        private void RepUpdate()
+        {
+            string updateContents = $"担当者 : {CurrentRep.Name}\r\n";
+
+            if (CurrentRep.IsValidity != IsRepValidity) updateContents += $"有効性 : {CurrentRep.IsValidity} → {IsRepValidity}\r\n";
+
         }
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかのチェックを切り替えます
@@ -234,10 +271,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string RepIDField
         {
-            get => repIDField;
+            get => _repIDField;
             set
             {
-                repIDField = value;
+                _repIDField = value;
                 CallPropertyChanged();
             }
         }
@@ -246,10 +283,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string RepName
         {
-            get => repName;
+            get => _repName;
             set
             {
-                repName = value;
+                _repName = value;
                 ValidationProperty(nameof(RepName), value);
                 SetRepOperationButtonEnabled();
                 CallPropertyChanged();
@@ -260,10 +297,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string RepCurrentPassword
         {
-            get => repCurrentPassword;
+            get => _repCurrentPassword;
             set
             {
-                repCurrentPassword = value;
+                _repCurrentPassword = value;
                 ValidationProperty(nameof(RepCurrentPassword), value);
                 if (CurrentOperation == DataOperation.更新) IsRepNewPasswordEnabled = value == CurrentRep.Password;
                 CallPropertyChanged();
@@ -274,10 +311,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string RepNewPassword
         {
-            get => repNewPassword;
+            get => _repNewPassword;
             set
             {
-                repNewPassword = value;
+                _repNewPassword = value;
                 ValidationProperty(nameof(RepNewPassword), value);
                 SetRepOperationButtonEnabled();
                 CallPropertyChanged();
@@ -288,10 +325,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsRepValidity
         {
-            get => isRepValidity;
+            get => _isRepValidity;
             set
             {
-                isRepValidity = value;
+                _isRepValidity = value;
                 CallPropertyChanged();
             }
         }
@@ -300,10 +337,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsRepNameDataEnabled
         {
-            get => isRepNameDataEnabled;
+            get => _isRepNameDataEnabled;
             set
             {
-                isRepNameDataEnabled = value;
+                _isRepNameDataEnabled = value;
                 CallPropertyChanged();
             }
         }
@@ -312,10 +349,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsRepPasswordEnabled
         {
-            get => isRepPasswordEnabled;
+            get => _isRepPasswordEnabled;
             set
             {
-                isRepPasswordEnabled = value;
+                _isRepPasswordEnabled = value;
                 if (value)
                 {
                     CurrentRepPasswordBorderBrush = TrueControlBorderBrush;
@@ -334,10 +371,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string RepDataOperationButtonContent
         {
-            get => repDataOperationButtonContent;
+            get => _repDataOperationButtonContent;
             set
             {
-                repDataOperationButtonContent = value;
+                _repDataOperationButtonContent = value;
                 CallPropertyChanged();
             }
         }
@@ -346,10 +383,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string ReferenceRep
         {
-            get => referenceRep;
+            get => _referenceRep;
             set
             {
-                referenceRep = value;
+                _referenceRep = value;
                 CallPropertyChanged();
             }
         }
@@ -358,10 +395,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool RepValidity
         {
-            get => repValidity;
+            get => _repValidity;
             set
             {
-                repValidity = value;
+                _repValidity = value;
                 CallPropertyChanged();
             }
         }
@@ -370,10 +407,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool NewPasswordCharCheck
         {
-            get => newPasswordCharCheck;
+            get => _newPasswordCharCheck;
             set
             {
-                newPasswordCharCheck = value;
+                _newPasswordCharCheck = value;
                 CallPropertyChanged();
             }
         }
@@ -382,10 +419,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool CurrentPasswordCharCheck
         {
-            get => currentPasswordCharCheck;
+            get => _currentPasswordCharCheck;
             set
             {
-                currentPasswordCharCheck = value;
+                _currentPasswordCharCheck = value;
                 CallPropertyChanged();
             }
         }
@@ -394,10 +431,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsRepNewPasswordEnabled
         {
-            get => isRepNewPasswordEnabled;
+            get => _isRepNewPasswordEnabled;
             set
             {
-                isRepNewPasswordEnabled = value;
+                _isRepNewPasswordEnabled = value;
                 if (value)
                 {
                     NewRepPasswordBorderBrush = TrueControlBorderBrush;
@@ -416,10 +453,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string CurrentRepPasswordBorderBrush
         {
-            get => currentRepPasswordBorderBrush;
+            get => _currentRepPasswordBorderBrush;
             set
             {
-                currentRepPasswordBorderBrush = value;
+                _currentRepPasswordBorderBrush = value;
                 CallPropertyChanged();
             }
         }
@@ -428,10 +465,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string CurrentRepPasswordBackground
         {
-            get => currentRepPasswordBackground;
+            get => _currentRepPasswordBackground;
             set
             {
-                currentRepPasswordBackground = value;
+                _currentRepPasswordBackground = value;
                 CallPropertyChanged();
             }
         }
@@ -440,10 +477,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string NewRepPasswordBorderBrush
         {
-            get => newRepPasswordBorderBrush;
+            get => _newRepPasswordBorderBrush;
             set
             {
-                newRepPasswordBorderBrush = value;
+                _newRepPasswordBorderBrush = value;
                 CallPropertyChanged();
             }
         }
@@ -452,10 +489,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string NewRepPasswordBackground
         {
-            get => newRepPasswordBackground;
+            get => _newRepPasswordBackground;
             set
             {
-                newRepPasswordBackground = value;
+                _newRepPasswordBackground = value;
                 CallPropertyChanged();
             }
         }
@@ -464,10 +501,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsRepReferenceMenuEnabled
         {
-            get => isRepReferenceMenuEnabled;
+            get => _isRepReferenceMenuEnabled;
             set
             {
-                isRepReferenceMenuEnabled = value;
+                _isRepReferenceMenuEnabled = value;
                 CallPropertyChanged();
             }
         }
@@ -476,11 +513,11 @@ namespace WPF.ViewModels
         /// </summary>
         public Rep CurrentRep
         {
-            get => currentRep;
+            get => _currentRep;
             set
             {
-                currentRep = value;
-                if (currentRep != null) SetRepDetailProperty();
+                _currentRep = value;
+                if (_currentRep != null) SetRepDetailProperty();
                 CallPropertyChanged();
             }
         }
@@ -499,10 +536,10 @@ namespace WPF.ViewModels
         /// </summary>
         public ObservableCollection<Rep> RepList
         {
-            get => repList;
+            get => _repList;
             set
             {
-                repList = value;
+                _repList = value;
                 CallPropertyChanged();
             }
         }
@@ -511,10 +548,10 @@ namespace WPF.ViewModels
         /// </summary>
         public bool IsRepOperationButtonEnabled
         {
-            get => isRepOperationButtonEnabled;
+            get => _isRepOperationButtonEnabled;
             set
             {
-                isRepOperationButtonEnabled = value;
+                _isRepOperationButtonEnabled = value;
                 CallPropertyChanged();
             }
         }
@@ -523,10 +560,10 @@ namespace WPF.ViewModels
         /// </summary>
         public string ConfirmationPassword
         {
-            get => confirmationPassword;
+            get => _confirmationPassword;
             set
             {
-                confirmationPassword = value;
+                _confirmationPassword = value;
                 ValidationProperty(nameof(ConfirmationPassword), value);
                 SetRepOperationButtonEnabled();
                 CallPropertyChanged();
@@ -537,14 +574,13 @@ namespace WPF.ViewModels
         /// </summary>
         public bool ConfirmationPasswordCharCheck
         {
-            get => confirmationPasswordCharCheck;
+            get => _confirmationPasswordCharCheck;
             set
             {
-                confirmationPasswordCharCheck = value;
+                _confirmationPasswordCharCheck = value;
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 担当者データ操作ボタンのEnabledを設定します
         /// </summary>
@@ -562,7 +598,11 @@ namespace WPF.ViewModels
                     IsRepOperationButtonEnabled = !(string.IsNullOrEmpty(RepName) | string.IsNullOrEmpty(RepNewPassword) | string.IsNullOrEmpty(ConfirmationPassword));
                     if(IsRepOperationButtonEnabled) IsRepOperationButtonEnabled= RepNewPassword == ConfirmationPassword;
                     break;
-
+                case DataOperation.更新:
+                    IsRepOperationButtonEnabled = IsRepNewPasswordEnabled & !string.IsNullOrEmpty(RepNewPassword);
+                    if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled = CurrentRep.Password == RepCurrentPassword;
+                    if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled = RepNewPassword == ConfirmationPassword;
+                    break;
                 default:
                     break;
             }
@@ -584,7 +624,7 @@ namespace WPF.ViewModels
                     if(IsRepNewPasswordEnabled) ErrorsListOperation(string.IsNullOrEmpty(RepNewPassword), propertyName, Properties.Resources.NullErrorInfo);
                     break;
                 case nameof(ConfirmationPassword):
-                    if (!isRepNewPasswordEnabled) break;
+                    if (!_isRepNewPasswordEnabled) break;
                     ErrorsListOperation(string.IsNullOrEmpty(ConfirmationPassword), propertyName, Properties.Resources.NullErrorInfo);
                     if (GetErrors(propertyName)==null) ErrorsListOperation(RepNewPassword != ConfirmationPassword, propertyName, Properties.Resources.PasswordErrorInfo);
                     break;

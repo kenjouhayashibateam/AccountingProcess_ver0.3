@@ -8,17 +8,17 @@ namespace WPF.ViewModels.Commands
     public class ScreenTransition
     {
         /// <summary>
-        /// 金庫金額計算ビューを呼び出します
+        /// 金庫金額計算ウィンドウを呼び出します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>金庫金額計算ウィンドウインスタンス</returns>
         public RemainingMoneyCalculationView RemainingMoneyCalculation()
         {
             return new RemainingMoneyCalculationView();
         }
         /// <summary>
-        /// データ管理ビューを呼び出します
+        /// データ管理ウィンドウを呼び出します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>データ管理ウィンドウインスタンス</returns>
         public DataManagementView DataManagement()
         {
             return new DataManagementView();

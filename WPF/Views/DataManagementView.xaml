@@ -7,12 +7,27 @@
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
         xmlns:control="https://github.com/qtbui159/CypherBox"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:b="clr-namespace:WPF.Views.Behaviors"
         Title="データ管理" Height="600" Width="400" WindowStartupLocation="CenterOwner">
 
     <Window.DataContext>
         <vm:DataManagementViewModel/>
     </Window.DataContext>
 
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <b:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
+
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
      <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

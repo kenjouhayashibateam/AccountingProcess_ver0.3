@@ -18,7 +18,7 @@ namespace Domain.Entities.ValueObjects
         /// <summary>
         /// 金額をカンマ区切り、単位をつけて返します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>00,000,000 円</returns>
         public string AmountWithUnit()
         {
             if(Amount<1)

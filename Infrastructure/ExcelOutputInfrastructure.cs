@@ -330,7 +330,7 @@ namespace Infrastructure
         /// メートル法の数字をインチ法で返します
         /// </summary>
         /// <param name="x">メートル法での長さ</param>
-        /// <returns></returns>
+        /// <returns>インチ法での長さ</returns>
         private double ToInch(double x)
         {
             return x * 0.39370;

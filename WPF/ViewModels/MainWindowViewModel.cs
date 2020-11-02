@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Windows;
+﻿using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
 
@@ -11,7 +10,6 @@ namespace WPF.ViewModels
     public class MainWindowViewModel : BaseViewModel, IClosing
     {
         #region Properties
-        private MessageBoxInfo messageInfo;
         private bool callClosingMessage;
         private bool processFeatureEnabled;
         private string location;
@@ -42,10 +40,6 @@ namespace WPF.ViewModels
         /// データ管理画面表示コマンド
         /// </summary>
         public DelegateCommand ShowDataManagement { get; }
-        /// <summary>
-        /// メッセージボックス表示コマンド
-        /// </summary>
-        public DelegateCommand MessageBoxCommand { get; }
 
         /// <summary>
         /// コンストラクタ　DelegateCommandのインスタンスを生成します
@@ -84,7 +78,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void ClosingMessage()
         {
-            messageInfo = new MessageBoxInfo()
+            MessageBox = new MessageBoxInfo()
             {
                 Message = "終了します。よろしいですか？",
                 Button = System.Windows.MessageBoxButton.YesNo,
@@ -92,17 +86,7 @@ namespace WPF.ViewModels
                 Image = System.Windows.MessageBoxImage.Question
             };
 
-            CallPropertyChanged(nameof(MessageInfo));
-        }
-
-        public MessageBoxInfo MessageInfo
-        {
-            get => messageInfo;
-            set
-            {
-                messageInfo = value;
-                CallPropertyChanged();
-            }
+            CallPropertyChanged(nameof(MessageBox));
         }
         /// <summary>
         /// 経理システムの終了確認メッセージボックスを呼び出します
@@ -188,11 +172,11 @@ namespace WPF.ViewModels
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック
         /// </summary>
-        /// <returns></returns>
+        /// <returns>YesNo</returns>
         public bool OnClosing()
         {
             CallClosingMessage = true;
-            return MessageInfo.Result != MessageBoxResult.Yes;
+            return MessageBox.Result != MessageBoxResult.Yes;
         }
 
         public override void ValidationProperty(string propertyName, object value)

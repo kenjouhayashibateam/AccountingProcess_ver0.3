@@ -15,6 +15,7 @@ namespace WPF.ViewModels
     public abstract class BaseViewModel : INotifyPropertyChanged,INotifyDataErrorInfo
     {
         private bool callShowWindow;
+        private bool callShowMessageBox;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -26,6 +27,14 @@ namespace WPF.ViewModels
         /// 表示するウィンドウデータ
         /// </summary>
         public ShowWindowData ShowWindow { get; set; }
+        /// <summary>
+        /// 表示するメッセージボックスデータ
+        /// </summary>
+        public MessageBoxInfo MessageBox { get; set; }
+        /// <summary>
+        /// メッセージボックス表示コマンド
+        /// </summary>
+        public DelegateCommand MessageBoxCommand { get; set; }
         /// <summary>
         /// ウィンドウを表示するタイミングを管轄
         /// </summary>
@@ -53,6 +62,21 @@ namespace WPF.ViewModels
                 return CurrentErrors.Count > 0;
             }
         }
+        /// <summary>
+        /// メッセージボックスを表示するタイミングを管轄
+        /// </summary>
+        public bool CallShowMessageBox
+        {
+            get => callShowMessageBox;
+            set
+            {
+                if (callShowMessageBox == value) return;
+                callShowMessageBox = value;
+                CallPropertyChanged();
+                callShowMessageBox = false;
+            }
+        }
+
         /// <summary>
         /// プロパティ変更通知イベントを呼び出します
         /// </summary>
@@ -106,7 +130,7 @@ namespace WPF.ViewModels
         /// 保持しているエラーを返します
         /// </summary>
         /// <param name="propertyName">取得するエラーのプロパティ名</param>
-        /// <returns></returns>
+        /// <returns>エラー内容</returns>
         public IEnumerable GetErrors(string propertyName)
         {
             if (!CurrentErrors.ContainsKey(propertyName))

@@ -71,7 +71,7 @@ namespace Domain.Entities
         /// <summary>
         /// 金庫クラスのインスタンスを取得します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>シングルトンの金庫</returns>
         public static Cashbox GetInstance()
         {
             return cashbox;
@@ -79,7 +79,7 @@ namespace Domain.Entities
         /// <summary>
         /// 送金額を取得します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>総金額</returns>
         public int GetTotalAmount()
         {
             int I = 0;
@@ -99,7 +99,7 @@ namespace Domain.Entities
         /// <summary>
         /// 総金額をカンマ区切り、単位をつけて返します
         /// </summary>
-        /// <returns></returns>
+        /// <returns>0,000,000 円</returns>
         public string GetTotalAmountWithUnit() => AmountHelper.AmountWithUnit(GetTotalAmount());
     }
 }

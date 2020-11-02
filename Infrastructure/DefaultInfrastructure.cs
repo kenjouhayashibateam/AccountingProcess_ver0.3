@@ -10,7 +10,7 @@ namespace Infrastructure
         /// <summary>
         /// DataOutputインフラストラクチャのデフォルト
         /// </summary>
-        /// <returns></returns>
+        /// <returns>エクセル出力</returns>
         public static IDataOutput GetDefaultDataOutput()
         {
             return new ExcelOutputInfrastructure();
@@ -18,7 +18,7 @@ namespace Infrastructure
         /// <summary>
         /// DataBaseConnectインフラストラクチャのデフォルト
         /// </summary>
-        /// <returns></returns>
+        /// <returns>SQLServer接続</returns>
         public static IDataBaseConnect GetDefaultDataBaseConnect()
         {
             return new SQLServerConnectInfrastructure();

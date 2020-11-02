@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WPF.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.Entities.ValueObjects;
 
 namespace WPF.ViewModels.Tests
@@ -48,8 +42,25 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.RepName, "a a");
             Assert.AreEqual(vm.RepCurrentPassword, string.Empty);
             Assert.AreEqual(vm.RepNewPassword, string.Empty);
-            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
             Assert.AreEqual(vm.RepDataOperationButtonContent, "更新");
+
+            vm.RepCurrentPassword = "bbb";
+
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
+            Assert.AreEqual(vm.IsRepNewPasswordEnabled, false);
+
+            vm.RepCurrentPassword = "aaa";
+            Assert.AreEqual(vm.IsRepNewPasswordEnabled, true);
+
+            vm.RepNewPassword = "bbb";
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
+
+            vm.ConfirmationPassword = "bb";
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
+
+            vm.ConfirmationPassword = "bbb";
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, true);
         }
     }
 }
