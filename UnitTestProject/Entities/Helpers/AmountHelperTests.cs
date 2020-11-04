@@ -14,8 +14,8 @@ namespace Domain.Entities.Helpers.Tests
         [TestMethod()]
         public void シナリオ()
         {
-            Assert.AreEqual(AmountHelper.AmountWithUnit(1000),"1,000 円");
-            Assert.AreEqual(AmountHelper.CommaDelimitedAmount(1000), "1,000");
+            Assert.AreEqual(TextHelper.AmountWithUnit(1000),"1,000 円");
+            Assert.AreEqual(TextHelper.CommaDelimitedAmount(1000), "1,000");
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Domain.Entities.ValueObjects
             }
             else
             {
-                return AmountHelper.AmountWithUnit(Amount);
+                return TextHelper.AmountWithUnit(Amount);
             }
         }
     }

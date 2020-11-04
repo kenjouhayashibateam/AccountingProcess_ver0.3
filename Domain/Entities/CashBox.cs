@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using static Domain.Entities.ValueObjects.MoneyCategory;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using static System.Console;
@@ -93,13 +94,13 @@ namespace Domain.Entities
             {
                 I += mc.Value.Amount;
             }
-
+            
             return I;
         }
         /// <summary>
         /// 総金額をカンマ区切り、単位をつけて返します
         /// </summary>
         /// <returns>0,000,000 円</returns>
-        public string GetTotalAmountWithUnit() => AmountHelper.AmountWithUnit(GetTotalAmount());
+        public string GetTotalAmountWithUnit() => TextHelper.AmountWithUnit(GetTotalAmount());
     }
 }

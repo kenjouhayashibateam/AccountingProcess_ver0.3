@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.ValueObjects;
 using Domain.Repositories;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -10,36 +11,35 @@ namespace Infrastructure
     /// </summary>
     public class SQLServerConnectInfrastructure : IDataBaseConnect
     {
-        private readonly SqlConnection Cn = new SqlConnection();
+        private SqlConnection Cn;
         private SqlCommand Cmd;
-        private readonly SqlDataReader DataReader;
+        private SqlDataReader DataReader;
 
-        /// <summary>
-        /// デストラクタ　SQLServerから切断します
-        /// </summary>
-        ~SQLServerConnectInfrastructure()
-        {
-            Cn.Close();
-        }
-        /// <summary>
-        /// コンストラクタ　SQLServerにログインする接続文字列を設定します
-        /// </summary>
-        public SQLServerConnectInfrastructure()
-        {
-            Cn.ConnectionString = Properties.Settings.Default.AccountingProcessConnection;
-        }
         /// <summary>
         /// ストアドプロシージャを実行するコマンドを生成します
         /// </summary>
         /// <param name="commandText">ストアドプロシージャ名</param>
-        private void ADO_NewInstance_StoredProc(string commandText)
+        /// <param name="isSystemAdmin">saアカウントを使うかのチェック</param>
+        private void ADO_NewInstance_StoredProc(string commandText,bool isSystemAdmin)
         {
-            Cmd = new SqlCommand()
+            Cn = new SqlConnection();
+            
+            if(isSystemAdmin)
             {
+                Cn.ConnectionString = Properties.Settings.Default.SystemAdminConnection;
+            }
+            else
+            {
+                Cn.ConnectionString = Properties.Settings.Default.AccountingProcessConnection;
+            }
+            
+            Cmd = new SqlCommand()
+            { 
                 Connection = Cn,
                 CommandType = CommandType.StoredProcedure,
                 CommandText = commandText
             };
+            Cn.Open();
         }
         /// <summary>
         /// 担当者登録
@@ -48,26 +48,52 @@ namespace Infrastructure
         /// <returns>データ処理件数</returns>
         public int Registration(Rep rep)
         {
-            ADO_NewInstance_StoredProc("registration_rep");
-            
-            Cmd.Parameters.Add(new SqlParameter("@rep_name", rep.Name));
-            Cmd.Parameters.Add(new SqlParameter("@rep_password", rep.Password));
-            Cmd.Parameters.Add(new SqlParameter("@is_validity", rep.IsValidity));
-            return Cmd.ExecuteNonQuery();
+            using (Cn) 
+            {
+                ADO_NewInstance_StoredProc("registration_rep",false);
+                Cmd.Parameters.AddWithValue("@rep_name", rep.Name);
+                Cmd.Parameters.AddWithValue("@password", rep.Password);
+                Cmd.Parameters.AddWithValue("@validity", rep.IsValidity);
+                return Cmd.ExecuteNonQuery();
+            }
         }
         /// <summary>
         /// 担当者データ更新
         /// </summary>
         /// <param name="rep">担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Rep rep)
+        public int Update(Rep rep,Rep loginRep)
         {
-            return 0;
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc("update_rep", true);
+                Cmd.Parameters.AddWithValue("@rep_id", rep.RepID);
+                Cmd.Parameters.AddWithValue("@password", rep.Password);
+                Cmd.Parameters.AddWithValue("@is_validity", rep.IsValidity);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", loginRep.RepID);
+                return Cmd.ExecuteNonQuery();
+            }
         }
 
-        public void ReferenceRep(string repName)
+        public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidity)
         {
-            throw new System.NotImplementedException();
+            Rep rep;
+            ObservableCollection<Rep> reps = new ObservableCollection<Rep>();
+
+            using (Cn)
+            {
+                ADO_NewInstance_StoredProc("reference_rep",false);
+                Cmd.Parameters.Add(new SqlParameter("@rep_name", repName));
+                Cmd.Parameters.Add(new SqlParameter("@true_only", isValidity));
+                DataReader = Cmd.ExecuteReader();
+                
+                while (DataReader.Read())
+                {
+                    rep = new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"]);
+                    reps.Add(rep);
+                }
+            }
+            return reps;
         }
     }
 }

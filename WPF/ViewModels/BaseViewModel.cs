@@ -16,6 +16,7 @@ namespace WPF.ViewModels
     {
         private bool callShowWindow;
         private bool callShowMessageBox;
+        private MessageBoxInfo messageBox;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -30,8 +31,16 @@ namespace WPF.ViewModels
         /// <summary>
         /// 表示するメッセージボックスデータ
         /// </summary>
-        public MessageBoxInfo MessageBox { get; set; }
-        /// <summary>
+         public MessageBoxInfo MessageBox
+        {
+            get => messageBox;
+            set
+            {
+                messageBox = value;
+                CallPropertyChanged();
+            }
+        }
+       /// <summary>
         /// メッセージボックス表示コマンド
         /// </summary>
         public DelegateCommand MessageBoxCommand { get; set; }
@@ -76,6 +85,7 @@ namespace WPF.ViewModels
                 callShowMessageBox = false;
             }
         }
+
 
         /// <summary>
         /// プロパティ変更通知イベントを呼び出します

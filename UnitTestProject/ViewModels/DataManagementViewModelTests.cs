@@ -21,7 +21,7 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.IsRepPasswordEnabled, false);
             Assert.AreEqual(vm.IsRepNewPasswordEnabled, true);
             Assert.AreEqual(vm.IsRepReferenceMenuEnabled, false);
-            Assert.AreEqual(vm.RepName, null);
+            Assert.AreEqual(vm.RepName, string.Empty);
             Assert.AreEqual(vm.RepCurrentPassword, string.Empty);
             Assert.AreEqual(vm.RepNewPassword, string.Empty);
             Assert.AreEqual(vm.RepDataOperationButtonContent, "登録");
@@ -51,6 +51,7 @@ namespace WPF.ViewModels.Tests
 
             vm.RepCurrentPassword = "aaa";
             Assert.AreEqual(vm.IsRepNewPasswordEnabled, true);
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, true);
 
             vm.RepNewPassword = "bbb";
             Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Domain.Entities.ValueObjects;
+using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
 
@@ -17,6 +18,8 @@ namespace WPF.ViewModels
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
         #endregion
+
+        public static Rep LoginRep { get; set; }
 
         public enum Locations
         {

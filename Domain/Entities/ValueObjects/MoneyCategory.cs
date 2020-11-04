@@ -103,7 +103,7 @@ namespace Domain.Entities.ValueObjects
         /// <returns>00,000,000 円</returns>
         public string AmountWithUnit()
         {
-            return AmountHelper.AmountWithUnit(Amount);
+            return TextHelper.AmountWithUnit(Amount);
         }
 
     }

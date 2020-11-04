@@ -5,6 +5,8 @@ using Domain.Repositories;
 using Infrastructure;
 using WPF.Views.Datas;
 using System.Windows;
+using System.Threading.Tasks;
+using Domain.Entities.Helpers;
 
 namespace WPF.ViewModels
 {
@@ -27,8 +29,8 @@ namespace WPF.ViewModels
         private string _repDataOperationButtonContent;
         private bool _isCheckedRegistration;
         private bool _isCheckedUpdate;
-        private string _referenceRep;
-        private bool _repValidity;
+        private string _referenceRepName = string.Empty;
+        private bool _repValidityTrueOnly;
         private bool _newPasswordCharCheck;
         private bool _currentPasswordCharCheck;
         private bool _confirmationPasswordCharCheck;
@@ -45,7 +47,7 @@ namespace WPF.ViewModels
         private ObservableCollection<Rep> _repList;
         private bool _isRepOperationButtonEnabled;
         #endregion
-        private IDataBaseConnect DataBaseConnect;
+        private readonly IDataBaseConnect DataBaseConnect;
         private DataOperation CurrentOperation;
         #endregion
 
@@ -72,7 +74,20 @@ namespace WPF.ViewModels
             SetRepDelegateCommand();
             SetRepOperationButtonEnabled();
         }
-
+        /// <summary>
+        /// 更新の必要がないことをメッセージボックスで知らせます
+        /// </summary>
+        private void CallNoRequiredRepUpdateMessage()
+        {
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = "更新の必要はありません",
+                Image = MessageBoxImage.Exclamation,
+                Title = "データ操作案内",
+                Button = MessageBoxButton.OK
+            };
+            CallShowMessageBox = true;
+        }
         /// <summary>
         /// データ操作のジャンルを切り替え、操作ボタンの表示文字列を入力し、コントロールの値をクリアして、Enableを設定します
         /// </summary>
@@ -83,6 +98,7 @@ namespace WPF.ViewModels
             IsCheckedRegistration = (Operation == DataOperation.登録);
             IsCheckedUpdate = (Operation == DataOperation.更新);
             RepDataOperationButtonContent = Operation.ToString();
+            if (CurrentOperation == DataOperation.更新) RepList= DataBaseConnect.ReferenceRep(string.Empty, false);
             SetDetailLocked();
         }
 
@@ -132,22 +148,45 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="confirmationMessage">確認内容（プロパティ等）</param>
         /// <param name="category">タイトルに表示するクラス名</param>
-        private MessageBoxResult CallConfirmationRegistration(string confirmationMessage,string titleRegistrationCategory)
+        private MessageBoxResult CallConfirmationDataOperation(string confirmationMessage,string titleRegistrationCategory)
         {
             MessageBox = new MessageBoxInfo()
             {
                 Message = confirmationMessage,
-                Title = $"{titleRegistrationCategory}登録確認",
+                Title = $"{titleRegistrationCategory}データ操作確認",
                 Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
             };
-            CallPropertyChanged(nameof(MessageBox));
             CallShowMessageBox = true;
-
             return MessageBox.Result;
         }
+        /// <summary>
+        /// データ操作を「登録」にするコマンド
+        /// </summary>
+        public DelegateCommand SetDataRegistrationCommand { get; set; }
+        /// <summary>
+        /// データ操作を「更新」にするコマンド
+        /// </summary>
+        public DelegateCommand SetDataUpdateCommand { get; set; }
 
         #region RepOperation
+        /// <summary>
+        /// 担当者データを操作します
+        /// </summary>
+        public void RepDataOperation()
+        {
+            switch(CurrentOperation)
+            {
+                case DataOperation.更新:
+                    RepUpdate();
+                    break;
+                case DataOperation.登録:
+                    RepRegistration();
+                    break;
+                default:
+                    break;
+            }
+        }
         /// <summary>
         /// 担当者DelegateCommandのインスタンスを生成します
         /// </summary>
@@ -156,7 +195,20 @@ namespace WPF.ViewModels
             RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
             RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
             ConfirmationPasswordCheckedReversCommand = new DelegateCommand(() => ConfirmationPasswordCharCheckedRevers(), () => true);
-            RepRegistrationCommand = new DelegateCommand(() => RepRegistration(), () => IsRepRegistrable());
+            RepDataOperationCommand = new DelegateCommand(() => RepDataOperation(), () => IsDataOperationCanExecute());
+        }
+        /// <summary>
+        /// データ操作コマンドのCanExecuteを設定します
+        /// </summary>
+        /// <returns></returns>
+        private bool IsDataOperationCanExecute()
+        {
+            return CurrentOperation switch
+            {
+                DataOperation.更新 => IsRepUpdatable(),
+                DataOperation.登録 => IsRepRegistrable(),
+                _ => false,
+            };
         }
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかの可否を反転させるコマンド
@@ -171,21 +223,17 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand RepCurrentPasswordCharCheckedReversCommand { get; set; }
         /// <summary>
-        /// データ操作を「登録」にするコマンド
+        /// 担当者データ操作コマンド
         /// </summary>
-        public DelegateCommand SetDataRegistrationCommand { get; set; }
+        public DelegateCommand RepDataOperationCommand { get; set; }
         /// <summary>
-        /// データ操作を「更新」にするコマンド
+        /// 担当者更新コマンドのCanExecuteを切り替えます
         /// </summary>
-        public DelegateCommand SetDataUpdateCommand { get; set; }
-        /// <summary>
-        /// 新規担当者登録コマンド
-        /// </summary>
-        public DelegateCommand RepRegistrationCommand { get; set; }
-        /// <summary>
-        /// 担当者データ更新コマンド
-        /// </summary>
-        public DelegateCommand RepUpdateCommand { get; set; }
+        /// <returns>CanExecute</returns>
+        private bool IsRepUpdatable()
+        {
+            return IsRepOperationButtonEnabled;
+        }
         /// <summary>
         /// 担当者登録コマンドのCanExecuteを切り替えます
         /// </summary>
@@ -193,32 +241,65 @@ namespace WPF.ViewModels
         private bool IsRepRegistrable()
         {
             var repError = GetErrors(nameof(RepName));
-            if(repError==null)repError = GetErrors(nameof(RepNewPassword));
-            if (repError == null) repError = GetErrors(nameof(ConfirmationPassword));
+            if(repError==null & !string.IsNullOrEmpty(RepNewPassword))repError = GetErrors(nameof(RepNewPassword));
+            if (repError == null & !string.IsNullOrEmpty(ConfirmationPassword)) repError = GetErrors(nameof(ConfirmationPassword));
             return repError == null;
         }
         /// <summary>
         /// 担当者を登録して、担当者一覧に加えます
         /// </summary>
-        private void RepRegistration()
+        private async void RepRegistration()
         {
             CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity);
-            if (CallConfirmationRegistration
+            if (CallConfirmationDataOperation
                 ($"担当者名 : {CurrentRep.Name}\r\nパスワード : {new string('*', RepNewPassword.Length)}\r\n有効性 : {CurrentRep.IsValidity}\r\n\r\n登録しますか？",
                 "担当者") == MessageBoxResult.Cancel)
                 return;
-            //DataBaseConnect.Registration(CurrentRep);
+            IsRepOperationButtonEnabled = false;
+            RepDataOperationButtonContent = "登録中";
+            await Task.Run(()=> DataBaseConnect.Registration(CurrentRep));
+            IsRepOperationButtonEnabled = true;
+            RepDataOperationButtonContent = "登録";
             RepDetailClear();
+            RepList = DataBaseConnect.ReferenceRep(string.Empty, RepValidityTrueOnly);
         }
         /// <summary>
         /// 担当者データの変更、リストを最新データに更新します
         /// </summary>
-        private void RepUpdate()
+        private async void RepUpdate()
         {
-            string updateContents = $"担当者 : {CurrentRep.Name}\r\n";
+            string updateContents=string.Empty;
 
-            if (CurrentRep.IsValidity != IsRepValidity) updateContents += $"有効性 : {CurrentRep.IsValidity} → {IsRepValidity}\r\n";
+            if (CurrentRep.IsValidity != IsRepValidity)
+            {
+                updateContents += $"有効性 : {CurrentRep.IsValidity} → {IsRepValidity}\r\n";
+                CurrentRep.IsValidity = IsRepValidity;
+            }
 
+            if (RepNewPassword.Length > 0)
+            {
+                updateContents += $"パスワード変更 : {new string('*', RepNewPassword.Length)}\r\n";
+                CurrentRep.Password = RepNewPassword;
+            }
+
+            if (updateContents == string.Empty)
+            {
+                CallNoRequiredRepUpdateMessage();
+                return;
+            }
+
+            updateContents = $"担当者 : {CurrentRep.Name}\r\n\r\n{updateContents}";
+            if (CallConfirmationDataOperation($"{updateContents}\r\n\r\n更新します。よろしいですか？", "担当者") == MessageBoxResult.Cancel) return;
+
+            MainWindowViewModel.LoginRep = CurrentRep;
+            
+            IsRepOperationButtonEnabled = false;
+            RepDataOperationButtonContent = "更新中";
+            await Task.Run(() => DataBaseConnect.Update(CurrentRep,MainWindowViewModel.LoginRep));
+            IsRepOperationButtonEnabled = true;
+            RepDataOperationButtonContent = "更新";
+            RepDetailClear();
+            RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
         }
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかのチェックを切り替えます
@@ -286,7 +367,8 @@ namespace WPF.ViewModels
             get => _repName;
             set
             {
-                _repName = value;
+                if (value == null) return;
+                _repName = value.Replace('　',' ');
                 ValidationProperty(nameof(RepName), value);
                 SetRepOperationButtonEnabled();
                 CallPropertyChanged();
@@ -302,7 +384,11 @@ namespace WPF.ViewModels
             {
                 _repCurrentPassword = value;
                 ValidationProperty(nameof(RepCurrentPassword), value);
-                if (CurrentOperation == DataOperation.更新) IsRepNewPasswordEnabled = value == CurrentRep.Password;
+                if (CurrentOperation == DataOperation.更新)
+                {
+                    IsRepNewPasswordEnabled = value == CurrentRep.Password;
+                    SetRepOperationButtonEnabled();
+                }
                 CallPropertyChanged();
             }
         }
@@ -381,24 +467,26 @@ namespace WPF.ViewModels
         /// <summary>
         /// 担当者検索文字列
         /// </summary>
-        public string ReferenceRep
+        public string ReferenceRepName
         {
-            get => _referenceRep;
+            get => _referenceRepName;
             set
             {
-                _referenceRep = value;
+                _referenceRepName = value;
+                RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
                 CallPropertyChanged();
             }
         }
         /// <summary>
         /// 担当者データの有効性
         /// </summary>
-        public bool RepValidity
+        public bool RepValidityTrueOnly
         {
-            get => _repValidity;
+            get => _repValidityTrueOnly;
             set
             {
-                _repValidity = value;
+                _repValidityTrueOnly = value;
+                RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
                 CallPropertyChanged();
             }
         }
@@ -599,7 +687,7 @@ namespace WPF.ViewModels
                     if(IsRepOperationButtonEnabled) IsRepOperationButtonEnabled= RepNewPassword == ConfirmationPassword;
                     break;
                 case DataOperation.更新:
-                    IsRepOperationButtonEnabled = IsRepNewPasswordEnabled & !string.IsNullOrEmpty(RepNewPassword);
+                    IsRepOperationButtonEnabled = IsRepNewPasswordEnabled & string.IsNullOrEmpty(RepNewPassword);
                     if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled = CurrentRep.Password == RepCurrentPassword;
                     if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled = RepNewPassword == ConfirmationPassword;
                     break;

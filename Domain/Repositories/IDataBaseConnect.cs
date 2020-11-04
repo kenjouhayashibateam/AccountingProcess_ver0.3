@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.ValueObjects;
+using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
 {
@@ -17,12 +18,14 @@ namespace Domain.Repositories
         /// データ更新
         /// </summary>
         /// <param name="rep">担当者</param>
+        /// <param name="LoginRep">ログインしている担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Rep rep);
+        public int Update(Rep rep,Rep loginRep);
         /// <summary>
         /// 担当者検索
         /// </summary>
         /// <param name="repName">担当者名</param>
-        public void ReferenceRep(string repName);
+        /// <param name="isValidity">有効性がTrueのデータのみ検索チェック</param>
+        public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidity);
     }
 }

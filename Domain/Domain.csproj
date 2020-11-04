@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CashBox.cs" />
-    <Compile Include="Entities\Helpers\AmountHelper.cs" />
+    <Compile Include="Entities\Helpers\TextHelper.cs" />
     <Compile Include="Entities\Slip.cs" />
     <Compile Include="Entities\ValueObjects\AccountSubject.cs" />
     <Compile Include="Entities\ValueObjects\Content.cs" />
