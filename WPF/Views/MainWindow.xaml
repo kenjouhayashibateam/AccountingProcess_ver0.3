@@ -10,14 +10,14 @@
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="春秋苑経理システム" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="{Binding WindowTitle}" Height="450" Width="800" WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
     <i:Interaction.Behaviors>
-        <b:WindowClosingBehavior/>
+        <b:WindowClosingCancelBehavior/>
     </i:Interaction.Behaviors>
     
     <i:Interaction.Triggers>
@@ -41,10 +41,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理をする場所を選んでください" Grid.Row="0" Margin="5">
+        <GroupBox x:Name="LoginGroupBox" Header="ログインしてください" Grid.Row="0" Margin="5">
+            <Button x:Name="LoginButton" Content="ログイン" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="300,5">
+                <Button.InputBindings>
+                    <MouseBinding Command="{Binding ShowLoginCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+        </GroupBox>
+        <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理をする場所を選んでください" Grid.Row="1" Margin="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -62,7 +70,7 @@
                 </RadioButton>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="PracticalOperationsItemsGroupBox" Header="実務項目" Grid.Row="1" Margin="5">
+        <GroupBox x:Name="PracticalOperationsItemsGroupBox" Header="実務項目" Grid.Row="2" Margin="5">
             <Grid IsEnabled="{Binding ProcessFeatureEnabled}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -87,7 +95,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="1" Content="データ管理（未実装）" Margin="10,15">
                     <Button.InputBindings>
-                        <MouseBinding Command="{Binding ShowDataManagement}" MouseAction="LeftClick"/>
+                        <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
             <Button x:Name="WindowCloseButton" Grid.Column="2" Content="閉じる"  Margin="10,15" Click="WindowCloseButton_Click"/>

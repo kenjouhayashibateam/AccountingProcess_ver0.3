@@ -17,6 +17,7 @@ namespace WPF.ViewModels
         private readonly ScreenTransition screenTransition = new ScreenTransition();
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
+        private string windowTitle;
         #endregion
 
         public static Rep LoginRep { get; set; }
@@ -42,13 +43,17 @@ namespace WPF.ViewModels
         /// <summary>
         /// データ管理画面表示コマンド
         /// </summary>
-        public DelegateCommand ShowDataManagement { get; }
-
+        public DelegateCommand ShowDataManagementCommand { get; }
+        /// <summary>
+        /// ログイン画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowLoginCommand { get; }
         /// <summary>
         /// コンストラクタ　DelegateCommandのインスタンスを生成します
         /// </summary>
         public MainWindowViewModel()
         {
+            WindowTitle = "春秋苑経理システム（ログイン : なし）";
             ShowRemainingMoneyCalculationCommand =
                 new DelegateCommand(() => SetShowRemainingMoneyCalculationView(), () => true);
             MessageBoxCommand =
@@ -57,8 +62,18 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetLocationKanriJimusho(), () => true);
             SetLodationShorendoCommand =
                 new DelegateCommand(() => SetLocationShorendo(), () => true);
-            ShowDataManagement =
+            ShowDataManagementCommand =
                 new DelegateCommand(() => SetShowDataManagementView(), () => true);
+            ShowLoginCommand =
+                new DelegateCommand(() => SetShowLoginView(), () => true);
+        }
+        /// <summary>
+        /// ログイン画面を表示します
+        /// </summary>
+        private void SetShowLoginView()
+        {
+            CreateShowWindowCommand(screenTransition.Login());
+            CallPropertyChanged();
         }
         /// <summary>
         /// データ管理画面を表示します
@@ -156,6 +171,17 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+
+        public string WindowTitle
+        {
+            get => windowTitle;
+            set
+            {
+                windowTitle = value;
+                CallPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
         /// </summary>

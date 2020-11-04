@@ -23,5 +23,13 @@ namespace WPF.ViewModels.Commands
         {
             return new DataManagementView();
         }
+        /// <summary>
+        /// ログインウィンドウを呼び出します
+        /// </summary>
+        /// <returns>ログインウィンドウインスタンス</returns>
+        public LoginView Login()
+        {
+            return new LoginView();
+        }
     }
 }
