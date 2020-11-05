@@ -12,16 +12,18 @@ namespace WPF.ViewModels
     /// <summary>
     /// ビューモデルの共通処理クラス
     /// </summary>
-    public abstract class BaseViewModel : INotifyPropertyChanged,INotifyDataErrorInfo
+    public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         private bool callShowWindow;
         private bool callShowMessageBox;
         private MessageBoxInfo messageBox;
+        private DelegateCommand<Window> windowCloseCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
         /// <summary>
-        /// フォーム表示コマンド
+        /// ウィンドウ表示コマンド
         /// </summary>
         public DelegateCommand ShowWindowCommand { get; set; }
         /// <summary>
@@ -31,7 +33,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 表示するメッセージボックスデータ
         /// </summary>
-         public MessageBoxInfo MessageBox
+        public MessageBoxInfo MessageBox
         {
             get => messageBox;
             set
@@ -40,7 +42,7 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-       /// <summary>
+        /// <summary>
         /// メッセージボックス表示コマンド
         /// </summary>
         public DelegateCommand MessageBoxCommand { get; set; }
@@ -52,7 +54,7 @@ namespace WPF.ViewModels
             get => callShowWindow;
             set
             {
-                if(callShowWindow==value)
+                if (callShowWindow == value)
                 {
                     return;
                 }
@@ -85,8 +87,32 @@ namespace WPF.ViewModels
                 callShowMessageBox = false;
             }
         }
-
-
+        /// <summary>
+        /// ウインドウクローズコマンド
+        /// </summary>
+        public DelegateCommand<Window> WindowCloseCommand
+        {
+            get
+            {
+                if (windowCloseCommand == null)
+                {
+                    windowCloseCommand = new DelegateCommand<Window>
+                        (
+                            (Window) => DoCloseWindow(Window), 
+                            (Window) => true
+                        ); 
+                }
+                return windowCloseCommand;
+            } set => windowCloseCommand = value; 
+        }
+        /// <summary>
+        /// ウインドウを閉じます
+        /// </summary>
+        /// <param name="window"></param>
+        protected void DoCloseWindow(Window window)
+        {
+            window.Close();
+        }
         /// <summary>
         /// プロパティ変更通知イベントを呼び出します
         /// </summary>

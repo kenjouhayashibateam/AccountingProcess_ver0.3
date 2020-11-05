@@ -18,9 +18,8 @@ namespace WPF.ViewModels
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
         private string windowTitle;
+        private Rep loginRep;
         #endregion
-
-        public static Rep LoginRep { get; set; }
 
         public enum Locations
         {
@@ -188,7 +187,7 @@ namespace WPF.ViewModels
         private void SetLocationKanriJimusho()
         {
             KanriJimushoChecked = true;
-            Location = Locations.管理事務所.ToString() ;
+            Location = Locations.管理事務所.ToString();
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
@@ -210,7 +209,7 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(kanriJimushoChecked):
                     SetLocationErrorsListOperation(propertyName);

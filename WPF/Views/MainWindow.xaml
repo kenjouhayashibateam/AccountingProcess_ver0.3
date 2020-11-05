@@ -98,7 +98,11 @@
                         <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
-            <Button x:Name="WindowCloseButton" Grid.Column="2" Content="閉じる"  Margin="10,15" Click="WindowCloseButton_Click"/>
+            <Button x:Name="WindowCloseButton" Grid.Column="2" Content="閉じる"  Margin="10,15">
+                <Button.InputBindings>
+                    <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
         </Grid>
     </Grid>
 </Window>

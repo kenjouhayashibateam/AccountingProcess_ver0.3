@@ -1,7 +1,9 @@
 ﻿using Domain.Entities.ValueObjects;
+using Domain.Repositories;
+using Infrastructure;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Forms;
+using System.Windows;
 using WPF.ViewModels.Commands;
 
 namespace WPF.ViewModels
@@ -15,7 +17,12 @@ namespace WPF.ViewModels
         private string password;
         private bool passwordCharCheck;
         private string repName;
+        private IDataBaseConnect DataBaseConnecter;
 
+        /// <summary>
+        /// ログインコマンド
+        /// </summary>
+        public DelegateCommand<Window> LoginCommand { get; }
         /// <summary>
         /// 担当者リスト
         /// </summary>
@@ -23,15 +30,15 @@ namespace WPF.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public LoginViewModel()
+        public LoginViewModel(IDataBaseConnect dataBaseConnect)
         {
-            Reps = new ObservableCollection<Rep>
-            {
-                new Rep("aaa", "bbb", "ccc", true),
-                new Rep("xxx","yyy","zzz",true)
-            };
+            DataBaseConnecter = dataBaseConnect;
+            Reps = DataBaseConnecter.ReferenceRep(string.Empty, true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
         }
+
+        public LoginViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+
         public DelegateCommand PasswordCheckReversCommand { get; }
         /// <summary>
         /// 選択された担当者
