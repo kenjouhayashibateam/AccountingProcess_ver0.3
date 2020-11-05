@@ -290,12 +290,10 @@ namespace WPF.ViewModels
 
             updateContents = $"担当者 : {CurrentRep.Name}\r\n\r\n{updateContents}";
             if (CallConfirmationDataOperation($"{updateContents}\r\n\r\n更新します。よろしいですか？", "担当者") == MessageBoxResult.Cancel) return;
-
-            MainWindowViewModel.LoginRep = CurrentRep;
             
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "更新中";
-            await Task.Run(() => DataBaseConnect.Update(CurrentRep,MainWindowViewModel.LoginRep));
+            await Task.Run(() => DataBaseConnect.Update(CurrentRep));
             IsRepOperationButtonEnabled = true;
             RepDataOperationButtonContent = "更新";
             RepDetailClear();

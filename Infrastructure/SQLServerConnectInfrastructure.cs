@@ -62,7 +62,7 @@ namespace Infrastructure
         /// </summary>
         /// <param name="rep">担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Rep rep,Rep loginRep)
+        public int Update(Rep rep)
         {
             using(Cn)
             {
@@ -70,7 +70,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@rep_id", rep.RepID);
                 Cmd.Parameters.AddWithValue("@password", rep.Password);
                 Cmd.Parameters.AddWithValue("@is_validity", rep.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_rep_id", loginRep.RepID);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", rep.RepID);
                 return Cmd.ExecuteNonQuery();
             }
         }

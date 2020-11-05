@@ -18,9 +18,8 @@ namespace Domain.Repositories
         /// データ更新
         /// </summary>
         /// <param name="rep">担当者</param>
-        /// <param name="LoginRep">ログインしている担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Rep rep,Rep loginRep);
+        public int Update(Rep rep);
         /// <summary>
         /// 担当者検索
         /// </summary>
