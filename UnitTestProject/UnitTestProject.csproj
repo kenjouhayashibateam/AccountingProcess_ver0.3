@@ -54,12 +54,17 @@
     <Compile Include="Entities\ValueObjects\OtherMoneyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DataManagementViewModelTests.cs" />
+    <Compile Include="ViewModels\LoginViewModelTests.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{44C1B257-4DB3-42E3-AD52-FE484A527144}</Project>
       <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{6FAD176D-78E7-4CF0-BD70-61D67ADD67FC}</Project>
+      <Name>Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\WPF\WPF.csproj">
       <Project>{D1B65BE8-8D31-47AB-ABD0-5ED627C8BAC6}</Project>

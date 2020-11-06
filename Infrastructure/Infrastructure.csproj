@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="DefaultInfrastructure.cs" />
     <Compile Include="ExcelOutputInfrastructure.cs" />
+    <Compile Include="LocalConectInfrastructure.cs" />
     <Compile Include="LogFileInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

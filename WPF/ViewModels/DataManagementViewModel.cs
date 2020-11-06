@@ -43,7 +43,7 @@ namespace WPF.ViewModels
         private readonly string TrueControlBackground = "#FFFFFF";
         private readonly string FalseControlBackground = "#A9A9A9";
         private bool _isRepReferenceMenuEnabled;
-        private Rep _currentRep=new Rep(string.Empty,string.Empty,string.Empty,false);
+        private Rep _currentRep=new Rep(string.Empty,string.Empty,string.Empty,false,false);
         private ObservableCollection<Rep> _repList;
         private bool _isRepOperationButtonEnabled;
         #endregion
@@ -203,6 +203,7 @@ namespace WPF.ViewModels
         /// <returns></returns>
         private bool IsDataOperationCanExecute()
         {
+            if (!IsAdminPermisson) return false;
             return CurrentOperation switch
             {
                 DataOperation.更新 => IsRepUpdatable(),
@@ -250,7 +251,7 @@ namespace WPF.ViewModels
         /// </summary>
         private async void RepRegistration()
         {
-            CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity);
+            CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity,false);
             if (CallConfirmationDataOperation
                 ($"担当者名 : {CurrentRep.Name}\r\nパスワード : {new string('*', RepNewPassword.Length)}\r\n有効性 : {CurrentRep.IsValidity}\r\n\r\n登録しますか？",
                 "担当者") == MessageBoxResult.Cancel)
@@ -343,7 +344,7 @@ namespace WPF.ViewModels
             RepCurrentPassword = string.Empty;
             RepNewPassword = string.Empty;
             ConfirmationPassword = string.Empty;
-            CurrentRep = new Rep(null, null, null, true);
+            CurrentRep = new Rep(null, null, null, false,false);
         }
         /// <summary>
         /// 担当者ID
@@ -677,7 +678,11 @@ namespace WPF.ViewModels
                 IsRepOperationButtonEnabled = true;
                 return;
             }
-
+            if(!IsAdminPermisson)
+            {
+                IsRepOperationButtonEnabled = false;
+                return;
+            }
             switch(CurrentOperation)
             {
                 case DataOperation.登録:

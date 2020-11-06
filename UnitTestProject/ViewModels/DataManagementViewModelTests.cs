@@ -1,16 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Domain.Entities.ValueObjects;
+using WPF.Views.Datas;
+using Infrastructure;
 
 namespace WPF.ViewModels.Tests
 {
     [TestClass()]
     public class DataManagementViewModelTests
     {
-        readonly DataManagementViewModel vm = new DataManagementViewModel();
+        readonly DataManagementViewModel vm = new DataManagementViewModel(new LocalConectInfrastructure());
         [TestMethod()]
         public void シナリオ()
         {
-
         }
         [TestMethod()]
         public void 登録時の担当者フィールドプロパティ()
@@ -31,15 +32,17 @@ namespace WPF.ViewModels.Tests
         public void 更新時の担当者フィールドプロパティ()
         {
             vm.SetDataUpdateCommand.Execute();
+            LoginRep rep = LoginRep.GetInstance();
+            rep.SetRep(new Rep("aaa", "bbb", "ccc", true, true));
 
             Assert.AreEqual(vm.IsRepNameDataEnabled, false);
             Assert.AreEqual(vm.IsRepPasswordEnabled, true);
             Assert.AreEqual(vm.IsRepNewPasswordEnabled, false);
             Assert.AreEqual(vm.IsRepReferenceMenuEnabled, true);
 
-            vm.CurrentRep = new Rep("rep1", "a a", "aaa", false);
+            vm.CurrentRep = vm.RepList[0];
 
-            Assert.AreEqual(vm.RepName, "a a");
+            Assert.AreEqual(vm.RepName, "林飛 顕誠");
             Assert.AreEqual(vm.RepCurrentPassword, string.Empty);
             Assert.AreEqual(vm.RepNewPassword, string.Empty);
             Assert.AreEqual(vm.RepDataOperationButtonContent, "更新");

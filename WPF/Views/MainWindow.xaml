@@ -16,6 +16,9 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
     <i:Interaction.Behaviors>
         <b:WindowClosingCancelBehavior/>
     </i:Interaction.Behaviors>
@@ -49,6 +52,7 @@
             <Button x:Name="LoginButton" Content="ログイン" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="300,5">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding ShowLoginCommand}" MouseAction="LeftClick"/>
+                    <KeyBinding Command="{Binding ShowLoginCommand}" Key="Space"/>
                 </Button.InputBindings>
             </Button>
         </GroupBox>
@@ -61,11 +65,13 @@
                 <RadioButton Content="管理事務所" Grid.Column="0" IsChecked="{Binding KanriJimushoChecked}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">
                     <RadioButton.InputBindings>
                         <MouseBinding Command="{Binding SetLocationKanriJimushoCommand}" MouseAction="LeftClick"/>
+                        <KeyBinding Command="{Binding SetLocationKanriJimushoCommand}" Key="Space"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
                 <RadioButton Content="青蓮堂" Grid.Column="1" IsChecked="{Binding ShorendoChecked}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10">
                     <RadioButton.InputBindings>
                         <MouseBinding Command="{Binding SetLodationShorendoCommand}" MouseAction="LeftClick"/>
+                        <KeyBinding Command="{Binding SetLodationShorendoCommand}" Key="Space"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
             </Grid>
@@ -80,6 +86,7 @@
                     <Button x:Name="ShowRemainingMoneyCalculationViewButton" Grid.Row="0" Grid.Column="0" Content="金庫金額計算" Margin="100,50" >
                         <Button.InputBindings>
                             <MouseBinding Command="{Binding ShowRemainingMoneyCalculationCommand}" MouseAction="LeftClick"/>
+                            <KeyBinding Command="{Binding ShowRemainingMoneyCalculationCommand}" Key="Space"/>
                         </Button.InputBindings>
                     </Button>
                 </Grid>
@@ -93,14 +100,16 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="1" Content="データ管理（未実装）" Margin="10,15">
+            <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="1" Visibility="{Binding IsAdminPermisson,Converter={StaticResource VisibilityConverter}}" Content="データ管理（未実装）" Margin="10,15">
                     <Button.InputBindings>
                         <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
-                    </Button.InputBindings>
+                    <KeyBinding Command="{Binding ShowDataManagementCommand}" Key="Space"/>
+                </Button.InputBindings>
                 </Button>
             <Button x:Name="WindowCloseButton" Grid.Column="2" Content="閉じる"  Margin="10,15">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                 </Button.InputBindings>
             </Button>
         </Grid>

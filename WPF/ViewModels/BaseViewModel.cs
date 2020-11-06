@@ -22,6 +22,7 @@ namespace WPF.ViewModels
         private DelegateCommand<Window> windowCloseCommand;
         private string loginRepName;
         private string windowTitle;
+        private bool isAdminPermisson;
 
         /// <summary>
         /// 画面タイトル
@@ -138,6 +139,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// アドミン権限
+        /// </summary>
+        public bool IsAdminPermisson
+        {
+            get => isAdminPermisson;
+            set
+            {
+                isAdminPermisson = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// ウインドウを閉じます
@@ -219,6 +232,8 @@ namespace WPF.ViewModels
         {
             LoginRep loginRep = LoginRep.GetInstance();
             loginRep.Add(this);
+            if (loginRep.Rep == null) IsAdminPermisson = false;
+            else IsAdminPermisson = loginRep.Rep.IsAdminPermisson;
             WindowTitle = SetWindowDefaultTitle();
         }
 
@@ -298,9 +313,14 @@ namespace WPF.ViewModels
             }
             else
             {
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)})";
+                IsAdminPermisson = rep.IsAdminPermisson;
+                WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
             }
         }
+        /// <summary>
+        /// 画面タイトルのみをセットします
+        /// </summary>
+        /// <returns>画面タイトル</returns>
         protected abstract string SetWindowDefaultTitle();
     }
 }

@@ -5,14 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:control="https://github.com/qtbui159/CypherBox"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+
         mc:Ignorable="d"
-        Title="ログインしてください" Height="250" Width="300">
+        Title="{Binding WindowTitle}" Height="250" Width="300">
 
     <Window.DataContext>
         <vm:LoginViewModel/>
     </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
+
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -51,12 +67,14 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="LoginButton" Grid.Column="1" Content="ログイン" Margin="3,10">
                 <Button.InputBindings>
-                    <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                    <MouseBinding Command="{Binding LoginCommand}" MouseAction="LeftClick"/>
+                    <KeyBinding Command="{Binding LoginCommand}" Key="Space"/>
                 </Button.InputBindings>
             </Button>
             <Button x:Name="CloseButton" Content="閉じる" Grid.Column="2" Margin="3,10">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                 </Button.InputBindings>
             </Button>
         </Grid>

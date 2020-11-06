@@ -18,13 +18,38 @@ namespace WPF.ViewModels
         private string password;
         private bool passwordCharCheck;
         private string repName;
-        private IDataBaseConnect DataBaseConnecter;
-        private ILoginRepObserver observer;
+        private readonly IDataBaseConnect DataBaseConnecter;
 
         /// <summary>
-        /// ログインコマンド
+        /// 担当者のパスワードを検証してログインします
         /// </summary>
-        public DelegateCommand<Window> LoginCommand { get; }
+        private void Login()
+        {
+            if(Password==CurrentRep.Password)
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message = $"担当者 : {CurrentRep.Name} でログインしました。",
+                    Image = MessageBoxImage.Information,
+                    Title = "ログイン成功",
+                    Button = MessageBoxButton.OK
+                };
+                CallPropertyChanged(nameof(MessageBox));
+                LoginRep loginRep = LoginRep.GetInstance();
+                loginRep.SetRep(CurrentRep);
+            }
+            else
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message = "ログインできません",
+                    Image = MessageBoxImage.Warning,
+                    Title = "ログイン失敗",
+                    Button = MessageBoxButton.OK
+                };
+                CallPropertyChanged(nameof(MessageBox));
+            }
+        }
         /// <summary>
         /// 担当者リスト
         /// </summary>
@@ -37,10 +62,10 @@ namespace WPF.ViewModels
             DataBaseConnecter = dataBaseConnect;
             Reps = DataBaseConnecter.ReferenceRep(string.Empty, true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
+            LoginCommand = new DelegateCommand(() => Login(), () => true);
         }
 
         public LoginViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
-
         public DelegateCommand PasswordCheckReversCommand { get; }
         /// <summary>
         /// 選択された担当者
@@ -92,6 +117,10 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ログインコマンド
+        /// </summary>
+        public DelegateCommand LoginCommand{get;}
 
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます

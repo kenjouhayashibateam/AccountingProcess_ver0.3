@@ -89,7 +89,7 @@ namespace Infrastructure
                 
                 while (DataReader.Read())
                 {
-                    rep = new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"]);
+                    rep = new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"],(bool)DataReader["is_permisson"]);
                     reps.Add(rep);
                 }
             }

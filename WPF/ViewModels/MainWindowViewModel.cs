@@ -1,6 +1,4 @@
-﻿using Domain.Entities.Helpers;
-using Domain.Entities.ValueObjects;
-using System.Windows;
+﻿using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
 
@@ -168,7 +166,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
         /// </summary>

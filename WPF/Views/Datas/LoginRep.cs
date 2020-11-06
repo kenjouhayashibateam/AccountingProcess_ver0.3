@@ -11,7 +11,10 @@ namespace WPF.Views.Datas
     public sealed class LoginRep
     {
         private readonly List<ILoginRepObserver> observers = new List<ILoginRepObserver>();
-        private readonly static LoginRep  loginRep=new LoginRep();
+        private readonly static LoginRep loginRep = new LoginRep();
+        private Rep _rep;
+
+        public Rep Rep => _rep;
 
         public static LoginRep GetInstance()
         {
@@ -20,6 +23,7 @@ namespace WPF.Views.Datas
 
         public void SetRep(Rep rep)
         {
+            _rep = rep;
             foreach (ILoginRepObserver observer in observers)
             {
                 observer.SetRep(rep);
