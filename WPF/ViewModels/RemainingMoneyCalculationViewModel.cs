@@ -4,7 +4,6 @@ using Domain.Entities;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Infrastructure;
 using System.Threading.Tasks;
-using System.ComponentModel;
 
 namespace WPF.ViewModels
 {
@@ -18,7 +17,6 @@ namespace WPF.ViewModels
         private readonly IDataOutput DataOutput;
         private bool outputButtonEnabled;
         private string outputButtonText="出力";
-
         #region AmountAndCount
         //表示用金額
         private string oneYenBundleAmountWithUnit;
@@ -787,6 +785,7 @@ namespace WPF.ViewModels
             OutputCommand = new DelegateCommand(() => Output(), () => true);
             OtherMoneyContentsClearCommand = new DelegateCommand(() => OtherMoneyContentsClear(), () => true);
             SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
+            DefaultWindowTitle = "金庫金額計算";
             OutputButtonEnabled = true;
         }
         /// <summary>
@@ -933,6 +932,12 @@ namespace WPF.ViewModels
                 default:
                     break;
             }
+        }
+
+        protected override string SetWindowDefaultTitle()
+        {
+            DefaultWindowTitle = "金庫金額計算";
+            return DefaultWindowTitle;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using WPF.ViewModels.Commands;
+using WPF.Views.Datas;
 
 namespace WPF.ViewModels
 {
@@ -18,6 +19,7 @@ namespace WPF.ViewModels
         private bool passwordCharCheck;
         private string repName;
         private IDataBaseConnect DataBaseConnecter;
+        private ILoginRepObserver observer;
 
         /// <summary>
         /// ログインコマンド
@@ -110,6 +112,12 @@ namespace WPF.ViewModels
                 default:
                     break;
             }
+        }
+
+        protected override string SetWindowDefaultTitle()
+        {
+            DefaultWindowTitle = "担当者ログイン";
+            return DefaultWindowTitle;
         }
     }
 }

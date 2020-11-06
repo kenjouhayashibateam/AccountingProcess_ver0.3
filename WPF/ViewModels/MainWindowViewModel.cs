@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
@@ -17,8 +18,6 @@ namespace WPF.ViewModels
         private readonly ScreenTransition screenTransition = new ScreenTransition();
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
-        private string windowTitle;
-        private Rep loginRep;
         #endregion
 
         public enum Locations
@@ -52,7 +51,7 @@ namespace WPF.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            WindowTitle = "春秋苑経理システム（ログイン : なし）";
+            //WindowTitle = "春秋苑経理システム（ログイン : なし）";
             ShowRemainingMoneyCalculationCommand =
                 new DelegateCommand(() => SetShowRemainingMoneyCalculationView(), () => true);
             MessageBoxCommand =
@@ -119,7 +118,6 @@ namespace WPF.ViewModels
                 callClosingMessage = false;
             }
         }
-
         /// <summary>
         /// 処理機能コントロールのEnabled
         /// </summary>
@@ -171,16 +169,6 @@ namespace WPF.ViewModels
             }
         }
 
-        public string WindowTitle
-        {
-            get => windowTitle;
-            set
-            {
-                windowTitle = value;
-                CallPropertyChanged();
-            }
-        }
-
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
         /// </summary>
@@ -227,6 +215,12 @@ namespace WPF.ViewModels
         private void SetLocationErrorsListOperation(string propertyName)
         {
             ErrorsListOperation(KanriJimushoChecked == false & ShorendoChecked == false, propertyName, "経理担当場所を設定して下さい");
+        }
+
+        protected override string SetWindowDefaultTitle()
+        {
+            DefaultWindowTitle = "春秋苑経理システム";
+            return DefaultWindowTitle;
         }
     }
 }

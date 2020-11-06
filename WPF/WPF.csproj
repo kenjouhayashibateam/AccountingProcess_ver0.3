@@ -88,6 +88,7 @@
     <Compile Include="Views\Behaviors\WindowClosingCancelBehavior.cs" />
     <Compile Include="Views\Datas\IClosing.cs" />
     <Compile Include="Views\Datas\InputValidation.cs" />
+    <Compile Include="Views\Datas\LoginRep.cs" />
     <Compile Include="Views\Datas\MessageBoxInfo.cs" />
     <Compile Include="Views\Datas\ShowWindowData.cs" />
     <Compile Include="Views\LoginView.xaml.cs">

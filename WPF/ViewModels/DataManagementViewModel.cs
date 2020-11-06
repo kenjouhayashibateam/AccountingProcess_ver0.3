@@ -717,6 +717,12 @@ namespace WPF.ViewModels
                 default:
                     break;
             }
-        }       
+        }
+
+        protected override string SetWindowDefaultTitle()
+        {
+            DefaultWindowTitle = "データ管理";
+            return DefaultWindowTitle;
+        }
     }
 }

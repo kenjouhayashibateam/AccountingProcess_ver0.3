@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,12 +14,19 @@ namespace WPF.ViewModels
     /// <summary>
     /// ビューモデルの共通処理クラス
     /// </summary>
-    public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
+    public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo, ILoginRepObserver
     {
         private bool callShowWindow;
         private bool callShowMessageBox;
         private MessageBoxInfo messageBox;
         private DelegateCommand<Window> windowCloseCommand;
+        private string loginRepName;
+        private string windowTitle;
+
+        /// <summary>
+        /// 画面タイトル
+        /// </summary>
+        protected string DefaultWindowTitle { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -106,6 +115,31 @@ namespace WPF.ViewModels
             } set => windowCloseCommand = value; 
         }
         /// <summary>
+        /// ログイン担当者の名前
+        /// </summary>
+        public string LoginRepName
+        {
+            get => loginRepName;
+            set
+            {
+                loginRepName = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ウィンドウタイトル
+        /// </summary>
+        public string WindowTitle
+        {
+            get => windowTitle;
+            set
+            {
+                windowTitle = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// ウインドウを閉じます
         /// </summary>
         /// <param name="window"></param>
@@ -179,6 +213,16 @@ namespace WPF.ViewModels
         /// </summary>
         public Dictionary<string, string> CurrentErrors=new Dictionary<string, string>();
         /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        protected BaseViewModel()
+        {
+            LoginRep loginRep = LoginRep.GetInstance();
+            loginRep.Add(this);
+            WindowTitle = SetWindowDefaultTitle();
+        }
+
+        /// <summary>
         /// エラーを追加します
         /// </summary>
         /// <param name="propertyName">追加するエラーのプロパティ名</param>
@@ -245,5 +289,18 @@ namespace WPF.ViewModels
         {
             CurrentErrors.Clear();
         }
+
+        public void SetRep(Rep rep)
+        {
+            if(rep==null)
+            {
+                WindowTitle = DefaultWindowTitle;
+            }
+            else
+            {
+                WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)})";
+            }
+        }
+        protected abstract string SetWindowDefaultTitle();
     }
 }
