@@ -236,7 +236,15 @@ namespace WPF.ViewModels
             else IsAdminPermisson = loginRep.Rep.IsAdminPermisson;
             WindowTitle = SetWindowDefaultTitle();
         }
-
+        /// <summary>
+        /// データが存在しない時のエラー操作
+        /// </summary>
+        /// <param name="propertyName">プロパティ名</param>
+        /// <param name="value"></param>
+        protected void SetNullOrEmptyError(string propertyName,string value)
+        {
+            ErrorsListOperation(string.IsNullOrEmpty(value), propertyName, Properties.Resources.NullErrorInfo);
+        }
         /// <summary>
         /// エラーを追加します
         /// </summary>

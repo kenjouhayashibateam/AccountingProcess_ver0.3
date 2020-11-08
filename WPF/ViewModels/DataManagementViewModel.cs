@@ -6,7 +6,7 @@ using Infrastructure;
 using WPF.Views.Datas;
 using System.Windows;
 using System.Threading.Tasks;
-using Domain.Entities.Helpers;
+using System.Collections;
 
 namespace WPF.ViewModels
 {
@@ -46,6 +46,15 @@ namespace WPF.ViewModels
         private Rep _currentRep=new Rep(string.Empty,string.Empty,string.Empty,false,false);
         private ObservableCollection<Rep> _repList;
         private bool _isRepOperationButtonEnabled;
+        #endregion
+        #region AccountingSubjectProperties
+        private string accountingSubjectIDField;
+        private bool isAccountingSubjectValidity;
+        private string accountingSubjectCodeField;
+        private string accountingSubjectField;
+        private string accountingSubnectOperationButtonContent;
+        private bool isAccountingSubjectOperationButtonEnabled;
+        private AccountingSubject currentAccountingSubject;
         #endregion
         private readonly IDataBaseConnect DataBaseConnect;
         private DataOperation CurrentOperation;
@@ -98,10 +107,10 @@ namespace WPF.ViewModels
             IsCheckedRegistration = (Operation == DataOperation.登録);
             IsCheckedUpdate = (Operation == DataOperation.更新);
             RepDataOperationButtonContent = Operation.ToString();
+            AccountingSubnectOperationButtonContent = Operation.ToString();
             if (CurrentOperation == DataOperation.更新) RepList= DataBaseConnect.ReferenceRep(string.Empty, false);
             SetDetailLocked();
         }
-
         /// <summary>
         /// データ操作のジャンルによって、各詳細のコントロールの値をクリア、Enableの設定をします
         /// </summary>
@@ -110,10 +119,11 @@ namespace WPF.ViewModels
             switch (CurrentOperation)
             {
                 case DataOperation.登録:
-                    SetFieldRegisterRep();
+                    SetFieldEnabledRegisterRep();
+                    
                     break;
                 case DataOperation.更新:
-                    SetFieldUpdaterRep();
+                    SetFieldEnabledUpdaterRep();
                     break;
                 default:
                     break;
@@ -258,7 +268,8 @@ namespace WPF.ViewModels
                 return;
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "登録中";
-            await Task.Run(()=> DataBaseConnect.Registration(CurrentRep));
+            LoginRep loginRep = LoginRep.GetInstance();
+            await Task.Run(()=> DataBaseConnect.Registration(CurrentRep,loginRep.Rep));
             IsRepOperationButtonEnabled = true;
             RepDataOperationButtonContent = "登録";
             RepDetailClear();
@@ -294,7 +305,8 @@ namespace WPF.ViewModels
             
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "更新中";
-            await Task.Run(() => DataBaseConnect.Update(CurrentRep));
+            LoginRep loginRep = LoginRep.GetInstance();
+            await Task.Run(() => DataBaseConnect.Update(CurrentRep,loginRep.Rep));
             IsRepOperationButtonEnabled = true;
             RepDataOperationButtonContent = "更新";
             RepDetailClear();
@@ -315,7 +327,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 担当者管理の更新のためのコントロールのEnableを設定し、フィールドをクリアします
         /// </summary>
-        private void SetFieldUpdaterRep()
+        private void SetFieldEnabledUpdaterRep()
         {
             IsRepNameDataEnabled = false;
             IsRepPasswordEnabled = true;
@@ -326,7 +338,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 担当者管理の登録のためのコントロールのEnableを設定し、フィールドをクリアします
         /// </summary>
-        private void SetFieldRegisterRep()
+        private void SetFieldEnabledRegisterRep()
         {
             IsRepReferenceMenuEnabled = false;
             IsRepNameDataEnabled = true;
@@ -613,7 +625,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetRepDetailProperty()
         {
-            RepIDField = CurrentRep.RepID;
+            RepIDField = CurrentRep.ID;
             RepName = CurrentRep.Name;
             IsRepValidity = CurrentRep.IsValidity;
             RepCurrentPassword = string.Empty;
@@ -701,23 +713,152 @@ namespace WPF.ViewModels
 
         #endregion
 
+        #region AccountingSubjectOperation
+        /// <summary>
+        /// 勘定科目ID
+        /// </summary>
+        public string AccountingSubjectIDField
+        {
+            get => accountingSubjectIDField;
+            set
+            {
+                accountingSubjectIDField = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目有効性
+        /// </summary>
+        public bool IsAccountingSubjectValidity
+        {
+            get => isAccountingSubjectValidity;
+            set
+            {
+                isAccountingSubjectValidity = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目コード
+        /// </summary>
+        public string AccountingSubjectCodeField
+        {
+            get => accountingSubjectCodeField;
+            set
+            {
+                if (value.Length == 3) accountingSubjectCodeField = value;
+                else accountingSubjectCodeField = string.Empty;
+                accountingSubjectCodeField = int.TryParse(accountingSubjectCodeField, out int i) ?i.ToString("000") : string.Empty;
+                ValidationProperty(nameof(AccountingSubjectCodeField), value);
+                SetAccountingSubjectOperationButtonEnabled();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目
+        /// </summary>
+        public string AccountingSubjectField
+        {
+            get => accountingSubjectField;
+            set
+            {
+                accountingSubjectField = value;
+                ValidationProperty(nameof(AccountingSubjectField), value);
+                SetAccountingSubjectOperationButtonEnabled();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目データ操作ボタンのContent
+        /// </summary>
+        public string AccountingSubnectOperationButtonContent
+        {
+            get => accountingSubnectOperationButtonContent;
+            set
+            {
+                accountingSubnectOperationButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目データ操作ボタンのEnabled
+        /// </summary>
+        public bool IsAccountingSubjectOperationButtonEnabled
+        {
+            get => isAccountingSubjectOperationButtonEnabled;
+            set
+            {
+                isAccountingSubjectOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された勘定科目を詳細欄に表示します
+        /// </summary>
+        public AccountingSubject CurrentAccountingSubject
+        {
+            get => currentAccountingSubject;
+            set
+            {
+                currentAccountingSubject = value;
+
+                AccountingSubjectIDField = currentAccountingSubject.ID;
+                AccountingSubjectCodeField = currentAccountingSubject.SubjectCode;
+                AccountingSubjectField = currentAccountingSubject.Subject;
+                isAccountingSubjectValidity = currentAccountingSubject.IsValidity;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目データ操作ボタンのEnabledを設定します
+        /// </summary>
+        private void SetAccountingSubjectOperationButtonEnabled()
+        {
+            if(!HasErrors)
+            {
+                IsAccountingSubjectOperationButtonEnabled = true;
+            }
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+                    {
+                        IsAccountingSubjectOperationButtonEnabled = !string.IsNullOrEmpty(AccountingSubjectCodeField) & !string.IsNullOrEmpty(AccountingSubjectField);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        /// <summary>
+        /// 勘定科目データ操作コマンド
+        /// </summary>
+        public DelegateCommand AccountingSubjectDataOperationCommand { get; set; }
+        #endregion
+
         public override void ValidationProperty(string propertyName, object value)
         {
             switch (propertyName)
             {
                 case nameof(RepName):
-                    ErrorsListOperation(string.IsNullOrEmpty(RepName), propertyName, Properties.Resources.NullErrorInfo);
+                    SetNullOrEmptyError(propertyName, value.ToString());
                     break;
                 case nameof(RepCurrentPassword):
                     if (IsRepPasswordEnabled) ErrorsListOperation(RepCurrentPassword != CurrentRep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
                     break;
                 case nameof(RepNewPassword):
-                    if(IsRepNewPasswordEnabled) ErrorsListOperation(string.IsNullOrEmpty(RepNewPassword), propertyName, Properties.Resources.NullErrorInfo);
+                    if (IsRepNewPasswordEnabled) SetNullOrEmptyError(propertyName, value.ToString());
                     break;
                 case nameof(ConfirmationPassword):
                     if (!_isRepNewPasswordEnabled) break;
-                    ErrorsListOperation(string.IsNullOrEmpty(ConfirmationPassword), propertyName, Properties.Resources.NullErrorInfo);
+                    SetNullOrEmptyError(propertyName, value.ToString());
                     if (GetErrors(propertyName)==null) ErrorsListOperation(RepNewPassword != ConfirmationPassword, propertyName, Properties.Resources.PasswordErrorInfo);
+                    break;
+                case nameof(AccountingSubjectCodeField):
+                    SetNullOrEmptyError(propertyName, value.ToString());
+                    break;
+                case nameof(AccountingSubjectField):
+                    SetNullOrEmptyError(propertyName, value.ToString());
                     break;
                 default:
                     break;

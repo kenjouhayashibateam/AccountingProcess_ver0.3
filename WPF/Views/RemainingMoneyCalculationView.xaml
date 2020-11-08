@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
-        Title="{Binding WindowTitle}" Height="800" Width="400" WindowStartupLocation="CenterOwner">
+        Title="{Binding WindowTitle}" Height="800" Width="400" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=TenThousandYenTextBox}">
 
     <Window.DataContext>
         <vm:RemainingMoneyCalculationViewModel/>

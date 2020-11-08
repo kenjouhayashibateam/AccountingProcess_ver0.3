@@ -12,7 +12,7 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:texthelper="clr-namespace:Domain.Entities.Helpers;assembly=Domain"
-        Title="データ管理" Height="600" Width="400" WindowStartupLocation="CenterOwner">
+        Title="データ管理" Height="600" Width="400" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=RepRegistrationButton}">
 
     <Window.DataContext>
         <vm:DataManagementViewModel/>
@@ -29,6 +29,7 @@
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
+    
      <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -152,6 +153,7 @@
                                 <Button x:Name="RepRegistrationButton" Grid.Row="1" Margin="15,5" Content="{Binding RepDataOperationButtonContent}" IsEnabled="{Binding IsRepOperationButtonEnabled}">
                                     <Button.InputBindings>
                                         <MouseBinding Command="{Binding RepDataOperationCommand}" MouseAction="LeftClick"/>
+                                        <KeyBinding Command="{Binding RepDataOperationCommand}" Key="Space"/>
                                     </Button.InputBindings>
                                 </Button>
                             </Grid>
@@ -187,6 +189,54 @@
                                     <DataGridTextColumn Header="担当者名" Width="4*" IsReadOnly="True" Binding="{Binding Name}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="勘定科目">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="詳細" Margin="5">
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="9*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="5*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding AccountingSubjectIDField}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsAccountingSubjectValidity}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="勘定科目コード" Grid.Row="2" VerticalAlignment="Bottom" Margin="5"/>
+                                <TextBox x:Name="AccountingSubjectCodeTextBox" Grid.Row="3" Text="{Binding AccountingSubjectCodeField,UpdateSourceTrigger=PropertyChanged}"  MaxLength="3" InputMethod.PreferredImeState="Off" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,140,5"/>
+                                <TextBlock Text="勘定科目" Grid.Row="4"  VerticalAlignment="Bottom" Margin="5"/>
+                                <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="5" Text="{Binding AccountingSubjectField,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+                            </Grid>
+                            <Button x:Name="AccountingSubjectOperationButton" Grid.Row="1" Content="{Binding AccountingSubnectOperationButtonContent}" IsEnabled="{Binding IsAccountingSubjectOperationButtonEnabled}" Margin="15,5">
+                                <Button.InputBindings>
+                                    <MouseBinding Command="{Binding AccountingSubjectDataOperationCommand}" MouseAction="LeftClick"/>
+                                    <KeyBinding Command="{Binding AccountingSubjectDataOperationCommand}" Key="Space"/>
+                                </Button.InputBindings>
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Column="1" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5">
+                            
                         </GroupBox>
                     </Grid>
                 </Grid>

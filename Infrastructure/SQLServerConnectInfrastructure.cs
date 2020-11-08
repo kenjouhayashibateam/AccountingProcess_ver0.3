@@ -46,7 +46,7 @@ namespace Infrastructure
         /// </summary>
         /// <param name="rep">担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Registration(Rep rep)
+        public int Registration(Rep rep, Rep operationRep)
         {
             using (Cn) 
             {
@@ -54,6 +54,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@rep_name", rep.Name);
                 Cmd.Parameters.AddWithValue("@password", rep.Password);
                 Cmd.Parameters.AddWithValue("@validity", rep.IsValidity);
+                Cmd.Parameters.AddWithValue("@is_permission", rep.IsAdminPermisson);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -62,15 +63,16 @@ namespace Infrastructure
         /// </summary>
         /// <param name="rep">担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Rep rep)
+        public int Update(Rep rep, Rep operationRep)
         {
             using(Cn)
             {
                 ADO_NewInstance_StoredProc("update_rep", true);
-                Cmd.Parameters.AddWithValue("@rep_id", rep.RepID);
+                Cmd.Parameters.AddWithValue("@rep_id", rep.ID);
                 Cmd.Parameters.AddWithValue("@password", rep.Password);
                 Cmd.Parameters.AddWithValue("@is_validity", rep.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_rep_id", rep.RepID);
+                Cmd.Parameters.AddWithValue("@is_permission", rep.IsAdminPermisson);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", operationRep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -89,11 +91,29 @@ namespace Infrastructure
                 
                 while (DataReader.Read())
                 {
-                    rep = new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"],(bool)DataReader["is_permisson"]);
+                    rep = new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"],(bool)DataReader["is_permission"]);
                     reps.Add(rep);
                 }
             }
             return reps;
+        }
+        /// <summary>
+        /// 勘定科目登録
+        /// </summary>
+        /// <param name="accountingSubject">勘定科目</param>
+        /// <param name="operationRep">登録担当者</param>
+        /// <returns>データ処理件数</returns>
+        public int Registration(AccountingSubject accountingSubject,Rep operationRep)
+        {
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc("registration_accounting_subject", false);
+                Cmd.Parameters.AddWithValue("@subject_code", accountingSubject.SubjectCode);
+                Cmd.Parameters.AddWithValue("@subject", accountingSubject.Subject);
+                Cmd.Parameters.AddWithValue("@validity", accountingSubject.IsValidity);
+                Cmd.Parameters.AddWithValue("@rep_id", operationRep.ID);
+                return Cmd.ExecuteNonQuery();
+            }
         }
     }
 }

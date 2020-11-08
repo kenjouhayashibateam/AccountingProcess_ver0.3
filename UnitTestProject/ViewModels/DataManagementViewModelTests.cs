@@ -14,7 +14,7 @@ namespace WPF.ViewModels.Tests
         {
         }
         [TestMethod()]
-        public void 登録時の担当者フィールドプロパティ()
+        public void 担当者の登録時フィールドプロパティ()
         {
             vm.IsCheckedRegistration = true;
 
@@ -29,11 +29,10 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
         }
         [TestMethod()]
-        public void 更新時の担当者フィールドプロパティ()
+        public void 担当者の更新時フィールドプロパティ()
         {
             vm.SetDataUpdateCommand.Execute();
-            LoginRep rep = LoginRep.GetInstance();
-            rep.SetRep(new Rep("aaa", "bbb", "ccc", true, true));
+            SetAdminPermissionRep();
 
             Assert.AreEqual(vm.IsRepNameDataEnabled, false);
             Assert.AreEqual(vm.IsRepPasswordEnabled, true);
@@ -65,6 +64,37 @@ namespace WPF.ViewModels.Tests
 
             vm.ConfirmationPassword = "bbb";
             Assert.AreEqual(vm.IsRepOperationButtonEnabled, true);
+        }
+        [TestMethod()]
+        public void 勘定科目の登録時のフィールドプロパティ()
+        {
+            vm.SetDataRegistrationCommand.Execute();
+            SetAdminPermissionRep();
+
+            vm.AccountingSubjectCodeField = string.Empty;
+            vm.AccountingSubjectField = string.Empty;
+
+            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, false);
+
+            vm.AccountingSubjectField = "aaaa";
+            vm.AccountingSubjectCodeField = "111";
+
+            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, true);
+
+            vm.AccountingSubjectCodeField = "11";
+
+            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, false);
+
+            vm.AccountingSubjectCodeField = "aaa";
+
+            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, false);
+
+        }
+
+        private void SetAdminPermissionRep()
+        {
+            LoginRep rep = LoginRep.GetInstance();
+            rep.SetRep(new Rep("aaa", "bbb", "ccc", true, true));
         }
     }
 }

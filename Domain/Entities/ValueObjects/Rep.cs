@@ -8,7 +8,7 @@
         /// <summary>
         /// ID
         /// </summary>
-        public string RepID { get; set; }
+        public string ID { get; set; }
         /// <summary>
         /// 担当者名
         /// </summary>
@@ -28,7 +28,7 @@
 
         public Rep(string repID, string name, string password, bool isValidity,bool isAdminPermisson)
         {
-            RepID = repID;
+            ID = repID;
             Name = name;
             Password = password;
             IsValidity = isValidity;

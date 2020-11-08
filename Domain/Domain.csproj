@@ -46,7 +46,7 @@
     <Compile Include="Entities\CashBox.cs" />
     <Compile Include="Entities\Helpers\TextHelper.cs" />
     <Compile Include="Entities\Slip.cs" />
-    <Compile Include="Entities\ValueObjects\AccountSubject.cs" />
+    <Compile Include="Entities\ValueObjects\AccountingSubject.cs" />
     <Compile Include="Entities\ValueObjects\Content.cs" />
     <Compile Include="Entities\ValueObjects\CreditAccount.cs" />
     <Compile Include="Entities\ValueObjects\MoneyCategory.cs" />

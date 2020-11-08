@@ -22,6 +22,11 @@ namespace Infrastructure
             return 1;
         }
 
+        public int Registration(AccountingSubject accountingSubject)
+        {
+            return 1;
+        }
+
         public int Update(Rep rep)
         {
             return 1;

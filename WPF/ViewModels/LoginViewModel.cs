@@ -63,6 +63,7 @@ namespace WPF.ViewModels
             Reps = DataBaseConnecter.ReferenceRep(string.Empty, true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
             LoginCommand = new DelegateCommand(() => Login(), () => true);
+            CurrentRep = Reps[0];
         }
 
         public LoginViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
