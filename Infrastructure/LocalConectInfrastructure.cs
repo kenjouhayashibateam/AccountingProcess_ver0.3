@@ -17,17 +17,17 @@ namespace Infrastructure
             return list;
         }
 
-        public int Registration(Rep rep)
+        public int Registration(Rep rep,Rep operationRep)
         {
             return 1;
         }
 
-        public int Registration(AccountingSubject accountingSubject)
+        public int Registration(AccountingSubject accountingSubject,Rep operationRep)
         {
             return 1;
         }
 
-        public int Update(Rep rep)
+        public int Update(Rep rep, Rep operationRep)
         {
             return 1;
         }
