@@ -8,11 +8,7 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class DataManagementViewModelTests
     {
-        readonly DataManagementViewModel vm = new DataManagementViewModel(new LocalConectInfrastructure());
-        [TestMethod()]
-        public void シナリオ()
-        {
-        }
+        DataManagementViewModel vm = new DataManagementViewModel(new LocalConnectInfrastructure());
         [TestMethod()]
         public void 担当者の登録時フィールドプロパティ()
         {
@@ -44,6 +40,7 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.RepName, "林飛 顕誠");
             Assert.AreEqual(vm.RepCurrentPassword, string.Empty);
             Assert.AreEqual(vm.RepNewPassword, string.Empty);
+            Assert.AreEqual(vm.ConfirmationPassword, string.Empty);
             Assert.AreEqual(vm.RepDataOperationButtonContent, "更新");
 
             vm.RepCurrentPassword = "bbb";
@@ -81,16 +78,25 @@ namespace WPF.ViewModels.Tests
 
             Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, true);
 
-            vm.AccountingSubjectCodeField = "11";
-
-            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, false);
-
             vm.AccountingSubjectCodeField = "aaa";
 
             Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, false);
 
         }
+        [TestMethod()]
+        public void 勘定科目の更新時のフィールドプロパティ()
+        {
+            vm.SetDataUpdateCommand.Execute();
 
+            Assert.AreEqual(vm.IsAccountingSubjectReferenceMenuEnabled, true);
+
+            vm.CurrentAccountingSubject = vm.AccountingSubjects[0];
+
+            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, true);
+
+            Assert.AreEqual(vm.IsAccountingSubjectCodeFieldEnabled, false);
+            Assert.AreEqual(vm.IsAccountingSubjectFieldEnabled, false);
+        }
         private void SetAdminPermissionRep()
         {
             LoginRep rep = LoginRep.GetInstance();

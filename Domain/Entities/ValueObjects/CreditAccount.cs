@@ -9,10 +9,16 @@ namespace Domain.Entities.ValueObjects
         /// <summary>
         /// ID
         /// </summary>
-        public int CreditAccountID;
+        public int ID;
         /// <summary>
         /// 貸方勘定
         /// </summary>
         public string Account;
+
+        public CreditAccount(int iD, string account)
+        {
+            ID = iD;
+            Account = account;
+        }
     }
 }

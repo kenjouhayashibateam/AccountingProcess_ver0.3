@@ -21,7 +21,7 @@ namespace Infrastructure
         /// <returns>SQLServer接続</returns>
         public static IDataBaseConnect GetDefaultDataBaseConnect()
         {
-            return new SQLServerConnectInfrastructure();
+            return new LocalConnectInfrastructure();
         }
     }
 }

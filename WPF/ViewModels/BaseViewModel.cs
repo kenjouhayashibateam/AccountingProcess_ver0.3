@@ -232,9 +232,9 @@ namespace WPF.ViewModels
         {
             LoginRep loginRep = LoginRep.GetInstance();
             loginRep.Add(this);
-            if (loginRep.Rep == null) IsAdminPermisson = false;
-            else IsAdminPermisson = loginRep.Rep.IsAdminPermisson;
             WindowTitle = SetWindowDefaultTitle();
+            if (loginRep.Rep == null) IsAdminPermisson = false;
+            else SetRep(loginRep.Rep);
         }
         /// <summary>
         /// データが存在しない時のエラー操作

@@ -76,8 +76,13 @@ namespace Infrastructure
                 return Cmd.ExecuteNonQuery();
             }
         }
-
-        public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidity)
+        /// <summary>
+        /// 担当者検索
+        /// </summary>
+        /// <param name="repName">担当者名</param>
+        /// <param name="isValidityTrueOnly">有効なデータのみ検索</param>
+        /// <returns></returns>
+        public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidityTrueOnly)
         {
             Rep rep;
             ObservableCollection<Rep> reps = new ObservableCollection<Rep>();
@@ -86,7 +91,7 @@ namespace Infrastructure
             {
                 ADO_NewInstance_StoredProc("reference_rep",false);
                 Cmd.Parameters.Add(new SqlParameter("@rep_name", repName));
-                Cmd.Parameters.Add(new SqlParameter("@true_only", isValidity));
+                Cmd.Parameters.Add(new SqlParameter("@true_only", isValidityTrueOnly));
                 DataReader = Cmd.ExecuteReader();
                 
                 while (DataReader.Read())
@@ -114,6 +119,16 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@rep_id", operationRep.ID);
                 return Cmd.ExecuteNonQuery();
             }
+        }
+
+        public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Update(AccountingSubject accountingSubject, Rep operationRep)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

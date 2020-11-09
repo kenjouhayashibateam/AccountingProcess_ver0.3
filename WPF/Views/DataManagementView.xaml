@@ -12,7 +12,7 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:texthelper="clr-namespace:Domain.Entities.Helpers;assembly=Domain"
-        Title="データ管理" Height="600" Width="400" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=RepRegistrationButton}">
+        Title="{Binding WindowTitle}" Height="600" Width="400" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=RepRegistrationButton}">
 
     <Window.DataContext>
         <vm:DataManagementViewModel/>
@@ -193,11 +193,39 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="勘定科目">
+            <TabItem Header="貸方勘定">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="詳細" Grid.Row="0" Margin="5">
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding CreditAccountIDField}"/>
+                                <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsCreditAccountValidity}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="貸方勘定" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0"/>
+                                <TextBox x:Name="CreditAccountTextBox" Grid.Row="3" Text="{Binding CreditAccountField}" VerticalAlignment="Center" Margin="5"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="勘定科目">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8*"/>
+                        <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Header="詳細" Margin="5">
                         <Grid Grid.Column="0">
@@ -218,9 +246,9 @@
                                 <TextBlock Text="{Binding AccountingSubjectIDField}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsAccountingSubjectValidity}" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="勘定科目コード" Grid.Row="2" VerticalAlignment="Bottom" Margin="5"/>
-                                <TextBox x:Name="AccountingSubjectCodeTextBox" Grid.Row="3" Text="{Binding AccountingSubjectCodeField,UpdateSourceTrigger=PropertyChanged}"  MaxLength="3" InputMethod.PreferredImeState="Off" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,140,5"/>
+                                <TextBox x:Name="AccountingSubjectCodeTextBox" Grid.Row="3" Text="{Binding AccountingSubjectCodeField}" IsEnabled="{Binding IsAccountingSubjectCodeFieldEnabled}" MaxLength="3" InputMethod.PreferredImeState="Off" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,110,5"/>
                                 <TextBlock Text="勘定科目" Grid.Row="4"  VerticalAlignment="Bottom" Margin="5"/>
-                                <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="5" Text="{Binding AccountingSubjectField,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+                                <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="5" Text="{Binding AccountingSubjectField,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsAccountingSubjectFieldEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
                             </Grid>
                             <Button x:Name="AccountingSubjectOperationButton" Grid.Row="1" Content="{Binding AccountingSubnectOperationButtonContent}" IsEnabled="{Binding IsAccountingSubjectOperationButtonEnabled}" Margin="15,5">
                                 <Button.InputBindings>
@@ -230,13 +258,51 @@
                             </Button>
                         </Grid>
                     </GroupBox>
-                    <Grid Grid.Column="1" >
+                    <Grid Grid.Column="1" IsEnabled="{Binding IsAccountingSubjectReferenceMenuEnabled}">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="5*"/>
                         </Grid.RowDefinitions>
                         <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5">
-                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="コード" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                                    <TextBlock Text="勘定科目" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="ReferenceAccountingSubjectCodeTextBox" Grid.Column="0" Text="{Binding ReferenceAccountingSubjectCode}" MaxLength="3" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
+                                    <TextBox x:Name="ReferenceAccontingSubjectTextBox" Grid.Column="1" Text="{Binding ReferenceAccountingSubject,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                                </Grid>
+                                <CheckBox Content="有効なデータのみ表示" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding IsAccountingSubjectValidityTrueOnly}" HorizontalAlignment="Right" Margin="5"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="一覧" Grid.Row="1" Margin="5">
+                            <DataGrid x:Name="AccountingSubjectDataGrid" ItemsSource="{Binding AccountingSubjects}" SelectedItem="{Binding CurrentAccountingSubject}" AutoGenerateColumns="False" Margin="1">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="有効性" Width="3*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsValidity}" IsEnabled="False" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="コード" IsReadOnly="True" Width="2*" Binding="{Binding SubjectCode}"/>
+                                    <DataGridTextColumn Header="勘定科目" IsReadOnly="True" Width="5*" Binding="{Binding Subject}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </GroupBox>
                     </Grid>
                 </Grid>
