@@ -16,6 +16,17 @@ namespace Infrastructure
             };
             return list;
         }
+ 
+        public ObservableCollection<Content> ReferenceContent(string content, string accountingSubject, bool isValidityTrueOnly)
+        {
+            ObservableCollection<Content> list = new ObservableCollection<Content>
+            {
+                new Content("content1",new AccountingSubject("accounitng_subject1","000","法事冥加",true),-1,"お布施",true),
+                new Content("content2",new AccountingSubject("accounting_subject2","000","葬儀冥加",true),-1,"お布施",true),
+                new Content("content3",new AccountingSubject("accounitng_subject1","000","法事冥加",true),13000,"焼香台",true)
+            };
+            return list;
+        }
 
         public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly)
         {
@@ -27,7 +38,7 @@ namespace Infrastructure
             };
             return list;
         }
-
+       
         public ObservableCollection<Rep> ReferenceRep(string repName, bool isValidity)
         {
             ObservableCollection<Rep> list = new ObservableCollection<Rep>
@@ -38,7 +49,7 @@ namespace Infrastructure
 
             return list;
         }
-
+  
         public int Registration(Rep rep,Rep operationRep)
         {
             return 1;
@@ -48,8 +59,13 @@ namespace Infrastructure
         {
             return 1;
         }
-
+ 
         public int Registration(CreditAccount creditAccount, Rep operationRep)
+        {
+            return 1;
+        }
+ 
+        public int Registration(Content content, Rep operationRep)
         {
             return 1;
         }
@@ -58,13 +74,18 @@ namespace Infrastructure
         {
             return 1;
         }
-
+  
         public int Update(AccountingSubject accountingSubject, Rep operationRep)
         {
             return 1;
         }
-
+  
         public int Update(CreditAccount creditAccount, Rep operationRep)
+        {
+            return 1;
+        }
+
+        public int Update(Content content, Rep operationRep)
         {
             return 1;
         }

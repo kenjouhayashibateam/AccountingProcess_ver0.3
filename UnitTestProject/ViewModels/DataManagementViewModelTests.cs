@@ -34,6 +34,7 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.IsRepPasswordEnabled, true);
             Assert.AreEqual(vm.IsRepNewPasswordEnabled, false);
             Assert.AreEqual(vm.IsRepReferenceMenuEnabled, true);
+            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
 
             vm.CurrentRep = vm.RepList[0];
 
@@ -89,6 +90,7 @@ namespace WPF.ViewModels.Tests
             vm.SetDataUpdateCommand.Execute();
 
             Assert.AreEqual(vm.IsAccountingSubjectReferenceMenuEnabled, true);
+            Assert.AreEqual(vm.IsAccountingSubjectOperationButtonEnabled, false);
 
             vm.CurrentAccountingSubject = vm.AccountingSubjects[0];
 
@@ -116,11 +118,42 @@ namespace WPF.ViewModels.Tests
             vm.SetDataUpdateCommand.Execute();
 
             Assert.AreEqual(vm.IsCreditAccountReferenceMenuEnabled, true);
+            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, false);
 
             vm.CurrentCreditAccount = vm.CreditAccounts[0];
 
             Assert.AreEqual(vm.IsCreditAccountEnabled, false);
             Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, true);
+        }
+        [TestMethod()]
+        public void 伝票内容の登録時のフィールドプロパティ()
+        {
+            vm.SetDataRegistrationCommand.Execute();
+
+            Assert.AreEqual(vm.IsContentOperationEnabled, false);
+            Assert.AreEqual(vm.IsAffiliationAccountingSubjectEnabled, true);
+            Assert.AreEqual(vm.IsContentFieldEnabled, true);
+
+            vm.AffiliationAccountingSubject = vm.AffiliationAccountingSubjects[0];
+
+            Assert.AreEqual(vm.IsContentOperationEnabled, false);
+
+            vm.ContentField = "aaa";
+
+            Assert.AreEqual(vm.IsContentOperationEnabled, true);
+        }
+        [TestMethod()]
+        public void 伝票内容の更新時のフィールドプロパティ()
+        {
+            vm.SetDataUpdateCommand.Execute();
+
+            Assert.AreEqual(vm.IsContentOperationEnabled, false);
+            Assert.AreEqual(vm.IsAffiliationAccountingSubjectEnabled, false);
+            Assert.AreEqual(vm.IsContentFieldEnabled, false);
+
+            vm.CurrentContent = vm.Contents[0];
+
+            Assert.AreEqual(vm.IsContentOperationEnabled, true);
         }
         private void SetAdminPermissionRep()
         {

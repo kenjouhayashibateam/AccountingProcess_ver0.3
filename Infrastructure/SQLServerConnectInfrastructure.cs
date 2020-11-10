@@ -41,11 +41,7 @@ namespace Infrastructure
             };
             Cn.Open();
         }
-        /// <summary>
-        /// 担当者登録
-        /// </summary>
-        /// <param name="rep">担当者</param>
-        /// <returns>データ処理件数</returns>
+   
         public int Registration(Rep rep, Rep operationRep)
         {
             using (Cn) 
@@ -58,11 +54,7 @@ namespace Infrastructure
                 return Cmd.ExecuteNonQuery();
             }
         }
-        /// <summary>
-        /// 担当者データ更新
-        /// </summary>
-        /// <param name="rep">担当者</param>
-        /// <returns>データ処理件数</returns>
+       
         public int Update(Rep rep, Rep operationRep)
         {
             using(Cn)
@@ -76,12 +68,7 @@ namespace Infrastructure
                 return Cmd.ExecuteNonQuery();
             }
         }
-        /// <summary>
-        /// 担当者検索
-        /// </summary>
-        /// <param name="repName">担当者名</param>
-        /// <param name="isValidityTrueOnly">有効なデータのみ検索</param>
-        /// <returns></returns>
+       
         public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidityTrueOnly)
         {
             Rep rep;
@@ -102,12 +89,7 @@ namespace Infrastructure
             }
             return reps;
         }
-        /// <summary>
-        /// 勘定科目登録
-        /// </summary>
-        /// <param name="accountingSubject">勘定科目</param>
-        /// <param name="operationRep">登録担当者</param>
-        /// <returns>データ処理件数</returns>
+     
         public int Registration(AccountingSubject accountingSubject,Rep operationRep)
         {
             using(Cn)
@@ -120,28 +102,43 @@ namespace Infrastructure
                 return Cmd.ExecuteNonQuery();
             }
         }
-
+    
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
             throw new System.NotImplementedException();
         }
-
+ 
         public int Update(AccountingSubject accountingSubject, Rep operationRep)
         {
             throw new System.NotImplementedException();
         }
-
+  
         public int Registration(CreditAccount creditAccount, Rep operationRep)
         {
             throw new System.NotImplementedException();
         }
-
+  
         public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly)
         {
             throw new System.NotImplementedException();
         }
-
+     
         public int Update(CreditAccount creditAccount, Rep operationRep)
+        {
+            throw new System.NotImplementedException();
+        }
+   
+        public int Registration(Content content, Rep operationRep)
+        {
+            throw new System.NotImplementedException();
+        }
+   
+        public int Update(Content content, Rep operationRep)
+        {
+            throw new System.NotImplementedException();
+        }
+    
+        public ObservableCollection<Content> ReferenceContent(string content, string accountingSubject, bool isValidityTrueOnly)
         {
             throw new System.NotImplementedException();
         }

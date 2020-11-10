@@ -4,6 +4,7 @@ using Domain.Entities;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Infrastructure;
 using System.Threading.Tasks;
+using Domain.Entities.Helpers;
 
 namespace WPF.ViewModels
 {
@@ -503,7 +504,7 @@ namespace WPF.ViewModels
         {
             string s = value.Replace(",", string.Empty);
 
-            otherMoneyAmountDisplayValue = int.TryParse(s, out int i) ? i.ToString("N0") : string.Empty;
+            otherMoneyAmountDisplayValue = int.TryParse(s, out int i) ? TextHelper.CommaDelimitedAmount(i) : string.Empty;
 
             if (otherMoneyAmountDisplayValue != string.Empty)
             {

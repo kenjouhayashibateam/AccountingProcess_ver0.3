@@ -242,8 +242,8 @@ namespace WPF.ViewModels
         /// <param name="propertyName">プロパティ名</param>
         /// <param name="value"></param>
         protected void SetNullOrEmptyError(string propertyName,string value)
-        {
-            ErrorsListOperation(string.IsNullOrEmpty(value), propertyName, Properties.Resources.NullErrorInfo);
+        { 
+            ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName, Properties.Resources.NullErrorInfo);
         }
         /// <summary>
         /// エラーを追加します

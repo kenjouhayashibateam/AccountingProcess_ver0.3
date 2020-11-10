@@ -5,7 +5,7 @@
     /// </summary>
     public class Content
     {
-        public Content(int iD, AccountingSubject accountingSubject, int flatRate, string text, bool isValidity)
+        public Content(string iD, AccountingSubject accountingSubject, int flatRate, string text, bool isValidity)
         {
             ID = iD;
             AccountingSubject = accountingSubject;
@@ -17,7 +17,7 @@
         /// <summary>
         /// ID
         /// </summary>
-        public int ID { get; set; }
+        public string ID { get; set; }
         /// <summary>
         /// 勘定科目
         /// </summary>
