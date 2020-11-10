@@ -202,7 +202,7 @@
                     <GroupBox Header="詳細" Grid.Row="0" Margin="5">
                         <Grid Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="9*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid>
@@ -211,14 +211,53 @@
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="6*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding CreditAccountIDField}"/>
+                                <TextBlock Text="{Binding CreditAccountIDField}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsCreditAccountValidity}" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="貸方勘定" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                                <TextBox x:Name="CreditAccountTextBox" Grid.Row="3" Text="{Binding CreditAccountField}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBox x:Name="CreditAccountTextBox" Grid.Row="3" Text="{Binding CreditAccountField}" IsEnabled="{Binding IsCreditAccountEnabled}" VerticalAlignment="Center" Margin="5"/>
                             </Grid>
+                            <Button x:Name="CreditAccountOperationButton" Grid.Row="1" Content="{Binding CreditAccountOperationButtonContent}" Margin="5">
+                                <Button.InputBindings>
+                                    <MouseBinding Command="{Binding CreditAccountDataOperationCommand}" MouseAction="LeftClick"/>
+                                    <KeyBinding Command="{Binding CreditAccountDataOperationCommand}" Key="Space"/>
+                                </Button.InputBindings>
+                            </Button>
                         </Grid>
                     </GroupBox>
+                    <Grid Grid.Column="1" IsEnabled="{Binding IsCreditAccountReferenceMenuEnabled}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="5*"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="検索メニュー" Margin="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="貸方勘定" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                                <TextBox x:Name="CreditAccountReferenceTextBox" Grid.Row="1" Text="{Binding ReferenceCreditAccount}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                                <CheckBox Content="有効なデータのみ表示" Grid.Row="2" IsChecked="{Binding IsReferenceCreditAccountValidity}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="一覧" Grid.Row="1" Margin="5">
+                            <DataGrid ItemsSource="{Binding CreditAccounts}" AutoGenerateColumns="False" SelectedItem="{Binding CurrentCreditAccount}">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="有効性" Width="2*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsValidity}" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="貸方勘定" Width="5*" IsReadOnly="True" Binding="{Binding Account}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </GroupBox>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="勘定科目">

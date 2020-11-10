@@ -17,6 +17,17 @@ namespace Infrastructure
             return list;
         }
 
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly)
+        {
+            ObservableCollection<CreditAccount> list = new ObservableCollection<CreditAccount>
+            {
+                new CreditAccount("credit_account1","春秋苑",true),
+                new CreditAccount("credit_account2","法務部",true),
+                new CreditAccount("credit_account3","ホテル",false)
+            };
+            return list;
+        }
+
         public ObservableCollection<Rep> ReferenceRep(string repName, bool isValidity)
         {
             ObservableCollection<Rep> list = new ObservableCollection<Rep>
@@ -38,12 +49,22 @@ namespace Infrastructure
             return 1;
         }
 
+        public int Registration(CreditAccount creditAccount, Rep operationRep)
+        {
+            return 1;
+        }
+
         public int Update(Rep rep, Rep operationRep)
         {
             return 1;
         }
 
         public int Update(AccountingSubject accountingSubject, Rep operationRep)
+        {
+            return 1;
+        }
+
+        public int Update(CreditAccount creditAccount, Rep operationRep)
         {
             return 1;
         }

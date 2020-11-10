@@ -130,5 +130,20 @@ namespace Infrastructure
         {
             throw new System.NotImplementedException();
         }
+
+        public int Registration(CreditAccount creditAccount, Rep operationRep)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Update(CreditAccount creditAccount, Rep operationRep)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

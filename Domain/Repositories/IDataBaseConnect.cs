@@ -10,9 +10,13 @@ namespace Domain.Repositories
     {
         public int Registration(Rep rep, Rep operationRep);
         public int Registration(AccountingSubject accountingSubject, Rep operationRep);
+        public int Registration(CreditAccount creditAccount, Rep operationRep);
         public int Update(Rep rep, Rep opelationRep);
         public int Update(AccountingSubject accountingSubject, Rep operationRep);
+        public int Update(CreditAccount creditAccount, Rep operationRep);
         public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidityTrueOnly);
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isValidityTrueOnly);
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly);
+        
     }
 }

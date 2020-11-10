@@ -66,6 +66,16 @@ namespace WPF.ViewModels
         private string creditAccountIDField;
         private bool isCreditAccountValidity;
         private string creditAccountField;
+        private string creditAccountOperationButtonContent;
+        private bool isCreditAccountOperationButtonEnabled;
+        private bool isCreditAccountEnabled;
+        private CreditAccount currentCreditAccount;
+        private bool isCreditAccountReferenceMenuEnabled;
+        private string referenceCreditAccount;
+        private bool isCreditAccountValidityTrueOnly;
+        private ObservableCollection<CreditAccount> creditAccounts;
+        #endregion
+        #region ContentProperties
         #endregion
         private readonly IDataBaseConnect DataBaseConnect;
         private DataOperation CurrentOperation;
@@ -101,6 +111,7 @@ namespace WPF.ViewModels
         {
             SetRepDelegateCommand();
             AccountingSubjectDataOperationCommand = new DelegateCommand(() => AccountingSubjectDataOperation(), () => IsAccountingSubjectOperationButtonEnabled);
+            CreditAccountDataOperationCommand = new DelegateCommand(() => CreditAccountDataOperation(), () => IsCreditAccountOperationButtonEnabled);
         }
         /// <summary>
         /// 更新の必要がないことをメッセージボックスで知らせます
@@ -136,6 +147,7 @@ namespace WPF.ViewModels
         {
             RepList = DataBaseConnect.ReferenceRep(string.Empty, false);
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, false);
+            CreditAccounts = DataBaseConnect.ReferenceCreditAccount(ReferenceCreditAccount, false);
         }
         /// <summary>
         /// 各データ操作ボタンのContentを設定します
@@ -144,6 +156,7 @@ namespace WPF.ViewModels
         {
             RepDataOperationButtonContent = operation.ToString();
             AccountingSubnectOperationButtonContent = operation.ToString();
+            CreditAccountOperationButtonContent = operation.ToString();
         }
         /// <summary>
         /// データ操作のジャンルによって、各詳細のコントロールの値をクリア、Enableの設定をします
@@ -155,10 +168,12 @@ namespace WPF.ViewModels
                 case DataOperation.登録:
                     SetFieldEnabledRegisterRep();
                     SetFieldEnabledRegisterAccountingSubject();
+                    SetFieldEnabledRegisterCreditAccount();
                     break;
                 case DataOperation.更新:
                     SetFieldEnabledUpdaterRep();
                     SetFieldEnabledUpdateAccountingSubject();
+                    SetFieldEnabledUpdateCreditAccount();
                     break;
                 default:
                     break;
@@ -852,6 +867,7 @@ namespace WPF.ViewModels
             if (!HasErrors)
             {
                 IsAccountingSubjectOperationButtonEnabled = true;
+                return;
             }
             IsAccountingSubjectOperationButtonEnabled = !string.IsNullOrEmpty(AccountingSubjectCodeField) & !string.IsNullOrEmpty(AccountingSubjectField);
         }
@@ -953,6 +969,11 @@ namespace WPF.ViewModels
                 case DataOperation.登録:
                     AccountSubjectRetistration();
                     break;
+                case DataOperation.更新:
+                    AccountingSubjectUpdate();
+                    break;
+                default:
+                    break;
             }
         }
         /// <summary>
@@ -1018,6 +1039,7 @@ namespace WPF.ViewModels
         }
         #endregion
         #region CreditAccountOperation
+
         /// <summary>
         /// 貸方勘定ID
         /// </summary>
@@ -1052,9 +1074,186 @@ namespace WPF.ViewModels
             {
                 creditAccountField = value;
                 ValidationProperty(nameof(CreditAccountField), value);
+                IsCreditAccountOperationButtonEnabled = !string.IsNullOrEmpty(value);
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 貸方勘定データ操作ボタンのContent
+        /// </summary>
+        public string CreditAccountOperationButtonContent
+        {
+            get => creditAccountOperationButtonContent;
+            set
+            {
+                creditAccountOperationButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定データ操作ボタンのEnabled
+        /// </summary>
+        public bool IsCreditAccountOperationButtonEnabled
+        {
+            get => isCreditAccountOperationButtonEnabled;
+            set
+            {
+                isCreditAccountOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定フィールドのEnabled
+        /// </summary>
+        public bool IsCreditAccountEnabled
+        {
+            get => isCreditAccountEnabled;
+            set
+            {
+                isCreditAccountEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定登録のためのコントロールのEnableを設定します
+        /// </summary>
+        private void SetFieldEnabledRegisterCreditAccount()
+        {
+            IsCreditAccountValidity = true;
+            IsCreditAccountEnabled = true;
+            IsCreditAccountReferenceMenuEnabled = false;
+            CreditAccountField = string.Empty;
+        }
+        /// <summary>
+        /// 貸方勘定更新のためのコントロールのEnableを設定します
+        /// </summary>
+        private void SetFieldEnabledUpdateCreditAccount()
+        {
+            IsCreditAccountReferenceMenuEnabled = true;
+            IsCreditAccountEnabled = false;
+            IsCreditAccountOperationButtonEnabled = true;
+        }
+        /// <summary>
+        /// 貸方勘定データ操作コマンド
+        /// </summary>
+        public DelegateCommand CreditAccountDataOperationCommand { get; set; }
+        /// <summary>
+        /// 選択された貸方勘定
+        /// </summary>
+        public CreditAccount CurrentCreditAccount
+        {
+            get => currentCreditAccount;
+            set
+            {
+                currentCreditAccount = value;
+                if(value!=null)
+                {
+                    CreditAccountIDField = value.ID;
+                    CreditAccountField = value.Account;
+                    IsCreditAccountValidity = value.IsValidity;
+                }
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定検索メニューのEnable
+        /// </summary>
+        public bool IsCreditAccountReferenceMenuEnabled
+        {
+            get => isCreditAccountReferenceMenuEnabled;
+            set
+            {
+                isCreditAccountReferenceMenuEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索する貸方勘定
+        /// </summary>
+        public string ReferenceCreditAccount
+        {
+            get => referenceCreditAccount;
+            set
+            {
+                referenceCreditAccount = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索する貸方勘定のValidity
+        /// </summary>
+        public bool IsCreditAccountValidityTrueOnly
+        {
+            get => isCreditAccountValidityTrueOnly;
+            set
+            {
+                isCreditAccountValidityTrueOnly = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索した貸方勘定リスト
+        /// </summary>
+        public ObservableCollection<CreditAccount> CreditAccounts
+        {
+            get => creditAccounts;
+            set
+            {
+                creditAccounts = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定データを登録、更新します
+        /// </summary>
+        private void CreditAccountDataOperation()
+        {
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+                    CreditAccountDataRegistration();
+                    break;
+                case DataOperation.更新:
+                    CreditAccountDataUpdate();
+                    break;
+                default:
+                    break;
+            }    
+        }
+        /// <summary>
+        /// 貸方勘定データを登録します
+        /// </summary>
+        private async void CreditAccountDataRegistration()
+        {
+            if (CallConfirmationDataOperation($"貸方勘定 : {CreditAccountField}\r\n有効性 : {IsCreditAccountValidity}", "貸方勘定") == MessageBoxResult.Cancel) return;
+
+            CurrentCreditAccount = new CreditAccount(null, CreditAccountField,IsCreditAccountValidity);
+
+            CreditAccountOperationButtonContent = "登録中";
+            IsCreditAccountOperationButtonEnabled = false;
+            await Task.Run(() => DataBaseConnect.Registration(CurrentCreditAccount, LoginRep.Rep));
+            CreditAccountOperationButtonContent = "登録";
+            IsCreditAccountOperationButtonEnabled = true;
+        }
+        /// <summary>
+        /// 貸方勘定データを更新します
+        /// </summary>
+        private async void CreditAccountDataUpdate()
+        {
+            if(IsCreditAccountValidity==CurrentCreditAccount.IsValidity)
+            {
+                CallNoRequiredUpdateMessage();
+                return;
+            }
+
+            CreditAccountOperationButtonContent = "更新中";
+            IsCreditAccountOperationButtonEnabled = false;
+            await Task.Run(() => DataBaseConnect.Update(CurrentCreditAccount, LoginRep.Rep));
+            IsCreditAccountOperationButtonEnabled = true;
+            CreditAccountOperationButtonContent = "更新";
+        }
+        #endregion
+        #region ContentOperation
         #endregion
         public override void ValidationProperty(string propertyName, object value)
         {

@@ -8,7 +8,7 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class DataManagementViewModelTests
     {
-        DataManagementViewModel vm = new DataManagementViewModel(new LocalConnectInfrastructure());
+        readonly DataManagementViewModel vm = new DataManagementViewModel(new LocalConnectInfrastructure());
         [TestMethod()]
         public void 担当者の登録時フィールドプロパティ()
         {
@@ -96,6 +96,31 @@ namespace WPF.ViewModels.Tests
 
             Assert.AreEqual(vm.IsAccountingSubjectCodeFieldEnabled, false);
             Assert.AreEqual(vm.IsAccountingSubjectFieldEnabled, false);
+        }
+        [TestMethod()]
+        public void 貸方勘定の登録時のフィールドプロパティ()
+        {
+            vm.SetDataRegistrationCommand.Execute();
+
+            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, false);
+            Assert.AreEqual(vm.CreditAccountField, string.Empty);
+            Assert.AreEqual(vm.IsCreditAccountEnabled, true);
+
+            vm.CreditAccountField = "aaa";
+
+            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, true);
+        }
+        [TestMethod()]
+        public void 貸方勘定の更新時のフィールドプロパティ()
+        {
+            vm.SetDataUpdateCommand.Execute();
+
+            Assert.AreEqual(vm.IsCreditAccountReferenceMenuEnabled, true);
+
+            vm.CurrentCreditAccount = vm.CreditAccounts[0];
+
+            Assert.AreEqual(vm.IsCreditAccountEnabled, false);
+            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, true);
         }
         private void SetAdminPermissionRep()
         {
