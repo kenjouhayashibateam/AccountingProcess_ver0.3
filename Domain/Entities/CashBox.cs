@@ -56,18 +56,6 @@ namespace Domain.Entities
             OtherMoneys[5] = new OtherMoney();
             OtherMoneys[6] = new OtherMoney();
             OtherMoneys[7] = new OtherMoney();
-
-            SetOtherMoneyTitleDefault();
-        }
-        /// <summary>
-        /// その他釣り銭等欄にデフォルト値を入力します
-        /// </summary>
-        public void SetOtherMoneyTitleDefault()
-        {
-            OtherMoneys[0].Title = "青蓮堂";
-            OtherMoneys[1].Title = "香華売り場";
-            OtherMoneys[2].Title = "春秋庵";
-            OtherMoneys[3].Title = "石材工事部";
         }
         /// <summary>
         /// 金庫クラスのインスタンスを取得します

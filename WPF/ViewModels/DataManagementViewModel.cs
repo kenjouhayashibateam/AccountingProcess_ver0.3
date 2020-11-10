@@ -92,6 +92,7 @@ namespace WPF.ViewModels
         private ObservableCollection<Content> contents;
         private bool isContentValidityTrueOnly;
         private string referenceContent;
+        private bool isContentReferenceMenuEnabled;
         #endregion
         private readonly IDataBaseConnect DataBaseConnect;
         private DataOperation CurrentOperation;
@@ -1367,6 +1368,7 @@ namespace WPF.ViewModels
             {
                 string s = value.Replace(",",string.Empty);
                 flatRateField = int.TryParse(s, out int i) ? TextHelper.CommaDelimitedAmount(i) : string.Empty;
+                flatRateField = (i <= 0) ? string.Empty : TextHelper.CommaDelimitedAmount(i);
                 CallPropertyChanged();
             }
         }
@@ -1440,6 +1442,7 @@ namespace WPF.ViewModels
             IsAffiliationAccountingSubjectEnabled = true;
             IsContentFieldEnabled = true;
             IsContentValidity = true;
+            IsContentReferenceMenuEnabled = false;
             ContentDetailFieldClear();
         }
         /// <summary>
@@ -1449,6 +1452,7 @@ namespace WPF.ViewModels
         {
             IsAffiliationAccountingSubjectEnabled = false;
             IsContentFieldEnabled = false;
+            IsContentReferenceMenuEnabled = true;
         }
         /// <summary>
         /// 伝票内容のデータ操作ボタンのEnableを設定します
@@ -1524,6 +1528,18 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 検索メニューのEnable
+        /// </summary>
+        public bool IsContentReferenceMenuEnabled
+        {
+            get => isContentReferenceMenuEnabled;
+            set
+            {
+                isContentReferenceMenuEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
         /// 伝票内容データを登録、更新します
         /// </summary>
         private void ContentDataOperation()
@@ -1576,7 +1592,13 @@ namespace WPF.ViewModels
         {
             string updateContents=string.Empty;
 
-            if (TextHelper.CommaDelimitedAmount(CurrentContent.FlatRate) != FlatRateField)updateContents= $"定額 : {TextHelper.AmountWithUnit(CurrentContent.FlatRate)} → {FlatRateField}円\r\n";
+            int oldFlatRate = CurrentContent.FlatRate;
+            if (oldFlatRate < 0) oldFlatRate = 0;
+
+            int newFlatRate = int.TryParse(FlatRateField, out int i) ? i : 0;
+            if (newFlatRate < 0) newFlatRate = 0;
+
+            if (oldFlatRate != newFlatRate)updateContents= $"定額 : {TextHelper.AmountWithUnit(CurrentContent.FlatRate)} → {FlatRateField}円\r\n";
             if (CurrentContent.IsValidity != IsContentValidity) updateContents += $"有効性 : {CurrentContent.IsValidity} → {IsContentValidity}\r\n";
 
             if(updateContents.Length==0)
@@ -1587,7 +1609,7 @@ namespace WPF.ViewModels
             if (CallConfirmationDataOperation($"伝票内容 : {ContentField}\r\n\r\n{updateContents}", "伝票内容") == MessageBoxResult.Cancel)
                 return;
 
-            int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
+            i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
             CurrentContent = new Content(ContentIDField, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
 
             IsContentOperationEnabled = false;

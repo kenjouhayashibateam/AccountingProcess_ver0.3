@@ -401,7 +401,7 @@
                             </Button>
                         </Grid>
                     </GroupBox>
-                    <Grid Grid.Column="1">
+                    <Grid Grid.Column="1" IsEnabled="{Binding IsContentReferenceMenuEnabled}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="5*"/>
@@ -428,8 +428,8 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="伝票内容" Width="4*" Binding="{Binding Text}"/>
-                                    <DataGridTextColumn Header="勘定科目" Width="4*" Binding="{Binding AccountingSubject.Subject}"/>
+                                    <DataGridTextColumn Header="伝票内容" Width="4*" IsReadOnly="True" Binding="{Binding Text}"/>
+                                    <DataGridTextColumn Header="勘定科目" Width="4*" IsReadOnly="True" Binding="{Binding AccountingSubject.Subject}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>

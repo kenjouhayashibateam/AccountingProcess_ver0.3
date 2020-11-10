@@ -12,7 +12,6 @@ namespace WPF.ViewModels
         #region Properties
         private bool callClosingMessage;
         private bool processFeatureEnabled;
-        private string location;
         private readonly ScreenTransition screenTransition = new ScreenTransition();
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
@@ -49,7 +48,6 @@ namespace WPF.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            //WindowTitle = "春秋苑経理システム（ログイン : なし）";
             ShowRemainingMoneyCalculationCommand =
                 new DelegateCommand(() => SetShowRemainingMoneyCalculationView(), () => true);
             MessageBoxCommand =
@@ -131,15 +129,8 @@ namespace WPF.ViewModels
         /// <summary>
         /// 経理担当場所
         /// </summary>
-        public string Location
-        {
-            get => location;
-            set
-            {
-                location = value;
-                ProcessFeatureEnabled = true;
-            }
-        }
+        public static string Location { get; set; }
+
         /// <summary>
         /// 管理事務所チェック欄
         /// </summary>
@@ -173,6 +164,7 @@ namespace WPF.ViewModels
         {
             KanriJimushoChecked = true;
             Location = Locations.管理事務所.ToString();
+            ProcessFeatureEnabled = true;
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
@@ -181,6 +173,7 @@ namespace WPF.ViewModels
         {
             ShorendoChecked = true;
             Location = Locations.青蓮堂.ToString();
+            ProcessFeatureEnabled = true;
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック

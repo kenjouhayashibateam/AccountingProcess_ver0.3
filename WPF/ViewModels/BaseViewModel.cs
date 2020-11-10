@@ -255,7 +255,7 @@ namespace WPF.ViewModels
             if (!CurrentErrors.ContainsKey(propertyName))
                 CurrentErrors.Add(propertyName, error);
 
-            OnErrorsChanged();
+            OnErrorsChanged(propertyName);
         }
         /// <summary>
         /// エラーを削除します
@@ -266,7 +266,7 @@ namespace WPF.ViewModels
             if (CurrentErrors.ContainsKey(propertyName))
                 CurrentErrors.Remove(propertyName);
 
-            OnErrorsChanged();
+            OnErrorsChanged(propertyName);
         }
         /// <summary>
         /// エラーリストに要素が追加、削除されたことを通知するイベントを呼び出します
@@ -275,18 +275,6 @@ namespace WPF.ViewModels
         protected void OnErrorsChanged(string proeprtyName)
         {
             this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(proeprtyName));
-        }
-        /// <summary>
-        /// エラーリストに要素が追加、削除されたことを通知するイベントを呼び出します
-        /// </summary>
-        protected void OnErrorsChanged()
-        {
-            StackFrame coller = new StackFrame(1);
-            string[] methodNames = coller.GetMethod().Name.Split('_');
-            int i = methodNames.Length - 1;
-            string propertyName = methodNames[i];
-
-            OnErrorsChanged(propertyName);
         }
         /// <summary>
         /// エラーリストを操作します
