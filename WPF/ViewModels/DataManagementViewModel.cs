@@ -88,7 +88,7 @@ namespace WPF.ViewModels
         private bool isContentOperationEnabled;
         private bool isAffiliationAccountingSubjectEnabled;
         private bool isContentFieldEnabled;
-        private Content currentContent;
+        private Content currentContent;　
         private ObservableCollection<Content> contents;
         private bool isContentValidityTrueOnly;
         private string referenceContent;

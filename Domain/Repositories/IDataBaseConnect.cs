@@ -80,17 +80,17 @@ namespace Domain.Repositories
         /// <summary>
         /// 貸方勘定検索
         /// </summary>
-        /// <param name="creditAccount">貸方勘定</param>
+        /// <param name="account">貸方勘定</param>
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <returns>貸方勘定リスト</returns>
-        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly);
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly);
         /// <summary>
         /// 伝票内容検索
         /// </summary>
-        /// <param name="content">伝票内容</param>
+        /// <param name="contentText">伝票内容</param>
         /// <param name="accountingSubject">勘定科目</param>
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <returns>伝票内容リスト</returns>
-        public ObservableCollection<Content> ReferenceContent(string content, string accountingSubject, bool isValidityTrueOnly);
+        public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubject, bool isValidityTrueOnly);
     }
 }

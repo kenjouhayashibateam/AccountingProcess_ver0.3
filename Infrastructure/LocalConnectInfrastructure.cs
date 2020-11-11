@@ -17,7 +17,7 @@ namespace Infrastructure
             return list;
         }
  
-        public ObservableCollection<Content> ReferenceContent(string content, string accountingSubject, bool isValidityTrueOnly)
+        public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubject, bool isValidityTrueOnly)
         {
             ObservableCollection<Content> list = new ObservableCollection<Content>
             {
@@ -28,7 +28,7 @@ namespace Infrastructure
             return list;
         }
 
-        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string creditAccount, bool isValidityTrueOnly)
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly)
         {
             ObservableCollection<CreditAccount> list = new ObservableCollection<CreditAccount>
             {
