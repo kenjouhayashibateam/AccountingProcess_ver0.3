@@ -217,7 +217,7 @@
                                 <TextBlock Text="{Binding CreditAccountIDField}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsCreditAccountValidity}" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="貸方勘定" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                                <TextBox x:Name="CreditAccountTextBox" Grid.Row="3" Text="{Binding CreditAccountField}" IsEnabled="{Binding IsCreditAccountEnabled}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBox x:Name="CreditAccountTextBox" Grid.Row="3" Text="{Binding CreditAccountField}" IsEnabled="{Binding IsCreditAccountEnabled}" VerticalAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
                             </Grid>
                             <Button x:Name="CreditAccountOperationButton" Grid.Row="1" IsEnabled="{Binding IsCreditAccountOperationButtonEnabled}" Content="{Binding CreditAccountOperationButtonContent}" Margin="5">
                                 <Button.InputBindings>

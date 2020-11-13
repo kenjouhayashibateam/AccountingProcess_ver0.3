@@ -6,6 +6,11 @@ namespace Infrastructure
 {
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
+        public AccountingSubject CallAccountingSubject(string id)
+        {
+            return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
+        }
+
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
@@ -26,6 +31,11 @@ namespace Infrastructure
                 new Content("content3",new AccountingSubject("accounitng_subject1","000","法事冥加",true),13000,"焼香台",true)
             };
             return list;
+        }
+
+        public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
+        {
+            throw new System.NotImplementedException();
         }
 
         public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly)

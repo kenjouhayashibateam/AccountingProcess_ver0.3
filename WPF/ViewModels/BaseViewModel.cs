@@ -303,7 +303,7 @@ namespace WPF.ViewModels
 
         public void SetRep(Rep rep)
         {
-            if(rep==null)
+            if(rep.Name==string.Empty)
             {
                 WindowTitle = DefaultWindowTitle;
             }

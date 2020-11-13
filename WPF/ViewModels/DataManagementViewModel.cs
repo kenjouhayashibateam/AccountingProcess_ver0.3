@@ -166,7 +166,7 @@ namespace WPF.ViewModels
             RepList = DataBaseConnect.ReferenceRep(string.Empty, false);
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, false);
             CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, false);
-            Contents = DataBaseConnect.ReferenceContent(string.Empty,string.Empty, false);
+            Contents = DataBaseConnect.ReferenceContent(string.Empty,string.Empty,string.Empty, false);
         }
         /// <summary>
         /// 各データ操作ボタンのContentを設定します
@@ -1021,6 +1021,7 @@ namespace WPF.ViewModels
 
             AccountingSubjectDetailFieldClear();
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, IsAccountingSubjectValidityTrueOnly);
+            AffiliationAccountingSubjects = AccountingSubjects;
         }
         /// <summary>
         /// 勘定科目詳細フィールドをクリアします
@@ -1572,7 +1573,7 @@ namespace WPF.ViewModels
             IsContentOperationEnabled = true;
             ContentDataOperationContent = "登録";
 
-            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, IsContentValidityTrueOnly);
+            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
             ContentDetailFieldClear();
         }
         /// <summary>
@@ -1619,7 +1620,7 @@ namespace WPF.ViewModels
             IsContentOperationEnabled = true;
 
             ContentDetailFieldClear();
-            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, IsContentValidityTrueOnly);
+            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
         }
         #endregion
 

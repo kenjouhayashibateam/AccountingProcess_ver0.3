@@ -91,6 +91,12 @@ namespace Domain.Repositories
         /// <param name="accountingSubject">勘定科目</param>
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <returns>伝票内容リスト</returns>
-        public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubject, bool isValidityTrueOnly);
+        public ObservableCollection<Content> ReferenceContent(string contentText,string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly);
+        /// <summary>
+        /// IDを基に勘定科目を呼び出します
+        /// </summary>
+        /// <param name="id">勘定科目ID</param>
+        /// <returns></returns>
+        public AccountingSubject CallAccountingSubject(string id);
     }
 }

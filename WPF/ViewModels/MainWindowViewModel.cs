@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Domain.Entities.ValueObjects;
+using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
 
@@ -15,6 +16,7 @@ namespace WPF.ViewModels
         private readonly ScreenTransition screenTransition = new ScreenTransition();
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
+        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         #endregion
 
         public enum Locations
@@ -44,7 +46,7 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowLoginCommand { get; }
         /// <summary>
-        /// コンストラクタ　DelegateCommandのインスタンスを生成します
+        /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
         public MainWindowViewModel()
         {
@@ -60,6 +62,7 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetShowDataManagementView(), () => true);
             ShowLoginCommand =
                 new DelegateCommand(() => SetShowLoginView(), () => true);
+            LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
         }
         /// <summary>
         /// ログイン画面を表示します
