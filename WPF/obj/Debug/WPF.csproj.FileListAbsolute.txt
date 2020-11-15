@@ -84,3 +84,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\L
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\LoginView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\LoginView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\LoginView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SlipMangementView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SlipMangementView.baml

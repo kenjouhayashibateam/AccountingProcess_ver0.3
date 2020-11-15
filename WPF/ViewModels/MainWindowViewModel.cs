@@ -17,6 +17,7 @@ namespace WPF.ViewModels
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
+        private bool isSlipManagementEnabled;
         #endregion
 
         public enum Locations
@@ -24,7 +25,6 @@ namespace WPF.ViewModels
             管理事務所,
             青蓮堂
         }
-
         /// <summary>
         /// 経理担当場所を管理事務所に設定するコマンド
         /// </summary>
@@ -46,10 +46,16 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowLoginCommand { get; }
         /// <summary>
+        /// 伝票管理画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowSlipManagementCommand { get; }
+        /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
         public MainWindowViewModel()
         {
+            LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+
             ShowRemainingMoneyCalculationCommand =
                 new DelegateCommand(() => SetShowRemainingMoneyCalculationView(), () => true);
             MessageBoxCommand =
@@ -62,7 +68,40 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetShowDataManagementView(), () => true);
             ShowLoginCommand =
                 new DelegateCommand(() => SetShowLoginView(), () => true);
-            LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+            ShowSlipManagementCommand =
+                new DelegateCommand(() => SetShowSlipManagementView(), () =>ReturnIsRepLogin());
+        }
+        /// <summary>
+        /// ログインしていないことを案内します
+        /// </summary>
+        private void CallNoLoginMessage()
+        {
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = "ログインしてください",
+                Button = MessageBoxButton.OK,
+                Image = MessageBoxImage.Warning,
+                Title = "担当者データがありません"
+            };
+            CallPropertyChanged(nameof(MessageBox));
+        }
+        /// <summary>
+        /// ログインしているかを判定します
+        /// </summary>
+        /// <returns>判定結果</returns>
+        private bool ReturnIsRepLogin()
+        {
+            bool b = LoginRep.Rep.ID != string.Empty;
+            if(!b)CallNoLoginMessage();
+            return b;
+        }
+        /// <summary>
+        /// 伝票管理画面を表示します
+        /// </summary>
+        private void SetShowSlipManagementView()
+        {
+            CreateShowWindowCommand(screenTransition.SlipManagement());
+            CallPropertyChanged();
         }
         /// <summary>
         /// ログイン画面を表示します
@@ -130,11 +169,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 経理担当場所
-        /// </summary>
-        public static string Location { get; set; }
-
-        /// <summary>
         /// 管理事務所チェック欄
         /// </summary>
         public bool KanriJimushoChecked
@@ -161,12 +195,24 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 伝票管理ボタンEnable
+        /// </summary>
+        public bool IsSlipManagementEnabled
+        {
+            get => isSlipManagementEnabled;
+            set
+            {
+                isSlipManagementEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
         /// 経理担当場所を管理事務所に設定します
         /// </summary>
         private void SetLocationKanriJimusho()
         {
             KanriJimushoChecked = true;
-            Location = Locations.管理事務所.ToString();
+            //Location = Locations.管理事務所.ToString();
             ProcessFeatureEnabled = true;
         }
         /// <summary>
@@ -175,8 +221,8 @@ namespace WPF.ViewModels
         private void SetLocationShorendo()
         {
             ShorendoChecked = true;
-            Location = Locations.青蓮堂.ToString();
-            ProcessFeatureEnabled = true;
+            AccountProcessLocation.SetLocation(Locations.青蓮堂.ToString());
+                       ProcessFeatureEnabled = true;
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック

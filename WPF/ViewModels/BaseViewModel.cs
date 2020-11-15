@@ -16,6 +16,7 @@ namespace WPF.ViewModels
     /// </summary>
     public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo, ILoginRepObserver
     {
+        #region Properties
         private bool callShowWindow;
         private bool callShowMessageBox;
         private MessageBoxInfo messageBox;
@@ -23,6 +24,7 @@ namespace WPF.ViewModels
         private string loginRepName;
         private string windowTitle;
         private bool isAdminPermisson;
+        #endregion
 
         /// <summary>
         /// 画面タイトル

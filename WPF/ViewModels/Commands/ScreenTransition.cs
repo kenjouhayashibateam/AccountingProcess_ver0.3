@@ -31,5 +31,13 @@ namespace WPF.ViewModels.Commands
         {
             return new LoginView();
         }
+        /// <summary>
+        /// 伝票管理画面を呼び出します
+        /// </summary>
+        /// <returns>伝票管理ウィンドウインスタンス</returns>
+        public SlipMangementView SlipManagement()
+        {
+            return new SlipMangementView();
+        }
     }
 }

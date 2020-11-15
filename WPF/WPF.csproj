@@ -79,6 +79,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
+    <Compile Include="ViewModels\SlipMangementViewModel.cs" />
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
     <Compile Include="Views\DataManagementView.xaml.cs">
@@ -97,6 +98,9 @@
     </Compile>
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">
       <DependentUpon>RemainingMoneyCalculationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SlipMangementView.xaml.cs">
+      <DependentUpon>SlipMangementView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\DataManagementView.xaml">
       <SubType>Designer</SubType>
@@ -119,6 +123,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\RemainingMoneyCalculationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SlipMangementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

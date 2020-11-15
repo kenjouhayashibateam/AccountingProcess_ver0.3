@@ -786,7 +786,7 @@ namespace WPF.ViewModels
             SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
             DefaultWindowTitle = "金庫金額計算";
             OutputButtonEnabled = true;
-            if (MainWindowViewModel.Location == MainWindowViewModel.Locations.管理事務所.ToString()) SetOtherMoneyTitleDefault();
+            //if (MainWindowViewModel.Location == MainWindowViewModel.Locations.管理事務所.ToString()) SetOtherMoneyTitleDefault();
         }
         /// <summary>
         /// 各プロパティに値を入力します

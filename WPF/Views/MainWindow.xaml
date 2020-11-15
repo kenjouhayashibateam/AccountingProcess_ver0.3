@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPF"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
@@ -90,7 +89,12 @@
                         </Button.InputBindings>
                     </Button>
                 </Grid>
-                <Button x:Name="ShowSlipManagement" Content="伝票管理（未実装）" Grid.Row="0" Grid.Column="1" Margin="100,50"/>
+                <Button x:Name="ShowSlipManagement" Content="伝票管理（未実装）" IsEnabled="{Binding ShowSlipManagementCommand}" Grid.Row="0" Grid.Column="1" Margin="100,50">
+                    <Button.InputBindings>
+                        <MouseBinding Command="{Binding ShowSlipManagementCommand}" MouseAction="LeftClick"/>
+                        <KeyBinding Command="{Binding ShowSlipManagementCommand}" Key="Space"/>
+                    </Button.InputBindings>
+                </Button>
             </Grid>            
         </GroupBox>
                

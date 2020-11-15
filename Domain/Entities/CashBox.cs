@@ -1,10 +1,8 @@
 ﻿using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using static Domain.Entities.ValueObjects.MoneyCategory;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
-using static System.Console;
 
 namespace Domain.Entities
 {
