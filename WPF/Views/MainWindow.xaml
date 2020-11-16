@@ -89,7 +89,7 @@
                         </Button.InputBindings>
                     </Button>
                 </Grid>
-                <Button x:Name="ShowSlipManagement" Content="伝票管理（未実装）" IsEnabled="{Binding ShowSlipManagementCommand}" Grid.Row="0" Grid.Column="1" Margin="100,50">
+                <Button x:Name="ShowSlipManagement" Content="出納管理（未実装）" IsEnabled="{Binding ShowSlipManagementCommand}" Grid.Row="0" Grid.Column="1" Margin="100,50">
                     <Button.InputBindings>
                         <MouseBinding Command="{Binding ShowSlipManagementCommand}" MouseAction="LeftClick"/>
                         <KeyBinding Command="{Binding ShowSlipManagementCommand}" Key="Space"/>

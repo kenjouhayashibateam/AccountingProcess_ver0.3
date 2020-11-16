@@ -32,12 +32,12 @@ namespace WPF.ViewModels.Commands
             return new LoginView();
         }
         /// <summary>
-        /// 伝票管理画面を呼び出します
+        /// 出納管理画面を呼び出します
         /// </summary>
-        /// <returns>伝票管理ウィンドウインスタンス</returns>
-        public SlipMangementView SlipManagement()
+        /// <returns>出納管理ウィンドウインスタンス</returns>
+        public ReceiptsAndExpenditureMangementView SlipManagement()
         {
-            return new SlipMangementView();
+            return new ReceiptsAndExpenditureMangementView();
         }
     }
 }

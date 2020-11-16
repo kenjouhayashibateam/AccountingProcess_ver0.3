@@ -5,6 +5,7 @@ using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Infrastructure;
 using System.Threading.Tasks;
 using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
 
 namespace WPF.ViewModels
 {
@@ -786,7 +787,7 @@ namespace WPF.ViewModels
             SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
             DefaultWindowTitle = "金庫金額計算";
             OutputButtonEnabled = true;
-            //if (MainWindowViewModel.Location == MainWindowViewModel.Locations.管理事務所.ToString()) SetOtherMoneyTitleDefault();
+            if (AccountingProcessLocation.Location == MainWindowViewModel.Locations.管理事務所.ToString()) SetOtherMoneyTitleDefault();
         }
         /// <summary>
         /// 各プロパティに値を入力します
@@ -937,7 +938,7 @@ namespace WPF.ViewModels
 
         protected override string SetWindowDefaultTitle()
         {
-            DefaultWindowTitle = "金庫金額計算";
+            DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
             return DefaultWindowTitle;
         }
     }

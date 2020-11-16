@@ -178,6 +178,7 @@ namespace WPF.ViewModels
             {
                 kanriJimushoChecked = value;
                 ValidationProperty(nameof(KanriJimushoChecked), value);
+                AccountingProcessLocation.Location = Locations.管理事務所.ToString();
                 CallPropertyChanged();
             }
         }
@@ -191,6 +192,7 @@ namespace WPF.ViewModels
             {
                 shorendoChecked = value;
                 ValidationProperty(nameof(ShorendoChecked), value);
+                AccountingProcessLocation.Location = Locations.青蓮堂.ToString();
                 CallPropertyChanged();
             }
         }
@@ -221,7 +223,7 @@ namespace WPF.ViewModels
         private void SetLocationShorendo()
         {
             ShorendoChecked = true;
-            AccountProcessLocation.SetLocation(Locations.青蓮堂.ToString());
+            AccountingProcessLocation.SetLocation(Locations.青蓮堂.ToString());
                        ProcessFeatureEnabled = true;
         }
         /// <summary>

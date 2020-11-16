@@ -3,15 +3,15 @@
     /// <summary>
     /// 経理担当場所（シングルトン）
     /// </summary>
-    public sealed class AccountProcessLocation
+    public sealed class AccountingProcessLocation
     {
-        private static readonly AccountProcessLocation accountingLocation = new AccountProcessLocation();
+        private static readonly AccountingProcessLocation accountingLocation = new AccountingProcessLocation();
         /// <summary>
         /// 担当場所
         /// </summary>
         public static string Location { get; set; }
 
-        public static AccountProcessLocation GetInstance()
+        public static AccountingProcessLocation GetInstance()
         {
             return accountingLocation;
         }
