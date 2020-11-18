@@ -98,5 +98,11 @@ namespace Domain.Repositories
         /// <param name="id">勘定科目ID</param>
         /// <returns></returns>
         public AccountingSubject CallAccountingSubject(string id);
+        /// <summary>
+        /// 伝票内容の文字列で、所属する勘定科目を検索します
+        /// </summary>
+        /// <param name="contentText">検索する伝票内容</param>
+        /// <returns></returns>
+        public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText);
     }
 }

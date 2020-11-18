@@ -21,21 +21,26 @@ namespace Infrastructure
             };
             return list;
         }
- 
-        public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubject, bool isValidityTrueOnly)
+
+        public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText)
         {
-            ObservableCollection<Content> list = new ObservableCollection<Content>
+            ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new Content("content1",new AccountingSubject("accounitng_subject1","000","法事冥加",true),-1,"お布施",true),
-                new Content("content2",new AccountingSubject("accounting_subject2","000","葬儀冥加",true),-1,"お布施",true),
-                new Content("content3",new AccountingSubject("accounitng_subject1","000","法事冥加",true),13000,"焼香台",true)
+                new AccountingSubject("accounitng_subject1","000","法事冥加",true),
+                new AccountingSubject("accounting_subject2","000","葬儀冥加",true),
             };
             return list;
         }
 
         public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
-            throw new System.NotImplementedException();
+            ObservableCollection<Content> list = new ObservableCollection<Content>
+            {
+                new Content("content1",new AccountingSubject("accounitng_subject1","000","法事冥加",true),-1,"法事お布施",true),
+                new Content("content2",new AccountingSubject("accounting_subject2","000","葬儀冥加",true),-1,"葬儀お布施",true),
+                new Content("content3",new AccountingSubject("accounitng_subject1","000","法事冥加",true),13000,"焼香台",true)
+            };
+            return list;            
         }
 
         public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly)

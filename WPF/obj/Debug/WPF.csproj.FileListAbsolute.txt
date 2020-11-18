@@ -86,3 +86,5 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\LoginView
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\LoginView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureMangementView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureMangementView.baml
+C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureMangementView.g.cs
+C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureMangementView.baml

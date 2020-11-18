@@ -19,6 +19,7 @@ namespace WPF.ViewModels
         private bool passwordCharCheck;
         private string repName;
         private readonly IDataBaseConnect DataBaseConnecter;
+        private bool isLoginButtonEnabled;
 
         /// <summary>
         /// 担当者のパスワードを検証してログインします
@@ -62,7 +63,7 @@ namespace WPF.ViewModels
             DataBaseConnecter = dataBaseConnect;
             Reps = DataBaseConnecter.ReferenceRep(string.Empty, true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
-            LoginCommand = new DelegateCommand(() => Login(), () => true);
+            LoginCommand = new DelegateCommand(() => Login(), () => IsLoginButtonEnabled);
             CurrentRep = Reps[0];
         }
 
@@ -90,6 +91,7 @@ namespace WPF.ViewModels
             {
                 password = value;
                 ValidationProperty(nameof(Password), value);
+                IsLoginButtonEnabled = GetErrors(nameof(Password)) == null;
                 CallPropertyChanged();
             }
         }
@@ -105,7 +107,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// ログイン担当者名
+        /// </summary>
         public string RepName
         {
             get => repName;
@@ -122,14 +126,23 @@ namespace WPF.ViewModels
         /// ログインコマンド
         /// </summary>
         public DelegateCommand LoginCommand{get;}
+        /// <summary>
+        /// ログインボタンEnable
+        /// </summary>
+        public bool IsLoginButtonEnabled
+        {
+            get => isLoginButtonEnabled;
+            set
+            {
+                isLoginButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
         /// </summary>
-        public void CheckRevers()
-        {
-            PasswordCharCheck = !PasswordCharCheck;
-        }
+        public void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
 
         public override void ValidationProperty(string propertyName, object value)
         {

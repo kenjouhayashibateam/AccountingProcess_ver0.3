@@ -29,5 +29,15 @@
             Subject = subject;
             IsValidity = isValidity;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !this.GetType().Equals(obj.GetType())) return false;
+            else
+            {
+                AccountingSubject accountingSubject = (AccountingSubject)obj;
+                return this.ID == accountingSubject.ID;
+            }
+        }
     }
 }

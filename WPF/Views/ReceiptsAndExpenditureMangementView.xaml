@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
+        xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="900" Width="800">
@@ -43,7 +44,7 @@
                         <RowDefinition Height="9*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Grid>
+                    <Grid Background="{Binding DetailBackGroundColor}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
@@ -85,9 +86,9 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <ComboBox Name="ContentComboBox" Grid.Column="0" Margin="5,3"/>
-                            <ComboBox Name="AccountingSubjectComboBox" Grid.Column="1" Margin="5,3"/>
-                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Column="2" Margin="5,3"/>
+                            <ComboBox Name="ContentComboBox" Grid.Column="0" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent.Text}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
+                            <ComboBox Name="AccountingSubjectComboBox" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Grid.Column="1" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject.Subject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
+                            <ComboBox Name="AccountingSubjectCodeComboBox" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" Grid.Column="2" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject.SubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
                         </Grid>
                         
                     </Grid>

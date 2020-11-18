@@ -2,6 +2,9 @@
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Media;
 
 namespace WPF.ViewModels
 {
@@ -13,19 +16,34 @@ namespace WPF.ViewModels
         private bool isRegistrationCheck;
         private bool isUpdateCheck;
         private bool isPaymentCheck;
-        private string isDepositAndWithdrawalContetnt;
+        private string depositAndWithdrawalContetnt;
         private readonly IDataBaseConnect DataBaseConnect;
-
+        private SolidColorBrush detailBackGroundColor;
+        private Content selectedContent;
+        private ObservableCollection<Content> comboContents;
+        private string comboContentText;
+        private AccountingSubject selectedAccountingSubject;
+        private ObservableCollection<AccountingSubject> comboAccountingSubjects;
+        private string comboAccountingSubjectText;
+        private string comboAccountingSubjectCode;
         #endregion
 
         public ReceiptsAndExpenditureMangementViewModel(IDataBaseConnect dataBaseConnect)
         {
             DataBaseConnect = dataBaseConnect;
+            IsPaymentCheck = true;
             CashBoxTotalAmount = $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
+            SetComboBoxItem();
         }
-
-        public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
-
+         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+       /// <summary>
+        /// 各コンボボックスのリストをセットします
+        /// </summary>
+        private void SetComboBoxItem()
+        {
+            ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
+            ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+        }
         /// <summary>
         /// 金庫の総計金額
         /// </summary>
@@ -71,9 +89,16 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentCheck = value;
-                if (value) DepositAndWithdrawalContetnt = "入金";
-                else DepositAndWithdrawalContetnt = "出金";
-
+                if (value)
+                {
+                    DepositAndWithdrawalContetnt = "入金";
+                    DetailBackGroundColor = new SolidColorBrush(Colors.MistyRose);
+                }
+                else
+                {
+                    DepositAndWithdrawalContetnt = "出金";
+                    DetailBackGroundColor = new SolidColorBrush(Colors.LightCyan);
+                }
                 CallPropertyChanged();
             }
         }
@@ -82,17 +107,151 @@ namespace WPF.ViewModels
         /// </summary>
         public string DepositAndWithdrawalContetnt
         {
-            get => isDepositAndWithdrawalContetnt;
+            get => depositAndWithdrawalContetnt;
             set
             {
-                isDepositAndWithdrawalContetnt = value;
+                depositAndWithdrawalContetnt = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入出金に応じて、詳細の色を決める
+        /// </summary>
+        public SolidColorBrush DetailBackGroundColor
+        {
+            get => detailBackGroundColor;
+            set
+            {
+                detailBackGroundColor = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された伝票内容
+        /// </summary>
+        public Content SelectedContent
+        {
+            get => selectedContent;
+            set
+            {
+                selectedContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 伝票内容コンボボックスリスト
+        /// </summary>
+        public ObservableCollection<Content> ComboContents
+        {
+            get => comboContents;
+            set
+            {
+                comboContents = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 伝票内容コンボボックスのText
+        /// </summary>
+        public string ComboContentText
+        {
+            get => comboContentText;
+            set
+            {
+                if (comboContentText == value) return;
+                comboContentText = value;
+                SelectedContent = ComboContents.FirstOrDefault(c => c.Text == value);
+                if (SelectedContent == null) ComboContentText = string.Empty;
+                else
+                {
+                    ComboAccountingSubjects = DataBaseConnect.ReferenceAffiliationAccountingSubject(comboContentText);
+                    ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
+                    ComboAccountingSubjectCode = comboAccountingSubjects[0].SubjectCode;
+                }
+                ValidationProperty(nameof(ComboContentText), comboContentText);
+                
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// コンボボックスで選択された勘定科目
+        /// </summary>
+        public AccountingSubject SelectedAccountingSubject
+        {
+            get => selectedAccountingSubject;
+            set
+            {
+                if (selectedAccountingSubject != null && selectedAccountingSubject.Equals(value)) return;
+                selectedAccountingSubject = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目コンボボックスの勘定科目リスト
+        /// </summary>
+        public ObservableCollection<AccountingSubject> ComboAccountingSubjects
+        {
+            get => comboAccountingSubjects;
+            set
+            {
+                comboAccountingSubjects = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目コンボボックスのText
+        /// </summary>
+        public string ComboAccountingSubjectText
+        {
+            get => comboAccountingSubjectText;
+            set
+            {
+                if (comboAccountingSubjectText == value) return;
+                comboAccountingSubjectText = value;
+                SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.Subject == comboAccountingSubjectText);
+                if (SelectedAccountingSubject == null) comboAccountingSubjectText = string.Empty;
+                else
+                {
+                    comboAccountingSubjectText = selectedAccountingSubject.Subject;
+                    ComboAccountingSubjectCode = selectedAccountingSubject.SubjectCode;
+                    SetAccountingSubjectChildContents();
+                }
+
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目コードコンボボックスのText
+        /// </summary>
+        public string ComboAccountingSubjectCode
+        {
+            get => comboAccountingSubjectCode;
+            set
+            {
+                if (comboAccountingSubjectCode == value) return;
+                comboAccountingSubjectCode = value;
+                
                 CallPropertyChanged();
             }
         }
 
+        /// <summary>
+        /// 勘定科目に所属している伝票内容を検索してリストに代入します
+        /// </summary>
+        private void SetAccountingSubjectChildContents()
+        {
+             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, ComboAccountingSubjectText, true);
+            if (SelectedContent == null) ComboContentText = ComboContents[0].Text;
+            else SelectedContent = ComboContents.FirstOrDefault(c => c.Text == ComboContentText);
+        }
         public override void ValidationProperty(string propertyName, object value)
         {
-            
+            switch(propertyName)
+            {
+                case nameof(ComboContentText):
+                    SetNullOrEmptyError(propertyName, value.ToString());
+                    break;
+            }
         }
 
         protected override string SetWindowDefaultTitle()

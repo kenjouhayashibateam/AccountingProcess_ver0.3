@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using Domain.Entities.ValueObjects;
+﻿using Domain.Entities.ValueObjects;
 using Domain.Repositories;
-using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -15,7 +13,6 @@ namespace Infrastructure
     public class SQLServerConnectInfrastructure : IDataBaseConnect
     {
         private SqlConnection Cn;
-        //private SqlCommand Cmd;
         private readonly LoginRep LoginRep=LoginRep.GetInstance();
 
         /// <summary>
@@ -24,28 +21,21 @@ namespace Infrastructure
         /// <param name="commandText">ストアドプロシージャ名</param>
         private void ADO_NewInstance_StoredProc(SqlCommand cmd, string commandText)
         {
-            Cn = new SqlConnection();
-            
-            if(LoginRep.Rep.IsAdminPermisson)
+            Cn = new SqlConnection
             {
-                Cn.ConnectionString = Properties.Settings.Default.SystemAdminConnection;
-            }
-            else
-            {
-                Cn.ConnectionString = Properties.Settings.Default.AccountingProcessConnection;
-            }
-
+                ConnectionString = LoginRep.Rep.IsAdminPermisson
+                ? Properties.Settings.Default.SystemAdminConnection
+                : Properties.Settings.Default.AccountingProcessConnection
+            };
             cmd.Connection = Cn;
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = commandText;
-
             Cn.Open();
         }
    
         public int Registration(Rep rep, Rep operationRep)
         {
             SqlCommand Cmd = new SqlCommand();
-
             using (Cn) 
             {
                 ADO_NewInstance_StoredProc(Cmd,"registration_rep");
@@ -75,16 +65,14 @@ namespace Infrastructure
        
         public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidityTrueOnly)
         {
-            SqlDataReader DataReader;
             SqlCommand Cmd = new SqlCommand();
             ObservableCollection<Rep> reps = new ObservableCollection<Rep>();
-
             using (Cn)
             {
                 ADO_NewInstance_StoredProc(Cmd,"reference_rep");
                 Cmd.Parameters.Add(new SqlParameter("@rep_name", repName));
                 Cmd.Parameters.Add(new SqlParameter("@true_only", isValidityTrueOnly));
-                DataReader = Cmd.ExecuteReader();
+                SqlDataReader DataReader = Cmd.ExecuteReader();
                 
                 while (DataReader.Read())
                 {
@@ -228,35 +216,24 @@ namespace Infrastructure
     
         public ObservableCollection<Content> ReferenceContent(string contentText,string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
-            SqlDataReader DataReader;
-            SqlDataAdapter sda;
-            DataTable dt=new DataTable();
             ObservableCollection<Content> contents = new ObservableCollection<Content>();
             SqlCommand Cmd = new SqlCommand();
 
             using (Cn)
             {
-                ADO_NewInstance_StoredProc(Cmd,"reference_content");
+                ADO_NewInstance_StoredProc(Cmd, "reference_content");
                 Cmd.Parameters.AddWithValue("@content", contentText);
                 Cmd.Parameters.AddWithValue("@subject_code", accountingSubjectCode);
                 Cmd.Parameters.AddWithValue("@subject", accountingSubject);
                 Cmd.Parameters.AddWithValue("@true_only", isValidityTrueOnly);
-                //DataReader = Cmd.ExecuteReader();
-                sda = new SqlDataAdapter(Cmd);
+                SqlDataAdapter sda = new SqlDataAdapter(Cmd);
 
+                using DataTable dt = new DataTable();
                 sda.Fill(dt);
-
-                //using(DataReader)
-                //{
-                //    while (DataReader.Read())
-                //    {
-                //        contents.Add(new Content((string)DataReader["content"], CallAccountingSubject((string)DataReader["accounting_subject_id"]), (int)DataReader["flat_rate"], (string)DataReader["text"], (bool)DataReader["is_validity"]));
-                //    }
-                //}
-            }
-            foreach(DataRow dr in dt.Rows)
-            {
-                contents.Add(new Content((string)dr["content_id"], CallAccountingSubject((string)dr["accounting_subject_id"]), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"]));
+                foreach (DataRow dr in dt.Rows)
+                {
+                    contents.Add(new Content((string)dr["content_id"], CallAccountingSubject((string)dr["accounting_subject_id"]), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"]));
+                }
             }
             
             return contents;
@@ -274,17 +251,22 @@ namespace Infrastructure
             return null;
         }
         /// <summary>
-        /// パラメータが一つのストアドプロシージャを実行します
+        /// パラメータが一つのストアドプロシージャを実行し、DataReaderを返します
         /// </summary>
         /// <param name="commandText">ストアドプロシージャ名</param>
         /// <param name="parameterName">パラメータ名</param>
         /// <param name="parameter">パラメータ</param>
-        /// <returns></returns>
+        /// <returns>ExecuteReader</returns>
         private SqlDataReader ReturnReaderCommandOneParameterStoredProc(SqlCommand cmd, string commandText,string parameterName,string parameter)
         {
             ADO_NewInstance_StoredProc(cmd,commandText);
             cmd.Parameters.AddWithValue(parameterName, parameter);
             return cmd.ExecuteReader();
+        }
+
+        public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
