@@ -34,5 +34,21 @@
         /// 有効性
         /// </summary>
         public bool IsValidity { get; set; }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !this.GetType().Equals(obj.GetType())) return false;
+            else
+            {
+                Content content = (Content)obj;
+                return this.ID == content.ID;
+            }
+        }
+
     }
 }

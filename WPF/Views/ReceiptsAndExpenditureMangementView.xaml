@@ -65,7 +65,7 @@
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"/>
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
                         <TextBlock Text="貸方勘定" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding SelectedCreditAccount.Account}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,200,3"/>
+                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount.Account}" SelectedIndex="0" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,200,3"/>
                         <Grid Grid.Row="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -94,7 +94,7 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="PriceTextBox" Grid.Column="0" Text="{Binding Price}" InputMethod.PreferredImeState="off" Margin="5,3"/>
+                            <TextBox x:Name="PriceTextBox" Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3"/>
                         </Grid>
                         <TextBlock Text="入出金日" Grid.Row="11" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>

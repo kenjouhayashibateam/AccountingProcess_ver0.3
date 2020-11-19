@@ -503,18 +503,9 @@ namespace WPF.ViewModels
         /// <param name="otherMoneyAmountDisplayValue">表示用金額</param>
         private void SetOtherMoneyAmount(string value, int otherMoneyNumber, ref string otherMoneyAmountDisplayValue)
         {
-            string s = value.Replace(",", string.Empty);
+            otherMoneyAmountDisplayValue = TextHelper.CommaDelimitedAmount(value);
 
-            otherMoneyAmountDisplayValue = int.TryParse(s, out int i) ? TextHelper.CommaDelimitedAmount(i) : string.Empty;
-
-            if (otherMoneyAmountDisplayValue != string.Empty)
-            {
-                myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = int.Parse(s);
-            }
-            else
-            {
-                myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = 0;
-            }
+            myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = otherMoneyAmountDisplayValue != string.Empty ? TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
             TotalAmount = myCashbox.GetTotalAmountWithUnit();
         }
         /// <summary>

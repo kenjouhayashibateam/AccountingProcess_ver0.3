@@ -54,7 +54,6 @@ namespace WPF.ViewModels
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true);
-            SelectedCreditAccount = ComboCreditAccounts[0];
         }
         /// <summary>
         /// 金庫の総計金額
@@ -146,9 +145,9 @@ namespace WPF.ViewModels
             get => selectedContent;
             set
             {
+                if (selectedContent != null && selectedContent.Equals(value)) return;
                 selectedContent = value;
-
-                if (selectedContent.FlatRate > 0) Price = TextHelper.CommaDelimitedAmount(selectedContent.FlatRate);
+                if (selectedContent != null && selectedContent.FlatRate > 0) Price = selectedContent.FlatRate.ToString();
                 else Price = string.Empty;
 
                 CallPropertyChanged();
@@ -182,7 +181,7 @@ namespace WPF.ViewModels
                 {
                     ComboAccountingSubjects = DataBaseConnect.ReferenceAffiliationAccountingSubject(comboContentText);
                     ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
-                    ComboAccountingSubjectCode = comboAccountingSubjects[0].SubjectCode;
+                    ComboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
                 }
                 ValidationProperty(nameof(ComboContentText), comboContentText);
                 
@@ -282,7 +281,7 @@ namespace WPF.ViewModels
             get => price;
             set
             {
-                price = value;
+                price = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
@@ -330,6 +329,7 @@ namespace WPF.ViewModels
             get => comboCreditAccountText;
             set
             {
+                if (comboCreditAccountText == value) return;
                 comboCreditAccountText = value;
                 CallPropertyChanged();
             }
@@ -344,6 +344,7 @@ namespace WPF.ViewModels
             if (SelectedContent == null) ComboContentText = ComboContents[0].Text;
             else SelectedContent = ComboContents.FirstOrDefault(c => c.Text == ComboContentText);
         }
+
         public override void ValidationProperty(string propertyName, object value)
         {
             switch(propertyName)
