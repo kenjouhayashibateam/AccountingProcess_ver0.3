@@ -1,7 +1,9 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
@@ -26,6 +28,13 @@ namespace WPF.ViewModels
         private ObservableCollection<AccountingSubject> comboAccountingSubjects;
         private string comboAccountingSubjectText;
         private string comboAccountingSubjectCode;
+        private string detailText;
+        private DateTime accountActivityDate;
+        private string price;
+        private string receiptsAndExpenditureIDField;
+        private ObservableCollection<CreditAccount> comboCreditAccounts;
+        private CreditAccount selectedCreditAccount;
+        private string comboCreditAccountText;
         #endregion
 
         public ReceiptsAndExpenditureMangementViewModel(IDataBaseConnect dataBaseConnect)
@@ -33,6 +42,7 @@ namespace WPF.ViewModels
             DataBaseConnect = dataBaseConnect;
             IsPaymentCheck = true;
             CashBoxTotalAmount = $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
+            AccountActivityDate = DateTime.Today;
             SetComboBoxItem();
         }
          public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
@@ -43,6 +53,8 @@ namespace WPF.ViewModels
         {
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true);
+            SelectedCreditAccount = ComboCreditAccounts[0];
         }
         /// <summary>
         /// 金庫の総計金額
@@ -135,6 +147,10 @@ namespace WPF.ViewModels
             set
             {
                 selectedContent = value;
+
+                if (selectedContent.FlatRate > 0) Price = TextHelper.CommaDelimitedAmount(selectedContent.FlatRate);
+                else Price = string.Empty;
+
                 CallPropertyChanged();
             }
         }
@@ -231,6 +247,90 @@ namespace WPF.ViewModels
                 if (comboAccountingSubjectCode == value) return;
                 comboAccountingSubjectCode = value;
                 
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 詳細欄のText
+        /// </summary>
+        public string DetailText
+        {
+            get => detailText;
+            set
+            {
+                detailText = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入出金日
+        /// </summary>
+        public DateTime AccountActivityDate
+        {
+            get => accountActivityDate;
+            set
+            {
+                accountActivityDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納金額
+        /// </summary>
+        public string Price
+        {
+            get => price;
+            set
+            {
+                price = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納IDフィールド
+        /// </summary>
+        public string ReceiptsAndExpenditureIDField
+        {
+            get => receiptsAndExpenditureIDField;
+            set
+            {
+                receiptsAndExpenditureIDField = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定コンボボックスのリスト
+        /// </summary>
+        public ObservableCollection<CreditAccount> ComboCreditAccounts
+        {
+            get => comboCreditAccounts;
+            set
+            {
+                comboCreditAccounts = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された貸方勘定
+        /// </summary>
+        public CreditAccount SelectedCreditAccount
+        {
+            get => selectedCreditAccount;
+            set
+            {
+                selectedCreditAccount = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方勘定コンボボックスのText
+        /// </summary>
+        public string ComboCreditAccountText
+        {
+            get => comboCreditAccountText;
+            set
+            {
+                comboCreditAccountText = value;
                 CallPropertyChanged();
             }
         }

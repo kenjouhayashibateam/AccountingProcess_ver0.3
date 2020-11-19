@@ -59,9 +59,9 @@ namespace Domain.Entities
         /// <summary>
         /// 入出金日
         /// </summary>
-        public DateTime DepositAndWithdrawalDate { get; set; }
+        public DateTime AccountActivityDate { get; set; }
 
-        public ReceiptsAndExpenditure(int slipID, AccountingProcessLocation location, DateTime registrationDate, Rep registrationRep, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime depositAndWithdrawalDate)
+        public ReceiptsAndExpenditure(int slipID, AccountingProcessLocation location, DateTime registrationDate, Rep registrationRep, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime accountActivityDate)
         {
             SlipID = slipID;
             Location = location;
@@ -75,7 +75,7 @@ namespace Domain.Entities
             IsValidity = isValidity;
             ApprovalDate = approvalDate;
             ApprovalRep = approvalRep;
-            DepositAndWithdrawalDate = depositAndWithdrawalDate;
+            AccountActivityDate = accountActivityDate;
         }
     }
 }
