@@ -1,59 +1,99 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using Domain.Repositories;
-using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
+using WPF.ViewModels.Commands;
 
 namespace WPF.ViewModels
 {
-    public class ReceiptsAndExpenditureMangementViewModel : BaseViewModel
+    public class ReceiptsAndExpenditureMangementViewModel : DataOperationViewModel
     {
         #region Properties
-        private readonly Cashbox Cashbox = Cashbox.GetInstance();
-        private string cashBoxTotalAmount;
-        private bool isRegistrationCheck;
-        private bool isUpdateCheck;
-        private bool isPaymentCheck;
-        private string depositAndWithdrawalContetnt;
-        private readonly IDataBaseConnect DataBaseConnect;
-        private SolidColorBrush detailBackGroundColor;
-        private Content selectedContent;
-        private ObservableCollection<Content> comboContents;
-        private string comboContentText;
-        private AccountingSubject selectedAccountingSubject;
-        private ObservableCollection<AccountingSubject> comboAccountingSubjects;
         private string comboAccountingSubjectText;
         private string comboAccountingSubjectCode;
         private string detailText;
-        private DateTime accountActivityDate;
+        private string cashBoxTotalAmount;
+        private string depositAndWithdrawalContetnt;
+        private string comboContentText;
         private string price;
         private string receiptsAndExpenditureIDField;
-        private ObservableCollection<CreditAccount> comboCreditAccounts;
-        private CreditAccount selectedCreditAccount;
         private string comboCreditAccountText;
+        private string dataOperationButtonContent;
+        private bool isValidity;
+        private bool isPaymentCheck;
+        private bool isDepositAndWithdrawalContetntEnabled;
+        private bool isComboBoxEnabled;
+        private bool isDetailTextEnabled;
+        private bool isPriceEnabled;
+        private bool isAccountActivityEnabled;
+        private readonly Cashbox Cashbox = Cashbox.GetInstance();
+        private DateTime accountActivityDate;
+        private ObservableCollection<AccountingSubject> comboAccountingSubjects;
+        private ObservableCollection<Content> comboContents;
+        private ObservableCollection<CreditAccount> comboCreditAccounts;
+        private SolidColorBrush detailBackGroundColor;
+        private Content selectedContent;
+        private AccountingSubject selectedAccountingSubject;
+        private CreditAccount selectedCreditAccount;
         #endregion
 
-        public ReceiptsAndExpenditureMangementViewModel(IDataBaseConnect dataBaseConnect)
+        public ReceiptsAndExpenditureMangementViewModel()
         {
-            DataBaseConnect = dataBaseConnect;
             IsPaymentCheck = true;
-            CashBoxTotalAmount = $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
+            CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             AccountActivityDate = DateTime.Today;
-            SetComboBoxItem();
         }
-         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
-       /// <summary>
-        /// 各コンボボックスのリストをセットします
-        /// </summary>
-        private void SetComboBoxItem()
+
+        protected override void SetDetailLocked()
+        {
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+                    IsValidity = true;
+                    IsDepositAndWithdrawalContetntEnabled = true;
+                    IsComboBoxEnabled = true;
+                    IsDetailTextEnabled = true;
+                    IsAccountActivityEnabled = true;
+
+                    break;
+            }
+        }
+
+        protected override void SetDataOperationButtonContent(DataOperation operation) => DataOperationButtonContent = operation.ToString();
+
+        protected override void SetDataList()
         {
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true);
+        }
+
+        protected override void SetDelegateCommand()
+        {
+            //throw new NotImplementedException();
+        }
+        /// <summary>
+        /// データ操作コマンド
+        /// </summary>
+        public DelegateCommand ReceiptsAndExpenditureDataOperationCommand { get; set; }
+        private void ReceiptsAndExpenditureDataOperation()
+        {
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+
+                    break;
+            }
+        }
+        /// <summary>
+        /// 出納データ登録
+        /// </summary>
+        private void DataRegistration()
+        {
+            DataBaseConnect.Registration(new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
         }
         /// <summary>
         /// 金庫の総計金額
@@ -64,30 +104,6 @@ namespace WPF.ViewModels
             set
             {
                 cashBoxTotalAmount = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// データ操作　登録チェック
-        /// </summary>
-        public bool IsRegistrationCheck
-        {
-            get => isRegistrationCheck;
-            set
-            {
-                isRegistrationCheck = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// データ操作　更新チェック
-        /// </summary>
-        public bool IsUpdateCheck
-        {
-            get => isUpdateCheck;
-            set
-            {
-                isUpdateCheck = value;
                 CallPropertyChanged();
             }
         }
@@ -331,6 +347,90 @@ namespace WPF.ViewModels
             {
                 if (comboCreditAccountText == value) return;
                 comboCreditAccountText = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// データの有効性
+        /// </summary>
+        public bool IsValidity
+        {
+            get => isValidity;
+            set
+            {
+                isValidity = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入出金チェックのEnabled
+        /// </summary>
+        public bool IsDepositAndWithdrawalContetntEnabled
+        {
+            get => isDepositAndWithdrawalContetntEnabled;
+            set
+            {
+                isDepositAndWithdrawalContetntEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 詳細のコンボボックスのEnabled
+        /// </summary>
+        public bool IsComboBoxEnabled
+        {
+            get => isComboBoxEnabled;
+            set
+            {
+                isComboBoxEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納詳細のEnabled
+        /// </summary>
+        public bool IsDetailTextEnabled
+        {
+            get => isDetailTextEnabled;
+            set
+            {
+                isDetailTextEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 金額Enabled
+        /// </summary>
+        public bool IsPriceEnabled
+        {
+            get => isPriceEnabled;
+            set
+            {
+                isPriceEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入出金日Enabled
+        /// </summary>
+        public bool IsAccountActivityEnabled
+        {
+            get => isAccountActivityEnabled;
+            set
+            {
+                isAccountActivityEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// データ操作ボタンのContent
+        /// </summary>
+        public string DataOperationButtonContent
+        {
+            get => dataOperationButtonContent;
+            set
+            {
+                dataOperationButtonContent = value;
                 CallPropertyChanged();
             }
         }

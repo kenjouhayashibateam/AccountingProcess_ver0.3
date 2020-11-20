@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.ValueObjects
+﻿using Domain.Entities.Helpers;
+
+namespace Domain.Entities.ValueObjects
 {
     /// <summary>
     /// 経理担当場所（シングルトン）
@@ -10,15 +12,32 @@
         /// 担当場所
         /// </summary>
         public static string Location { get; set; }
-
+        /// <summary>
+        /// 金庫計算、出納登録前の金額
+        /// </summary>
+        public static string OriginalTotalAmount { get; set; }
+        /// <summary>
+        /// 担当場所インスタンス
+        /// </summary>
+        /// <returns></returns>
         public static AccountingProcessLocation GetInstance()
         {
             return accountingLocation;
         }
-
+        /// <summary>
+        /// 担当場所を設定します
+        /// </summary>
+        /// <param name="location">場所</param>
         public static void SetLocation(string location)
         {
             Location = location;
+        }
+        /// <summary>
+        /// 金庫計算、出納登録前の金額を設定します
+        /// </summary>
+        public static void SetOriginalTotalAmount(int amount)
+        {
+            OriginalTotalAmount = TextHelper.AmountWithUnit(amount);
         }
     }
 }

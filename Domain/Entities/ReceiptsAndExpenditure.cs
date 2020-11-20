@@ -13,10 +13,6 @@ namespace Domain.Entities
         /// </summary>
         public int SlipID { get; set; }
         /// <summary>
-        /// 伝票作成場所
-        /// </summary>
-        public AccountingProcessLocation Location { get; set; }
-        /// <summary>
         /// 伝票登録日
         /// </summary>
         public DateTime RegistrationDate { get; set; }
@@ -61,10 +57,9 @@ namespace Domain.Entities
         /// </summary>
         public DateTime AccountActivityDate { get; set; }
 
-        public ReceiptsAndExpenditure(int slipID, AccountingProcessLocation location, DateTime registrationDate, Rep registrationRep, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime accountActivityDate)
+        public ReceiptsAndExpenditure(int ReceiptsAndExpenditureID, DateTime registrationDate, Rep registrationRep, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime accountActivityDate)
         {
-            SlipID = slipID;
-            Location = location;
+            SlipID = ReceiptsAndExpenditureID;
             RegistrationDate = registrationDate;
             RegistrationRep = registrationRep;
             CreditAccount = creditAccount;

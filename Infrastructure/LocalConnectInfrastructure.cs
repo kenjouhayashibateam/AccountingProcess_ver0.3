@@ -1,5 +1,7 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using Domain.Repositories;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Infrastructure
@@ -9,6 +11,14 @@ namespace Infrastructure
         public AccountingSubject CallAccountingSubject(string id)
         {
             return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
+        }
+
+        public ReceiptsAndExpenditure PreviousDayBalance()
+        {
+            return new ReceiptsAndExpenditure
+                (0, DateTime.Parse("1900/01/01"), new Rep("rep1", "林飛 顕誠", "aaa", true, true), new CreditAccount("creditaccount1", "春秋苑", true),
+                new Content("content0", new AccountingSubject("accountint_subject0", "000", "収支", false), -1, "収支日報", false), "収支総計", 1000000, true, false, DateTime.Parse("1900/01/01"), 
+                new Rep("rep1", "林飛 顕誠", "aaa", true, true), DateTime.Parse("1900/01/01"));
         }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
@@ -65,42 +75,47 @@ namespace Infrastructure
             return list;
         }
   
-        public int Registration(Rep rep,Rep operationRep)
+        public int Registration(Rep rep)
         {
             return 1;
         }
 
-        public int Registration(AccountingSubject accountingSubject,Rep operationRep)
+        public int Registration(AccountingSubject accountingSubject)
         {
             return 1;
         }
  
-        public int Registration(CreditAccount creditAccount, Rep operationRep)
+        public int Registration(CreditAccount creditAccount)
         {
             return 1;
         }
  
-        public int Registration(Content content, Rep operationRep)
+        public int Registration(Content content)
         {
             return 1;
         }
 
-        public int Update(Rep rep, Rep operationRep)
-        {
-            return 1;
-        }
-  
-        public int Update(AccountingSubject accountingSubject, Rep operationRep)
-        {
-            return 1;
-        }
-  
-        public int Update(CreditAccount creditAccount, Rep operationRep)
+        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
             return 1;
         }
 
-        public int Update(Content content, Rep operationRep)
+        public int Update(Rep rep)
+        {
+            return 1;
+        }
+  
+        public int Update(AccountingSubject accountingSubject)
+        {
+            return 1;
+        }
+  
+        public int Update(CreditAccount creditAccount)
+        {
+            return 1;
+        }
+
+        public int Update(Content content)
         {
             return 1;
         }

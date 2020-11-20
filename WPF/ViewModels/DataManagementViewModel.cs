@@ -1,19 +1,17 @@
-﻿using Domain.Entities.ValueObjects;
-using WPF.ViewModels.Commands;
-using System.Collections.ObjectModel;
-using Domain.Repositories;
-using Infrastructure;
-using WPF.Views.Datas;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading.Tasks;
+using WPF.Views.Datas;
+using WPF.ViewModels.Commands;
 using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
 
 namespace WPF.ViewModels
 {
     /// <summary>
     /// データ管理画面
     /// </summary>
-    public class DataManagementViewModel : BaseViewModel
+    public class DataManagementViewModel : DataOperationViewModel
     {
         #region Properties
         #region RepProperties
@@ -22,18 +20,8 @@ namespace WPF.ViewModels
         private string _repCurrentPassword;
         private string _repNewPassword;
         private string _confirmationPassword;
-        private bool _isRepValidity;
-        private bool _isRepNameDataEnabled;
-        private bool _isRepPasswordEnabled;
-        private bool _isRepNewPasswordEnabled;
         private string _repDataOperationButtonContent;
-        private bool _isCheckedRegistration;
-        private bool _isCheckedUpdate;
         private string _referenceRepName = string.Empty;
-        private bool _repValidityTrueOnly;
-        private bool _newPasswordCharCheck;
-        private bool _currentPasswordCharCheck;
-        private bool _confirmationPasswordCharCheck;
         private string _currentRepPasswordBorderBrush;
         private string _currentRepPasswordBackground;
         private string _newRepPasswordBorderBrush;
@@ -42,146 +30,98 @@ namespace WPF.ViewModels
         private readonly string FalseControlBorderBrush = "#FFABADB3";
         private readonly string TrueControlBackground = "#FFFFFF";
         private readonly string FalseControlBackground = "#A9A9A9";
+        private bool _isRepValidity;
+        private bool _isRepNameDataEnabled;
+        private bool _isRepPasswordEnabled;
+        private bool _isRepNewPasswordEnabled;
+        private bool _repValidityTrueOnly;
+        private bool _newPasswordCharCheck;
+        private bool _currentPasswordCharCheck;
+        private bool _confirmationPasswordCharCheck;
         private bool _isRepReferenceMenuEnabled;
+        private bool _isRepOperationButtonEnabled;
         private Rep _currentRep = new Rep(string.Empty, string.Empty, string.Empty, false, false);
         private ObservableCollection<Rep> _repList;
-        private bool _isRepOperationButtonEnabled;
         #endregion
         #region AccountingSubjectProperties
         private string accountingSubjectIDField;
-        private bool isAccountingSubjectValidity;
         private string accountingSubjectCodeField;
         private string accountingSubjectField;
         private string accountingSubnectOperationButtonContent;
-        private bool isAccountingSubjectOperationButtonEnabled;
-        private AccountingSubject currentAccountingSubject;
-        private ObservableCollection<AccountingSubject> accountingSubjects;
-        private bool isAccountingSubjectValidityTrueOnly;
         private string referenceAccountingSubjectCode;
         private string referenceAccountingSubject;
+        private bool isAccountingSubjectOperationButtonEnabled;
+        private bool isAccountingSubjectValidity;
+        private bool isAccountingSubjectValidityTrueOnly;
         private bool isAccountingSubjectReferenceMenuEnabled;
         private bool isAccountingSubjectCodeFieldEnabled;
         private bool isAccountingSubjectFieldEnabled;
+        private AccountingSubject currentAccountingSubject;
+        private ObservableCollection<AccountingSubject> accountingSubjects;
         #endregion
         #region CreditAccountProperties
         private string creditAccountIDField;
-        private bool isCreditAccountValidity;
         private string creditAccountField;
         private string creditAccountOperationButtonContent;
+        private string referenceCreditAccount;
         private bool isCreditAccountOperationButtonEnabled;
         private bool isCreditAccountEnabled;
-        private CreditAccount currentCreditAccount;
+        private bool isCreditAccountValidity;
         private bool isCreditAccountReferenceMenuEnabled;
-        private string referenceCreditAccount;
         private bool isCreditAccountValidityTrueOnly;
+        private CreditAccount currentCreditAccount;
         private ObservableCollection<CreditAccount> creditAccounts;
         #endregion
         #region ContentProperties
         private string contentIDField;
-        private bool isContentValidity;
-        private ObservableCollection<AccountingSubject> affiliationAccountingSubjects;
-        private AccountingSubject affiliationAccountingSubject;
         private string selectedAccountingSubjectField;
         private string contentField;
         private string flatRateField;
         private string contentDataOperationContent;
+        private string referenceContent;
+        private bool isContentValidity;
         private bool isContentOperationEnabled;
         private bool isAffiliationAccountingSubjectEnabled;
         private bool isContentFieldEnabled;
+        private bool isContentValidityTrueOnly;
+        private bool isContentReferenceMenuEnabled;
+        private ObservableCollection<AccountingSubject> affiliationAccountingSubjects;
+        private AccountingSubject affiliationAccountingSubject;
         private Content currentContent;　
         private ObservableCollection<Content> contents;
-        private bool isContentValidityTrueOnly;
-        private string referenceContent;
-        private bool isContentReferenceMenuEnabled;
         #endregion
-        private readonly IDataBaseConnect DataBaseConnect;
-        private DataOperation CurrentOperation;
-        readonly LoginRep LoginRep = LoginRep.GetInstance();
         #endregion
 
-        /// <summary>
-        /// データ操作の判別
-        /// </summary>
-        private enum DataOperation
+        public DataManagementViewModel()
         {
-            登録,
-            更新
-        }
-        public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
-        /// <summary>
-        /// コンストラクタ　DataBaseConnectを設定、DelegateCommandのインスタンスを生成します
-        /// </summary>
-        /// <param name="connecter">接続するデータベース</param>
-        public DataManagementViewModel(IDataBaseConnect connecter)
-        {
-            DataBaseConnect = connecter;
-            SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
-            SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
-            SetDataOperation(DataOperation.登録);
-            SetDelegateCommand();
             AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
         }
-        /// <summary>
-        /// 各デリゲートコマンドを生成します
-        /// </summary>
-        private void SetDelegateCommand()
+
+        protected override void SetDelegateCommand()
         {
             SetRepDelegateCommand();
             AccountingSubjectDataOperationCommand = new DelegateCommand(() => AccountingSubjectDataOperation(), () => IsAccountingSubjectOperationButtonEnabled);
             CreditAccountDataOperationCommand = new DelegateCommand(() => CreditAccountDataOperation(), () => IsCreditAccountOperationButtonEnabled);
             ContentDataOperationCommand = new DelegateCommand(() => ContentDataOperation(), () => IsContentOperationEnabled);
         }
-        /// <summary>
-        /// 更新の必要がないことをメッセージボックスで知らせます
-        /// </summary>
-        private void CallNoRequiredUpdateMessage()
-        {
-            MessageBox = new MessageBoxInfo()
-            {
-                Message = "更新の必要はありません",
-                Image = MessageBoxImage.Exclamation,
-                Title = "データ操作案内",
-                Button = MessageBoxButton.OK
-            };
-            CallShowMessageBox = true;
-        }
-        /// <summary>
-        /// データ操作のジャンルを切り替え、操作ボタンの表示文字列を入力し、コントロールの値をクリアして、Enableを設定します
-        /// </summary>
-        /// <param name="Operation"></param>
-        private void SetDataOperation(DataOperation Operation)
-        {
-            CurrentOperation = Operation;
-            IsCheckedRegistration = (Operation == DataOperation.登録);
-            IsCheckedUpdate = (Operation == DataOperation.更新);
-            SetDataOperationButtonContent(Operation);
-            if (CurrentOperation == DataOperation.更新) SetDataList();
-            SetDetailLocked();
-        }
-        /// <summary>
-        /// 各データのリストを生成します
-        /// </summary>
-        private void SetDataList()
+
+        protected override void SetDataList()
         {
             RepList = DataBaseConnect.ReferenceRep(string.Empty, false);
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, false);
             CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, false);
             Contents = DataBaseConnect.ReferenceContent(string.Empty,string.Empty,string.Empty, false);
         }
-        /// <summary>
-        /// 各データ操作ボタンのContentを設定します
-        /// </summary>
-        private void SetDataOperationButtonContent(DataOperation operation)
+
+        protected override void SetDataOperationButtonContent(DataOperation operation)
         {
             RepDataOperationButtonContent = operation.ToString();
             AccountingSubnectOperationButtonContent = operation.ToString();
             CreditAccountOperationButtonContent = operation.ToString();
             ContentDataOperationContent = operation.ToString();
         }
-        /// <summary>
-        /// データ操作のジャンルによって、各詳細のコントロールの値をクリア、Enableの設定をします
-        /// </summary>
-        private void SetDetailLocked()
+
+        protected override void SetDetailLocked()
         {
             switch (CurrentOperation)
             {
@@ -201,56 +141,6 @@ namespace WPF.ViewModels
                     break;
             }
         }
-        /// <summary>
-        /// データ操作の登録Checked
-        /// </summary>
-        public bool IsCheckedRegistration
-        {
-            get => _isCheckedRegistration;
-            set
-            {
-                _isCheckedRegistration = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// データ操作の更新Checked
-        /// </summary>
-        public bool IsCheckedUpdate
-        {
-            get => _isCheckedUpdate;
-            set
-            {
-                _isCheckedUpdate = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 登録、更新確認メッセージボックスを生成、呼び出します
-        /// </summary>
-        /// <param name="confirmationMessage">確認内容（プロパティ等）</param>
-        /// <param name="titleRegistrationCategory">タイトルに表示するクラス名</param>
-        /// <returns>OKCancelを返します</returns>
-        private MessageBoxResult CallConfirmationDataOperation(string confirmationMessage, string titleRegistrationCategory)
-        {
-            MessageBox = new MessageBoxInfo()
-            {
-                Message = confirmationMessage,
-                Title = $"{titleRegistrationCategory}データ操作確認",
-                Button = MessageBoxButton.OKCancel,
-                Image = MessageBoxImage.Question,
-            };
-            CallShowMessageBox = true;
-            return MessageBox.Result;
-        }
-        /// <summary>
-        /// データ操作を「登録」にするコマンド
-        /// </summary>
-        public DelegateCommand SetDataRegistrationCommand { get; set; }
-        /// <summary>
-        /// データ操作を「更新」にするコマンド
-        /// </summary>
-        public DelegateCommand SetDataUpdateCommand { get; set; }
 
         #region RepOperation
 
@@ -341,7 +231,7 @@ namespace WPF.ViewModels
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "登録中";
             LoginRep loginRep = LoginRep.GetInstance();
-            await Task.Run(() => DataBaseConnect.Registration(CurrentRep, loginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Registration(CurrentRep));
             IsRepOperationButtonEnabled = true;
             RepDataOperationButtonContent = "登録";
 
@@ -379,7 +269,7 @@ namespace WPF.ViewModels
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "更新中";
             LoginRep loginRep = LoginRep.GetInstance();
-            await Task.Run(() => DataBaseConnect.Update(CurrentRep, loginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Update(CurrentRep));
             IsRepOperationButtonEnabled = true;
             RepDataOperationButtonContent = "更新";
 
@@ -1015,7 +905,7 @@ namespace WPF.ViewModels
 
             IsAccountingSubjectOperationButtonEnabled = false;
             AccountingSubnectOperationButtonContent = "登録中";
-            await Task.Run(() => DataBaseConnect.Registration(CurrentAccountingSubject, LoginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Registration(CurrentAccountingSubject));
             IsAccountingSubjectOperationButtonEnabled = true;
             AccountingSubnectOperationButtonContent = "登録";
 
@@ -1262,7 +1152,7 @@ namespace WPF.ViewModels
 
             CreditAccountOperationButtonContent = "登録中";
             IsCreditAccountOperationButtonEnabled = false;
-            await Task.Run(() => DataBaseConnect.Registration(CurrentCreditAccount, LoginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Registration(CurrentCreditAccount));
             CreditAccountOperationButtonContent = "登録";
             IsCreditAccountOperationButtonEnabled = true;
 
@@ -1287,7 +1177,7 @@ namespace WPF.ViewModels
 
             CreditAccountOperationButtonContent = "更新中";
             IsCreditAccountOperationButtonEnabled = false;
-            await Task.Run(() => DataBaseConnect.Update(CurrentCreditAccount, LoginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Update(CurrentCreditAccount));
             IsCreditAccountOperationButtonEnabled = true;
             CreditAccountOperationButtonContent = "更新";
         }
@@ -1569,7 +1459,7 @@ namespace WPF.ViewModels
 
             ContentDataOperationContent = "登録中";
             IsContentOperationEnabled = false;
-            await Task.Run(() => DataBaseConnect.Registration(CurrentContent, LoginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Registration(CurrentContent));
             IsContentOperationEnabled = true;
             ContentDataOperationContent = "登録";
 
@@ -1615,7 +1505,7 @@ namespace WPF.ViewModels
 
             IsContentOperationEnabled = false;
             ContentDataOperationContent = "更新中";
-            await Task.Run(() => DataBaseConnect.Update(CurrentContent, LoginRep.Rep));
+            await Task.Run(() => DataBaseConnect.Update(CurrentContent));
             ContentDataOperationContent = "更新";
             IsContentOperationEnabled = true;
 

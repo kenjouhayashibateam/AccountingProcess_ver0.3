@@ -17,13 +17,13 @@ namespace WPF.ViewModels
     public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo, ILoginRepObserver
     {
         #region Properties
-        private bool callShowWindow;
-        private bool callShowMessageBox;
         private MessageBoxInfo messageBox;
         private DelegateCommand<Window> windowCloseCommand;
         private string loginRepName;
         private string windowTitle;
         private bool isAdminPermisson;
+        private bool callShowWindow;
+        private bool callShowMessageBox;
         #endregion
 
         /// <summary>

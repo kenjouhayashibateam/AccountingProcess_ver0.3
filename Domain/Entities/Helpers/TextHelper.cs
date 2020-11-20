@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Domain.Entities.Helpers
 {
     /// <summary>
@@ -6,6 +7,7 @@ namespace Domain.Entities.Helpers
     /// </summary>
     public class TextHelper
     {
+        public static DateTime DefaultDate = DateTime.Parse("1900/01/01");
         /// <summary>
         /// 金額を3桁ごとのカンマ区切りにして、単位をつけて返します
         /// </summary>

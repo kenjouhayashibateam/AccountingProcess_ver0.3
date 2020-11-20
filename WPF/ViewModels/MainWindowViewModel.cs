@@ -1,4 +1,7 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
+using Domain.Repositories;
+using Infrastructure;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
@@ -18,6 +21,9 @@ namespace WPF.ViewModels
         private bool kanriJimushoChecked;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private bool isSlipManagementEnabled;
+        private readonly IDataBaseConnect DataBaseConnect;
+        private string depositAmount;
+        private bool isDepositMenuEnabled;
         #endregion
 
         public enum Locations
@@ -48,13 +54,14 @@ namespace WPF.ViewModels
         /// <summary>
         /// 伝票管理画面表示コマンド
         /// </summary>
-        public DelegateCommand ShowSlipManagementCommand { get; }
+        public DelegateCommand ShowReceiptsAndExpenditureManagementCommand { get; }
         /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDataBaseConnect dataBaseConnect)
         {
             LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+            DataBaseConnect = dataBaseConnect;
 
             ShowRemainingMoneyCalculationCommand =
                 new DelegateCommand(() => SetShowRemainingMoneyCalculationView(), () => true);
@@ -68,9 +75,11 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetShowDataManagementView(), () => true);
             ShowLoginCommand =
                 new DelegateCommand(() => SetShowLoginView(), () => true);
-            ShowSlipManagementCommand =
-                new DelegateCommand(() => SetShowSlipManagementView(), () =>ReturnIsRepLogin());
+            ShowReceiptsAndExpenditureManagementCommand =
+                new DelegateCommand(() => SetShowReceiptsAndExpenditureManagementView(), () =>SetOperationButtonEnabled());
         }
+        public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
+
         /// <summary>
         /// ログインしていないことを案内します
         /// </summary>
@@ -86,6 +95,32 @@ namespace WPF.ViewModels
             CallPropertyChanged(nameof(MessageBox));
         }
         /// <summary>
+        /// ログインしていて、なおかつ経理担当場所が管理事務所か、青蓮堂の場合は預り金を設定している場合にTrueを返します
+        /// </summary>
+        /// <returns></returns>
+        private bool SetOperationButtonEnabled()
+        {
+            if (!ReturnIsRepLogin()) return false;
+            bool b=!string.IsNullOrEmpty(DepositAmount);
+            if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) return true;
+            if (!b) CallDepositAmountEmptyMessage();
+            return b;
+        }
+        /// <summary>
+        /// 経理担当場所が青蓮堂で、預り金のテキストボックスが空白だった時に警告します
+        /// </summary>
+        private void CallDepositAmountEmptyMessage()
+        {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message = "経理担当場所が青蓮堂の場合は、テキストボックスに預かった金庫の金額を入力してください。",
+                    Image = MessageBoxImage.Warning,
+                    Title = "金額未入力",
+                    Button = MessageBoxButton.OK
+                };
+                CallPropertyChanged(nameof(MessageBox));
+        }
+        /// <summary>
         /// ログインしているかを判定します
         /// </summary>
         /// <returns>判定結果</returns>
@@ -98,7 +133,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 伝票管理画面を表示します
         /// </summary>
-        private void SetShowSlipManagementView()
+        private void SetShowReceiptsAndExpenditureManagementView()
         {
             CreateShowWindowCommand(screenTransition.SlipManagement());
             CallPropertyChanged();
@@ -177,8 +212,8 @@ namespace WPF.ViewModels
             set
             {
                 kanriJimushoChecked = value;
+                if (value) AccountingProcessLocation.SetLocation(Locations.管理事務所.ToString());
                 ValidationProperty(nameof(KanriJimushoChecked), value);
-                AccountingProcessLocation.Location = Locations.管理事務所.ToString();
                 CallPropertyChanged();
             }
         }
@@ -191,8 +226,8 @@ namespace WPF.ViewModels
             set
             {
                 shorendoChecked = value;
+                if (value) AccountingProcessLocation.SetLocation(Locations.青蓮堂.ToString());
                 ValidationProperty(nameof(ShorendoChecked), value);
-                AccountingProcessLocation.Location = Locations.青蓮堂.ToString();
                 CallPropertyChanged();
             }
         }
@@ -209,13 +244,39 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 預り金額
+        /// </summary>
+        public string DepositAmount
+        {
+            get => depositAmount;
+            set
+            {
+                depositAmount = TextHelper.CommaDelimitedAmount(value);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 預り金メニューのEnabled
+        /// </summary>
+        public bool IsDepositMenuEnabled
+        {
+            get => isDepositMenuEnabled;
+            set
+            {
+                isDepositMenuEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 経理担当場所を管理事務所に設定します
         /// </summary>
         private void SetLocationKanriJimusho()
         {
             KanriJimushoChecked = true;
-            //Location = Locations.管理事務所.ToString();
             ProcessFeatureEnabled = true;
+            IsDepositMenuEnabled = false;
+            AccountingProcessLocation.SetOriginalTotalAmount(DataBaseConnect.PreviousDayBalance().Price);
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
@@ -223,8 +284,8 @@ namespace WPF.ViewModels
         private void SetLocationShorendo()
         {
             ShorendoChecked = true;
-            AccountingProcessLocation.SetLocation(Locations.青蓮堂.ToString());
-                       ProcessFeatureEnabled = true;
+            IsDepositMenuEnabled = true;
+            ProcessFeatureEnabled = true;
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック
@@ -256,6 +317,7 @@ namespace WPF.ViewModels
         private void SetLocationErrorsListOperation(string propertyName)
         {
             ErrorsListOperation(KanriJimushoChecked == false & ShorendoChecked == false, propertyName, "経理担当場所を設定して下さい");
+            if (GetErrors(propertyName) == null) ErrorsListOperation(shorendoChecked == true & string.IsNullOrEmpty(DepositAmount), propertyName, "金額を入力してください");
         }
 
         protected override string SetWindowDefaultTitle()

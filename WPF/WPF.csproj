@@ -76,6 +76,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
     <Compile Include="ViewModels\Commands\ScreenTransition.cs" />
+    <Compile Include="ViewModels\DataOperationViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />

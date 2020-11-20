@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
@@ -13,55 +14,55 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="rep">担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Registration(Rep rep, Rep operationRep);
+        public int Registration(Rep rep);
         /// <summary>
         /// 勘定科目データ登録
         /// </summary>
         /// <param name="accountingSubject">勘定科目</param>
         /// <param name="operationRep">登録担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Registration(AccountingSubject accountingSubject, Rep operationRep);
+        public int Registration(AccountingSubject accountingSubject);
         /// <summary>
         /// 貸方勘定データ登録
         /// </summary>
         /// <param name="creditAccount">貸方勘定</param>
         /// <param name="operationRep">登録担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Registration(CreditAccount creditAccount, Rep operationRep);
+        public int Registration(CreditAccount creditAccount);
         /// <summary>
         /// 伝票内容データ登録
         /// </summary>
         /// <param name="content">伝票内容</param>
         /// <param name="operationRep">登録担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Registration(Content content, Rep operationRep);
+        public int Registration(Content content);
         /// <summary>
         /// 担当者データ更新
         /// </summary>
         /// <param name="rep">担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Rep rep, Rep opelationRep);
+        public int Update(Rep rep);
         /// <summary>
         /// 勘定科目データ更新
         /// </summary>
         /// <param name="accountingSubject">勘定科目</param>
         /// <param name="operationRep">更新担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(AccountingSubject accountingSubject, Rep operationRep);
+        public int Update(AccountingSubject accountingSubject);
         /// <summary>
         /// 貸方勘定データ更新
         /// </summary>
         /// <param name="creditAccount">貸方勘定</param>
         /// <param name="operationRep">更新担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(CreditAccount creditAccount, Rep operationRep);
+        public int Update(CreditAccount creditAccount);
         /// <summary>
         /// 伝票内容データ更新
         /// </summary>
         /// <param name="content">伝票内容</param>
         /// <param name="operationRep">更新担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(Content content, Rep operationRep);
+        public int Update(Content content);
         /// <summary>
         /// 担当者検索
         /// </summary>
@@ -104,5 +105,16 @@ namespace Domain.Repositories
         /// <param name="contentText">検索する伝票内容</param>
         /// <returns></returns>
         public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText);
+        /// <summary>
+        /// 前日収支の総計の出納データを返します
+        /// </summary>
+        /// <returns>前日収支出納データ</returns>
+        public ReceiptsAndExpenditure PreviousDayBalance();
+        /// <summary>
+        /// 出納データを登録します
+        /// </summary>
+        /// <param name="">出納データ</param>
+        /// <returns></returns>
+        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure);
     }
 }

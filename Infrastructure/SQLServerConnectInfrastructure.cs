@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -33,7 +34,7 @@ namespace Infrastructure
             Cn.Open();
         }
    
-        public int Registration(Rep rep, Rep operationRep)
+        public int Registration(Rep rep)
         {
             SqlCommand Cmd = new SqlCommand();
             using (Cn) 
@@ -47,7 +48,7 @@ namespace Infrastructure
             }
         }
        
-        public int Update(Rep rep, Rep operationRep)
+        public int Update(Rep rep)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -58,7 +59,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@password", rep.Password);
                 Cmd.Parameters.AddWithValue("@is_validity", rep.IsValidity);
                 Cmd.Parameters.AddWithValue("@is_permission", rep.IsAdminPermisson);
-                Cmd.Parameters.AddWithValue("@operation_rep_id", operationRep.ID);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -82,7 +83,7 @@ namespace Infrastructure
             return reps;
         }
      
-        public int Registration(AccountingSubject accountingSubject,Rep operationRep)
+        public int Registration(AccountingSubject accountingSubject)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -92,7 +93,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@subject_code", accountingSubject.SubjectCode);
                 Cmd.Parameters.AddWithValue("@subject", accountingSubject.Subject);
                 Cmd.Parameters.AddWithValue("@validity", accountingSubject.IsValidity);
-                Cmd.Parameters.AddWithValue("@rep_id", operationRep.ID);
+                Cmd.Parameters.AddWithValue("@rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -120,7 +121,7 @@ namespace Infrastructure
             }
         }
             
-        public int Update(AccountingSubject accountingSubject, Rep operationRep)
+        public int Update(AccountingSubject accountingSubject)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -129,12 +130,12 @@ namespace Infrastructure
                 ADO_NewInstance_StoredProc(Cmd,"update_accounting_subject");
                 Cmd.Parameters.AddWithValue("@accounting_subject_id", accountingSubject.ID);
                 Cmd.Parameters.AddWithValue("@is_validity", accountingSubject.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_rep_id", operationRep.ID);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
   
-        public int Registration(CreditAccount creditAccount, Rep operationRep)
+        public int Registration(CreditAccount creditAccount)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -143,7 +144,7 @@ namespace Infrastructure
                 ADO_NewInstance_StoredProc(Cmd,"registration_credit_account");
                 Cmd.Parameters.AddWithValue("@account", creditAccount.Account);
                 Cmd.Parameters.AddWithValue("@is_validity", creditAccount.IsValidity);
-                Cmd.Parameters.AddWithValue("@rep_id", operationRep.ID);
+                Cmd.Parameters.AddWithValue("@rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -169,7 +170,7 @@ namespace Infrastructure
             }
         }
      
-        public int Update(CreditAccount creditAccount, Rep operationRep)
+        public int Update(CreditAccount creditAccount)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -178,12 +179,12 @@ namespace Infrastructure
                 ADO_NewInstance_StoredProc(Cmd,"update_credit_account");
                 Cmd.Parameters.AddWithValue("@credit_account_id", creditAccount.ID);
                 Cmd.Parameters.AddWithValue("@is_validity", creditAccount.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_rep", operationRep);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
    
-        public int Registration(Content content, Rep operationRep)
+        public int Registration(Content content)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -194,12 +195,12 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@content", content.Text);
                 Cmd.Parameters.AddWithValue("@flat_rate", content.FlatRate);
                 Cmd.Parameters.AddWithValue("@is_validity", content.IsValidity);
-                Cmd.Parameters.AddWithValue("@rep_id", operationRep.ID);
+                Cmd.Parameters.AddWithValue("@rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
    
-        public int Update(Content content, Rep operationRep)
+        public int Update(Content content)
         {
             SqlCommand Cmd = new SqlCommand();
 
@@ -209,7 +210,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@content_id", content.ID);
                 Cmd.Parameters.AddWithValue("@flat_rate", content.FlatRate);
                 Cmd.Parameters.AddWithValue("@is_validity", content.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_rep_id", operationRep.ID);
+                Cmd.Parameters.AddWithValue("@operation_rep_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -265,6 +266,16 @@ namespace Infrastructure
         }
 
         public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ReceiptsAndExpenditure PreviousDayBalance()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
             throw new System.NotImplementedException();
         }
