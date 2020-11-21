@@ -12,7 +12,7 @@ namespace WPF.ViewModels
         private bool _isCheckedUpdate;
 
         protected DataOperation CurrentOperation;
-        protected readonly IDataBaseConnect DataBaseConnect;
+        protected IDataBaseConnect DataBaseConnect { get; set; }
         protected readonly LoginRep LoginRep = LoginRep.GetInstance();
 
         /// <summary>
@@ -24,16 +24,16 @@ namespace WPF.ViewModels
             更新
         }
 
-        protected DataOperationViewModel(IDataBaseConnect dataBaseConnect)
+        public DataOperationViewModel(IDataBaseConnect dataBaseConnect)
         {
             DataBaseConnect = dataBaseConnect;
+            SetDataList();
             SetDelegateCommand();
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
             SetDataOperation(DataOperation.登録);
         }
-
-        protected DataOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public DataOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
         /// データ操作を「登録」にするコマンド
         /// </summary>

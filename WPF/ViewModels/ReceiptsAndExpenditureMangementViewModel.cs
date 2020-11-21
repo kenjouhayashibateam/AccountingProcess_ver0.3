@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
+using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -38,6 +40,7 @@ namespace WPF.ViewModels
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
         private CreditAccount selectedCreditAccount;
+        private bool isDataOperationButtonEnabled;
         #endregion
 
         public ReceiptsAndExpenditureMangementViewModel()
@@ -57,8 +60,15 @@ namespace WPF.ViewModels
                     IsComboBoxEnabled = true;
                     IsDetailTextEnabled = true;
                     IsAccountActivityEnabled = true;
-
-                    break;
+                    IsPriceEnabled = true;
+                    ComboCreditAccountText = ComboCreditAccounts[0].Account;
+                    ComboContentText = string.Empty;
+                    ComboAccountingSubjectText = string.Empty;
+                    ComboAccountingSubjectCode = string.Empty;
+                    DetailText = string.Empty;
+                    price = string.Empty;
+                    AccountActivityDate = DateTime.Today;
+                    break;                    
             }
         }
 
@@ -73,18 +83,22 @@ namespace WPF.ViewModels
 
         protected override void SetDelegateCommand()
         {
-            //throw new NotImplementedException();
+            ReceiptsAndExpenditureDataOperationCommand =
+                new DelegateCommand(() => ReceiptsAndExpenditureDataOperation(), () => true);
         }
         /// <summary>
         /// データ操作コマンド
         /// </summary>
         public DelegateCommand ReceiptsAndExpenditureDataOperationCommand { get; set; }
+        /// <summary>
+        /// 出納データを登録、更新します
+        /// </summary>
         private void ReceiptsAndExpenditureDataOperation()
         {
             switch(CurrentOperation)
             {
                 case DataOperation.登録:
-
+                    DataRegistration();
                     break;
             }
         }
@@ -247,7 +261,7 @@ namespace WPF.ViewModels
                     ComboAccountingSubjectCode = selectedAccountingSubject.SubjectCode;
                     SetAccountingSubjectChildContents();
                 }
-
+                ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
             }
         }
@@ -261,7 +275,7 @@ namespace WPF.ViewModels
             {
                 if (comboAccountingSubjectCode == value) return;
                 comboAccountingSubjectCode = value;
-                
+                ValidationProperty(nameof(ComboAccountingSubjectCode), value);
                 CallPropertyChanged();
             }
         }
@@ -298,6 +312,7 @@ namespace WPF.ViewModels
             set
             {
                 price = TextHelper.CommaDelimitedAmount(value);
+                ValidationProperty(nameof(Price), price);
                 CallPropertyChanged();
             }
         }
@@ -347,6 +362,7 @@ namespace WPF.ViewModels
             {
                 if (comboCreditAccountText == value) return;
                 comboCreditAccountText = value;
+                ValidationProperty(ComboCreditAccountText, value);
                 CallPropertyChanged();
             }
         }
@@ -434,6 +450,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// データ操作ボタンのEnable
+        /// </summary>
+        public bool IsDataOperationButtonEnabled
+        {
+            get => isDataOperationButtonEnabled;
+            set
+            {
+                isDataOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 勘定科目に所属している伝票内容を検索してリストに代入します
@@ -450,6 +478,18 @@ namespace WPF.ViewModels
             switch(propertyName)
             {
                 case nameof(ComboContentText):
+                    SetNullOrEmptyError(propertyName, value.ToString());
+                    break;
+                case nameof(ComboAccountingSubjectText):
+                    SetNullOrEmptyError(propertyName, value.ToString());
+                    break;
+                case nameof(ComboAccountingSubjectCode):
+                    SetNullOrEmptyError(propertyName, value.ToString());
+                    break;
+                case nameof(Price):
+                    SetNullOrEmptyError(propertyName, value.ToString());
+                    break;
+                case nameof(ComboCreditAccountText):
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
             }

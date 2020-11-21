@@ -74,3 +74,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\D
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\Microsoft.Xaml.Behaviors.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\Microsoft.Xaml.Behaviors.pdb
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\春秋苑経理システム.pdb
+C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\春秋苑経理システム.exe.config

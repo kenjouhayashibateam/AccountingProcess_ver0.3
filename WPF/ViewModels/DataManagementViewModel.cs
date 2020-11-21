@@ -5,6 +5,8 @@ using WPF.Views.Datas;
 using WPF.ViewModels.Commands;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Infrastructure;
+using Domain.Repositories;
 
 namespace WPF.ViewModels
 {
