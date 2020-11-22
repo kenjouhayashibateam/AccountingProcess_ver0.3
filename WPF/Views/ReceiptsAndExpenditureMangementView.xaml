@@ -73,7 +73,7 @@
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsEnabled="{Binding IsDepositAndWithdrawalContetntEnabled}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
                         <TextBlock Text="貸方勘定" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount.Account}" SelectedIndex="0" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,200,3"/>
+                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,250,3"/>
                         <Grid Grid.Row="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -90,9 +90,9 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <ComboBox Name="ContentComboBox" Grid.Column="0" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent.Text}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
-                            <ComboBox Name="AccountingSubjectComboBox" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject.Subject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
-                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Column="2" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject.SubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
+                            <ComboBox Name="ContentComboBox" Grid.Column="0" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
+                            <ComboBox Name="AccountingSubjectComboBox" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
+                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Column="2" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
                         </Grid>
                         <TextBlock Text="詳細（将来的に削除予定）" Grid.Row="7" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <TextBox x:Name="DetailTextBox" Grid.Row="8" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
@@ -108,7 +108,7 @@
                         <TextBlock Text="入出金日" Grid.Row="11" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <DatePicker x:Name="AccountActivityTextBox" Grid.Row="12" SelectedDate="{Binding AccountActivityDate}" IsEnabled="{Binding IsAccountActivityEnabled}" HorizontalAlignment="Left" Margin="5,3"/>
                     </Grid>
-                    <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" Margin="5">
+                    <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5">
 
                     </Button>
                 </Grid>

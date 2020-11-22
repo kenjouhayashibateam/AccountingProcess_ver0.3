@@ -1,13 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Domain.Entities.ValueObjects;
 using WPF.Views.Datas;
+using Infrastructure;
 
 namespace WPF.ViewModels.Tests
 {
     [TestClass()]
     public class DataManagementViewModelTests
     {
-        readonly DataManagementViewModel vm = new DataManagementViewModel();
+        readonly DataManagementViewModel vm = new DataManagementViewModel() { DataBaseConnect = new LocalConnectInfrastructure() };
         [TestMethod()]
         public void 担当者の登録時フィールドプロパティ()
         {

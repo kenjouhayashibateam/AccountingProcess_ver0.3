@@ -12,7 +12,7 @@ namespace WPF.ViewModels
         private bool _isCheckedUpdate;
 
         protected DataOperation CurrentOperation;
-        protected IDataBaseConnect DataBaseConnect { get; set; }
+        public IDataBaseConnect DataBaseConnect { get; set; }
         protected readonly LoginRep LoginRep = LoginRep.GetInstance();
 
         /// <summary>

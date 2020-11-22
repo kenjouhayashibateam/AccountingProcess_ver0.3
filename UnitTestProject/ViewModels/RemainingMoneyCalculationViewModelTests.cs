@@ -9,24 +9,6 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class RemainingMoneyCalculationViewModelTests
     {
-        //[TestMethod()]
-        //public void RemainingMoneyCalculationViewModelTest()
-        //{
-        //    Assert.Fail();
-        //}
-
-        //[TestMethod()]
-        //public void RemainingMoneyCalculationViewModelTest1()
-        //{
-        //    Assert.Fail();
-        //}
-
-        //[TestMethod()]
-        //public void OutputTest()
-        //{
-        //    Assert.Fail();
-        //}
-
         [TestMethod]
         public void シナリオ()
         {

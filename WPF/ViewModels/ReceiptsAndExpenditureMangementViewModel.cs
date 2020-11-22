@@ -1,8 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using Domain.Repositories;
-using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -84,8 +82,9 @@ namespace WPF.ViewModels
         protected override void SetDelegateCommand()
         {
             ReceiptsAndExpenditureDataOperationCommand =
-                new DelegateCommand(() => ReceiptsAndExpenditureDataOperation(), () => true);
+                new DelegateCommand(() => ReceiptsAndExpenditureDataOperation(), () => IsDataOperationButtonEnabled);
         }
+        
         /// <summary>
         /// データ操作コマンド
         /// </summary>
@@ -213,6 +212,7 @@ namespace WPF.ViewModels
                     ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
                     ComboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
                 }
+                SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
                 
                 CallPropertyChanged();
@@ -275,6 +275,7 @@ namespace WPF.ViewModels
             {
                 if (comboAccountingSubjectCode == value) return;
                 comboAccountingSubjectCode = value;
+                SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboAccountingSubjectCode), value);
                 CallPropertyChanged();
             }
@@ -312,6 +313,7 @@ namespace WPF.ViewModels
             set
             {
                 price = TextHelper.CommaDelimitedAmount(value);
+                SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(Price), price);
                 CallPropertyChanged();
             }
@@ -361,7 +363,11 @@ namespace WPF.ViewModels
             set
             {
                 if (comboCreditAccountText == value) return;
-                comboCreditAccountText = value;
+                SelectedCreditAccount = ComboCreditAccounts.FirstOrDefault(c => c.Account == value);
+                if (SelectedCreditAccount == null) comboCreditAccountText = string.Empty;
+                else comboCreditAccountText = SelectedCreditAccount.Account;
+
+                SetDataOperationButtonEnabled();
                 ValidationProperty(ComboCreditAccountText, value);
                 CallPropertyChanged();
             }
@@ -462,7 +468,27 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// データ操作ボタンのEnabledを設定します
+        /// </summary>
+        public void SetDataOperationButtonEnabled()
+        {
 
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+                    IsDataOperationButtonEnabled = CanRegistration();
+                    break;
+            }
+        }
+        /// <summary>
+        /// 出納データ登録時の必須のフィールドにデータが入力されているかを確認し、判定結果を返します
+        /// </summary>
+        /// <returns>判定結果</returns>
+        private bool CanRegistration()
+        {
+            return !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) & !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price);
+        }
         /// <summary>
         /// 勘定科目に所属している伝票内容を検索してリストに代入します
         /// </summary>
