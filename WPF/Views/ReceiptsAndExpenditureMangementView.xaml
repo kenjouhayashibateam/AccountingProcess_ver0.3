@@ -73,7 +73,7 @@
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsEnabled="{Binding IsDepositAndWithdrawalContetntEnabled}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
                         <TextBlock Text="貸方勘定" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,250,3"/>
+                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,255,3"/>
                         <Grid Grid.Row="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>

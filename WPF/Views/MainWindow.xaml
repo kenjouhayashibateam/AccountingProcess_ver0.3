@@ -107,7 +107,7 @@
                         </Button.InputBindings>
                     </Button>
                 </Grid>
-                <Button x:Name="ShowSlipManagement" Content="出納管理（未実装）" IsEnabled="{Binding SetOperationButtonEnabled}" Grid.Row="0" Grid.Column="1" Margin="100,50">
+                <Button x:Name="ShowSlipManagement" Content="出納管理（未実装）" Grid.Row="0" Grid.Column="1" Margin="100,50">
                     <Button.InputBindings>
                         <MouseBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" MouseAction="LeftClick"/>
                         <KeyBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" Key="Space"/>

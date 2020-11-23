@@ -59,7 +59,6 @@ namespace WPF.ViewModels
                     IsDetailTextEnabled = true;
                     IsAccountActivityEnabled = true;
                     IsPriceEnabled = true;
-                    ComboCreditAccountText = ComboCreditAccounts[0].Account;
                     ComboContentText = string.Empty;
                     ComboAccountingSubjectText = string.Empty;
                     ComboAccountingSubjectCode = string.Empty;

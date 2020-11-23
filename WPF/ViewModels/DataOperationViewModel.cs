@@ -32,7 +32,7 @@ namespace WPF.ViewModels
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
             SetDataOperation(DataOperation.登録);
-        }
+        } 
         public DataOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
         /// データ操作を「登録」にするコマンド
@@ -47,7 +47,7 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="confirmationMessage">確認内容（プロパティ等）</param>
         /// <param name="titleRegistrationCategory">タイトルに表示するクラス名</param>
-        /// <returns>OKCancelを返します</returns>
+        /// <returns>OK、Cancelを返します</returns>
         protected MessageBoxResult CallConfirmationDataOperation(string confirmationMessage, string titleRegistrationCategory)
         {
             MessageBox = new MessageBoxInfo()

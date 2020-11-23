@@ -98,7 +98,7 @@ namespace WPF.ViewModels
         /// ログインしていて、なおかつ経理担当場所が管理事務所か、青蓮堂の場合は預り金を設定している場合にTrueを返します
         /// </summary>
         /// <returns></returns>
-        private bool SetOperationButtonEnabled()
+        public bool SetOperationButtonEnabled()
         {
             if (!ReturnIsRepLogin()) return false;
             bool b=!string.IsNullOrEmpty(DepositAmount);
