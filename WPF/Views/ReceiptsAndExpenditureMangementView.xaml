@@ -13,6 +13,10 @@
         <vm:ReceiptsAndExpenditureMangementViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -73,7 +77,7 @@
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsEnabled="{Binding IsDepositAndWithdrawalContetntEnabled}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
                         <TextBlock Text="貸方勘定" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,255,3"/>
+                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" SelectedIndex="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.ID}" Margin="5,3,255,3"/>
                         <Grid Grid.Row="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -109,10 +113,54 @@
                         <DatePicker x:Name="AccountActivityTextBox" Grid.Row="12" SelectedDate="{Binding AccountActivityDate}" IsEnabled="{Binding IsAccountActivityEnabled}" HorizontalAlignment="Left" Margin="5,3"/>
                     </Grid>
                     <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5">
-
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
                     </Button>
                 </Grid>
             </GroupBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Grid.Column="0" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                            <TextBlock Text="～" Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
+                            <DatePicker Grid.Column="2" SelectedDate="{Binding SearchEndDate}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                            <TextBlock Text="を表示する" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Content="すべて表示" Grid.Column="0" IsChecked="{Binding IsAllShowItem}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <RadioButton Content="入金のみ表示" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <RadioButton Content="出金のみ表示" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+            </Grid>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

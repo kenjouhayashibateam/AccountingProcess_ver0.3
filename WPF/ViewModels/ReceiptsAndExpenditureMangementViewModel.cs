@@ -9,6 +9,9 @@ using WPF.ViewModels.Commands;
 
 namespace WPF.ViewModels
 {
+    /// <summary>
+    /// 出納管理ウィンドウViewModel
+    /// </summary>
     public class ReceiptsAndExpenditureMangementViewModel : DataOperationViewModel
     {
         #region Properties
@@ -29,8 +32,15 @@ namespace WPF.ViewModels
         private bool isDetailTextEnabled;
         private bool isPriceEnabled;
         private bool isAccountActivityEnabled;
-        private readonly Cashbox Cashbox = Cashbox.GetInstance();
+        private bool isPeriodSearch;
+        private bool isSeachInfoVisibility;
+        private bool isAllShowItem;
+        private bool isPaymentOnly;
+        private bool isWithdrawalOnly;
         private DateTime accountActivityDate;
+        private DateTime searchStartDate;
+        private DateTime searchEndDate;
+        private readonly Cashbox Cashbox = Cashbox.GetInstance();
         private ObservableCollection<AccountingSubject> comboAccountingSubjects;
         private ObservableCollection<Content> comboContents;
         private ObservableCollection<CreditAccount> comboCreditAccounts;
@@ -46,6 +56,7 @@ namespace WPF.ViewModels
             IsPaymentCheck = true;
             CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             AccountActivityDate = DateTime.Today;
+            SearchStartDate = DateTime.Today;
         }
 
         protected override void SetDetailLocked()
@@ -62,6 +73,7 @@ namespace WPF.ViewModels
                     ComboContentText = string.Empty;
                     ComboAccountingSubjectText = string.Empty;
                     ComboAccountingSubjectCode = string.Empty;
+                    ComboCreditAccountText = ComboCreditAccounts[0].Account;
                     DetailText = string.Empty;
                     price = string.Empty;
                     AccountActivityDate = DateTime.Today;
@@ -76,6 +88,7 @@ namespace WPF.ViewModels
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true);
+            SelectedCreditAccount = ComboCreditAccounts[0];
         }
 
         protected override void SetDelegateCommand()
@@ -467,6 +480,95 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 期間検索チェック
+        /// </summary>
+        public bool IsPeriodSearch
+        {
+            get => isPeriodSearch;
+            set
+            {
+                isPeriodSearch = value;
+                IsSearchInfoVisibility = value;
+                if (!value) SearchEndDate = SearchStartDate;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 期間検索の最古の年月日
+        /// </summary>
+        public DateTime SearchStartDate
+        {
+            get => searchStartDate;
+            set
+            {
+                if (SearchEndDate < value) SearchEndDate = value;
+                searchStartDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 期間検索の最新の年月日
+        /// </summary>
+        public DateTime SearchEndDate
+        {
+            get => searchEndDate;
+            set
+            {
+                if (SearchStartDate > value) searchEndDate = SearchStartDate;
+                else searchEndDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 期間検索する場合のVisiblity
+        /// </summary>
+        public bool IsSearchInfoVisibility
+        {
+            get => isSeachInfoVisibility;
+            set
+            {
+                isSeachInfoVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 該当する日付のすべての出納データを表示するかのCheck
+        /// </summary>
+        public bool IsAllShowItem
+        {
+            get => isAllShowItem;
+            set
+            {
+                isAllShowItem = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 該当する日付の入金の出納データのみ表示するかのCheck
+        /// </summary>
+        public bool IsPaymentOnly
+        {
+            get => isPaymentOnly;
+            set
+            {
+                isPaymentOnly = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 該当する日付の出金の出納データのみ表示するかのCheck
+        /// </summary>
+        public bool IsWithdrawalOnly
+        {
+            get => isWithdrawalOnly;
+            set
+            {
+                isWithdrawalOnly = value;
+                CallPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
         /// </summary>

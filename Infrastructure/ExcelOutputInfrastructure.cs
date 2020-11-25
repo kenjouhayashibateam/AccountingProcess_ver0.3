@@ -54,14 +54,8 @@ namespace Infrastructure
         /// </summary>
         ~ExcelOutputInfrastructure()
         {
-            if(App==null)
-            {
-                return;
-            }
-            if(App.Workbooks.Count==0)
-            {
-                App.Quit();
-            }
+            if (App == null) return;
+            if (App.Workbooks.Count == 0) App.Quit();
         }
         /// <summary>
         /// データ出力エクセルファイルを開きます
@@ -96,16 +90,10 @@ namespace Infrastructure
             //出力ファイルを検出して閉じる
             foreach(Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks)
             {
-                if (wb.Name==Properties.Resources.SaveFile)
-                {
-                    wb.Close(SaveChanges:false);
-                }
+                if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);
             }
             //開いているワークブックがなければエクセルアプリケーションを終了する
-            if( myWorkbooks.Count==0)
-            {
-                App.Quit();
-            }    
+            if (myWorkbooks.Count == 0) App.Quit();
         }
         /// <summary>
         /// 金庫データを出力します※テンプレートパターンを使ってリファクタリングする
@@ -155,12 +143,12 @@ namespace Infrastructure
             Double[] RowSizes = new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75,18.75, 32.25 };
             Double[] ColumnSizes =new Double[] { 12.86, 6.88, 14.38, 12.86, 6.75, 6.75, 6.75 };
 
-            for(int i=0;i<RowSizes.Length;i++)
+            for (int i = 0; i < RowSizes.Length; i++)
             {
                 myWorksheet.Rows((i+1).ToString()).Height = RowSizes[i];
             }
 
-            for(int i=0;i<ColumnSizes.Length;i++)
+            for (int i = 0; i < ColumnSizes.Length; i++)
             {
                 myWorksheet.Columns((i+1).ToString()).Width = ColumnSizes[i];
             }
@@ -331,9 +319,6 @@ namespace Infrastructure
         /// </summary>
         /// <param name="x">メートル法での長さ</param>
         /// <returns>インチ法での長さ</returns>
-        private double ToInch(double x)
-        {
-            return x * 0.39370;
-        }
+        private double ToInch(double x) => x * 0.39370;
     }
 }
