@@ -153,7 +153,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// ウインドウを閉じます
         /// </summary>

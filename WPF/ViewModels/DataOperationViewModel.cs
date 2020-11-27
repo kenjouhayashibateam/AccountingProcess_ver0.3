@@ -11,8 +11,8 @@ namespace WPF.ViewModels
         private bool _isCheckedRegistration;
         private bool _isCheckedUpdate;
 
-        protected DataOperation CurrentOperation;
         public IDataBaseConnect DataBaseConnect { get; set; }
+        protected DataOperation CurrentOperation;
         protected readonly LoginRep LoginRep = LoginRep.GetInstance();
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace WPF.ViewModels
             SetDelegateCommand();
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
-            SetDataOperation(DataOperation.登録);
+            SetDataRegistrationCommand.Execute();
         } 
         public DataOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
@@ -88,17 +88,14 @@ namespace WPF.ViewModels
         /// データ操作のジャンルによって、各詳細のコントロールの値をクリア、Enableの設定をします
         /// </summary>
         protected abstract void SetDetailLocked();
-
         /// <summary>
         /// 各データ操作ボタンのContentを設定します
         /// </summary>
         protected abstract void SetDataOperationButtonContent(DataOperation operation);
-
         /// <summary>
         /// 各データのリストを生成します
         /// </summary>
         protected abstract void SetDataList();
-
         /// <summary>
         /// データ操作のジャンルを切り替え、操作ボタンの表示文字列を入力し、コントロールの値をクリアして、Enableを設定します
         /// </summary>
@@ -106,18 +103,23 @@ namespace WPF.ViewModels
         protected void SetDataOperation(DataOperation Operation)
         {
             CurrentOperation = Operation;
-            IsCheckedRegistration = (Operation == DataOperation.登録);
-            IsCheckedUpdate = (Operation == DataOperation.更新);
+            switch(CurrentOperation)
+            {
+                case DataOperation.登録:
+                    IsCheckedRegistration = true;
+                    break;
+                case DataOperation.更新:
+                    IsCheckedUpdate = true;
+                    SetDataList();
+                    break;
+            }
             SetDataOperationButtonContent(Operation);
-            if (CurrentOperation == DataOperation.更新) SetDataList();
             SetDetailLocked();
         }
-
         /// <summary>
         /// 各デリゲートコマンドを生成します
         /// </summary>
         protected abstract void SetDelegateCommand();
-
         /// <summary>
         /// 更新の必要がないことをメッセージボックスで知らせます
         /// </summary>

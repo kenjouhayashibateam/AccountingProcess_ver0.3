@@ -5,8 +5,6 @@ using WPF.Views.Datas;
 using WPF.ViewModels.Commands;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using Infrastructure;
-using Domain.Repositories;
 
 namespace WPF.ViewModels
 {
@@ -42,7 +40,8 @@ namespace WPF.ViewModels
         private bool _confirmationPasswordCharCheck;
         private bool _isRepReferenceMenuEnabled;
         private bool _isRepOperationButtonEnabled;
-        private Rep _currentRep = new Rep(string.Empty, string.Empty, string.Empty, false, false);
+        private bool _isRepDataAdminPermisson;
+        private Rep _currentRep;
         private ObservableCollection<Rep> _repList;
         #endregion
         #region AccountingSubjectProperties
@@ -94,10 +93,7 @@ namespace WPF.ViewModels
         #endregion
         #endregion
 
-        public DataManagementViewModel()
-        {
-            AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
-        }
+        public DataManagementViewModel() => AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
 
         protected override void SetDelegateCommand()
         {
@@ -224,9 +220,9 @@ namespace WPF.ViewModels
         /// </summary>
         private async void RepRegistration()
         {
-            CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity, false);
+            CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity, IsRepDataAdminPermisson);
             if (CallConfirmationDataOperation
-                ($"担当者名 : {CurrentRep.Name}\r\nパスワード : {new string('*', RepNewPassword.Length)}\r\n有効性 : {CurrentRep.IsValidity}\r\n\r\n登録しますか？",
+                ($"担当者名 : {CurrentRep.Name}\r\nパスワード : {new string('*', RepNewPassword.Length)}\r\n有効性 : {CurrentRep.IsValidity}\r\n管理者権限 : {CurrentRep.IsAdminPermisson}\r\n \r\n登録しますか？",
                 "担当者") == MessageBoxResult.Cancel)
                 return;
 
@@ -307,6 +303,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetFieldEnabledRegisterRep()
         {
+            IsRepValidity = true;
+            IsRepDataAdminPermisson = true;
             IsRepReferenceMenuEnabled = false;
             IsRepNameDataEnabled = true;
             IsRepPasswordEnabled = false;
@@ -318,12 +316,11 @@ namespace WPF.ViewModels
         /// </summary>
         private void RepDetailClear()
         {
-            IsRepValidity = true;
             RepName = string.Empty;
             RepCurrentPassword = string.Empty;
             RepNewPassword = string.Empty;
             ConfirmationPassword = string.Empty;
-            CurrentRep = new Rep(null, null, null, false, false);
+            CurrentRep = new Rep(null, null, null, true, false);
         }
         /// <summary>
         /// 担当者ID
@@ -456,7 +453,7 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 担当者データの有効性
+        /// 担当者データの有効性Trueのみ検索チェック
         /// </summary>
         public bool RepValidityTrueOnly
         {
@@ -597,6 +594,7 @@ namespace WPF.ViewModels
             RepName = CurrentRep.Name;
             IsRepValidity = CurrentRep.IsValidity;
             IsAdminPermisson = CurrentRep.IsAdminPermisson;
+            IsRepDataAdminPermisson = CurrentRep.IsAdminPermisson;
             RepCurrentPassword = string.Empty;
         }
         /// <summary>
@@ -676,6 +674,18 @@ namespace WPF.ViewModels
                     break;
                 default:
                     break;
+            }
+        }
+        /// <summary>
+        /// 担当者詳細の管理者権限チェック
+        /// </summary>
+        public bool IsRepDataAdminPermisson
+        {
+            get => _isRepDataAdminPermisson;
+            set
+            {
+                _isRepDataAdminPermisson = value;
+                CallPropertyChanged();
             }
         }
 

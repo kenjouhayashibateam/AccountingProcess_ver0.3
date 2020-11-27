@@ -47,7 +47,7 @@ namespace WPF.ViewModels
         private SolidColorBrush detailBackGroundColor;
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
-        private CreditAccount selectedCreditAccount;
+        private CreditAccount selectedCreditAccount=new CreditAccount(string.Empty,string.Empty,false);
         private bool isDataOperationButtonEnabled;
         #endregion
 
@@ -57,6 +57,7 @@ namespace WPF.ViewModels
             CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             AccountActivityDate = DateTime.Today;
             SearchStartDate = DateTime.Today;
+            SetDataRegistrationCommand.Execute();
         }
 
         protected override void SetDetailLocked()
@@ -77,7 +78,10 @@ namespace WPF.ViewModels
                     DetailText = string.Empty;
                     price = string.Empty;
                     AccountActivityDate = DateTime.Today;
-                    break;                    
+                    break;
+                case DataOperation.更新:
+                    ComboCreditAccountText = string.Empty;
+                    break;
             }
         }
 
@@ -88,7 +92,6 @@ namespace WPF.ViewModels
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true);
-            SelectedCreditAccount = ComboCreditAccounts[0];
         }
 
         protected override void SetDelegateCommand()
@@ -362,6 +365,7 @@ namespace WPF.ViewModels
             get => selectedCreditAccount;
             set
             {
+                if (selectedCreditAccount !=null &&  selectedCreditAccount.Equals(value)) return;
                 selectedCreditAccount = value;
                 CallPropertyChanged();
             }
@@ -588,7 +592,7 @@ namespace WPF.ViewModels
         /// <returns>判定結果</returns>
         private bool CanRegistration()
         {
-            return !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) & !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price);
+            return !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) & !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price) & 0 < TextHelper.IntAmount(price);
         }
         /// <summary>
         /// 勘定科目に所属している伝票内容を検索してリストに代入します

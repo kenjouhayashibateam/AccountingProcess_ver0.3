@@ -135,7 +135,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowReceiptsAndExpenditureManagementView()
         {
-            CreateShowWindowCommand(screenTransition.SlipManagement());
+            CreateShowWindowCommand(screenTransition.ReceiptsAndExpenditureMangement());
             CallPropertyChanged();
         }
         /// <summary>

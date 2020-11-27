@@ -89,7 +89,7 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Row="0" Text="{Binding RepIDField}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsRepValidity}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <CheckBox Content="管理者権限を付与する" Grid.Row="2" IsChecked="{Binding IsAdminPermisson}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <CheckBox Content="管理者権限を付与する" Grid.Row="2" IsChecked="{Binding IsRepDataAdminPermisson}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Text="担当者名" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
                                     <TextBox x:Name="RepNameTextBox" Grid.Row="4" Text="{Binding RepName, UpdateSourceTrigger=PropertyChanged}" Margin="5" IsEnabled="{Binding IsRepNameDataEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native"/>
                                     <TextBlock Text="パスワード(変更の際に入力)" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
