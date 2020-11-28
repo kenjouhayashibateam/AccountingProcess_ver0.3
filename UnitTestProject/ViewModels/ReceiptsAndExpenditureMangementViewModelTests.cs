@@ -12,6 +12,8 @@ namespace WPF.ViewModels.Tests
         [TestMethod()]
         public void データ登録時のフィールドプロパティ()
         {
+            vm.SetDataRegistrationCommand.Execute();
+
             Assert.AreEqual(vm.IsValidity, true);
             Assert.AreEqual(vm.ComboContentText, string.Empty);
             Assert.AreEqual(vm.ComboAccountingSubjectText, string.Empty);

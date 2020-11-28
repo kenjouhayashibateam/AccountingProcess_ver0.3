@@ -93,7 +93,11 @@ namespace WPF.ViewModels
         #endregion
         #endregion
 
-        public DataManagementViewModel() => AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+        public DataManagementViewModel()
+        {
+            AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            SetDataRegistrationCommand.Execute();
+        }
 
         protected override void SetDelegateCommand()
         {

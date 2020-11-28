@@ -37,17 +37,22 @@ namespace WPF.ViewModels
         private bool isAllShowItem;
         private bool isPaymentOnly;
         private bool isWithdrawalOnly;
+        private bool isReferenceMenuEnabled;
         private DateTime accountActivityDate;
         private DateTime searchStartDate;
         private DateTime searchEndDate;
+        private DateTime registrationDate;
         private readonly Cashbox Cashbox = Cashbox.GetInstance();
+        private Rep registrationRep;
         private ObservableCollection<AccountingSubject> comboAccountingSubjects;
         private ObservableCollection<Content> comboContents;
         private ObservableCollection<CreditAccount> comboCreditAccounts;
+        private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
         private SolidColorBrush detailBackGroundColor;
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
         private CreditAccount selectedCreditAccount=new CreditAccount(string.Empty,string.Empty,false);
+        private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         private bool isDataOperationButtonEnabled;
         #endregion
 
@@ -57,7 +62,7 @@ namespace WPF.ViewModels
             CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             AccountActivityDate = DateTime.Today;
             SearchStartDate = DateTime.Today;
-            SetDataRegistrationCommand.Execute();
+            RegistrationRep = LoginRep.Rep;
         }
 
         protected override void SetDetailLocked()
@@ -78,9 +83,13 @@ namespace WPF.ViewModels
                     DetailText = string.Empty;
                     price = string.Empty;
                     AccountActivityDate = DateTime.Today;
+                    RegistrationDate = DateTime.Today;
+                    IsReferenceMenuEnabled = false;
                     break;
                 case DataOperation.更新:
                     ComboCreditAccountText = string.Empty;
+                    IsReferenceMenuEnabled = true;
+                    ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
                     break;
             }
         }
@@ -121,7 +130,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void DataRegistration()
         {
-            DataBaseConnect.Registration(new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
+            DataBaseConnect.Registration(new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep,AccountingProcessLocation.Location,  SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
         }
         /// <summary>
         /// 金庫の総計金額
@@ -224,8 +233,8 @@ namespace WPF.ViewModels
                 else
                 {
                     ComboAccountingSubjects = DataBaseConnect.ReferenceAffiliationAccountingSubject(comboContentText);
+                    SelectedAccountingSubject = ComboAccountingSubjects[0];
                     ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
-                    ComboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
                 }
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
@@ -266,9 +275,11 @@ namespace WPF.ViewModels
             get => comboAccountingSubjectText;
             set
             {
-                if (comboAccountingSubjectText == value) return;
-                comboAccountingSubjectText = value;
-                SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.Subject == comboAccountingSubjectText);
+                if (comboAccountingSubjectText != value)
+                {
+                    comboAccountingSubjectText = value;
+                    SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.Subject == comboAccountingSubjectText);
+                }
                 if (SelectedAccountingSubject == null) comboAccountingSubjectText = string.Empty;
                 else
                 {
@@ -288,9 +299,11 @@ namespace WPF.ViewModels
             get => comboAccountingSubjectCode;
             set
             {
-                if (comboAccountingSubjectCode == value) return;
-                comboAccountingSubjectCode = value;
-                SetDataOperationButtonEnabled();
+                if (comboAccountingSubjectCode != value)
+                {
+                    comboAccountingSubjectCode = value;
+                    SetDataOperationButtonEnabled();
+                }
                 ValidationProperty(nameof(ComboAccountingSubjectCode), value);
                 CallPropertyChanged();
             }
@@ -572,6 +585,66 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出納データリスト
+        /// </summary>
+        public ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures
+        {
+            get => receiptsAndExpenditures;
+            set
+            {
+                receiptsAndExpenditures = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された出納データ
+        /// </summary>
+        public ReceiptsAndExpenditure SelectedReceiptsAndExpenditure
+        {
+            get => selectedReceiptsAndExpenditure;
+            set
+            {
+                selectedReceiptsAndExpenditure = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納データ登録日
+        /// </summary>
+        public DateTime RegistrationDate
+        {
+            get => registrationDate;
+            set
+            {
+                registrationDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 登録担当者
+        /// </summary>
+        public Rep RegistrationRep
+        {
+            get => registrationRep;
+            set
+            {
+                registrationRep = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索メニューのEnabled
+        /// </summary>
+        public bool IsReferenceMenuEnabled
+        {
+            get => isReferenceMenuEnabled;
+            set
+            {
+                isReferenceMenuEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
@@ -599,9 +672,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetAccountingSubjectChildContents()
         {
-             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, ComboAccountingSubjectText, true);
-            if (SelectedContent == null) ComboContentText = ComboContents[0].Text;
-            else SelectedContent = ComboContents.FirstOrDefault(c => c.Text == ComboContentText);
+            ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, ComboAccountingSubjectText, true);
+            SelectedContent = ComboContents.FirstOrDefault(c => c.Text == ComboContentText);
         }
 
         public override void ValidationProperty(string propertyName, object value)

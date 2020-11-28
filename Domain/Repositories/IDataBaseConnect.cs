@@ -97,13 +97,13 @@ namespace Domain.Repositories
         /// IDを基に勘定科目を呼び出します
         /// </summary>
         /// <param name="id">勘定科目ID</param>
-        /// <returns></returns>
+        /// <returns>勘定科目</returns>
         public AccountingSubject CallAccountingSubject(string id);
         /// <summary>
         /// 伝票内容の文字列で、所属する勘定科目を検索します
         /// </summary>
         /// <param name="contentText">検索する伝票内容</param>
-        /// <returns></returns>
+        /// <returns>勘定科目リスト</returns>
         public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText);
         /// <summary>
         /// 前日収支の総計の出納データを返します
@@ -114,7 +114,23 @@ namespace Domain.Repositories
         /// 出納データを登録します
         /// </summary>
         /// <param name="">出納データ</param>
-        /// <returns></returns>
+        /// <returns>データ処理件数</returns>
         public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure);
+        /// <summary>
+        /// 出納データを検索します
+        /// </summary>
+        /// <param name="registrationDateStart">登録日検索開始日時</param>
+        /// <param name="registrationDateEnd">登録日検索最終日時</param>
+        /// <param name="location">経理担当場所</param>
+        /// <param name="creditAccount">貸方勘定</param>
+        /// <param name="accountingSubject">勘定科目</param>
+        /// <param name="accountingSubjectCode">勘定科目コード</param>
+        /// <param name="whichDepositAndWithdrawalOnly">入出金のどちらかのみを検索するか</param>
+        /// <param name="isPayment">入金チェック</param>
+        /// <param name="isValidityOnly">有効性</param>
+        /// <param name="accountActivityDateStart">入出金日検索開始日時</param>
+        /// <param name="accountActivityDateEnd">入出金日検索最終日時</param>
+        /// <returns></returns>
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd);
     }
 }

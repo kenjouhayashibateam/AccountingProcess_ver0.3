@@ -16,7 +16,7 @@ namespace Infrastructure
         public ReceiptsAndExpenditure PreviousDayBalance()
         {
             return new ReceiptsAndExpenditure
-                (0, DateTime.Parse("1900/01/01"), new Rep("rep1", "林飛 顕誠", "aaa", true, true), new CreditAccount("creditaccount1", "春秋苑", true),
+                (0, DateTime.Parse("1900/01/01"), new Rep("rep1", "林飛 顕誠", "aaa", true, true),"春秋苑", new CreditAccount("creditaccount1", "春秋苑", true),
                 new Content("content0", new AccountingSubject("accountint_subject0", "000", "収支", false), -1, "収支日報", false), "収支総計", 1000000, true, false, DateTime.Parse("1900/01/01"), 
                 new Rep("rep1", "林飛 顕誠", "aaa", true, true), DateTime.Parse("1900/01/01"));
         }
@@ -63,7 +63,27 @@ namespace Infrastructure
             };
             return list;
         }
-       
+
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd)
+        {
+            Rep repHayashiba=new Rep("rep1","林飛 顕誠","aaa",true,true);
+            Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
+
+            ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>
+            {
+                new ReceiptsAndExpenditure(0,DateTime.Today.AddDays(-1),repHayashiba,"管理事務所",new CreditAccount("credit_account","春秋苑",true),
+                    new Content("content1",new AccountingSubject("account_subject1","000","納骨冥加",true),40000,"納骨手数料",true),"春秋家",40000,true,true,DateTime.Today.AddDays(-1),
+                    repAkima,DateTime.Today.AddDays(-1)),
+                new ReceiptsAndExpenditure(1,DateTime.Today.AddDays(-1),repAkima,"青蓮堂",new CreditAccount("credit_account","春秋苑",true),
+                    new Content("content2",new AccountingSubject("account_subject2","100","葬儀冥加",true),-1,"青蓮堂使用費",true),"信行家",250000,true,true,DateTime.Today.AddDays(-1),
+                    repHayashiba,DateTime.Today.AddDays(-1)),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",new CreditAccount("credit_account","信行寺",true),
+                    new Content("content3",new AccountingSubject("account_subject3","202","雑費",true),-1,"文房具代",true),"消しゴム",150,false,true,DateTime.Today,
+                    repHayashiba,DateTime.Today)
+            };
+            return list;
+        }
+
         public ObservableCollection<Rep> ReferenceRep(string repName, bool isValidity)
         {
             ObservableCollection<Rep> list = new ObservableCollection<Rep>

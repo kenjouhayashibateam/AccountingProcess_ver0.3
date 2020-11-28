@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
 using System;
 
 namespace Domain.Entities
@@ -9,11 +10,11 @@ namespace Domain.Entities
     public class ReceiptsAndExpenditure
     {
         /// <summary>
-        /// 伝票ID
+        /// 出納ID
         /// </summary>
-        public int SlipID { get; set; }
+        public int ReceiptsAndExpenditureID { get; set; }
         /// <summary>
-        /// 伝票登録日
+        /// データ登録日
         /// </summary>
         public DateTime RegistrationDate { get; set; }
         /// <summary>
@@ -21,7 +22,11 @@ namespace Domain.Entities
         /// </summary>
         public Rep RegistrationRep { get; set; }
         /// <summary>
-        /// 勘定科目
+        /// 担当場所
+        /// </summary>
+        public string Location { get; set; }
+        /// <summary>
+        /// 貸方勘定
         /// </summary>
         public CreditAccount CreditAccount { get; set; }
         /// <summary>
@@ -36,6 +41,10 @@ namespace Domain.Entities
         /// 金額
         /// </summary>
         public int Price { get; set; }
+        /// <summary>
+        /// 単位付き金額
+        /// </summary>
+        public string PriceWithUnit { get => TextHelper.AmountWithUnit(Price); }
         /// <summary>
         /// 出入金　入金はTrue、出金はFalse
         /// </summary>
@@ -57,11 +66,12 @@ namespace Domain.Entities
         /// </summary>
         public DateTime AccountActivityDate { get; set; }
 
-        public ReceiptsAndExpenditure(int ReceiptsAndExpenditureID, DateTime registrationDate, Rep registrationRep, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime accountActivityDate)
+        public ReceiptsAndExpenditure(int receiptsAndExpenditureID, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime accountActivityDate)
         {
-            SlipID = ReceiptsAndExpenditureID;
+            ReceiptsAndExpenditureID = receiptsAndExpenditureID;
             RegistrationDate = registrationDate;
             RegistrationRep = registrationRep;
+            Location = location;
             CreditAccount = creditAccount;
             Content = content;
             Detail = detail;

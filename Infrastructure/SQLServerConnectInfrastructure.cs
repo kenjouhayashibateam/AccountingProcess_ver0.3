@@ -279,5 +279,10 @@ namespace Infrastructure
         {
             throw new System.NotImplementedException();
         }
+
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

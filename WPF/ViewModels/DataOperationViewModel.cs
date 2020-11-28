@@ -31,7 +31,6 @@ namespace WPF.ViewModels
             SetDelegateCommand();
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
-            SetDataRegistrationCommand.Execute();
         } 
         public DataOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
