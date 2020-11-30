@@ -25,9 +25,16 @@ namespace Infrastructure
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("accounitng_subject1","000","法事冥加",true),
-                new AccountingSubject("accounting_subject2","000","葬儀冥加",true),
-                new AccountingSubject("accounting_subject3","222","その他",false)
+                new AccountingSubject("id0", "822", "その他雑収入", true),
+                new AccountingSubject("id0", "822", "その他冥加金", true),
+                new AccountingSubject("id0", "874", "その他茶所収入", true),
+                new AccountingSubject("id0", "416", "仮受金", true),
+                new AccountingSubject("id0", "611", "旅費交通費", true),
+                new AccountingSubject("id0", "616", "消耗品費", true),
+                new AccountingSubject("id0", "621", "車両費", true),
+                new AccountingSubject("id0", "735", "苑内整備費", true),
+                new AccountingSubject("id0", "168", "仮払金", true),
+                new AccountingSubject("id0", "133", "セレサ川崎普通貯金", true)
             };
             return list;
         }
@@ -44,11 +51,31 @@ namespace Infrastructure
 
         public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
+            string idstring = "id0";
+
+            AccountingSubject OtherMiscellaneousIncome = new AccountingSubject(idstring, "822", "その他雑収入", true);
+            AccountingSubject OtherContribution = new AccountingSubject(idstring, "822", "その他冥加金", true);
+            AccountingSubject OtherTyadokoroIncome = new AccountingSubject(idstring, "874", "その他茶所収入", true);
+            AccountingSubject SuspenseReceiptMoney = new AccountingSubject(idstring, "416", "仮受金", true);
+            AccountingSubject TravelExpense = new AccountingSubject(idstring, "611", "旅費交通費", true);
+            AccountingSubject SuppliesExpense = new AccountingSubject(idstring, "616", "消耗品費", true);
+            AccountingSubject VehicleFee = new AccountingSubject(idstring, "621", "車両費", true);
+            AccountingSubject InternalMaintenanceExpenses = new AccountingSubject(idstring, "735", "苑内整備費", true);
+            AccountingSubject SuspensePayment = new AccountingSubject(idstring, "168", "仮払金", true);
+            AccountingSubject Seresa = new AccountingSubject(idstring, "133", "セレサ川崎普通貯金", true);
+
             ObservableCollection<Content> list = new ObservableCollection<Content>
             {
-                new Content("content1",new AccountingSubject("accounitng_subject1","000","法事冥加",true),-1,"法事お布施",true),
-                new Content("content2",new AccountingSubject("accounting_subject2","000","葬儀冥加",true),-1,"葬儀お布施",true),
-                new Content("content3",new AccountingSubject("accounitng_subject1","000","法事冥加",true),13000,"焼香台",true)
+                new Content("content3",OtherMiscellaneousIncome,-1,"銘板彫刻",true),
+                new Content("content3",OtherContribution,-1,"骨壺",true),
+                new Content("content3",OtherTyadokoroIncome,-1,"ビール、ライター",true),
+                new Content("content3",SuspenseReceiptMoney,-1,"ワイズコア",true),
+                new Content("content3",TravelExpense,-1,"3ヶ月交通費",true),
+                new Content("content3",SuppliesExpense,-1,"コード、マウスパッド",true),
+                new Content("content3",VehicleFee,-1,"ヴィッツ　ガソリン代",true),
+                new Content("content3",InternalMaintenanceExpenses,-1,"花苗",true),
+                new Content("content3",SuspensePayment,-1,"法事両替用",true),
+                new Content("content3",Seresa,-1,"入金",true)
             };
             return list;            
         }
@@ -69,16 +96,52 @@ namespace Infrastructure
             Rep repHayashiba=new Rep("rep1","林飛 顕誠","aaa",true,true);
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
+            string idstring = "id0";
+
+            CreditAccount shunjuen = new CreditAccount(idstring, "春秋苑", true);
+
+            AccountingSubject OtherMiscellaneousIncome = new AccountingSubject(idstring, "822", "その他雑収入", true);
+            AccountingSubject OtherContribution = new AccountingSubject(idstring, "822", "その他冥加金", true);
+            AccountingSubject OtherTyadokoroIncome = new AccountingSubject(idstring, "874", "その他茶所収入", true);
+            AccountingSubject SuspenseReceiptMoney = new AccountingSubject(idstring, "416", "仮受金", true);
+            AccountingSubject TravelExpense = new AccountingSubject(idstring, "611", "旅費交通費", true);
+            AccountingSubject SuppliesExpense = new AccountingSubject(idstring, "616", "消耗品費", true);
+            AccountingSubject VehicleFee = new AccountingSubject(idstring, "621", "車両費", true);
+            AccountingSubject InternalMaintenanceExpenses = new AccountingSubject(idstring, "735", "苑内整備費", true);
+            AccountingSubject SuspensePayment = new AccountingSubject(idstring, "168", "仮払金", true);
+            AccountingSubject Seresa = new AccountingSubject(idstring, "133","セレサ川崎普通貯金", true);
+
             ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>
             {
-                new ReceiptsAndExpenditure(0,DateTime.Today.AddDays(-1),repHayashiba,"管理事務所",new CreditAccount("credit_account","春秋苑",true),
-                    new Content("content1",new AccountingSubject("account_subject1","000","納骨冥加",true),40000,"納骨手数料",true),"春秋家",40000,true,true,DateTime.Today.AddDays(-1),
-                    repAkima,DateTime.Today.AddDays(-1)),
-                new ReceiptsAndExpenditure(1,DateTime.Today.AddDays(-1),repAkima,"青蓮堂",new CreditAccount("credit_account","春秋苑",true),
-                    new Content("content2",new AccountingSubject("account_subject2","100","葬儀冥加",true),-1,"青蓮堂使用費",true),"信行家",250000,true,true,DateTime.Today.AddDays(-1),
-                    repHayashiba,DateTime.Today.AddDays(-1)),
-                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",new CreditAccount("credit_account","信行寺",true),
-                    new Content("content3",new AccountingSubject("account_subject3","202","雑費",true),-1,"文房具代",true),"消しゴム",150,false,true,DateTime.Today,
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",OtherMiscellaneousIncome,-1,"銘板彫刻",true),"山口家",5400,true,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",TravelExpense,-1,"3ヶ月交通費",true),"坂本邦夫",12860,false,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",SuppliesExpense,-1,"コード、マウスパッド",true),"ヤマダ電機",2247,false,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",VehicleFee,-1,"ヴィッツ　ガソリン代",true),"アセント",4600,false,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",InternalMaintenanceExpenses,-1,"花苗",true),"ビバホーム",5827,false,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,DateTime.Today,
+                    repHayashiba,DateTime.Today),
+                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content3",Seresa,-1,"入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),120000,false,true,DateTime.Today,
                     repHayashiba,DateTime.Today)
             };
             return list;

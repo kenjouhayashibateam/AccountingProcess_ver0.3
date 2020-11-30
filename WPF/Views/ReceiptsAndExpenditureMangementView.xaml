@@ -198,12 +198,48 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="経理場所" IsReadOnly="True" Binding="{Binding Location}" Width="4*"/>
-                            <DataGridTextColumn Header="科目コード" IsReadOnly="True" Binding="{Binding Content.AccountingSubject.SubjectCode}" Width="4*"/>
-                            <DataGridTextColumn Header="勘定科目" IsReadOnly="True" Binding="{Binding Content.AccountingSubject.Subject}" Width="6*"/>
-                            <DataGridTextColumn Header="内容" IsReadOnly="True" Binding="{Binding Content.Text}" Width="6*"/>
-                            <DataGridTextColumn Header="詳細" IsReadOnly="True" Binding="{Binding Detail}" Width="6*"/>
-                            <DataGridTextColumn Header="金額" IsReadOnly="True" Binding="{Binding PriceWithUnit}" Width="5*"/>
+                            <DataGridTemplateColumn Header="経理場所" Width="4*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Location}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="科目コード" Width="4*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="勘定科目" Width="6*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="内容" Width="6*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Content.Text}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="詳細" Width="6*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Detail}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="金額" Width="5*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
@@ -214,7 +250,7 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding CashBoxTotalAmount}" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
-                        
+                        <TextBlock Text="{Binding BalanceFinalAccount}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
                     </Grid>
                 </GroupBox>
             </Grid>

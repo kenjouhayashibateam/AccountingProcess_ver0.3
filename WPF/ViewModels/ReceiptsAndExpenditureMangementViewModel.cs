@@ -25,6 +25,7 @@ namespace WPF.ViewModels
         private string receiptsAndExpenditureIDField;
         private string comboCreditAccountText;
         private string dataOperationButtonContent;
+        private string balanceFinalAccount;
         private bool isValidity;
         private bool isPaymentCheck;
         private bool isDepositAndWithdrawalContetntEnabled;
@@ -62,7 +63,9 @@ namespace WPF.ViewModels
             CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             AccountActivityDate = DateTime.Today;
             SearchStartDate = DateTime.Today;
+            RegistrationDate = DateTime.Today;
             RegistrationRep = LoginRep.Rep;
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
         }
 
         protected override void SetDetailLocked()
@@ -82,14 +85,11 @@ namespace WPF.ViewModels
                     ComboCreditAccountText = ComboCreditAccounts[0].Account;
                     DetailText = string.Empty;
                     price = string.Empty;
-                    AccountActivityDate = DateTime.Today;
-                    RegistrationDate = DateTime.Today;
                     IsReferenceMenuEnabled = false;
                     break;
                 case DataOperation.更新:
                     ComboCreditAccountText = string.Empty;
                     IsReferenceMenuEnabled = true;
-                    ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
                     break;
             }
         }
@@ -594,6 +594,7 @@ namespace WPF.ViewModels
             set
             {
                 receiptsAndExpenditures = value;
+                SetBalanceFinalAccount();
                 CallPropertyChanged();
             }
         }
@@ -606,8 +607,23 @@ namespace WPF.ViewModels
             set
             {
                 selectedReceiptsAndExpenditure = value;
+                SetReceiptsAndExpenditureProperty();
                 CallPropertyChanged();
             }
+        }
+        private void SetReceiptsAndExpenditureProperty()
+        {
+            IsValidity = SelectedReceiptsAndExpenditure.IsValidity;
+            IsPaymentCheck = SelectedReceiptsAndExpenditure.IsPayment;
+            ComboCreditAccountText = SelectedReceiptsAndExpenditure.CreditAccount.Account;
+            ComboContentText = SelectedReceiptsAndExpenditure.Content.Text;
+            ComboAccountingSubjectText = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
+            ComboAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode;
+            DetailText = SelectedReceiptsAndExpenditure.Detail;
+            Price = SelectedReceiptsAndExpenditure.Price.ToString();
+            AccountActivityDate = SelectedReceiptsAndExpenditure.AccountActivityDate;
+            RegistrationDate = SelectedReceiptsAndExpenditure.RegistrationDate;
+            RegistrationRep = SelectedReceiptsAndExpenditure.RegistrationRep;
         }
         /// <summary>
         /// 出納データ登録日
@@ -645,7 +661,30 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出納データリストの収支決算
+        /// </summary>
+        public string BalanceFinalAccount
+        {
+            get => balanceFinalAccount;
+            set
+            {
+                balanceFinalAccount = value;
+                CallPropertyChanged();
+            }
+        }
 
+        private void SetBalanceFinalAccount()
+        {
+            int amount = 0;
+
+            foreach(ReceiptsAndExpenditure receiptsAndExpenditure in ReceiptsAndExpenditures)
+            {
+                if (receiptsAndExpenditure.IsPayment) amount += receiptsAndExpenditure.Price;
+                else amount -= receiptsAndExpenditure.Price;
+            }
+            BalanceFinalAccount = $"出納リストの収支決算 : {TextHelper.AmountWithUnit(amount)}";
+        }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
         /// </summary>
