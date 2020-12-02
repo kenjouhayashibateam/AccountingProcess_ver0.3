@@ -22,8 +22,9 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="14*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="データ操作" Grid.Row="0" Margin="5">
+        <GroupBox Header="データ操作" Grid.Row="0" Margin="5,3">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -48,7 +49,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="詳細" Background="{Binding DetailBackGroundColor}" Margin="5">
+            <GroupBox Header="詳細" Background="{Binding DetailBackGroundColor}" Margin="5,3">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="10*"/>
@@ -59,64 +60,88 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
                             <RowDefinition Height="4*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding ReceiptsAndExpenditureIDField}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsEnabled="{Binding IsDepositAndWithdrawalContetntEnabled}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
-                        <TextBlock Text="貸方勘定" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <ComboBox Name="CreditAccountComboBox" Grid.Row="4" SelectedIndex="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus,Mode=TwoWay}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.Account}" Margin="5,3,180,3"/>
-                        <Grid Grid.Row="5">
+                        <Grid Grid.Row="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="貸方勘定" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <ComboBox Name="CreditAccountComboBox" Grid.Row="1" SelectedIndex="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus,Mode=TwoWay}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.Account}" Margin="5,3,180,3"/>
+                        </Grid>
+                        <Grid Grid.Row="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="内容" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
-                            <TextBlock Text="勘定科目" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
-                            <TextBlock Text="科目コード" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <TextBlock Text="科目コード" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <TextBlock Text="勘定科目" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <TextBlock Text="内容" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
+                            <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
+                            <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
+                        </Grid>
+                        <Grid Grid.Row="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="詳細（将来的に削除予定）" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <TextBox x:Name="DetailTextBox" Grid.Row="1" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
                         </Grid>
                         <Grid Grid.Row="6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Name="ContentComboBox" Grid.Column="0" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
-                            <ComboBox Name="AccountingSubjectComboBox" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
-                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Column="2" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
-                        </Grid>
-                        <TextBlock Text="詳細（将来的に削除予定）" Grid.Row="7" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <TextBox x:Name="DetailTextBox" Grid.Row="8" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
-                        <TextBlock Text="金額" Grid.Row="9" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <Grid Grid.Row="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="PriceTextBox" Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPriceEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="off" Margin="5,3"/>
-                            <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3"/>
+                            <TextBlock Text="金額" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <TextBox x:Name="PriceTextBox" Grid.Row="1" Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPriceEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="off" Margin="5,3"/>
+                            <TextBlock Text="円" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3"/>
                         </Grid>
-                        <TextBlock Text="入出金日" Grid.Row="11" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <DatePicker x:Name="AccountActivityTextBox" Grid.Row="12" SelectedDate="{Binding AccountActivityDate}" IsEnabled="{Binding IsAccountActivityEnabled}" HorizontalAlignment="Left" Margin="5,3"/>
-                        <TextBlock Text="登録日" Grid.Row="13" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <DatePicker x:Name="RegistrationDateTextBox" Grid.Row="14" SelectedDate="{Binding RegistrationDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
-                        <TextBlock Text="登録担当者" Grid.Row="15" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <TextBox x:Name="RegistrationRepNameTextBox" Grid.Row="16" IsEnabled="False" Text="{Binding RegistrationRep.Name}" VerticalContentAlignment="Center" Margin="5,3,200,3"/>
+                        <Grid Grid.Row="7">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="入出金日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" IsEnabled="{Binding IsAccountActivityEnabled}" HorizontalAlignment="Left" Margin="5,3"/>
+                        </Grid>
+                        <Grid Grid.Row="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="登録日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <DatePicker x:Name="RegistrationDateTextBox" Grid.Row="1" SelectedDate="{Binding RegistrationDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
+                        </Grid>
+                        <Grid Grid.Row="9">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="登録担当者" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <TextBox x:Name="RegistrationRepNameTextBox" Grid.Row="1" IsEnabled="False" Text="{Binding RegistrationRep.Name}" VerticalContentAlignment="Center" Margin="5,3,200,3"/>
+                        </Grid>
                     </Grid>
                     <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5,3">
                         <Button.InputBindings>
@@ -132,7 +157,7 @@
                     <RowDefinition Height="7*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5">
+                <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5,3">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
@@ -176,7 +201,7 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="一覧" Grid.Row="1" Margin="5">
+                <GroupBox Header="一覧" Grid.Row="1" Margin="5,3">
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" AutoGenerateColumns="False">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
@@ -243,7 +268,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
-                <GroupBox Header="諸情報" Grid.Row="2" Margin="5">
+                <GroupBox Header="諸情報" Grid.Row="2" Margin="5,3">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -255,7 +280,10 @@
                 </GroupBox>
             </Grid>
         </Grid>
-        <Grid Grid.Row="2">
+        <GroupBox Header="収支日報" Grid.Row="2" Margin="5,3">
+            
+        </GroupBox>
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="1*"/>
