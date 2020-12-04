@@ -228,18 +228,10 @@ namespace WPF.ViewModels
             {
                 if (comboContentText == value) return;
                 comboContentText = value;
+                CallPropertyChanged();
                 SelectedContent = ComboContents.FirstOrDefault(c => c.Text == value);
-                if (SelectedContent == null) ComboContentText = string.Empty;
-                else
-                {
-                    ComboAccountingSubjects = DataBaseConnect.ReferenceAffiliationAccountingSubject(comboContentText);
-                    SelectedAccountingSubject = ComboAccountingSubjects[0];
-                    ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
-                }
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
-                
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -275,18 +267,11 @@ namespace WPF.ViewModels
             get => comboAccountingSubjectText;
             set
             {
-                if (comboAccountingSubjectText != value)
-                {
-                    comboAccountingSubjectText = value;
-                    SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.Subject == comboAccountingSubjectText);
-                }
+                if (comboAccountingSubjectText == value) return;
+                comboAccountingSubjectText = value;
+                SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.Subject == comboAccountingSubjectText);
                 if (SelectedAccountingSubject == null) comboAccountingSubjectText = string.Empty;
-                else
-                {
-                    comboAccountingSubjectText = selectedAccountingSubject.Subject;
-                    ComboAccountingSubjectCode = selectedAccountingSubject.SubjectCode;
-                    SetAccountingSubjectChildContents();
-                }
+                else SetAccountingSubjectChildContents();                
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
             }
@@ -299,13 +284,12 @@ namespace WPF.ViewModels
             get => comboAccountingSubjectCode;
             set
             {
-                if (comboAccountingSubjectCode != value)
-                {
-                    comboAccountingSubjectCode = value;
-                    SetDataOperationButtonEnabled();
-                }
-                ValidationProperty(nameof(ComboAccountingSubjectCode), value);
+                if (comboAccountingSubjectCode == value) return;
+                comboAccountingSubjectCode = value;
+                SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.SubjectCode == comboAccountingSubjectCode);
                 CallPropertyChanged();
+                SetDataOperationButtonEnabled();
+                ValidationProperty(nameof(ComboAccountingSubjectCode), value);
             }
         }
         /// <summary>
@@ -611,14 +595,17 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出納データ選択時に詳細フィールドにプロパティをセットします
+        /// </summary>
         private void SetReceiptsAndExpenditureProperty()
         {
             IsValidity = SelectedReceiptsAndExpenditure.IsValidity;
             IsPaymentCheck = SelectedReceiptsAndExpenditure.IsPayment;
             ComboCreditAccountText = SelectedReceiptsAndExpenditure.CreditAccount.Account;
-            ComboContentText = SelectedReceiptsAndExpenditure.Content.Text;
-            ComboAccountingSubjectText = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
             ComboAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode;
+            ComboAccountingSubjectText = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
+            ComboContentText = SelectedReceiptsAndExpenditure.Content.Text;
             DetailText = SelectedReceiptsAndExpenditure.Detail;
             Price = SelectedReceiptsAndExpenditure.Price.ToString();
             AccountActivityDate = SelectedReceiptsAndExpenditure.AccountActivityDate;
@@ -673,7 +660,9 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// リストの収支決算を表示します
+        /// </summary>
         private void SetBalanceFinalAccount()
         {
             int amount = 0;
