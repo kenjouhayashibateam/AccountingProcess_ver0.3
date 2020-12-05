@@ -46,12 +46,14 @@ namespace WPF.ViewModels
         private readonly Cashbox Cashbox = Cashbox.GetInstance();
         private Rep registrationRep;
         private ObservableCollection<AccountingSubject> comboAccountingSubjects;
+        private ObservableCollection<AccountingSubject> comboAccountingSubjectCodes;
         private ObservableCollection<Content> comboContents;
         private ObservableCollection<CreditAccount> comboCreditAccounts;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
         private SolidColorBrush detailBackGroundColor;
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
+        private AccountingSubject selectedAccountingSubjectCode;
         private CreditAccount selectedCreditAccount=new CreditAccount(string.Empty,string.Empty,false);
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         private bool isDataOperationButtonEnabled;
@@ -89,6 +91,7 @@ namespace WPF.ViewModels
                     break;
                 case DataOperation.更新:
                     ComboCreditAccountText = string.Empty;
+                    SetDataList();
                     IsReferenceMenuEnabled = true;
                     break;
             }
@@ -100,6 +103,7 @@ namespace WPF.ViewModels
         {
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            ComboAccountingSubjectCodes = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true);
         }
 
@@ -202,7 +206,6 @@ namespace WPF.ViewModels
                 selectedContent = value;
                 if (selectedContent != null && selectedContent.FlatRate > 0) Price = selectedContent.FlatRate.ToString();
                 else Price = string.Empty;
-
                 CallPropertyChanged();
             }
         }
@@ -229,7 +232,6 @@ namespace WPF.ViewModels
                 if (comboContentText == value) return;
                 comboContentText = value;
                 CallPropertyChanged();
-                SelectedContent = ComboContents.FirstOrDefault(c => c.Text == value);
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
             }
@@ -244,6 +246,7 @@ namespace WPF.ViewModels
             {
                 if (selectedAccountingSubject != null && selectedAccountingSubject.Equals(value)) return;
                 selectedAccountingSubject = value;
+                if(selectedAccountingSubject!=null && CurrentOperation==DataOperation.登録) ComboContents = DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
                 CallPropertyChanged();
             }
         }
@@ -269,9 +272,7 @@ namespace WPF.ViewModels
             {
                 if (comboAccountingSubjectText == value) return;
                 comboAccountingSubjectText = value;
-                SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.Subject == comboAccountingSubjectText);
-                if (SelectedAccountingSubject == null) comboAccountingSubjectText = string.Empty;
-                else SetAccountingSubjectChildContents();                
+                SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
             }
@@ -286,10 +287,9 @@ namespace WPF.ViewModels
             {
                 if (comboAccountingSubjectCode == value) return;
                 comboAccountingSubjectCode = value;
-                SelectedAccountingSubject = ComboAccountingSubjects.FirstOrDefault(a => a.SubjectCode == comboAccountingSubjectCode);
-                CallPropertyChanged();
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboAccountingSubjectCode), value);
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -661,6 +661,30 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 勘定科目コードのリスト
+        /// </summary>
+        public ObservableCollection<AccountingSubject> ComboAccountingSubjectCodes
+        {
+            get => comboAccountingSubjectCodes;
+            set
+            {
+                comboAccountingSubjectCodes = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された勘定科目コード
+        /// </summary>
+        public AccountingSubject SelectedAccountingSubjectCode
+        {
+            get => selectedAccountingSubjectCode;
+            set
+            {
+                selectedAccountingSubjectCode = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
         private void SetBalanceFinalAccount()
@@ -679,7 +703,6 @@ namespace WPF.ViewModels
         /// </summary>
         public void SetDataOperationButtonEnabled()
         {
-
             switch(CurrentOperation)
             {
                 case DataOperation.登録:
@@ -693,17 +716,8 @@ namespace WPF.ViewModels
         /// <returns>判定結果</returns>
         private bool CanRegistration()
         {
-            return !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) & !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price) & 0 < TextHelper.IntAmount(price);
+            return !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) & !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price) && 0 < TextHelper.IntAmount(price);
         }
-        /// <summary>
-        /// 勘定科目に所属している伝票内容を検索してリストに代入します
-        /// </summary>
-        private void SetAccountingSubjectChildContents()
-        {
-            ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, ComboAccountingSubjectText, true);
-            SelectedContent = ComboContents.FirstOrDefault(c => c.Text == ComboContentText);
-        }
-
         public override void ValidationProperty(string propertyName, object value)
         {
             switch(propertyName)
