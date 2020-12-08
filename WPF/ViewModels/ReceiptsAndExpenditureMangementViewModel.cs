@@ -246,7 +246,7 @@ namespace WPF.ViewModels
             {
                 if (selectedAccountingSubject != null && selectedAccountingSubject.Equals(value)) return;
                 selectedAccountingSubject = value;
-                if(selectedAccountingSubject!=null && CurrentOperation==DataOperation.登録) ComboContents = DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
+                if (selectedAccountingSubject != null && CurrentOperation == DataOperation.登録) ComboContents = DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
                 CallPropertyChanged();
             }
         }

@@ -93,7 +93,7 @@
                             <TextBlock Text="科目コード" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBlock Text="勘定科目" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBlock Text="内容" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
+                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
                             <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
                             <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
                         </Grid>
@@ -281,7 +281,26 @@
             </Grid>
         </Grid>
         <GroupBox Header="収支日報" Grid.Row="2" Margin="5,3">
-            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="当日収入"/>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="当日支出"/>
+                <TextBlock Grid.Column="3" Grid.Row="0" Text="当日収支"/>
+                <Button x:Name="a" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" Content="出力">
+                    
+                </Button>
+            </Grid>
         </GroupBox>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
