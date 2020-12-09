@@ -270,7 +270,7 @@ namespace Infrastructure
             throw new System.NotImplementedException();
         }
 
-        public ReceiptsAndExpenditure PreviousDayBalance()
+        public int PreviousDayIncome()
         {
             throw new System.NotImplementedException();
         }
@@ -281,6 +281,16 @@ namespace Infrastructure
         }
 
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int PreviousDayDisbursement()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int FinalAccountPerMonth()
         {
             throw new System.NotImplementedException();
         }

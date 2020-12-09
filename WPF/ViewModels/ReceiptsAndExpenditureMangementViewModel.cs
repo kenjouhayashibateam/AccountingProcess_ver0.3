@@ -26,6 +26,12 @@ namespace WPF.ViewModels
         private string comboCreditAccountText;
         private string dataOperationButtonContent;
         private string balanceFinalAccount;
+        private string previousDayFinalAccount;
+        private string listTitle;
+        private string peymentSum;
+        private string withdrawalSum;
+        private string transferSum;
+        private string todaysFinalAccount;
         private bool isValidity;
         private bool isPaymentCheck;
         private bool isDepositAndWithdrawalContetntEnabled;
@@ -54,7 +60,7 @@ namespace WPF.ViewModels
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
         private AccountingSubject selectedAccountingSubjectCode;
-        private CreditAccount selectedCreditAccount=new CreditAccount(string.Empty,string.Empty,false);
+        private CreditAccount selectedCreditAccount = new CreditAccount(string.Empty, string.Empty, false);
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         private bool isDataOperationButtonEnabled;
         #endregion
@@ -66,13 +72,18 @@ namespace WPF.ViewModels
             AccountActivityDate = DateTime.Today;
             SearchStartDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
+            PreviousDayFinalAccount = TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement() + DataBaseConnect.PreviousDayIncome());
             RegistrationRep = LoginRep.Rep;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
+            TodaysFinalAccount =ReturnTodaysFinalAccount();
+            ListTitle = $"一覧 : 前日決算 {TodaysFinalAccount}";
         }
 
         protected override void SetDetailLocked()
         {
-            switch(CurrentOperation)
+            switch (CurrentOperation)
             {
                 case DataOperation.登録:
                     IsValidity = true;
@@ -112,7 +123,17 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureDataOperationCommand =
                 new DelegateCommand(() => ReceiptsAndExpenditureDataOperation(), () => IsDataOperationButtonEnabled);
         }
-        
+        /// <summary>
+        /// 本日の決算額を返します
+        /// </summary>
+        /// <returns></returns>
+        private string ReturnTodaysFinalAccount()
+        {
+            int ws = TextHelper.IntAmount(WithdrawalSum.Replace("円", string.Empty));
+            int ts = TextHelper.IntAmount(TransferSum.Replace("円", string.Empty));
+            int ps = TextHelper.IntAmount(PeymentSum.Replace("円", string.Empty));
+            return TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - ws - ts + ps);
+        }
         /// <summary>
         /// データ操作コマンド
         /// </summary>
@@ -122,7 +143,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void ReceiptsAndExpenditureDataOperation()
         {
-            switch(CurrentOperation)
+            switch (CurrentOperation)
             {
                 case DataOperation.登録:
                     DataRegistration();
@@ -134,7 +155,51 @@ namespace WPF.ViewModels
         /// </summary>
         private void DataRegistration()
         {
-            DataBaseConnect.Registration(new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep,AccountingProcessLocation.Location,  SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
+            DataBaseConnect.Registration(new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
+        }
+        /// <summary>
+        /// 出納データから出金データを取り出し、出金、振替に振り分けて合計を算出します
+        /// </summary>
+        private void SetWithdrawalSumAndTransferSum()
+        {
+            WithdrawalSum = TextHelper.AmountWithUnit(0);
+            TransferSum = TextHelper.AmountWithUnit(0);
+            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+            {
+                if (!rae.IsPayment) WithdrawalAllocation(rae);
+            }
+        }
+        /// <summary>
+        /// 出金データを出金、振替に振り分けます
+        /// </summary>
+        /// <param name="receiptsAndExpenditure"></param>
+        private void WithdrawalAllocation(ReceiptsAndExpenditure receiptsAndExpenditure)
+        {
+            int i;
+            if (receiptsAndExpenditure.Content.Text == "入金")
+            {
+                i = TextHelper.IntAmount(TransferSum.Replace("円", string.Empty));
+                TransferSum = TextHelper.AmountWithUnit(i + receiptsAndExpenditure.Price);
+            }
+            else
+            {
+                i = TextHelper.IntAmount(WithdrawalSum.Replace("円", string.Empty));
+                WithdrawalSum = TextHelper.AmountWithUnit(i + receiptsAndExpenditure.Price);
+            }
+        }
+        /// <summary>
+        /// 入金合計を算出します
+        /// </summary>
+        private void SetPeymentSum()
+        {
+            int i = 0;
+            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+            {
+                if (rae.IsPayment) i += rae.Price;
+            }
+            PeymentSum = TextHelper.AmountWithUnit(i);
         }
         /// <summary>
         /// 金庫の総計金額
@@ -362,7 +427,7 @@ namespace WPF.ViewModels
             get => selectedCreditAccount;
             set
             {
-                if (selectedCreditAccount !=null &&  selectedCreditAccount.Equals(value)) return;
+                if (selectedCreditAccount != null && selectedCreditAccount.Equals(value)) return;
                 selectedCreditAccount = value;
                 CallPropertyChanged();
             }
@@ -685,11 +750,84 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 前日決算
+        /// </summary>
+        public string PreviousDayFinalAccount
+        {
+            get => previousDayFinalAccount;
+            set
+            {
+                previousDayFinalAccount = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納一覧のタイトル
+        /// </summary>
+        public string ListTitle
+        {
+            get => listTitle;
+            set
+            {
+                listTitle = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入金合計
+        /// </summary>
+        public string PeymentSum
+        {
+            get => peymentSum;
+            set
+            {
+                peymentSum = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出金合計
+        /// </summary>
+        public string WithdrawalSum
+        {
+            get => withdrawalSum;
+            set
+            {
+                withdrawalSum = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 振替合計
+        /// </summary>
+        public string TransferSum
+        {
+            get => transferSum;
+            set
+            {
+                transferSum = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 今日の決算
+        /// </summary>
+        public string TodaysFinalAccount
+        {
+            get => todaysFinalAccount;
+            set
+            {
+                todaysFinalAccount = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
         private void SetBalanceFinalAccount()
         {
-            int amount = 0;
+            int amount = DataBaseConnect.FinalAccountPerMonth();
 
             foreach(ReceiptsAndExpenditure receiptsAndExpenditure in ReceiptsAndExpenditures)
             {

@@ -13,19 +13,26 @@ namespace Infrastructure
             return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
         }
 
-        public ReceiptsAndExpenditure PreviousDayBalance()
+        public int FinalAccountPerMonth()
         {
-            return new ReceiptsAndExpenditure
-                (0, DateTime.Parse("1900/01/01"), new Rep("rep1", "林飛 顕誠", "aaa", true, true),"春秋苑", new CreditAccount("creditaccount1", "春秋苑", true),
-                new Content("content0", new AccountingSubject("accountint_subject0", "000", "収支", false), -1, "収支日報", false), "収支総計", 1000000, true, false, DateTime.Parse("1900/01/01"), 
-                new Rep("rep1", "林飛 顕誠", "aaa", true, true), DateTime.Parse("1900/01/01"));
+            return 2815597;
+        }
+
+        public int PreviousDayDisbursement()
+        {
+            return 0;
+        }
+
+        public int PreviousDayIncome()
+        {
+            return 0;
         }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("id0", "822", "その他雑収入", true),
+                new AccountingSubject("id0", "882", "その他雑収入", true),
                 new AccountingSubject("id1", "822", "その他冥加金", true),
                 new AccountingSubject("id2", "874", "その他茶所収入", true),
                 new AccountingSubject("id3", "416", "仮受金", true),
@@ -43,7 +50,7 @@ namespace Infrastructure
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("id0", "822", "その他雑収入", true),
+                new AccountingSubject("id0", "882", "その他雑収入", true),
                 new AccountingSubject("id1", "822", "その他冥加金", true),
                 new AccountingSubject("id2", "874", "その他茶所収入", true),
                 new AccountingSubject("id3", "416", "仮受金", true),
@@ -59,7 +66,7 @@ namespace Infrastructure
 
         public ObservableCollection<Content> ReferenceContent(string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
-            AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "822", "その他雑収入", true);
+            AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution = new AccountingSubject("id1", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome = new AccountingSubject("id2", "874", "その他茶所収入", true);
             AccountingSubject SuspenseReceiptMoney = new AccountingSubject("id3", "416", "仮受金", true);
@@ -104,7 +111,7 @@ namespace Infrastructure
 
             CreditAccount shunjuen = new CreditAccount("credit_account1", "春秋苑", true);
 
-            AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "822", "その他雑収入", true);
+            AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution = new AccountingSubject("id2", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome = new AccountingSubject("id3", "874", "その他茶所収入", true);
             AccountingSubject SuspenseReceiptMoney = new AccountingSubject("id4", "416", "仮受金", true);
@@ -145,7 +152,7 @@ namespace Infrastructure
                     new Content("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,DateTime.Today,
                     repHayashiba,DateTime.Today),
                  new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content12",Seresa,-1,"入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),120000,false,true,DateTime.Today,
+                    new Content("content12",Seresa,-1,"入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),3130000,false,true,DateTime.Today,
                     repHayashiba,DateTime.Today)
             };
             return list;

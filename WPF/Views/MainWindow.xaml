@@ -80,13 +80,13 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="預かった金庫の金額を入力してください" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBlock Text="{Binding DepositAmountInfo}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
-                           <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" Margin="5,3"/>
+                           <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </Grid>

@@ -21,7 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="15*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="データ操作" Grid.Row="0" Margin="5,3">
@@ -67,7 +67,7 @@
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="2*"/>
-                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding ReceiptsAndExpenditureIDField}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
@@ -154,7 +154,7 @@
             <Grid Grid.Column="1" IsEnabled="{Binding IsReferenceMenuEnabled}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
-                    <RowDefinition Height="9*"/>
+                    <RowDefinition Height="8*"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5,3">
@@ -201,7 +201,7 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="一覧" Grid.Row="1" Margin="5,3">
+                <GroupBox Header="{Binding ListTitle}" Grid.Row="1" Margin="5,3">
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" AutoGenerateColumns="False">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
@@ -288,16 +288,31 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支"/>
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="当日収入"/>
-                <TextBlock Grid.Column="2" Grid.Row="0" Text="当日支出"/>
-                <TextBlock Grid.Column="3" Grid.Row="0" Text="当日収支"/>
-                <Button x:Name="a" Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" Content="出力">
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="出金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="3" Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="4" Grid.Row="0" Text="残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding PreviousDayFinalAccount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding PeymentSum}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding WithdrawalSum}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding TransferSum}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="4" Grid.Row="1" Text="{Binding TodaysFinalAccount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="横浜銀行残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="セレサ川崎残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="2" Grid.Row="2" Text="ワイズコア仮受金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBox x:Name="YokohamaBankTextBox" Grid.Column="0" Grid.Row="3" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
+                <TextBox x:Name="CeresaTextBox" Grid.Column="1" Grid.Row="3" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
+                <TextBox x:Name="WiseCoreTextBox" Grid.Column="2" Grid.Row="3" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
+                <Button x:Name="aaa" Grid.Column="5" Grid.Row="0" Grid.RowSpan="4" Content="出力" Margin="10,30">
                     
                 </Button>
             </Grid>

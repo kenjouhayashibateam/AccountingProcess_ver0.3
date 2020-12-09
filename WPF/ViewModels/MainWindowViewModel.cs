@@ -16,14 +16,15 @@ namespace WPF.ViewModels
         #region Properties
         private bool callClosingMessage;
         private bool processFeatureEnabled;
-        private readonly ScreenTransition screenTransition = new ScreenTransition();
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
-        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private bool isSlipManagementEnabled;
+        private bool isDepositMenuEnabled;
+        private readonly ScreenTransition screenTransition = new ScreenTransition();
+        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private readonly IDataBaseConnect DataBaseConnect;
         private string depositAmount;
-        private bool isDepositMenuEnabled;
+        private string depositAmountInfo;
         #endregion
 
         public enum Locations
@@ -107,18 +108,19 @@ namespace WPF.ViewModels
             return b;
         }
         /// <summary>
-        /// 経理担当場所が青蓮堂で、預り金のテキストボックスが空白だった時に警告します
+        /// 経理担当場所が青蓮堂で、預り金のテキストボックスの値が0だった時に警告します
         /// </summary>
         private void CallDepositAmountEmptyMessage()
-        {
-                MessageBox = new MessageBoxInfo()
-                {
-                    Message = "経理担当場所が青蓮堂の場合は、テキストボックスに預かった金庫の金額を入力してください。",
-                    Image = MessageBoxImage.Warning,
-                    Title = "金額未入力",
-                    Button = MessageBoxButton.OK
-                };
-                CallPropertyChanged(nameof(MessageBox));
+        {    
+            if (TextHelper.IntAmount(DepositAmount)!=0) return;
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = "経理担当場所が青蓮堂の場合は、テキストボックスに預かった金庫の金額を入力してください。",
+                Image = MessageBoxImage.Warning,
+                Title = "金額未入力",
+                Button = MessageBoxButton.OK
+            };
+            CallPropertyChanged(nameof(MessageBox));
         }
         /// <summary>
         /// ログインしているかを判定します
@@ -244,7 +246,7 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 預り金額
+        /// 預り金額（管理事務所なら前日残高、青蓮堂なら預り金）
         /// </summary>
         public string DepositAmount
         {
@@ -267,6 +269,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 預り金欄の案内文字列
+        /// </summary>
+        public string DepositAmountInfo
+        {
+            get => depositAmountInfo;
+            set
+            {
+                depositAmountInfo = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -276,7 +290,10 @@ namespace WPF.ViewModels
             KanriJimushoChecked = true;
             ProcessFeatureEnabled = true;
             IsDepositMenuEnabled = false;
-            AccountingProcessLocation.SetOriginalTotalAmount(DataBaseConnect.PreviousDayBalance().Price);
+            AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayIncome();
+            DepositAmountInfo = "前日決算金額";
+            DepositAmount = (DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement() + DataBaseConnect.PreviousDayIncome()).ToString();
+
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
@@ -286,6 +303,9 @@ namespace WPF.ViewModels
             ShorendoChecked = true;
             IsDepositMenuEnabled = true;
             ProcessFeatureEnabled = true;
+            AccountingProcessLocation.OriginalTotalAmount = 0;
+            DepositAmountInfo = "預かった金庫の金額を入力してください";
+            DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック

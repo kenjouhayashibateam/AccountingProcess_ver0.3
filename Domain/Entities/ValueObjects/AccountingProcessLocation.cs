@@ -15,7 +15,7 @@ namespace Domain.Entities.ValueObjects
         /// <summary>
         /// 金庫計算、出納登録前の金額
         /// </summary>
-        public static string OriginalTotalAmount { get; set; }
+        public static int OriginalTotalAmount { get; set; }
         /// <summary>
         /// 担当場所インスタンス
         /// </summary>
@@ -31,13 +31,6 @@ namespace Domain.Entities.ValueObjects
         public static void SetLocation(string location)
         {
             Location = location;
-        }
-        /// <summary>
-        /// 金庫計算、出納登録前の金額を設定します
-        /// </summary>
-        public static void SetOriginalTotalAmount(int amount)
-        {
-            OriginalTotalAmount = TextHelper.AmountWithUnit(amount);
         }
     }
 }
