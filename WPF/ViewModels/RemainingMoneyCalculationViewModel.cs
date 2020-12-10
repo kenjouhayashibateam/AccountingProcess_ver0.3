@@ -513,10 +513,7 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="value">内容</param>
         /// <param name="otherMoneyNumber">欄のインデックス</param>
-        private void SetOtherMontyTitle(string value, int otherMoneyNumber)
-        {
-            myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;
-        }
+        private void SetOtherMontyTitle(string value, int otherMoneyNumber) => myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;        
         /// <summary>
         /// その他金庫等1の内容名
         /// </summary>
@@ -780,6 +777,7 @@ namespace WPF.ViewModels
             OutputButtonEnabled = true;
             if (AccountingProcessLocation.Location == MainWindowViewModel.Locations.管理事務所.ToString()) SetOtherMoneyTitleDefault();
         }
+        public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
         /// 各プロパティに値を入力します
         /// </summary>
@@ -857,7 +855,6 @@ namespace WPF.ViewModels
             OtherMoneyTitle8 = string.Empty;
         }
 
-        public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
         /// 金庫金額の一覧を出力します
         /// </summary>
@@ -865,7 +862,7 @@ namespace WPF.ViewModels
         {
             OutputButtonEnabled = false;
             OutputButtonText = "出力中";
-            await Task.Run(() => DataOutput.CashBoxDataOutput());
+            await Task.Run(() => DataOutput.CashboxData());
             OutputButtonEnabled = true;
             OutputButtonText = "出力";
         }

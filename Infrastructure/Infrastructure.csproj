@@ -64,7 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultInfrastructure.cs" />
-    <Compile Include="ExcelOutputInfrastructure.cs" />
+    <Compile Include="ExcelOutputData\BalanceFinalAccountOutput.cs" />
+    <Compile Include="ExcelOutputData\CashBoxOutput.cs" />
+    <Compile Include="ExcelOutputData\OutputData.cs" />
+    <Compile Include="ExcelOutputData\ExcelOutputInfrastructure.cs" />
     <Compile Include="LocalConnectInfrastructure.cs" />
     <Compile Include="LogFileInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

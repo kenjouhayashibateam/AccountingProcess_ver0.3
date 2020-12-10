@@ -1,9 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
+using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using WPF.ViewModels.Commands;
 
@@ -32,6 +35,10 @@ namespace WPF.ViewModels
         private string withdrawalSum;
         private string transferSum;
         private string todaysFinalAccount;
+        private string balanceFinalAccountOutputButtonContent;
+        private string yokohamaBankAmount;
+        private string ceresaAmount;
+        private string wizeCoreAmount;
         private bool isValidity;
         private bool isPaymentCheck;
         private bool isDepositAndWithdrawalContetntEnabled;
@@ -45,6 +52,7 @@ namespace WPF.ViewModels
         private bool isPaymentOnly;
         private bool isWithdrawalOnly;
         private bool isReferenceMenuEnabled;
+        private bool isDataOperationButtonEnabled;
         private DateTime accountActivityDate;
         private DateTime searchStartDate;
         private DateTime searchEndDate;
@@ -62,11 +70,12 @@ namespace WPF.ViewModels
         private AccountingSubject selectedAccountingSubjectCode;
         private CreditAccount selectedCreditAccount = new CreditAccount(string.Empty, string.Empty, false);
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
-        private bool isDataOperationButtonEnabled;
+        private readonly IDataOutput DataOutput;
         #endregion
 
-        public ReceiptsAndExpenditureMangementViewModel()
+        public ReceiptsAndExpenditureMangementViewModel(IDataOutput dataOutput)
         {
+            DataOutput = dataOutput;
             IsPaymentCheck = true;
             CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             AccountActivityDate = DateTime.Today;
@@ -79,6 +88,19 @@ namespace WPF.ViewModels
             SetWithdrawalSumAndTransferSum();
             TodaysFinalAccount =ReturnTodaysFinalAccount();
             ListTitle = $"一覧 : 前日決算 {TodaysFinalAccount}";
+            BalanceFinalAccountOutputButtonContent = "出力";
+            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => true);
+        }
+        public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 収支日報出力コマンド
+        /// </summary>
+        public DelegateCommand BalanceFinalAccountOutputCommand { get; }
+        private async void BalanceFinalAccountOutput()
+        {
+            BalanceFinalAccountOutputButtonContent = "出力中";
+            await Task.Run(() => DataOutput.BalanceFinalAccount(PreviousDayFinalAccount, PeymentSum, WithdrawalSum, TransferSum, TodaysFinalAccount, YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
+            BalanceFinalAccountOutputButtonContent = "出力";
         }
 
         protected override void SetDetailLocked()
@@ -155,7 +177,9 @@ namespace WPF.ViewModels
         /// </summary>
         private void DataRegistration()
         {
-            DataBaseConnect.Registration(new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
+            DataBaseConnect.Registration
+                (new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditAccount, SelectedContent, DetailText, TextHelper.IntAmount(price),
+                 IsPaymentCheck, IsValidity, TextHelper.DefaultDate, null, AccountActivityDate));
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
         }
@@ -818,6 +842,54 @@ namespace WPF.ViewModels
             set
             {
                 todaysFinalAccount = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 収支日報出力ボタンのContent
+        /// </summary>
+        public string BalanceFinalAccountOutputButtonContent
+        {
+            get => balanceFinalAccountOutputButtonContent;
+            set
+            {
+                balanceFinalAccountOutputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 横浜銀行残高
+        /// </summary>
+        public string YokohamaBankAmount
+        {
+            get => yokohamaBankAmount;
+            set
+            {
+                yokohamaBankAmount = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// セレサ川崎残高
+        /// </summary>
+        public string CeresaAmount
+        {
+            get => ceresaAmount;
+            set
+            {
+                ceresaAmount = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ワイズコア仮受金
+        /// </summary>
+        public string WizeCoreAmount
+        {
+            get => wizeCoreAmount;
+            set
+            {
+                wizeCoreAmount = value;
                 CallPropertyChanged();
             }
         }

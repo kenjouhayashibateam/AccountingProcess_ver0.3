@@ -309,11 +309,14 @@
                 <TextBlock Grid.Column="0" Grid.Row="2" Text="横浜銀行残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="1" Grid.Row="2" Text="セレサ川崎残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="2" Grid.Row="2" Text="ワイズコア仮受金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
-                <TextBox x:Name="YokohamaBankTextBox" Grid.Column="0" Grid.Row="3" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
-                <TextBox x:Name="CeresaTextBox" Grid.Column="1" Grid.Row="3" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
-                <TextBox x:Name="WiseCoreTextBox" Grid.Column="2" Grid.Row="3" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
-                <Button x:Name="aaa" Grid.Column="5" Grid.Row="0" Grid.RowSpan="4" Content="出力" Margin="10,30">
-                    
+                <TextBox x:Name="YokohamaBankTextBox" Grid.Column="0" Grid.Row="3" Text="{Binding YokohamaBankAmount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
+                <TextBox x:Name="CeresaTextBox" Grid.Column="1" Grid.Row="3" Text="{Binding CeresaAmount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
+                <TextBox x:Name="WiseCoreTextBox" Grid.Column="2" Grid.Row="3" Text="{Binding WizeCoreAmount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="5,3"/>
+                <Button x:Name="BalanceFinalAccountOutputButton" Grid.Column="5" Grid.Row="0" Grid.RowSpan="4" Content="{Binding BalanceFinalAccountOutputButtonContent}" Margin="10,30">
+                    <Button.InputBindings>
+                        <KeyBinding Command="{Binding BalanceFinalAccountOutputCommand}" Key="Space"/>
+                        <MouseBinding Command="{Binding BalanceFinalAccountOutputCommand}" MouseAction="LeftClick"/>
+                    </Button.InputBindings>
                 </Button>
             </Grid>
         </GroupBox>
