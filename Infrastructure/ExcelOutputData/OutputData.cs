@@ -186,6 +186,14 @@ namespace Infrastructure.ExcelOutputData
         /// <param name="x">メートル法での長さ</param>
         /// <returns>インチ法での長さ</returns>
         protected double ToInch(double x) => x * 0.39370;
+        /// <summary>
+        /// エクセルシートのCellの範囲を指定します
+        /// </summary>
+        /// <param name="cell1Row">始点CellのRow</param>
+        /// <param name="cell1Column">始点CellのCulumn</param>
+        /// <param name="cell2Row">終点CellのRow</param>
+        /// <param name="cell2Column">終点CellのCulumn</param>
+        /// <returns>ClosedXML.Excel.Range</returns>
         protected IXLRange MySheetCellRange(int cell1Row, int cell1Column, int cell2Row, int cell2Column) => myWorksheet.Range(myWorksheet.Cell(cell1Row, cell1Column), myWorksheet.Cell(cell2Row, cell2Column));
     }
 }

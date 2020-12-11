@@ -53,6 +53,8 @@ namespace WPF.ViewModels
         private bool isWithdrawalOnly;
         private bool isReferenceMenuEnabled;
         private bool isDataOperationButtonEnabled;
+        private bool isOutputGroupEnabled;
+        private bool isBalanceFinalAccountOutputEnabled;
         private DateTime accountActivityDate;
         private DateTime searchStartDate;
         private DateTime searchEndDate;
@@ -87,20 +89,24 @@ namespace WPF.ViewModels
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
             TodaysFinalAccount =ReturnTodaysFinalAccount();
-            ListTitle = $"一覧 : 前日決算 {TodaysFinalAccount}";
-            BalanceFinalAccountOutputButtonContent = "出力";
-            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => true);
+            ListTitle = $"一覧 : 前日決算 {PreviousDayFinalAccount}";
+            IsOutputGroupEnabled = true;
+            BalanceFinalAccountOutputButtonContent = "収支日報";
+            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
         /// 収支日報出力コマンド
         /// </summary>
         public DelegateCommand BalanceFinalAccountOutputCommand { get; }
+
         private async void BalanceFinalAccountOutput()
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
+            IsOutputGroupEnabled = false;
             await Task.Run(() => DataOutput.BalanceFinalAccount(PreviousDayFinalAccount, PeymentSum, WithdrawalSum, TransferSum, TodaysFinalAccount, YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
-            BalanceFinalAccountOutputButtonContent = "出力";
+            BalanceFinalAccountOutputButtonContent = "収支日報";
+            IsOutputGroupEnabled = true;
         }
 
         protected override void SetDetailLocked()
@@ -151,9 +157,9 @@ namespace WPF.ViewModels
         /// <returns></returns>
         private string ReturnTodaysFinalAccount()
         {
-            int ws = TextHelper.IntAmount(WithdrawalSum.Replace("円", string.Empty));
-            int ts = TextHelper.IntAmount(TransferSum.Replace("円", string.Empty));
-            int ps = TextHelper.IntAmount(PeymentSum.Replace("円", string.Empty));
+            int ws = TextHelper.IntAmount(WithdrawalSum);
+            int ts = TextHelper.IntAmount(TransferSum);
+            int ps = TextHelper.IntAmount(PeymentSum);
             return TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - ws - ts + ps);
         }
         /// <summary>
@@ -188,8 +194,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetWithdrawalSumAndTransferSum()
         {
-            WithdrawalSum = TextHelper.AmountWithUnit(0);
-            TransferSum = TextHelper.AmountWithUnit(0);
+            WithdrawalSum = TextHelper.CommaDelimitedAmount(0);
+            TransferSum = TextHelper.CommaDelimitedAmount(0);
             foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
@@ -204,13 +210,13 @@ namespace WPF.ViewModels
             int i;
             if (receiptsAndExpenditure.Content.Text == "入金")
             {
-                i = TextHelper.IntAmount(TransferSum.Replace("円", string.Empty));
-                TransferSum = TextHelper.AmountWithUnit(i + receiptsAndExpenditure.Price);
+                i = TextHelper.IntAmount(TransferSum);
+                TransferSum = TextHelper.CommaDelimitedAmount(i + receiptsAndExpenditure.Price);
             }
             else
             {
-                i = TextHelper.IntAmount(WithdrawalSum.Replace("円", string.Empty));
-                WithdrawalSum = TextHelper.AmountWithUnit(i + receiptsAndExpenditure.Price);
+                i = TextHelper.IntAmount(WithdrawalSum);
+                WithdrawalSum = TextHelper.CommaDelimitedAmount(i + receiptsAndExpenditure.Price);
             }
         }
         /// <summary>
@@ -223,7 +229,7 @@ namespace WPF.ViewModels
             {
                 if (rae.IsPayment) i += rae.Price;
             }
-            PeymentSum = TextHelper.AmountWithUnit(i);
+            PeymentSum = TextHelper.CommaDelimitedAmount(i);
         }
         /// <summary>
         /// 金庫の総計金額
@@ -865,7 +871,7 @@ namespace WPF.ViewModels
             get => yokohamaBankAmount;
             set
             {
-                yokohamaBankAmount = value;
+                yokohamaBankAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
@@ -877,7 +883,7 @@ namespace WPF.ViewModels
             get => ceresaAmount;
             set
             {
-                ceresaAmount = value;
+                ceresaAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
@@ -889,11 +895,34 @@ namespace WPF.ViewModels
             get => wizeCoreAmount;
             set
             {
-                wizeCoreAmount = value;
+                wizeCoreAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 各種出力メニューのEnabled
+        /// </summary>
+        public bool IsOutputGroupEnabled
+        {
+            get => isOutputGroupEnabled;
+            set
+            {
+                isOutputGroupEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 収支日報出力ボタンのEnabled
+        /// </summary>
+        public bool IsBalanceFinalAccountOutputEnabled
+        {
+            get => isBalanceFinalAccountOutputEnabled;
+            set
+            {
+                isBalanceFinalAccountOutputEnabled = value;
+                CallPropertyChanged();
+            }
+        }
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
@@ -907,6 +936,7 @@ namespace WPF.ViewModels
                 else amount -= receiptsAndExpenditure.Price;
             }
             BalanceFinalAccount = $"出納リストの収支決算 : {TextHelper.AmountWithUnit(amount)}";
+            IsBalanceFinalAccountOutputEnabled = Cashbox.GetTotalAmount() == amount;
         }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します

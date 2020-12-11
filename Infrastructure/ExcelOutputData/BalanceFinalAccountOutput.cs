@@ -9,16 +9,51 @@ namespace Infrastructure.ExcelOutputData
 {
     internal class BalanceFinalAccountOutput : OutputData
     {
+        /// <summary>
+        /// 前日決算額
+        /// </summary>
         private readonly string PreviousDayFinalAccountWithUnit;
+        /// <summary>
+        /// 入金額
+        /// </summary>
         private readonly string PaymentWithUnit;
+        /// <summary>
+        /// 出金額
+        /// </summary>
         private readonly string WithdrawalWithUnit;
+        /// <summary>
+        /// 社内振替額
+        /// </summary>
         private readonly string TranceferAmountWithUnit;
+        /// <summary>
+        /// 当日決算額
+        /// </summary>
         private readonly string TodayFinalAccountWithUnit;
+        /// <summary>
+        /// 横浜銀行残高
+        /// </summary>
         private readonly string YokohamaBankAmountWithUnit;
+        /// <summary>
+        /// セレサ川崎残高
+        /// </summary>
         private readonly string CeresaAmountWithUnit;
+        /// <summary>
+        /// ワイズコア仮受金
+        /// </summary>
         private readonly string WizeCoreAmountWithUnit;
-
-        public BalanceFinalAccountOutput(string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, string tranceferAmountWithUnit, string todayFinalAccountWithUnit, string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, string wizeCoreAmountWithUnit)
+        /// <param name="previousDayFinalAccountWithUnit">前日決算額</param>
+        /// <param name="paymentWithUnit">入金額</param>
+        /// <param name="withdrawalWithUnit">出金額param>
+        /// <param name="tranceferAmountWithUnit">社内振替額</param>
+        /// <param name="todayFinalAccountWithUnit">当日決算額</param>
+        /// <param name="yokohamaBankAmountWithUnit">横浜銀行残高</param>
+        /// <param name="ceresaAmountWithUnit">セレサ川崎残高</param>
+        /// <param name="wizeCoreAmountWithUnit">ワイズコア仮受金</param>
+        public BalanceFinalAccountOutput
+            (
+                string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
+                string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, string wizeCoreAmountWithUnit
+            )
         {
             PreviousDayFinalAccountWithUnit = previousDayFinalAccountWithUnit;
             PaymentWithUnit = paymentWithUnit;
@@ -37,12 +72,12 @@ namespace Infrastructure.ExcelOutputData
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
-            myWorksheet.Range(myWorksheet.Cell(9, 1), myWorksheet.Cell(10, 5)).Style
+            MySheetCellRange(9,1,10,5).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
-            myWorksheet.Range(myWorksheet.Cell(12, 2), myWorksheet.Cell(14, 3)).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+            MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
         }
 
         protected override void SetCellsAlignment()
@@ -110,6 +145,7 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetRowSizes() => new double[] { 51, 18, 64.5, 57, 18, 42, 126, 18.75, 20.25, 42, 27.75, 21, 21, 21, 40.5, 20.25 };
+
         protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
 
         protected override void SetSheetFontStyle()
