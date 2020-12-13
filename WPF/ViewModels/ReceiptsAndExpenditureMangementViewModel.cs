@@ -18,6 +18,15 @@ namespace WPF.ViewModels
     public class ReceiptsAndExpenditureMangementViewModel : DataOperationViewModel
     {
         #region Properties
+        #region int
+        private int peymentSum;
+        private int withdrawalSum;
+        private int transferSum;
+        #endregion
+        #region string
+        private string peymentSumDisplayValue;
+        private string withdrawalSumDisplayValue;
+        private string transferSumDisplayValue;
         private string comboAccountingSubjectText;
         private string comboAccountingSubjectCode;
         private string detailText;
@@ -31,14 +40,14 @@ namespace WPF.ViewModels
         private string balanceFinalAccount;
         private string previousDayFinalAccount;
         private string listTitle;
-        private string peymentSum;
-        private string withdrawalSum;
-        private string transferSum;
         private string todaysFinalAccount;
         private string balanceFinalAccountOutputButtonContent;
         private string yokohamaBankAmount;
         private string ceresaAmount;
         private string wizeCoreAmount;
+        private string receiptsAndExpenditureOutputButtonContent;
+        #endregion
+        #region bool
         private bool isValidity;
         private bool isPaymentCheck;
         private bool isDepositAndWithdrawalContetntEnabled;
@@ -55,18 +64,24 @@ namespace WPF.ViewModels
         private bool isDataOperationButtonEnabled;
         private bool isOutputGroupEnabled;
         private bool isBalanceFinalAccountOutputEnabled;
+        private bool isReceiptsAndExpenditureOutputButtonEnabled;
+        #endregion
+        #region DateTime
         private DateTime accountActivityDate;
         private DateTime searchStartDate;
         private DateTime searchEndDate;
         private DateTime registrationDate;
-        private readonly Cashbox Cashbox = Cashbox.GetInstance();
-        private Rep registrationRep;
+        #endregion
+        #region ObservableCollection
         private ObservableCollection<AccountingSubject> comboAccountingSubjects;
         private ObservableCollection<AccountingSubject> comboAccountingSubjectCodes;
         private ObservableCollection<Content> comboContents;
         private ObservableCollection<CreditAccount> comboCreditAccounts;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
+        #endregion
         private SolidColorBrush detailBackGroundColor;
+        private readonly Cashbox Cashbox = Cashbox.GetInstance();
+        private Rep registrationRep;
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
         private AccountingSubject selectedAccountingSubjectCode;
@@ -92,6 +107,7 @@ namespace WPF.ViewModels
             ListTitle = $"一覧 : 前日決算 {PreviousDayFinalAccount}";
             IsOutputGroupEnabled = true;
             BalanceFinalAccountOutputButtonContent = "収支日報";
+            ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
@@ -104,7 +120,8 @@ namespace WPF.ViewModels
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
-            await Task.Run(() => DataOutput.BalanceFinalAccount(PreviousDayFinalAccount, PeymentSum, WithdrawalSum, TransferSum, TodaysFinalAccount, YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
+            await Task.Run(() => DataOutput.BalanceFinalAccount(PreviousDayFinalAccount, PeymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue, TodaysFinalAccount,
+                YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
         }
@@ -155,13 +172,7 @@ namespace WPF.ViewModels
         /// 本日の決算額を返します
         /// </summary>
         /// <returns></returns>
-        private string ReturnTodaysFinalAccount()
-        {
-            int ws = TextHelper.IntAmount(WithdrawalSum);
-            int ts = TextHelper.IntAmount(TransferSum);
-            int ps = TextHelper.IntAmount(PeymentSum);
-            return TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - ws - ts + ps);
-        }
+        private string ReturnTodaysFinalAccount() => TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - withdrawalSum - TransferSum + PeymentSum);
         /// <summary>
         /// データ操作コマンド
         /// </summary>
@@ -194,8 +205,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetWithdrawalSumAndTransferSum()
         {
-            WithdrawalSum = TextHelper.CommaDelimitedAmount(0);
-            TransferSum = TextHelper.CommaDelimitedAmount(0);
+            WithdrawalSum = 0;
+            TransferSum = 0;
             foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
@@ -207,17 +218,10 @@ namespace WPF.ViewModels
         /// <param name="receiptsAndExpenditure"></param>
         private void WithdrawalAllocation(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
-            int i;
             if (receiptsAndExpenditure.Content.Text == "入金")
-            {
-                i = TextHelper.IntAmount(TransferSum);
-                TransferSum = TextHelper.CommaDelimitedAmount(i + receiptsAndExpenditure.Price);
-            }
+                TransferSum += receiptsAndExpenditure.Price;
             else
-            {
-                i = TextHelper.IntAmount(WithdrawalSum);
-                WithdrawalSum = TextHelper.CommaDelimitedAmount(i + receiptsAndExpenditure.Price);
-            }
+                WithdrawalSum += receiptsAndExpenditure.Price;
         }
         /// <summary>
         /// 入金合計を算出します
@@ -229,7 +233,7 @@ namespace WPF.ViewModels
             {
                 if (rae.IsPayment) i += rae.Price;
             }
-            PeymentSum = TextHelper.CommaDelimitedAmount(i);
+            PeymentSum =i;
         }
         /// <summary>
         /// 金庫の総計金額
@@ -806,36 +810,39 @@ namespace WPF.ViewModels
         /// <summary>
         /// 入金合計
         /// </summary>
-        public string PeymentSum
+        public int PeymentSum
         {
             get => peymentSum;
             set
             {
                 peymentSum = value;
+                PeymentSumDisplayValue = TextHelper.AmountWithUnit(value);
                 CallPropertyChanged();
             }
         }
         /// <summary>
         /// 出金合計
         /// </summary>
-        public string WithdrawalSum
+        public int  WithdrawalSum
         {
             get => withdrawalSum;
             set
             {
                 withdrawalSum = value;
+                WithdrawalSumDisplayValue = TextHelper.AmountWithUnit(value);
                 CallPropertyChanged();
             }
         }
         /// <summary>
         /// 振替合計
         /// </summary>
-        public string TransferSum
+        public int TransferSum
         {
             get => transferSum;
             set
             {
                 transferSum = value;
+                TransferSumDisplayValue = TextHelper.AmountWithUnit(value);
                 CallPropertyChanged();
             }
         }
@@ -923,6 +930,67 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 表示用入金額
+        /// </summary>
+        public string PeymentSumDisplayValue
+        {
+            get => peymentSumDisplayValue;
+            set
+            {
+                peymentSumDisplayValue = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 表示用出金額
+        /// </summary>
+        public string WithdrawalSumDisplayValue
+        {
+            get => withdrawalSumDisplayValue;
+            set
+            {
+                withdrawalSumDisplayValue = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 表示用振替額
+        /// </summary>
+        public string TransferSumDisplayValue
+        {
+            get => transferSumDisplayValue;
+            set
+            {
+                transferSumDisplayValue = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納データ出力ボタンのContent
+        /// </summary>
+        public string ReceiptsAndExpenditureOutputButtonContent
+        {
+            get => receiptsAndExpenditureOutputButtonContent;
+            set
+            {
+                receiptsAndExpenditureOutputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出納データ出力ボタンのEnabled
+        /// </summary>
+        public bool IsReceiptsAndExpenditureOutputButtonEnabled
+        {
+            get => isReceiptsAndExpenditureOutputButtonEnabled;
+            set
+            {
+                isReceiptsAndExpenditureOutputButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>

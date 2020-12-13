@@ -268,7 +268,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
-                <GroupBox Header="諸情報" Grid.Row="2" Margin="5,3">
+                <GroupBox Header="決算" Grid.Row="2" Margin="5,3">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -301,9 +301,9 @@
                 <TextBlock Grid.Column="3" Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                 <TextBlock Grid.Column="4" Grid.Row="0" Text="残高" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding PreviousDayFinalAccount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding PeymentSum}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding WithdrawalSum}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding TransferSum}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding PeymentSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding WithdrawalSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding TransferSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="4" Grid.Row="1" Text="{Binding TodaysFinalAccount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="0" Grid.Row="2" Text="横浜銀行残高" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                 <TextBlock Grid.Column="1" Grid.Row="2" Text="セレサ川崎残高" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
@@ -343,7 +343,8 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="BalanceFinalAccountOutputButton" Grid.Column="5" Content="{Binding BalanceFinalAccountOutputButtonContent}" IsEnabled="{Binding IsBalanceFinalAccountOutputEnabled}" Margin="5">
+                <Button x:Name="ReceiptsAndExpenditureOutputButton" Grid.Column="3" Content="{Binding ReceiptsAndExpenditureOutputButtonContent}" IsEnabled="{Binding IsReceiptsAndExpenditureOutputButtonEnabled}" Margin="5"/>
+                <Button x:Name="BalanceFinalAccountOutputButton" Grid.Column="4" Content="{Binding BalanceFinalAccountOutputButtonContent}" IsEnabled="{Binding IsBalanceFinalAccountOutputEnabled}" Margin="5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding BalanceFinalAccountOutputCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding BalanceFinalAccountOutputCommand}" MouseAction="LeftClick"/>

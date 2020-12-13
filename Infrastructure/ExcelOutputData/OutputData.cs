@@ -41,7 +41,6 @@ namespace Infrastructure.ExcelOutputData
         {
             Logger = logger;
         }
-
         public OutputData() : this(new LogFileInfrastructure()) { }
 
         /// <summary>
@@ -156,11 +155,12 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
             myWorksheet.Style.Font.FontName = SetSheetFontName();
             SetSheetFontStyle();
-            myWorksheet.PageSetup.PaperSize = SheetPaperSize();
-            myWorksheet.PageSetup.Margins.Top = SetMaeginsTop();
-            myWorksheet.PageSetup.Margins.Left = SetMaeginsLeft();
-            myWorksheet.PageSetup.Margins.Right = SetMaeginsRight();
-            myWorksheet.PageSetup.Margins.Bottom = SetMaeginsBottom();
+            myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
+            myWorksheet.PageSetup.Margins
+                .SetLeft(SetMaeginsLeft())
+                .SetTop(SetMaeginsTop())
+                .SetRight(SetMaeginsRight())
+                .SetBottom(SetMaeginsBottom());
             SetMerge();
             double[] RowSizes = SetRowSizes();
             double[] ColumnSizes = SetColumnSizes();
