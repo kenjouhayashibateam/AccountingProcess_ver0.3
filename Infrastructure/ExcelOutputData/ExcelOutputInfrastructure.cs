@@ -1,4 +1,5 @@
-﻿using Domain.Repositories;
+﻿using Domain.Entities;
+using Domain.Repositories;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -13,13 +14,16 @@ namespace Infrastructure.ExcelOutputData
             bfao.DataOutput();
         }
 
-        /// <summary>
-        /// 金庫データを出力します
-        /// </summary>
         public void CashboxData()
         {
             CashBoxOutput cbo = new CashBoxOutput();
             cbo.DataOutput();
+        }
+
+        public void ReceiptsAndExpenditureData(ReceiptsAndExpenditure receiptsAndExpenditure, int index)
+        {
+            ReceiptsAndExpenditureOutput raeo = new ReceiptsAndExpenditureOutput(receiptsAndExpenditure,index);
+            raeo.DataOutput();
         }
     }
 }

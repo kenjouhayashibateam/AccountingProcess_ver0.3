@@ -343,7 +343,12 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="ReceiptsAndExpenditureOutputButton" Grid.Column="3" Content="{Binding ReceiptsAndExpenditureOutputButtonContent}" IsEnabled="{Binding IsReceiptsAndExpenditureOutputButtonEnabled}" Margin="5"/>
+                <Button x:Name="ReceiptsAndExpenditureOutputButton" Grid.Column="3" Content="{Binding ReceiptsAndExpenditureOutputButtonContent}" IsEnabled="{Binding IsReceiptsAndExpenditureOutputButtonEnabled}" Margin="5">
+                    <Button.InputBindings>
+                        <KeyBinding Command="{Binding ReceiptsAndExpenditureOutputCommand}" Key="Space"/>
+                        <MouseBinding Command="{Binding ReceiptsAndExpenditureOutputCommand}" MouseAction="LeftClick"/>
+                    </Button.InputBindings>
+                </Button>
                 <Button x:Name="BalanceFinalAccountOutputButton" Grid.Column="4" Content="{Binding BalanceFinalAccountOutputButtonContent}" IsEnabled="{Binding IsBalanceFinalAccountOutputEnabled}" Margin="5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding BalanceFinalAccountOutputCommand}" Key="Space"/>

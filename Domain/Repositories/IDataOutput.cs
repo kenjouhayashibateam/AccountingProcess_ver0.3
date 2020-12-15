@@ -1,4 +1,6 @@
-﻿namespace Domain.Repositories
+﻿using Domain.Entities;
+
+namespace Domain.Repositories
 {
     /// <summary>
     /// データ出力
@@ -21,5 +23,11 @@
         /// <param name="ceresaAmountWithUnit">セレサ川崎残高</param>
         /// <param name="wizeCoreAmountWithUnit">ワイズコア仮受金</param>
         void BalanceFinalAccount(string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, string tranceferAmountWithUnit, string todayFinalAccountWithUnit, string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, string wizeCoreAmountWithUnit);
+        /// <summary>
+        /// 出納データを出力します
+        /// </summary>
+        /// <param name="receiptsAndExpenditure">出力する出納データ</param>
+        /// <param name="index">データのインデックス</param>
+        void ReceiptsAndExpenditureData(ReceiptsAndExpenditure receiptsAndExpenditure,int index);
     }
 }

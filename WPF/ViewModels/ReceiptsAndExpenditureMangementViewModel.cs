@@ -93,29 +93,56 @@ namespace WPF.ViewModels
         public ReceiptsAndExpenditureMangementViewModel(IDataOutput dataOutput)
         {
             DataOutput = dataOutput;
-            IsPaymentCheck = true;
-            CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
+            SetProperty();
+            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
+            ReceiptsAndExpenditureOutputCommand = new DelegateCommand(() => ReceiptsAndExpenditureOutput(), () => true);
+        }
+        public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// Viewにプロパティをセットします
+        /// </summary>
+        private void SetProperty()
+        {
             AccountActivityDate = DateTime.Today;
             SearchStartDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
+            IsPaymentCheck = true;
+            TodaysFinalAccount = ReturnTodaysFinalAccount();
+            ListTitle = $"一覧 : 前日決算 {PreviousDayFinalAccount}";
+            IsOutputGroupEnabled = true;
+            BalanceFinalAccountOutputButtonContent = "収支日報";
+            ReceiptsAndExpenditureOutputButtonContent = "出納帳";
+            CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             PreviousDayFinalAccount = TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement() + DataBaseConnect.PreviousDayIncome());
             RegistrationRep = LoginRep.Rep;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
-            TodaysFinalAccount =ReturnTodaysFinalAccount();
-            ListTitle = $"一覧 : 前日決算 {PreviousDayFinalAccount}";
-            IsOutputGroupEnabled = true;
-            BalanceFinalAccountOutputButtonContent = "収支日報";
-            ReceiptsAndExpenditureOutputButtonContent = "出納帳";
-            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
         }
-        public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 出納データ出力コマンド
+        /// </summary>
+        public DelegateCommand ReceiptsAndExpenditureOutputCommand { get; }
+        private async void ReceiptsAndExpenditureOutput()
+        {
+            ReceiptsAndExpenditureOutputButtonContent = "出力中";
+            IsOutputGroupEnabled = false;
+            int i = 0;
+            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+            {
+                await Task.Run(() => DataOutput.ReceiptsAndExpenditureData(rae,i));
+                i++;
+            }
+            ReceiptsAndExpenditureOutputButtonContent = "出納データ";
+            IsOutputGroupEnabled = true;
+        }
         /// <summary>
         /// 収支日報出力コマンド
         /// </summary>
         public DelegateCommand BalanceFinalAccountOutputCommand { get; }
-
+        /// <summary>
+        /// 収支日報を出力します
+        /// </summary>
         private async void BalanceFinalAccountOutput()
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
@@ -1005,6 +1032,7 @@ namespace WPF.ViewModels
             }
             BalanceFinalAccount = $"出納リストの収支決算 : {TextHelper.AmountWithUnit(amount)}";
             IsBalanceFinalAccountOutputEnabled = Cashbox.GetTotalAmount() == amount;
+            IsReceiptsAndExpenditureOutputButtonEnabled = Cashbox.GetTotalAmount() == amount;
         }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
