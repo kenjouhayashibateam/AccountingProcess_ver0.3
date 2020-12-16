@@ -2,6 +2,7 @@
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
+using System;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
@@ -290,9 +291,9 @@ namespace WPF.ViewModels
             KanriJimushoChecked = true;
             ProcessFeatureEnabled = true;
             IsDepositMenuEnabled = false;
-            AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayIncome();
+            AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayIncome(DateTime.Today);
             DepositAmountInfo = "前日決算金額";
-            DepositAmount = (DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement() + DataBaseConnect.PreviousDayIncome()).ToString();
+            DepositAmount = (DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement(DateTime.Today) + DataBaseConnect.PreviousDayIncome(DateTime.Today)).ToString();
 
         }
         /// <summary>

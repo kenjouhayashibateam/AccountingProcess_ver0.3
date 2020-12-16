@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.ExcelOutputData
 {
-    internal class BalanceFinalAccountOutput : OutputData
+    /// <summary>
+    /// 収支日報出力
+    /// </summary>
+    internal class BalanceFinalAccountOutput : OutputSingleSheetData
     {
         /// <summary>
         /// 前日決算額
@@ -80,7 +83,7 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
         }
 
-        protected override void SetCellsAlignment()
+        protected override void SetCellsStyle()
         {
             myWorksheet.Cell(2, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             myWorksheet.Cell(3, 1).Style

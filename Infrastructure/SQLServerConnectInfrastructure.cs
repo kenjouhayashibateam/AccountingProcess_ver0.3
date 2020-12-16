@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -270,7 +271,7 @@ namespace Infrastructure
             throw new System.NotImplementedException();
         }
 
-        public int PreviousDayIncome()
+        public int PreviousDayIncome(DateTime previousDay)
         {
             throw new System.NotImplementedException();
         }
@@ -285,7 +286,7 @@ namespace Infrastructure
             throw new System.NotImplementedException();
         }
 
-        public int PreviousDayDisbursement()
+        public int PreviousDayDisbursement(DateTime previousDay)
         {
             throw new System.NotImplementedException();
         }

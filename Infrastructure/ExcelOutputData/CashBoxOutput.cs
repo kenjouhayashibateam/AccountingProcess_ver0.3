@@ -8,7 +8,7 @@ namespace Infrastructure.ExcelOutputData
     /// <summary>
     /// 金庫金額をエクセルに出力するクラス
     /// </summary>
-    internal class CashBoxOutput : OutputData
+    internal class CashBoxOutput : OutputSingleSheetData
     {
         protected override void SetBorderStyle()
         {
@@ -38,7 +38,7 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(15, 4, 9, 4).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
         }
 
-        protected override void SetCellsAlignment()
+        protected override void SetCellsStyle()
         {
             myWorksheet.Cell(1, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)

@@ -1,11 +1,14 @@
-﻿using System;
+﻿using ClosedXML.Excel;
 using Domain.Repositories;
-using ClosedXML.Excel;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.VisualBasic;
+using System;
 
 namespace Infrastructure.ExcelOutputData
 {
+    /// <summary>
+    /// データ出力クラス
+    /// </summary>
     internal abstract class OutputData
     {
         /// <summary>
@@ -31,8 +34,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// エクセルファイルを保存しているフォルダのFullPath
         /// </summary>
-        private readonly string openPath = System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
-
+        protected readonly string openPath = System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
         /// <summary>
         /// コンストラクタ　ログ保存のインフラストラクチャを設定します
         /// </summary>
@@ -40,6 +42,9 @@ namespace Infrastructure.ExcelOutputData
         public OutputData(ILogger logger)
         {
             Logger = logger;
+            ExcelClose();
+            myWorkbook = new XLWorkbook();
+            myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
         }
         public OutputData() : this(new LogFileInfrastructure()) { }
 
@@ -54,7 +59,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// データ出力エクセルファイルを開きます
         /// </summary>
-        private void ExcelOpen()
+        protected void ExcelOpen()
         {
             myWorkbooks.Open(Filename: openPath, ReadOnly: true);
             App.Visible = true;
@@ -76,7 +81,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// データ出力エクセルファイルを閉じます
         /// </summary>
-        private void ExcelClose()
+        protected void ExcelClose()
         {
             CallExcelApplication();
 
@@ -138,48 +143,9 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected abstract void SetBorderStyle();
         /// <summary>
-        /// セルのAlignmentを設定します
+        /// セルのStyleを設定します
         /// </summary>
-        protected abstract void SetCellsAlignment();
-        /// <summary>
-        /// シートにデータの文字列を書き込みます
-        /// </summary>
-        protected abstract void SetDataStrings();
-        /// <summary>
-        /// エクセルにデータを出力します
-        /// </summary>
-        public void DataOutput()
-        {
-            ExcelClose();
-            myWorkbook = new XLWorkbook();
-            myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
-            myWorksheet.Style.Font.FontName = SetSheetFontName();
-            SetSheetFontStyle();
-            myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
-            myWorksheet.PageSetup.Margins
-                .SetLeft(SetMaeginsLeft())
-                .SetTop(SetMaeginsTop())
-                .SetRight(SetMaeginsRight())
-                .SetBottom(SetMaeginsBottom());
-            SetMerge();
-            double[] RowSizes = SetRowSizes();
-            double[] ColumnSizes = SetColumnSizes();
-
-            for (int i = 0; i < RowSizes.Length; i++)
-            {
-                myWorksheet.Rows((i + 1).ToString()).Height = RowSizes[i];
-            }
-
-            for (int i = 0; i < ColumnSizes.Length; i++)
-            {
-                myWorksheet.Columns((i + 1).ToString()).Width = ColumnSizes[i];
-            }
-            SetBorderStyle();
-            SetCellsAlignment();
-            SetDataStrings();
-            myWorkbook.SaveAs(openPath);
-            ExcelOpen();
-        }
+        protected abstract void SetCellsStyle();
         /// <summary>
         /// メートル法の数字をインチ法で返します
         /// </summary>

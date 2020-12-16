@@ -22,6 +22,7 @@ namespace WPF.ViewModels
         private int peymentSum;
         private int withdrawalSum;
         private int transferSum;
+        private int previousDayFinalAccount;
         #endregion
         #region string
         private string peymentSumDisplayValue;
@@ -38,7 +39,6 @@ namespace WPF.ViewModels
         private string comboCreditAccountText;
         private string dataOperationButtonContent;
         private string balanceFinalAccount;
-        private string previousDayFinalAccount;
         private string listTitle;
         private string todaysFinalAccount;
         private string balanceFinalAccountOutputButtonContent;
@@ -108,12 +108,15 @@ namespace WPF.ViewModels
             RegistrationDate = DateTime.Today;
             IsPaymentCheck = true;
             TodaysFinalAccount = ReturnTodaysFinalAccount();
-            ListTitle = $"一覧 : 前日決算 {PreviousDayFinalAccount}";
             IsOutputGroupEnabled = true;
             BalanceFinalAccountOutputButtonContent = "収支日報";
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
-            PreviousDayFinalAccount = TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement() + DataBaseConnect.PreviousDayIncome());
+            DateTime PreviousDay;
+            if (IsPeriodSearch) PreviousDay = SearchEndDate;
+            else PreviousDay = SearchStartDate;
+            PreviousDayFinalAccount = DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement(PreviousDay) + DataBaseConnect.PreviousDayIncome(PreviousDay);
+            ListTitle = $"一覧 : 前日決算 {TextHelper.AmountWithUnit( PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
             SetPeymentSum();
@@ -127,12 +130,7 @@ namespace WPF.ViewModels
         {
             ReceiptsAndExpenditureOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
-            int i = 0;
-            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
-            {
-                await Task.Run(() => DataOutput.ReceiptsAndExpenditureData(rae,i));
-                i++;
-            }
+            await Task.Run(() => DataOutput.ReceiptsAndExpenditureData(ReceiptsAndExpenditures, PreviousDayFinalAccount));
             ReceiptsAndExpenditureOutputButtonContent = "出納データ";
             IsOutputGroupEnabled = true;
         }
@@ -147,7 +145,7 @@ namespace WPF.ViewModels
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
-            await Task.Run(() => DataOutput.BalanceFinalAccount(PreviousDayFinalAccount, PeymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue, TodaysFinalAccount,
+            await Task.Run(() => DataOutput.BalanceFinalAccount(TextHelper.AmountWithUnit(PreviousDayFinalAccount), PeymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue, TodaysFinalAccount,
                 YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
@@ -631,6 +629,7 @@ namespace WPF.ViewModels
             {
                 if (SearchEndDate < value) SearchEndDate = value;
                 searchStartDate = value;
+                
                 CallPropertyChanged();
             }
         }
@@ -813,7 +812,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 前日決算
         /// </summary>
-        public string PreviousDayFinalAccount
+        public int PreviousDayFinalAccount
         {
             get => previousDayFinalAccount;
             set

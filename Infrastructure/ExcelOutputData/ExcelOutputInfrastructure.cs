@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
+using System.Collections.ObjectModel;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -20,9 +21,9 @@ namespace Infrastructure.ExcelOutputData
             cbo.DataOutput();
         }
 
-        public void ReceiptsAndExpenditureData(ReceiptsAndExpenditure receiptsAndExpenditure, int index)
+        public void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, int previousDayBalance)
         {
-            ReceiptsAndExpenditureOutput raeo = new ReceiptsAndExpenditureOutput(receiptsAndExpenditure,index);
+            ReceiptsAndExpenditureOutput raeo = new ReceiptsAndExpenditureOutput(receiptsAndExpenditures, previousDayBalance);
             raeo.DataOutput();
         }
     }

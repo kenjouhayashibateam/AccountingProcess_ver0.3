@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
 {
@@ -26,8 +27,8 @@ namespace Domain.Repositories
         /// <summary>
         /// 出納データを出力します
         /// </summary>
-        /// <param name="receiptsAndExpenditure">出力する出納データ</param>
-        /// <param name="index">データのインデックス</param>
-        void ReceiptsAndExpenditureData(ReceiptsAndExpenditure receiptsAndExpenditure,int index);
+        /// <param name="receiptsAndExpenditures">出力する出納データ</param>
+        /// <param name="previousDayBalance">出力する出納データの前日残高</param>
+        void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance);
     }
 }

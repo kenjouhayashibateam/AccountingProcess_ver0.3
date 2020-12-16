@@ -67,6 +67,7 @@
     <Compile Include="ExcelOutputData\BalanceFinalAccountOutput.cs" />
     <Compile Include="ExcelOutputData\CashBoxOutput.cs" />
     <Compile Include="ExcelOutputData\OutputData.cs" />
+    <Compile Include="ExcelOutputData\OutputSingleSheetData.cs" />
     <Compile Include="ExcelOutputData\ExcelOutputInfrastructure.cs" />
     <Compile Include="ExcelOutputData\OutputList.cs" />
     <Compile Include="ExcelOutputData\ReceiptsAndExpenditureOutput.cs" />

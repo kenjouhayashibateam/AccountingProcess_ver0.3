@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
@@ -106,15 +107,15 @@ namespace Domain.Repositories
         /// <returns>勘定科目リスト</returns>
         public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText);
         /// <summary>
-        /// 前日の収入金額を返します
+        /// 引数前日までの収入金額を返します
         /// </summary>
         /// <returns>前日収入金額</returns>
-        public int PreviousDayIncome();
+        public int PreviousDayIncome(DateTime previousDay);
         /// <summary>
-        /// 前日の支出金額を返します
+        /// 引数前日までの支出金額を返します
         /// </summary>
         /// <returns>前日支出金額</returns>
-        public int PreviousDayDisbursement();
+        public int PreviousDayDisbursement(DateTime previousDay);
         /// <summary>
         /// 月ごとの決算を返します
         /// </summary>

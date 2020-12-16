@@ -18,12 +18,12 @@ namespace Infrastructure
             return 2815597;
         }
 
-        public int PreviousDayDisbursement()
+        public int PreviousDayDisbursement(DateTime previousDay)
         {
             return 0;
         }
 
-        public int PreviousDayIncome()
+        public int PreviousDayIncome(DateTime previousDay)
         {
             return 0;
         }
@@ -130,10 +130,10 @@ namespace Infrastructure
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
                     repHayashiba,DateTime.Today),
-                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
+                    new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,DateTime.Today.AddDays(1),
+                    repHayashiba,DateTime.Today.AddDays(2)),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
                     new Content("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,DateTime.Today,
                     repHayashiba,DateTime.Today),
                  new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,

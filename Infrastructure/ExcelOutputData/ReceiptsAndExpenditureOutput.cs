@@ -1,15 +1,17 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
+using Domain.Entities.Helpers;
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Infrastructure.ExcelOutputData
 {
+    /// <summary>
+    /// 出納データ出力
+    /// </summary>
     internal class ReceiptsAndExpenditureOutput : OutputData
     {
-        /// <summary>
-        /// 出納データ
-        /// </summary>
-        private readonly ReceiptsAndExpenditure ReceiptsAndExpenditureData;
         /// <summary>
         /// 出納データのインデックス
         /// </summary>
@@ -17,32 +19,87 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// エクセルに出力する出納データの入出金日
         /// </summary>
-        private DateTime CurrentDate;
+        private DateTime CurrentDate; 
+        /// <summary>
+        /// 出納データリスト
+        /// </summary>
+        private readonly ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
+        /// <summary>
+        /// 前日残高
+        /// </summary>
+        private int PreviousDayBalance;
 
-        public ReceiptsAndExpenditureOutput(ReceiptsAndExpenditure receiptsAndExpenditure, int itemIndex)
+        public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance) : base()
         {
-            ReceiptsAndExpenditureData = receiptsAndExpenditure;
-            ItemIndex = itemIndex;
-            if(ItemIndex==0)
-            {
-                MySheetCellRange(1, 1, 1, 8).Style
-                    .Border.SetLeftBorder(XLBorderStyleValues.Thin)
-                    .Border.SetTopBorder(XLBorderStyleValues.Thin)
-                    .Border.SetRightBorder(XLBorderStyleValues.Thin)
-                    .Border.SetBottomBorder(XLBorderStyleValues.Thin);
+            ReceiptsAndExpenditures = receiptsAndExpenditures;
+            PreviousDayBalance = previousDayBalance;
+            ItemIndex = 0;
+            MySheetCellRange(1, 1, 1, 8).Style
+                .Border.SetLeftBorder(XLBorderStyleValues.Thin)
+                .Border.SetTopBorder(XLBorderStyleValues.Thin)
+                .Border.SetRightBorder(XLBorderStyleValues.Thin)
+                .Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
-                myWorksheet.Cell(1, 1).Value = "日付";
-                myWorksheet.Cell(1, 2).Value = "コード";
-                myWorksheet.Cell(1, 3).Value = "勘定科目";
-                myWorksheet.Cell(1, 4).Value = "内容";
-                myWorksheet.Cell(1, 5).Value = "詳細";
-                myWorksheet.Cell(1, 6).Value = "入金";
-                myWorksheet.Cell(1, 7).Value = "出金";
-                myWorksheet.Cell(1, 8).Value = "合計";
-                ItemIndex++;
-            }
+            myWorksheet.Cell(1, 1).Value = "日付";
+            myWorksheet.Cell(1, 2).Value = "コード";
+            myWorksheet.Cell(1, 3).Value = "勘定科目";
+            myWorksheet.Cell(1, 4).Value = "内容";
+            myWorksheet.Cell(1, 5).Value = "詳細";
+            myWorksheet.Cell(1, 6).Value = "入金";
+            myWorksheet.Cell(1, 7).Value = "出金";
+            myWorksheet.Cell(1, 8).Value = "合計";
+            ItemIndex++;
+        
         }
-
+        public void DataOutput()
+        {
+            int payment = 0;
+            int withdrawal = 0;
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r=>r.AccountActivityDate).ThenBy(r=>r.Content.AccountingSubject.SubjectCode ))
+            {
+                if (CurrentDate != rae.AccountActivityDate)
+                {
+                    myWorksheet.Cell(ItemIndex + 1, 3).Value = "収支";
+                    myWorksheet.Cell(ItemIndex + 1, 6).Value = payment;
+                    myWorksheet.Cell(ItemIndex + 1, 7).Value = withdrawal;
+                    myWorksheet.Cell(ItemIndex + 1, 8).Value = PreviousDayBalance;
+                    PreviousDayBalance = PreviousDayBalance + payment - withdrawal;
+                    payment = 0;
+                    withdrawal = 0;
+                    SetStyleAndNextIndex();
+                    CurrentDate = rae.AccountActivityDate;
+                    myWorksheet.Cell(ItemIndex + 1, 1).Value = rae.AccountActivityDate;
+                    SetStyleAndNextIndex();
+                }
+                myWorksheet.Cell(ItemIndex + 1, 2).Value = rae.Content.AccountingSubject.SubjectCode;
+                myWorksheet.Cell(ItemIndex + 1, 3).Value = rae.Content.AccountingSubject.Subject;
+                myWorksheet.Cell(ItemIndex + 1, 4).Value = rae.Content.Text;
+                myWorksheet.Cell(ItemIndex + 1, 5).Value = rae.Detail;
+                if (rae.IsPayment)
+                {
+                    myWorksheet.Cell(ItemIndex + 1, 6).Value =rae.Price;
+                    payment += rae.Price;
+                }
+                else
+                {
+                    myWorksheet.Cell(ItemIndex + 1, 7).Value = rae.Price;
+                    withdrawal += rae.Price;
+                }
+                SetStyleAndNextIndex();
+            }
+            myWorksheet.Cell(ItemIndex + 1, 3).Value = "収支";
+            myWorksheet.Cell(ItemIndex + 1, 6).Value = payment;
+            myWorksheet.Cell(ItemIndex + 1, 7).Value = withdrawal;
+            SetStyleAndNextIndex();
+            myWorkbook.SaveAs(openPath);
+            ExcelOpen();
+        }
+        private void SetStyleAndNextIndex()
+        {
+            SetBorderStyle();
+            SetCellsStyle();
+            ItemIndex++;
+        }
         protected override void SetBorderStyle()
         {
             MySheetCellRange(ItemIndex + 1, 1, ItemIndex + 1, 8).Style
@@ -52,7 +109,7 @@ namespace Infrastructure.ExcelOutputData
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
         }
 
-        protected override void SetCellsAlignment()
+        protected override void SetCellsStyle()
         {
             myWorksheet.Cell(ItemIndex + 1, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
@@ -65,26 +122,11 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             MySheetCellRange(ItemIndex + 1, 6, ItemIndex + 1, 8).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
-                .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
+                .NumberFormat.SetFormat("#,##0");
         }
 
         protected override double[] SetColumnSizes() => new double[] { 1, 1, 1, 1, 1, 1, 1, 1 };
-
-        protected override void SetDataStrings()
-        {
-            if (CurrentDate != ReceiptsAndExpenditureData.AccountActivityDate)
-            {
-                CurrentDate = ReceiptsAndExpenditureData.AccountActivityDate;
-                myWorksheet.Cell(ItemIndex + 1, 1).Value = ReceiptsAndExpenditureData.AccountActivityDate;
-                ItemIndex++;
-            }
-            myWorksheet.Cell(ItemIndex + 1, 2).Value = ReceiptsAndExpenditureData.Content.AccountingSubject.SubjectCode;
-            myWorksheet.Cell(ItemIndex + 1, 3).Value = ReceiptsAndExpenditureData.Content.AccountingSubject.Subject;
-            myWorksheet.Cell(ItemIndex + 1, 4).Value = ReceiptsAndExpenditureData.Content.Text;
-            myWorksheet.Cell(ItemIndex + 1, 5).Value = ReceiptsAndExpenditureData.Detail;
-            if (ReceiptsAndExpenditureData.IsPayment) myWorksheet.Cell(ItemIndex + 1, 6).Value = ReceiptsAndExpenditureData.Price;
-            else myWorksheet.Cell(ItemIndex + 1, 7).Value = ReceiptsAndExpenditureData.Price;
-        }
 
         protected override double SetMaeginsBottom() => ToInch(1.9);
 

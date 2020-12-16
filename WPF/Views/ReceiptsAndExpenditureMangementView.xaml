@@ -7,7 +7,7 @@
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="900" Width="900" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="900" Width="1000" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
@@ -223,6 +223,13 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="入出金" Width="3*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding AccountActivityDate,StringFormat=M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="経理場所" Width="4*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -230,7 +237,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="科目コード" Width="4*">
+                            <DataGridTemplateColumn Header="コード" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -258,7 +265,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="金額" Width="5*">
+                            <DataGridTemplateColumn Header="金額" Width="4*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
