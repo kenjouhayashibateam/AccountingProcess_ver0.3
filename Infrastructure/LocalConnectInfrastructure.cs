@@ -8,25 +8,13 @@ namespace Infrastructure
 {
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
-        public AccountingSubject CallAccountingSubject(string id)
-        {
-            return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
-        }
+        public AccountingSubject CallAccountingSubject(string id) => new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
 
-        public int FinalAccountPerMonth()
-        {
-            return 2815597;
-        }
+        public int FinalAccountPerMonth() => 2815597;
 
-        public int PreviousDayDisbursement(DateTime previousDay)
-        {
-            return 0;
-        }
+        public int PreviousDayDisbursement(DateTime previousDay) => 0;
 
-        public int PreviousDayIncome(DateTime previousDay)
-        {
-            return 0;
-        }
+        public int PreviousDayIncome(DateTime previousDay) => 0;
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
@@ -152,7 +140,7 @@ namespace Infrastructure
                     new Content("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,DateTime.Today,
                     repHayashiba,DateTime.Today),
                  new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content12",Seresa,-1,"入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),3130000,false,true,DateTime.Today,
+                    new Content("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),3130000,false,true,DateTime.Today,
                     repHayashiba,DateTime.Today)
             };
             return list;
@@ -168,50 +156,23 @@ namespace Infrastructure
 
             return list;
         }
-  
-        public int Registration(Rep rep)
-        {
-            return 1;
-        }
 
-        public int Registration(AccountingSubject accountingSubject)
-        {
-            return 1;
-        }
- 
-        public int Registration(CreditAccount creditAccount)
-        {
-            return 1;
-        }
- 
-        public int Registration(Content content)
-        {
-            return 1;
-        }
+        public int Registration(Rep rep) => 1;
 
-        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure)
-        {
-            return 1;
-        }
+        public int Registration(AccountingSubject accountingSubject) => 1;
 
-        public int Update(Rep rep)
-        {
-            return 1;
-        }
-  
-        public int Update(AccountingSubject accountingSubject)
-        {
-            return 1;
-        }
-  
-        public int Update(CreditAccount creditAccount)
-        {
-            return 1;
-        }
+        public int Registration(CreditAccount creditAccount) => 1;
 
-        public int Update(Content content)
-        {
-            return 1;
-        }
+        public int Registration(Content content) => 1;
+
+        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
+
+        public int Update(Rep rep) => 1;
+
+        public int Update(AccountingSubject accountingSubject) => 1;
+
+        public int Update(CreditAccount creditAccount) => 1;
+
+        public int Update(Content content) => 1;
     }
 }

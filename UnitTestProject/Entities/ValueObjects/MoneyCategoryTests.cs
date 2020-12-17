@@ -17,10 +17,7 @@ namespace Domain.Entities.ValueObjects.Tests
         [TestMethod()]
         public void シナリオ()
         {
-            MoneyCategory money = new MoneyCategory(100)
-            {
-                Count = 10
-            };
+            MoneyCategory money = new MoneyCategory(100) { Count = 10 };
 
             Assert.AreEqual(money.Amount, 1000);
         }

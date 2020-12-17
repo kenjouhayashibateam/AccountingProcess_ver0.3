@@ -22,24 +22,15 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Style.Font.FontName = SetSheetFontName();
             SetSheetFontStyle();
             myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
-            myWorksheet.PageSetup.Margins
-                .SetLeft(SetMaeginsLeft())
-                .SetTop(SetMaeginsTop())
-                .SetRight(SetMaeginsRight())
-                .SetBottom(SetMaeginsBottom());
+            SetMargins();
             SetMerge();
             double[] RowSizes = SetRowSizes();
             double[] ColumnSizes = SetColumnSizes();
 
-            for (int i = 0; i < RowSizes.Length; i++)
-            {
-                myWorksheet.Rows((i + 1).ToString()).Height = RowSizes[i];
-            }
+            for (int i = 0; i < RowSizes.Length; i++) { myWorksheet.Row(i + 1).Height = RowSizes[i]; }
 
-            for (int i = 0; i < ColumnSizes.Length; i++)
-            {
-                myWorksheet.Columns((i + 1).ToString()).Width = ColumnSizes[i];
-            }
+            for (int i = 0; i < ColumnSizes.Length; i++) { myWorksheet.Column(i + 1).Width = ColumnSizes[i]; }
+
             SetBorderStyle();
             SetCellsStyle();
             SetDataStrings();

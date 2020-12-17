@@ -3,10 +3,7 @@ using System.Collections.Generic;
 
 namespace WPF.Views.Datas
 {
-    public interface ILoginRepObserver
-    {
-        public void SetRep(Rep rep);
-    }
+    public interface ILoginRepObserver { public void SetRep(Rep rep); }
 
     public sealed class LoginRep
     {
@@ -16,28 +13,16 @@ namespace WPF.Views.Datas
 
         public Rep Rep => _rep;
 
-        public static LoginRep GetInstance()
-        {
-            return loginRep;
-        }
+        public static LoginRep GetInstance() => loginRep;
 
         public void SetRep(Rep rep)
         {
             _rep = rep;
-            foreach (ILoginRepObserver observer in observers)
-            {
-                observer.SetRep(rep);
-            }
+            foreach (ILoginRepObserver observer in observers) observer.SetRep(rep);
         }
 
-        public void Add(ILoginRepObserver observer)
-        {
-            observers.Add(observer);
-        }
+        public void Add(ILoginRepObserver observer) => observers.Add(observer);
 
-        public void Remove(ILoginRepObserver observer)
-        {
-            observers.Remove(observer);
-        }
+        public void Remove(ILoginRepObserver observer) => observers.Remove(observer);
     }
 }

@@ -30,10 +30,7 @@
             IsValidity = isValidity;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         public override bool Equals(object obj)
         {

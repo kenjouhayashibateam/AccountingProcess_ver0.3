@@ -87,12 +87,20 @@ namespace Infrastructure.ExcelOutputData
 
             myWorkbooks = App.Workbooks;
             //出力ファイルを検出して閉じる
-            foreach (Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks)
-            {
-                if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);
-            }
+            foreach (Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks) if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);             
             //開いているワークブックがなければエクセルアプリケーションを終了する
             if (myWorkbooks.Count == 0) App.Quit();
+        }
+        /// <summary>
+        /// シートの余白を設定します
+        /// </summary>
+        protected void SetMargins()
+        {
+            myWorksheet.PageSetup.Margins
+                .SetLeft(SetMaeginsLeft())
+                .SetTop(SetMaeginsTop())
+                .SetRight(SetMaeginsRight())
+                .SetBottom(SetMaeginsBottom());
         }
         /// <summary>
         /// エクセルシートのフォント名を返します

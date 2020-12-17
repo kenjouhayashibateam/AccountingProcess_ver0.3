@@ -71,15 +71,8 @@ namespace Domain.Entities
         {
             int I = 0;
 
-            foreach(OtherMoney om in OtherMoneys)
-            {
-                I += om.Amount;
-            }
-
-            foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys)
-            {
-                I += mc.Value.Amount;
-            }
+            foreach (OtherMoney om in OtherMoneys) I += om.Amount;
+            foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys) I += mc.Value.Amount;            
             
             return I;
         }

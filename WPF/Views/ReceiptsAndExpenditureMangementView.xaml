@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
+                xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="900" Width="1000" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
@@ -16,6 +19,21 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
     </Window.Resources>
+
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
+            <behavior:ShowDiarog/>
+        </interactions:PropertyChangedTrigger>
+        <i:EventTrigger EventName="Activated">
+            <i:InvokeCommandAction Command="{Binding SetCashboxTotalAmountCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -302,12 +320,12 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                <TextBlock Grid.Column="2" Grid.Row="0" Text="出金" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                <TextBlock Grid.Column="3" Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                <TextBlock Grid.Column="4" Grid.Row="0" Text="残高" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding PreviousDayFinalAccount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="出金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="3" Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="4" Grid.Row="0" Text="金庫残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding PreviousDayFinalAccountDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding PeymentSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding WithdrawalSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding TransferSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
@@ -366,10 +384,17 @@
         </GroupBox>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="CloseButton" Grid.Column="1" Content="閉じる" Margin="5">
+            <Button x:Name="ShowRemainingMoneyCalculationViewButton" Content="金庫金額計算" Grid.Column="1" Margin="5">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding ShowRemainingCalculationViewCommand}" Key="Space"/>
+                    <MouseBinding Command="{Binding ShowRemainingCalculationViewCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+            <Button x:Name="CloseButton" Grid.Column="2" Content="閉じる" Margin="5">
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

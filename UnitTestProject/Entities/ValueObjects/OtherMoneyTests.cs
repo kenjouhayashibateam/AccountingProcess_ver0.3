@@ -14,10 +14,7 @@ namespace Domain.Entities.ValueObjects.Tests
         [TestMethod()]
         public void シナリオ()
         {
-            OtherMoney otherMoney = new OtherMoney()
-            {
-                Amount = 1000
-            };
+            OtherMoney otherMoney = new OtherMoney() { Amount = 1000 };
             Assert.AreEqual(otherMoney.AmountWithUnit(), "1,000 円");
         }
     }

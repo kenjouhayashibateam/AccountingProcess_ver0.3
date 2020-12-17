@@ -75,11 +75,9 @@ namespace Infrastructure
                 Cmd.Parameters.Add(new SqlParameter("@rep_name", repName));
                 Cmd.Parameters.Add(new SqlParameter("@true_only", isValidityTrueOnly));
                 SqlDataReader DataReader = Cmd.ExecuteReader();
-                
+
                 while (DataReader.Read())
-                {
-                    reps.Add(new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"], (bool)DataReader["is_permission"]));
-                }
+                { reps.Add(new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"], (bool)DataReader["is_permission"])); }
             }
             return reps;
         }
@@ -114,9 +112,7 @@ namespace Infrastructure
                 DataReader = Cmd.ExecuteReader();
 
                 while (DataReader.Read())
-                {
-                    accountingSubjects.Add(new AccountingSubject((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], (string)DataReader["subject"], (bool)DataReader["is_validity"]));
-                }
+                { accountingSubjects.Add(new AccountingSubject((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], (string)DataReader["subject"], (bool)DataReader["is_validity"])); }
 
                 return accountingSubjects;
             }
@@ -163,10 +159,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@true_only", isValidityTrueOnly);
                 DataReader = Cmd.ExecuteReader();
 
-                while (DataReader.Read())
-                {
-                    creditAccounts.Add(new CreditAccount((string)DataReader["credit_account_id"], (string)DataReader["account"], (bool)DataReader["is_validity"]));
-                }
+                while (DataReader.Read()) { creditAccounts.Add(new CreditAccount((string)DataReader["credit_account_id"], (string)DataReader["account"], (bool)DataReader["is_validity"])); }
                 return creditAccounts;
             }
         }
@@ -233,9 +226,7 @@ namespace Infrastructure
                 using DataTable dt = new DataTable();
                 sda.Fill(dt);
                 foreach (DataRow dr in dt.Rows)
-                {
-                    contents.Add(new Content((string)dr["content_id"], CallAccountingSubject((string)dr["accounting_subject_id"]), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"]));
-                }
+                { contents.Add(new Content((string)dr["content_id"], CallAccountingSubject((string)dr["accounting_subject_id"]), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"])); }
             }
             
             return contents;
@@ -248,7 +239,8 @@ namespace Infrastructure
             using (Cn)
             {
                 using SqlDataReader DataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_accounting_subject", "@accounting_subject_id", id);
-                while (DataReader.Read()) return new AccountingSubject((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], (string)DataReader["subject"], (bool)DataReader["is_validity"]);
+                while (DataReader.Read())
+                    return new AccountingSubject((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], (string)DataReader["subject"], (bool)DataReader["is_validity"]);
             }
             return null;
         }
@@ -281,7 +273,8 @@ namespace Infrastructure
             throw new System.NotImplementedException();
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd)
+        public ObservableCollection<ReceiptsAndExpenditure>
+            ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd)
         {
             throw new System.NotImplementedException();
         }

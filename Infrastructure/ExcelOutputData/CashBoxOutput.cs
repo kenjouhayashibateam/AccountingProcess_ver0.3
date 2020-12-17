@@ -155,8 +155,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(15, 5).Value = "金額";
 
             for (int i = 0; i < myCashbox.OtherMoneys.Length; i++)
-            {
-                if (i < 4)
+            if (i < 4)
                 {
                     myWorksheet.Cell(16 + i, 1).Value = myCashbox.OtherMoneys[i].Title;
                     myWorksheet.Cell(16 + i, 2).Value = myCashbox.OtherMoneys[i].AmountWithUnit();
@@ -166,7 +165,6 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(16 + (i - 4), 4).Value = myCashbox.OtherMoneys[i].Title;
                     myWorksheet.Cell(16 + (i - 4), 5).Value = myCashbox.OtherMoneys[i].AmountWithUnit();
                 }
-            }
             
             myWorksheet.Cell(21, 1).Value = $"合計　{myCashbox.GetTotalAmountWithUnit()}";
         }

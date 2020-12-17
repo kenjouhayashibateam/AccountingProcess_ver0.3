@@ -28,6 +28,7 @@ namespace WPF.ViewModels
         private string peymentSumDisplayValue;
         private string withdrawalSumDisplayValue;
         private string transferSumDisplayValue;
+        private string previousDayFinalAccountDisplayValue;
         private string comboAccountingSubjectText;
         private string comboAccountingSubjectCode;
         private string detailText;
@@ -80,7 +81,7 @@ namespace WPF.ViewModels
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
         #endregion
         private SolidColorBrush detailBackGroundColor;
-        private readonly Cashbox Cashbox = Cashbox.GetInstance();
+        private Cashbox Cashbox = Cashbox.GetInstance();
         private Rep registrationRep;
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
@@ -96,8 +97,19 @@ namespace WPF.ViewModels
             SetProperty();
             BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
             ReceiptsAndExpenditureOutputCommand = new DelegateCommand(() => ReceiptsAndExpenditureOutput(), () => true);
+            ShowRemainingCalculationViewCommand = new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
+            SetCashboxTotalAmountCommand = new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 金庫金額計算ウィンドウ表示コマンド
+        /// </summary>
+        public DelegateCommand ShowRemainingCalculationViewCommand { get; }
+        private void ShowRemainingCalculationView()
+        {
+            CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
+            CallPropertyChanged();
+        }
         /// <summary>
         /// Viewにプロパティをセットします
         /// </summary>
@@ -109,18 +121,31 @@ namespace WPF.ViewModels
             IsPaymentCheck = true;
             TodaysFinalAccount = ReturnTodaysFinalAccount();
             IsOutputGroupEnabled = true;
+            IsReceiptsAndExpenditureOutputButtonEnabled = true;
+            IsBalanceFinalAccountOutputEnabled = true;
             BalanceFinalAccountOutputButtonContent = "収支日報";
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
-            CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
             DateTime PreviousDay;
             if (IsPeriodSearch) PreviousDay = SearchEndDate;
             else PreviousDay = SearchStartDate;
             PreviousDayFinalAccount = DataBaseConnect.FinalAccountPerMonth() - DataBaseConnect.PreviousDayDisbursement(PreviousDay) + DataBaseConnect.PreviousDayIncome(PreviousDay);
             ListTitle = $"一覧 : 前日決算 {TextHelper.AmountWithUnit( PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
-            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, 
+                string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
+            SetCashboxTotalAmount();
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
+        }
+        /// <summary>
+        /// 金庫データをViewにセットする
+        /// </summary>
+        public DelegateCommand SetCashboxTotalAmountCommand { get; }
+        private void SetCashboxTotalAmount()
+        {
+            Cashbox = Cashbox.GetInstance();
+            CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
+            SetBalanceFinalAccount();
         }
         /// <summary>
         /// 出納データ出力コマンド
@@ -197,7 +222,13 @@ namespace WPF.ViewModels
         /// 本日の決算額を返します
         /// </summary>
         /// <returns></returns>
-        private string ReturnTodaysFinalAccount() => TextHelper.AmountWithUnit(DataBaseConnect.FinalAccountPerMonth() - withdrawalSum - TransferSum + PeymentSum);
+        private string ReturnTodaysFinalAccount()
+        {
+            if ( DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
+                return TextHelper.AmountWithUnit(PreviousDayFinalAccount - WithdrawalSum - TransferSum + PeymentSum);
+            else
+                return string.Empty;
+        }
         /// <summary>
         /// データ操作コマンド
         /// </summary>
@@ -232,10 +263,7 @@ namespace WPF.ViewModels
         {
             WithdrawalSum = 0;
             TransferSum = 0;
-            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
-            {
-                if (!rae.IsPayment) WithdrawalAllocation(rae);
-            }
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) { if (!rae.IsPayment) WithdrawalAllocation(rae); }
         }
         /// <summary>
         /// 出金データを出金、振替に振り分けます
@@ -243,7 +271,7 @@ namespace WPF.ViewModels
         /// <param name="receiptsAndExpenditure"></param>
         private void WithdrawalAllocation(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
-            if (receiptsAndExpenditure.Content.Text == "入金")
+            if (receiptsAndExpenditure.Content.Text == "口座入金")
                 TransferSum += receiptsAndExpenditure.Price;
             else
                 WithdrawalSum += receiptsAndExpenditure.Price;
@@ -254,10 +282,8 @@ namespace WPF.ViewModels
         private void SetPeymentSum()
         {
             int i = 0;
-            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
-            {
-                if (rae.IsPayment) i += rae.Price;
-            }
+
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) { if (rae.IsPayment) i += rae.Price; }
             PeymentSum =i;
         }
         /// <summary>
@@ -628,8 +654,7 @@ namespace WPF.ViewModels
             set
             {
                 if (SearchEndDate < value) SearchEndDate = value;
-                searchStartDate = value;
-                
+                searchStartDate = value;                
                 CallPropertyChanged();
             }
         }
@@ -818,6 +843,7 @@ namespace WPF.ViewModels
             set
             {
                 previousDayFinalAccount = value;
+                PreviousDayFinalAccountDisplayValue = TextHelper.AmountWithUnit(value);
                 CallPropertyChanged();
             }
         }
@@ -1016,6 +1042,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 表示用前日決算
+        /// </summary>
+        public string PreviousDayFinalAccountDisplayValue
+        {
+            get => previousDayFinalAccountDisplayValue;
+            set
+            {
+                previousDayFinalAccountDisplayValue = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1049,10 +1087,10 @@ namespace WPF.ViewModels
         /// 出納データ登録時の必須のフィールドにデータが入力されているかを確認し、判定結果を返します
         /// </summary>
         /// <returns>判定結果</returns>
-        private bool CanRegistration()
-        {
-            return !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) & !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price) && 0 < TextHelper.IntAmount(price);
-        }
+        private bool CanRegistration() =>
+            !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) &
+            !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price) && 0 < TextHelper.IntAmount(price);
+
         public override void ValidationProperty(string propertyName, object value)
         {
             switch(propertyName)

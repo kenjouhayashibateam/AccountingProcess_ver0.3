@@ -21,7 +21,6 @@ namespace WPF.ViewModels
         private bool kanriJimushoChecked;
         private bool isSlipManagementEnabled;
         private bool isDepositMenuEnabled;
-        private readonly ScreenTransition screenTransition = new ScreenTransition();
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private readonly IDataBaseConnect DataBaseConnect;
         private string depositAmount;
@@ -86,16 +85,7 @@ namespace WPF.ViewModels
         /// ログインしていないことを案内します
         /// </summary>
         private void CallNoLoginMessage()
-        {
-            MessageBox = new MessageBoxInfo()
-            {
-                Message = "ログインしてください",
-                Button = MessageBoxButton.OK,
-                Image = MessageBoxImage.Warning,
-                Title = "担当者データがありません"
-            };
-            CallPropertyChanged(nameof(MessageBox));
-        }
+        => MessageBox = new MessageBoxInfo() { Message = "ログインしてください", Button = MessageBoxButton.OK, Image = MessageBoxImage.Warning, Title = "担当者データがありません" };
         /// <summary>
         /// ログインしていて、なおかつ経理担当場所が管理事務所か、青蓮堂の場合は預り金を設定している場合にTrueを返します
         /// </summary>
@@ -138,7 +128,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowReceiptsAndExpenditureManagementView()
         {
-            CreateShowWindowCommand(screenTransition.ReceiptsAndExpenditureMangement());
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureMangement());
             CallPropertyChanged();
         }
         /// <summary>
@@ -146,7 +136,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowLoginView()
         {
-            CreateShowWindowCommand(screenTransition.Login());
+            CreateShowWindowCommand(ScreenTransition.Login());
             CallPropertyChanged();
         }
         /// <summary>
@@ -154,7 +144,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowDataManagementView()
         {
-            CreateShowWindowCommand(screenTransition.DataManagement());
+            CreateShowWindowCommand(ScreenTransition.DataManagement());
             CallPropertyChanged();
         }
         /// <summary>
@@ -162,7 +152,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowRemainingMoneyCalculationView()
         {
-            CreateShowWindowCommand(screenTransition.RemainingMoneyCalculation());
+            CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
             CallPropertyChanged();
         }
         /// <summary>

@@ -66,10 +66,7 @@ namespace WPF.ViewModels
             get => callShowWindow;
             set
             {
-                if (callShowWindow == value)
-                {
-                    return;
-                }
+                if (callShowWindow == value) return;
                 callShowWindow = value;
                 CallPropertyChanged();
                 callShowWindow = false;
@@ -78,13 +75,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// エラーを所持しているかを返す
         /// </summary>
-        public bool HasErrors
-        {
-            get
-            {
-                return CurrentErrors.Count > 0;
-            }
-        }
+        public bool HasErrors => CurrentErrors.Count > 0;
         /// <summary>
         /// メッセージボックスを表示するタイミングを管轄
         /// </summary>
@@ -157,10 +148,7 @@ namespace WPF.ViewModels
         /// ウインドウを閉じます
         /// </summary>
         /// <param name="window"></param>
-        protected void DoCloseWindow(Window window)
-        {
-            window.Close();
-        }
+        protected void DoCloseWindow(Window window) => window.Close();
         /// <summary>
         /// プロパティ変更通知イベントを呼び出します
         /// </summary>
@@ -177,10 +165,7 @@ namespace WPF.ViewModels
         /// 引数のプロパティの変更を通知します
         /// </summary>
         /// <param name="propertyName">プロパティ名</param>
-        protected void CallPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected void CallPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         /// <summary>
         /// ウィンドウ表示コマンドを設定します
         /// </summary>
@@ -197,11 +182,7 @@ namespace WPF.ViewModels
         /// <param name="window"></param>
         private void SetShowWindow(Window window)
         {
-            ShowWindow = new ShowWindowData()
-            {
-                WindowData = window
-            };
-
+            ShowWindow = new ShowWindowData() { WindowData = window };
             CallPropertyChanged(nameof(ShowWindow));
         }
         /// <summary>
@@ -217,9 +198,7 @@ namespace WPF.ViewModels
         /// <returns>エラー内容</returns>
         public IEnumerable GetErrors(string propertyName)
         {
-            if (!CurrentErrors.ContainsKey(propertyName))
-                return null;
-
+            if (!CurrentErrors.ContainsKey(propertyName)) return null;
             return CurrentErrors[propertyName];
         }
         /// <summary>
@@ -242,10 +221,7 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="propertyName">プロパティ名</param>
         /// <param name="value"></param>
-        protected void SetNullOrEmptyError(string propertyName,string value)
-        { 
-            ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName, Properties.Resources.NullErrorInfo);
-        }
+        protected void SetNullOrEmptyError(string propertyName, string value) => ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName, Properties.Resources.NullErrorInfo);
         /// <summary>
         /// エラーを追加します
         /// </summary>
@@ -285,29 +261,17 @@ namespace WPF.ViewModels
         /// <param name="exeption">エラー内容</param>
         protected void ErrorsListOperation(bool hasError, string propertyName,string exeption)
         {
-            if(hasError)
-            {
-                AddError(propertyName, exeption);
-            }
-            else
-            {
-                RemoveError(propertyName);
-            }
+            if (hasError) AddError(propertyName, exeption);
+            else RemoveError(propertyName);            
         }
         /// <summary>
         /// エラーをクリアします
         /// </summary>
-        protected void ErrorsClear()
-        {
-            CurrentErrors.Clear();
-        }
+        protected void ErrorsClear() => CurrentErrors.Clear();
 
         public void SetRep(Rep rep)
         {
-            if(rep.Name==string.Empty)
-            {
-                WindowTitle = DefaultWindowTitle;
-            }
+            if (rep.Name == string.Empty) WindowTitle = DefaultWindowTitle;            
             else
             {
                 IsAdminPermisson = rep.IsAdminPermisson;

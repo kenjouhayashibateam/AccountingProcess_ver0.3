@@ -20,17 +20,11 @@ namespace Domain.Entities.ValueObjects
         /// 担当場所インスタンス
         /// </summary>
         /// <returns></returns>
-        public static AccountingProcessLocation GetInstance()
-        {
-            return accountingLocation;
-        }
+        public static AccountingProcessLocation GetInstance() => accountingLocation;
         /// <summary>
         /// 担当場所を設定します
         /// </summary>
         /// <param name="location">場所</param>
-        public static void SetLocation(string location)
-        {
-            Location = location;
-        }
+        public static void SetLocation(string location) => Location = location;        
     }
 }

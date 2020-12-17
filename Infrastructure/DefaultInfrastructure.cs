@@ -12,17 +12,11 @@ namespace Infrastructure
         /// DataOutputインフラストラクチャのデフォルト
         /// </summary>
         /// <returns>エクセル出力</returns>
-        public static IDataOutput GetDefaultDataOutput()
-        {
-            return new ExcelOutputInfrastructure();
-        }
+        public static IDataOutput GetDefaultDataOutput() => new ExcelOutputInfrastructure();
         /// <summary>
         /// DataBaseConnectインフラストラクチャのデフォルト
         /// </summary>
         /// <returns>SQLServer接続</returns>
-        public static IDataBaseConnect GetDefaultDataBaseConnect()
-        {
-            return new LocalConnectInfrastructure();
-        }
+        public static IDataBaseConnect GetDefaultDataBaseConnect() => new LocalConnectInfrastructure();
     }
 }

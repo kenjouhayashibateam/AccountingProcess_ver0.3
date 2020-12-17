@@ -19,7 +19,6 @@ namespace WPF.ViewModels.Tests
         {
             vm.SetRep(new Rep("aaa", "bbb", "ccc", true,true));
             Assert.AreEqual(vm.WindowTitle, "担当者ログイン（ログイン : bbb）");
-
         }
     }
 }

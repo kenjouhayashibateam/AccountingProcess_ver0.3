@@ -101,10 +101,6 @@ namespace Domain.Entities.ValueObjects
         /// 表示用金額の文字列を返します。
         /// </summary>
         /// <returns>00,000,000 円</returns>
-        public string AmountWithUnit()
-        {
-            return TextHelper.AmountWithUnit(Amount);
-        }
-
+        public string AmountWithUnit() => TextHelper.AmountWithUnit(Amount);
     }
 }
