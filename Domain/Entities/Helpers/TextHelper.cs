@@ -37,13 +37,15 @@ namespace Domain.Entities.Helpers
             return int.TryParse(s, out int i) ? CommaDelimitedAmount(i) : string.Empty;
         }
         /// <summary>
-        /// 金額をIntで返します。数字と認識できない場合は0を返します
+        /// 金額をIntで返します。単位とカンマを削除しても数字と認識できない場合は0を返します
         /// </summary>
         /// <param name="amount">金額</param>
         /// <returns>000000</returns>
         public static int IntAmount(string amount)
         {
-            return CommaDelimitedAmount(amount) == string.Empty ? 0 : int.Parse(amount.Replace(",", string.Empty));
+            string s = amount.Replace(Properties.Resources.Unit, string.Empty);
+            s = s.Replace(",", string.Empty);
+            return CommaDelimitedAmount(s) == string.Empty ? 0 : int.Parse(s);
         }
         /// <summary>
         /// 名前の最初のスペースまでの文字列を返します

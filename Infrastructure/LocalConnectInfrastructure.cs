@@ -16,6 +16,8 @@ namespace Infrastructure
 
         public int PreviousDayIncome(DateTime previousDay) => 0;
 
+        public int PreviousDayTotalBalance(DateTime previousDay) => 2815597;
+
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>

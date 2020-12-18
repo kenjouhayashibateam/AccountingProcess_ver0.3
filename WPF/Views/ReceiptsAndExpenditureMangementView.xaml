@@ -220,7 +220,7 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="{Binding ListTitle}" Grid.Row="1" Margin="5,3">
-                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" AutoGenerateColumns="False">
+                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <Style.Triggers>
@@ -234,21 +234,21 @@
                             </Style>
                         </DataGrid.ItemContainerStyle>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="有効性" Width="3*">
+                            <DataGridTemplateColumn Header="有効性" Width="3*" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsValidity}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <CheckBox IsChecked="{Binding IsValidity}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="入出金" Width="3*">
+                            <DataGridTemplateColumn Header="入出金" Width="3*" SortMemberPath="AccountActivityDate">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding AccountActivityDate,StringFormat=M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="経理場所" Width="4*">
+                            <DataGridTemplateColumn Header="経理場所" Width="4*" SortMemberPath="Location">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Location}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

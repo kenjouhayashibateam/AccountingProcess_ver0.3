@@ -9,7 +9,7 @@ namespace Infrastructure.ExcelOutputData
     /// <summary>
     /// 単票出力
     /// </summary>
-    internal abstract class OutputSingleSheetData : OutputData
+    internal abstract class OutputSingleSheetData : ExcelApp
     {
         /// <summary>
         /// エクセルにデータを出力します

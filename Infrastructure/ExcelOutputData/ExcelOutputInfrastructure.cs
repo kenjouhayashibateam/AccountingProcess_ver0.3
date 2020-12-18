@@ -24,7 +24,7 @@ namespace Infrastructure.ExcelOutputData
         public void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, int previousDayBalance)
         {
             ReceiptsAndExpenditureOutput raeo = new ReceiptsAndExpenditureOutput(receiptsAndExpenditures, previousDayBalance);
-            raeo.DataOutput();
+            raeo.Output();
         }
     }
 }

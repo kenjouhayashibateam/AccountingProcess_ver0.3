@@ -288,5 +288,10 @@ namespace Infrastructure
         {
             throw new System.NotImplementedException();
         }
+
+        public int PreviousDayTotalBalance(DateTime previousDay)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,15 +1,60 @@
 ﻿using Domain.Entities;
+using System.Collections;
 using System.Collections.ObjectModel;
 
 namespace Infrastructure.ExcelOutputData
 {
-    internal abstract class OutputList : OutputData
+    /// <summary>
+    /// リスト出力
+    /// </summary>
+    internal abstract class OutputList : ExcelApp
     {
-        private ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditureOutputs;
+        /// <summary>
+        /// データリストのインデックス
+        /// </summary>
+        protected int ItemIndex;
+        /// <summary>
+        /// データ出力のページ数
+        /// </summary>
+        protected int PageCount;
+        /// <summary>
+        /// 出力データリスト
+        /// </summary>
+        protected IEnumerable OutputDatas;
+        /// <summary>
+        /// データを出力する一番上のRow
+        /// </summary>
+        protected int StartRowPosition;
 
-        protected OutputList(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures)
+        protected OutputList(IEnumerable outputDatas)
         {
-            ReceiptsAndExpenditureOutputs = receiptsAndExpenditures;
+            OutputDatas = outputDatas;
+            ItemIndex = 0;
+            PageCount = 1;
+            StartRowPosition = 1;
+            PageStyle();
+        }
+        /// <summary>
+        /// データリストを出力します
+        /// </summary>
+        public abstract void Output();
+        /// <summary>
+        /// エクセルシートの用紙1ページごとのStyleを設定します
+        /// </summary>
+        protected void PageStyle()
+        {
+            for (int i = 0; i < SetRowSizes().Length; i++) myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
+            for (int i = 0; i < SetColumnSizes().Length; i++) myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];
+
+        }
+        /// <summary>
+        /// 新しいページのStyleを設定します
+        /// </summary>
+        protected void NextPage()
+        {
+            StartRowPosition = PageCount + SetRowSizes().Length * PageCount;
+            PageCount++;
+            PageStyle();
         }
     }
 }

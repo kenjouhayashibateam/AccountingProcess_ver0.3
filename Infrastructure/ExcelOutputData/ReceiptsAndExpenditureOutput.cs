@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
-using Domain.Entities.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,16 +9,16 @@ namespace Infrastructure.ExcelOutputData
     /// <summary>
     /// 出納データ出力
     /// </summary>
-    internal class ReceiptsAndExpenditureOutput : OutputData
+    internal class ReceiptsAndExpenditureOutput : OutputList
     {
-        /// <summary>
-        /// 出納データのインデックス
-        /// </summary>
-        private int ItemIndex;
         /// <summary>
         /// エクセルに出力する出納データの入出金日
         /// </summary>
-        private DateTime CurrentDate; 
+        private DateTime CurrentDate;
+        /// <summary>
+        /// 1ページあたりの行数
+        /// </summary>
+        private readonly int OnePageRowCount = 50;
         /// <summary>
         /// 出納データリスト
         /// </summary>
@@ -29,21 +28,15 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         private int PreviousDayBalance;
 
-        public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance) : base()
+        public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance) : base(receiptsAndExpenditures)
         {
             ReceiptsAndExpenditures = receiptsAndExpenditures;
             PreviousDayBalance = previousDayBalance;
-            ItemIndex = 0;
+        }
 
-            for (int i = 0; i < SetRowSizes().Length; i++) myWorksheet.Row(ItemIndex + 1).Height = SetRowSizes()[i];
-
-            for(int i = 0; i < SetColumnSizes().Length; i++) myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];
-
-            MySheetCellRange(1, 1, 1, 8).Style
-                .Border.SetLeftBorder(XLBorderStyleValues.Thin)
-                .Border.SetTopBorder(XLBorderStyleValues.Thin)
-                .Border.SetRightBorder(XLBorderStyleValues.Thin)
-                .Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        public override void Output()
+        {
+            SetBorderStyle();
 
             myWorksheet.Cell(1, 1).Value = "日付";
             myWorksheet.Cell(1, 2).Value = "コード";
@@ -53,10 +46,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(1, 6).Value = "入金";
             myWorksheet.Cell(1, 7).Value = "出金";
             myWorksheet.Cell(1, 8).Value = "合計";
-            SetStyleAndNextIndex();        
-        }
-        public void DataOutput()
-        {
+            SetStyleAndNextIndex();
             int payment = 0;
             int withdrawal = 0;
 
@@ -86,7 +76,7 @@ namespace Infrastructure.ExcelOutputData
 
                 if (rae.IsPayment)
                 {
-                    myWorksheet.Cell(ItemIndex + 1, 6).Value =rae.Price;
+                    myWorksheet.Cell(ItemIndex + 1, 6).Value = rae.Price;
                     payment += rae.Price;
                 }
                 else
@@ -94,7 +84,6 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(ItemIndex + 1, 7).Value = rae.Price;
                     withdrawal += rae.Price;
                 }
-
                 SetStyleAndNextIndex();
             }
 
@@ -108,8 +97,8 @@ namespace Infrastructure.ExcelOutputData
             ExcelOpen();
         }
         /// <summary>
-        /// インデックスに値を加える際に、前のデータのセルのスタイルを設定します
-        /// </summary>
+        ///  インデックスに値を加える際に、前のデータのセルのスタイルを設定します
+        ///  </summary>
         private void SetStyleAndNextIndex()
         {
             SetBorderStyle();
@@ -119,6 +108,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Style.Alignment.SetShrinkToFit(true);
             ItemIndex++;
         }
+
         protected override void SetBorderStyle()
         {
             MySheetCellRange(ItemIndex + 1, 1, ItemIndex + 1, 8).Style
@@ -157,7 +147,12 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge() {}
 
-        protected override double[] SetRowSizes() => new double[] { 15 };
+        protected override double[] SetRowSizes()
+        {
+            double[] d=new double[OnePageRowCount];
+            for (int i = 0; i < d.Length; i++) { d[i] = 15; }
+            return d;
+        }
 
         protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
 

@@ -119,7 +119,6 @@ namespace WPF.ViewModels
             SearchStartDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
             IsPaymentCheck = true;
-            TodaysFinalAccount = ReturnTodaysFinalAccount();
             IsOutputGroupEnabled = true;
             IsReceiptsAndExpenditureOutputButtonEnabled = true;
             IsBalanceFinalAccountOutputEnabled = true;
@@ -136,6 +135,7 @@ namespace WPF.ViewModels
             SetCashboxTotalAmount();
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
+            TodaysFinalAccount = ReturnTodaysFinalAccount();
         }
         /// <summary>
         /// 金庫データをViewにセットする
@@ -224,7 +224,7 @@ namespace WPF.ViewModels
         /// <returns></returns>
         private string ReturnTodaysFinalAccount()
         {
-            if ( DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
+            if (DataBaseConnect.PreviousDayTotalBalance(DateTime.Today.AddDays(-2))- DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1))+DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
                 return TextHelper.AmountWithUnit(PreviousDayFinalAccount - WithdrawalSum - TransferSum + PeymentSum);
             else
                 return string.Empty;

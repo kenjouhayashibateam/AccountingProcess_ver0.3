@@ -107,15 +107,23 @@ namespace Domain.Repositories
         /// <returns>勘定科目リスト</returns>
         public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText);
         /// <summary>
-        /// 引数前日までの収入金額を返します
+        /// 引数（前日）までの収入金額を返します
         /// </summary>
+        /// <param name="previousDay">前日日付</param>
         /// <returns>前日収入金額</returns>
         public int PreviousDayIncome(DateTime previousDay);
         /// <summary>
-        /// 引数前日までの支出金額を返します
+        /// 引数（前日）までの支出金額を返します
         /// </summary>
+        /// <param name="previousDay">前日日付</param>
         /// <returns>前日支出金額</returns>
         public int PreviousDayDisbursement(DateTime previousDay);
+        /// <summary>
+        /// 引数（前日）までの決算額を返します
+        /// </summary>
+        /// <param name="previousDay">前日日付</param>
+        /// <returns></returns>
+        public int PreviousDayTotalBalance(DateTime previousDay);
         /// <summary>
         /// 月ごとの決算を返します
         /// </summary>
