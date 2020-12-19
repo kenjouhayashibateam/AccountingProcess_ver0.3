@@ -16,10 +16,6 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         public void DataOutput()
         {
-            //ExcelClose();
-            //myWorkbook = new XLWorkbook();
-            //myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
-            myWorksheet.Style.Font.FontName = SetSheetFontName();
             SetSheetFontStyle();
             myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
             SetMargins();

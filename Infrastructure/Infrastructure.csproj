@@ -71,6 +71,7 @@
     <Compile Include="ExcelOutputData\ExcelOutputInfrastructure.cs" />
     <Compile Include="ExcelOutputData\OutputList.cs" />
     <Compile Include="ExcelOutputData\ReceiptsAndExpenditureOutput.cs" />
+    <Compile Include="ExcelOutputData\PaymentSlipOutput.cs" />
     <Compile Include="LocalConnectInfrastructure.cs" />
     <Compile Include="LogFileInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

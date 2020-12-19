@@ -37,18 +37,12 @@ namespace Infrastructure.ExcelOutputData
         public override void Output()
         {
             SetBorderStyle();
+            PageCount++;
+            NextPage();
 
-            myWorksheet.Cell(1, 1).Value = "日付";
-            myWorksheet.Cell(1, 2).Value = "コード";
-            myWorksheet.Cell(1, 3).Value = "勘定科目";
-            myWorksheet.Cell(1, 4).Value = "内容";
-            myWorksheet.Cell(1, 5).Value = "詳細";
-            myWorksheet.Cell(1, 6).Value = "入金";
-            myWorksheet.Cell(1, 7).Value = "出金";
-            myWorksheet.Cell(1, 8).Value = "合計";
-            SetStyleAndNextIndex();
             int payment = 0;
             int withdrawal = 0;
+            int itemCount = 0;
 
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
                 .ThenByDescending(r => r.IsPayment)
@@ -85,6 +79,12 @@ namespace Infrastructure.ExcelOutputData
                     withdrawal += rae.Price;
                 }
                 SetStyleAndNextIndex();
+                itemCount++;
+                if(itemCount>OnePageRowCount)
+                {
+                    itemCount = 0;
+                    NextPage();
+                }
             }
 
             myWorksheet.Cell(ItemIndex + 1, 3).Value = "収支";
@@ -133,6 +133,7 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .NumberFormat.SetFormat("#,##0");
+            myWorksheet.Style.Font.FontName = "ＭＳ Ｐゴシック";
         }
 
         protected override double[] SetColumnSizes() => new double[] { 10.86, 4.71, 16.43, 16.43, 16.43, 9.14, 9.14, 9.14 };
@@ -154,10 +155,21 @@ namespace Infrastructure.ExcelOutputData
             return d;
         }
 
-        protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
-
-        protected override void SetSheetFontStyle() {}
+        protected override void SetSheetFontStyle() => myWorksheet.Style.Font.FontSize = 11;
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
+
+        protected override void PageStyle()
+        {
+            myWorksheet.Cell(StartRowPosition + 1, 1).Value = "日付";
+            myWorksheet.Cell(StartRowPosition + 1, 2).Value = "コード";
+            myWorksheet.Cell(StartRowPosition + 1, 3).Value = "勘定科目";
+            myWorksheet.Cell(StartRowPosition + 1, 4).Value = "内容";
+            myWorksheet.Cell(StartRowPosition + 1, 5).Value = "詳細";
+            myWorksheet.Cell(StartRowPosition + 1, 6).Value = "入金";
+            myWorksheet.Cell(StartRowPosition + 1, 7).Value = "出金";
+            myWorksheet.Cell(StartRowPosition + 1, 8).Value = "合計";
+            SetStyleAndNextIndex();
+        }
     }
 }

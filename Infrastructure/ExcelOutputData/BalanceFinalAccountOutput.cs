@@ -145,11 +145,10 @@ namespace Infrastructure.ExcelOutputData
 
         protected override double[] SetRowSizes() => new double[] { 51, 18, 64.5, 57, 18, 42, 126, 18.75, 20.25, 42, 27.75, 21, 21, 21, 40.5, 20.25 };
 
-        protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
-
         protected override void SetSheetFontStyle()
         {
             myWorksheet.Style.Font.FontSize = 11;
+            myWorksheet.Style.Font.FontName = "ＭＳ Ｐゴシック";
             myWorksheet.Cell(2, 4).Style.Font.FontSize = 14;
             myWorksheet.Cell(3, 1).Style.Font.FontSize = 28;
             myWorksheet.Cell(8, 1).Style.Font.FontSize = 16;

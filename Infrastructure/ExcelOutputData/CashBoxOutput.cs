@@ -205,12 +205,12 @@ namespace Infrastructure.ExcelOutputData
         protected override double[] SetRowSizes() =>
             new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 32.25 };
 
-        protected override string SetSheetFontName() => "ＭＳ ゴシック";
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;        
 
         protected override void SetSheetFontStyle()
         {
+            myWorksheet.Style.Font.FontName = "ＭＳ ゴシック";
             MySheetCellRange(1, 1, 20, 7).Style.NumberFormat.Format = "@";
             myWorksheet.Cell(21, 1).Style.Font.Bold = true;
             myWorksheet.Cell(21, 1).Style.Font.FontSize = 20;
