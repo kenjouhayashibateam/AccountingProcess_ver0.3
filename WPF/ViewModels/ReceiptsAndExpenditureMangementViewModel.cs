@@ -23,6 +23,7 @@ namespace WPF.ViewModels
         private int withdrawalSum;
         private int transferSum;
         private int previousDayFinalAccount;
+        private int todayTotalAmount;
         #endregion
         #region string
         private string peymentSumDisplayValue;
@@ -47,6 +48,7 @@ namespace WPF.ViewModels
         private string ceresaAmount;
         private string wizeCoreAmount;
         private string receiptsAndExpenditureOutputButtonContent;
+        private string paymentSlipsOutputButtonContent;
         #endregion
         #region bool
         private bool isValidity;
@@ -66,6 +68,7 @@ namespace WPF.ViewModels
         private bool isOutputGroupEnabled;
         private bool isBalanceFinalAccountOutputEnabled;
         private bool isReceiptsAndExpenditureOutputButtonEnabled;
+        private bool isPaymentSlipsOutputEnabled;
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
@@ -96,11 +99,24 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             SetProperty();
             BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
-            ReceiptsAndExpenditureOutputCommand = new DelegateCommand(() => ReceiptsAndExpenditureOutput(), () => true);
+            ReceiptsAndExpenditureOutputCommand = new DelegateCommand(() => ReceiptsAndExpenditureOutput(), () => IsReceiptsAndExpenditureOutputButtonEnabled);
             ShowRemainingCalculationViewCommand = new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
             SetCashboxTotalAmountCommand = new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
+            PaymentSlipsOutputCommand = new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 入金伝票出力コマンド
+        /// </summary>
+        public DelegateCommand PaymentSlipsOutputCommand { get; }
+        private async void PaymentSlipsOutput()
+        {
+            PaymentSlipsOutputButtonContent = "出力中";
+            IsPaymentSlipsOutputEnabled = false;
+            await Task.Run(() => DataOutput.PaymentSlips(ReceiptsAndExpenditures,LoginRep.Rep));
+            IsPaymentSlipsOutputEnabled = true;
+            PaymentSlipsOutputButtonContent = "入金伝票";
+        }
         /// <summary>
         /// 金庫金額計算ウィンドウ表示コマンド
         /// </summary>
@@ -119,11 +135,14 @@ namespace WPF.ViewModels
             SearchStartDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
             IsPaymentCheck = true;
-            IsOutputGroupEnabled = true;
+            TodaysFinalAccount = TextHelper.AmountWithUnit(ReturnTodaysFinalAccount());
+            IsOutputGroupEnabled = Cashbox.GetTotalAmount() == TextHelper.IntAmount(TodaysFinalAccount);
             IsReceiptsAndExpenditureOutputButtonEnabled = true;
             IsBalanceFinalAccountOutputEnabled = true;
+            IsPaymentSlipsOutputEnabled = true;
             BalanceFinalAccountOutputButtonContent = "収支日報";
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
+            PaymentSlipsOutputButtonContent = "入金伝票";
             DateTime PreviousDay;
             if (IsPeriodSearch) PreviousDay = SearchEndDate;
             else PreviousDay = SearchStartDate;
@@ -132,10 +151,9 @@ namespace WPF.ViewModels
             RegistrationRep = LoginRep.Rep;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(string.Empty, string.Empty, string.Empty, string.Empty, 
                 string.Empty, string.Empty, false, true, false, string.Empty, string.Empty);
-            SetCashboxTotalAmount();
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
-            TodaysFinalAccount = ReturnTodaysFinalAccount();
+            SetCashboxTotalAmount();
         }
         /// <summary>
         /// 金庫データをViewにセットする
@@ -144,7 +162,10 @@ namespace WPF.ViewModels
         private void SetCashboxTotalAmount()
         {
             Cashbox = Cashbox.GetInstance();
-            CashBoxTotalAmount = Cashbox.GetTotalAmount() == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {Cashbox.GetTotalAmountWithUnit()}";
+            todayTotalAmount = Cashbox.GetTotalAmount();
+            CashBoxTotalAmount = todayTotalAmount == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {TextHelper.AmountWithUnit(todayTotalAmount)}";
+            if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum) TodaysFinalAccount = TextHelper.AmountWithUnit(todayTotalAmount);
+            if (todayTotalAmount == 0) TodaysFinalAccount = "データを照合して下さい。";
             SetBalanceFinalAccount();
         }
         /// <summary>
@@ -222,12 +243,12 @@ namespace WPF.ViewModels
         /// 本日の決算額を返します
         /// </summary>
         /// <returns></returns>
-        private string ReturnTodaysFinalAccount()
+        private int ReturnTodaysFinalAccount()
         {
             if (DataBaseConnect.PreviousDayTotalBalance(DateTime.Today.AddDays(-2))- DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1))+DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
-                return TextHelper.AmountWithUnit(PreviousDayFinalAccount - WithdrawalSum - TransferSum + PeymentSum);
+                return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
             else
-                return string.Empty;
+                return 0;
         }
         /// <summary>
         /// データ操作コマンド
@@ -284,7 +305,7 @@ namespace WPF.ViewModels
             int i = 0;
 
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) { if (rae.IsPayment) i += rae.Price; }
-            PeymentSum =i;
+            PaymentSum =i;
         }
         /// <summary>
         /// 金庫の総計金額
@@ -862,7 +883,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 入金合計
         /// </summary>
-        public int PeymentSum
+        public int PaymentSum
         {
             get => peymentSum;
             set
@@ -1054,6 +1075,30 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 入金伝票出力ボタンのContent
+        /// </summary>
+        public string PaymentSlipsOutputButtonContent
+        {
+            get => paymentSlipsOutputButtonContent;
+            set
+            {
+                paymentSlipsOutputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入金伝票出力ボタンのEnabled
+        /// </summary>
+        public bool IsPaymentSlipsOutputEnabled
+        {
+            get => isPaymentSlipsOutputEnabled;
+            set
+            {
+                isPaymentSlipsOutputEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1068,8 +1113,13 @@ namespace WPF.ViewModels
                 else amount -= receiptsAndExpenditure.Price;
             }
             BalanceFinalAccount = $"出納リストの収支決算 : {TextHelper.AmountWithUnit(amount)}";
+            SetOutputButtonEnabled(amount);
+        }
+        private void SetOutputButtonEnabled(int amount)
+        {        
             IsBalanceFinalAccountOutputEnabled = Cashbox.GetTotalAmount() == amount;
             IsReceiptsAndExpenditureOutputButtonEnabled = Cashbox.GetTotalAmount() == amount;
+            IsPaymentSlipsOutputEnabled = Cashbox.GetTotalAmount() == amount;
         }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します

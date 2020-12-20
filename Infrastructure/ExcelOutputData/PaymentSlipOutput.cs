@@ -39,6 +39,8 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.Content.AccountingSubject.Subject))
             {
                 if (!rae.IsPayment) continue;
+                if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;
+
                 if (code == rae.Content.AccountingSubject.SubjectCode) isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
                 else
                 {
@@ -52,6 +54,7 @@ namespace Infrastructure.ExcelOutputData
                 if (isGoNext)
                 {
                     for (int i = 0; i < rae.Price.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 11, 13 - i).Value = rae.Price.ToString().Substring(i, 1);
+                    myWorksheet.Cell(StartRowPosition + 7, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
                     myWorksheet.Cell(StartRowPosition + 11, 1).Value = rae.AccountActivityDate.Year;
                     myWorksheet.Cell(StartRowPosition + 11, 2).Value = rae.AccountActivityDate.Month;
                     myWorksheet.Cell(StartRowPosition + 11, 3).Value = rae.AccountActivityDate.Day;
@@ -77,6 +80,7 @@ namespace Infrastructure.ExcelOutputData
 
                 contentCount++;
             }
+            ExcelOpen();
         }
         /// <summary>
         /// 文字列を比較して、同じならFalse、違えばTrueを返します
@@ -86,7 +90,13 @@ namespace Infrastructure.ExcelOutputData
         /// <returns></returns>
         private bool IsStringEqualsReverse(string Value1, string Value2) => Value1 != Value2;
 
-        protected override void PageStyle() => myWorksheet.Cell(StartRowPosition + 7, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
+        protected override void PageStyle()
+        {
+            SetBorderStyle();
+            SetCellsStyle();
+            SetMargins();
+            SetMerge();
+        }
 
         protected override void SetBorderStyle() { }
 

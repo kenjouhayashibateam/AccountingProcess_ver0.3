@@ -36,10 +36,6 @@ namespace Infrastructure.ExcelOutputData
 
         public override void Output()
         {
-            SetBorderStyle();
-            PageCount++;
-            NextPage();
-
             int payment = 0;
             int withdrawal = 0;
             int itemCount = 0;
@@ -93,7 +89,6 @@ namespace Infrastructure.ExcelOutputData
             PreviousDayBalance = PreviousDayBalance + payment - withdrawal;
             myWorksheet.Cell(ItemIndex + 1, 8).Value = PreviousDayBalance;
             SetStyleAndNextIndex();
-            myWorkbook.SaveAs(openPath);
             ExcelOpen();
         }
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System.Collections.ObjectModel;
 
@@ -19,6 +20,12 @@ namespace Infrastructure.ExcelOutputData
         {
             CashBoxOutput cbo = new CashBoxOutput();
             cbo.DataOutput();
+        }
+
+        public void PaymentSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep)
+        {
+            PaymentSlipOutput pso = new PaymentSlipOutput(receiptsAndExpenditures,loginRep);
+            pso.Output();
         }
 
         public void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, int previousDayBalance)

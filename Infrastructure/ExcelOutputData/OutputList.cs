@@ -30,7 +30,7 @@ namespace Infrastructure.ExcelOutputData
         {
             OutputDatas = outputDatas;
             ItemIndex = 0;
-            PageCount = 0;
+            PageCount = 1;
             StartRowPosition = 0;
             PageStyle();
         }
@@ -47,7 +47,7 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected void NextPage()
         {
-            StartRowPosition = PageCount + SetRowSizes().Length * PageCount;
+            StartRowPosition = PageCount + SetRowSizes().Length * PageCount ;
             PageCount++;
             for (int i = 0; i < SetRowSizes().Length; i++) myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
             for (int i = 0; i < SetColumnSizes().Length; i++) myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];

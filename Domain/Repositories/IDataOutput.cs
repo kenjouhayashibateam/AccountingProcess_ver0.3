@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
@@ -30,5 +31,11 @@ namespace Domain.Repositories
         /// <param name="receiptsAndExpenditures">出力する出納データ</param>
         /// <param name="previousDayBalance">出力する出納データの前日残高</param>
         void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance);
+        /// <summary>
+        /// 入金伝票を出力します
+        /// </summary>
+        /// <param name="receiptsAndExpenditures">伝票出力する出納データ</param>
+        /// <param name="loginRep">ログインしている担当者</param>
+        void PaymentSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep);
     }
 }
