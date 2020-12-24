@@ -30,9 +30,10 @@ namespace Infrastructure.ExcelOutputData
         {
             OutputDatas = outputDatas;
             ItemIndex = 0;
-            PageCount = 1;
-            StartRowPosition = 0;
-            PageStyle();
+            PageCount = 0;
+            StartRowPosition = 1;
+            myWorksheet.PageSetup.PaperSize = SheetPaperSize();
+            NextPage();
         }
         /// <summary>
         /// データリストを出力します
@@ -47,8 +48,8 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected void NextPage()
         {
-            StartRowPosition = PageCount + SetRowSizes().Length * PageCount ;
             PageCount++;
+            StartRowPosition = SetRowSizes().Length * (PageCount - 1) + 1;
             for (int i = 0; i < SetRowSizes().Length; i++) myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
             for (int i = 0; i < SetColumnSizes().Length; i++) myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];
             PageStyle();

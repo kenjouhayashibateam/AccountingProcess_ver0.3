@@ -136,7 +136,7 @@ namespace WPF.ViewModels
             RegistrationDate = DateTime.Today;
             IsPaymentCheck = true;
             TodaysFinalAccount = TextHelper.AmountWithUnit(ReturnTodaysFinalAccount());
-            IsOutputGroupEnabled = Cashbox.GetTotalAmount() == TextHelper.IntAmount(TodaysFinalAccount);
+            SetOutputGroupEnabled();
             IsReceiptsAndExpenditureOutputButtonEnabled = true;
             IsBalanceFinalAccountOutputEnabled = true;
             IsPaymentSlipsOutputEnabled = true;
@@ -156,6 +156,10 @@ namespace WPF.ViewModels
             SetCashboxTotalAmount();
         }
         /// <summary>
+        /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
+        /// </summary>
+        private void SetOutputGroupEnabled() => IsOutputGroupEnabled = Cashbox.GetTotalAmount() == TextHelper.IntAmount(TodaysFinalAccount);
+        /// <summary>
         /// 金庫データをViewにセットする
         /// </summary>
         public DelegateCommand SetCashboxTotalAmountCommand { get; }
@@ -166,6 +170,7 @@ namespace WPF.ViewModels
             CashBoxTotalAmount = todayTotalAmount == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {TextHelper.AmountWithUnit(todayTotalAmount)}";
             if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum) TodaysFinalAccount = TextHelper.AmountWithUnit(todayTotalAmount);
             if (todayTotalAmount == 0) TodaysFinalAccount = "データを照合して下さい。";
+            SetOutputGroupEnabled();
             SetBalanceFinalAccount();
         }
         /// <summary>

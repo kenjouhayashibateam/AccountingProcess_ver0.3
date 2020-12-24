@@ -31,43 +31,44 @@ namespace Infrastructure.ExcelOutputData
             int inputRow = 0;
             int inputColumn = 0;
             int TotalPrice = 0;
-            DateTime currentDate = DateTime.Parse("1900/01/01");
-
+            DateTime currentDate =new DateTime(1900,1,1);
+            //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
                 .ThenBy(r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject))
             {
-                if (!rae.IsPayment) continue;
-                if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;
-
-                if (code == rae.Content.AccountingSubject.SubjectCode) isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
+                if (!rae.IsPayment) continue;   //入金伝票なので、Falseなら次のデータへ
+                if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
+                if (subject == string.Empty) subject = rae.Content.AccountingSubject.Subject;//subjectの初期値を設定する
+                if (currentDate == new DateTime(1900,1,1)) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
+                //codeが同じならisGoNextにsubjectの比較結果を代入する
+                if (code == rae.Content.AccountingSubject.SubjectCode)
+                {
+                    isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
+                    if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入金日比較
+                }
                 else
                 {
                     isGoNext = true;
                     code = rae.Content.AccountingSubject.SubjectCode;
                     subject = rae.Content.AccountingSubject.Subject;
                 }
-                if (!isGoNext) isGoNext = contentCount > 8;
-                if (!isGoNext) isGoNext = currentDate == rae.AccountActivityDate;
-                currentDate = rae.AccountActivityDate;
+                currentDate = rae.AccountActivityDate;//入金日を代入
+                if (!isGoNext) isGoNext = contentCount > 8;//8件以上は次のページに出力
+                //頁移動の有無による動作
                 if (isGoNext)
                 {
-                    for (int i = 0; i < rae.Price.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 11, 13 - i).Value = rae.Price.ToString().Substring(i, 1);
-                    myWorksheet.Cell(StartRowPosition + 7, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
-                    myWorksheet.Cell(StartRowPosition + 11, 1).Value = rae.AccountActivityDate.Year;
-                    myWorksheet.Cell(StartRowPosition + 11, 2).Value = rae.AccountActivityDate.Month;
-                    myWorksheet.Cell(StartRowPosition + 11, 3).Value = rae.AccountActivityDate.Day;
-                    myWorksheet.Cell(StartRowPosition + 10, 14).Value = $"{rae.Content.AccountingSubject.Subject} {rae.Content.AccountingSubject.SubjectCode}";
-                    myWorksheet.Cell(StartRowPosition + 10, 16).Value = rae.CreditAccount.Account;
-                    NextPage();
+                    TotalPrice = rae.Price;
                     contentCount = 0;
+                    NextPage();//次のページへ
                 }
-                else TotalPrice += rae.Price;
-                myWorksheet.Cell(StartRowPosition + 2, 1).Value = $"{rae.AccountActivityDate:M/d} {rae.Content.Text}";
-                if(contentCount<3)
+                else TotalPrice += rae.Price;//ページ移動がなければ、総額に現在のデータのPriceを加算
+                myWorksheet.Cell(StartRowPosition + 1, 1).Value = $"{rae.AccountActivityDate:M/d} {rae.Content.Text}";//伝票の一番上にタイトルとして入金日、Contentを出力                
+                //伝票1件目から4件目は一列目、5件目から8件目までは4列目に出力
+                if (contentCount < 4)
                 {
-                    inputRow = StartRowPosition + 3 + contentCount;
+                    inputRow = StartRowPosition + 2 + contentCount;
                     inputColumn = 1;
                 }
                 else
@@ -75,8 +76,17 @@ namespace Infrastructure.ExcelOutputData
                     inputRow = StartRowPosition + 3 + contentCount - 4;
                     inputColumn = 11;
                 }
-                myWorksheet.Cell(inputRow, inputColumn).Value = rae.Detail;
-                myWorksheet.Cell(inputRow, inputColumn + 1).Value = rae.Price;
+                myWorksheet.Cell(inputRow, inputColumn).Value = rae.Detail;//詳細を出力
+                myWorksheet.Cell(inputRow, inputColumn + 1).Value = rae.Price;//金額を出力
+
+                //伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
+                for (int i = 0; i <TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value = TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
+                myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
+                myWorksheet.Cell(StartRowPosition + 10, 1).Value = rae.AccountActivityDate.Year;
+                myWorksheet.Cell(StartRowPosition + 10, 2).Value = rae.AccountActivityDate.Month;
+                myWorksheet.Cell(StartRowPosition + 10, 3).Value = rae.AccountActivityDate.Day;
+                myWorksheet.Cell(StartRowPosition + 9, 14).Value = $"{rae.Content.AccountingSubject.Subject} {rae.Content.AccountingSubject.SubjectCode}";
+                myWorksheet.Cell(StartRowPosition + 9, 16).Value = rae.CreditAccount.Account;
 
                 contentCount++;
             }
@@ -96,35 +106,45 @@ namespace Infrastructure.ExcelOutputData
             SetCellsStyle();
             SetMargins();
             SetMerge();
+            myWorksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
         }
 
-        protected override void SetBorderStyle() { }
+        protected override void SetBorderStyle()
+        {
+            myWorksheet.Style
+                .Border.SetLeftBorder(XLBorderStyleValues.None)
+                .Border.SetTopBorder(XLBorderStyleValues.None)
+                .Border.SetRightBorder(XLBorderStyleValues.None)
+                .Border.SetBottomBorder(XLBorderStyleValues.None);
+        }
 
         protected override void SetCellsStyle()
         {
-            MySheetCellRange(StartRowPosition + 2, 1, StartRowPosition + 6, 20).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
-            myWorksheet.Cell(StartRowPosition + 2, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-            myWorksheet.Cell(StartRowPosition + 2, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            for (int i = StartRowPosition + 3; i < 7; i++)
+            MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 5, 20).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+            myWorksheet.Cell(StartRowPosition + 1, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+            myWorksheet.Cell(StartRowPosition + 1, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            for (int i = StartRowPosition + 2; i < 6; i++)
             {
                 myWorksheet.Cell(i, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
                 myWorksheet.Cell(i, 4).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                 myWorksheet.Cell(i, 6).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
                 myWorksheet.Cell(i, 15).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             }
-            myWorksheet.Cell(StartRowPosition + 7, 20).Style
+            myWorksheet.Cell(StartRowPosition + 6, 20).Style
                 .Alignment.SetTopToBottom(true)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            MySheetCellRange(StartRowPosition + 10, 14, StartRowPosition + 10, 16).Style
+            MySheetCellRange(StartRowPosition + 9, 14, StartRowPosition + 9, 16).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(StartRowPosition + 11, 1, StartRowPosition + 11, 13).Style
+            MySheetCellRange(StartRowPosition + 10, 1, StartRowPosition + 10, 13).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
         }
 
-        protected override double[] SetColumnSizes() => new double[] { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.83, 5.43, 0.83, 5.43 };
+        protected override double[] SetColumnSizes() => new double[] { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.83, 5.43, 0.83, 5.14 };
+
+        protected override double[] SetRowSizes() => new double[] { 28.5, 17.25, 17.25, 17.25, 17.25, 17.25, 18.75, 18.75, 9, 30, 21 };
 
         protected override double SetMaeginsBottom() => ToInch(0);
 
@@ -136,20 +156,19 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            for (int i = 1; i < 6; i++)
+            MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 15).Merge();
+            for (int i = 2; i < 5; i++)
             {
                 MySheetCellRange(StartRowPosition + i, 1, StartRowPosition + i, 3).Merge();
                 MySheetCellRange(StartRowPosition + i, 4, StartRowPosition + i, 9).Merge();
                 MySheetCellRange(StartRowPosition + i, 11, StartRowPosition + i, 14).Merge();
                 MySheetCellRange(StartRowPosition + i, 16, StartRowPosition + i, 20).Merge();
             }
-            MySheetCellRange(StartRowPosition + 7, 18, StartRowPosition + 8, 18).Merge();
-            MySheetCellRange(StartRowPosition + 7, 20, StartRowPosition + 8, 20).Merge();
-            MySheetCellRange(StartRowPosition + 10, 14, StartRowPosition + 10, 15).Merge();
-            MySheetCellRange(StartRowPosition + 10, 16, StartRowPosition + 10, 20).Merge();
+            MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 7, 18).Merge();
+            MySheetCellRange(StartRowPosition + 6, 20, StartRowPosition + 7, 20).Merge();
+            MySheetCellRange(StartRowPosition + 9, 14, StartRowPosition + 9, 15).Merge();
+            MySheetCellRange(StartRowPosition + 9, 16, StartRowPosition + 9, 19).Merge();
         }
-
-        protected override double[] SetRowSizes() => new double[] { 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 21.75, 25.5, 21 };
 
         protected override void SetSheetFontStyle() => myWorksheet.Style.Font.FontSize = 11;
 
