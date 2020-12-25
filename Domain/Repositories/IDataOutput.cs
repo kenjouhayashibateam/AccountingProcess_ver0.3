@@ -32,10 +32,11 @@ namespace Domain.Repositories
         /// <param name="previousDayBalance">出力する出納データの前日残高</param>
         void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance);
         /// <summary>
-        /// 入金伝票を出力します
+        /// 入出金伝票を出力します
         /// </summary>
         /// <param name="receiptsAndExpenditures">伝票出力する出納データ</param>
         /// <param name="loginRep">ログインしている担当者</param>
-        void PaymentSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep);
+        /// <param name="isPayment">伝票の種類。入金チェック</param>
+        void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment);
     }
 }

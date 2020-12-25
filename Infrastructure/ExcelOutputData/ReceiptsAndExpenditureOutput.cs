@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -22,7 +23,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// 出納データリスト
         /// </summary>
-        private readonly ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
+        private ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
         /// <summary>
         /// 前日残高
         /// </summary>
@@ -30,7 +31,6 @@ namespace Infrastructure.ExcelOutputData
 
         public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance) : base(receiptsAndExpenditures)
         {
-            ReceiptsAndExpenditures = receiptsAndExpenditures;
             PreviousDayBalance = previousDayBalance;
         }
 
@@ -165,6 +165,11 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(StartRowPosition + 1, 7).Value = "出金";
             myWorksheet.Cell(StartRowPosition + 1, 8).Value = "合計";
             SetStyleAndNextIndex();
+        }
+
+        protected override void SetList(IEnumerable outputList)
+        {
+            ReceiptsAndExpenditures =(ObservableCollection<ReceiptsAndExpenditure>) outputList;
         }
     }
 }

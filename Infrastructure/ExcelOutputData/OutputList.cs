@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-using System.Collections;
-using System.Collections.ObjectModel;
+﻿using System.Collections;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -18,23 +16,24 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected int PageCount;
         /// <summary>
-        /// 出力データリスト
-        /// </summary>
-        protected IEnumerable OutputDatas;
-        /// <summary>
         /// データを出力するページの一番上のRow
         /// </summary>
         protected int StartRowPosition;
 
-        protected OutputList(IEnumerable outputDatas)
+        protected OutputList(IEnumerable outputList)
         {
-            OutputDatas = outputDatas;
+            SetList(outputList);
             ItemIndex = 0;
             PageCount = 0;
             StartRowPosition = 1;
             myWorksheet.PageSetup.PaperSize = SheetPaperSize();
             NextPage();
         }
+        /// <summary>
+        /// 出力するリストを保持します
+        /// </summary>
+        /// <param name="outputList">出力リスト</param>
+        protected abstract void SetList(IEnumerable outputList);
         /// <summary>
         /// データリストを出力します
         /// </summary>

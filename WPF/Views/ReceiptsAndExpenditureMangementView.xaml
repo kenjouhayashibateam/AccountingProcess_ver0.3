@@ -368,10 +368,16 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="PaymentSlipsOutputButton" Grid.Column="2" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="5">
+                <Button x:Name="PaymentSlipsOutputButton" Grid.Column="1" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding PaymentSlipsOutputCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding PaymentSlipsOutputCommand}" MouseAction="LeftClick"/>
+                    </Button.InputBindings>
+                </Button>
+                <Button x:Name="WithdrawalSlipsOutputButton" Grid.Column="2" Content="{Binding WithdrawalSlipsOutputButtonContent}" IsEnabled="{Binding IsWithdrawalSlipsOutputEnabled}" Margin="5">
+                    <Button.InputBindings>
+                        <KeyBinding Command="{Binding WithdrawalSlipsOutputCommand}" Key="Space"/>
+                        <MouseBinding Command="{Binding WithdrawalSlipsOutputCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
                 <Button x:Name="ReceiptsAndExpenditureOutputButton" Grid.Column="3" Content="{Binding ReceiptsAndExpenditureOutputButtonContent}" IsEnabled="{Binding IsReceiptsAndExpenditureOutputButtonEnabled}" Margin="5">

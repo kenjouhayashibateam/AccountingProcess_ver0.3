@@ -49,6 +49,7 @@ namespace WPF.ViewModels
         private string wizeCoreAmount;
         private string receiptsAndExpenditureOutputButtonContent;
         private string paymentSlipsOutputButtonContent;
+        private string withdrawalSlipsOutputButtonContent;
         #endregion
         #region bool
         private bool isValidity;
@@ -69,6 +70,7 @@ namespace WPF.ViewModels
         private bool isBalanceFinalAccountOutputEnabled;
         private bool isReceiptsAndExpenditureOutputButtonEnabled;
         private bool isPaymentSlipsOutputEnabled;
+        private bool isWithdrawalSlipsOutputEnabled;
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
@@ -103,8 +105,21 @@ namespace WPF.ViewModels
             ShowRemainingCalculationViewCommand = new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
             SetCashboxTotalAmountCommand = new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
             PaymentSlipsOutputCommand = new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
+            WithdrawalSlipsOutputCommand = new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 出金伝票出力コマンド
+        /// </summary>
+        public DelegateCommand WithdrawalSlipsOutputCommand { get; }
+        private async void WithdrawalSlipsOutput()
+        {
+            WithdrawalSlipsOutputButtonContent = "出力中";
+            IsWithdrawalSlipsOutputEnabled = false;
+            await Task.Run(() => DataOutput.PaymentAndWithdrawalSlips(receiptsAndExpenditures, LoginRep.Rep, false));
+            IsWithdrawalSlipsOutputEnabled = true;
+            WithdrawalSlipsOutputButtonContent = "出金伝票";
+        }
         /// <summary>
         /// 入金伝票出力コマンド
         /// </summary>
@@ -113,7 +128,7 @@ namespace WPF.ViewModels
         {
             PaymentSlipsOutputButtonContent = "出力中";
             IsPaymentSlipsOutputEnabled = false;
-            await Task.Run(() => DataOutput.PaymentSlips(ReceiptsAndExpenditures,LoginRep.Rep));
+            await Task.Run(() => DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, true));
             IsPaymentSlipsOutputEnabled = true;
             PaymentSlipsOutputButtonContent = "入金伝票";
         }
@@ -140,9 +155,11 @@ namespace WPF.ViewModels
             IsReceiptsAndExpenditureOutputButtonEnabled = true;
             IsBalanceFinalAccountOutputEnabled = true;
             IsPaymentSlipsOutputEnabled = true;
+            IsWithdrawalSlipsOutputEnabled = true;
             BalanceFinalAccountOutputButtonContent = "収支日報";
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
+            WithdrawalSlipsOutputButtonContent = "出金伝票";
             DateTime PreviousDay;
             if (IsPeriodSearch) PreviousDay = SearchEndDate;
             else PreviousDay = SearchStartDate;
@@ -1104,6 +1121,30 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出金伝票出力ボタンのContent
+        /// </summary>
+        public string WithdrawalSlipsOutputButtonContent
+        {
+            get => withdrawalSlipsOutputButtonContent;
+            set
+            {
+                withdrawalSlipsOutputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出金伝票出力ボタンのEnabled
+        /// </summary>
+        public bool IsWithdrawalSlipsOutputEnabled
+        {
+            get => isWithdrawalSlipsOutputEnabled;
+            set
+            {
+                isWithdrawalSlipsOutputEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1120,11 +1161,14 @@ namespace WPF.ViewModels
             BalanceFinalAccount = $"出納リストの収支決算 : {TextHelper.AmountWithUnit(amount)}";
             SetOutputButtonEnabled(amount);
         }
+        /// <summary>
+        /// 金庫の総額と決算額があっていれば、各EnabledをTrueにします
+        /// </summary>
+        /// <param name="amount">決算額</param>
         private void SetOutputButtonEnabled(int amount)
-        {        
-            IsBalanceFinalAccountOutputEnabled = Cashbox.GetTotalAmount() == amount;
-            IsReceiptsAndExpenditureOutputButtonEnabled = Cashbox.GetTotalAmount() == amount;
-            IsPaymentSlipsOutputEnabled = Cashbox.GetTotalAmount() == amount;
+        {
+            IsBalanceFinalAccountOutputEnabled = IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled = IsWithdrawalSlipsOutputEnabled =
+                Cashbox.GetTotalAmount() == amount;
         }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します

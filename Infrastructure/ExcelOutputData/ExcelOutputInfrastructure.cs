@@ -2,6 +2,7 @@
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System.Collections.ObjectModel;
+using static Infrastructure.ExcelOutputData.SlipOutput;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -22,9 +23,10 @@ namespace Infrastructure.ExcelOutputData
             cbo.DataOutput();
         }
 
-        public void PaymentSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep)
+        public void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment)
         {
-            PaymentSlipOutput pso = new PaymentSlipOutput(receiptsAndExpenditures,loginRep);
+            SlipType st = (isPayment) ? SlipType.Payment : SlipType.Withdrawal;
+            SlipOutput pso = new SlipOutput(receiptsAndExpenditures,loginRep,st);
             pso.Output();
         }
 
