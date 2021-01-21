@@ -1,4 +1,5 @@
 ﻿using Infrastructure;
+using Infrastructure.ExcelOutputData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -7,7 +8,7 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class ReceiptsAndExpenditureMangementViewModelTests
     {
-        private readonly ReceiptsAndExpenditureMangementViewModel vm = new ReceiptsAndExpenditureMangementViewModel() { DataBaseConnect = new LocalConnectInfrastructure() };
+        private readonly ReceiptsAndExpenditureMangementViewModel vm = new ReceiptsAndExpenditureMangementViewModel(new ExcelOutputInfrastructure(), new LocalConnectInfrastructure());
 
         [TestMethod()]
         public void データ登録時のフィールドプロパティ()
@@ -35,6 +36,17 @@ namespace WPF.ViewModels.Tests
 
             vm.Price = "1000";
             Assert.AreEqual(vm.IsDataOperationButtonEnabled, true);            
+        }
+        [TestMethod()]
+        public void データ更新時のフィールドプロパティ()
+        {
+            vm.SetDataUpdateCommand.Execute();
+
+            vm.SelectedReceiptsAndExpenditure = vm.ReceiptsAndExpenditures[0];
+            Assert.AreEqual(vm.IsDataOperationButtonEnabled, true);
+
+            vm.ComboContentText = string.Empty;
+            Assert.AreEqual(vm.IsDataOperationButtonEnabled, false);
         }
     }
 }

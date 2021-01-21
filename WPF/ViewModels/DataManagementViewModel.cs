@@ -5,6 +5,8 @@ using WPF.Views.Datas;
 using WPF.ViewModels.Commands;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
+using Infrastructure;
 
 namespace WPF.ViewModels
 {
@@ -70,6 +72,7 @@ namespace WPF.ViewModels
         private bool isCreditAccountValidity;
         private bool isCreditAccountReferenceMenuEnabled;
         private bool isCreditAccountValidityTrueOnly;
+        private bool isShunjuenAccount;
         private CreditAccount currentCreditAccount;
         private ObservableCollection<CreditAccount> creditAccounts;
         #endregion
@@ -93,11 +96,12 @@ namespace WPF.ViewModels
         #endregion
         #endregion
 
-        public DataManagementViewModel()
+        public DataManagementViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             SetDataRegistrationCommand.Execute();
         }
+        public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
 
         protected override void SetDelegateCommand()
         {
@@ -111,7 +115,7 @@ namespace WPF.ViewModels
         {
             RepList = DataBaseConnect.ReferenceRep(string.Empty, false);
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, false);
-            CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, false);
+            CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, false,false);
             Contents = DataBaseConnect.ReferenceContent(string.Empty,string.Empty,string.Empty, false);
         }
 
@@ -1059,6 +1063,7 @@ namespace WPF.ViewModels
             IsCreditAccountEnabled = true;
             IsCreditAccountReferenceMenuEnabled = false;
             IsCreditAccountOperationButtonEnabled = false;
+            IsShunjuenAccount = true;
             CreditAccountField = string.Empty;
         }
         /// <summary>
@@ -1162,7 +1167,7 @@ namespace WPF.ViewModels
         /// </summary>
         private async void CreditAccountDataRegistration()
         {
-            CurrentCreditAccount = new CreditAccount(null, CreditAccountField, IsCreditAccountValidity);
+            CurrentCreditAccount = new CreditAccount(null, CreditAccountField, IsCreditAccountValidity,IsShunjuenAccount);
 
            if (CallConfirmationDataOperation($"貸方勘定 : {CreditAccountField}\r\n有効性 : {IsCreditAccountValidity}", "貸方勘定") == MessageBoxResult.Cancel) return;
 
@@ -1172,7 +1177,7 @@ namespace WPF.ViewModels
             CreditAccountOperationButtonContent = "登録";
             IsCreditAccountOperationButtonEnabled = true;
 
-            CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, IsCreditAccountValidityTrueOnly);
+            CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, IsCreditAccountValidityTrueOnly,false);
             CreditAccountFieldClear();
         }
         private void CreditAccountFieldClear()
@@ -1446,6 +1451,19 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 春秋苑会計に掲載されるデータかのチェック
+        /// </summary>
+        public bool IsShunjuenAccount
+        {
+            get => isShunjuenAccount;
+            set
+            {
+                isShunjuenAccount = value;
+                CallPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// 伝票内容データを登録、更新します
         /// </summary>

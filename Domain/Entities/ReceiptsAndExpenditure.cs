@@ -54,19 +54,15 @@ namespace Domain.Entities
         /// </summary>
         public bool IsValidity { get; set; }
         /// <summary>
-        /// 認証日
-        /// </summary>
-        public DateTime ApprovalDate { get; set; }
-        /// <summary>
-        /// 認証担当者
-        /// </summary>
-        public Rep ApprovalRep { get; set; }
-        /// <summary>
         /// 入出金日
         /// </summary>
         public DateTime AccountActivityDate { get; set; }
+        /// <summary>
+        /// 出力済みチェック
+        /// </summary>
+        public bool IsOutput { get; set; }
 
-        public ReceiptsAndExpenditure(int receiptsAndExpenditureID, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime approvalDate, Rep approvalRep, DateTime accountActivityDate)
+        public ReceiptsAndExpenditure(int receiptsAndExpenditureID, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime accountActivityDate,bool isOutput)
         {
             ReceiptsAndExpenditureID = receiptsAndExpenditureID;
             RegistrationDate = registrationDate;
@@ -78,9 +74,8 @@ namespace Domain.Entities
             Price = price;
             IsPayment = isPayment;
             IsValidity = isValidity;
-            ApprovalDate = approvalDate;
-            ApprovalRep = approvalRep;
             AccountActivityDate = accountActivityDate;
+            IsOutput = isOutput;
         }
     }
 }

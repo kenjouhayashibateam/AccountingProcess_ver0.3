@@ -209,9 +209,6 @@ namespace Infrastructure.ExcelOutputData
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
 
-        protected override void SetList(IEnumerable outputList)
-        {
-            ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
-        }
+        protected override void SetList(IEnumerable outputList) => ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;        
     }
 }

@@ -24,6 +24,9 @@
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <behavior:ShowDiarog/>
         </interactions:PropertyChangedTrigger>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
         <i:EventTrigger EventName="Activated">
             <i:InvokeCommandAction Command="{Binding SetCashboxTotalAmountCommand}"/>
         </i:EventTrigger>
@@ -32,6 +35,9 @@
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
             <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
+        </ib:DataTrigger>
+        <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
     
@@ -199,12 +205,13 @@
                         </Grid>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <CheckBox Content="担当経理場所の出納データを表示" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
                             <CheckBox Content="有効なデータのみ表示" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                            <CheckBox Content="出力済みのデータも含む" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsContainOutputted}" Margin="5"/>
                         </Grid>
                         <Grid Grid.Row="3">
                             <Grid.ColumnDefinitions>

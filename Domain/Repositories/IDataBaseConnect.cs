@@ -65,6 +65,12 @@ namespace Domain.Repositories
         /// <returns>データ処理件数</returns>
         public int Update(Content content);
         /// <summary>
+        /// 出納データを更新します
+        /// </summary>
+        /// <param name="receiptsAndExpenditure">更新出納データ</param>
+        /// <returns>データ処理件数</returns>
+        public int Update(ReceiptsAndExpenditure receiptsAndExpenditure);
+        /// <summary>
         /// 担当者検索
         /// </summary>
         /// <param name="repName">担当者名</param>
@@ -84,8 +90,9 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="account">貸方勘定</param>
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
+        /// <param name="isShunjuenAccountOnly">春秋苑会計に掲載されるデータのみ表示</param>
         /// <returns>貸方勘定リスト</returns>
-        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly);
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly);
         /// <summary>
         /// 伝票内容検索
         /// </summary>
@@ -100,6 +107,24 @@ namespace Domain.Repositories
         /// <param name="id">勘定科目ID</param>
         /// <returns>勘定科目</returns>
         public AccountingSubject CallAccountingSubject(string id);
+        /// <summary>
+        /// IDを基に会計内容を呼び出します
+        /// </summary>
+        /// <param name="id">会計内容ID</param>
+        /// <returns>会計内容</returns>
+        public Content CallContent(string id);
+        /// <summary>
+        /// IDを基に貸方勘定を呼び出します
+        /// </summary>
+        /// <param name="id">貸方勘定ID</param>
+        /// <returns>貸方勘定</returns>
+        public CreditAccount CallCreditAccount(string id);
+        /// <summary>
+        /// IDを基に担当者を呼び出します
+        /// </summary>
+        /// <param name="id">担当者ID</param>
+        /// <returns>担当者</returns>
+        public Rep CallRep(string id);
         /// <summary>
         /// 伝票内容の文字列で、所属する勘定科目を検索します
         /// </summary>
@@ -119,16 +144,11 @@ namespace Domain.Repositories
         /// <returns>前日支出金額</returns>
         public int PreviousDayDisbursement(DateTime previousDay);
         /// <summary>
-        /// 引数（前日）までの決算額を返します
-        /// </summary>
-        /// <param name="previousDay">前日日付</param>
-        /// <returns></returns>
-        public int PreviousDayTotalBalance(DateTime previousDay);
-        /// <summary>
         /// 月ごとの決算を返します
         /// </summary>
+        /// <param name="accountDate">呼び出す決算日</param>
         /// <returns>決算額</returns>
-        public int FinalAccountPerMonth();
+        public int FinalAccountPerMonth(DateTime accountDate);
         /// <summary>
         /// 出納データを登録します
         /// </summary>
@@ -150,6 +170,6 @@ namespace Domain.Repositories
         /// <param name="accountActivityDateStart">入出金日検索開始日時</param>
         /// <param name="accountActivityDateEnd">入出金日検索最終日時</param>
         /// <returns></returns>
-        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd);
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount,string content,string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly,bool isPayment, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd);
     }
 }

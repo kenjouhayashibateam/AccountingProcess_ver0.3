@@ -10,13 +10,17 @@ namespace Infrastructure
     {
         public AccountingSubject CallAccountingSubject(string id) => new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
 
-        public int FinalAccountPerMonth() => 2815597;
+        public Content CallContent(string id) => new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true);
+
+        public CreditAccount CallCreditAccount(string id) => new CreditAccount("credit_account0", "春秋苑", true,true);
+
+        public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
+
+        public int FinalAccountPerMonth(DateTime accountDate) => 2815597;
 
         public int PreviousDayDisbursement(DateTime previousDay) => 0;
 
         public int PreviousDayIncome(DateTime previousDay) => 0;
-
-        public int PreviousDayTotalBalance(DateTime previousDay) => 2815597;
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
@@ -83,23 +87,22 @@ namespace Infrastructure
             return list;            
         }
 
-        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly)
+        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
         {
             ObservableCollection<CreditAccount> list = new ObservableCollection<CreditAccount>
             {
-                new CreditAccount("credit_account1","春秋苑",true),
-                new CreditAccount("credit_account2","法務部",true),
-                new CreditAccount("credit_account3","ホテル",false)
+                new CreditAccount("credit_account1","春秋苑",true,true),
+                new CreditAccount("credit_account2","法務部",true,true),
+                new CreditAccount("credit_account3","ホテル",false,false)
             };
             return list;
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(string registrationDateStart, string registrationDateEnd, string location, string creditAccount, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, string accountActivityDateStart, string accountActivityDateEnd)
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd)
         {
-            Rep repHayashiba=new Rep("rep1","林飛 顕誠","aaa",true,true);
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
-            CreditAccount shunjuen = new CreditAccount("credit_account1", "春秋苑", true);
+            CreditAccount shunjuen = new CreditAccount("credit_account1", "春秋苑", true,true);
 
             AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution = new AccountingSubject("id2", "822", "その他冥加金", true);
@@ -115,35 +118,25 @@ namespace Infrastructure
             ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>
             {
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content3",OtherMiscellaneousIncome,-1,"銘板彫刻",true),"山口家",5400,true,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
+                    new Content("content3",OtherMiscellaneousIncome,-1,"銘板彫刻",true),"山口家",5400,true,true,DateTime.Today,false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
+                    new Content("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,false),
                 new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
-                    new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,DateTime.Today.AddDays(1),
-                    repHayashiba,DateTime.Today.AddDays(2)),
+                    new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,DateTime.Today.AddDays(1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
-                    new Content("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content7",TravelExpense,-1,"3ヶ月交通費",true),"坂本邦夫",12860,false,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content8",SuppliesExpense,-1,"コード、マウスパッド",true),"ヤマダ電機",2247,false,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content9",VehicleFee,-1,"ヴィッツ　ガソリン代",true),"アセント",4600,false,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content10",InternalMaintenanceExpenses,-1,"花苗",true),"ビバホーム",5827,false,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,DateTime.Today,
-                    repHayashiba,DateTime.Today),
-                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),3130000,false,true,DateTime.Today,
-                    repHayashiba,DateTime.Today)
+                    new Content("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,DateTime.Today,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content7",TravelExpense,-1,"3ヶ月交通費",true),"坂本邦夫",12860,false,true,DateTime.Today,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content8",SuppliesExpense,-1,"コード、マウスパッド",true),"ヤマダ電機",2247,false,true,DateTime.Today,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content9",VehicleFee,-1,"ヴィッツ　ガソリン代",true),"アセント",4600,false,true,DateTime.Today,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content10",InternalMaintenanceExpenses,-1,"花苗",true),"ビバホーム",5827,false,true,DateTime.Today,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,DateTime.Today,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),3130000,false,true,DateTime.Today,false)
             };
             return list;
         }
@@ -176,5 +169,7 @@ namespace Infrastructure
         public int Update(CreditAccount creditAccount) => 1;
 
         public int Update(Content content) => 1;
+
+        public int Update(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
     }
 }
