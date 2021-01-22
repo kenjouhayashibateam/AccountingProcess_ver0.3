@@ -40,11 +40,11 @@
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
-    
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="13*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="14*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="1*"/>
@@ -77,20 +77,21 @@
             <GroupBox Header="詳細" Background="{Binding DetailBackGroundColor}" Margin="5,3">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="13*"/>
+                        <RowDefinition Height="20*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="2*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding ReceiptsAndExpenditureIDField}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -98,16 +99,16 @@
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsEnabled="{Binding IsDepositAndWithdrawalContetntEnabled}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
                         <Grid Grid.Row="3">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="貸方勘定" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                             <ComboBox Name="CreditAccountComboBox" Grid.Row="1" SelectedIndex="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus,Mode=TwoWay}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.Account}" Margin="5,3,180,3"/>
                         </Grid>
                         <Grid Grid.Row="4">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
@@ -123,16 +124,16 @@
                         </Grid>
                         <Grid Grid.Row="5">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="詳細（将来的に削除予定）" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                             <TextBox x:Name="DetailTextBox" Grid.Row="1" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
                         </Grid>
                         <Grid Grid.Row="6">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -144,30 +145,31 @@
                         </Grid>
                         <Grid Grid.Row="7">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="4*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="入出金日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                             <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" IsEnabled="{Binding IsAccountActivityEnabled}" HorizontalAlignment="Left" Margin="5,3"/>
                         </Grid>
                         <Grid Grid.Row="8">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="登録日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                             <DatePicker x:Name="RegistrationDateTextBox" Grid.Row="1" SelectedDate="{Binding RegistrationDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
                         </Grid>
                         <Grid Grid.Row="9">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="登録担当者" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                             <TextBox x:Name="RegistrationRepNameTextBox" Grid.Row="1" IsEnabled="False" Text="{Binding RegistrationRep.Name}" VerticalContentAlignment="Center" Margin="5,3,200,3"/>
                         </Grid>
+                        <CheckBox Content="印刷済みフラグ" Grid.Row="10" Margin="5"/>
                     </Grid>
-                    <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5,3">
+                    <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5,0">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" MouseAction="LeftClick"/>
@@ -196,7 +198,7 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <DatePicker Grid.Column="0" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
                             <TextBlock Text="～" Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
@@ -209,20 +211,19 @@
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Content="担当経理場所の出納データを表示" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
-                            <CheckBox Content="有効なデータのみ表示" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                            <CheckBox Content="担当経理場所の出納データを表示" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsLocationSearch}" Margin="5"/>
+                            <CheckBox Content="有効なデータのみ表示" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidityTrueOnly}" Margin="5"/>
                             <CheckBox Content="出力済みのデータも含む" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsContainOutputted}" Margin="5"/>
                         </Grid>
                         <Grid Grid.Row="3">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton Content="すべて表示" Grid.Column="0" IsChecked="{Binding IsAllShowItem}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                            <RadioButton Content="入金のみ表示" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                            <RadioButton Content="出金のみ表示" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <RadioButton Content="入出金すべて表示" Grid.Column="0" IsChecked="{Binding IsAllShowItem}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,10,0,10"/>
+                            <RadioButton Content="入金のみ表示" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,10,0,10"/>
+                            <RadioButton Content="出金のみ表示" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,10,0,10" Grid.ColumnSpan="2"/>
                         </Grid>
                     </Grid>
                 </GroupBox>

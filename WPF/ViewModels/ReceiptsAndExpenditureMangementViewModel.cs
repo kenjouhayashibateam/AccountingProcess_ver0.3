@@ -74,6 +74,8 @@ namespace WPF.ViewModels
         private bool isWithdrawalSlipsOutputEnabled;
         private bool isOutput;
         private bool isContainOutputted;
+        private bool isLocationSearch;
+        private bool isValidityTrueOnly;
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
@@ -103,18 +105,12 @@ namespace WPF.ViewModels
         {
             DataOutput = dataOutput;
             SetProperty();
-            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
-            ReceiptsAndExpenditureOutputCommand = new DelegateCommand(() => ReceiptsAndExpenditureOutput(), () => IsReceiptsAndExpenditureOutputButtonEnabled);
-            ShowRemainingCalculationViewCommand = new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
-            SetCashboxTotalAmountCommand = new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
-            PaymentSlipsOutputCommand = new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
-            WithdrawalSlipsOutputCommand = new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput(), DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
         /// 出金伝票出力コマンド
         /// </summary>
-        public DelegateCommand WithdrawalSlipsOutputCommand { get; }
+        public DelegateCommand WithdrawalSlipsOutputCommand { get; set; }
         private async void WithdrawalSlipsOutput()
         {
             WithdrawalSlipsOutputButtonContent = "出力中";
@@ -137,7 +133,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 入金伝票出力コマンド
         /// </summary>
-        public DelegateCommand PaymentSlipsOutputCommand { get; }
+        public DelegateCommand PaymentSlipsOutputCommand { get; set; }
         private async void PaymentSlipsOutput()
         {
             PaymentSlipsOutputButtonContent = "出力中";
@@ -149,7 +145,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 金庫金額計算ウィンドウ表示コマンド
         /// </summary>
-        public DelegateCommand ShowRemainingCalculationViewCommand { get; }
+        public DelegateCommand ShowRemainingCalculationViewCommand { get; set; }
         private void ShowRemainingCalculationView()
         {
             CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
@@ -170,6 +166,7 @@ namespace WPF.ViewModels
             IsBalanceFinalAccountOutputEnabled = true;
             IsPaymentSlipsOutputEnabled = true;
             IsWithdrawalSlipsOutputEnabled = true;
+            IsAllShowItem = true;
             BalanceFinalAccountOutputButtonContent = "収支日報";
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
@@ -193,7 +190,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 金庫データをViewにセットする
         /// </summary>
-        public DelegateCommand SetCashboxTotalAmountCommand { get; }
+        public DelegateCommand SetCashboxTotalAmountCommand { get; set; }
         private void SetCashboxTotalAmount()
         {
             Cashbox = Cashbox.GetInstance();
@@ -207,7 +204,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出納データ出力コマンド
         /// </summary>
-        public DelegateCommand ReceiptsAndExpenditureOutputCommand { get; }
+        public DelegateCommand ReceiptsAndExpenditureOutputCommand { get; set; }
         private async void ReceiptsAndExpenditureOutput()
         {
             ReceiptsAndExpenditureOutputButtonContent = "出力中";
@@ -219,7 +216,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 収支日報出力コマンド
         /// </summary>
-        public DelegateCommand BalanceFinalAccountOutputCommand { get; }
+        public DelegateCommand BalanceFinalAccountOutputCommand { get; set; }
         /// <summary>
         /// 収支日報を出力します
         /// </summary>
@@ -244,13 +241,14 @@ namespace WPF.ViewModels
                     IsDetailTextEnabled = true;
                     IsAccountActivityEnabled = true;
                     IsPriceEnabled = true;
+                    IsOutput = false;
+                    IsReferenceMenuEnabled = false;
                     ComboContentText = string.Empty;
                     ComboAccountingSubjectText = string.Empty;
                     ComboAccountingSubjectCode = string.Empty;
                     ComboCreditAccountText = ComboCreditAccounts[0].Account;
                     DetailText = string.Empty;
-                    price = string.Empty;
-                    IsReferenceMenuEnabled = false;
+                    Price = string.Empty;
                     break;
                 case DataOperation.更新:
                     ComboCreditAccountText = string.Empty;
@@ -272,8 +270,13 @@ namespace WPF.ViewModels
 
         protected override void SetDelegateCommand()
         {
-            ReceiptsAndExpenditureDataOperationCommand =
-                new DelegateCommand(() => ReceiptsAndExpenditureDataOperation(), () => IsDataOperationButtonEnabled);
+            ReceiptsAndExpenditureDataOperationCommand = new DelegateCommand(() => ReceiptsAndExpenditureDataOperation(), () => IsDataOperationButtonEnabled);
+            BalanceFinalAccountOutputCommand = new DelegateCommand(() => BalanceFinalAccountOutput(), () => IsBalanceFinalAccountOutputEnabled);
+            ReceiptsAndExpenditureOutputCommand = new DelegateCommand(() => ReceiptsAndExpenditureOutput(), () => IsReceiptsAndExpenditureOutputButtonEnabled);
+            ShowRemainingCalculationViewCommand = new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
+            SetCashboxTotalAmountCommand = new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
+            PaymentSlipsOutputCommand = new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
+            WithdrawalSlipsOutputCommand = new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -782,7 +785,9 @@ namespace WPF.ViewModels
             set
             {
                 if (SearchEndDate < value) SearchEndDate = value;
-                searchStartDate = value;                
+                searchStartDate = value;
+                if (!IsPeriodSearch) SearchEndDate = value;
+                CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -796,6 +801,7 @@ namespace WPF.ViewModels
             {
                 if (SearchStartDate > value) searchEndDate = SearchStartDate;
                 else searchEndDate = value;
+                CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -820,6 +826,7 @@ namespace WPF.ViewModels
             set
             {
                 isAllShowItem = value;
+                CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -832,6 +839,7 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentOnly = value;
+                CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -844,6 +852,7 @@ namespace WPF.ViewModels
             set
             {
                 isWithdrawalOnly = value;
+                CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -881,6 +890,7 @@ namespace WPF.ViewModels
         {
             IsValidity = SelectedReceiptsAndExpenditure.IsValidity;
             IsPaymentCheck = SelectedReceiptsAndExpenditure.IsPayment;
+            IsOutput = SelectedReceiptsAndExpenditure.IsOutput;
             ComboCreditAccountText = SelectedReceiptsAndExpenditure.CreditAccount.Account;
             ComboAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode;
             ComboAccountingSubjectText = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
@@ -1255,6 +1265,30 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 経理担当場所のデータのみを表示するかのチェック
+        /// </summary>
+        public bool IsLocationSearch
+        {
+            get => isLocationSearch;
+            set
+            {
+                isLocationSearch = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 有効なデータのみ検索するかのチェック
+        /// </summary>
+        public bool IsValidityTrueOnly
+        {
+            get => isValidityTrueOnly;
+            set
+            {
+                isValidityTrueOnly = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1316,7 +1350,32 @@ namespace WPF.ViewModels
                     break;
             }
         }
+        /// <summary>
+        /// 出納データを検索して、リストに格納します
+        /// </summary>
+        private void CreateReceiptsAndExpenditures()
+        {
+            DateTime AccountActivityDateStart;
+            DateTime AccountActivityDateEnd;
+            if (IsPeriodSearch)
+            {
+                AccountActivityDateStart = SearchStartDate == null ? new DateTime(1900, 1, 1) : SearchStartDate;
+                AccountActivityDateEnd = SearchEndDate == null ? new DateTime(9999, 1, 1) : SearchEndDate;
+            }
+            else
+            {
+                AccountActivityDateStart = new DateTime(1900, 1, 1);
+                AccountActivityDateEnd = AccountActivityDateStart;
+            }
 
+            string Location;
+            if (IsLocationSearch) Location = AccountingProcessLocation.Location;
+            else Location = string.Empty;
+
+            if (IsLocationSearch) Location = AccountingProcessLocation.Location;
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), Location, string.Empty, string.Empty, string.Empty, string.Empty,
+                string.Empty, !IsAllShowItem, IsPaymentOnly, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd);
+        }
         protected override string SetWindowDefaultTitle()
         {
             DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";
