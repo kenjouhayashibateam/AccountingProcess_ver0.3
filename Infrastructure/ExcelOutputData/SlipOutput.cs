@@ -113,7 +113,6 @@ namespace Infrastructure.ExcelOutputData
                         break;
                 };
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = rae.CreditAccount.Account;
-
                 contentCount++;
             }
         }

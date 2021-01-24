@@ -98,7 +98,7 @@ namespace Infrastructure
             return list;
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd)
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 

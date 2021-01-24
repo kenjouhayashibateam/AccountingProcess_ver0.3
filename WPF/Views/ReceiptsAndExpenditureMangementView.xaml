@@ -10,7 +10,7 @@
                 xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="900" Width="1000" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="950" Width="1000" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
@@ -47,7 +47,7 @@
             <RowDefinition Height="14*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="データ操作" Grid.Row="0" Margin="5,3">
             <Grid>
@@ -211,7 +211,7 @@
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Content="担当経理場所の出納データを表示" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsLocationSearch}" Margin="5"/>
+                            <CheckBox Content="担当経理場所の出納データのみを表示" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsLocationSearch}" Margin="5"/>
                             <CheckBox Content="有効なデータのみ表示" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidityTrueOnly}" Margin="5"/>
                             <CheckBox Content="出力済みのデータも含む" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsContainOutputted}" Margin="5"/>
                         </Grid>
@@ -324,9 +324,9 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
@@ -388,7 +388,7 @@
                         <MouseBinding Command="{Binding WithdrawalSlipsOutputCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
-                <Button x:Name="ReceiptsAndExpenditureOutputButton" Grid.Column="3" Content="{Binding ReceiptsAndExpenditureOutputButtonContent}" IsEnabled="{Binding IsReceiptsAndExpenditureOutputButtonEnabled}" Margin="5">
+                <Button x:Name="ReceiptsAndExpenditureOutputButton" Grid.Column="3" Content="{Binding ReceiptsAndExpenditureOutputButtonContent}" IsEnabled="False" Margin="5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding ReceiptsAndExpenditureOutputCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding ReceiptsAndExpenditureOutputCommand}" MouseAction="LeftClick"/>

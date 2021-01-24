@@ -1093,6 +1093,7 @@ namespace WPF.ViewModels
                     CreditAccountIDField = value.ID;
                     CreditAccountField = value.Account;
                     IsCreditAccountValidity = value.IsValidity;
+                    IsShunjuenAccount = value.IsShunjuenAccount;
                 }
                 CallPropertyChanged();
             }

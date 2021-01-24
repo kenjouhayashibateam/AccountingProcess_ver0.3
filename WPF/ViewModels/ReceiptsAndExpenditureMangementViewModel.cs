@@ -115,14 +115,13 @@ namespace WPF.ViewModels
         {
             WithdrawalSlipsOutputButtonContent = "出力中";
             IsWithdrawalSlipsOutputEnabled = false;
-            await Task.Run(() => DataOutput.PaymentAndWithdrawalSlips(receiptsAndExpenditures, LoginRep.Rep, false));
+            await Task.Run(() => SlipsOutputProcess(false));
             IsWithdrawalSlipsOutputEnabled = true;
             WithdrawalSlipsOutputButtonContent = "出金伝票";
         }
         private void FieldClear()
         {
             IsValidity = true;
-            SelectedCreditAccount = null;
             SelectedAccountingSubjectCode = null;
             SelectedAccountingSubject = null;
             SelectedContent = null;
@@ -138,9 +137,18 @@ namespace WPF.ViewModels
         {
             PaymentSlipsOutputButtonContent = "出力中";
             IsPaymentSlipsOutputEnabled = false;
-            await Task.Run(() => DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, true));
+            await Task.Run(() => SlipsOutputProcess(true));
             IsPaymentSlipsOutputEnabled = true;
             PaymentSlipsOutputButtonContent = "入金伝票";
+        }
+        private void SlipsOutputProcess(bool isPayment)
+        {
+            DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, isPayment);
+            foreach(ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+            {
+                rae.IsOutput = true;
+                DataBaseConnect.Update(rae);
+            }
         }
         /// <summary>
         /// 金庫金額計算ウィンドウ表示コマンド
@@ -174,11 +182,13 @@ namespace WPF.ViewModels
             DateTime PreviousDay;
             if (IsPeriodSearch) PreviousDay = SearchEndDate;
             else PreviousDay = SearchStartDate;
-            PreviousDayFinalAccount = DataBaseConnect.FinalAccountPerMonth(DateTime.Today.AddMonths(-1)) - DataBaseConnect.PreviousDayDisbursement(PreviousDay) + DataBaseConnect.PreviousDayIncome(PreviousDay);
+            PreviousDayFinalAccount =
+                DataBaseConnect.FinalAccountPerMonth
+                (DateTime.Today.AddMonths(-1)) - DataBaseConnect.PreviousDayDisbursement(PreviousDay) + DataBaseConnect.PreviousDayIncome(PreviousDay);
             ListTitle = $"一覧 : 前日決算 {TextHelper.AmountWithUnit( PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
-            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, DateTime.Today.AddDays(-1), DateTime.Today);
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, false, true, false, true, DateTime.Today.AddDays(-1), DateTime.Today);
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
             SetCashboxTotalAmount();
@@ -224,8 +234,8 @@ namespace WPF.ViewModels
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
-            await Task.Run(() => DataOutput.BalanceFinalAccount(TextHelper.AmountWithUnit(PreviousDayFinalAccount), PeymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue, TodaysFinalAccount,
-                YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
+            await Task.Run(() => DataOutput.BalanceFinalAccount(TextHelper.AmountWithUnit(PreviousDayFinalAccount), PeymentSumDisplayValue, WithdrawalSumDisplayValue,
+                TransferSumDisplayValue, TodaysFinalAccount, YokohamaBankAmount, CeresaAmount, WizeCoreAmount));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
         }
@@ -284,7 +294,8 @@ namespace WPF.ViewModels
         /// <returns></returns>
         private int ReturnTodaysFinalAccount()
         {
-            if (DataBaseConnect.FinalAccountPerMonth(DateTime.Today.AddMonths(-1))- DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1))+DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
+            if (DataBaseConnect.FinalAccountPerMonth(DateTime.Today.AddMonths(-1))
+                - DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1))+DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
                 return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
             else
                 return 0;
@@ -309,10 +320,36 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 出納データが更新できるかを判定します
+        /// </summary>
+        /// <returns></returns>
+        private bool DecisionCanReceiptsAndExpenditureUpdate()
+        {
+            bool value = SelectedReceiptsAndExpenditure.AccountActivityDate < DateTime.Today.AddDays(-1);
+
+            if(!value)
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Button = System.Windows.MessageBoxButton.OK,
+                    Image = System.Windows.MessageBoxImage.Warning,
+                    Title = "更新可能日経過",
+                    Message = $"データ更新は入出金から2日を過ぎると許可されません"
+                };
+                CallShowMessageBox = true;
+            }
+            return value;
+        }
+        /// <summary>
         /// 出納データを更新します
         /// </summary>
         private void DataUpdate()
         {
+            bool canUpdate = true;
+
+            if (SelectedReceiptsAndExpenditure.IsValidity == IsValidity) canUpdate = DecisionCanReceiptsAndExpenditureUpdate();
+            if (!canUpdate) return;
+
             string UpdateCotent = string.Empty;
 
             UpdateCotent+= $"経理担当場所 : {SelectedReceiptsAndExpenditure.Location} → {AccountingProcessLocation.Location}\r\n";
@@ -367,8 +404,9 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditure rae = new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditAccount, SelectedContent,
                 DetailText, TextHelper.IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, false);
 
-            if (CallConfirmationDataOperation($"経理担当場所 : {rae.Location}\r\n入出金日 : {rae.AccountActivityDate}\r\n貸方勘定 : {rae.CreditAccount.Account}\r\n入出金 : {DepositAndWithdrawalContetnt}\r\n" +
-                $"内容 : {rae.Content.Text}\r\n詳細 : {rae.Detail}\r\n金額 : {TextHelper.AmountWithUnit(rae.Price)}\r\n有効性 : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票")
+            if (CallConfirmationDataOperation
+                ($"経理担当場所 : {rae.Location}\r\n入出金日 : {rae.AccountActivityDate}\r\n貸方勘定 : {rae.CreditAccount.Account}\r\n入出金 : {DepositAndWithdrawalContetnt}\r\n" +
+                 $"内容 : {rae.Content.Text}\r\n詳細 : {rae.Detail}\r\n金額 : {TextHelper.AmountWithUnit(rae.Price)}\r\n有効性 : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票")
                 == System.Windows.MessageBoxResult.Cancel) return;
 
             DataBaseConnect.Registration(rae);
@@ -527,7 +565,8 @@ namespace WPF.ViewModels
             {
                 if (selectedAccountingSubject != null && selectedAccountingSubject.Equals(value)) return;
                 selectedAccountingSubject = value;
-                if (selectedAccountingSubject != null && CurrentOperation == DataOperation.登録) ComboContents = DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
+                if (selectedAccountingSubject != null && CurrentOperation == DataOperation.登録) ComboContents =
+                        DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
                 CallPropertyChanged();
             }
         }
@@ -1373,8 +1412,8 @@ namespace WPF.ViewModels
             else Location = string.Empty;
 
             if (IsLocationSearch) Location = AccountingProcessLocation.Location;
-            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), Location, string.Empty, string.Empty, string.Empty, string.Empty,
-                string.Empty, !IsAllShowItem, IsPaymentOnly, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd);
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), Location, string.Empty, string.Empty, string.Empty,
+                string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd);
         }
         protected override string SetWindowDefaultTitle()
         {

@@ -220,7 +220,7 @@
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsCreditAccountValidity}" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="貸方勘定" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0"/>
                                 <TextBox x:Name="CreditAccountTextBox" Grid.Row="3" Text="{Binding CreditAccountField}" IsEnabled="{Binding IsCreditAccountEnabled}" VerticalAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                                <CheckBox Content="春秋苑会計（出納帳が春秋苑）" Grid.Row="4" VerticalAlignment="Center" Margin="5,0"/>
+                                <CheckBox Content="春秋苑会計（出納帳が春秋苑）" Grid.Row="4" VerticalAlignment="Center" IsChecked="{Binding IsShunjuenAccount}" Margin="5,0"/>
                             </Grid>
                             <Button x:Name="CreditAccountOperationButton" Grid.Row="1" IsEnabled="{Binding IsCreditAccountOperationButtonEnabled}" Content="{Binding CreditAccountOperationButtonContent}" Margin="5">
                                 <Button.InputBindings>

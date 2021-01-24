@@ -288,7 +288,9 @@ namespace Infrastructure
                 while (dataReader.Read()) { amount = (int)dataReader["amount"]; }
             }
 
-            receipts = ReferenceReceiptsAndExpenditure(new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, previousDay.AddDays(-1 * (previousDay.Day - 1)), previousDay);
+            receipts = ReferenceReceiptsAndExpenditure
+                (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
+                  true, true,true, true, previousDay.AddDays(-1 * (previousDay.Day - 1)), previousDay);
 
             foreach(ReceiptsAndExpenditure rae in receipts) { amount += rae.Price; }
 
@@ -316,8 +318,9 @@ namespace Infrastructure
             }
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure>
-            ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount,string content,string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd)
+        public ObservableCollection<ReceiptsAndExpenditure>ReferenceReceiptsAndExpenditure
+            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount,string content,string detail, string accountingSubject,
+            string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd)
         {
             ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>();
             SqlCommand Cmd = new SqlCommand();
@@ -335,6 +338,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@detail", detail);
                 Cmd.Parameters.AddWithValue("@limiting_is_payment", whichDepositAndWithdrawalOnly);
                 Cmd.Parameters.AddWithValue("@is_payment", isPayment);
+                Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
                 Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
                 SqlDataReader dataReader = Cmd.ExecuteReader();
 
@@ -358,10 +362,9 @@ namespace Infrastructure
                     while (dataReader.Read())
                     finalAmount = (int)dataReader["amount"];
             }
-            receiptsAndExpenditures =
-                ReferenceReceiptsAndExpenditure(new DateTime(1900, 01, 01), new DateTime(9999, 12, 31), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
-                                                                        string.Empty, true, false, true, new DateTime(previousDay.Year, previousDay.Month, previousDay.AddDays(-1 * (previousDay.Day - 1)).Day),
-                                                                        previousDay);
+            receiptsAndExpenditures = ReferenceReceiptsAndExpenditure
+                (new DateTime(1900, 01, 01), new DateTime(9999, 12, 31), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, true, false,true, true,
+                 new DateTime(previousDay.Year, previousDay.Month, previousDay.AddDays(-1 * (previousDay.Day - 1)).Day), previousDay);
 
             foreach (ReceiptsAndExpenditure rae in receiptsAndExpenditures) { finalAmount -= rae.Price; }
 
