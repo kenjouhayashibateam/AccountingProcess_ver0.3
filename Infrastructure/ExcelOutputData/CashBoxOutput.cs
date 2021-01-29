@@ -35,7 +35,7 @@ namespace Infrastructure.ExcelOutputData
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
-            MySheetCellRange(15, 4, 9, 4).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            MySheetCellRange(6, 4, 12, 4).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
         }
 
         protected override void SetCellsStyle()

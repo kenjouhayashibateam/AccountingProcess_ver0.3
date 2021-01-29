@@ -105,8 +105,20 @@ namespace WPF.ViewModels
         {
             DataOutput = dataOutput;
             SetProperty();
+            DefaultListExpress();
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput(), DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 前日と本日のリストを表示するコマンド
+        /// </summary>
+        public DelegateCommand DefaultListExpressCommand { get; set; }
+        private void DefaultListExpress()
+        {
+            IsPeriodSearch = true;
+            SearchStartDate = DateTime.Today.AddDays(-1);
+            SearchEndDate = DateTime.Today;
+            IsContainOutputted = true;
+        }
         /// <summary>
         /// 出金伝票出力コマンド
         /// </summary>
@@ -253,9 +265,9 @@ namespace WPF.ViewModels
                     IsPriceEnabled = true;
                     IsOutput = false;
                     IsReferenceMenuEnabled = false;
-                    ComboContentText = string.Empty;
-                    ComboAccountingSubjectText = string.Empty;
-                    ComboAccountingSubjectCode = string.Empty;
+                     ComboAccountingSubjectCode = string.Empty;
+                     ComboAccountingSubjectText = string.Empty;
+                  ComboContentText = string.Empty;
                     ComboCreditAccountText = ComboCreditAccounts[0].Account;
                     DetailText = string.Empty;
                     Price = string.Empty;
@@ -287,6 +299,7 @@ namespace WPF.ViewModels
             SetCashboxTotalAmountCommand = new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
             PaymentSlipsOutputCommand = new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
             WithdrawalSlipsOutputCommand = new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
+            DefaultListExpressCommand = new DelegateCommand(() => DefaultListExpress(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -565,8 +578,11 @@ namespace WPF.ViewModels
             {
                 if (selectedAccountingSubject != null && selectedAccountingSubject.Equals(value)) return;
                 selectedAccountingSubject = value;
-                if (selectedAccountingSubject != null && CurrentOperation == DataOperation.登録) ComboContents =
-                        DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
+                if (selectedAccountingSubject != null && CurrentOperation == DataOperation.登録)
+                {
+                    ComboContents = DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
+                    ComboContentText = ComboContents[0].Text;
+                }
                 CallPropertyChanged();
             }
         }
@@ -608,6 +624,8 @@ namespace WPF.ViewModels
                 if (comboAccountingSubjectCode == value) return;
                 comboAccountingSubjectCode = value;
                 SetDataOperationButtonEnabled();
+                ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
                 ValidationProperty(nameof(ComboAccountingSubjectCode), value);
                 CallPropertyChanged();
             }

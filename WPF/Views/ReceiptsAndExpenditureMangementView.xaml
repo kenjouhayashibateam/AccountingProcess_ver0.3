@@ -10,7 +10,7 @@
                 xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="950" Width="1000" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="950" Width="1050" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
@@ -44,9 +44,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="14*"/>
+            <RowDefinition Height="16*"/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="データ操作" Grid.Row="0" Margin="5,3">
@@ -61,7 +61,7 @@
                         <MouseBinding Command="{Binding SetDataRegistrationCommand}" MouseAction="LeftClick"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
-                <RadioButton Content="更新" IsChecked="{Binding IsCheckedUpdate}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <RadioButton Content="更新及び閲覧" IsChecked="{Binding IsCheckedUpdate}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <RadioButton.InputBindings>
                         <KeyBinding Command="{Binding SetDataUpdateCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding SetDataUpdateCommand}" MouseAction="LeftClick"/>
@@ -72,7 +72,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Header="詳細" Background="{Binding DetailBackGroundColor}" Margin="5,3">
                 <Grid>
@@ -191,19 +191,27 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                         <Button x:Name="DefaultListExpress" Content="前日、本日のデータを表示する" Grid.Column="0" Margin="5"></Button>
+                       </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="4*"/>
                             </Grid.ColumnDefinitions>
-                            <DatePicker Grid.Column="0" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
-                            <TextBlock Text="～" Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
-                            <DatePicker Grid.Column="2" SelectedDate="{Binding SearchEndDate}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
-                            <TextBlock Text="を表示する" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                            <DatePicker Grid.Column="1" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                            <TextBlock Text="～" Grid.Column="2" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
+                            <DatePicker Grid.Column="3" SelectedDate="{Binding SearchEndDate}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                            <TextBlock Text="を表示する" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
@@ -295,6 +303,13 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="印刷済" Width="3*" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsOutput}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

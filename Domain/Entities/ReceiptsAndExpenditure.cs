@@ -12,7 +12,7 @@ namespace Domain.Entities
         /// <summary>
         /// 出納ID
         /// </summary>
-        public int ReceiptsAndExpenditureID { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// データ登録日
         /// </summary>
@@ -62,9 +62,9 @@ namespace Domain.Entities
         /// </summary>
         public bool IsOutput { get; set; }
 
-        public ReceiptsAndExpenditure(int receiptsAndExpenditureID, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime accountActivityDate,bool isOutput)
+        public ReceiptsAndExpenditure(int id, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime accountActivityDate,bool isOutput)
         {
-            ReceiptsAndExpenditureID = receiptsAndExpenditureID;
+            ID =id;
             RegistrationDate = registrationDate;
             RegistrationRep = registrationRep;
             Location = location;
