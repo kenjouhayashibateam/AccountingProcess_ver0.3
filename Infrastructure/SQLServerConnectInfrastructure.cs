@@ -78,7 +78,8 @@ namespace Infrastructure
                 SqlDataReader DataReader = Cmd.ExecuteReader();
 
                 while (DataReader.Read())
-                    reps.Add(new Rep((string)DataReader["rep_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"], (bool)DataReader["is_permission"]));
+                    reps.Add
+                        (new Rep((string)DataReader["staff_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"], (bool)DataReader["is_permission"]));
             }
             return reps;
         }
@@ -144,6 +145,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@account", creditAccount.Account);
                 Cmd.Parameters.AddWithValue("@is_validity", creditAccount.IsValidity);
                 Cmd.Parameters.AddWithValue("@staff_id", LoginRep.Rep.ID);
+                Cmd.Parameters.AddWithValue("@is_shunjuen_account", creditAccount.IsShunjuenAccount);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -230,7 +232,11 @@ namespace Infrastructure
                 using DataTable dt = new DataTable();
                 sda.Fill(dt);
                 foreach (DataRow dr in dt.Rows)
-                    contents.Add(new Content((string)dr["content_id"], CallAccountingSubject((string)dr["accounting_subject_id"]), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"]));
+                    contents.Add
+                        (
+                            new Content((string)dr["content_id"], 
+                            new AccountingSubject((string)dr["accounting_subject_id"], 
+                            (string)dr["subject_code"], (string)dr["subject"], true), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"]));
             }
             return contents;
         }
@@ -334,7 +340,7 @@ namespace Infrastructure
         {
             ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>();
             SqlCommand Cmd = new SqlCommand();
-
+            SqlDataReader dataReader;
             using (Cn)
             {
                 ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure");
@@ -350,14 +356,26 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@is_payment", isPayment);
                 Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
                 Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
-                SqlDataReader dataReader = Cmd.ExecuteReader();
+                dataReader = Cmd.ExecuteReader();
+                }
 
-                while (dataReader.Read()) list.Add(new ReceiptsAndExpenditure
+            Rep paramRep;
+            CreditAccount paramCreditAccount;
+            AccountingSubject paramAccountingSubject;
+            Content paramContent;
+            while (dataReader.Read())
+            {
+                paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+                paramCreditAccount = new CreditAccount((string)dataReader["credit_account_id"], (string)dataReader["account"], true, (bool)dataReader["is_shunjuen_account"]);
+                paramAccountingSubject = new AccountingSubject((string)dataReader["accounting_subject_id"], (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                list.Add(new ReceiptsAndExpenditure
                     (
-                        (int)dataReader["receeipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], CallRep((string)dataReader["rep_id"]), (string)dataReader["location"],
-                        CallCreditAccount((string)dataReader["credit_account_id"]), CallContent((string)dataReader["content_id"]), (string)dataReader["detail"], (int)dataReader["price"], 
-                        (bool)dataReader["is_payment"], (bool)dataReader["is_valiedity"], (DateTime)dataReader["account_activity_date"], (bool)dataReader["is_output"])
+                    (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"],paramCreditAccount,
+                     paramContent, (string)dataReader["detail"], (int)dataReader["price"],
+                    (bool)dataReader["is_payment"], (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"], (bool)dataReader["is_output"])
                     );
+
             }
             return list;
         }
@@ -409,10 +427,10 @@ namespace Infrastructure
 
             using(Cn)
             {
-                dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_rep", "@rep_id", id);
+                dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_staff", "@staff_id", id);
 
                 while(dataReader.Read())
-                    rep = new Rep((string)dataReader["rep_id"], (string)dataReader["name"], (string)dataReader["password"], (bool)dataReader["is_validity"], (bool)dataReader["is_permission"]);
+                    rep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], (string)dataReader["password"], (bool)dataReader["is_validity"], (bool)dataReader["is_permission"]);
             }
             return rep;
         }
@@ -442,12 +460,13 @@ namespace Infrastructure
             using(Cn)
             {
                 dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_content", "@content_id", id);
-                
-                while(dataReader.Read())
-                    content=new Content
+
+                while (dataReader.Read())
+                    content = new Content
                         (
-                            (string)dataReader["content_id"],CallAccountingSubject((string)dataReader["accounting_subject_id"]),(int)dataReader["flat_rate"],
-                            (string)dataReader["content"],(bool)dataReader["is_validity"]
+                            (string)dataReader["content_id"],
+                            new AccountingSubject((string)dataReader["accounting_subject_id"], (string)dataReader["subject_code"], (string)dataReader["subject"], true),
+                            (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"]
                         );
             }
             return content;

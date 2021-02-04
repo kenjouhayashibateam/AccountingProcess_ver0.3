@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -18,7 +19,6 @@ namespace Infrastructure.ExcelOutputData
         protected Rep OutputRep;
         private readonly SlipType mySlipType;
         private readonly bool IsPayment;//振替伝票出力機能を作成する際に使用する。現状は入出金の確認だけの機能
-
         public enum SlipType
         {
             Payment,
@@ -48,7 +48,7 @@ namespace Infrastructure.ExcelOutputData
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
                 .ThenBy(r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
-                .ThenBy(r => r.Content.AccountingSubject.Subject))
+                .ThenBy(r=>r.Content.AccountingSubject.Subject))
             {
                 if (!rae.IsPayment==IsPayment) continue;
                 if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
@@ -100,6 +100,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = rae.AccountActivityDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = rae.AccountActivityDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = rae.AccountActivityDate.Day;
+                
                 string ass = $"{rae.Content.AccountingSubject.Subject} : {rae.Content.AccountingSubject.SubjectCode}";
                 switch(mySlipType)
                 {

@@ -1,5 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
+using Domain.Entities.ValueObjects;
+using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -29,7 +31,7 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         private int PreviousDayBalance;
 
-        public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance) : base(receiptsAndExpenditures)
+        public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance ) : base(receiptsAndExpenditures)
         {
             PreviousDayBalance = previousDayBalance;
         }
@@ -42,7 +44,8 @@ namespace Infrastructure.ExcelOutputData
 
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
                 .ThenByDescending(r => r.IsPayment)
-                .ThenBy(r => r.Content.AccountingSubject.SubjectCode))
+                .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
+                .ThenBy(r=>r.Content.AccountingSubject.Subject))
             {
                 if (CurrentDate != rae.AccountActivityDate)
                 {
@@ -58,7 +61,6 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(ItemIndex + 1, 1).Value = rae.AccountActivityDate;
                     SetStyleAndNextIndex();
                 }
-
                 myWorksheet.Cell(ItemIndex + 1, 2).Value = rae.Content.AccountingSubject.SubjectCode;
                 myWorksheet.Cell(ItemIndex + 1, 3).Value = rae.Content.AccountingSubject.Subject;
                 myWorksheet.Cell(ItemIndex + 1, 4).Value = rae.Content.Text;

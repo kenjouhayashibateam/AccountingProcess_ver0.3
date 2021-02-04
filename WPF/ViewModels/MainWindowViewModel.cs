@@ -283,13 +283,10 @@ namespace WPF.ViewModels
             IsDepositMenuEnabled = false;
             AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1));
             DateTime previousMonthLastDay = DateTime.Today.AddDays((-1 * (DateTime.Today.Day - 1)) - 1);
-            if (DataBaseConnect.FinalAccountPerMonth(previousMonthLastDay) - DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1)) + DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)) == DataBaseConnect.FinalAccountPerMonth(DateTime.Today.AddMonths(-1)) - DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1)) + DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)))
-            {
-                DepositAmountInfo = "前日決算金額";
-                DepositAmount =
-                    (DataBaseConnect.FinalAccountPerMonth(previousMonthLastDay) - DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1)) + DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1))).ToString();
-            }
-            else DepositAmountInfo = "決算金額が合いません。出納記録を確認してください";
+
+            DepositAmountInfo = "前日決算金額";
+            DepositAmount =
+                (DataBaseConnect.FinalAccountPerMonth(previousMonthLastDay) - DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1)) + DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1))).ToString();
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します

@@ -406,8 +406,7 @@ namespace WPF.ViewModels
                     Message = "更新しました"
                 };
                 CallShowMessageBox = true;
-            }
-                    
+            }          
         } 
         /// <summary>
         /// 出納データを登録します
@@ -1362,6 +1361,7 @@ namespace WPF.ViewModels
                 if (receiptsAndExpenditure.IsPayment) amount += receiptsAndExpenditure.Price;
                 else amount -= receiptsAndExpenditure.Price;
             }
+            amount += PreviousDayFinalAccount;
             BalanceFinalAccount = $"出納リストの収支決算 : {TextHelper.AmountWithUnit(amount)}";
             SetOutputButtonEnabled(amount);
         }

@@ -1397,7 +1397,7 @@ namespace WPF.ViewModels
                 else
                 {
                     IsContentValidity = currentContent.IsValidity;
-                    AffiliationAccountingSubject = currentContent.AccountingSubject;
+                    AffiliationAccountingSubject =DataBaseConnect.CallAccountingSubject(currentContent.AccountingSubject.ID);
                     ContentField = currentContent.Text;
                     FlatRateField = currentContent.FlatRate.ToString();
                 }
