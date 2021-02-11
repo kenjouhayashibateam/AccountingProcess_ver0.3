@@ -43,7 +43,7 @@ namespace Infrastructure.ExcelOutputData
             int inputContentColumn = 0;
             int inputPriceColumn = 0;
             int TotalPrice = 0;
-            DateTime currentDate = new DateTime(1900, 1, 1);
+            DateTime currentDate = TextHelper.DefaultDate;
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
                 .ThenBy(r => r.IsPayment)
@@ -53,7 +53,7 @@ namespace Infrastructure.ExcelOutputData
                 if (!rae.IsPayment==IsPayment) continue;
                 if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
                 if (subject == string.Empty) subject = rae.Content.AccountingSubject.Subject;//subjectの初期値を設定する
-                if (currentDate == new DateTime(1900, 1, 1)) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
+                if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
                 //codeが同じならisGoNextにsubjectの比較結果を代入する
                 if (code == rae.Content.AccountingSubject.SubjectCode)
                 {

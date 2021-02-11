@@ -58,11 +58,21 @@ namespace Domain.Entities
         /// </summary>
         public DateTime AccountActivityDate { get; set; }
         /// <summary>
-        /// 出力済みチェック
+        /// 出力日
+        /// </summary>
+        public DateTime OutputDate { get; set; }
+        /// <summary>
+        /// 出力したかのチェック
         /// </summary>
         public bool IsOutput { get; set; }
+        /// <summary>
+        /// 軽減税率かのチェック
+        /// </summary>
+        public bool IsReducedTaxRate { get; set; }
 
-        public ReceiptsAndExpenditure(int id, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, DateTime accountActivityDate,bool isOutput)
+        public ReceiptsAndExpenditure
+            (int id, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, 
+            DateTime accountActivityDate,DateTime outputDate,bool isRedicedTaxRate)
         {
             ID =id;
             RegistrationDate = registrationDate;
@@ -75,7 +85,9 @@ namespace Domain.Entities
             IsPayment = isPayment;
             IsValidity = isValidity;
             AccountActivityDate = accountActivityDate;
-            IsOutput = isOutput;
+            OutputDate = outputDate;
+            IsOutput = OutputDate != TextHelper.DefaultDate;
+            IsReducedTaxRate = isRedicedTaxRate;
         }
     }
 }

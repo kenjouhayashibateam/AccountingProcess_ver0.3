@@ -83,6 +83,7 @@ namespace WPF.ViewModels
         private string flatRateField;
         private string contentDataOperationContent;
         private string referenceContent;
+        private string affiliationAccountingSubjectCode;
         private bool isContentValidity;
         private bool isContentOperationEnabled;
         private bool isAffiliationAccountingSubjectEnabled;
@@ -1252,7 +1253,7 @@ namespace WPF.ViewModels
             {
                 affiliationAccountingSubject = value;
                 ValidationProperty(nameof(AffiliationAccountingSubject), value);
-                if(affiliationAccountingSubject!=null) SelectedAccountingSubjectField = affiliationAccountingSubject.Subject;
+                if (affiliationAccountingSubject != null) SelectedAccountingSubjectField = affiliationAccountingSubject.Subject;                
                 SetContentOperationButtonEnabled();
                 CallPropertyChanged();
             }
@@ -1396,8 +1397,10 @@ namespace WPF.ViewModels
                 if (currentContent == null) ContentDetailFieldClear();
                 else
                 {
+                    ContentIDField = currentContent.ID;
                     IsContentValidity = currentContent.IsValidity;
                     AffiliationAccountingSubject =DataBaseConnect.CallAccountingSubject(currentContent.AccountingSubject.ID);
+                    AffiliationAccountingSubjectCode = AffiliationAccountingSubject.SubjectCode;
                     ContentField = currentContent.Text;
                     FlatRateField = currentContent.FlatRate.ToString();
                 }
@@ -1464,6 +1467,20 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 伝票内容をグルーピングする勘定科目コード
+        /// </summary>
+        public string AffiliationAccountingSubjectCode
+        {
+            get => affiliationAccountingSubjectCode;
+            set
+            {
+                affiliationAccountingSubjectCode = value;
+                if (value != null) AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                if (AffiliationAccountingSubjects.Count > 0) AffiliationAccountingSubject = AffiliationAccountingSubjects[0];
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 伝票内容データを登録、更新します
@@ -1507,6 +1524,7 @@ namespace WPF.ViewModels
         private void ContentDetailFieldClear()
         {
             AffiliationAccountingSubject = null;
+            AffiliationAccountingSubjectCode = string.Empty;
             FlatRateField = string.Empty;
             ContentField = string.Empty;
             IsContentValidity = true;
@@ -1521,7 +1539,7 @@ namespace WPF.ViewModels
             int oldFlatRate = CurrentContent.FlatRate;
             if (oldFlatRate < 0) oldFlatRate = 0;
 
-            int newFlatRate = int.TryParse(FlatRateField, out int i) ? i : 0;
+            int newFlatRate = TextHelper.IntAmount(FlatRateField);
             if (newFlatRate < 0) newFlatRate = 0;
 
             if (oldFlatRate != newFlatRate)updateContents= $"定額 : {TextHelper.AmountWithUnit(CurrentContent.FlatRate)} → {FlatRateField}円\r\n";
@@ -1535,7 +1553,7 @@ namespace WPF.ViewModels
             if (CallConfirmationDataOperation($"伝票内容 : {ContentField}\r\n\r\n{updateContents}", "伝票内容") == MessageBoxResult.Cancel)
                 return;
 
-            i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
+            int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
             CurrentContent = new Content(ContentIDField, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
 
             IsContentOperationEnabled = false;

@@ -378,16 +378,20 @@
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{Binding ContentIDField}" Grid.Row="0" Margin="5"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsContentValidity}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
-                                <TextBlock Text="勘定科目" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <ComboBox Name="AccountingSubjectComboBox" IsEnabled="{Binding IsAffiliationAccountingSubjectEnabled}" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Text="{Binding SelectedAccountingSubjectField}" Grid.Row="3" IsEditable="True" ItemsSource="{Binding AffiliationAccountingSubjects}" SelectedItem="{Binding AffiliationAccountingSubject}" DisplayMemberPath="Subject"  SelectedValuePath="ID" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                                <TextBlock Text="伝票内容" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <TextBox x:Name="ContentTextBox" Grid.Row="5" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding ContentField,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                                <TextBlock Text="定額" Grid.Row="6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <Grid Grid.Row="7" VerticalAlignment="Stretch">
+                                <TextBlock Text="科目コード" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                <TextBox x:Name="AffiliationAccountingSubjectCodeTextBox" Grid.Row="3" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding AffiliationAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="Off" Margin="5,5,150,5"/>
+                                <TextBlock Text="勘定科目" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                <ComboBox Name="AccountingSubjectComboBox" IsEnabled="{Binding IsAffiliationAccountingSubjectEnabled}" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Text="{Binding SelectedAccountingSubjectField}" Grid.Row="5" IsEditable="True" ItemsSource="{Binding AffiliationAccountingSubjects}" SelectedItem="{Binding AffiliationAccountingSubject}" DisplayMemberPath="Subject"  SelectedValuePath="ID" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                                <TextBlock Text="伝票内容" Grid.Row="6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                <TextBox x:Name="ContentTextBox" Grid.Row="7" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding ContentField,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                                <TextBlock Text="定額" Grid.Row="8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                <Grid Grid.Row="9" VerticalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*"/>
                                         <ColumnDefinition Width="1*"/>

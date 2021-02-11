@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using static Domain.Entities.Helpers.TextHelper;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
@@ -208,6 +209,7 @@ namespace Infrastructure
             {
                 ADO_NewInstance_StoredProc(Cmd,"update_content");
                 Cmd.Parameters.AddWithValue("@content_id", content.ID);
+                Cmd.Parameters.AddWithValue("@content", content.Text);
                 Cmd.Parameters.AddWithValue("@flat_rate", content.FlatRate);
                 Cmd.Parameters.AddWithValue("@is_validity", content.IsValidity);
                 Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
@@ -301,7 +303,7 @@ namespace Infrastructure
 
             receipts = ReferenceReceiptsAndExpenditure
                 (
-                    new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
+                    DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
                     true, true,true, true, previousDay.AddDays(-1 * (previousDay.Day - 1)), previousDay
                 );
 
@@ -371,9 +373,9 @@ namespace Infrastructure
                 paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, (int)dataReader["flat_rate"], (string)dataReader["content"], true);
                 list.Add(new ReceiptsAndExpenditure
                     (
-                    (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"],paramCreditAccount,
-                     paramContent, (string)dataReader["detail"], (int)dataReader["price"],
-                    (bool)dataReader["is_payment"], (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"], (bool)dataReader["is_output"])
+                    (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"], paramCreditAccount,
+                     paramContent, (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
+                     (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
                     );
 
             }
@@ -396,7 +398,7 @@ namespace Infrastructure
                     finalAmount = (int)dataReader["amount"];
             }
             receiptsAndExpenditures = ReferenceReceiptsAndExpenditure
-                (new DateTime(1900, 01, 01), new DateTime(9999, 12, 31), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, true, false,true, true,
+                (DefaultDate, new DateTime(9999, 12, 31), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, true, false,true, true,
                  new DateTime(previousDay.Year, previousDay.Month, previousDay.AddDays(-1 * (previousDay.Day - 1)).Day), previousDay);
 
             foreach (ReceiptsAndExpenditure rae in receiptsAndExpenditures) finalAmount -= rae.Price;
@@ -487,7 +489,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@detail", receiptsAndExpenditure.Detail);
                 Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
                 Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.IsOutput);
+                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.OutputDate);
                 Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
                 return Cmd.ExecuteNonQuery();
             }

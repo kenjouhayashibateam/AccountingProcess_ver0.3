@@ -10,7 +10,7 @@
                 xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="950" Width="1050" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="950" Width="1120" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
@@ -120,15 +120,20 @@
                             <TextBlock Text="内容" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
                             <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
                             <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
-                            <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
+                            <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent,Mode=TwoWay}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
                         </Grid>
                         <Grid Grid.Row="5">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>
                                 <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="詳細（将来的に削除予定）" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <TextBox x:Name="DetailTextBox" Grid.Row="1" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="詳細（将来的に削除予定）" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <TextBox x:Name="DetailTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                            <CheckBox Content="軽減税率のデータ" Grid.Row="1" Grid.Column="1" FontSize="14" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                         </Grid>
                         <Grid Grid.Row="6">
                             <Grid.RowDefinitions>
@@ -156,8 +161,14 @@
                                 <RowDefinition Height="2*"/>
                                 <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="登録日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <DatePicker x:Name="RegistrationDateTextBox" Grid.Row="1" SelectedDate="{Binding RegistrationDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="登録日" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <DatePicker x:Name="RegistrationDateTextBox" Grid.Row="1" Grid.Column="0" SelectedDate="{Binding RegistrationDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
+                            <TextBlock Text="{Binding SlipOutputDateTitle}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <DatePicker x:Name="SlipOutputDate" Grid.Row="1" Grid.Column="1" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
                         </Grid>
                         <Grid Grid.Row="9">
                             <Grid.RowDefinitions>
@@ -260,7 +271,14 @@
                             <DataGridTemplateColumn Header="入出金" Width="3*" SortMemberPath="AccountActivityDate">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding AccountActivityDate,StringFormat=M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="伝票発行" Width="3.5*" SortMemberPath="AccountActivityDate">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding OutputDate,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
