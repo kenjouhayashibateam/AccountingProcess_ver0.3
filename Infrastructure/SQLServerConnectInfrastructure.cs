@@ -329,6 +329,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
                 Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
                 Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
+                Cmd.Parameters.AddWithValue("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -481,16 +482,18 @@ namespace Infrastructure
             using(Cn)
             {
                 ADO_NewInstance_StoredProc(Cmd, "update_receipts_and_expenditure");
-                Cmd.Parameters.AddWithValue("@receipts_and_expediture_id", receiptsAndExpenditure.ID);
+                Cmd.Parameters.AddWithValue("@receipts_and_expenditure_id", receiptsAndExpenditure.ID);
                 Cmd.Parameters.AddWithValue("@location", receiptsAndExpenditure.Location);
                 Cmd.Parameters.AddWithValue("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
                 Cmd.Parameters.AddWithValue("@credit_account_id", receiptsAndExpenditure.CreditAccount.ID);
                 Cmd.Parameters.AddWithValue("@content_id", receiptsAndExpenditure.Content.ID);
                 Cmd.Parameters.AddWithValue("@detail", receiptsAndExpenditure.Detail);
+                Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
                 Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
                 Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.OutputDate);
+                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.IsOutput);
                 Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
+                Cmd.Parameters.AddWithValue("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
                 return Cmd.ExecuteNonQuery();
             }
         }

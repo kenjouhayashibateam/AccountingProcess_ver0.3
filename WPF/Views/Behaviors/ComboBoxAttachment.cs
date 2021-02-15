@@ -113,6 +113,21 @@ namespace WPF.Views.Behaviors
             cb.Focus();
             e.Handled = false;
         }
+
+        public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.RegisterAttached("MaxLength", typeof(int), typeof(ComboBoxAttachment), new UIPropertyMetadata(1, OnMaxLengthChanged));
+
+        public static void OnMaxLengthChanged(DependencyObject obj,DependencyPropertyChangedEventArgs args)
+        {
+            if (!(obj is ComboBox comboBox)) return;
+            comboBox.Loaded +=
+                (s, e) =>
+                {
+                    if (!(comboBox.Template.FindName("PART_EditableTextBox", comboBox) is TextBox textBox)) return;
+                    textBox.MaxLength = (int)args.NewValue;
+                };
+        }
+        public static int GetMaxLength(DependencyObject obj0) => (int)obj0.GetValue(MaxLengthProperty);
+        public static void SetMaxLength(DependencyObject obj, int value) => obj.SetValue(MaxLengthProperty, value);
     }
 }
 

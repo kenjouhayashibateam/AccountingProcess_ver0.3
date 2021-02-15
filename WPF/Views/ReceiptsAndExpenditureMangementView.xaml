@@ -94,7 +94,7 @@
                             <RowDefinition Height="3*"/>
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding ReceiptsAndExpenditureIDField}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding ReceiptsAndExpenditureIDFieldText}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
                         <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsEnabled="{Binding IsDepositAndWithdrawalContetntEnabled}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3"/>
                         <Grid Grid.Row="3">
@@ -118,9 +118,9 @@
                             <TextBlock Text="科目コード" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBlock Text="勘定科目" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBlock Text="内容" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
+                            <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.MaxLength="3" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
                             <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
-                            <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent,Mode=TwoWay}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
+                            <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEnabled="{Binding IsComboBoxEnabled}" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent,Mode=TwoWay}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
                         </Grid>
                         <Grid Grid.Row="5">
                             <Grid.RowDefinitions>
@@ -141,12 +141,19 @@
                                 <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="金額" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBox x:Name="PriceTextBox" Grid.Row="1" Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPriceEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3"/>
+                            <Button x:Name="ZeroAddButton" Content="000を付け足す" Grid.Column="2" Grid.Row="1" Margin="5,5,9,5">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding ZeroAddCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding ZeroAddCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
                         </Grid>
                         <Grid Grid.Row="7">
                             <Grid.RowDefinitions>
@@ -247,7 +254,7 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="{Binding ListTitle}" Grid.Row="1" Margin="5,3">
-                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
+                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <Style.Triggers>
@@ -289,7 +296,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="コード" Width="2*">
+                            <DataGridTemplateColumn Header="コード" Width="2*" SortMemberPath="SubjectCode">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

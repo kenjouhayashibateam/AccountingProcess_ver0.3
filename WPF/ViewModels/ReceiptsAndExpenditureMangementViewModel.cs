@@ -53,6 +53,7 @@ namespace WPF.ViewModels
         private string paymentSlipsOutputButtonContent;
         private string withdrawalSlipsOutputButtonContent;
         private string slipOutputDateTitle;
+        private string receiptsAndExpenditureIDFieldText;
         #endregion
         #region bool
         private bool isValidity;
@@ -135,11 +136,13 @@ namespace WPF.ViewModels
             IsWithdrawalSlipsOutputEnabled = true;
             WithdrawalSlipsOutputButtonContent = "出金伝票";
         }
+
         private void FieldClear()
         {
             IsValidity = true;
-            ComboAccountingSubjectCode = string.Empty;
             ComboAccountingSubjectText = string.Empty;
+            SelectedAccountingSubject = null;
+            ComboAccountingSubjectCode = string.Empty;
             ComboContentText = string.Empty;
             DetailText = string.Empty;
             Price = string.Empty;
@@ -276,10 +279,16 @@ namespace WPF.ViewModels
                     DetailText = string.Empty;
                     Price = string.Empty;
                     SlipOutputDate = DefaultDate;
+                    ReceiptsAndExpenditureIDField = 0;
                     break;
                 case DataOperation.更新:
                     ComboCreditAccountText = string.Empty;
                     SetDataList();
+                    IsDepositAndWithdrawalContetntEnabled = false;
+                    IsComboBoxEnabled = false;
+                    IsDetailTextEnabled = false;
+                    IsAccountActivityEnabled = false;
+                    IsPriceEnabled = false;
                     IsReferenceMenuEnabled = true;
                     break;
             }
@@ -292,7 +301,7 @@ namespace WPF.ViewModels
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboAccountingSubjectCodes = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
-            ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true,true);
+            ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true,false);
         }
 
         protected override void SetDelegateCommand()
@@ -305,6 +314,7 @@ namespace WPF.ViewModels
             PaymentSlipsOutputCommand = new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
             WithdrawalSlipsOutputCommand = new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
             DefaultListExpressCommand = new DelegateCommand(() => DefaultListExpress(), () => true);
+            ZeroAddCommand = new DelegateCommand(() => ZeroAdd(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -317,6 +327,19 @@ namespace WPF.ViewModels
                 return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
             else
                 return 0;
+        }
+        /// <summary>
+        /// 金額に000を付け足すコマンド
+        /// </summary>
+        public DelegateCommand ZeroAddCommand { get; set; }
+        /// <summary>
+        /// 金額に000を付け足す
+        /// </summary>
+        private void ZeroAdd()
+        {
+            int i = IntAmount(Price);
+            i *= 1000;
+            Price = CommaDelimitedAmount(i);
         }
         /// <summary>
         /// データ操作コマンド
@@ -451,8 +474,8 @@ namespace WPF.ViewModels
                 DetailText, IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, DefaultDate,IsReducedTaxRate);
 
             if (CallConfirmationDataOperation
-                ($"経理担当場所 : {rae.Location}\r\n入出金日 : {rae.AccountActivityDate}\r\n貸方勘定 : {rae.CreditAccount.Account}\r\n入出金 : {DepositAndWithdrawalContetnt}\r\n" +
-                 $"内容 : {rae.Content.Text}\r\n詳細 : {rae.Detail}\r\n金額 : {TextHelper.AmountWithUnit(rae.Price)}\r\n有効性 : {rae.IsValidity}\r\n軽減税率 : {rae.IsReducedTaxRate}\r\n\r\n登録しますか？", "伝票")
+                ($"経理担当場所 : {rae.Location}\r\n入出金日 : {rae.AccountActivityDate.ToShortDateString()}\r\n貸方勘定 : {rae.CreditAccount.Account}\r\n入出金 : {DepositAndWithdrawalContetnt}\r\n" +
+                 $"内容 : {rae.Content.Text}\r\n詳細 : {rae.Detail}\r\n金額 : {TextHelper.AmountWithUnit(rae.Price)}\r\n軽減税率 : {rae.IsReducedTaxRate}\r\n有効性 : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票")
                 == System.Windows.MessageBoxResult.Cancel) return;
 
             DataBaseConnect.Registration(rae);
@@ -596,10 +619,12 @@ namespace WPF.ViewModels
             {
                 comboContentText = value;
                 SelectedContent = ComboContents.FirstOrDefault(c => c.Text == comboContentText);
-                CallPropertyChanged();
+                if (SelectedContent == null) comboContentText = string.Empty;
+                else comboContentText = SelectedContent.Text;
+
                 SetDataOperationButtonEnabled();
-                if (value == null) return;
                 ValidationProperty(nameof(ComboContentText), comboContentText);
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -610,13 +635,11 @@ namespace WPF.ViewModels
             get => selectedAccountingSubject;
             set
             {
-                if (selectedAccountingSubject != null && selectedAccountingSubject.Equals(value)) return;
                 selectedAccountingSubject = value;
-                if (selectedAccountingSubject != null && CurrentOperation == DataOperation.登録)
-                {
-                    ComboContents = DataBaseConnect.ReferenceContent(string.Empty, selectedAccountingSubject.SubjectCode, selectedAccountingSubject.Subject, true);
-                    ComboContentText = ComboContents.Count != 0 ? ComboContents[0].Text : string.Empty;
-                }
+                ComboContents = DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, ComboAccountingSubjectText, true);
+                if (ComboContents.Count > 0) ComboContentText = ComboContents.Count != 0 ? ComboContents[0].Text : string.Empty;
+                else ComboContentText = string.Empty;
+
                 CallPropertyChanged();
             }
         }
@@ -641,8 +664,16 @@ namespace WPF.ViewModels
             set
             {
                 if (comboAccountingSubjectText == value) return;
-                comboAccountingSubjectText = value;
                 SetDataOperationButtonEnabled();
+                if (string.IsNullOrEmpty(value))
+                {
+                    ComboContents.Clear();
+                }
+                else ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
+
+                if (ComboContents.Count > 0) ComboContentText = ComboContents[0].Text;
+                else ComboContentText = string.Empty;
+                comboAccountingSubjectText = value;
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
             }
@@ -656,11 +687,28 @@ namespace WPF.ViewModels
             set
             {
                 if (comboAccountingSubjectCode == value) return;
-                comboAccountingSubjectCode = value;
                 SetDataOperationButtonEnabled();
-                ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
-                ComboAccountingSubjectText = ComboAccountingSubjects.Count > 0 ? ComboAccountingSubjects[0].Subject : string.Empty;
-                ValidationProperty(nameof(ComboAccountingSubjectCode), value);
+                if (string.IsNullOrEmpty(value))
+                {
+                    ComboAccountingSubjects.Clear();
+                    ComboAccountingSubjectText = string.Empty;
+                }
+                else ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+
+                if (ComboAccountingSubjects.Count > 0)
+                {
+                    comboAccountingSubjectCode = value;
+                    ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
+                }
+                else
+                {
+                    comboAccountingSubjectCode = string.Empty;
+                    ComboAccountingSubjectText = string.Empty;
+                    ComboContentText = string.Empty;
+                    ComboContents.Clear();
+                }
+                SetDataOperationButtonEnabled();
+                ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
                 CallPropertyChanged();
             }
         }
@@ -705,13 +753,14 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出納IDフィールド
         /// </summary>
-        public int ReceiptsAndExpenditureIDField
+        private int ReceiptsAndExpenditureIDField
         {
             get => receiptsAndExpenditureIDField;
             set
             {
                 receiptsAndExpenditureIDField = value;
-                CallPropertyChanged();
+                if (value == 0) ReceiptsAndExpenditureIDFieldText = string.Empty;
+                else ReceiptsAndExpenditureIDFieldText = $"データID : {value}";
             }
         }
         /// <summary>
@@ -1063,6 +1112,7 @@ namespace WPF.ViewModels
             set
             {
                 selectedAccountingSubjectCode = value;
+                if (value == null) ComboAccountingSubjectCode = string.Empty;
                 CallPropertyChanged();
             }
         }
@@ -1417,6 +1467,18 @@ namespace WPF.ViewModels
             set
             {
                 isReducedTaxRate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 詳細に表示するID
+        /// </summary>
+        public string ReceiptsAndExpenditureIDFieldText
+        {
+            get => receiptsAndExpenditureIDFieldText;
+            set
+            {
+                receiptsAndExpenditureIDFieldText = value;
                 CallPropertyChanged();
             }
         }

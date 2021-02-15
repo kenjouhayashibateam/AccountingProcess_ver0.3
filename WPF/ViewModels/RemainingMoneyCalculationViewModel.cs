@@ -849,7 +849,7 @@ namespace WPF.ViewModels
             OtherMoneyTitle2 = "香華売り場";
             OtherMoneyTitle3 = "春秋庵";
             OtherMoneyTitle4 = "石材工事部";
-            OtherMoneyTitle5 = string.Empty;
+            OtherMoneyTitle5 = "管理料";
             OtherMoneyTitle6 = string.Empty;
             OtherMoneyTitle7 = string.Empty;
             OtherMoneyTitle8 = string.Empty;

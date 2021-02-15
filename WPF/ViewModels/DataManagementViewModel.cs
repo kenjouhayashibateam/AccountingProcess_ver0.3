@@ -51,8 +51,8 @@ namespace WPF.ViewModels
         private string accountingSubjectCodeField;
         private string accountingSubjectField;
         private string accountingSubnectOperationButtonContent;
-        private string referenceAccountingSubjectCode;
-        private string referenceAccountingSubject;
+        private string referenceAccountingSubjectCode = string.Empty;
+        private string referenceAccountingSubject = string.Empty;
         private bool isAccountingSubjectOperationButtonEnabled;
         private bool isAccountingSubjectValidity;
         private bool isAccountingSubjectValidityTrueOnly;
@@ -82,8 +82,10 @@ namespace WPF.ViewModels
         private string contentField;
         private string flatRateField;
         private string contentDataOperationContent;
-        private string referenceContent;
+        private string referenceContent=string.Empty;
         private string affiliationAccountingSubjectCode;
+        private string referenceAccountingSubjectCodeBelognsContent = string.Empty;
+        private string referenceAccountingSubjectBelognsContent = string.Empty;
         private bool isContentValidity;
         private bool isContentOperationEnabled;
         private bool isAffiliationAccountingSubjectEnabled;
@@ -115,7 +117,10 @@ namespace WPF.ViewModels
         protected override void SetDataList()
         {
             RepList = DataBaseConnect.ReferenceRep(string.Empty, false);
-            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, false);
+            ReferenceAccountingSubject = string.Empty;
+            ReferenceAccountingSubjectCode = string.Empty;
+            IsAccountingSubjectValidityTrueOnly = true;
+            CreateAccountSubjects();
             CreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, false,false);
             Contents = DataBaseConnect.ReferenceContent(string.Empty,string.Empty,string.Empty, false);
         }
@@ -184,7 +189,6 @@ namespace WPF.ViewModels
         /// <returns></returns>
         private bool IsRepDataOperationCanExecute()
         {
-            if (!IsAdminPermisson) return false;
             return CurrentOperation switch
             {
                 DataOperation.更新 => IsRepUpdatable(),
@@ -660,13 +664,13 @@ namespace WPF.ViewModels
         /// 担当者データ操作ボタンのEnabledを設定します
         /// </summary>
         private void SetRepOperationButtonEnabled()
-        {
+       {
             if (!HasErrors)
             {
                 IsRepOperationButtonEnabled = true;
                 return;
             }
-            if (!IsAdminPermisson)
+            if (!LoginRep.Rep.IsAdminPermisson)
             {
                 IsRepOperationButtonEnabled = false;
                 return;
@@ -835,6 +839,7 @@ namespace WPF.ViewModels
             set
             {
                 isAccountingSubjectValidityTrueOnly = value;
+                CreateAccountSubjects();
                 CallPropertyChanged();
             }
         }
@@ -847,9 +852,12 @@ namespace WPF.ViewModels
             set
             {
                 referenceAccountingSubjectCode = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
+                CreateAccountSubjects();
                 CallPropertyChanged();
             }
         }
+        private void CreateAccountSubjects() =>
+            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(ReferenceAccountingSubjectCode, ReferenceAccountingSubject, IsAccountingSubjectValidityTrueOnly);        
         /// <summary>
         /// 検索する勘定科目
         /// </summary>
@@ -859,6 +867,7 @@ namespace WPF.ViewModels
             set
             {
                 referenceAccountingSubject = value;
+                CreateAccountSubjects();
                 CallPropertyChanged();
             }
         }
@@ -1294,7 +1303,7 @@ namespace WPF.ViewModels
             get => selectedAccountingSubjectField;
             set
             {
-                selectedAccountingSubjectField = (AffiliationAccountingSubject == null) ? string.Empty : value;
+                selectedAccountingSubjectField = value;
                 ValidationProperty(nameof(SelectedAccountingSubjectField), selectedAccountingSubjectField);
                 SetContentOperationButtonEnabled();
                 CallPropertyChanged();
@@ -1399,8 +1408,8 @@ namespace WPF.ViewModels
                 {
                     ContentIDField = currentContent.ID;
                     IsContentValidity = currentContent.IsValidity;
-                    AffiliationAccountingSubject =DataBaseConnect.CallAccountingSubject(currentContent.AccountingSubject.ID);
-                    AffiliationAccountingSubjectCode = AffiliationAccountingSubject.SubjectCode;
+                    AffiliationAccountingSubject =currentContent.AccountingSubject;
+                    AffiliationAccountingSubjectCode = currentContent.AccountingSubject.SubjectCode;
                     ContentField = currentContent.Text;
                     FlatRateField = currentContent.FlatRate.ToString();
                 }
@@ -1428,6 +1437,7 @@ namespace WPF.ViewModels
             set
             {
                 isContentValidityTrueOnly = value;
+                CreateContents();
                 CallPropertyChanged();
             }
         }
@@ -1440,9 +1450,12 @@ namespace WPF.ViewModels
             set
             {
                 referenceContent = value;
+                CreateContents();
                 CallPropertyChanged();
             }
         }
+        private void CreateContents() =>
+            Contents = DataBaseConnect.ReferenceContent(ReferenceContent, ReferenceAccountingSubjectCodeBelognsContent, ReferenceAccountingSubjectBelognsContent, IsContentValidityTrueOnly);
         /// <summary>
         /// 検索メニューのEnable
         /// </summary>
@@ -1481,7 +1494,33 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 伝票内容検索で使用する勘定科目コード
+        /// </summary>
+        public string ReferenceAccountingSubjectCodeBelognsContent
+        {
+            get => referenceAccountingSubjectCodeBelognsContent;
+            set
+            {
+                referenceAccountingSubjectCodeBelognsContent = value;
+                CreateContents();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 伝票内容検索で使用する勘定科目
+        /// </summary>
+        public string ReferenceAccountingSubjectBelognsContent
+        {
+            get => referenceAccountingSubjectBelognsContent;
+            set
+            {
+                referenceAccountingSubjectBelognsContent = value;
+                CreateContents();
+                CallPropertyChanged();
+            }
+        }
+       
         /// <summary>
         /// 伝票内容データを登録、更新します
         /// </summary>
