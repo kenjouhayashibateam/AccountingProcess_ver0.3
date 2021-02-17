@@ -112,8 +112,8 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="4*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="科目コード" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBlock Text="勘定科目" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
@@ -282,7 +282,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="伝票発行" Width="3.5*" SortMemberPath="AccountActivityDate">
+                            <DataGridTemplateColumn Header="伝票発行" Width="3.5*" SortMemberPath="OutputDate">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding OutputDate,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -296,7 +296,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="コード" Width="2*" SortMemberPath="SubjectCode">
+                            <DataGridTemplateColumn Header="コード" Width="2*" SortMemberPath="Content.AccountingSubject.SubjectCode">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

@@ -739,6 +739,7 @@ namespace WPF.ViewModels
             {
                 accountingSubjectCodeField = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
                 ValidationProperty(nameof(AccountingSubjectCodeField), value);
+                ReferenceAccountingSubjectCode = value;
                 SetAccountingSubjectOperationButtonEnabled();
                 CallPropertyChanged();
             }
@@ -1491,6 +1492,7 @@ namespace WPF.ViewModels
                 affiliationAccountingSubjectCode = value;
                 if (value != null) AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
                 if (AffiliationAccountingSubjects.Count > 0) AffiliationAccountingSubject = AffiliationAccountingSubjects[0];
+                ReferenceAccountingSubjectCodeBelognsContent = value;
                 CallPropertyChanged();
             }
         }

@@ -307,7 +307,7 @@ namespace Infrastructure
                     true, true,true, true, previousDay.AddDays(-1 * (previousDay.Day - 1)), previousDay
                 );
 
-            foreach(ReceiptsAndExpenditure rae in receipts) { amount += rae.Price; }
+            foreach (ReceiptsAndExpenditure rae in receipts) amount += rae.Price;
 
             return amount;
         }
@@ -402,7 +402,7 @@ namespace Infrastructure
                 (DefaultDate, new DateTime(9999, 12, 31), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, true, false,true, true,
                  new DateTime(previousDay.Year, previousDay.Month, previousDay.AddDays(-1 * (previousDay.Day - 1)).Day), previousDay);
 
-            foreach (ReceiptsAndExpenditure rae in receiptsAndExpenditures) finalAmount -= rae.Price;
+            foreach (ReceiptsAndExpenditure rae in receiptsAndExpenditures) finalAmount += rae.Price;
 
             return finalAmount;
         }
