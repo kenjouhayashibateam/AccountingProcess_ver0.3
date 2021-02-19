@@ -83,8 +83,10 @@ namespace WPF.ViewModels
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
-        private DateTime searchStartDate;
-        private DateTime searchEndDate;
+        private DateTime searchStartDate = DefaultDate;
+        private DateTime searchEndDate = new DateTime(9999, 1, 1);
+        private DateTime searchOutputDateStart = DefaultDate;
+        private DateTime searchOutputDateEnd = new DateTime(9999, 1, 1);
         private DateTime registrationDate;
         private DateTime slipOutputDate;
         #endregion
@@ -108,6 +110,9 @@ namespace WPF.ViewModels
 
         public ReceiptsAndExpenditureMangementViewModel(IDataOutput dataOutput, IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
+            IsContainOutputted = true;
+            SearchStartDate = DateTime.Today.AddDays(-1);
+            SearchEndDate = DateTime.Today;
             DataOutput = dataOutput;
             SetProperty();
             DefaultListExpress();
@@ -122,6 +127,8 @@ namespace WPF.ViewModels
             IsPeriodSearch = true;
             SearchStartDate = DateTime.Today.AddDays(-1);
             SearchEndDate = DateTime.Today;
+            SearchOutputDateStart = DefaultDate;
+            SearchOutputDateEnd = new DateTime(9999,1,1);
             IsContainOutputted = true;
         }
         /// <summary>
@@ -207,7 +214,7 @@ namespace WPF.ViewModels
             ListTitle = $"一覧 : 前日決算 {AmountWithUnit( PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, false, true, false, true, DateTime.Today.AddDays(-1), DateTime.Today);
+                string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(9999, 1, 1));
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
             SetCashboxTotalAmount();
@@ -392,12 +399,6 @@ namespace WPF.ViewModels
             if (!canUpdate) return;
 
             string UpdateCotent = string.Empty;
-
-            //if (SelectedReceiptsAndExpenditure.Location != AccountingProcessLocation.Location)
-            //{
-            //    UpdateCotent += $"経理担当場所 : {SelectedReceiptsAndExpenditure.Location} → {AccountingProcessLocation.Location}\r\n";
-            //    SelectedReceiptsAndExpenditure.Location = AccountingProcessLocation.Location;
-            //}
 
             if (SelectedReceiptsAndExpenditure.AccountActivityDate != AccountActivityDate)
             {
@@ -1482,6 +1483,34 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 伝票発行日ベースでの検索の初めの日付
+        /// </summary>
+        public DateTime SearchOutputDateStart
+        {
+            get => searchOutputDateStart;
+            set
+            {
+                if (SearchOutputDateEnd < value) searchStartDate = SearchOutputDateEnd;
+                else searchOutputDateStart = value;
+                CreateReceiptsAndExpenditures();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 伝票発行日ベースでの検索の終わりの日付
+        /// </summary>
+        public DateTime SearchOutputDateEnd
+        {
+            get => searchOutputDateEnd;
+            set
+            {
+                if (SearchOutputDateStart > value) searchOutputDateEnd = SearchOutputDateStart;
+                else searchOutputDateEnd = value;
+                CreateReceiptsAndExpenditures();
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1551,15 +1580,22 @@ namespace WPF.ViewModels
         {
             DateTime AccountActivityDateStart;
             DateTime AccountActivityDateEnd;
+            DateTime OutputDateStart;
+            DateTime OutputDateEnd;
+
             if (IsPeriodSearch)
             {
-                AccountActivityDateStart = SearchStartDate == null ? DefaultDate : SearchStartDate;
+                AccountActivityDateStart = SearchStartDate;
+                OutputDateStart = SearchOutputDateStart;
                 AccountActivityDateEnd = SearchEndDate == null ? new DateTime(9999, 1, 1) : SearchEndDate;
+                OutputDateEnd = SearchOutputDateEnd == null ? new DateTime(9999, 1, 1) : SearchOutputDateEnd;
             }
             else
             {
-                AccountActivityDateStart = DefaultDate;
+                AccountActivityDateStart = SearchStartDate;
+                OutputDateStart = SearchOutputDateStart;
                 AccountActivityDateEnd = AccountActivityDateStart;
+                OutputDateEnd = SearchOutputDateStart;
             }
 
             string Location;
@@ -1568,7 +1604,7 @@ namespace WPF.ViewModels
 
             if (IsLocationSearch) Location = AccountingProcessLocation.Location;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999,1,1), Location, string.Empty, string.Empty, string.Empty,
-                string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd);
+                string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd,OutputDateStart,OutputDateEnd);
         }
         protected override string SetWindowDefaultTitle()
         {

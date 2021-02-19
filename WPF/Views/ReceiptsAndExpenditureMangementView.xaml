@@ -10,7 +10,7 @@
                 xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="950" Width="1120" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="1000" Width="1120" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
@@ -44,7 +44,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="16*"/>
+            <RowDefinition Height="19*"/>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
@@ -197,25 +197,17 @@
             </GroupBox>
             <Grid Grid.Column="1" IsEnabled="{Binding IsReferenceMenuEnabled}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="4*"/>
                     <RowDefinition Height="6*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="検索メニュー" Grid.Row="0" Margin="5,3">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="5*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
-                         <Button x:Name="DefaultListExpress" Content="前日、本日のデータを表示する" Grid.Column="0" Margin="5"></Button>
-                       </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
@@ -225,13 +217,36 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="4*"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
-                            <DatePicker Grid.Column="1" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
-                            <TextBlock Text="～" Grid.Column="2" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
-                            <DatePicker Grid.Column="3" SelectedDate="{Binding SearchEndDate}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
-                            <TextBlock Text="を表示する" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Grid>
-                        <Grid Grid.Row="2">
+                        <GroupBox Grid.Row="0" Header="日付検索" Margin="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <TextBlock Text="入出金日" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <TextBlock Text="～" Grid.Column="2" Grid.Row="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
+                                <DatePicker Grid.Column="3" Grid.Row="1" SelectedDate="{Binding SearchEndDate}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <TextBlock Text="を表示する" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="伝票発行日" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <DatePicker Grid.Column="1" Grid.Row="2" SelectedDate="{Binding SearchOutputDateStart}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="～" Grid.Column="2" Grid.Row="2" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
+                                <DatePicker Grid.Column="3" Grid.Row="2" SelectedDate="{Binding SearchOutputDateEnd}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <TextBlock Text="を表示する" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            </Grid>
+                        </GroupBox>
+                        <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="2*"/>
@@ -241,15 +256,15 @@
                             <CheckBox Content="有効なデータのみ表示" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidityTrueOnly}" Margin="5"/>
                             <CheckBox Content="出力済みのデータも含む" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsContainOutputted}" Margin="5"/>
                         </Grid>
-                        <Grid Grid.Row="3">
+                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton Content="入出金すべて表示" Grid.Column="0" IsChecked="{Binding IsAllShowItem}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,10,0,10"/>
-                            <RadioButton Content="入金のみ表示" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,10,0,10"/>
-                            <RadioButton Content="出金のみ表示" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,10,0,10" Grid.ColumnSpan="2"/>
+                            <RadioButton Content="入出金すべて表示" Grid.Column="0" IsChecked="{Binding IsAllShowItem}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                            <RadioButton Content="入金のみ表示" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                            <RadioButton Content="出金のみ表示" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" />
                         </Grid>
                     </Grid>
                 </GroupBox>

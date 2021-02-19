@@ -283,11 +283,11 @@ namespace WPF.ViewModels
             IsDepositMenuEnabled = false;
             int income = DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1));
             int withdrawal = DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1));
-            AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1));
             DateTime previousMonthLastDay = DateTime.Today.AddDays((-1 * (DateTime.Today.Day - 1)) - 1);
+            AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.FinalAccountPerMonth(previousMonthLastDay) - withdrawal + income;
 
             DepositAmountInfo = "前日決算金額";
-            DepositAmount = TextHelper.CommaDelimitedAmount(DataBaseConnect.FinalAccountPerMonth(previousMonthLastDay) - withdrawal + income);
+            DepositAmount = TextHelper.CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
