@@ -27,6 +27,7 @@ namespace Infrastructure.ExcelOutputData
             PageCount = 0;
             StartRowPosition = 1;
             myWorksheet.PageSetup.PaperSize = SheetPaperSize();
+            myWorksheet.Style.Font.FontName = SetSheetFontName();
             NextPage();
         }
         /// <summary>

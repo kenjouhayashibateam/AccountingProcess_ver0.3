@@ -130,7 +130,6 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .NumberFormat.SetFormat("#,##0");
-            myWorksheet.Style.Font.FontName = "ＭＳ Ｐゴシック";
         }
 
         protected override double[] SetColumnSizes() => new double[] { 10.86, 4.71, 16.43, 16.43, 16.43, 9.14, 9.14, 9.14 };
@@ -173,5 +172,7 @@ namespace Infrastructure.ExcelOutputData
         {
             ReceiptsAndExpenditures =(ObservableCollection<ReceiptsAndExpenditure>) outputList;
         }
+
+        protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
     }
 }

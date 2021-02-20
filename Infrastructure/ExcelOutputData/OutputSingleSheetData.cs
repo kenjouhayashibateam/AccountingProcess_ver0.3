@@ -26,7 +26,7 @@ namespace Infrastructure.ExcelOutputData
             for (int i = 0; i < RowSizes.Length; i++) { myWorksheet.Row(i + 1).Height = RowSizes[i]; }
 
             for (int i = 0; i < ColumnSizes.Length; i++) { myWorksheet.Column(i + 1).Width = ColumnSizes[i]; }
-
+            myWorksheet.Style.Font.FontName = SetSheetFontName();
             SetBorderStyle();
             SetCellsStyle();
             SetDataStrings();

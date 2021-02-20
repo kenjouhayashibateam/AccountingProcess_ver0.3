@@ -210,10 +210,11 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetSheetFontStyle()
         {
-            myWorksheet.Style.Font.FontName = "ＭＳ ゴシック";
             MySheetCellRange(1, 1, 20, 7).Style.NumberFormat.Format = "@";
             myWorksheet.Cell(21, 1).Style.Font.Bold = true;
             myWorksheet.Cell(21, 1).Style.Font.FontSize = 20;
         }
+
+        protected override string SetSheetFontName() => "ＭＳ ゴシック";
     }
 }
