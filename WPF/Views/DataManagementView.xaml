@@ -461,6 +461,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="CloseButton" Content="閉じる" Grid.Column="2" Margin="10">
                 <Button.InputBindings>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
                 </Button.InputBindings>
             </Button>

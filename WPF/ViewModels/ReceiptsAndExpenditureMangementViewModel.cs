@@ -80,6 +80,7 @@ namespace WPF.ViewModels
         private bool isLocationSearch;
         private bool isValidityTrueOnly;
         private bool isReducedTaxRate;
+        private bool isOutputCheckEnabled;
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
@@ -110,7 +111,7 @@ namespace WPF.ViewModels
 
         public ReceiptsAndExpenditureMangementViewModel(IDataOutput dataOutput, IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            IsContainOutputted = true;
+            IsContainOutputted = false;
             SearchStartDate = DateTime.Today.AddDays(-1);
             SearchEndDate = DateTime.Today;
             DataOutput = dataOutput;
@@ -125,11 +126,11 @@ namespace WPF.ViewModels
         private void DefaultListExpress()
         {
             IsPeriodSearch = true;
-            SearchStartDate = DateTime.Today.AddDays(-1);
-            SearchEndDate = DateTime.Today;
-            SearchOutputDateStart = DefaultDate;
-            SearchOutputDateEnd = new DateTime(9999,1,1);
-            IsContainOutputted = true;
+            SearchOutputDateStart = DateTime.Today.AddDays(-1);
+            SearchOutputDateEnd = DateTime.Today;
+            SearchStartDate = DefaultDate;
+            SearchEndDate = new DateTime(9999,1,1);
+            IsContainOutputted = false;
         }
         /// <summary>
         /// 出金伝票出力コマンド
@@ -205,12 +206,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
             WithdrawalSlipsOutputButtonContent = "出金伝票";
-            DateTime PreviousDay;
-            if (IsPeriodSearch) PreviousDay = SearchEndDate;
-            else PreviousDay = SearchStartDate;
-            PreviousDayFinalAccount =
-                DataBaseConnect.FinalAccountPerMonth
-                (DateTime.Today.AddMonths(-1)) - DataBaseConnect.PreviousDayDisbursement(PreviousDay) + DataBaseConnect.PreviousDayIncome(PreviousDay);
+            PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
             ListTitle = $"一覧 : 前日決算 {AmountWithUnit( PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty,
@@ -275,6 +271,7 @@ namespace WPF.ViewModels
                     IsDepositAndWithdrawalContetntEnabled = true;
                     IsComboBoxEnabled = true;
                     IsDetailTextEnabled = true;
+                    IsOutputCheckEnabled = false;
                     IsAccountActivityEnabled = true;
                     IsPriceEnabled = true;
                     IsOutput = false;
@@ -297,6 +294,7 @@ namespace WPF.ViewModels
                     IsAccountActivityEnabled = false;
                     IsPriceEnabled = false;
                     IsReferenceMenuEnabled = true;
+                    IsOutputCheckEnabled = true;
                     break;
             }
         }
@@ -327,14 +325,7 @@ namespace WPF.ViewModels
         /// 本日の決算額を返します
         /// </summary>
         /// <returns></returns>
-        private int ReturnTodaysFinalAccount()
-        {
-            if (DataBaseConnect.FinalAccountPerMonth(DateTime.Today.AddMonths(-1))
-                - DataBaseConnect.PreviousDayDisbursement(DateTime.Today.AddDays(-1))+DataBaseConnect.PreviousDayIncome(DateTime.Today.AddDays(-1)) == PreviousDayFinalAccount)
-                return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
-            else
-                return 0;
-        }
+        private int ReturnTodaysFinalAccount() => PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
         /// <summary>
         /// 金額に000を付け足すコマンド
         /// </summary>
@@ -1406,6 +1397,7 @@ namespace WPF.ViewModels
             set
             {
                 isContainOutputted = value;
+                CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1511,6 +1503,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出力したかのチェックボックスのenabled
+        /// </summary>
+        public bool IsOutputCheckEnabled
+        {
+            get => isOutputCheckEnabled;
+            set
+            {
+                isOutputCheckEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1519,15 +1523,11 @@ namespace WPF.ViewModels
         {
             int amount = 0;
             
-            if(IsCheckedRegistration)
-                amount = DataBaseConnect.FinalAccountPerMonth(DateTime.Today.AddMonths(-1));
-
             foreach(ReceiptsAndExpenditure receiptsAndExpenditure in ReceiptsAndExpenditures)
             {
                 if (receiptsAndExpenditure.IsPayment) amount += receiptsAndExpenditure.Price;
                 else amount -= receiptsAndExpenditure.Price;
             }
-            amount += PreviousDayFinalAccount;
             BalanceFinalAccount = $"出納リストの収支決算 : {AmountWithUnit(amount)}";
             SetOutputButtonEnabled(amount);
         }
@@ -1606,6 +1606,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999,1,1), Location, string.Empty, string.Empty, string.Empty,
                 string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd,OutputDateStart,OutputDateEnd);
         }
+
         protected override string SetWindowDefaultTitle()
         {
             DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";

@@ -17,12 +17,8 @@ namespace Infrastructure
 
         public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
 
-        public int FinalAccountPerMonth(DateTime accountDate) => 2815597;
-
-        public int PreviousDayDisbursement(DateTime previousDay) => 0;
-
-        public int PreviousDayIncome(DateTime previousDay) => 0;
-
+        public int PreviousDayFinalAmount() => 0;
+        
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>

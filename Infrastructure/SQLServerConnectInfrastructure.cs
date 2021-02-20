@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using static Domain.Entities.Helpers.TextHelper;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
@@ -19,10 +18,9 @@ namespace Infrastructure
         private readonly LoginRep LoginRep=LoginRep.GetInstance();
 
         /// <summary>
-        /// ストアドプロシージャを実行するコマンドを生成します
+        /// コネクションストリングを設定します。
         /// </summary>
-        /// <param name="commandText">ストアドプロシージャ名</param>
-        private void ADO_NewInstance_StoredProc(SqlCommand cmd, string commandText)
+        private void SettingConectionString()
         {
             Cn = new SqlConnection
             {
@@ -30,6 +28,15 @@ namespace Infrastructure
                 ? Properties.Settings.Default.SystemAdminConnection
                 : Properties.Settings.Default.AccountingProcessConnection
             };
+        }
+        /// <summary>
+        /// ストアドプロシージャを実行するコマンドを生成します
+        /// </summary>
+        /// <param name="commandText">ストアドプロシージャ名</param>
+        private void ADO_NewInstance_StoredProc(SqlCommand cmd, string commandText)
+        {
+            SettingConectionString();
+
             cmd.Connection = Cn;
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = commandText;
@@ -284,34 +291,6 @@ namespace Infrastructure
             return list;
         }
 
-        public int PreviousDayIncome(DateTime previousDay)
-        {
-            //SqlCommand Cmd = new SqlCommand();
-            //SqlDataReader dataReader;
-            //DateTime referenceDate = previousDay.AddDays((-1 * (previousDay.Day - 1)) - 1);
-            int amount = default;
-            ObservableCollection<ReceiptsAndExpenditure> receipts;
-            
-            //using(Cn)
-            //{
-            //    ADO_NewInstance_StoredProc(Cmd, "call_final_account_per_month");
-            //    Cmd.Parameters.AddWithValue("@date", referenceDate);
-            //    dataReader = Cmd.ExecuteReader();
-
-            //    while (dataReader.Read()) { amount = (int)dataReader["amount"]; }
-            //}
-
-            receipts = ReferenceReceiptsAndExpenditure
-                (
-                    DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
-                    true, true,true, true,DefaultDate,new DateTime(9999,1,1), previousDay.AddDays(-1 * (previousDay.Day - 1)), previousDay
-                );
-
-            foreach (ReceiptsAndExpenditure rae in receipts) amount += rae.Price;
-
-            return amount;
-        }
-
         public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
             SqlCommand Cmd = new SqlCommand();
@@ -359,6 +338,8 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@is_payment", isPayment);
                 Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
                 Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
+                if (!isContainOutputted) outputDateStart = new DateTime(1900, 1, 1);
+                if (!isContainOutputted) outputDateEnd = new DateTime(1900, 1, 1);
                 Cmd.Parameters.AddWithValue("@output_date_start", outputDateStart);
                 Cmd.Parameters.AddWithValue("@output_date_end", outputDateEnd);
                 dataReader = Cmd.ExecuteReader();
@@ -383,45 +364,6 @@ namespace Infrastructure
 
             }
             return list;
-        }
-
-        public int PreviousDayDisbursement(DateTime previousDay)
-        {
-            //SqlCommand Cmd = new SqlCommand();
-            //SqlDataReader dataReader;
-            //DateTime lastMonthDate = new DateTime(previousDay.Year, previousDay.Month, 1).AddDays(-1);
-            int finalAmount = default;
-            ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
-
-            //using (Cn)
-            //{
-            //    dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "reference_final_account_per_month", "@reference_date", lastMonthDate.ToString());
-
-            //        while (dataReader.Read())
-            //        finalAmount = (int)dataReader["amount"];
-            //}
-            receiptsAndExpenditures = ReferenceReceiptsAndExpenditure
-                (DefaultDate, new DateTime(9999, 12, 31), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, true, false,true, true,
-                 DefaultDate,new DateTime(9999,1,1), new DateTime(previousDay.Year, previousDay.Month, previousDay.AddDays(-1 * (previousDay.Day - 1)).Day), previousDay);
-
-            foreach (ReceiptsAndExpenditure rae in receiptsAndExpenditures) finalAmount += rae.Price;
-
-            return finalAmount;
-        }
-
-        public int FinalAccountPerMonth(DateTime accountDate)
-        {
-            SqlCommand Cmd = new SqlCommand();
-            SqlDataReader dataReader;
-            int Value = default;
-
-            using(Cn)
-            {
-                dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_final_account_per_month", "@date", accountDate.ToString());
-
-                while (dataReader.Read()) Value = (int)dataReader["amount"];
-            }
-            return Value;
         }
 
         public Rep CallRep(string id)
@@ -498,6 +440,17 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
                 return Cmd.ExecuteNonQuery();
             }
+        }
+
+        public int PreviousDayFinalAmount()
+        {
+            SettingConectionString();
+            SqlCommand Cmd = new SqlCommand("select dbo.return_previous_day_final_amount()",Cn);
+            Object obj;
+            Cn.Open();
+            using (Cn) obj = Cmd.ExecuteScalar();
+
+            return (int)obj;
         }
     }
 }

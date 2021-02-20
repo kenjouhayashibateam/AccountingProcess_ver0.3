@@ -1564,6 +1564,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void ContentDetailFieldClear()
         {
+            if(CurrentContent != null) CurrentContent=null;
+            ContentIDField = string.Empty;
             AffiliationAccountingSubject = null;
             AffiliationAccountingSubjectCode = string.Empty;
             FlatRateField = string.Empty;
