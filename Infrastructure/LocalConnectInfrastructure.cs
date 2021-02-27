@@ -15,6 +15,8 @@ namespace Infrastructure
 
         public CreditAccount CallCreditAccount(string id) => new CreditAccount("credit_account0", "春秋苑", true,true);
 
+        public int CallFinalAccountPerMonth() => 0;
+
         public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
 
         public int PreviousDayFinalAmount() => 0;
@@ -159,6 +161,8 @@ namespace Infrastructure
 
         public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
 
+        public int RegistrationPerMonthFinalAccount() => 1;
+        
         public int Update(Rep rep) => 1;
 
         public int Update(AccountingSubject accountingSubject) => 1;

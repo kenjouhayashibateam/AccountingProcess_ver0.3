@@ -24,7 +24,9 @@ namespace Domain.Repositories
         /// <param name="yokohamaBankAmountWithUnit">横浜銀行残高</param>
         /// <param name="ceresaAmountWithUnit">セレサ川崎残高</param>
         /// <param name="wizeCoreAmountWithUnit">ワイズコア仮受金</param>
-        void BalanceFinalAccount(string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, string tranceferAmountWithUnit, string todayFinalAccountWithUnit, string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, string wizeCoreAmountWithUnit);
+        void BalanceFinalAccount
+            (string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
+            string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, string wizeCoreAmountWithUnit);
         /// <summary>
         /// 出納データを出力します
         /// </summary>

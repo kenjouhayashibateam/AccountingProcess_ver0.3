@@ -9,12 +9,16 @@ namespace WPF.ViewModels.Tests
     public class DataManagementViewModelTests
     {
         readonly DataManagementViewModel vm = new DataManagementViewModel(new LocalConnectInfrastructure()) ;
+        LoginRep loginRep = LoginRep.GetInstance();
+
         [TestMethod()]
         public void 担当者の登録時フィールドプロパティ()
         {
+            loginRep.SetRep(new Rep("aaa", "aaa", "aaa", true, true));
+
             vm.IsCheckedRegistration = true;
             vm.DataBaseConnect = new LocalConnectInfrastructure();
-
+            loginRep.SetRep(new Rep("aaa", "aaa", "aaa", true, true));
             Assert.AreEqual(vm.IsRepNameDataEnabled, true);
             Assert.AreEqual(vm.IsRepPasswordEnabled, false);
             Assert.AreEqual(vm.IsRepNewPasswordEnabled, true);
@@ -89,6 +93,7 @@ namespace WPF.ViewModels.Tests
         [TestMethod()]
         public void 勘定科目の更新時のフィールドプロパティ()
         {
+            loginRep.SetRep(new Rep("aaa", "aaa", "aaa", true, true));
             vm.SetDataUpdateCommand.Execute();
 
             Assert.AreEqual(vm.IsAccountingSubjectReferenceMenuEnabled, true);

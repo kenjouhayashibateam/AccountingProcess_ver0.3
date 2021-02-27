@@ -8,7 +8,8 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class ReceiptsAndExpenditureMangementViewModelTests
     {
-        private readonly ReceiptsAndExpenditureMangementViewModel vm = new ReceiptsAndExpenditureMangementViewModel(new ExcelOutputInfrastructure(), new LocalConnectInfrastructure());
+        private readonly ReceiptsAndExpenditureMangementViewModel
+            vm = new ReceiptsAndExpenditureMangementViewModel(new ExcelOutputInfrastructure(), new LocalConnectInfrastructure());
 
         [TestMethod()]
         public void データ登録時のフィールドプロパティ()
@@ -25,13 +26,14 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.AccountActivityDate, DateTime.Today);
             Assert.AreEqual(vm.IsDataOperationButtonEnabled, false);
 
+            vm.ComboAccountingSubjectCode = "882";
+            vm.ComboAccountingSubjectCode = vm.ComboAccountingSubjects[0].SubjectCode;
+            Assert.AreEqual(vm.IsDataOperationButtonEnabled, false);
+
             vm.ComboContentText = vm.ComboContents[0].Text;
             Assert.AreEqual(vm.IsDataOperationButtonEnabled, false);
 
             vm.ComboAccountingSubjectText = vm.ComboAccountingSubjects[0].Subject;
-            Assert.AreEqual(vm.IsDataOperationButtonEnabled, false);
-
-            vm.ComboAccountingSubjectCode = vm.ComboAccountingSubjects[0].SubjectCode;
             Assert.AreEqual(vm.IsDataOperationButtonEnabled, false);
 
             vm.Price = "1000";

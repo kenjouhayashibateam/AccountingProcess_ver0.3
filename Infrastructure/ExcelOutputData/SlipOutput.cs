@@ -43,12 +43,12 @@ namespace Infrastructure.ExcelOutputData
             int contentCount = 0;
             int inputRow = 0;
             int inputContentColumn = 0;
-            int inputPriceColumn = 0;
             int TotalPrice = 0;
             DateTime currentDate = TextHelper.DefaultDate;
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
-                .ThenBy(r => r.IsPayment)
+            //foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
+            //    .ThenBy(r => r.IsPayment)
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending(r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r=>r.Content.AccountingSubject.Subject))
             {
@@ -63,7 +63,7 @@ namespace Infrastructure.ExcelOutputData
                 {
                     isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
                     if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入出金日比較
-                    if (!isGoNext) isGoNext = IsStringEqualsReverse(content, rae.Content.Text); //伝票内容比較
+                    //if (!isGoNext) isGoNext = IsStringEqualsReverse(content, rae.Content.Text); //伝票内容比較
                 }
                 else isGoNext = true;
 
@@ -80,26 +80,26 @@ namespace Infrastructure.ExcelOutputData
                     NextPage();//次のページへ
                 }
                 else TotalPrice += rae.Price;//ページ移動がなければ、総額に現在のデータのPriceを加算
-                myWorksheet.Cell(StartRowPosition + 1, 1).Value = $"{rae.AccountActivityDate:M/d} {rae.Content.Text}";//伝票の一番上にタイトルとして入金日、Contentを出力                
+                myWorksheet.Cell(StartRowPosition + 1, 1).Value = $"{rae.AccountActivityDate:M/d}";//{rae.Content.Text}伝票の一番上にタイトルとして入金日、Contentを出力                
                 //伝票1件目から4件目は一列目、5件目から8件目までは4列目に出力
                 if (contentCount <= 4)
                 {
                     inputRow = StartRowPosition + 1 + contentCount;
                     inputContentColumn = 1;
-                    inputPriceColumn = 4;
                 }
                 else
                 {
                     inputRow = StartRowPosition + 1 + contentCount - 4;
                     inputContentColumn = 11;
-                    inputPriceColumn = 15;
                 }
-                //myWorksheet.Cell(inputRow, inputContentColumn).Value = rae.Detail;//詳細を出力
-                //myWorksheet.Cell(inputRow, inputPriceColumn).Value = TextHelper.CommaDelimitedAmount(rae.Price);//金額を出力
-                myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Detail}　\\{rae.Price}-";
+                myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Content.Text} {rae.Detail} \\{rae.Price}-";
 
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
                 myWorksheet.Cell(StartRowPosition + 1, 16).Value = AccountingProcessLocation.Location;
+                string s;
+                if (rae.IsReducedTaxRate) s = "※軽減税率";
+                else s = string.Empty;
+                myWorksheet.Cell(StartRowPosition + 2, 16).Value = s;
                 for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value = TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = rae.AccountActivityDate.Year;
@@ -158,16 +158,15 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 5, 20).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
             myWorksheet.Cell(StartRowPosition + 1, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
             myWorksheet.Cell(StartRowPosition + 1, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            myWorksheet.Cell(StartRowPosition + 2, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             for (int i = StartRowPosition + 2; i < StartRowPosition + 7; i++)
             {
                 myWorksheet.Cell(i, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
                 myWorksheet.Cell(i, 1).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                 myWorksheet.Cell(i, 1).Style.Alignment.SetShrinkToFit(true);
-                //myWorksheet.Cell(i, 4).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
                 myWorksheet.Cell(i, 11).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
                 myWorksheet.Cell(i, 11).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                 myWorksheet.Cell(i, 11).Style.Alignment.SetShrinkToFit(true);
-                //myWorksheet.Cell(i, 15).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             }
             myWorksheet.Cell(StartRowPosition + 6, 20).Style
                 .Alignment.SetTopToBottom(true)
@@ -202,10 +201,9 @@ namespace Infrastructure.ExcelOutputData
             for (int i = 2; i < 6; i++)
             {
                 MySheetCellRange(StartRowPosition + i, 1, StartRowPosition + i, 9).Merge();
-                //MySheetCellRange(StartRowPosition + i, 4, StartRowPosition + i, 9).Merge();
                 MySheetCellRange(StartRowPosition + i, 11, StartRowPosition + i, 15).Merge();
-                //MySheetCellRange(StartRowPosition + i, 16, StartRowPosition + i, 20).Merge();
             }
+            MySheetCellRange(StartRowPosition + 2, 16, StartRowPosition + 2, 20).Merge();
             MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 7, 18).Merge();
             MySheetCellRange(StartRowPosition + 6, 20, StartRowPosition + 7, 20).Merge();
             MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 13).Merge();

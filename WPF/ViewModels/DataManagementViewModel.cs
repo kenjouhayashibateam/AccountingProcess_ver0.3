@@ -670,6 +670,7 @@ namespace WPF.ViewModels
                 IsRepOperationButtonEnabled = true;
                 return;
             }
+            if (LoginRep.Rep == null) return;
             if (!LoginRep.Rep.IsAdminPermisson)
             {
                 IsRepOperationButtonEnabled = false;

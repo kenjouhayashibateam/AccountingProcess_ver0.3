@@ -452,5 +452,34 @@ namespace Infrastructure
 
             return (int)obj;
         }
+
+        public int RegistrationPerMonthFinalAccount()
+        {
+            SqlCommand Cmd = new SqlCommand();
+
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "registration_final_account_per_month_table");
+                return Cmd.ExecuteNonQuery();
+            }
+        }
+
+        public int CallFinalAccountPerMonth()
+        {
+            SqlCommand Cmd = new SqlCommand();
+            int i=default;
+
+            using (Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "call_final_account_per_month");
+                DateTime previousMonthLastDay = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
+                Cmd.Parameters.AddWithValue("@date", previousMonthLastDay);
+
+                SqlDataReader sdr = Cmd.ExecuteReader();
+
+                while (sdr.Read()) i = (int)sdr["amount"];
+            }
+            return i;
+        }
     }
 }

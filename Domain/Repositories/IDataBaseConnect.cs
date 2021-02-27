@@ -156,12 +156,22 @@ namespace Domain.Repositories
         /// <param name="accountActivityDateEnd">入出金日検索最終日時</param>
         /// <returns></returns>
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
-            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject, string accountingSubjectCode,
-            bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
-            DateTime outputDateStart, DateTime outputDateEnd);
+            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject,
+            string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
+            DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd);
         /// <summary>
         /// 前日決算額を返します
         /// </summary>
+        /// <returns>決算額</returns>
         public int PreviousDayFinalAmount();
+        /// <summary>
+        /// 前月決算を登録します
+        /// </summary>
+        public int RegistrationPerMonthFinalAccount();
+        /// <summary>
+        /// 前月決算額を返します
+        /// </summary>
+        /// <returns></returns>
+        public int CallFinalAccountPerMonth();
     }
 }

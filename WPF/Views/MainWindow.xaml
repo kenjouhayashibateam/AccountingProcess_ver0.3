@@ -107,7 +107,7 @@
                         </Button.InputBindings>
                     </Button>
                 </Grid>
-                <Button x:Name="ShowSlipManagement" Content="出納管理（未実装）" Grid.Row="0" Grid.Column="1" Margin="100,50">
+                <Button x:Name="ShowSlipManagement" Content="出納管理" Grid.Row="0" Grid.Column="1" Margin="100,50">
                     <Button.InputBindings>
                         <MouseBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" MouseAction="LeftClick"/>
                         <KeyBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" Key="Space"/>
@@ -118,17 +118,24 @@
                
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="9*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="1" Visibility="{Binding IsAdminPermisson,Converter={StaticResource VisibilityConverter}}" Content="データ管理" Margin="10,15">
+            <Button x:Name="PerMonthFinalAccountRegistrationButton" Grid.Row="0" Grid.Column="1" Visibility="{Binding IsRegistrationPerMonthFinalAccountVisiblity,Converter={StaticResource VisibilityConverter}}" Content="前月決算登録" Margin="10,15" >
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding RegistrationPerMonthFinalAccountCommand}" Key="Space"/>
+                    <MouseBinding Command="{Binding RegistrationPerMonthFinalAccountCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+            <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="2" Visibility="{Binding IsAdminPermisson,Converter={StaticResource VisibilityConverter}}" Content="データ管理" Margin="10,15">
                     <Button.InputBindings>
                         <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding ShowDataManagementCommand}" Key="Space"/>
                 </Button.InputBindings>
                 </Button>
-            <Button x:Name="WindowCloseButton" Grid.Column="2" Content="閉じる"  Margin="10,15">
+            <Button x:Name="WindowCloseButton" Grid.Column="3" Content="閉じる"  Margin="10,15">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>

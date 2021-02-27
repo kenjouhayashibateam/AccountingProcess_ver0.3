@@ -132,7 +132,7 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="詳細（将来的に削除予定）" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <TextBox x:Name="DetailTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding DetailText}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                            <TextBox x:Name="DetailTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding DetailText,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsDetailTextEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
                             <CheckBox Content="軽減税率のデータ" Grid.Row="1" Grid.Column="1" FontSize="14" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                         </Grid>
                         <Grid Grid.Row="6">
@@ -146,7 +146,7 @@
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="金額" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
-                            <TextBox x:Name="PriceTextBox" Grid.Row="1" Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPriceEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="off" Margin="5,3"/>
+                            <TextBox x:Name="PriceTextBox" Grid.Row="1" Grid.Column="0" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPriceEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3"/>
                             <Button x:Name="ZeroAddButton" Content="000を付け足す" Grid.Column="2" Grid.Row="1" Margin="5,5,9,5">
                                 <Button.InputBindings>
@@ -252,7 +252,7 @@
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Content="担当経理場所の出納データのみを表示" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsLocationSearch}" Margin="5"/>
+                            <CheckBox Content="{Binding ReferenceLocationCheckBoxContent}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsLocationSearch}" Margin="5"/>
                             <CheckBox Content="有効なデータのみ表示" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidityTrueOnly}" Margin="5"/>
                             <CheckBox Content="出力済みのデータも含む" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsContainOutputted}" Margin="5"/>
                         </Grid>

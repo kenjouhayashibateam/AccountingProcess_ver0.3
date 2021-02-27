@@ -38,7 +38,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="担当者" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
-        <ComboBox Name="RepsComboBox" Grid.Row="1" Margin="5" VerticalContentAlignment="Center" ItemsSource="{Binding Reps}" DisplayMemberPath="Name" SelectedIndex="0" SelectedValue="{Binding CurrentRep}" Text="{Binding RepName,UpdateSourceTrigger=LostFocus}" IsEditable="True" SelectedValuePath="{Binding CurrentRep.ID}"/>
+        <ComboBox Name="RepsComboBox" Grid.Row="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Margin="5" VerticalContentAlignment="Center" ItemsSource="{Binding Reps}" DisplayMemberPath="Name" SelectedIndex="0" SelectedValue="{Binding CurrentRep}" Text="{Binding RepName,UpdateSourceTrigger=LostFocus}" IsEditable="True" SelectedValuePath="{Binding CurrentRep.ID}"/>
         <TextBlock Text="パスワード" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
         <Grid Grid.Row="3" Margin="5">
             <Grid.ColumnDefinitions>
