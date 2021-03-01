@@ -81,8 +81,6 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetShowReceiptsAndExpenditureManagementView(), () =>SetOperationButtonEnabled());
             RegistrationPerMonthFinalAccountCommand =
                 new DelegateCommand(() => RegistrationPerMonthFinalAccount(), () => true);
-            ConfirmationPerMonthFinalAccount();
-
         }
         public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
         /// <summary>
@@ -91,12 +89,23 @@ namespace WPF.ViewModels
         private void ConfirmationPerMonthFinalAccount()
         {
             IsRegistrationPerMonthFinalAccountVisiblity = DateTime.Today.Day == 1;//今日の日付が1日なら登録ボタンを可視化する
+            if(string.IsNullOrEmpty(LoginRep.Rep.Name))
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message = "ログインしてください",
+                    Image = MessageBoxImage.Information,
+                    Title = "ログインエラー",
+                    Button = MessageBoxButton.OK
+                };
+                CallShowMessageBox = true;
+                IsSlipManagementEnabled = false;
+                return;
+            }
             if (IsRegistrationPerMonthFinalAccountVisiblity) 
                 IsRegistrationPerMonthFinalAccountVisiblity = DataBaseConnect.CallFinalAccountPerMonth() == 0;//前月決算が登録されていれば登録ボタンを隠す
             if (!IsRegistrationPerMonthFinalAccountVisiblity) return;//登録ボタンが可視化されていなければ処理を終了する
-            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.Cancel) return;
             RegistrationPerMonthFinalAccount();
-            IsRegistrationPerMonthFinalAccountVisiblity = false;//前月決算が登録されたので、登録ボタンを隠す
         }
         private MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo()
         {
@@ -115,7 +124,12 @@ namespace WPF.ViewModels
         /// 前月決算を登録します
         /// </summary>
         public DelegateCommand RegistrationPerMonthFinalAccountCommand { get; set; }
-        private void RegistrationPerMonthFinalAccount() => DataBaseConnect.RegistrationPerMonthFinalAccount();
+        private void RegistrationPerMonthFinalAccount()
+        {
+            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.Cancel) return;
+            DataBaseConnect.RegistrationPerMonthFinalAccount();
+            IsRegistrationPerMonthFinalAccountVisiblity = false;//前月決算が登録されたので、登録ボタンを隠す
+        }
         /// <summary>
         /// ログインしていないことを案内します
         /// </summary>
@@ -328,9 +342,10 @@ namespace WPF.ViewModels
         {
             KanriJimushoChecked = true;
             ProcessFeatureEnabled = true;
+            IsSlipManagementEnabled = LoginRep.Rep.Name != string.Empty;
             IsDepositMenuEnabled = false;
+            ConfirmationPerMonthFinalAccount();
             AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayFinalAmount();
-
             DepositAmountInfo = "前日決算金額";
             DepositAmount = TextHelper.CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
         }

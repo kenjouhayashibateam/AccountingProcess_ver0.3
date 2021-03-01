@@ -27,10 +27,11 @@ namespace WPF.ViewModels
         private int previousDayFinalAccount;
         private int todayTotalAmount;
         private int receiptsAndExpenditureIDField;
+        public int ListIndex;
         /// <summary>
         /// 金庫の締め時間
         /// </summary>
-        private int ClosingCashboxHour = 15;
+        private readonly int ClosingCashboxHour = 15;
        #endregion
         #region string
         private string peymentSumDisplayValue;
@@ -401,6 +402,12 @@ namespace WPF.ViewModels
                 SelectedReceiptsAndExpenditure.CreditAccount = SelectedCreditAccount;
             }
 
+            if (SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode) 
+                UpdateCotent += $"勘定科目コード : {SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode} → {ComboAccountingSubjectCode}\r\n";            
+
+            if(SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject!=ComboAccountingSubjectText)
+                UpdateCotent += $"勘定科目 : {SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject} → {ComboAccountingSubjectText}\r\n";
+
             if (SelectedReceiptsAndExpenditure.Content.Text != ComboContentText)
             {
                 UpdateCotent += $"内容 : {SelectedReceiptsAndExpenditure.Content.Text} → {ComboContentText}\r\n";
@@ -698,7 +705,7 @@ namespace WPF.ViewModels
                 if (ComboAccountingSubjects.Count > 0)
                 {
                     comboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
-                    ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
+                    AccountingSubjectSpecialProcess(comboAccountingSubjectCode);
                 }
                 else
                 {
@@ -711,6 +718,14 @@ namespace WPF.ViewModels
                 ValidationProperty(nameof(ComboAccountingSubjectCode), value);
                 CallPropertyChanged();
             }
+        }
+
+        private void AccountingSubjectSpecialProcess(string code)
+        {
+            if (code == "813")
+                ComboAccountingSubjectText = ComboAccountingSubjects[1].Subject;
+            else
+                ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
         }
         /// <summary>
         /// 詳細欄のText
