@@ -27,7 +27,6 @@ namespace WPF.ViewModels
         private int previousDayFinalAccount;
         private int todayTotalAmount;
         private int receiptsAndExpenditureIDField;
-        public int ListIndex;
         /// <summary>
         /// 金庫の締め時間
         /// </summary>
@@ -90,10 +89,10 @@ namespace WPF.ViewModels
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
-        private DateTime searchStartDate = DefaultDate;
         private DateTime searchEndDate = new DateTime(9999, 1, 1);
-        private DateTime searchOutputDateStart = DefaultDate;
+        private DateTime searchStartDate = DefaultDate;
         private DateTime searchOutputDateEnd = new DateTime(9999, 1, 1);
+        private DateTime searchOutputDateStart = DefaultDate;
         private DateTime registrationDate;
         private DateTime slipOutputDate;
         #endregion
@@ -493,7 +492,6 @@ namespace WPF.ViewModels
             CreateReceiptsAndExpenditures();
             if (IsPaymentCheck) SetPeymentSum();
             else SetWithdrawalSumAndTransferSum();
-
             FieldClear();
         }
         /// <summary>
@@ -1049,7 +1047,8 @@ namespace WPF.ViewModels
             SlipOutputDate = selectedReceiptsAndExpenditure.OutputDate;
             IsOutput = SelectedReceiptsAndExpenditure.OutputDate!=DefaultDate;
             ComboCreditAccountText = SelectedReceiptsAndExpenditure.CreditAccount.Account;
-            ComboAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode;
+            SelectedAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject;
+            ComboAccountingSubjectCode = SelectedAccountingSubjectCode.SubjectCode;
             ComboAccountingSubjectText = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
             ComboContentText = SelectedReceiptsAndExpenditure.Content.Text;
             DetailText = SelectedReceiptsAndExpenditure.Detail;
@@ -1435,6 +1434,7 @@ namespace WPF.ViewModels
             set
             {
                 isContainOutputted = value;
+                if (value) SearchOutputDateEnd = DateTime.Today;
                 CreateReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -1567,7 +1567,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
