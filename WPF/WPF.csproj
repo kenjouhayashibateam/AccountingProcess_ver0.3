@@ -88,6 +88,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
+    <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
     <Compile Include="Views\DataManagementView.xaml.cs">
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="Views\ReceiptsAndExpenditureMangementView.xaml.cs">
       <DependentUpon>ReceiptsAndExpenditureMangementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShorendoCashBoxCalculationView.xaml.cs">
+      <DependentUpon>ShorendoCashBoxCalculationView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\DataManagementView.xaml">
       <SubType>Designer</SubType>
@@ -135,6 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReceiptsAndExpenditureMangementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShorendoCashBoxCalculationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

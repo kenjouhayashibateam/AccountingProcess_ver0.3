@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Helpers;
+﻿using Domain.Entities;
+using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
@@ -201,7 +202,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowRemainingMoneyCalculationView()
         {
-            CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
+            if (AccountingProcessLocation.Location == "管理事務所") CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
+            else CreateShowWindowCommand(ScreenTransition.ShorendoCashBoxCalculation());
             CallPropertyChanged();
         }
         /// <summary>
@@ -294,6 +296,7 @@ namespace WPF.ViewModels
             set
             {
                 AccountingProcessLocation.OriginalTotalAmount = TextHelper.IntAmount(value);
+                IsSlipManagementEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 depositAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }

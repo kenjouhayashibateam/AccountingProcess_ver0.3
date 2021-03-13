@@ -223,7 +223,7 @@
                         <ColumnDefinition Width="8*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="OtherMoneyAmount1TextBox" Text="{Binding OtherMoneyAmountDisplayValue1, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
+                    <TextBox x:Name="OtherMoneyAmount1TextBox" Text="{Binding OtherMoneyAmountDisplayValue1, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off"/>
                     <TextBlock Text="円" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
                 <TextBox x:Name="OtherMoneyTitle2TextBox" Text="{Binding OtherMoneyTitle2}" Grid.Row="3" Grid.Column="0" Margin="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="fullshape,Native"/>

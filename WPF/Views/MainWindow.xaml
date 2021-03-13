@@ -86,7 +86,7 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
-                           <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" Margin="5,3"/>
+                           <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" b:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </Grid>

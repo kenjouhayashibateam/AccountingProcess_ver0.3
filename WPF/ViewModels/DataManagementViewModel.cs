@@ -7,6 +7,7 @@ using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
+using Domain.Entities;
 
 namespace WPF.ViewModels
 {
@@ -1264,8 +1265,11 @@ namespace WPF.ViewModels
             {
                 affiliationAccountingSubject = value;
                 ValidationProperty(nameof(AffiliationAccountingSubject), value);
-                if (affiliationAccountingSubject != null) SelectedAccountingSubjectField = affiliationAccountingSubject.Subject;                
-                SetContentOperationButtonEnabled();
+                if (affiliationAccountingSubject != null)
+                {
+                    SelectedAccountingSubjectField = affiliationAccountingSubject.Subject;
+                    SetContentOperationButtonEnabled();
+                }
                 CallPropertyChanged();
             }
         }
@@ -1490,6 +1494,7 @@ namespace WPF.ViewModels
             get => affiliationAccountingSubjectCode;
             set
             {
+                if (affiliationAccountingSubjectCode == value) return;
                 affiliationAccountingSubjectCode = value;
                 if (value != null) AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
                 if (AffiliationAccountingSubjects.Count > 0) AffiliationAccountingSubject = AffiliationAccountingSubjects[0];

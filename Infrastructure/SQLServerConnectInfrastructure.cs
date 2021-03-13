@@ -5,7 +5,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
-using WPF.Views.Datas;
 
 namespace Infrastructure
 {

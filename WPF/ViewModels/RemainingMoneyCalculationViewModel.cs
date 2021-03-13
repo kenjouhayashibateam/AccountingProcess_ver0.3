@@ -802,21 +802,21 @@ namespace WPF.ViewModels
             FiveHundredYenBundleCount = myCashbox.MoneyCategorys[FiveHundredYenBundle].Count;
 
             OtherMoneyTitle1 = myCashbox.OtherMoneys[0].Title;
-            OtherMoneyAmountDisplayValue1 = myCashbox.OtherMoneys[0].AmountWithUnit();
+            OtherMoneyAmountDisplayValue1 = myCashbox.OtherMoneys[0].Amount != 0 ? myCashbox.OtherMoneys[0].Amount.ToString() : string.Empty;
             OtherMoneyTitle2 = myCashbox.OtherMoneys[1].Title;
-            OtherMoneyAmountDisplayValue2 = myCashbox.OtherMoneys[1].AmountWithUnit();
+            OtherMoneyAmountDisplayValue2 = myCashbox.OtherMoneys[1].Amount != 0 ? myCashbox.OtherMoneys[1].Amount.ToString() : string.Empty;
             OtherMoneyTitle3 = myCashbox.OtherMoneys[2].Title;
-            OtherMoneyAmountDisplayValue3 = myCashbox.OtherMoneys[2].AmountWithUnit();
+            OtherMoneyAmountDisplayValue3 = myCashbox.OtherMoneys[2].Amount != 0 ? myCashbox.OtherMoneys[2].Amount.ToString() : string.Empty;
             OtherMoneyTitle4 = myCashbox.OtherMoneys[3].Title;
-            OtherMoneyAmountDisplayValue4 = myCashbox.OtherMoneys[3].AmountWithUnit();
+            OtherMoneyAmountDisplayValue4 = myCashbox.OtherMoneys[3].Amount != 0 ? myCashbox.OtherMoneys[3].Amount.ToString() : string.Empty;
             OtherMoneyTitle5 = myCashbox.OtherMoneys[4].Title;
-            OtherMoneyAmountDisplayValue5 = myCashbox.OtherMoneys[4].AmountWithUnit();
+            OtherMoneyAmountDisplayValue5 = myCashbox.OtherMoneys[4].Amount != 0 ? myCashbox.OtherMoneys[4].Amount.ToString() : string.Empty;
             OtherMoneyTitle6 = myCashbox.OtherMoneys[5].Title;
-            OtherMoneyAmountDisplayValue6 = myCashbox.OtherMoneys[5].AmountWithUnit();
+            OtherMoneyAmountDisplayValue6 = myCashbox.OtherMoneys[5].Amount != 0 ? myCashbox.OtherMoneys[5].Amount.ToString() : string.Empty;
             OtherMoneyTitle7 = myCashbox.OtherMoneys[6].Title;
-            OtherMoneyAmountDisplayValue7 = myCashbox.OtherMoneys[6].AmountWithUnit();
+            OtherMoneyAmountDisplayValue7 = myCashbox.OtherMoneys[6].Amount != 0 ? myCashbox.OtherMoneys[6].Amount.ToString() : string.Empty;
             OtherMoneyTitle8 = myCashbox.OtherMoneys[7].Title;
-            OtherMoneyAmountDisplayValue8 = myCashbox.OtherMoneys[7].AmountWithUnit();
+            OtherMoneyAmountDisplayValue8 = myCashbox.OtherMoneys[7].Amount != 0 ? myCashbox.OtherMoneys[7].Amount.ToString() : string.Empty;
         }
         /// <summary>
         /// その他釣り銭等メニューの値をすべてクリアします

@@ -21,8 +21,10 @@ namespace Domain.Entities.ValueObjects
         /// <returns>00,000,000 円</returns>
         public string AmountWithUnit()
         {
+            string s = TextHelper.AmountWithUnit(Amount);
             if (Amount < 1) return string.Empty;
-            else return TextHelper.AmountWithUnit(Amount);            
+            else return s;
+                
         }
     }
 }

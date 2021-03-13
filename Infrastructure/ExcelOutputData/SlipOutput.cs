@@ -38,6 +38,7 @@ namespace Infrastructure.ExcelOutputData
             string code = string.Empty;
             string subject = string.Empty;
             string content = string.Empty ;
+            string location = default;
 
             bool isGoNext = false;
             int contentCount = 0;
@@ -50,16 +51,21 @@ namespace Infrastructure.ExcelOutputData
             //    .ThenBy(r => r.IsPayment)
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending(r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
-                .ThenBy(r=>r.Content.AccountingSubject.Subject))
+                .ThenBy(r=>r.Content.AccountingSubject.Subject)
+                .ThenBy(r=>r.Location))
             {
-                if (!rae.IsPayment==IsPayment) continue;
+                if (rae.IsPayment!=IsPayment) continue;
                 if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
                 if (subject == string.Empty) subject = rae.Content.AccountingSubject.Subject;//subjectの初期値を設定する
                 if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
                 if (content == string.Empty) content = rae.Content.Text;//contentの初期値を設定する
+                if (location == string.Empty) location = rae.Location;
                 contentCount++;
+
+                isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
+
                 //codeが同じならisGoNextにsubjectの比較結果を代入する
-                if (code == rae.Content.AccountingSubject.SubjectCode)
+                if (code == rae.Content.AccountingSubject.SubjectCode | isGoNext == false)
                 {
                     isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
                     if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入出金日比較
@@ -95,7 +101,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Content.Text} {rae.Detail} \\{rae.Price}-";
 
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
-                myWorksheet.Cell(StartRowPosition + 1, 16).Value = AccountingProcessLocation.Location;
+                myWorksheet.Cell(StartRowPosition + 1, 16).Value = rae.Location;
                 string s;
                 if (rae.IsReducedTaxRate) s = "※軽減税率";
                 else s = string.Empty;
@@ -169,7 +175,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(i, 11).Style.Alignment.SetShrinkToFit(true);
             }
             myWorksheet.Cell(StartRowPosition + 6, 20).Style
-                .Alignment.SetTopToBottom(true)
+                //.Alignment.SetTopToBottom(true)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 16).Style

@@ -64,7 +64,7 @@ namespace Domain.Entities
             return cashbox;
         }
         /// <summary>
-        /// 送金額を取得します
+        /// 総金額を取得します
         /// </summary>
         /// <returns>総金額</returns>
         public int GetTotalAmount()
@@ -81,5 +81,6 @@ namespace Domain.Entities
         /// </summary>
         /// <returns>0,000,000 円</returns>
         public string GetTotalAmountWithUnit() => TextHelper.AmountWithUnit(GetTotalAmount());
+    
     }
 }

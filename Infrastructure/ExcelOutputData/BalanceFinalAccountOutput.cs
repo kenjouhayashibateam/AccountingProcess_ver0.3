@@ -1,4 +1,6 @@
 ﻿using ClosedXML.Excel;
+using Domain.Entities;
+using Domain.Entities.Helpers;
 using System;
 
 namespace Infrastructure.ExcelOutputData
@@ -8,6 +10,7 @@ namespace Infrastructure.ExcelOutputData
     /// </summary>
     internal class BalanceFinalAccountOutput : OutputSingleSheetData
     {
+        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         /// <summary>
         /// 前日決算額
         /// </summary>
@@ -86,6 +89,10 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             MySheetCellRange(5,3,5,5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            myWorksheet.Cell(6, 5).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                //.Alignment.SetTopToBottom(true);
             myWorksheet.Cell(8, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
             MySheetCellRange(9, 1, 9, 5).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
@@ -105,6 +112,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(5, 3).Value = "本部長";
             myWorksheet.Cell(5, 4).Value = "副住職";
             myWorksheet.Cell(5, 5).Value = "係";
+            myWorksheet.Cell(6, 5).Value = TextHelper.GetFirstName(LoginRep.Rep.Name);
             myWorksheet.Cell(8, 1).Value = "収支";
             myWorksheet.Cell(9, 1).Value = "前日より繰越";
             myWorksheet.Cell(9, 2).Value = "入金";
@@ -153,8 +161,9 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Style.Font.FontName = "ＭＳ Ｐゴシック";
             myWorksheet.Cell(2, 4).Style.Font.FontSize = 14;
             myWorksheet.Cell(3, 1).Style.Font.FontSize = 28;
+            myWorksheet.Cell(6, 5).Style.Font.FontSize = 12;
             myWorksheet.Cell(8, 1).Style.Font.FontSize = 16;
-            MySheetCellRange(10, 1, 10, 5).Style.Font.FontSize = 14;
+            MySheetCellRange(10, 1, 10, 5).Style.Font.FontSize = 12;
             MySheetCellRange(12, 2, 14, 3).Style.Font.FontSize = 14;
             MySheetCellRange(12, 2, 14, 3).Style.Font.Bold = true;
             myWorksheet.Cell(16, 4).Style.Font.FontSize = 16;

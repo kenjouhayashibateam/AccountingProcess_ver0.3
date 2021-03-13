@@ -154,6 +154,8 @@ namespace Domain.Repositories
         /// <param name="isValidityOnly">有効性がTrueのみ</param>
         /// <param name="accountActivityDateStart">入出金日検索開始日時</param>
         /// <param name="accountActivityDateEnd">入出金日検索最終日時</param>
+        /// <param name="outputDateStart">伝票発行日検索開始日時</param>
+        /// <param name="outputDateEnd">伝票発行日検索最終日時</param>
         /// <returns></returns>
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject,

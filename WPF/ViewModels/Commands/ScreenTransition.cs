@@ -27,5 +27,10 @@ namespace WPF.ViewModels.Commands
         /// </summary>
         /// <returns>出納管理ウィンドウインスタンス</returns>
         public static ReceiptsAndExpenditureMangementView ReceiptsAndExpenditureMangement() => new ReceiptsAndExpenditureMangementView();
+        /// <summary>
+        /// 青蓮堂金庫管理画面を呼び出します
+        /// </summary>
+        /// <returns>青蓮堂金庫管理ウインドウインスタンス</returns>
+        public static ShorendoCashBoxCalculationView ShorendoCashBoxCalculation() => new ShorendoCashBoxCalculationView();
     }
 }

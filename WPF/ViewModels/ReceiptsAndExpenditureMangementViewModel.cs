@@ -31,6 +31,10 @@ namespace WPF.ViewModels
         /// 金庫の締め時間
         /// </summary>
         private readonly int ClosingCashboxHour = 15;
+        /// <summary>
+        /// リストの収支金額
+        /// </summary>
+        private int ListAmount;
        #endregion
         #region string
         private string peymentSumDisplayValue;
@@ -59,6 +63,10 @@ namespace WPF.ViewModels
         private string slipOutputDateTitle;
         private string receiptsAndExpenditureIDFieldText;
         private string referenceLocationCheckBoxContent;
+        /// <summary>
+        /// 当日決算の基準になる金額の種類。管理事務所なら前日決算、青蓮堂なら預り金額
+        /// </summary>
+        private string FinalAccountCategory;
         #endregion
         #region bool
         private bool isValidity;
@@ -102,6 +110,10 @@ namespace WPF.ViewModels
         private ObservableCollection<Content> comboContents;
         private ObservableCollection<CreditAccount> comboCreditAccounts;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
+        /// <summary>
+        /// 本日付で出力済みの伝票データのリスト
+        /// </summary>
+        private ObservableCollection<ReceiptsAndExpenditure> TodayWroteList = new ObservableCollection<ReceiptsAndExpenditure>();
         #endregion
         private SolidColorBrush detailBackGroundColor;
         private Cashbox Cashbox = Cashbox.GetInstance();
@@ -188,7 +200,7 @@ namespace WPF.ViewModels
             DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, isPayment);
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
-                rae.OutputDate = DateTime.Today;
+                rae.IsOutput = true;
                 DataBaseConnect.Update(rae);
             }
         }
@@ -221,12 +233,23 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
             WithdrawalSlipsOutputButtonContent = "出金伝票";
-            if (AccountingProcessLocation.Location == "管理事務所") PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
-            else previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
-            ListTitle = $"一覧 : 前日決算 {AmountWithUnit(PreviousDayFinalAccount)}";
+            if (AccountingProcessLocation.Location == "管理事務所")
+            {
+                TodayWroteList=DataBaseConnect.ReferenceReceiptsAndExpenditure
+                   (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
+                     new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), DateTime.Today, DateTime.Today);
+                PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
+                FinalAccountCategory = "前日決算";
+            }
+            else
+            {
+                previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
+                FinalAccountCategory = "預かり金額";
+            }
+            ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
-            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(9999, 1, 1));
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), AccountingProcessLocation.Location ,string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
             ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
@@ -235,7 +258,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
         /// </summary>
-        private void SetOutputGroupEnabled() => IsOutputGroupEnabled = Cashbox.GetTotalAmount() == IntAmount(TodaysFinalAccount);
+        private void SetOutputGroupEnabled() => IsOutputGroupEnabled = Cashbox.GetTotalAmount() == ListAmount;
         /// <summary>
         /// 金庫データをViewにセットする
         /// </summary>
@@ -501,7 +524,8 @@ namespace WPF.ViewModels
         {
             WithdrawalSum = 0;
             TransferSum = 0;
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) { if (!rae.IsPayment) WithdrawalAllocation(rae); }
+            foreach (ReceiptsAndExpenditure rae in TodayWroteList) if (!rae.IsPayment) WithdrawalAllocation(rae);
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) if (!rae.IsPayment) WithdrawalAllocation(rae);
         }
         /// <summary>
         /// 出金データを出金、振替に振り分けます
@@ -515,13 +539,13 @@ namespace WPF.ViewModels
                 WithdrawalSum += receiptsAndExpenditure.Price;
         }
         /// <summary>
-        /// 入金合計を算出します
+        /// 本日の入金合計を算出します
         /// </summary>
         private void SetPeymentSum()
         {
             int i = 0;
-
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) { if (rae.IsPayment) i += rae.Price; }
+            foreach (ReceiptsAndExpenditure rae in TodayWroteList) if (rae.IsPayment) i += rae.Price;
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures) if (rae.IsPayment) i += rae.Price;
             PaymentSum =i;
         }
         /// <summary>
@@ -703,7 +727,7 @@ namespace WPF.ViewModels
                 if (ComboAccountingSubjects.Count > 0)
                 {
                     comboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
-                    AccountingSubjectSpecialProcess(comboAccountingSubjectCode);
+                ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
                 }
                 else
                 {
@@ -718,13 +742,6 @@ namespace WPF.ViewModels
             }
         }
 
-        private void AccountingSubjectSpecialProcess(string code)
-        {
-            if (code == "813")
-                ComboAccountingSubjectText = ComboAccountingSubjects[1].Subject;
-            else
-                ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
-        }
         /// <summary>
         /// 詳細欄のText
         /// </summary>
@@ -1572,15 +1589,29 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetBalanceFinalAccount()
         {
-            int amount = PreviousDayFinalAccount;
+           ListAmount = PreviousDayFinalAccount;
             
             foreach(ReceiptsAndExpenditure receiptsAndExpenditure in ReceiptsAndExpenditures)
             {
-                if (receiptsAndExpenditure.IsPayment) amount += receiptsAndExpenditure.Price;
-                else amount -= receiptsAndExpenditure.Price;
+                if (receiptsAndExpenditure.IsPayment) ListAmount += receiptsAndExpenditure.Price;
+                else ListAmount -= receiptsAndExpenditure.Price;
             }
-            BalanceFinalAccount = $"出納リストの収支決算 : {AmountWithUnit(amount)}";
-            SetOutputButtonEnabled(amount);
+
+            int todayAmount = default;
+
+            if (TodayWroteList.Count != 0)
+            {
+                foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
+                {
+                    if (receiptsAndExpenditure.IsPayment) todayAmount += receiptsAndExpenditure.Price;
+                    else todayAmount -= receiptsAndExpenditure.Price;
+                }
+                ListAmount += todayAmount;
+                BalanceFinalAccount = $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}\r\n（本日出力済み伝票 {AmountWithUnit(todayAmount)} 分を含む）";
+            }
+            else BalanceFinalAccount = $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
+
+            SetOutputButtonEnabled(ListAmount);
         }
         /// <summary>
         /// 金庫の総額と決算額があっていれば、各EnabledをTrueにします

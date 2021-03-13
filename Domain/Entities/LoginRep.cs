@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.ValueObjects;
 using System.Collections.Generic;
 
-namespace WPF.Views.Datas
+namespace Domain.Entities
 {
     public interface ILoginRepObserver { public void SetRep(Rep rep); }
 

@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Helpers;
+﻿using Domain.Entities;
+using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using System;
 using System.Collections;
