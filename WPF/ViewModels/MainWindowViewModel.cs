@@ -23,6 +23,7 @@ namespace WPF.ViewModels
         private bool isSlipManagementEnabled;
         private bool isDepositMenuEnabled;
         private bool isRegistrationPerMonthFinalAccountVisiblity;
+        private bool isLogoutEnabled;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private readonly IDataBaseConnect DataBaseConnect;
         private string depositAmount;
@@ -82,8 +83,20 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetShowReceiptsAndExpenditureManagementView(), () =>SetOperationButtonEnabled());
             RegistrationPerMonthFinalAccountCommand =
                 new DelegateCommand(() => RegistrationPerMonthFinalAccount(), () => true);
+            LogoutCommand =
+                new DelegateCommand(() => Logout(), () => true);
         }
         public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
+        /// <summary>
+        /// ログアウトコマンド
+        /// </summary>
+        public DelegateCommand LogoutCommand { get; set; }
+        private void Logout()
+        {
+            LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+            IsSlipManagementEnabled = false;
+            IsLogoutEnabled = false;
+        }
         /// <summary>
         /// 前月決算額を確認したうえで登録します
         /// </summary>
@@ -92,14 +105,7 @@ namespace WPF.ViewModels
             IsRegistrationPerMonthFinalAccountVisiblity = DateTime.Today.Day == 1;//今日の日付が1日なら登録ボタンを可視化する
             if(string.IsNullOrEmpty(LoginRep.Rep.Name))
             {
-                MessageBox = new MessageBoxInfo()
-                {
-                    Message = "ログインしてください",
-                    Image = MessageBoxImage.Information,
-                    Title = "ログインエラー",
-                    Button = MessageBoxButton.OK
-                };
-                CallShowMessageBox = true;
+                CallNoLoginMessage();
                 IsSlipManagementEnabled = false;
                 return;
             }
@@ -143,8 +149,8 @@ namespace WPF.ViewModels
         public bool SetOperationButtonEnabled()
         {
             if (!ReturnIsRepLogin()) return false;
-            bool b=!string.IsNullOrEmpty(DepositAmount);
             if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) return true;
+            bool b=!string.IsNullOrEmpty(DepositAmount);
             if (!b) CallDepositAmountEmptyMessage();
             return b;
         }
@@ -170,7 +176,6 @@ namespace WPF.ViewModels
         private bool ReturnIsRepLogin()
         {
             bool b = LoginRep.Rep.ID != string.Empty;
-            if(!b)CallNoLoginMessage();
             return b;
         }
         /// <summary>
@@ -337,6 +342,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ログアウトボタンのenabled
+        /// </summary>
+        public bool IsLogoutEnabled
+        {
+            get => isLogoutEnabled;
+            set
+            {
+                isLogoutEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -345,12 +362,12 @@ namespace WPF.ViewModels
         {
             KanriJimushoChecked = true;
             ProcessFeatureEnabled = true;
-            IsSlipManagementEnabled = LoginRep.Rep.Name != string.Empty;
             IsDepositMenuEnabled = false;
             ConfirmationPerMonthFinalAccount();
             AccountingProcessLocation.OriginalTotalAmount = DataBaseConnect.PreviousDayFinalAmount();
             DepositAmountInfo = "前日決算金額";
             DepositAmount = TextHelper.CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
+            IsSlipManagementEnabled = LoginRep.Rep.Name != string.Empty;
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
@@ -401,6 +418,24 @@ namespace WPF.ViewModels
         {
             DefaultWindowTitle = "春秋苑経理システム";
             return DefaultWindowTitle;
+        }
+
+        public override void SetRep(Rep rep)
+        {
+            {
+                if (rep == null || string.IsNullOrEmpty(rep.Name))
+                {
+                    WindowTitle = DefaultWindowTitle;
+                    IsAdminPermisson = false;
+                    SetOperationButtonEnabled();
+                }
+                else
+                {
+                    IsAdminPermisson = rep.IsAdminPermisson;
+                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                    IsLogoutEnabled = true;
+                }
+            }
         }
     }
 }

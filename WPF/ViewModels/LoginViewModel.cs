@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
@@ -162,6 +163,18 @@ namespace WPF.ViewModels
         {
             DefaultWindowTitle = "担当者ログイン";
             return DefaultWindowTitle;
+        }
+
+        public override void SetRep(Rep rep) 
+        {
+            {
+                if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+                else
+                {
+                    IsAdminPermisson = rep.IsAdminPermisson;
+                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                }
+            }
         }
     }
 }

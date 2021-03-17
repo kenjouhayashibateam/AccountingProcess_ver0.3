@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Domain.Entities.ValueObjects;
-using WPF.Views.Datas;
 using Infrastructure;
+using Domain.Entities;
 
 namespace WPF.ViewModels.Tests
 {

@@ -24,7 +24,8 @@ namespace WPF.Views.Behaviors
             showForm.WindowData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             showForm.WindowData.Owner.Visibility = Visibility.Hidden;
             showForm.WindowData.ShowDialog();
-            Application.Current.MainWindow.Visibility= Visibility.Visible;
+            //showForm.WindowData.Owner.Visibility = Visibility.Visible;
+            Application.Current.MainWindow.Visibility = Visibility.Visible;
         }
     }
 }

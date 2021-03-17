@@ -39,6 +39,7 @@ namespace Infrastructure.ExcelOutputData
             string subject = string.Empty;
             string content = string.Empty ;
             string location = default;
+            string creditAccount = default;
 
             bool isGoNext = false;
             int contentCount = 0;
@@ -52,14 +53,16 @@ namespace Infrastructure.ExcelOutputData
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending(r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r=>r.Content.AccountingSubject.Subject)
-                .ThenBy(r=>r.Location))
+                .ThenBy(r=>r.Location)
+                .ThenBy(r=>r.CreditAccount.Account))
             {
                 if (rae.IsPayment!=IsPayment) continue;
-                if (code == string.Empty) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
-                if (subject == string.Empty) subject = rae.Content.AccountingSubject.Subject;//subjectの初期値を設定する
+                if (string.IsNullOrEmpty(code)) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
+                if (string.IsNullOrEmpty(subject)) subject = rae.Content.AccountingSubject.Subject;//subjectの初期値を設定する
                 if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
-                if (content == string.Empty) content = rae.Content.Text;//contentの初期値を設定する
-                if (location == string.Empty) location = rae.Location;
+                if (string.IsNullOrEmpty(content)) content = rae.Content.Text;//contentの初期値を設定する
+                if (string.IsNullOrEmpty(location)) location = rae.Location;
+                if (string.IsNullOrEmpty(creditAccount)) creditAccount = rae.CreditAccount.Account;
                 contentCount++;
 
                 isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
@@ -69,6 +72,7 @@ namespace Infrastructure.ExcelOutputData
                 {
                     isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
                     if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入出金日比較
+                    if (!isGoNext) isGoNext = creditAccount != rae.CreditAccount.Account;
                     //if (!isGoNext) isGoNext = IsStringEqualsReverse(content, rae.Content.Text); //伝票内容比較
                 }
                 else isGoNext = true;
@@ -82,6 +86,8 @@ namespace Infrastructure.ExcelOutputData
                     subject = rae.Content.AccountingSubject.Subject;
                     content = rae.Content.Text;                    
                     TotalPrice = rae.Price;
+                    creditAccount = rae.CreditAccount.Account;
+                    location = rae.Location;
                     contentCount = 1;
                     NextPage();//次のページへ
                 }
@@ -98,7 +104,7 @@ namespace Infrastructure.ExcelOutputData
                     inputRow = StartRowPosition + 1 + contentCount - 4;
                     inputContentColumn = 11;
                 }
-                myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Content.Text} {rae.Detail} \\{rae.Price}-";
+                myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Content.Text} {rae.Detail} \\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
 
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
                 myWorksheet.Cell(StartRowPosition + 1, 16).Value = rae.Location;
@@ -106,7 +112,8 @@ namespace Infrastructure.ExcelOutputData
                 if (rae.IsReducedTaxRate) s = "※軽減税率";
                 else s = string.Empty;
                 myWorksheet.Cell(StartRowPosition + 2, 16).Value = s;
-                for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value = TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
+                for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
+                        TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = rae.AccountActivityDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = rae.AccountActivityDate.Month;
@@ -124,7 +131,8 @@ namespace Infrastructure.ExcelOutputData
                     default:
                         break;
                 };
-                myWorksheet.Cell(StartRowPosition + 9, 16).Value = rae.CreditAccount.Account;
+                s = rae.CreditAccount.Account == "その他" ? string.Empty : rae.CreditAccount.Account;
+                myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
             }
         }
         /// <summary>
@@ -188,7 +196,8 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(StartRowPosition + 10, 4, StartRowPosition + 10, 13).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
-        protected override double[] SetColumnSizes() => new double[] { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
+        protected override double[] SetColumnSizes() => new double[] 
+        { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
 
         protected override double[] SetRowSizes() => new double[] { 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
 

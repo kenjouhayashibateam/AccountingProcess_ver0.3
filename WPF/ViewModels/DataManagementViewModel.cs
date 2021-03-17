@@ -1664,5 +1664,17 @@ namespace WPF.ViewModels
             DefaultWindowTitle = "データ管理";
             return DefaultWindowTitle;
         }
+
+        public override void SetRep(Rep rep)
+        {
+            {
+                if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+                else
+                {
+                    IsAdminPermisson = rep.IsAdminPermisson;
+                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                }
+            }
+        }
     }
 }

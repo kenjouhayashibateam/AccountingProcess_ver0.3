@@ -200,6 +200,7 @@ namespace WPF.ViewModels
             DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, isPayment);
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
+                if (rae.IsPayment != isPayment) continue;
                 rae.IsOutput = true;
                 DataBaseConnect.Update(rae);
             }
@@ -248,8 +249,12 @@ namespace WPF.ViewModels
             }
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
             RegistrationRep = LoginRep.Rep;
-            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), AccountingProcessLocation.Location ,string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
+            if (ClosingCashboxHour < DateTime.Now.Hour) ReceiptsAndExpenditures =
+                       DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), AccountingProcessLocation.Location, string.Empty, string.Empty,
+                       string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
+            else ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
+                new DateTime(1900, 1, 1));
             ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
@@ -413,16 +418,10 @@ namespace WPF.ViewModels
             }
 
             if (SelectedReceiptsAndExpenditure.AccountActivityDate != AccountActivityDate)
-            {
                 UpdateCotent += $"入出金日 : {SelectedReceiptsAndExpenditure.AccountActivityDate} → {AccountActivityDate}\r\n";
-                SelectedReceiptsAndExpenditure.AccountActivityDate = AccountActivityDate;
-            }
 
             if (SelectedReceiptsAndExpenditure.CreditAccount.Account != ComboCreditAccountText)
-            {
                 UpdateCotent += $"貸方勘定 : {SelectedReceiptsAndExpenditure.CreditAccount.Account} → {ComboCreditAccountText}\r\n";
-                SelectedReceiptsAndExpenditure.CreditAccount = SelectedCreditAccount;
-            }
 
             if (SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode) 
                 UpdateCotent += $"勘定科目コード : {SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode} → {ComboAccountingSubjectCode}\r\n";            
@@ -431,34 +430,19 @@ namespace WPF.ViewModels
                 UpdateCotent += $"勘定科目 : {SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject} → {ComboAccountingSubjectText}\r\n";
 
             if (SelectedReceiptsAndExpenditure.Content.Text != ComboContentText)
-            {
                 UpdateCotent += $"内容 : {SelectedReceiptsAndExpenditure.Content.Text} → {ComboContentText}\r\n";
-                SelectedReceiptsAndExpenditure.Content = SelectedContent;
-            }
 
             if (SelectedReceiptsAndExpenditure.Detail != DetailText)
-            {
                 UpdateCotent += $"詳細 : {SelectedReceiptsAndExpenditure.Detail} → {DetailText}\r\n";
-                SelectedReceiptsAndExpenditure.Detail = DetailText;
-            }
 
             if (SelectedReceiptsAndExpenditure.Price != IntAmount(price))
-            {
                 UpdateCotent += $"金額 : {SelectedReceiptsAndExpenditure.Price} → {IntAmount(Price)}\r\n";
-                SelectedReceiptsAndExpenditure.Price = IntAmount(price);
-            }
 
             if (SelectedReceiptsAndExpenditure.IsValidity != IsValidity)
-            {
                 UpdateCotent += $"有効性 : {SelectedReceiptsAndExpenditure.IsValidity} → {IsValidity}\r\n";
-                SelectedReceiptsAndExpenditure.IsValidity = IsValidity;
-            }
 
             if (SelectedReceiptsAndExpenditure.OutputDate != SlipOutputDate)
-            {
                 UpdateCotent += $"出力日 : {SelectedReceiptsAndExpenditure.OutputDate} → {SlipOutputDate}\r\n";
-                SelectedReceiptsAndExpenditure.OutputDate = SlipOutputDate;
-            }
 
             if (SelectedReceiptsAndExpenditure.IsReducedTaxRate != IsReducedTaxRate) 
                 UpdateCotent += $"軽減税率データ : {SelectedReceiptsAndExpenditure.IsReducedTaxRate} → {IsReducedTaxRate}\r\n";
@@ -467,23 +451,28 @@ namespace WPF.ViewModels
             {
                 CallNoRequiredUpdateMessage();
                 return;
-            } 
-
-            if(CallConfirmationDataOperation($"{UpdateCotent}\r\n\r\n更新しますか？","伝票")==System.Windows.MessageBoxResult.OK)
-            {
-                DataBaseConnect.Update
-                    (new ReceiptsAndExpenditure(ReceiptsAndExpenditureIDField,RegistrationDate,RegistrationRep,SelectedReceiptsAndExpenditure.Location,
-                    SelectedCreditAccount,SelectedContent,DetailText,IntAmount(price),IsPaymentCheck,IsValidity,AccountActivityDate,SlipOutputDate,IsReducedTaxRate));
-                MessageBox = new MessageBoxInfo
-                {
-                    Button = System.Windows.MessageBoxButton.OK,
-                    Image = System.Windows.MessageBoxImage.Information,
-                    Title = "更新完了",
-                    Message = "更新しました"
-                };
-                CallShowMessageBox = true;
             }
+
+            if (CallConfirmationDataOperation($"{UpdateCotent}\r\n\r\n更新しますか？", "伝票") == System.Windows.MessageBoxResult.Cancel)
+            {
+                SetReceiptsAndExpenditureProperty();
+                return;
+            }
+
+            DataBaseConnect.Update
+                (new ReceiptsAndExpenditure(ReceiptsAndExpenditureIDField, RegistrationDate, RegistrationRep, SelectedReceiptsAndExpenditure.Location,
+                SelectedCreditAccount, SelectedContent, DetailText, IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, SlipOutputDate, IsReducedTaxRate));
+            MessageBox = new MessageBoxInfo
+            {
+                Button = System.Windows.MessageBoxButton.OK,
+                Image = System.Windows.MessageBoxImage.Information,
+                Title = "更新完了",
+                Message = "更新しました"
+            };
+            CallShowMessageBox = true;
+            
             CreateReceiptsAndExpenditures();
+            SelectedReceiptsAndExpenditure = ReceiptsAndExpenditures.First(r => r.ID==ReceiptsAndExpenditureIDField);
             if (IsPaymentCheck) SetPeymentSum();
             else SetWithdrawalSumAndTransferSum();
         } 
@@ -1690,12 +1679,27 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999,1,1), Location, string.Empty, string.Empty, string.Empty,
                 string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd,OutputDateStart,
                 OutputDateEnd);
+
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
         }
 
         protected override string SetWindowDefaultTitle()
         {
             DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";
             return DefaultWindowTitle;
+        }
+
+        public override void SetRep(Rep rep)
+        {
+            {
+                if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+                else
+                {
+                    IsAdminPermisson = rep.IsAdminPermisson;
+                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                }
+            }
         }
     }
 }

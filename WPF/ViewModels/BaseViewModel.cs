@@ -215,7 +215,11 @@ namespace WPF.ViewModels
             loginRep.Add(this);
             WindowTitle = SetWindowDefaultTitle();
             if (loginRep.Rep == null) IsAdminPermisson = false;
-            else SetRep(loginRep.Rep);
+            else
+            {
+                SetRep(loginRep.Rep);
+                IsAdminPermisson = loginRep.Rep.IsAdminPermisson;
+            }
         }
         /// <summary>
         /// データが存在しない時のエラー操作
@@ -270,15 +274,8 @@ namespace WPF.ViewModels
         /// </summary>
         protected void ErrorsClear() => CurrentErrors.Clear();
 
-        public void SetRep(Rep rep)
-        {
-            if (rep.Name == string.Empty) WindowTitle = DefaultWindowTitle;            
-            else
-            {
-                IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
-            }
-        }
+        public abstract void SetRep(Rep rep);
+
         /// <summary>
         /// 画面タイトルのみをセットします
         /// </summary>
