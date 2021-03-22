@@ -207,8 +207,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetShowRemainingMoneyCalculationView()
         {
-            if (AccountingProcessLocation.Location == "管理事務所") CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
-            else CreateShowWindowCommand(ScreenTransition.ShorendoCashBoxCalculation());
+            CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
             CallPropertyChanged();
         }
         /// <summary>
@@ -301,7 +300,7 @@ namespace WPF.ViewModels
             set
             {
                 AccountingProcessLocation.OriginalTotalAmount = TextHelper.IntAmount(value);
-                IsSlipManagementEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
+                if (LoginRep.Rep.Name != string.Empty) IsSlipManagementEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 depositAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }

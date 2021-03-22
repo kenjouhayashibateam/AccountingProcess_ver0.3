@@ -26,10 +26,10 @@ namespace Domain.Repositories
         /// <summary>
         /// 貸方勘定データ登録
         /// </summary>
-        /// <param name="creditAccount">貸方勘定</param>
+        /// <param name="creditDept">貸方勘定</param>
         /// <param name="operationRep">登録担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Registration(CreditAccount creditAccount);
+        public int Registration(CreditDept creditDept);
         /// <summary>
         /// 伝票内容データ登録
         /// </summary>
@@ -53,10 +53,10 @@ namespace Domain.Repositories
         /// <summary>
         /// 貸方勘定データ更新
         /// </summary>
-        /// <param name="creditAccount">貸方勘定</param>
+        /// <param name="creditDept">貸方勘定</param>
         /// <param name="operationRep">更新担当者</param>
         /// <returns>データ処理件数</returns>
-        public int Update(CreditAccount creditAccount);
+        public int Update(CreditDept creditDept);
         /// <summary>
         /// 伝票内容データ更新
         /// </summary>
@@ -92,7 +92,7 @@ namespace Domain.Repositories
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <param name="isShunjuenAccountOnly">春秋苑会計に掲載されるデータのみ表示</param>
         /// <returns>貸方勘定リスト</returns>
-        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly);
+        public ObservableCollection<CreditDept> ReferenceCreditDept(string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly);
         /// <summary>
         /// 伝票内容検索
         /// </summary>
@@ -118,7 +118,7 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="id">貸方勘定ID</param>
         /// <returns>貸方勘定</returns>
-        public CreditAccount CallCreditAccount(string id);
+        public CreditDept CallCreditDept(string id);
         /// <summary>
         /// IDを基に担当者を呼び出します
         /// </summary>
@@ -143,7 +143,7 @@ namespace Domain.Repositories
         /// <param name="registrationDateStart">登録日検索開始日時</param>
         /// <param name="registrationDateEnd">登録日検索最終日時</param>
         /// <param name="location">経理担当場所</param>
-        /// <param name="creditAccount">貸方勘定</param>
+        /// <param name="creditDept">貸方勘定</param>
         /// <param name="content">内容</param>
         /// <param name="detail">詳細</param>
         /// <param name="accountingSubject">勘定科目</param>
@@ -158,7 +158,7 @@ namespace Domain.Repositories
         /// <param name="outputDateEnd">伝票発行日検索最終日時</param>
         /// <returns></returns>
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
-            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject,
+            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept, string content, string detail, string accountingSubject,
             string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
             DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd);
         /// <summary>

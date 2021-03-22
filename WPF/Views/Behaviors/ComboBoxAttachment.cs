@@ -47,6 +47,8 @@ namespace WPF.Views.Behaviors
             var isIMEModeOnGotFocus = GetIsIMEModeTrueOnGotFocus(cb);
             var tb = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
 
+            if (tb == null) return;
+
             if (isIMEModeOnGotFocus)
             {
                 InputMethod.SetPreferredImeState(tb, InputMethodState.On);

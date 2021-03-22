@@ -26,9 +26,9 @@ namespace Domain.Entities
         /// </summary>
         public string Location { get; set; }
         /// <summary>
-        /// 貸方勘定
+        /// 貸方部門
         /// </summary>
-        public CreditAccount CreditAccount { get; set; }
+        public CreditDept CreditDept { get; set; }
         /// <summary>
         /// 伝票内容
         /// </summary>
@@ -71,14 +71,14 @@ namespace Domain.Entities
         public bool IsReducedTaxRate { get; set; }
 
         public ReceiptsAndExpenditure
-            (int id, DateTime registrationDate, Rep registrationRep,string location, CreditAccount creditAccount, Content content, string detail, int price, bool isPayment, bool isValidity, 
+            (int id, DateTime registrationDate, Rep registrationRep,string location, CreditDept creditDept, Content content, string detail, int price, bool isPayment, bool isValidity, 
             DateTime accountActivityDate,DateTime outputDate,bool isRedicedTaxRate)
         {
             ID =id;
             RegistrationDate = registrationDate;
             RegistrationRep = registrationRep;
             Location = location;
-            CreditAccount = creditAccount;
+            CreditDept = creditDept;
             Content = content;
             Detail = detail;
             Price = price;

@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using System;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
 namespace WPF.ViewModels
@@ -68,6 +67,22 @@ namespace WPF.ViewModels
             myCashbox.MoneyCategorys[FiftyYenBundle].Count = 0;
             myCashbox.MoneyCategorys[OneHundredYenBundle].Count = 0;
             myCashbox.MoneyCategorys[FiveHundredYenBundle].Count = 0;
+            OtherMoneyAmountDisplayValue1 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[0].Amount);
+            OtherMoneyAmountDisplayValue2 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[1].Amount);
+            OtherMoneyAmountDisplayValue3 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[2].Amount);
+            OtherMoneyAmountDisplayValue4 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[3].Amount);
+            OtherMoneyAmountDisplayValue5 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[4].Amount);
+            OtherMoneyAmountDisplayValue6 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[5].Amount);
+            OtherMoneyAmountDisplayValue7 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[6].Amount);
+            OtherMoneyAmountDisplayValue8 = TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[7].Amount);
+            OtherMoneyTitle1 = myCashbox.OtherMoneys[0].Title;
+            OtherMoneyTitle2 = myCashbox.OtherMoneys[1].Title;
+            OtherMoneyTitle3 = myCashbox.OtherMoneys[2].Title;
+            OtherMoneyTitle4 = myCashbox.OtherMoneys[3].Title;
+            OtherMoneyTitle5 = myCashbox.OtherMoneys[4].Title;
+            OtherMoneyTitle6 = myCashbox.OtherMoneys[5].Title;
+            OtherMoneyTitle7 = myCashbox.OtherMoneys[6].Title;
+            OtherMoneyTitle8 = myCashbox.OtherMoneys[7].Title;
         }
 
         /// <summary>
@@ -175,6 +190,12 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 各その他釣り銭等欄に内容を入力します
+        /// </summary>
+        /// <param name="value">内容</param>
+        /// <param name="otherMoneyNumber">欄のインデックス</param>
+        private void SetOtherMontyTitle(string value, int otherMoneyNumber) => myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;
+        /// <summary>
         /// タイトル1
         /// </summary>
         public string OtherMoneyTitle1
@@ -183,6 +204,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle1 = value;
+                SetOtherMontyTitle(value, 1);
+                ValidationProperty(nameof(OtherMoneyTitle1), value);
                 CallPropertyChanged();
             }
         }
@@ -195,6 +218,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle2 = value;
+                SetOtherMontyTitle(value, 2);
+                ValidationProperty(nameof(OtherMoneyTitle2), value);
                 CallPropertyChanged();
             }
         }
@@ -207,6 +232,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle3 = value;
+                SetOtherMontyTitle(value, 3);
+                ValidationProperty(nameof(OtherMoneyTitle3), value);
                 CallPropertyChanged();
             }
         }
@@ -219,6 +246,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle4 = value;
+                SetOtherMontyTitle(value, 4);
+                ValidationProperty(nameof(OtherMoneyTitle4), value);
                 CallPropertyChanged();
             }
         }
@@ -231,6 +260,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle5 = value;
+                SetOtherMontyTitle(value, 5);
+                ValidationProperty(nameof(OtherMoneyTitle5), value);
                 CallPropertyChanged();
             }
         }
@@ -243,6 +274,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle6 = value;
+                SetOtherMontyTitle(value, 6);
+                ValidationProperty(nameof(OtherMoneyTitle6), value);
                 CallPropertyChanged();
             }
         }
@@ -255,6 +288,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle7 = value;
+                SetOtherMontyTitle(value, 7);
+                ValidationProperty(nameof(OtherMoneyTitle7), value);
                 CallPropertyChanged();
             }
         }
@@ -267,6 +302,8 @@ namespace WPF.ViewModels
             set
             {
                 otherMoneyTitle8 = value;
+                SetOtherMontyTitle(value, 8);
+                ValidationProperty(nameof(OtherMoneyTitle8), value);
                 CallPropertyChanged();
             }
         }

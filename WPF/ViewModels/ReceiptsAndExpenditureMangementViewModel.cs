@@ -48,7 +48,7 @@ namespace WPF.ViewModels
         private string depositAndWithdrawalContetnt;
         private string comboContentText;
         private string price;
-        private string comboCreditAccountText;
+        private string comboCreditDeptText;
         private string dataOperationButtonContent;
         private string balanceFinalAccount;
         private string listTitle;
@@ -108,7 +108,7 @@ namespace WPF.ViewModels
         private ObservableCollection<AccountingSubject> comboAccountingSubjects;
         private ObservableCollection<AccountingSubject> comboAccountingSubjectCodes;
         private ObservableCollection<Content> comboContents;
-        private ObservableCollection<CreditAccount> comboCreditAccounts;
+        private ObservableCollection<CreditDept> comboCreditDepts;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
         /// <summary>
         /// 本日付で出力済みの伝票データのリスト
@@ -121,7 +121,7 @@ namespace WPF.ViewModels
         private Content selectedContent;
         private AccountingSubject selectedAccountingSubject;
         private AccountingSubject selectedAccountingSubjectCode;
-        private CreditAccount selectedCreditAccount = new CreditAccount(string.Empty, string.Empty, false,true);
+        private CreditDept selectedCreditDept = new CreditDept(string.Empty, string.Empty, false,true);
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         private readonly IDataOutput DataOutput;
         #endregion
@@ -274,7 +274,7 @@ namespace WPF.ViewModels
             todayTotalAmount = Cashbox.GetTotalAmount();
             CashBoxTotalAmount = todayTotalAmount == 0 ? "金庫の金額を計上して下さい" : $"金庫の金額 : {AmountWithUnit(todayTotalAmount)}";
             if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum) TodaysFinalAccount = AmountWithUnit(todayTotalAmount);
-            if (todayTotalAmount == 0) TodaysFinalAccount = "データを照合して下さい。";
+            else TodaysFinalAccount = "数字が合っていません。確認して下さい。";
             SetOutputGroupEnabled();
             SetBalanceFinalAccount();
         }
@@ -324,14 +324,14 @@ namespace WPF.ViewModels
                     ComboAccountingSubjectCode = string.Empty;
                     ComboAccountingSubjectText = string.Empty;
                     ComboContentText = string.Empty;
-                    ComboCreditAccountText = ComboCreditAccounts[0].Account;
+                    ComboCreditDeptText = ComboCreditDepts[0].Dept;
                     DetailText = string.Empty;
                     Price = string.Empty;
                     SlipOutputDate = DefaultDate;
                     ReceiptsAndExpenditureIDField = 0;
                     break;
                 case DataOperation.更新:
-                    ComboCreditAccountText = string.Empty;
+                    ComboCreditDeptText = string.Empty;
                     SetDataList();
                     IsDepositAndWithdrawalContetntEnabled = false;
                     IsComboBoxEnabled = false;
@@ -351,7 +351,7 @@ namespace WPF.ViewModels
             ComboContents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboAccountingSubjectCodes = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
-            ComboCreditAccounts = DataBaseConnect.ReferenceCreditAccount(string.Empty, true,false);
+            ComboCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true,false);
         }
 
         protected override void SetDelegateCommand()
@@ -420,8 +420,8 @@ namespace WPF.ViewModels
             if (SelectedReceiptsAndExpenditure.AccountActivityDate != AccountActivityDate)
                 UpdateCotent += $"入出金日 : {SelectedReceiptsAndExpenditure.AccountActivityDate} → {AccountActivityDate}\r\n";
 
-            if (SelectedReceiptsAndExpenditure.CreditAccount.Account != ComboCreditAccountText)
-                UpdateCotent += $"貸方勘定 : {SelectedReceiptsAndExpenditure.CreditAccount.Account} → {ComboCreditAccountText}\r\n";
+            if (SelectedReceiptsAndExpenditure.CreditDept.Dept != ComboCreditDeptText)
+                UpdateCotent += $"貸方勘定 : {SelectedReceiptsAndExpenditure.CreditDept.Dept} → {ComboCreditDeptText}\r\n";
 
             if (SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode) 
                 UpdateCotent += $"勘定科目コード : {SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode} → {ComboAccountingSubjectCode}\r\n";            
@@ -436,7 +436,7 @@ namespace WPF.ViewModels
                 UpdateCotent += $"詳細 : {SelectedReceiptsAndExpenditure.Detail} → {DetailText}\r\n";
 
             if (SelectedReceiptsAndExpenditure.Price != IntAmount(price))
-                UpdateCotent += $"金額 : {SelectedReceiptsAndExpenditure.Price} → {IntAmount(Price)}\r\n";
+                UpdateCotent += $"金額 : {TextHelper.AmountWithUnit(SelectedReceiptsAndExpenditure.Price)} → {TextHelper.AmountWithUnit(IntAmount(Price))}\r\n";
 
             if (SelectedReceiptsAndExpenditure.IsValidity != IsValidity)
                 UpdateCotent += $"有効性 : {SelectedReceiptsAndExpenditure.IsValidity} → {IsValidity}\r\n";
@@ -461,7 +461,7 @@ namespace WPF.ViewModels
 
             DataBaseConnect.Update
                 (new ReceiptsAndExpenditure(ReceiptsAndExpenditureIDField, RegistrationDate, RegistrationRep, SelectedReceiptsAndExpenditure.Location,
-                SelectedCreditAccount, SelectedContent, DetailText, IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, SlipOutputDate, IsReducedTaxRate));
+                SelectedCreditDept, SelectedContent, DetailText, IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, SlipOutputDate, IsReducedTaxRate));
             MessageBox = new MessageBoxInfo
             {
                 Button = System.Windows.MessageBoxButton.OK,
@@ -475,17 +475,18 @@ namespace WPF.ViewModels
             SelectedReceiptsAndExpenditure = ReceiptsAndExpenditures.First(r => r.ID==ReceiptsAndExpenditureIDField);
             if (IsPaymentCheck) SetPeymentSum();
             else SetWithdrawalSumAndTransferSum();
+            SetCashboxTotalAmount();
         } 
         /// <summary>
         /// 出納データを登録します
         /// </summary>
         private void DataRegistration()
         {
-            ReceiptsAndExpenditure rae = new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditAccount, SelectedContent,
+            ReceiptsAndExpenditure rae = new ReceiptsAndExpenditure(0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditDept, SelectedContent,
                 DetailText, IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, DefaultDate,IsReducedTaxRate);
 
             if (CallConfirmationDataOperation
-                ($"経理担当場所\t : {rae.Location}\r\n入出金\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n貸方勘定\t\t : {rae.CreditAccount.Account}\r\n" +
+                ($"経理担当場所\t : {rae.Location}\r\n入出金\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n貸方勘定\t\t : {rae.CreditDept.Dept}\r\n" +
                  $"入出金\t\t : {DepositAndWithdrawalContetnt}\r\nコード\t\t : {rae.Content.AccountingSubject.SubjectCode}\r\n勘定科目\t\t : {rae.Content.AccountingSubject.Subject}\r\n" +
                  $"内容\t\t : {rae.Content.Text}\r\n詳細\t\t : {rae.Detail}\r\n金額\t\t : {TextHelper.AmountWithUnit(rae.Price)}\r\n軽減税率\t\t : {rae.IsReducedTaxRate}\r\n" +
                  $"有効性\t\t : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票") == System.Windows.MessageBoxResult.Cancel) return;
@@ -785,43 +786,43 @@ namespace WPF.ViewModels
         /// <summary>
         /// 貸方勘定コンボボックスのリスト
         /// </summary>
-        public ObservableCollection<CreditAccount> ComboCreditAccounts
+        public ObservableCollection<CreditDept> ComboCreditDepts
         {
-            get => comboCreditAccounts;
+            get => comboCreditDepts;
             set
             {
-                comboCreditAccounts = value;
+                comboCreditDepts = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
         /// 選択された貸方勘定
         /// </summary>
-        public CreditAccount SelectedCreditAccount
+        public CreditDept SelectedCreditDept
         {
-            get => selectedCreditAccount;
+            get => selectedCreditDept;
             set
             {
-                if (selectedCreditAccount != null && selectedCreditAccount.Equals(value)) return;
-                selectedCreditAccount = value;
+                if (selectedCreditDept != null && selectedCreditDept.Equals(value)) return;
+                selectedCreditDept = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 貸方勘定コンボボックスのText
+        /// 貸方部門コンボボックスのText
         /// </summary>
-        public string ComboCreditAccountText
+        public string ComboCreditDeptText
         {
-            get => comboCreditAccountText;
+            get => comboCreditDeptText;
             set
             {
-                if (comboCreditAccountText == value) return;
-                SelectedCreditAccount = ComboCreditAccounts.FirstOrDefault(c => c.Account == value);
-                if (SelectedCreditAccount == null) comboCreditAccountText = string.Empty;
-                else comboCreditAccountText = SelectedCreditAccount.Account;
+                if (comboCreditDeptText == value) return;
+                SelectedCreditDept = ComboCreditDepts.FirstOrDefault(c => c.Dept == value);
+                if (SelectedCreditDept == null) comboCreditDeptText = string.Empty;
+                else comboCreditDeptText = SelectedCreditDept.Dept;
 
                 SetDataOperationButtonEnabled();
-                ValidationProperty(ComboCreditAccountText, value);
+                ValidationProperty(ComboCreditDeptText, value);
                 CallPropertyChanged();
             }
         }
@@ -1052,7 +1053,7 @@ namespace WPF.ViewModels
             IsPaymentCheck = SelectedReceiptsAndExpenditure.IsPayment;
             SlipOutputDate = selectedReceiptsAndExpenditure.OutputDate;
             IsOutput = SelectedReceiptsAndExpenditure.OutputDate!=DefaultDate;
-            ComboCreditAccountText = SelectedReceiptsAndExpenditure.CreditAccount.Account;
+            ComboCreditDeptText = SelectedReceiptsAndExpenditure.CreditDept.Dept;
             SelectedAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject;
             ComboAccountingSubjectCode = SelectedAccountingSubjectCode.SubjectCode;
             ComboAccountingSubjectText = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
@@ -1620,7 +1621,7 @@ namespace WPF.ViewModels
         /// </summary>
         /// <returns>判定結果</returns>
         private bool CanOperation() =>
-            !string.IsNullOrEmpty(ComboCreditAccountText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) &
+            !string.IsNullOrEmpty(ComboCreditDeptText) & !string.IsNullOrEmpty(ComboContentText) & !string.IsNullOrEmpty(ComboAccountingSubjectText) &
             !string.IsNullOrEmpty(ComboAccountingSubjectCode) & !string.IsNullOrEmpty(Price) && 0 < IntAmount(price) & !IsOutput;
 
         public override void ValidationProperty(string propertyName, object value)
@@ -1641,7 +1642,7 @@ namespace WPF.ViewModels
                 case nameof(Price):
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
-                case nameof(ComboCreditAccountText):
+                case nameof(ComboCreditDeptText):
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
             }

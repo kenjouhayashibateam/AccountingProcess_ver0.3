@@ -39,7 +39,7 @@ namespace Infrastructure.ExcelOutputData
             string subject = string.Empty;
             string content = string.Empty ;
             string location = default;
-            string creditAccount = default;
+            string creditDept = default;
 
             bool isGoNext = false;
             int contentCount = 0;
@@ -54,7 +54,7 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r=>r.Content.AccountingSubject.Subject)
                 .ThenBy(r=>r.Location)
-                .ThenBy(r=>r.CreditAccount.Account))
+                .ThenBy(r=>r.CreditDept.Dept))
             {
                 if (rae.IsPayment!=IsPayment) continue;
                 if (string.IsNullOrEmpty(code)) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
@@ -62,7 +62,7 @@ namespace Infrastructure.ExcelOutputData
                 if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
                 if (string.IsNullOrEmpty(content)) content = rae.Content.Text;//contentの初期値を設定する
                 if (string.IsNullOrEmpty(location)) location = rae.Location;
-                if (string.IsNullOrEmpty(creditAccount)) creditAccount = rae.CreditAccount.Account;
+                if (string.IsNullOrEmpty(creditDept)) creditDept = rae.CreditDept.Dept;
                 contentCount++;
 
                 isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
@@ -72,13 +72,14 @@ namespace Infrastructure.ExcelOutputData
                 {
                     isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
                     if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入出金日比較
-                    if (!isGoNext) isGoNext = creditAccount != rae.CreditAccount.Account;
+                    if (!isGoNext) isGoNext = creditDept != rae.CreditDept.Dept;
+                    if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault(s => s == rae.Content.AccountingSubject.SubjectCode) != null) isGoNext = content != rae.Content.Text;
                     //if (!isGoNext) isGoNext = IsStringEqualsReverse(content, rae.Content.Text); //伝票内容比較
                 }
                 else isGoNext = true;
 
                 currentDate = rae.AccountActivityDate;//入出金日を代入
-                if (!isGoNext) isGoNext = contentCount > 8;//9件以上は次のページに出力
+                if (!isGoNext) isGoNext = contentCount > 10;//11件以上は次のページに出力
                 //頁移動の有無による動作
                 if (isGoNext)
                 {
@@ -86,32 +87,32 @@ namespace Infrastructure.ExcelOutputData
                     subject = rae.Content.AccountingSubject.Subject;
                     content = rae.Content.Text;                    
                     TotalPrice = rae.Price;
-                    creditAccount = rae.CreditAccount.Account;
+                    creditDept = rae.CreditDept.Dept;
                     location = rae.Location;
                     contentCount = 1;
                     NextPage();//次のページへ
                 }
                 else TotalPrice += rae.Price;//ページ移動がなければ、総額に現在のデータのPriceを加算
-                myWorksheet.Cell(StartRowPosition + 1, 1).Value = $"{rae.AccountActivityDate:M/d}";//{rae.Content.Text}伝票の一番上にタイトルとして入金日、Contentを出力                
-                //伝票1件目から4件目は一列目、5件目から8件目までは4列目に出力
-                if (contentCount <= 4)
+                //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、セルの場所を設定する
+                if (contentCount <= 5)
                 {
-                    inputRow = StartRowPosition + 1 + contentCount;
+                    inputRow = StartRowPosition  + contentCount;
                     inputContentColumn = 1;
                 }
                 else
                 {
-                    inputRow = StartRowPosition + 1 + contentCount - 4;
+                    inputRow = StartRowPosition  + contentCount - 5;
                     inputContentColumn = 11;
                 }
+                //伝票の詳細を設定したセルに出力する
                 myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Content.Text} {rae.Detail} \\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
-
+                myWorksheet.Cell(StartRowPosition + 1, 16).Value = $"{rae.AccountActivityDate:M/d}";//{rae.Content.Text}伝票の一番上の右の欄に入金日を出力                
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
-                myWorksheet.Cell(StartRowPosition + 1, 16).Value = rae.Location;
+                myWorksheet.Cell(StartRowPosition + 2, 16).Value = rae.Location; 
                 string s;
                 if (rae.IsReducedTaxRate) s = "※軽減税率";
                 else s = string.Empty;
-                myWorksheet.Cell(StartRowPosition + 2, 16).Value = s;
+                myWorksheet.Cell(StartRowPosition + 3, 16).Value = s;
                 for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
@@ -119,7 +120,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = rae.AccountActivityDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = rae.AccountActivityDate.Day;
                 
-                string ass = $"{rae.Content.AccountingSubject.SubjectCode} : {rae.Content.AccountingSubject.Subject}";
+                string ass = $"{rae.Content.AccountingSubject.Subject} : {rae.Content.AccountingSubject.SubjectCode}";
                 switch(mySlipType)
                 {
                     case SlipType.Payment:
@@ -131,10 +132,14 @@ namespace Infrastructure.ExcelOutputData
                     default:
                         break;
                 };
-                s = rae.CreditAccount.Account == "その他" ? string.Empty : rae.CreditAccount.Account;
+                s = rae.CreditDept.Dept == "その他" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
             }
         }
+        /// <summary>
+        /// ContentによってNextPageを検証する勘定科目コードの配列
+        /// </summary>
+        private readonly string[] CompareContentsSubjectCode = new string[] { };
         /// <summary>
         /// 文字列を比較して、同じならFalse、違えばTrueを返します
         /// </summary>
@@ -173,7 +178,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(StartRowPosition + 1, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
             myWorksheet.Cell(StartRowPosition + 1, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             myWorksheet.Cell(StartRowPosition + 2, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            for (int i = StartRowPosition + 2; i < StartRowPosition + 7; i++)
+            for (int i = StartRowPosition + 1; i < StartRowPosition + 7; i++)
             {
                 myWorksheet.Cell(i, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
                 myWorksheet.Cell(i, 1).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
@@ -197,11 +202,14 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetColumnSizes() => new double[] 
-        { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
+        //{ 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
+        { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10, 5.29, 0.92, 5.43, 0.92, 5.14 };
 
-        protected override double[] SetRowSizes() => new double[] { 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
+        protected override double[] SetRowSizes() => new double[]
+        //{ 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
+        { 27, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
 
-        protected override double SetMaeginsBottom() => ToInch(0);
+    protected override double SetMaeginsBottom() => ToInch(0);
 
         protected override double SetMaeginsLeft() => ToInch(2);
 
@@ -212,13 +220,12 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetMerge()
         {
             MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 15).Merge();
-            MySheetCellRange(StartRowPosition + 1, 16, StartRowPosition + 1, 20).Merge();
-            for (int i = 2; i < 6; i++)
+            for (int i = 1; i < 6; i++)
             {
                 MySheetCellRange(StartRowPosition + i, 1, StartRowPosition + i, 9).Merge();
                 MySheetCellRange(StartRowPosition + i, 11, StartRowPosition + i, 15).Merge();
             }
-            MySheetCellRange(StartRowPosition + 2, 16, StartRowPosition + 2, 20).Merge();
+            for (int i = 1; i < 5; i++) { MySheetCellRange(StartRowPosition + i, 16, StartRowPosition + i, 20).Merge(); }
             MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 7, 18).Merge();
             MySheetCellRange(StartRowPosition + 6, 20, StartRowPosition + 7, 20).Merge();
             MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 13).Merge();

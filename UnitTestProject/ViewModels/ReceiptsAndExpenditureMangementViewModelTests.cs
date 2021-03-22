@@ -20,7 +20,7 @@ namespace WPF.ViewModels.Tests
             Assert.AreEqual(vm.ComboContentText, string.Empty);
             Assert.AreEqual(vm.ComboAccountingSubjectText, string.Empty);
             Assert.AreEqual(vm.ComboAccountingSubjectCode, string.Empty);
-            Assert.AreEqual(vm.ComboCreditAccountText, "春秋苑");
+            Assert.AreEqual(vm.ComboCreditDeptText, "春秋苑");
             Assert.AreEqual(vm.DetailText, string.Empty);
             Assert.AreEqual(vm.Price, string.Empty);
             Assert.AreEqual(vm.AccountActivityDate, DateTime.Today);

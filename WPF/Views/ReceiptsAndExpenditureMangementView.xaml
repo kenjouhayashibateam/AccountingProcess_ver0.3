@@ -102,8 +102,8 @@
                                 <RowDefinition Height="2*"/>
                                 <RowDefinition Height="3*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="貸方勘定" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <ComboBox Name="CreditAccountComboBox" Grid.Row="1" SelectedIndex="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="true" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditAccounts}" Text="{Binding ComboCreditAccountText,UpdateSourceTrigger=LostFocus,Mode=TwoWay}" DisplayMemberPath="Account" SelectedValue="{Binding SelectedCreditAccount}" SelectedValuePath="{Binding SelectedCreditAccount.Account}" Margin="5,3,180,3"/>
+                            <TextBlock Text="貸方部門" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                            <ComboBox Name="CreditDeptComboBox" Grid.Row="1" SelectedIndex="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="true" IsEnabled="{Binding IsComboBoxEnabled}" ItemsSource="{Binding ComboCreditDepts}" Text="{Binding ComboCreditDeptText,UpdateSourceTrigger=LostFocus,Mode=TwoWay}" DisplayMemberPath="Dept" SelectedValue="{Binding SelectedCreditDept}" SelectedValuePath="{Binding SelectedCreditDept.Dept}" Margin="5,3,180,3"/>
                         </Grid>
                         <Grid Grid.Row="4">
                             <Grid.RowDefinitions>
@@ -297,17 +297,17 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="伝票発行" Width="3.5*" SortMemberPath="OutputDate">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding OutputDate,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="経理場所" Width="4*" SortMemberPath="Location">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Location}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="貸方部門" Width="3.5*" SortMemberPath="OutputDate">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CreditDept.Dept,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

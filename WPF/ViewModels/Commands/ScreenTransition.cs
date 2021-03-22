@@ -1,4 +1,6 @@
-﻿using WPF.Views;
+﻿using Domain.Entities.ValueObjects;
+using System.Windows;
+using WPF.Views;
 
 namespace WPF.ViewModels.Commands
 {
@@ -11,26 +13,25 @@ namespace WPF.ViewModels.Commands
         /// 金庫金額計算ウィンドウを呼び出します
         /// </summary>
         /// <returns>金庫金額計算ウィンドウインスタンス</returns>
-        public static RemainingMoneyCalculationView RemainingMoneyCalculation() => new RemainingMoneyCalculationView();
+        public static Window RemainingMoneyCalculation()
+        {
+            if (AccountingProcessLocation.Location == "管理事務所") return new RemainingMoneyCalculationView();
+            else return new ShorendoCashBoxCalculationView();
+        }
         /// <summary>
         /// データ管理ウィンドウを呼び出します
         /// </summary>
         /// <returns>データ管理ウィンドウインスタンス</returns>
-        public static DataManagementView DataManagement() => new DataManagementView();
+        public static Window DataManagement() => new DataManagementView();
         /// <summary>
         /// ログインウィンドウを呼び出します
         /// </summary>
         /// <returns>ログインウィンドウインスタンス</returns>
-        public static LoginView Login() => new LoginView();
+        public static Window Login() => new LoginView();
         /// <summary>
         /// 出納管理画面を呼び出します
         /// </summary>
         /// <returns>出納管理ウィンドウインスタンス</returns>
-        public static ReceiptsAndExpenditureMangementView ReceiptsAndExpenditureMangement() => new ReceiptsAndExpenditureMangementView();
-        /// <summary>
-        /// 青蓮堂金庫管理画面を呼び出します
-        /// </summary>
-        /// <returns>青蓮堂金庫管理ウインドウインスタンス</returns>
-        public static ShorendoCashBoxCalculationView ShorendoCashBoxCalculation() => new ShorendoCashBoxCalculationView();
+        public static Window ReceiptsAndExpenditureMangement() => new ReceiptsAndExpenditureMangementView();
     }
 }

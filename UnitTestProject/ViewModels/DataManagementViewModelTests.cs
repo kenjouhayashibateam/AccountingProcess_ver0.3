@@ -111,26 +111,26 @@ namespace WPF.ViewModels.Tests
         {
             vm.SetDataRegistrationCommand.Execute();
 
-            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, false);
-            Assert.AreEqual(vm.CreditAccountField, string.Empty);
-            Assert.AreEqual(vm.IsCreditAccountEnabled, true);
+            Assert.AreEqual(vm.IsCreditDeptOperationButtonEnabled, false);
+            Assert.AreEqual(vm.CreditDeptField, string.Empty);
+            Assert.AreEqual(vm.IsCreditDeptEnabled, true);
 
-            vm.CreditAccountField = "aaa";
+            vm.CreditDeptField = "aaa";
 
-            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, true);
+            Assert.AreEqual(vm.IsCreditDeptOperationButtonEnabled, true);
         }
         [TestMethod()]
         public void 貸方勘定の更新時のフィールドプロパティ()
         {
             vm.SetDataUpdateCommand.Execute();
 
-            Assert.AreEqual(vm.IsCreditAccountReferenceMenuEnabled, true);
-            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, false);
+            Assert.AreEqual(vm.IsCreditDeptReferenceMenuEnabled, true);
+            Assert.AreEqual(vm.IsCreditDeptOperationButtonEnabled, false);
 
-            vm.CurrentCreditAccount = vm.CreditAccounts[0];
+            vm.CurrentCreditDept = vm.CreditDepts[0];
 
-            Assert.AreEqual(vm.IsCreditAccountEnabled, false);
-            Assert.AreEqual(vm.IsCreditAccountOperationButtonEnabled, true);
+            Assert.AreEqual(vm.IsCreditDeptEnabled, false);
+            Assert.AreEqual(vm.IsCreditDeptOperationButtonEnabled, true);
         }
         [TestMethod()]
         public void 伝票内容の登録時のフィールドプロパティ()

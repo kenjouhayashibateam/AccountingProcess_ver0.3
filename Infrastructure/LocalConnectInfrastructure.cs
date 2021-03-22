@@ -13,7 +13,7 @@ namespace Infrastructure
 
         public Content CallContent(string id) => new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true);
 
-        public CreditAccount CallCreditAccount(string id) => new CreditAccount("credit_account0", "春秋苑", true,true);
+        public CreditDept CallCreditDept(string id) => new CreditDept("credit_dept0", "春秋苑", true,true);
 
         public int CallFinalAccountPerMonth() => 0;
 
@@ -86,22 +86,22 @@ namespace Infrastructure
             return list;            
         }
 
-        public ObservableCollection<CreditAccount> ReferenceCreditAccount(string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
+        public ObservableCollection<CreditDept> ReferenceCreditDept(string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
         {
-            ObservableCollection<CreditAccount> list = new ObservableCollection<CreditAccount>
+            ObservableCollection<CreditDept> list = new ObservableCollection<CreditDept>
             {
-                new CreditAccount("credit_account1","春秋苑",true,true),
-                new CreditAccount("credit_account2","法務部",true,true),
-                new CreditAccount("credit_account3","ホテル",false,false)
+                new CreditDept("credit_dept1","春秋苑",true,true),
+                new CreditDept("credit_dept2","法務部",true,true),
+                new CreditDept("credit_dept3","ホテル",false,false)
             };
             return list;
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditAccount, string content, string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,DateTime outputDateStart,DateTime OutputDateEnd)
+        public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept, string content, string detail, string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,DateTime outputDateStart,DateTime OutputDateEnd)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
-            CreditAccount shunjuen = new CreditAccount("credit_account1", "春秋苑", true,true);
+            CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true,true);
 
             AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution = new AccountingSubject("id2", "822", "その他冥加金", true);
@@ -155,7 +155,7 @@ namespace Infrastructure
 
         public int Registration(AccountingSubject accountingSubject) => 1;
 
-        public int Registration(CreditAccount creditAccount) => 1;
+        public int Registration(CreditDept creditDept) => 1;
 
         public int Registration(Content content) => 1;
 
@@ -167,7 +167,7 @@ namespace Infrastructure
 
         public int Update(AccountingSubject accountingSubject) => 1;
 
-        public int Update(CreditAccount creditAccount) => 1;
+        public int Update(CreditDept creditDept) => 1;
 
         public int Update(Content content) => 1;
 
