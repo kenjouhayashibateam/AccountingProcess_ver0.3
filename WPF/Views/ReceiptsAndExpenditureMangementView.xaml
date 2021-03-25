@@ -190,6 +190,7 @@
                     <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5,0">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" Key="Space"/>
+                            <KeyBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" Key="Return"/>
                             <MouseBinding Command="{Binding ReceiptsAndExpenditureDataOperationCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
@@ -269,7 +270,7 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="{Binding ListTitle}" Grid.Row="1" Margin="5,3">
-                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" VirtualizingPanel.ScrollUnit="Item" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
+                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <Style.Triggers>

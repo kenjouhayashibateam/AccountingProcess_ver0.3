@@ -116,9 +116,9 @@ namespace Infrastructure.ExcelOutputData
                 for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
-                myWorksheet.Cell(StartRowPosition + 10, 1).Value = rae.AccountActivityDate.Year;
-                myWorksheet.Cell(StartRowPosition + 10, 2).Value = rae.AccountActivityDate.Month;
-                myWorksheet.Cell(StartRowPosition + 10, 3).Value = rae.AccountActivityDate.Day;
+                myWorksheet.Cell(StartRowPosition + 10, 1).Value = DateTime.Today.Year;
+                myWorksheet.Cell(StartRowPosition + 10, 2).Value = DateTime.Today.Month;
+                myWorksheet.Cell(StartRowPosition + 10, 3).Value = DateTime.Today.Day;
                 
                 string ass = $"{rae.Content.AccountingSubject.Subject} : {rae.Content.AccountingSubject.SubjectCode}";
                 switch(mySlipType)
@@ -203,11 +203,11 @@ namespace Infrastructure.ExcelOutputData
 
         protected override double[] SetColumnSizes() => new double[] 
         //{ 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
-        { 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10, 5.29, 0.92, 5.43, 0.92, 5.14 };
+        { 5, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.43, 5.29, 0.75, 5.43, 0.83, 4.86 };
 
         protected override double[] SetRowSizes() => new double[]
         //{ 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
-        { 27, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
+        { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 32.25 };
 
     protected override double SetMaeginsBottom() => ToInch(0);
 

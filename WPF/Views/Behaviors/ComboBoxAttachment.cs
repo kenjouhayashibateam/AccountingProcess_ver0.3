@@ -45,9 +45,8 @@ namespace WPF.Views.Behaviors
             if (!(sender is ComboBox cb)) { return; }
 
             var isIMEModeOnGotFocus = GetIsIMEModeTrueOnGotFocus(cb);
-            var tb = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
 
-            if (tb == null) return;
+            if (!(cb.Template.FindName("PART_EditableTextBox", cb) is TextBox tb)) return;
 
             if (isIMEModeOnGotFocus)
             {
