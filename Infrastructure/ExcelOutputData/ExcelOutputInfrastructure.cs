@@ -27,10 +27,10 @@ namespace Infrastructure.ExcelOutputData
             cbo.DataOutput();
         }
 
-        public void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment)
+        public void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment,bool isPreviousDay)
         {
             SlipType st = (isPayment) ? SlipType.Payment : SlipType.Withdrawal;
-            SlipOutput pso = new SlipOutput(receiptsAndExpenditures,loginRep,st);
+            SlipOutput pso = new SlipOutput(receiptsAndExpenditures,loginRep,st,isPreviousDay);
             pso.Output();
         }
 

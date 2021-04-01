@@ -39,6 +39,6 @@ namespace Domain.Repositories
         /// <param name="receiptsAndExpenditures">伝票出力する出納データ</param>
         /// <param name="loginRep">ログインしている担当者</param>
         /// <param name="isPayment">伝票の種類。入金チェック</param>
-        void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment);
+        void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment,bool isPreviousDay);
     }
 }

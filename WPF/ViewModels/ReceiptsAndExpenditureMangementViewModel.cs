@@ -63,6 +63,7 @@ namespace WPF.ViewModels
         private string slipOutputDateTitle;
         private string receiptsAndExpenditureIDFieldText;
         private string referenceLocationCheckBoxContent;
+        private string password;
         /// <summary>
         /// 当日決算の基準になる金額の種類。管理事務所なら前日決算、青蓮堂なら預り金額
         /// </summary>
@@ -94,6 +95,9 @@ namespace WPF.ViewModels
         private bool isValidityTrueOnly;
         private bool isReducedTaxRate;
         private bool isOutputCheckEnabled;
+        private bool isPreviousDayOutput;
+        private bool isPreviousDayOutputEnabled;
+        private bool isPasswordEnabled;
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
@@ -137,6 +141,19 @@ namespace WPF.ViewModels
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput(), DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
+        /// 出力日を前日に変更させるチェックの管理コマンド
+        /// </summary>
+        public DelegateCommand OutputDateChangePreviousDayCheckCommand { get; set; }
+        private void IsOutputDateChangePreviousDayCheck()
+        {
+            IsPreviousDayOutput = !isPreviousDayOutput;
+        }
+        /// <summary>
+        /// 出納データリストを再検索するコマンド
+        /// </summary>
+        public DelegateCommand RefreshListCommand { get; set; }
+        private void RefreshList() => ReferenceReceiptsAndExpenditures();
+        /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
         /// </summary>
         public DelegateCommand DefaultListExpressCommand { get; set; }
@@ -145,8 +162,8 @@ namespace WPF.ViewModels
             IsPeriodSearch = true;
             SearchOutputDateStart = DefaultDate;
             SearchOutputDateEnd = DefaultDate;
-            SearchStartDate = DefaultDate;
-            SearchEndDate = new DateTime(9999,1,1);
+            SearchStartDate = DateTime.Today.AddMonths(-1 * (DateTime.Today.Month - 1)).AddDays(-1 * (DateTime.Today.Day - 1));
+            SearchEndDate = DateTime.Today;
             switch(AccountingProcessLocation.Location)
             {
                 case "管理事務所":
@@ -195,14 +212,19 @@ namespace WPF.ViewModels
             IsPaymentSlipsOutputEnabled = true;
             PaymentSlipsOutputButtonContent = "入金伝票";
         }
+        /// <summary>
+        /// 伝票を出力します
+        /// </summary>
+        /// <param name="isPayment">入出金チェック</param>
         private void SlipsOutputProcess(bool isPayment)
         {
-            DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, isPayment);
+            DataOutput.PaymentAndWithdrawalSlips(ReceiptsAndExpenditures, LoginRep.Rep, isPayment, IsPreviousDayOutput);
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
                 if (rae.IsPayment != isPayment) continue;
                 rae.IsOutput = true;
                 DataBaseConnect.Update(rae);
+                if (IsPreviousDayOutput) DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
             }
         }
         /// <summary>
@@ -234,6 +256,27 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
             WithdrawalSlipsOutputButtonContent = "出金伝票";
+            RegistrationRep = LoginRep.Rep;
+            if (ClosingCashboxHour < DateTime.Now.Hour) ReceiptsAndExpenditures =
+                       DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), AccountingProcessLocation.Location, string.Empty, string.Empty,
+                       string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
+            else ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
+                new DateTime(1900, 1, 1));
+            IsPreviousDayOutput = false;
+            Password = string.Empty;
+            ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
+            IsPreviousDayOutputEnabled = LoginRep.Rep.IsAdminPermisson;
+            SetListTitle();
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
+            SetCashboxTotalAmount();
+        }
+        /// <summary>
+        /// 一覧のタイトルをセットします
+        /// </summary>
+        private void SetListTitle()
+        {
             if (AccountingProcessLocation.Location == "管理事務所")
             {
                 TodayWroteList=DataBaseConnect.ReferenceReceiptsAndExpenditure
@@ -248,17 +291,6 @@ namespace WPF.ViewModels
                 FinalAccountCategory = "預かり金額";
             }
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
-            RegistrationRep = LoginRep.Rep;
-            if (ClosingCashboxHour < DateTime.Now.Hour) ReceiptsAndExpenditures =
-                       DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), AccountingProcessLocation.Location, string.Empty, string.Empty,
-                       string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
-            else ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
-                new DateTime(1900, 1, 1));
-            ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
-            SetPeymentSum();
-            SetWithdrawalSumAndTransferSum();
-            SetCashboxTotalAmount();
         }
         /// <summary>
         /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
@@ -365,6 +397,8 @@ namespace WPF.ViewModels
             WithdrawalSlipsOutputCommand = new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
             DefaultListExpressCommand = new DelegateCommand(() => DefaultListExpress(), () => true);
             ZeroAddCommand = new DelegateCommand(() => ZeroAdd(), () => true);
+            RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
+            OutputDateChangePreviousDayCheckCommand = new DelegateCommand(() => IsOutputDateChangePreviousDayCheck(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -471,7 +505,7 @@ namespace WPF.ViewModels
             };
             CallShowMessageBox = true;
             
-            CreateReceiptsAndExpenditures();
+            ReferenceReceiptsAndExpenditures();
             SelectedReceiptsAndExpenditure = ReceiptsAndExpenditures.First(r => r.ID==ReceiptsAndExpenditureIDField);
             if (IsPaymentCheck) SetPeymentSum();
             else SetWithdrawalSumAndTransferSum();
@@ -502,7 +536,7 @@ namespace WPF.ViewModels
             };
             CallShowMessageBox = true;            
 
-            CreateReceiptsAndExpenditures();
+            ReferenceReceiptsAndExpenditures();
             if (IsPaymentCheck) SetPeymentSum();
             else SetWithdrawalSumAndTransferSum();
             FieldClear();
@@ -947,7 +981,7 @@ namespace WPF.ViewModels
                 if (SearchEndDate < value) SearchEndDate = value;
                 searchStartDate = value;
                 if (!IsPeriodSearch) SearchEndDate = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -961,7 +995,7 @@ namespace WPF.ViewModels
             {
                 if (SearchStartDate > value) searchEndDate = SearchStartDate;
                 else searchEndDate = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -986,7 +1020,7 @@ namespace WPF.ViewModels
             set
             {
                 isAllShowItem = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -999,7 +1033,7 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentOnly = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1012,7 +1046,7 @@ namespace WPF.ViewModels
             set
             {
                 isWithdrawalOnly = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1442,7 +1476,7 @@ namespace WPF.ViewModels
             {
                 isContainOutputted = value;
                 if (value) SearchOutputDateEnd = DateTime.Today;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1455,7 +1489,7 @@ namespace WPF.ViewModels
             set
             {
                 isLocationSearch = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1468,7 +1502,7 @@ namespace WPF.ViewModels
             set
             {
                 isValidityTrueOnly = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1532,7 +1566,7 @@ namespace WPF.ViewModels
             {
                 if (SearchOutputDateEnd < value) searchStartDate = SearchOutputDateEnd;
                 else searchOutputDateStart = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1546,7 +1580,7 @@ namespace WPF.ViewModels
             {
                 if (SearchOutputDateStart > value) searchOutputDateEnd = SearchOutputDateStart;
                 else searchOutputDateEnd = value;
-                CreateReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -1574,6 +1608,56 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 前日の日付で出力するかのチェック
+        /// </summary>
+        public bool IsPreviousDayOutput
+        {
+            get => isPreviousDayOutput;
+            set
+            {
+                isPreviousDayOutput = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 前日の日付で出力するチェックのEnabled
+        /// </summary>
+        public bool IsPreviousDayOutputEnabled
+        {
+            get => isPreviousDayOutputEnabled;
+            set
+            {
+                isPreviousDayOutputEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 職員パスワード入力
+        /// </summary>
+        public string Password
+        {
+            get => password;
+            set
+            {
+                password = value;
+                IsPreviousDayOutputEnabled = value == LoginRep.Rep.Password;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// パスワードのEnabled
+        /// </summary>
+        public bool IsPasswordEnabled
+        {
+            get => isPasswordEnabled;
+            set
+            {
+                isPasswordEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
@@ -1609,8 +1693,8 @@ namespace WPF.ViewModels
         /// <param name="amount">決算額</param>
         private void SetOutputButtonEnabled(int amount)
         {
-            IsBalanceFinalAccountOutputEnabled = IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled = IsWithdrawalSlipsOutputEnabled =
-                Cashbox.GetTotalAmount() == amount;
+            IsBalanceFinalAccountOutputEnabled = IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled = IsWithdrawalSlipsOutputEnabled = isPasswordEnabled =
+                IsPreviousDayOutputEnabled = Cashbox.GetTotalAmount() == amount;
         }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
@@ -1650,7 +1734,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出納データを検索して、リストに格納します
         /// </summary>
-        private void CreateReceiptsAndExpenditures()
+        private void ReferenceReceiptsAndExpenditures()
         {
             DateTime AccountActivityDateStart;
             DateTime AccountActivityDateEnd;
@@ -1677,12 +1761,36 @@ namespace WPF.ViewModels
             else Location = string.Empty;
 
             if (IsLocationSearch) Location = AccountingProcessLocation.Location;
-            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999,1,1), Location, string.Empty, string.Empty, string.Empty,
-                string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, AccountActivityDateStart, AccountActivityDateEnd,OutputDateStart,
-                OutputDateEnd);
 
+            ListTitle = "描画中です。お待ちください。";
+            IsReferenceMenuEnabled = false;
+            CreateReceiptsAndExpenditures(AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd, Location);
+            //Task task=Task.Run(()=>CreateReceiptsAndExpenditures(AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd, Location));
+            //await task;
+            ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
+            IsReferenceMenuEnabled = IsCheckedUpdate;
+            SetAmountSum();
+        }
+        private void SetAmountSum()
+        {
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
+        }
+        /// <summary>
+        /// データベースに接続して出納データリストを生成します
+        /// </summary>
+        /// <param name="accountActivityDateStart"></param>
+        /// <param name="accountActivityDateEnd"></param>
+        /// <param name="outputDateStart"></param>
+        /// <param name="outputDateEnd"></param>
+        /// <param name="location"></param>
+        private void CreateReceiptsAndExpenditures
+            (DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, string location)
+        {
+            ReceiptsAndExpenditures = DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), location, string.Empty, string.Empty, string.Empty,
+                string.Empty, string.Empty, !IsAllShowItem, IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart, accountActivityDateEnd, outputDateStart,
+                outputDateEnd);
+
         }
 
         protected override string SetWindowDefaultTitle()

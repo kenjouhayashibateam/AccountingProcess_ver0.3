@@ -4,13 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
+        xmlns:control="https://github.com/qtbui159/CypherBox"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="1000" Width="1120" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="1000" Width="1150" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
@@ -72,7 +73,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Header="詳細" Background="{Binding DetailBackGroundColor}" Margin="5,3">
                 <Grid>
@@ -161,7 +162,7 @@
                                 <RowDefinition Height="4*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="入出金日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" IsEnabled="{Binding IsAccountActivityEnabled}" InputMethod.PreferredImeState="off" HorizontalAlignment="Left" Margin="5,3"/>
+                            <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" IsEnabled="{Binding IsAccountActivityEnabled}" InputMethod.PreferredImeState="off" HorizontalAlignment="Left" Margin="5,3"/>
                         </Grid>
                         <Grid Grid.Row="8">
                             <Grid.RowDefinitions>
@@ -236,14 +237,14 @@
                                 </Grid.RowDefinitions>
                                 <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
                                 <TextBlock Text="入出金日" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" InputMethod.PreferredImeState="Off" VerticalAlignment="Center" Margin="5,3"/>
+                                <DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Left" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" InputMethod.PreferredImeState="Off" VerticalAlignment="Center" Margin="5,3"/>
                                 <TextBlock Text="～" Grid.Column="2" Grid.Row="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
-                                <DatePicker Grid.Column="3" Grid.Row="1" SelectedDate="{Binding SearchEndDate}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <DatePicker Grid.Column="3" Grid.Row="1" SelectedDate="{Binding SearchEndDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
                                 <TextBlock Text="を表示する" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock Text="伝票発行日" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <DatePicker Grid.Column="1" Grid.Row="2" SelectedDate="{Binding SearchOutputDateStart}" InputMethod.PreferredImeState="Off" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <DatePicker Grid.Column="1" Grid.Row="2" SelectedDate="{Binding SearchOutputDateStart}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" InputMethod.PreferredImeState="Off" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
                                 <TextBlock Text="～" Grid.Column="2" Grid.Row="2" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
-                                <DatePicker Grid.Column="3" Grid.Row="2" SelectedDate="{Binding SearchOutputDateEnd}" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <DatePicker Grid.Column="3" Grid.Row="2" SelectedDate="{Binding SearchOutputDateEnd}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
                                 <TextBlock Text="を表示する" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </Grid>
                         </GroupBox>
@@ -269,8 +270,24 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="{Binding ListTitle}" Grid.Row="1" Margin="5,3">
-                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
+                <GroupBox Grid.Row="1" Margin="5,3">
+                    <GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="RefreshListButton" Content="リストを再構築する" Grid.Column="0" Margin="5,1,1,3">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding RefreshListCommand}" Key="Space"/>
+                                    <KeyBinding Command="{Binding RefreshListCommand}" Key="Return"/>
+                                    <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <TextBlock Grid.Column="1" Text="{Binding ListTitle}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox.Header>
+                    <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" EnableColumnVirtualization="True" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <Style.Triggers>
@@ -284,7 +301,12 @@
                             </Style>
                         </DataGrid.ItemContainerStyle>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="有効性" Width="3*" >
+                            <DataGridTemplateColumn Header="有効性" Width="3*">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsValidity}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -292,6 +314,11 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="入出金" Width="3*" SortMemberPath="AccountActivityDate">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -299,6 +326,11 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="経理場所" Width="4*" SortMemberPath="Location">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Location}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -306,6 +338,11 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="貸方部門" Width="3.5*" SortMemberPath="OutputDate">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding CreditDept.Dept,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -313,6 +350,11 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="コード" Width="2*" SortMemberPath="Content.AccountingSubject.SubjectCode">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -333,7 +375,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="詳細" Width="6*">
+                            <DataGridTemplateColumn Header="詳細" Width="7*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Detail}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -348,6 +390,11 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="印刷済" Width="3*" >
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsOutput}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -357,7 +404,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>
-                <GroupBox Header="決算" Grid.Row="2" Margin="5,3">
+                <GroupBox Header="決算" Grid.Row="2" Margin="5,3" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -432,6 +479,38 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <control:CypherBox/>
+                    <Grid Grid.Row="0" Margin="100,5,5,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.ColumnSpan="3" BorderBrush="#FFABADB3"   BorderThickness="1" CornerRadius="5" ></Border>
+                        <control:CypherBox x:Name="RepCurrentPasswordCypherBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                                           CypherText="{Binding Password,Mode=TwoWay}" BorderThickness="0" VerticalContentAlignment="Center"
+                                                           Placeholder="your password" ShowPlainText="{Binding PasswordCharCheck,Mode=OneWay}"/>
+
+                        <Button Grid.Column="1" Command="{Binding PasswordCheckReversCommand}" HorizontalAlignment="Right">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="../Resources/eye.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <CheckBox Content="前日の日付で出力する" Grid.Row="1" IsChecked="{Binding IsPreviousDayOutput}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14" Margin="5">
+                        <CheckBox.InputBindings>
+                            <KeyBinding Command="{Binding OutputDateChangePreviousDayCheckCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding OutputDateChangePreviousDayCheckCommand}" MouseAction="LeftClick"/>
+                        </CheckBox.InputBindings>
+                    </CheckBox>
+                </Grid>
                 <Button x:Name="PaymentSlipsOutputButton" Grid.Column="1" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding PaymentSlipsOutputCommand}" Key="Space"/>

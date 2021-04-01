@@ -321,7 +321,6 @@ namespace Infrastructure
         {
             ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>();
             SqlCommand Cmd = new SqlCommand();
-            SqlDataReader dataReader;
             using (Cn)
             {
                 ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure");
@@ -337,31 +336,29 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@is_payment", isPayment);
                 Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
                 Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
-                if (!isContainOutputted) outputDateStart = new DateTime(1900, 1, 1);
-                if (!isContainOutputted) outputDateEnd = new DateTime(1900, 1, 1);
                 Cmd.Parameters.AddWithValue("@output_date_start", outputDateStart);
                 Cmd.Parameters.AddWithValue("@output_date_end", outputDateEnd);
-                dataReader = Cmd.ExecuteReader();
+                using SqlDataReader dataReader = Cmd.ExecuteReader();
+                Rep paramRep;
+                CreditDept paramCreditDept;
+                AccountingSubject paramAccountingSubject;
+                Content paramContent;
+                while (dataReader.Read())
+                {
+                    
+                    paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+                    paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
+                    paramAccountingSubject = new AccountingSubject((string)dataReader["accounting_subject_id"], (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                    list.Add(new ReceiptsAndExpenditure
+                        (
+                        (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"], paramCreditDept,
+                        paramContent, (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
+                        (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
+                        );
                 }
-
-            Rep paramRep;
-            CreditDept paramCreditDept;
-            AccountingSubject paramAccountingSubject;
-            Content paramContent;
-            while (dataReader.Read())
-            {
-                paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
-                paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
-                paramAccountingSubject = new AccountingSubject((string)dataReader["accounting_subject_id"], (string)dataReader["subject_code"], (string)dataReader["subject"], true);
-                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-                list.Add(new ReceiptsAndExpenditure
-                    (
-                    (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"], paramCreditDept,
-                     paramContent, (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
-                     (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
-                    );
-
             }
+
             return list;
         }
 
@@ -479,6 +476,18 @@ namespace Infrastructure
                 while (sdr.Read()) i = (int)sdr["amount"];
             }
             return i;
+        }
+
+        public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure)
+        {
+            SqlCommand Cmd = new SqlCommand();
+
+            using (Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "update_receipts_and_expenditure");
+                Cmd.Parameters.AddWithValue("@receipts_and_expenditure_id", receiptsAndExpenditure.ID);
+                return Cmd.ExecuteNonQuery();
+            }
         }
     }
 }

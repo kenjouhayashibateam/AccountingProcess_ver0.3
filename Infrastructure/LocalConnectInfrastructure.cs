@@ -20,7 +20,9 @@ namespace Infrastructure
         public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
 
         public int PreviousDayFinalAmount() => 0;
-        
+
+        public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure) => 0;
+
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>

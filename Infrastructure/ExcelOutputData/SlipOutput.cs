@@ -19,6 +19,8 @@ namespace Infrastructure.ExcelOutputData
         protected Rep OutputRep;
         private readonly SlipType mySlipType;
         private readonly bool IsPayment;//振替伝票出力機能を作成する際に使用する。現状は入出金の確認だけの機能
+        private readonly bool IsPreviousDay;
+
         public enum SlipType
         {
             Payment,
@@ -26,11 +28,12 @@ namespace Infrastructure.ExcelOutputData
             Transter
         }
 
-        internal SlipOutput(ObservableCollection<ReceiptsAndExpenditure> outputDatas, Rep outputRep,SlipType slipType) : base(outputDatas)
+        internal SlipOutput(ObservableCollection<ReceiptsAndExpenditure> outputDatas, Rep outputRep,SlipType slipType,bool isPreviousDay) : base(outputDatas)
         {
             OutputRep = outputRep;
             mySlipType = slipType;
             IsPayment = mySlipType == SlipType.Payment;
+            IsPreviousDay = isPreviousDay;
         }
 
         protected void SlipDataOutput()
@@ -115,10 +118,11 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition + 3, 16).Value = s;
                 for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
+                DateTime OutputDate = IsPreviousDay ? DateTime.Today : DateTime.Today.AddDays(-1);
                 myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
-                myWorksheet.Cell(StartRowPosition + 10, 1).Value = DateTime.Today.Year;
-                myWorksheet.Cell(StartRowPosition + 10, 2).Value = DateTime.Today.Month;
-                myWorksheet.Cell(StartRowPosition + 10, 3).Value = DateTime.Today.Day;
+                myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
+                myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;
+                myWorksheet.Cell(StartRowPosition + 10, 3).Value = OutputDate.Day;
                 
                 string ass = $"{rae.Content.AccountingSubject.Subject} : {rae.Content.AccountingSubject.SubjectCode}";
                 switch(mySlipType)

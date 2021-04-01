@@ -79,6 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\CreateVoucherViewModel.cs" />
     <Compile Include="ViewModels\DataManagementViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
@@ -89,8 +90,14 @@
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
     <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
+    <Compile Include="ViewModels\VoucherOutputViewModel.cs" />
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
+    <Compile Include="Views\Behaviors\DataGridAttachment.cs" />
+    <Compile Include="Views\Behaviors\DatePickerAttachment.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
+    <Compile Include="Views\CreateVoucherView.xaml.cs">
+      <DependentUpon>CreateVoucherView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DataManagementView.xaml.cs">
       <DependentUpon>DataManagementView.xaml</DependentUpon>
     </Compile>
@@ -114,6 +121,13 @@
     <Compile Include="Views\ShorendoCashBoxCalculationView.xaml.cs">
       <DependentUpon>ShorendoCashBoxCalculationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\VoucherOutputView.xaml.cs">
+      <DependentUpon>VoucherOutputView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\CreateVoucherView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DataManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,6 +157,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ShorendoCashBoxCalculationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VoucherOutputView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

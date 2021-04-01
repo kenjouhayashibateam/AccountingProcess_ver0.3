@@ -175,5 +175,9 @@ namespace Domain.Repositories
         /// </summary>
         /// <returns></returns>
         public int CallFinalAccountPerMonth();
+        /// <summary>
+        /// 伝票の出力日を前日に変更します
+        /// </summary>
+        public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure);
     }
 }

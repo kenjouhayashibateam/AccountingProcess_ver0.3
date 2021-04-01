@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace Domain.Entities
 {
+    /// <summary>
+    /// ログインしている職員の変更を通知します
+    /// </summary>
     public interface ILoginRepObserver { public void SetRep(Rep rep); }
-
+    /// <summary>
+    /// ログインしている経理担当者クラス
+    /// </summary>
     public sealed class LoginRep
     {
         private readonly List<ILoginRepObserver> observers = new List<ILoginRepObserver>();
