@@ -44,3 +44,5 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infr
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.pdb
+C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\System.Data.SqlClient.dll
+C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\System.Data.SqlClient.xml

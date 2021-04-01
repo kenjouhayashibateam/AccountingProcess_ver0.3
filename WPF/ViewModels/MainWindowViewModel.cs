@@ -413,11 +413,7 @@ namespace WPF.ViewModels
             if (GetErrors(propertyName) == null) ErrorsListOperation(shorendoChecked == true & string.IsNullOrEmpty(DepositAmount), propertyName, "金額を入力してください");
         }
 
-        protected override string SetWindowDefaultTitle()
-        {
-            DefaultWindowTitle = "春秋苑経理システム";
-            return DefaultWindowTitle;
-        }
+        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "春秋苑経理システム";
 
         public override void SetRep(Rep rep)
         {

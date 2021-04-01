@@ -484,7 +484,6 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <control:CypherBox/>
                     <Grid Grid.Row="0" Margin="100,5,5,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="8*"/>

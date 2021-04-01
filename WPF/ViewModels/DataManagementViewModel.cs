@@ -1658,11 +1658,7 @@ namespace WPF.ViewModels
             }
         }
 
-        protected override string SetWindowDefaultTitle()
-        {
-            DefaultWindowTitle = "データ管理";
-            return DefaultWindowTitle;
-        }
+        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "データ管理";
 
         public override void SetRep(Rep rep)
         {

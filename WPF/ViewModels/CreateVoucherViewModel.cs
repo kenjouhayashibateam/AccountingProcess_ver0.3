@@ -17,9 +17,6 @@ namespace WPF.ViewModels
             throw new System.NotImplementedException();
         }
 
-        protected override string SetWindowDefaultTitle()
-        {
-            throw new System.NotImplementedException();
-        }
+        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "受納証作成";
     }
 }

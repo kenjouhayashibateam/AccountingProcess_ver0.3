@@ -98,6 +98,7 @@ namespace WPF.ViewModels
         private bool isPreviousDayOutput;
         private bool isPreviousDayOutputEnabled;
         private bool isPasswordEnabled;
+        private bool passwordCharCheck;
         #endregion
         #region DateTime
         private DateTime accountActivityDate;
@@ -264,7 +265,6 @@ namespace WPF.ViewModels
                 string.Empty, string.Empty, string.Empty, string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
                 new DateTime(1900, 1, 1));
             IsPreviousDayOutput = false;
-            Password = string.Empty;
             ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
             IsPreviousDayOutputEnabled = LoginRep.Rep.IsAdminPermisson;
             SetListTitle();
@@ -1641,7 +1641,8 @@ namespace WPF.ViewModels
             set
             {
                 password = value;
-                IsPreviousDayOutputEnabled = value == LoginRep.Rep.Password;
+                ValidationProperty(nameof(Password), value);
+                IsPreviousDayOutputEnabled = GetErrors(nameof(Password)) == null;
                 CallPropertyChanged();
             }
         }
@@ -1657,6 +1658,22 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// パスワードの文字を隠すかのチェック
+        /// </summary>
+        public bool PasswordCharCheck
+        {
+            get => passwordCharCheck;
+            set
+            {
+                passwordCharCheck = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// パスワードの文字を隠すかのチェックを反転させます
+        /// </summary>
+        public void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1729,6 +1746,11 @@ namespace WPF.ViewModels
                 case nameof(ComboCreditDeptText):
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
+                case nameof(Password):
+                    ErrorsListOperation(string.IsNullOrEmpty(Password), propertyName, Properties.Resources.NullErrorInfo);
+                    ErrorsListOperation(password != LoginRep.Rep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
+                    break;
+
             }
         }
         /// <summary>
@@ -1793,11 +1815,7 @@ namespace WPF.ViewModels
 
         }
 
-        protected override string SetWindowDefaultTitle()
-        {
-            DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";
-            return DefaultWindowTitle;
-        }
+        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";
 
         public override void SetRep(Rep rep)
         {

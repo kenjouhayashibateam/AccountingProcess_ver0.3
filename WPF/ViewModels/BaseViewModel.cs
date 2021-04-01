@@ -213,7 +213,8 @@ namespace WPF.ViewModels
         {
             LoginRep loginRep = LoginRep.GetInstance();
             loginRep.Add(this);
-            WindowTitle = SetWindowDefaultTitle();
+            SetWindowDefaultTitle();
+            WindowTitle = DefaultWindowTitle;
             if (loginRep.Rep == null) IsAdminPermisson = false;
             else
             {
@@ -279,7 +280,6 @@ namespace WPF.ViewModels
         /// <summary>
         /// 画面タイトルのみをセットします
         /// </summary>
-        /// <returns>画面タイトル</returns>
-        protected abstract string SetWindowDefaultTitle();
+        protected abstract void SetWindowDefaultTitle();
     }
 }

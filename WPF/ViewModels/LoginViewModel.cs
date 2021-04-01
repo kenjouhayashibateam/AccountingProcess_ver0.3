@@ -159,11 +159,7 @@ namespace WPF.ViewModels
             }
         }
 
-        protected override string SetWindowDefaultTitle()
-        {
-            DefaultWindowTitle = "担当者ログイン";
-            return DefaultWindowTitle;
-        }
+        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "担当者ログイン";
 
         public override void SetRep(Rep rep) 
         {
