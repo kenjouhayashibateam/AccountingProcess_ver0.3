@@ -94,8 +94,6 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Interop.TaskSch
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.ResolveComReference.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CreateVoucherView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CreateVoucherView.baml
-C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherOutputView.g.cs
-C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherOutputView.baml
 C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Interop.TaskScheduler.dll
 C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.ResolveComReference.cache
 C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CreateVoucherView.g.cs

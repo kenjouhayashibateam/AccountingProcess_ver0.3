@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\
 WPF
 none
 false
 DEBUG;TRACE
-C:\Users\k_hayashiba\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
 7389195024
 
 35112952306
-22-1753406159
+22-613769826
 Views\CreateVoucherView.xaml;Views\DataManagementView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\RemainingMoneyCalculationView.xaml;Views\ReceiptsAndExpenditureMangementView.xaml;Views\ShorendoCashBoxCalculationView.xaml;
 
-False
+True
 
