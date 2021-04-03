@@ -139,6 +139,8 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             SetProperty();
             DefaultListExpress();
+            SetBalanceFinalAccount();
+            IsPreviousDayOutputEnabled = false;
         }
         public ReceiptsAndExpenditureMangementViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput(), DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
@@ -1085,7 +1087,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureIDField = SelectedReceiptsAndExpenditure.ID;
             IsValidity = SelectedReceiptsAndExpenditure.IsValidity;
             IsPaymentCheck = SelectedReceiptsAndExpenditure.IsPayment;
-            SlipOutputDate = selectedReceiptsAndExpenditure.OutputDate;
+            SlipOutputDate = SelectedReceiptsAndExpenditure.OutputDate;
             IsOutput = SelectedReceiptsAndExpenditure.OutputDate!=DefaultDate;
             ComboCreditDeptText = SelectedReceiptsAndExpenditure.CreditDept.Dept;
             SelectedAccountingSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject;
@@ -1711,7 +1713,7 @@ namespace WPF.ViewModels
         private void SetOutputButtonEnabled(int amount)
         {
             IsBalanceFinalAccountOutputEnabled = IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled = IsWithdrawalSlipsOutputEnabled = isPasswordEnabled =
-                IsPreviousDayOutputEnabled = Cashbox.GetTotalAmount() == amount;
+                IsPreviousDayOutputEnabled = IsOutputGroupEnabled= Cashbox.GetTotalAmount() == amount;
         }
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
