@@ -75,7 +75,8 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="詳細" Background="{Binding DetailBackGroundColor}" Margin="5,3">
+            <GroupBox Header="{Binding DetailTitle}" Background="{Binding DetailBackGroundColor}" Margin="5,3">
+               
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20*"/>
@@ -504,10 +505,6 @@
                         </Button>
                     </Grid>
                     <CheckBox Content="前日の日付で出力する" Grid.Row="1" IsChecked="{Binding IsPreviousDayOutput}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14" Margin="5">
-                        <CheckBox.InputBindings>
-                            <KeyBinding Command="{Binding OutputDateChangePreviousDayCheckCommand}" Key="Space"/>
-                            <MouseBinding Command="{Binding OutputDateChangePreviousDayCheckCommand}" MouseAction="LeftClick"/>
-                        </CheckBox.InputBindings>
                     </CheckBox>
                 </Grid>
                 <Button x:Name="PaymentSlipsOutputButton" Grid.Column="1" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="5">

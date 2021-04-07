@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
+        xmlns:beharvior="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="450" Width="800">
@@ -11,6 +12,58 @@
         <vm:CreateVoucherViewModel/>
     </Window.DataContext>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="出納データ登録">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="貸方部門" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <ComboBox Grid.Row="1" Grid.Column="0" Name="DeptComboBox" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Margin="5,1"/>
+                    <Grid Grid.Row="2" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="科目コード" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <ComboBox Grid.Row="1" Grid.Column="0" Name="RegistrationSubjectCodeComboBox" beharvior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEditable="True" Margin="5,1"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="RegistrationSubject" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Margin="5,1"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="内容" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <ComboBox Grid.Row="1" Grid.Column="2" x:Name="RegistrationContent" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Margin="5,1"/>
+                    </Grid>
+                    <TextBlock Grid.Row="4" Text="宛名" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <Grid Grid.Row="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Name="RegistrationAddresseeTextBox" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,1"/>
+                        <TextBlock Grid.Column="1" Text="様" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

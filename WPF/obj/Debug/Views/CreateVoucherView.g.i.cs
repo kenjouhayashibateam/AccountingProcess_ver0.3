@@ -31,6 +31,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 using WPF.ViewModels;
 using WPF.Views;
+using WPF.Views.Behaviors;
 
 
 namespace WPF.Views {
@@ -40,6 +41,46 @@ namespace WPF.Views {
     /// CreateVoucherView
     /// </summary>
     public partial class CreateVoucherView : System.Windows.Window, System.Windows.Markup.IComponentConnector {
+        
+        
+        #line 38 "..\..\..\Views\CreateVoucherView.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ComboBox DeptComboBox;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 50 "..\..\..\Views\CreateVoucherView.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ComboBox RegistrationSubjectCodeComboBox;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 52 "..\..\..\Views\CreateVoucherView.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ComboBox RegistrationSubject;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 54 "..\..\..\Views\CreateVoucherView.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ComboBox RegistrationContent;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 62 "..\..\..\Views\CreateVoucherView.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.TextBox RegistrationAddresseeTextBox;
+        
+        #line default
+        #line hidden
         
         private bool _contentLoaded;
         
@@ -64,11 +105,36 @@ namespace WPF.Views {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        internal System.Delegate _CreateDelegate(System.Type delegateType, string handler) {
+            return System.Delegate.CreateDelegate(delegateType, this, handler);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)]
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes")]
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         void System.Windows.Markup.IComponentConnector.Connect(int connectionId, object target) {
+            switch (connectionId)
+            {
+            case 1:
+            this.DeptComboBox = ((System.Windows.Controls.ComboBox)(target));
+            return;
+            case 2:
+            this.RegistrationSubjectCodeComboBox = ((System.Windows.Controls.ComboBox)(target));
+            return;
+            case 3:
+            this.RegistrationSubject = ((System.Windows.Controls.ComboBox)(target));
+            return;
+            case 4:
+            this.RegistrationContent = ((System.Windows.Controls.ComboBox)(target));
+            return;
+            case 5:
+            this.RegistrationAddresseeTextBox = ((System.Windows.Controls.TextBox)(target));
+            return;
+            }
             this._contentLoaded = true;
         }
     }
