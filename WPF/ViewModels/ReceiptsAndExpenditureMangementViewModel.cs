@@ -750,7 +750,7 @@ namespace WPF.ViewModels
                 if (ComboAccountingSubjects.Count > 0)
                 {
                     comboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
-                ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
+                    ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
                 }
                 else
                 {
@@ -1850,13 +1850,11 @@ namespace WPF.ViewModels
 
         public override void SetRep(Rep rep)
         {
+            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+            else
             {
-                if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-                else
-                {
-                    IsAdminPermisson = rep.IsAdminPermisson;
-                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
-                }
+                IsAdminPermisson = rep.IsAdminPermisson;
+                WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
             }
         }
     }

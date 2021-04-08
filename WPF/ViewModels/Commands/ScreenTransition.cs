@@ -33,5 +33,10 @@ namespace WPF.ViewModels.Commands
         /// </summary>
         /// <returns>出納管理ウィンドウインスタンス</returns>
         public static Window ReceiptsAndExpenditureMangement() => new ReceiptsAndExpenditureMangementView();
+        /// <summary>
+        /// 受納証発行画面を呼び出します
+        /// </summary>
+        /// <returns>受納証発行ウィンドウインスタンス</returns>
+        public static Window CreateVoucher() => new CreateVoucherView();
     }
 }

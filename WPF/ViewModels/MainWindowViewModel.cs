@@ -60,6 +60,10 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowReceiptsAndExpenditureManagementCommand { get; }
         /// <summary>
+        /// 受納証発行画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowCreateVoucherCommand { get; }
+        /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
         public MainWindowViewModel(IDataBaseConnect dataBaseConnect)
@@ -81,6 +85,8 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetShowLoginView(), () => true);
             ShowReceiptsAndExpenditureManagementCommand =
                 new DelegateCommand(() => SetShowReceiptsAndExpenditureManagementView(), () =>SetOperationButtonEnabled());
+            ShowCreateVoucherCommand =
+                new DelegateCommand(() => SetShowCreateVoucherView(), () => true);
             RegistrationPerMonthFinalAccountCommand =
                 new DelegateCommand(() => RegistrationPerMonthFinalAccount(), () => true);
             LogoutCommand =
@@ -179,37 +185,25 @@ namespace WPF.ViewModels
             return b;
         }
         /// <summary>
+        /// 受納証発行画面を表示します
+        /// </summary>
+        private void SetShowCreateVoucherView() => CreateShowWindowCommand(ScreenTransition.CreateVoucher());
+        /// <summary>
         /// 伝票管理画面を表示します
         /// </summary>
-        private void SetShowReceiptsAndExpenditureManagementView()
-        {
-            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureMangement());
-            CallPropertyChanged();
-        }
+        private void SetShowReceiptsAndExpenditureManagementView() => CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureMangement());
         /// <summary>
         /// ログイン画面を表示します
         /// </summary>
-        private void SetShowLoginView()
-        {
-            CreateShowWindowCommand(ScreenTransition.Login());
-            CallPropertyChanged();
-        }
+        private void SetShowLoginView() => CreateShowWindowCommand(ScreenTransition.Login());
         /// <summary>
         /// データ管理画面を表示します
         /// </summary>
-        private void SetShowDataManagementView()
-        {
-            CreateShowWindowCommand(ScreenTransition.DataManagement());
-            CallPropertyChanged();
-        }
+        private void SetShowDataManagementView() => CreateShowWindowCommand(ScreenTransition.DataManagement());
         /// <summary>
         /// 金庫金額計算画面を表示します
         /// </summary>
-        private void SetShowRemainingMoneyCalculationView()
-        {
-            CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
-            CallPropertyChanged();
-        }
+        private void SetShowRemainingMoneyCalculationView() => CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation());
         /// <summary>
         /// 経理システムの終了確認のメッセージボックスを設定します
         /// </summary>
