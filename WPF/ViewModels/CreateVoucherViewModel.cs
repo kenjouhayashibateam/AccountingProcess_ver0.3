@@ -3,6 +3,9 @@ using Domain.Entities.ValueObjects;
 using System.Collections.ObjectModel;
 using Domain.Repositories;
 using Infrastructure;
+using WPF.ViewModels.Commands;
+using Domain.Entities;
+using System;
 
 namespace WPF.ViewModels
 {
@@ -12,14 +15,23 @@ namespace WPF.ViewModels
     public class CreateVoucherViewModel : DataOperationViewModel
     {
         #region Properties
+        #region Strings
         private string comboAccountingSubjectCode;
         private string comboAccountingSubject;
         private string comboContent;
         private string addresseeTitle;
+        private string registrationAddressee;
+        private string registrationPriceDisplayValue;
+        #endregion
+        private int registrationPrice;
+        bool isReducedTaxRate;
+        #region ObservableCollections
         private ObservableCollection<CreditDept> creditDepts;
         private ObservableCollection<AccountingSubject> accountingSubjectCodes;
         private ObservableCollection<AccountingSubject> accountingSubjects;
         private ObservableCollection<Content> contents;
+        #endregion
+        private DateTime registrationAccountActivityDate;
         private CreditDept selectedCreditDept;
         private AccountingSubject selectedAccountingSubjectCode;
         private AccountingSubject selectedAccontingSubject;
@@ -33,6 +45,16 @@ namespace WPF.ViewModels
             AddresseeTitle = "様";
         }
         public CreateVoucherViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect(), DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 出納データ登録コマンド
+        /// </summary>
+        public DelegateCommand RegistrationReceiptsAndExpenditureCommand { get; }
+        private void RegistrationReceiptsAndExpenditure()
+        {
+            DataBaseConnect.Registration
+                (new ReceiptsAndExpenditure(0, DateTime.Today, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditDept, SelectedContent,
+                    $"{RegistrationAddressee}{AddresseeTitle}", RegistrationPrice, true, true, RegistrationAccountActivityDate, TextHelper.DefaultDate, isReducedTaxRate));
+        }
         /// <summary>
         /// 選択された貸方部門
         /// </summary>
@@ -197,6 +219,68 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 伝票登録する宛名
+        /// </summary>
+        public string RegistrationAddressee
+        {
+            get => registrationAddressee;
+            set
+            {
+                registrationAddressee = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 伝票登録する金額
+        /// </summary>
+        public int RegistrationPrice
+        {
+            get => registrationPrice;
+            set
+            {
+                registrationPrice = value;
+                ValidationProperty(nameof(RegistrationPrice), value);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ビューに表示する伝票登録の金額
+        /// </summary>
+        public string RegistrationPriceDisplayValue
+        {
+            get => registrationPriceDisplayValue;
+            set
+            {
+                registrationPriceDisplayValue = TextHelper.CommaDelimitedAmount(value);
+                ValidationProperty(nameof(RegistrationPriceDisplayValue), registrationPriceDisplayValue);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 登録する入金日
+        /// </summary>
+        public DateTime RegistrationAccountActivityDate
+        {
+            get => registrationAccountActivityDate;
+            set
+            {
+                registrationAccountActivityDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 軽減税率チェック
+        /// </summary>
+        public bool IsReducedTaxRate
+        {
+            get => isReducedTaxRate;
+            set
+            {
+                isReducedTaxRate = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void SetRep(Rep rep)
         {
@@ -210,7 +294,15 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            throw new System.NotImplementedException();
+            switch(propertyName)
+            {
+                case nameof(RegistrationPrice):
+                    ErrorsListOperation((int)value == 0, propertyName, "金額は1円以上で登録して下さい。");
+                    break;
+                case nameof(RegistrationPriceDisplayValue):
+                    SetNullOrEmptyError(propertyName,(string)value);
+                    break;
+            }
         }
 
         protected override void SetDataList()

@@ -7,7 +7,7 @@
         xmlns:beharvior="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="700" Width="800">
+        Title="{Binding WindowTitle}" Height="750" Width="800">
     <Window.DataContext>
         <vm:CreateVoucherViewModel/>
     </Window.DataContext>
@@ -22,12 +22,14 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="4*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <GroupBox Header="出納データ登録" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -73,19 +75,23 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="RegistrationAddresseeTextBox" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
+                        <TextBox Grid.Column="0" x:Name="RegistrationAddresseeTextBox" Text="{Binding RegistrationAddressee}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
                         <TextBox Grid.Column="1" x:Name="TitleTextBox" Text="{Binding AddresseeTitle}" InputMethod.PreferredImeState="on" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1,120,1"/>
                     </Grid>
                     <TextBlock Grid.Row="6" Grid.Column="0" Text="金額" VerticalAlignment="Bottom" Margin="5,0"/>
                     <Grid Grid.Row="7">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="RegistrationPriceTextBox" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,1"/>
+                        <TextBox Grid.Column="0" x:Name="RegistrationPriceTextBox" Text="{Binding RegistrationPrice}" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,1"/>
                         <TextBlock Grid.Column="1" Text="円" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="2" Content="軽減税率チェック" VerticalAlignment="Center" IsChecked="{Binding IsReducedTaxRate}"/>
                     </Grid>
-                    <Grid Grid.Row="8">
+                    <TextBlock Grid.Row="8" Text="入金日" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <DatePicker Grid.Row="9" beharvior:DatePickerAttachment.IsIMEModeOffGotFocus="True" DisplayDate="{Binding RegistrationAccountActivityDate}" Margin="5,1,200,1"/>
+                    <Grid Grid.Row="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="4*"/>
                             <ColumnDefinition Width="1*"/>
