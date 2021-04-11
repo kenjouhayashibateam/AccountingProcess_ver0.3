@@ -22,6 +22,8 @@ namespace WPF.ViewModels
         private string addresseeTitle;
         private string registrationAddressee;
         private string registrationPriceDisplayValue;
+        private string voucherAddressee;
+        private string voucherTotalAmountDisplayValue;
         #endregion
         private int registrationPrice;
         bool isReducedTaxRate;
@@ -30,12 +32,14 @@ namespace WPF.ViewModels
         private ObservableCollection<AccountingSubject> accountingSubjectCodes;
         private ObservableCollection<AccountingSubject> accountingSubjects;
         private ObservableCollection<Content> contents;
+        private ObservableCollection<ReceiptsAndExpenditure> voucherContents;
         #endregion
         private DateTime registrationAccountActivityDate;
+        private DateTime searchDate;
         private CreditDept selectedCreditDept;
         private AccountingSubject selectedAccountingSubjectCode;
         private AccountingSubject selectedAccontingSubject;
-        public Content SelectedContent;
+        private Content selectedContent;
         private readonly IDataOutput DataOutput;
         #endregion
 
@@ -43,6 +47,9 @@ namespace WPF.ViewModels
         {
             DataOutput = dataOutput;
             AddresseeTitle = "様";
+            RegistrationAccountActivityDate = DateTime.Today;
+            RegistrationReceiptsAndExpenditureCommand = new DelegateCommand
+                (() => RegistrationReceiptsAndExpenditure(), () => true);
         }
         public CreateVoucherViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect(), DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
@@ -51,9 +58,28 @@ namespace WPF.ViewModels
         public DelegateCommand RegistrationReceiptsAndExpenditureCommand { get; }
         private void RegistrationReceiptsAndExpenditure()
         {
-            DataBaseConnect.Registration
-                (new ReceiptsAndExpenditure(0, DateTime.Today, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditDept, SelectedContent,
-                    $"{RegistrationAddressee}{AddresseeTitle}", RegistrationPrice, true, true, RegistrationAccountActivityDate, TextHelper.DefaultDate, isReducedTaxRate));
+            ReceiptsAndExpenditure rae = new ReceiptsAndExpenditure(0, DateTime.Today, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditDept, SelectedContent,
+                    $"{RegistrationAddressee}{AddresseeTitle}", RegistrationPrice, true, true, RegistrationAccountActivityDate, TextHelper.DefaultDate, IsReducedTaxRate);
+            if (!ConfirmationRegistration(rae)) return;
+            DataBaseConnect.Registration(rae);
+            VoucherContents.Add(rae);
+            VoucherAddressee = RegistrationAddressee;
+        }
+        private bool ConfirmationRegistration(ReceiptsAndExpenditure receiptsAndExpenditure)
+        {
+            MessageBox = new Views.Datas.MessageBoxInfo()
+            {
+                Message = $"経理担当場所\t : {receiptsAndExpenditure.Location}\r\n入出金日\t\t : {receiptsAndExpenditure.AccountActivityDate.ToShortDateString()}\r\n" +
+                $"貸方勘定\t\t : {receiptsAndExpenditure.CreditDept.Dept}\r\nコード\t\t : {receiptsAndExpenditure.Content.AccountingSubject.SubjectCode}\r\n" +
+                 $"勘定科目\t\t : {receiptsAndExpenditure.Content.AccountingSubject.Subject}\r\n内容\t\t : {receiptsAndExpenditure.Content.Text}\r\n詳細\t\t : {receiptsAndExpenditure.Detail}\r\n" +
+                 $"金額\t\t : {TextHelper.AmountWithUnit(receiptsAndExpenditure.Price)}\r\n軽減税率\t\t : {receiptsAndExpenditure.IsReducedTaxRate}\r\n有効性\t\t : {receiptsAndExpenditure.IsValidity}\r\n" +
+                 $"\r\n登録しますか？",
+                Button = System.Windows.MessageBoxButton.YesNo,
+                Title="登録確認",
+                Image=System.Windows.MessageBoxImage.Question
+            };
+            CallShowMessageBox = true;
+            return MessageBox.Result == System.Windows.MessageBoxResult.Yes;
         }
         /// <summary>
         /// 選択された貸方部門
@@ -144,14 +170,15 @@ namespace WPF.ViewModels
 
                 if(AccountingSubjects.Count>0)
                 {
-                    comboAccountingSubjectCode = AccountingSubjects[0].SubjectCode;
+                    value = AccountingSubjects[0].SubjectCode;
                     ComboAccountingSubject = AccountingSubjects[0].Subject;
                 }
                 else
                 {
-                    comboAccountingSubjectCode = string.Empty;
+                    value = string.Empty;
                     ComboAccountingSubject = string.Empty;
                 }
+                comboAccountingSubjectCode = value;
                 CallPropertyChanged();
             }
         }
@@ -278,6 +305,69 @@ namespace WPF.ViewModels
             set
             {
                 isReducedTaxRate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 受納証の宛名
+        /// </summary>
+        public string VoucherAddressee
+        {
+            get => voucherAddressee;
+            set
+            {
+                voucherAddressee = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 受納証の但し書きに表示するデータリスト
+        /// </summary>
+        public ObservableCollection<ReceiptsAndExpenditure> VoucherContents
+        {
+            get => voucherContents;
+            set
+            {
+                voucherContents = value;
+                int i = default;
+                foreach (ReceiptsAndExpenditure rae in voucherContents) i += rae.Price;
+                VoucherTotalAmountDisplayValue = i.ToString();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 受納証に記載する合計金額のビュー表示文字列
+        /// </summary>
+        public string VoucherTotalAmountDisplayValue
+        {
+            get => voucherTotalAmountDisplayValue;
+            set
+            {
+                voucherTotalAmountDisplayValue =TextHelper.CommaDelimitedAmount(value);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された伝票内容
+        /// </summary>
+        public Content SelectedContent
+        {
+            get => selectedContent;
+            set
+            {
+                selectedContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索日時
+        /// </summary>
+        public DateTime SearchDate
+        {
+            get => searchDate;
+            set
+            {
+                searchDate = value;
                 CallPropertyChanged();
             }
         }

@@ -517,7 +517,7 @@ namespace WPF.ViewModels
                 DetailText, IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, DefaultDate,IsReducedTaxRate);
 
             if (CallConfirmationDataOperation
-                ($"経理担当場所\t : {rae.Location}\r\n入出金\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n貸方勘定\t\t : {rae.CreditDept.Dept}\r\n" +
+                ($"経理担当場所\t : {rae.Location}\r\n入出金日\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n貸方勘定\t\t : {rae.CreditDept.Dept}\r\n" +
                  $"入出金\t\t : {DepositAndWithdrawalContetnt}\r\nコード\t\t : {rae.Content.AccountingSubject.SubjectCode}\r\n勘定科目\t\t : {rae.Content.AccountingSubject.Subject}\r\n" +
                  $"内容\t\t : {rae.Content.Text}\r\n詳細\t\t : {rae.Detail}\r\n金額\t\t : {TextHelper.AmountWithUnit(rae.Price)}\r\n軽減税率\t\t : {rae.IsReducedTaxRate}\r\n" +
                  $"有効性\t\t : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票") == System.Windows.MessageBoxResult.Cancel) return;
@@ -1824,6 +1824,7 @@ namespace WPF.ViewModels
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
             IsReferenceMenuEnabled = IsCheckedUpdate;
             SetAmountSum();
+            SetBalanceFinalAccount();
         }
         private void SetAmountSum()
         {
