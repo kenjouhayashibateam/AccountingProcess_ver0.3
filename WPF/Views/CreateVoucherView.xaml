@@ -125,12 +125,12 @@
                         <TextBox Grid.Row="1" Grid.Column="0" x:Name="VoucherAddresseeTextBox" Text="{Binding VoucherAddressee}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
                         <TextBlock Text="様" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"/>
                     </Grid>
-                    <DataGrid Grid.Row="1" x:Name="VoucherAddresseeContentsDataGrid" ItemsSource="{Binding VoucherContents}" SelectedItem="" AutoGenerateColumns="False" Margin="5">
+                    <DataGrid Grid.Row="1" x:Name="VoucherAddresseeContentsDataGrid" ItemsSource="{Binding VoucherContents}" SelectedValue="{Binding SelectedVoucherContent}" AutoGenerateColumns="False" Margin="5">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="勘定科目" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}"/>                                        
+                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" HorizontalAlignment="Left" VerticalAlignment="Center"/>                                        
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -138,6 +138,17 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="データ操作" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="DeleteDataButton" Content="削除" Margin="2">
+                                            <Button.InputBindings>
+                                                <MouseBinding Command="{Binding Path=DataContext.DeleteVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                            </Button.InputBindings>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -154,7 +165,6 @@
                         <TextBlock Grid.Column="1" Text="{Binding VoucherTotalAmountDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
                         <TextBlock Grid.Column="2" Text=" 円" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                         <Button Grid.Column="3" x:Name="OutputButton" Content="出力" Margin="5,3">
-                            
                         </Button>
                     </Grid>
                 </Grid>
@@ -180,8 +190,40 @@
                 </Grid>
             </GroupBox>
             <GroupBox Header="一覧" Grid.Row="1" Margin="5">
-                <DataGrid AutoGenerateColumns="False" Margin="5">
-                    
+                <DataGrid AutoGenerateColumns="False" x:Name="SearchReceiptsAndExpenditureDataGrid" ItemsSource="{Binding SearchReceiptsAndExpenditures}" SelectedValue="{Binding SelectedSeachReceiptsAndExpenditure}" Margin="5">
+                    <DataGrid.InputBindings>
+                        <MouseBinding Command="{Binding AddVoucherContentCommand}" MouseAction="LeftDoubleClick"/>
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="コード" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="勘定科目" Width="3*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="内容" Width="3*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="詳細" Width="4*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
         </Grid>
