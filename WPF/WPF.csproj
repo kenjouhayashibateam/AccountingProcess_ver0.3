@@ -94,6 +94,7 @@
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\DataGridAttachment.cs" />
     <Compile Include="Views\Behaviors\DatePickerAttachment.cs" />
+    <Compile Include="Views\Behaviors\SystemMenuBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
     <Compile Include="Views\CreateVoucherView.xaml.cs">
       <DependentUpon>CreateVoucherView.xaml</DependentUpon>
@@ -124,6 +125,8 @@
     <Compile Include="Views\ShorendoCashBoxCalculationView.xaml.cs">
       <DependentUpon>ShorendoCashBoxCalculationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win32\Api\User32.cs" />
+    <Compile Include="Win32\Constant.cs" />
     <Page Include="Views\CreateVoucherView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

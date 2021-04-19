@@ -10,16 +10,19 @@ namespace WPF.Views.Behaviors
     /// </summary>
     public static class DataGridAttachment
     {
-        //以下のDataGridのソートを昇順→降順→ソート無しに設定する添付プロパティはビルド時にCOMの参照警告、プロパティのセッターエラーが出るため使えない。要検証
+        //以下のDataGridのソートを昇順→降順→ソート無しに設定する添付プロパティはビルド時にCOMの参照警告、
+        //プロパティのセッターエラーが出るため使えない。要検証
         //    public static bool GetIsSortCustomize(DependencyObject obj)
         //    {
         //        return (bool)obj.GetValue(IsSortCustomizeProperty);
         //    }
 
         //    public static DependencyProperty IsSortCustomizeProperty =
-        //        DependencyProperty.RegisterAttached("IsSortCustomize", typeof(bool), typeof(DataGridAttachment), new PropertyMetadata(OnIsSortCustomizeChanged));
+        //        DependencyProperty.RegisterAttached("IsSortCustomize", typeof(bool),
+        //        typeof(DataGridAttachment), new PropertyMetadata(OnIsSortCustomizeChanged));
 
-        //    private static void OnIsSortCustomizeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        //    private static void OnIsSortCustomizeChanged
+        //          (DependencyObject obj, DependencyPropertyChangedEventArgs e)
         //    {
         //        if (!(obj is DataGrid dataGrid)) return;
         //        if ((bool)e.NewValue) dataGrid.Sorting += DataGrid_Sorting;

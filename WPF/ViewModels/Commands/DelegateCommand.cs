@@ -19,8 +19,10 @@ namespace WPF.ViewModels.Commands
 
         public DelegateCommand(Action execute, Func<bool> canExecute)
         {
-            _Execute = execute ?? throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(execute));
-            _CanExecute = canExecute ?? throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(canExecute));
+            _Execute = execute ??
+                throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(execute));
+            _CanExecute = canExecute ??
+                throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(canExecute));
         }
 
         public bool CanExecute(object parameter) => _CanExecute();
@@ -53,7 +55,8 @@ namespace WPF.ViewModels.Commands
 
         public DelegateCommand(Action<T> execute, Func<T, bool> canExecute)
         {
-            _Execute = execute ?? throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(execute));
+            _Execute = execute ??
+                throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(execute));
             _CanExecute = canExecute;
         }
 

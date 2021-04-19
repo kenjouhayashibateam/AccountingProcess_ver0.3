@@ -21,7 +21,7 @@
     <i:Interaction.Behaviors>
         <b:WindowClosingCancelBehavior/>
     </i:Interaction.Behaviors>
-    
+
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <b:ShowDiarog/>
@@ -30,7 +30,6 @@
             <b:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
-
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
             <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>

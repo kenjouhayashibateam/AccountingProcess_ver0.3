@@ -101,7 +101,8 @@ namespace WPF.ViewModels
 
         public DataManagementViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
+                                                                (string.Empty, string.Empty, true);
             SetDataRegistrationCommand.Execute();
         }
         public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
@@ -109,9 +110,14 @@ namespace WPF.ViewModels
         protected override void SetDelegateCommand()
         {
             SetRepDelegateCommand();
-            AccountingSubjectDataOperationCommand = new DelegateCommand(() => AccountingSubjectDataOperation(), () => IsAccountingSubjectOperationButtonEnabled);
-            CreditDeptDataOperationCommand = new DelegateCommand(() => CreditDeptDataOperation(), () => IsCreditDeptOperationButtonEnabled);
-            ContentDataOperationCommand = new DelegateCommand(() => ContentDataOperation(), () => IsContentOperationEnabled);
+            AccountingSubjectDataOperationCommand = 
+                new DelegateCommand(() => AccountingSubjectDataOperation(),
+                                                                () => IsAccountingSubjectOperationButtonEnabled);
+            CreditDeptDataOperationCommand =
+                new DelegateCommand(() => CreditDeptDataOperation(), 
+                                                                () => IsCreditDeptOperationButtonEnabled);
+            ContentDataOperationCommand =
+                new DelegateCommand(() => ContentDataOperation(), () => IsContentOperationEnabled);
         }
 
         protected override void SetDataList()
@@ -178,10 +184,14 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetRepDelegateCommand()
         {
-            RepNewPasswordCharCheckedReversCommand = new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
-            RepCurrentPasswordCharCheckedReversCommand = new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
-            ConfirmationPasswordCheckedReversCommand = new DelegateCommand(() => ConfirmationPasswordCharCheckedRevers(), () => true);
-            RepDataOperationCommand = new DelegateCommand(() => RepDataOperation(), () => IsRepDataOperationCanExecute());
+            RepNewPasswordCharCheckedReversCommand =
+                new DelegateCommand(() => RepNewPasswordCharCheckedRevers(), () => true);
+            RepCurrentPasswordCharCheckedReversCommand = 
+                new DelegateCommand(() => RepCurrentPasswordCharCheckedRevers(), () => true);
+            ConfirmationPasswordCheckedReversCommand =
+                new DelegateCommand(() => ConfirmationPasswordCharCheckedRevers(), () => true);
+            RepDataOperationCommand = 
+                new DelegateCommand(() => RepDataOperation(), () => IsRepDataOperationCanExecute());
         }
         /// <summary>
         /// 担当者データ操作コマンドのCanExecuteを設定します
@@ -224,8 +234,10 @@ namespace WPF.ViewModels
         private bool IsRepRegistrable()
         {
             var repError = GetErrors(nameof(RepName));
-            if (repError == null & !string.IsNullOrEmpty(RepNewPassword)) repError = GetErrors(nameof(RepNewPassword));
-            if (repError == null & !string.IsNullOrEmpty(ConfirmationPassword)) repError = GetErrors(nameof(ConfirmationPassword));
+            if (repError == null & !string.IsNullOrEmpty(RepNewPassword))
+                repError = GetErrors(nameof(RepNewPassword));
+            if (repError == null & !string.IsNullOrEmpty(ConfirmationPassword)) 
+                repError = GetErrors(nameof(ConfirmationPassword));
             return repError == null;
         }
         /// <summary>
@@ -233,10 +245,14 @@ namespace WPF.ViewModels
         /// </summary>
         private async void RepRegistration()
         {
-            CurrentRep = new Rep(null, RepName, RepNewPassword, IsRepValidity, IsRepDataAdminPermisson);
+            CurrentRep = new Rep
+                                    (null, RepName, RepNewPassword, IsRepValidity, IsRepDataAdminPermisson);
             if (CallConfirmationDataOperation
-                ($"担当者名 : {CurrentRep.Name}\r\nパスワード : {new string('*', RepNewPassword.Length)}\r\n有効性 : {CurrentRep.IsValidity}\r\n管理者権限 : {CurrentRep.IsAdminPermisson}\r\n \r\n登録しますか？",
-                "担当者") == MessageBoxResult.Cancel)
+                ($"担当者名 : {CurrentRep.Name}\r\n" +
+                    $"パスワード : {new string('*', RepNewPassword.Length)}\r\n" +
+                    $"有効性 : {CurrentRep.IsValidity}\r\n管理者権限 : {CurrentRep.IsAdminPermisson}\r\n " +
+                    $"\r\n登録しますか？",
+                    "担 当者") == MessageBoxResult.Cancel)
                 return;
 
             IsRepOperationButtonEnabled = false;
@@ -275,7 +291,9 @@ namespace WPF.ViewModels
             }
 
             updateContents = $"担当者 : {CurrentRep.Name}\r\n\r\n{updateContents}";
-            if (CallConfirmationDataOperation($"{updateContents}\r\n\r\n更新します。よろしいですか？", "担当者") == MessageBoxResult.Cancel) return;
+            if (CallConfirmationDataOperation
+                ($"{updateContents}\r\n\r\n更新します。よろしいですか？", "担当者") ==
+                    MessageBoxResult.Cancel) return;
 
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "更新中";
@@ -290,15 +308,18 @@ namespace WPF.ViewModels
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかのチェックを切り替えます
         /// </summary>
-        private void RepNewPasswordCharCheckedRevers() => NewPasswordCharCheck = !NewPasswordCharCheck;
+        private void RepNewPasswordCharCheckedRevers() =>
+            NewPasswordCharCheck = !NewPasswordCharCheck;
         /// <summary>
         /// 再入力パスワード入力欄の文字を隠すかのチェックを切り替えます
         /// </summary>
-        private void ConfirmationPasswordCharCheckedRevers() => ConfirmationPasswordCharCheck = !ConfirmationPasswordCharCheck;
+        private void ConfirmationPasswordCharCheckedRevers() =>
+            ConfirmationPasswordCharCheck = !ConfirmationPasswordCharCheck;
         /// <summary>
         /// 現在のパスワード入力欄の文字を隠すかのチェックを切り替えます
         /// </summary>
-        private void RepCurrentPasswordCharCheckedRevers() => CurrentPasswordCharCheck = !CurrentPasswordCharCheck;
+        private void RepCurrentPasswordCharCheckedRevers() =>
+            CurrentPasswordCharCheck = !CurrentPasswordCharCheck;
         /// <summary>
         /// 担当者管理の更新のためのコントロールのEnableを設定し、フィールドをクリアします
         /// </summary>
@@ -679,12 +700,16 @@ namespace WPF.ViewModels
             switch (CurrentOperation)
             {
                 case DataOperation.登録:
-                    IsRepOperationButtonEnabled = !(string.IsNullOrEmpty(RepName) | string.IsNullOrEmpty(RepNewPassword) | string.IsNullOrEmpty(ConfirmationPassword));
-                    if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled = RepNewPassword == ConfirmationPassword;
+                    IsRepOperationButtonEnabled = !(string.IsNullOrEmpty(RepName) |
+                        string.IsNullOrEmpty(RepNewPassword) | 
+                        string.IsNullOrEmpty(ConfirmationPassword));
+                    if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled =
+                            RepNewPassword == ConfirmationPassword;
                     break;
                 case DataOperation.更新:
                     IsRepOperationButtonEnabled = CurrentRep.Password == RepCurrentPassword;
-                    if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled = RepNewPassword == ConfirmationPassword;
+                    if (IsRepOperationButtonEnabled) IsRepOperationButtonEnabled =
+                            RepNewPassword == ConfirmationPassword;
                     break;
                 default:
                     break;
@@ -1623,7 +1648,10 @@ namespace WPF.ViewModels
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
                 case nameof(RepCurrentPassword):
-                    if (IsRepPasswordEnabled) ErrorsListOperation(RepCurrentPassword != CurrentRep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
+                    if (IsRepPasswordEnabled) 
+                        ErrorsListOperation
+                            (RepCurrentPassword != CurrentRep.Password, propertyName, 
+                                Properties.Resources.PasswordErrorInfo);
                     break;
                 case nameof(RepNewPassword):
                     if (IsRepNewPasswordEnabled) SetNullOrEmptyError(propertyName, value.ToString());
@@ -1631,18 +1659,25 @@ namespace WPF.ViewModels
                 case nameof(ConfirmationPassword):
                     if (!_isRepNewPasswordEnabled) break;
                     SetNullOrEmptyError(propertyName, value.ToString());
-                    if (GetErrors(propertyName)==null) ErrorsListOperation(RepNewPassword != ConfirmationPassword, propertyName, Properties.Resources.PasswordErrorInfo);
+                    if (GetErrors(propertyName)==null) 
+                        ErrorsListOperation
+                            (RepNewPassword != ConfirmationPassword, propertyName, 
+                                Properties.Resources.PasswordErrorInfo);
                     break;
                 case nameof(AccountingSubjectCodeField):
                     SetNullOrEmptyError(propertyName, value.ToString());
-                    if (GetErrors(propertyName) == null) ErrorsListOperation(AccountingSubjectCodeField.Length != 3, propertyName, "コードの桁数が不正です");
+                    if (GetErrors(propertyName) == null)
+                        ErrorsListOperation(AccountingSubjectCodeField.Length != 3, propertyName, 
+                            "コードの桁数が不正です");
                     break;
                 case nameof(AccountingSubjectField):
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
                 case nameof(ReferenceAccountingSubjectCode):
                     SetNullOrEmptyError(propertyName, value.ToString());
-                    if (GetErrors(propertyName) == null) ErrorsListOperation(ReferenceAccountingSubjectCode.Length != 3, propertyName, "コードの桁数が不正です");
+                    if (GetErrors(propertyName) == null)
+                        ErrorsListOperation(ReferenceAccountingSubjectCode.Length != 3, propertyName, 
+                            "コードの桁数が不正です");
                     break;
                 case nameof(CreditDeptField):
                     SetNullOrEmptyError(propertyName, value.ToString());
@@ -1667,7 +1702,8 @@ namespace WPF.ViewModels
                 else
                 {
                     IsAdminPermisson = rep.IsAdminPermisson;
-                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                    WindowTitle =
+                        $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
                 }
             }
         }

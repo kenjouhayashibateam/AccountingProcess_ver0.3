@@ -10,7 +10,6 @@
         xmlns:control="https://github.com/qtbui159/CypherBox"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
-
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="250" Width="300" FocusManager.FocusedElement="{Binding ElementName=RepsComboBox}">
 
@@ -23,7 +22,9 @@
             <behavior:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
-
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>

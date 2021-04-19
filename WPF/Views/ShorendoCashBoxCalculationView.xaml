@@ -6,12 +6,18 @@
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"  Height="300" Width="600">
 
     <Window.DataContext>
         <vm:ShorendoCashBoxCalculationViewModel/>
     </Window.DataContext>
+
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>

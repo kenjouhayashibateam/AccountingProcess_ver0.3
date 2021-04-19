@@ -18,7 +18,8 @@ namespace Domain.Entities
         /// <summary>
         /// 金種リスト
         /// </summary>
-        public Dictionary<Denomination, MoneyCategory> MoneyCategorys = new Dictionary<Denomination, MoneyCategory>();
+        public Dictionary<Denomination, MoneyCategory> MoneyCategorys =
+            new Dictionary<Denomination, MoneyCategory>();
         /// <summary>
         /// その他の金銭リスト
         /// </summary>

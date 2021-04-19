@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace WPF.ViewModels
         private bool callShowWindow;
         private bool callShowMessageBox;
         #endregion
+        
+        protected IDataBaseConnect DataBaseConnect;
 
         /// <summary>
         /// 画面タイトル
@@ -42,6 +45,23 @@ namespace WPF.ViewModels
         /// 表示するウィンドウデータ
         /// </summary>
         public ShowWindowData ShowWindow { get; set; }
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        protected BaseViewModel(IDataBaseConnect dataBaseConnect)
+        {
+            DataBaseConnect = dataBaseConnect;
+            LoginRep loginRep = LoginRep.GetInstance();
+            loginRep.Add(this);
+            SetWindowDefaultTitle();
+            WindowTitle = DefaultWindowTitle;
+            if (loginRep.Rep == null) IsAdminPermisson = false;
+            else
+            {
+                SetRep(loginRep.Rep);
+                IsAdminPermisson = loginRep.Rep.IsAdminPermisson;
+            }
+        }
         /// <summary>
         /// 表示するメッセージボックスデータ
         /// </summary>
@@ -205,22 +225,6 @@ namespace WPF.ViewModels
         /// エラーリスト
         /// </summary>
         public Dictionary<string, string> CurrentErrors=new Dictionary<string, string>();
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        protected BaseViewModel()
-        {
-            LoginRep loginRep = LoginRep.GetInstance();
-            loginRep.Add(this);
-            SetWindowDefaultTitle();
-            WindowTitle = DefaultWindowTitle;
-            if (loginRep.Rep == null) IsAdminPermisson = false;
-            else
-            {
-                SetRep(loginRep.Rep);
-                IsAdminPermisson = loginRep.Rep.IsAdminPermisson;
-            }
-        }
         /// <summary>
         /// データが存在しない時のエラー操作
         /// </summary>

@@ -6,50 +6,36 @@ using Infrastructure;
 using WPF.ViewModels.Commands;
 using Domain.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace WPF.ViewModels
 {
     /// <summary>
     /// 受納証作成画面ViewModel
     /// </summary>
-    public class CreateVoucherViewModel : DataOperationViewModel,
+    public class CreateVoucherViewModel : BaseViewModel,
         IReceiptsAndExpenditureOperationObserver
     {
         #region Properties
         #region Strings
-        private string comboAccountingSubjectCode;
-        private string comboAccountingSubject;
-        private string comboContent;
-        private string addresseeTitle;
-        private string registrationAddressee;
-        private string registrationPriceDisplayValue;
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
         #endregion
-        private int registrationPrice;
+        #region ObservableCollections
+        private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 
+            new ObservableCollection<ReceiptsAndExpenditure>();
+        private ObservableCollection<ReceiptsAndExpenditure> searchReceiptsAndExpenditures;
+        #endregion
+        private DateTime searchDate;
+        private ReceiptsAndExpenditure selectedVoucherContent;
+        private ReceiptsAndExpenditure selectedSeachReceiptsAndExpenditure;
+        private readonly IDataOutput DataOutput;
+        private readonly ReceiptsAndExpenditureOperation OperationData;
         /// <summary>
         /// 受納証の総額
         /// </summary>
         private int VoucherTotalAmount;
-        private bool isReducedTaxRate;
-        #region ObservableCollections
-        private ObservableCollection<CreditDept> creditDepts;
-        private ObservableCollection<AccountingSubject> accountingSubjectCodes;
-        private ObservableCollection<AccountingSubject> accountingSubjects;
-        private ObservableCollection<Content> contents;
-        private ObservableCollection<ReceiptsAndExpenditure> voucherContents = new ObservableCollection<ReceiptsAndExpenditure>();
-        private ObservableCollection<ReceiptsAndExpenditure> searchReceiptsAndExpenditures;
-        #endregion
-        private DateTime registrationAccountActivityDate;
-        private DateTime searchDate;
-        private CreditDept selectedCreditDept;
-        private AccountingSubject selectedAccountingSubjectCode;
-        private AccountingSubject selectedAccontingSubject;
-        private Content selectedContent;
-        private ReceiptsAndExpenditure selectedVoucherContent;
-        private ReceiptsAndExpenditure selectedSeachReceiptsAndExpenditure;
-        private readonly IDataOutput DataOutput;
-        private ReceiptsAndExpenditureOperation OperationData;
+        private bool isOutputButtonEnabled;
         #endregion
 
         public CreateVoucherViewModel
@@ -58,9 +44,8 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
             OperationData.Add(this);
-            AddresseeTitle = "様";
-            RegistrationAccountActivityDate = DateTime.Today;
             SearchDate = DateTime.Today;
+            SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
             (DefaultInfrastructure.GetDefaultDataBaseConnect(),
@@ -88,298 +73,32 @@ namespace WPF.ViewModels
         /// 受納証の出納データリストに出納データを追加するコマンド
         /// </summary>
         public DelegateCommand AddVoucherContentCommand { get; set; }
-        private void AddVoucherContent()
+        private async void AddVoucherContent()
         {
+            await Task.Delay(1);
+            if (SelectedSeachReceiptsAndExpenditure == null) return;
+            if (VoucherContents.Contains(SelectedSeachReceiptsAndExpenditure)) return;
             VoucherContents.Add(SelectedSeachReceiptsAndExpenditure);
             SetTotalAmount();
+            SetOutputEnabled();
         }
         /// <summary>
         /// 受納証の出納データリストから出納データを削除するコマンド
         /// </summary>
         public DelegateCommand DeleteVoucherContentCommand { get; set; }
-        private void DeleteVoucherContent()
+        private async void DeleteVoucherContent()
         {
+            await Task.Delay(1);
             VoucherContents.Remove(selectedVoucherContent);
             SetTotalAmount();
+            SetOutputEnabled();
         }
         private void SetTotalAmount()
         {
             int i = default;
+
             foreach (ReceiptsAndExpenditure rae in VoucherContents) i += rae.Price;
             VoucherTotalAmountDisplayValue = i.ToString();
-        }
-        /// <summary>
-        /// 出納データ登録コマンド
-        /// </summary>
-        public DelegateCommand RegistrationReceiptsAndExpenditureCommand { get; set; }
-        private void RegistrationReceiptsAndExpenditure()
-        {
-            string addressee = 
-                AddresseeTitle == "様" ?
-                RegistrationAddressee : $"{RegistrationAddressee}{AddresseeTitle}";
-
-            ReceiptsAndExpenditure rae = new ReceiptsAndExpenditure
-                (0, DateTime.Today, LoginRep.Rep, AccountingProcessLocation.Location, SelectedCreditDept, 
-                SelectedContent, addressee, RegistrationPrice, true, true,
-                RegistrationAccountActivityDate, TextHelper.DefaultDate, IsReducedTaxRate);
-            
-            if (!ConfirmationRegistration(rae)) return;
-            DataBaseConnect.Registration(rae);
-            VoucherContents.Add(rae);
-            VoucherAddressee = RegistrationAddressee;
-        }
-
-        private bool ConfirmationRegistration(ReceiptsAndExpenditure receiptsAndExpenditure)
-        {
-            MessageBox = new Views.Datas.MessageBoxInfo()
-            {
-                Message = $"経理担当場所\t : {receiptsAndExpenditure.Location}\r\n" +
-                $"入出金日\t\t : {receiptsAndExpenditure.AccountActivityDate.ToShortDateString()}\r\n" +
-                $"貸方勘定\t\t : {receiptsAndExpenditure.CreditDept.Dept}\r\n" +
-                $"コード\t\t : {receiptsAndExpenditure.Content.AccountingSubject.SubjectCode}\r\n" +
-                 $"勘定科目\t\t : {receiptsAndExpenditure.Content.AccountingSubject.Subject}\r\n" +
-                 $"内容\t\t : {receiptsAndExpenditure.Content.Text}\r\n" +
-                 $"詳細\t\t : {receiptsAndExpenditure.Detail}\r\n" +
-                 $"金額\t\t : {TextHelper.AmountWithUnit(receiptsAndExpenditure.Price)}\r\n" +
-                 $"軽減税率\t\t : {receiptsAndExpenditure.IsReducedTaxRate}\r\n" +
-                 $"有効性\t\t : {receiptsAndExpenditure.IsValidity}\r\n" +
-                 $"\r\n登録しますか？",
-                Button = System.Windows.MessageBoxButton.YesNo,
-                Title="登録確認",
-                Image=System.Windows.MessageBoxImage.Question
-            };
-            CallShowMessageBox = true;
-            return MessageBox.Result == System.Windows.MessageBoxResult.Yes;
-        }
-        /// <summary>
-        /// 選択された貸方部門
-        /// </summary>
-        public CreditDept SelectedCreditDept
-        {
-            get => selectedCreditDept;
-            set
-            {
-                selectedCreditDept = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 貸方部門リスト
-        /// </summary>
-        public ObservableCollection<CreditDept> CreditDepts
-        {
-            get => creditDepts;
-            set
-            {
-                creditDepts = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 選択された勘定科目コード
-        /// </summary>
-        public AccountingSubject SelectedAccountingSubjectCode
-        {
-            get => selectedAccountingSubjectCode;
-            set
-            {
-                selectedAccountingSubjectCode = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 勘定科目コードリスト
-        /// </summary>
-        public ObservableCollection<AccountingSubject> AccountingSubjectCodes
-        {
-            get => accountingSubjectCodes;
-            set
-            {
-                accountingSubjectCodes = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 勘定科目リスト
-        /// </summary>
-        public ObservableCollection<AccountingSubject> AccountingSubjects
-        {
-            get => accountingSubjects;
-            set
-            {
-                accountingSubjects = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 選択された勘定科目
-        /// </summary>
-        public AccountingSubject SelectedAccontingSubject
-        {
-            get => selectedAccontingSubject;
-            set
-            {
-                selectedAccontingSubject = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 勘定科目コード文字列
-        /// </summary>
-        public string ComboAccountingSubjectCode
-        {
-            get => comboAccountingSubjectCode;
-            set
-            {
-                if (!string.IsNullOrEmpty(value))
-                    AccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
-                else
-                {
-                    AccountingSubjects.Clear();
-                    ComboAccountingSubject = string.Empty;
-                }
-
-                if(AccountingSubjects.Count>0)
-                {
-                    value = AccountingSubjects[0].SubjectCode;
-                    ComboAccountingSubject = AccountingSubjects[0].Subject;
-                }
-                else
-                {
-                    value = string.Empty;
-                    ComboAccountingSubject = string.Empty;
-                }
-                comboAccountingSubjectCode = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 勘定科目文字列
-        /// </summary>
-        public string ComboAccountingSubject
-        {
-            get => comboAccountingSubject;
-            set
-            {
-                if (!string.IsNullOrEmpty(value))
-                    Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
-                else
-                {
-                    Contents.Clear();
-                    ComboContent = string.Empty;
-                }
-
-                if(Contents.Count>0)
-                {
-                    comboAccountingSubject = Contents[0].AccountingSubject.Subject;
-                    ComboContent = Contents[0].Text;
-                }
-                else
-                {
-                    comboAccountingSubject = string.Empty;
-                    ComboContent = string.Empty;
-                }
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 伝票内容リスト
-        /// </summary>
-        public ObservableCollection<Content> Contents
-        {
-            get => contents;
-            set
-            {
-                contents = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 伝票内容文字列
-        /// </summary>
-        public string ComboContent
-        {
-            get => comboContent;
-            set
-            {
-                comboContent = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 登録する宛名の敬称
-        /// </summary>
-        public string AddresseeTitle
-        {
-            get => addresseeTitle;
-            set
-            {
-                addresseeTitle = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 伝票登録する宛名
-        /// </summary>
-        public string RegistrationAddressee
-        {
-            get => registrationAddressee;
-            set
-            {
-                registrationAddressee = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 伝票登録する金額
-        /// </summary>
-        public int RegistrationPrice
-        {
-            get => registrationPrice;
-            set
-            {
-                registrationPrice = value;
-                ValidationProperty(nameof(RegistrationPrice), value);
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// ビューに表示する伝票登録の金額
-        /// </summary>
-        public string RegistrationPriceDisplayValue
-        {
-            get => registrationPriceDisplayValue;
-            set
-            {
-                registrationPriceDisplayValue = TextHelper.CommaDelimitedAmount(value);
-                ValidationProperty(nameof(RegistrationPriceDisplayValue), registrationPriceDisplayValue);
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 登録する入金日
-        /// </summary>
-        public DateTime RegistrationAccountActivityDate
-        {
-            get => registrationAccountActivityDate;
-            set
-            {
-                registrationAccountActivityDate = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 軽減税率チェック
-        /// </summary>
-        public bool IsReducedTaxRate
-        {
-            get => isReducedTaxRate;
-            set
-            {
-                isReducedTaxRate = value;
-                CallPropertyChanged();
-            }
         }
         /// <summary>
         /// 受納証の宛名
@@ -390,9 +109,15 @@ namespace WPF.ViewModels
             set
             {
                 voucherAddressee = value;
+                ValidationProperty(nameof(VoucherAddressee), value);
+                SetOutputEnabled();
                 CallPropertyChanged();
             }
         }
+
+        private void SetOutputEnabled()=>
+            IsOutputButtonEnabled = VoucherContents.Count != 0 & !string.IsNullOrEmpty(VoucherAddressee);
+        
         /// <summary>
         /// 受納証の但し書きに表示するデータリスト
         /// </summary>
@@ -418,18 +143,6 @@ namespace WPF.ViewModels
             {
                 VoucherTotalAmount = TextHelper.IntAmount(value);
                 voucherTotalAmountDisplayValue =TextHelper.CommaDelimitedAmount(value);
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 選択された伝票内容
-        /// </summary>
-        public Content SelectedContent
-        {
-            get => selectedContent;
-            set
-            {
-                selectedContent = value;
                 CallPropertyChanged();
             }
         }
@@ -486,6 +199,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出力ボタンのEnable
+        /// </summary>
+        public bool IsOutputButtonEnabled
+        {
+            get => isOutputButtonEnabled;
+            set
+            {
+                isOutputButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void SetRep(Rep rep)
         {
@@ -502,28 +227,14 @@ namespace WPF.ViewModels
         {
             switch(propertyName)
             {
-                case nameof(RegistrationPrice):
-                    ErrorsListOperation((int)value == 0, propertyName, "金額は1円以上で登録して下さい。");
-                    break;
-                case nameof(RegistrationPriceDisplayValue):
-                    SetNullOrEmptyError(propertyName,(string)value);
+                case nameof(VoucherAddressee):
+                    SetNullOrEmptyError(propertyName, (string)value);
                     break;
             }
         }
 
-        protected override void SetDataList()
+        protected void SetDelegateCommand()
         {
-            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, true);
-            AccountingSubjectCodes =
-                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
-        }
-
-        protected override void SetDataOperationButtonContent(DataOperation operation) { }
-
-        protected override void SetDelegateCommand()
-        {
-            RegistrationReceiptsAndExpenditureCommand = new DelegateCommand
-                (() => RegistrationReceiptsAndExpenditure(), () => true);
             DeleteVoucherContentCommand = new DelegateCommand
                 (() => DeleteVoucherContent(), () => true);
             AddVoucherContentCommand = new DelegateCommand
@@ -534,17 +245,13 @@ namespace WPF.ViewModels
                 (() => ShowRegistration(), () => true);
         }
 
-        protected override void SetDetailLocked() { }
-
         protected override void SetWindowDefaultTitle() =>
             DefaultWindowTitle = $"受納証作成 : {AccountingProcessLocation.Location}";
 
         public void Notify()
         {
-            ReceiptsAndExpenditureOperation raeo =
-                ReceiptsAndExpenditureOperation.GetInstance();
-            SearchDate = raeo.Data.AccountActivityDate;
-            VoucherContents.Add(raeo.Data);
+            SearchDate = OperationData.Data.AccountActivityDate;
+            VoucherContents.Add(OperationData.Data);
         }
     }
 }

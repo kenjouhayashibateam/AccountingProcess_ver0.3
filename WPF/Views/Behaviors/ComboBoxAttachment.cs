@@ -20,7 +20,9 @@ namespace WPF.Views.Behaviors
         }
 
         public static DependencyProperty SetIsIMEModeOnProperty =
-            DependencyProperty.RegisterAttached("SetIsIMEModeOnProperty", typeof(bool), typeof(ComboBoxAttachment), new PropertyMetadata(false, (d, e) =>
+            DependencyProperty.RegisterAttached
+                ("SetIsIMEModeOnProperty", typeof(bool), typeof(ComboBoxAttachment), 
+                    new PropertyMetadata(false, (d, e) =>
             {
                 if (!(d is ComboBox cb)) return;
 

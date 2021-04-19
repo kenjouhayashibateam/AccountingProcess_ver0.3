@@ -7,7 +7,8 @@ namespace Domain.Entities.ValueObjects
     /// </summary>
     public sealed class AccountingProcessLocation
     {
-        private static readonly AccountingProcessLocation accountingLocation = new AccountingProcessLocation();
+        private static readonly AccountingProcessLocation accountingLocation =
+            new AccountingProcessLocation();
         /// <summary>
         /// 担当場所
         /// </summary>

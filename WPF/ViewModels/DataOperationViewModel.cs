@@ -11,7 +11,6 @@ namespace WPF.ViewModels
         private bool _isCheckedRegistration;
         private bool _isCheckedUpdate;
 
-        public IDataBaseConnect DataBaseConnect { get; set; }
         protected DataOperation CurrentOperation;
         protected readonly LoginRep LoginRep = LoginRep.GetInstance();
 
@@ -24,9 +23,8 @@ namespace WPF.ViewModels
             更新
         }
 
-        public DataOperationViewModel(IDataBaseConnect dataBaseConnect)
+        public DataOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
-            DataBaseConnect = dataBaseConnect;
             SetDataList();
             SetDelegateCommand();
             SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);

@@ -88,7 +88,8 @@ namespace WPF.ViewModels
             {
                 tenThousandYenCount = value;
                 myCashbox.MoneyCategorys[TenThousandYen].Count = tenThousandYenCount;
-                TenThousandYenAmountWithUnit = myCashbox.MoneyCategorys[TenThousandYen].AmountWithUnit();
+                TenThousandYenAmountWithUnit = 
+                    myCashbox.MoneyCategorys[TenThousandYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -103,7 +104,8 @@ namespace WPF.ViewModels
             {
                 fiveThousandYenCount = value;
                 myCashbox.MoneyCategorys[FiveThousandYen].Count = fiveThousandYenCount;
-                FiveThousandYenAmountWithUnit = myCashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
+                FiveThousandYenAmountWithUnit = 
+                    myCashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -118,7 +120,8 @@ namespace WPF.ViewModels
             {
                 oneThousandYenCount = value;
                 myCashbox.MoneyCategorys[OneThousandYen].Count = oneThousandYenCount;
-                OneThousandYenAmountWithUnit = myCashbox.MoneyCategorys[OneThousandYen].AmountWithUnit();
+                OneThousandYenAmountWithUnit =
+                    myCashbox.MoneyCategorys[OneThousandYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -133,7 +136,8 @@ namespace WPF.ViewModels
             {
                 fiveHundredYenCount = value;
                 myCashbox.MoneyCategorys[FiveHundredYen].Count = fiveHundredYenCount;
-                FiveHundredYenAmountWithUnit = myCashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
+                FiveHundredYenAmountWithUnit = 
+                    myCashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -148,7 +152,8 @@ namespace WPF.ViewModels
             {
                 oneHundredYenCount = value;
                 myCashbox.MoneyCategorys[OneHundredYen].Count = oneHundredYenCount;
-                OneHundredYenAmountWithUnit = myCashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
+                OneHundredYenAmountWithUnit = 
+                    myCashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -342,8 +347,10 @@ namespace WPF.ViewModels
             set
             {
                 fiveHundredYenBundleCount = value;
-                myCashbox.MoneyCategorys[FiveHundredYenBundle].Count = fiveHundredYenBundleCount;
-                FiveHundredYenBundleAmountWithUnit = myCashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
+                myCashbox.MoneyCategorys[FiveHundredYenBundle].Count =
+                    fiveHundredYenBundleCount;
+                FiveHundredYenBundleAmountWithUnit = 
+                    myCashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -369,8 +376,10 @@ namespace WPF.ViewModels
             set
             {
                 oneHundredYenBundleCount = value;
-                myCashbox.MoneyCategorys[OneHundredYenBundle].Count = oneHundredYenBundleCount;
-                OneHundredYenBundleAmountWithUnit = myCashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
+                myCashbox.MoneyCategorys[OneHundredYenBundle].Count =
+                    oneHundredYenBundleCount;
+                OneHundredYenBundleAmountWithUnit = 
+                    myCashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -397,7 +406,8 @@ namespace WPF.ViewModels
             {
                 fiftyYenBundleCount = value;
                 myCashbox.MoneyCategorys[FiftyYenBundle].Count = fiftyYenBundleCount;
-                FiftyYenBundleAmountWithUnit = myCashbox.MoneyCategorys[FiftyYenBundle].AmountWithUnit();
+                FiftyYenBundleAmountWithUnit =
+                    myCashbox.MoneyCategorys[FiftyYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -424,7 +434,8 @@ namespace WPF.ViewModels
             {
                 tenYenBundleCount = value;
                 myCashbox.MoneyCategorys[TenYenBundle].Count = tenYenBundleCount;
-                TenYenBundleAmountWithUnit = myCashbox.MoneyCategorys[TenYenBundle].AmountWithUnit();
+                TenYenBundleAmountWithUnit = 
+                    myCashbox.MoneyCategorys[TenYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -451,7 +462,8 @@ namespace WPF.ViewModels
             {
                 fiveYenBundleCount = value;
                 myCashbox.MoneyCategorys[FiveYenBundle].Count = fiveYenBundleCount;
-                FiveYenBundleAmountWithUnit = myCashbox.MoneyCategorys[FiveYenBundle].AmountWithUnit();
+                FiveYenBundleAmountWithUnit =
+                    myCashbox.MoneyCategorys[FiveYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -478,7 +490,8 @@ namespace WPF.ViewModels
             {
                 oneYenBundleCount = value;
                 myCashbox.MoneyCategorys[OneYenBundle].Count = oneYenBundleCount;
-                OneYenBundleAmountWithUnit = myCashbox.MoneyCategorys[OneYenBundle].AmountWithUnit();
+                OneYenBundleAmountWithUnit =
+                    myCashbox.MoneyCategorys[OneYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
@@ -501,11 +514,14 @@ namespace WPF.ViewModels
         /// <param name="value">ビューからの文字列</param>
         /// <param name="otherMoneyAmount">金額</param>
         /// <param name="otherMoneyAmountDisplayValue">表示用金額</param>
-        private void SetOtherMoneyAmount(string value, int otherMoneyNumber, ref string otherMoneyAmountDisplayValue)
+        private void SetOtherMoneyAmount
+            (string value, int otherMoneyNumber, ref string otherMoneyAmountDisplayValue)
         {
             otherMoneyAmountDisplayValue = TextHelper.CommaDelimitedAmount(value);
 
-            myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = otherMoneyAmountDisplayValue != string.Empty ? TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
+            myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = 
+                otherMoneyAmountDisplayValue != string.Empty ? 
+                    TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
             TotalAmount = myCashbox.GetTotalAmountWithUnit();
         }
         /// <summary>
@@ -513,7 +529,8 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="value">内容</param>
         /// <param name="otherMoneyNumber">欄のインデックス</param>
-        private void SetOtherMontyTitle(string value, int otherMoneyNumber) => myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;        
+        private void SetOtherMontyTitle(string value, int otherMoneyNumber) => 
+            myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;        
         /// <summary>
         /// その他金庫等1の内容名
         /// </summary>
@@ -766,16 +783,20 @@ namespace WPF.ViewModels
         /// コンストラクタ　DataOutput、各プロパティを設定、DelegateCommandのインスタンスを生成します
         /// </summary>
         /// <param name="dataOutput"></param>
-        public RemainingMoneyCalculationViewModel(IDataOutput dataOutput)
+        public RemainingMoneyCalculationViewModel(IDataOutput dataOutput):
+            base(DefaultInfrastructure.GetDefaultDataBaseConnect())
         {
             DataOutput = dataOutput;
             SetProperty();
             OutputCommand = new DelegateCommand(() => Output(), () => true);
-            OtherMoneyContentsClearCommand = new DelegateCommand(() => OtherMoneyContentsClear(), () => true);
-            SetOtherMoneyDefaultTitleCommand = new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
+            OtherMoneyContentsClearCommand =
+                new DelegateCommand(() => OtherMoneyContentsClear(), () => true);
+            SetOtherMoneyDefaultTitleCommand = 
+                new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
             DefaultWindowTitle = "金庫金額計算";
             OutputButtonEnabled = true;
-            if (AccountingProcessLocation.Location == MainWindowViewModel.Locations.管理事務所.ToString()) SetOtherMoneyTitleDefault();
+            if (AccountingProcessLocation.Location == MainWindowViewModel.Locations.管理事務所.ToString())
+                SetOtherMoneyTitleDefault();
         }
         public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
@@ -802,21 +823,37 @@ namespace WPF.ViewModels
             FiveHundredYenBundleCount = myCashbox.MoneyCategorys[FiveHundredYenBundle].Count;
 
             OtherMoneyTitle1 = myCashbox.OtherMoneys[0].Title;
-            OtherMoneyAmountDisplayValue1 = myCashbox.OtherMoneys[0].Amount != 0 ? myCashbox.OtherMoneys[0].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue1 = 
+                myCashbox.OtherMoneys[0].Amount != 0 ? 
+                    myCashbox.OtherMoneys[0].Amount.ToString() : string.Empty;
             OtherMoneyTitle2 = myCashbox.OtherMoneys[1].Title;
-            OtherMoneyAmountDisplayValue2 = myCashbox.OtherMoneys[1].Amount != 0 ? myCashbox.OtherMoneys[1].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue2 = 
+                myCashbox.OtherMoneys[1].Amount != 0 ? 
+                    myCashbox.OtherMoneys[1].Amount.ToString() : string.Empty;
             OtherMoneyTitle3 = myCashbox.OtherMoneys[2].Title;
-            OtherMoneyAmountDisplayValue3 = myCashbox.OtherMoneys[2].Amount != 0 ? myCashbox.OtherMoneys[2].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue3 = 
+                myCashbox.OtherMoneys[2].Amount != 0 ? 
+                    myCashbox.OtherMoneys[2].Amount.ToString() : string.Empty;
             OtherMoneyTitle4 = myCashbox.OtherMoneys[3].Title;
-            OtherMoneyAmountDisplayValue4 = myCashbox.OtherMoneys[3].Amount != 0 ? myCashbox.OtherMoneys[3].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue4 = 
+                myCashbox.OtherMoneys[3].Amount != 0 ? 
+                    myCashbox.OtherMoneys[3].Amount.ToString() : string.Empty;
             OtherMoneyTitle5 = myCashbox.OtherMoneys[4].Title;
-            OtherMoneyAmountDisplayValue5 = myCashbox.OtherMoneys[4].Amount != 0 ? myCashbox.OtherMoneys[4].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue5 = 
+                myCashbox.OtherMoneys[4].Amount != 0 ? 
+                    myCashbox.OtherMoneys[4].Amount.ToString() : string.Empty;
             OtherMoneyTitle6 = myCashbox.OtherMoneys[5].Title;
-            OtherMoneyAmountDisplayValue6 = myCashbox.OtherMoneys[5].Amount != 0 ? myCashbox.OtherMoneys[5].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue6 = 
+                myCashbox.OtherMoneys[5].Amount != 0 ? 
+                    myCashbox.OtherMoneys[5].Amount.ToString() : string.Empty;
             OtherMoneyTitle7 = myCashbox.OtherMoneys[6].Title;
-            OtherMoneyAmountDisplayValue7 = myCashbox.OtherMoneys[6].Amount != 0 ? myCashbox.OtherMoneys[6].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue7 = 
+                myCashbox.OtherMoneys[6].Amount != 0 ? 
+                    myCashbox.OtherMoneys[6].Amount.ToString() : string.Empty;
             OtherMoneyTitle8 = myCashbox.OtherMoneys[7].Title;
-            OtherMoneyAmountDisplayValue8 = myCashbox.OtherMoneys[7].Amount != 0 ? myCashbox.OtherMoneys[7].Amount.ToString() : string.Empty;
+            OtherMoneyAmountDisplayValue8 = 
+                myCashbox.OtherMoneys[7].Amount != 0 ? 
+                    myCashbox.OtherMoneys[7].Amount.ToString() : string.Empty;
         }
         /// <summary>
         /// その他釣り銭等メニューの値をすべてクリアします
@@ -872,59 +909,100 @@ namespace WPF.ViewModels
             switch(propertyName)
             {
                 case nameof(OtherMoneyTitle1):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle1) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1), nameof(OtherMoneyAmountDisplayValue1), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle1) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1), 
+                            nameof(OtherMoneyAmountDisplayValue1), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle2):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle2) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2), nameof(OtherMoneyAmountDisplayValue2), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle2) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2), 
+                            nameof(OtherMoneyAmountDisplayValue2), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle3):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle3) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3), nameof(OtherMoneyAmountDisplayValue3), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle3) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3), 
+                            nameof(OtherMoneyAmountDisplayValue3), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle4):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle4) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4), nameof(OtherMoneyAmountDisplayValue4), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle4) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4), 
+                            nameof(OtherMoneyAmountDisplayValue4), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle5):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle5) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5), nameof(OtherMoneyAmountDisplayValue5), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle5) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5), 
+                            nameof(OtherMoneyAmountDisplayValue5), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle6):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle6) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6), nameof(OtherMoneyAmountDisplayValue6), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle6) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6), 
+                            nameof(OtherMoneyAmountDisplayValue6), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle7):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle7) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7), nameof(OtherMoneyAmountDisplayValue7), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle7) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7), 
+                            nameof(OtherMoneyAmountDisplayValue7), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyTitle8):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyTitle8) & string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8), nameof(OtherMoneyAmountDisplayValue8), "金額を入力して下さい");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyTitle8) & 
+                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8), 
+                            nameof(OtherMoneyAmountDisplayValue8), "金額を入力して下さい");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue1):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1) & string.IsNullOrEmpty(OtherMoneyTitle1), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle1), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue2):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2) & string.IsNullOrEmpty(OtherMoneyTitle2), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle2), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue3):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3) & string.IsNullOrEmpty(OtherMoneyTitle3), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle3), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue4):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4) & string.IsNullOrEmpty(OtherMoneyTitle4), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle4), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue5):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5) & string.IsNullOrEmpty(OtherMoneyTitle5), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle5), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue6):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6) & string.IsNullOrEmpty(OtherMoneyTitle6), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle6), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue7):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7) & string.IsNullOrEmpty(OtherMoneyTitle7), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle7), propertyName, "内容を入力してください");
                     break;
                 case nameof(OtherMoneyAmountDisplayValue8):
-                    ErrorsListOperation(!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8) & string.IsNullOrEmpty(OtherMoneyTitle8), propertyName, "内容を入力してください");
+                    ErrorsListOperation
+                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8) & 
+                            string.IsNullOrEmpty(OtherMoneyTitle8), propertyName, "内容を入力してください");
                     break;
                 default:
                     break;
             }
         }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
+        protected override void SetWindowDefaultTitle() => 
+            DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
 
         public override void SetRep(Rep rep)
         {

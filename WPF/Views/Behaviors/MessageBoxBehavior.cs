@@ -18,7 +18,8 @@ namespace WPF.Views.Behaviors
             if (parameter is DependencyPropertyChangedEventArgs e
                 && e.NewValue is MessageBoxInfo info)
             {
-                info.Result = MessageBox.Show(info.Message, info.Title, info.Button, info.Image, info.DefaultResult, info.Options);
+                info.Result = MessageBox.Show
+                    (info.Message, info.Title, info.Button, info.Image, info.DefaultResult, info.Options);
             }
         }
     }

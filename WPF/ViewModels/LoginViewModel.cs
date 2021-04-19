@@ -20,7 +20,6 @@ namespace WPF.ViewModels
         private string password;
         private bool passwordCharCheck;
         private string repName;
-        private readonly IDataBaseConnect DataBaseConnecter;
         private bool isLoginButtonEnabled;
 
         /// <summary>
@@ -60,10 +59,9 @@ namespace WPF.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public LoginViewModel(IDataBaseConnect dataBaseConnect)
+        public LoginViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
-            DataBaseConnecter = dataBaseConnect;
-            Reps = DataBaseConnecter.ReferenceRep(string.Empty, true);
+            Reps = DataBaseConnect.ReferenceRep(string.Empty, true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
             LoginCommand = new DelegateCommand(() => Login(), () => IsLoginButtonEnabled);
             CurrentRep = Reps[0];

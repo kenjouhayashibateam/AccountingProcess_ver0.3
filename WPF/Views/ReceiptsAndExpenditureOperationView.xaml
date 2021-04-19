@@ -20,6 +20,9 @@
             <behavior:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>

@@ -17,7 +17,8 @@ namespace WPF.Views.Behaviors
         }
 
         public static DependencyProperty SetIsIMEModeOffProperty =
-            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), typeof(DatePickerAttachment), new PropertyMetadata(false, (d, e) =>
+            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), 
+                typeof(DatePickerAttachment), new PropertyMetadata(false, (d, e) =>
             {
                 if (!(d is DatePicker dp)) return;
 

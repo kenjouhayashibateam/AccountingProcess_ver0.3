@@ -25,7 +25,6 @@ namespace WPF.ViewModels
         private bool isRegistrationPerMonthFinalAccountVisiblity;
         private bool isLogoutEnabled;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
-        private readonly IDataBaseConnect DataBaseConnect;
         private string depositAmount;
         private string depositAmountInfo;
         #endregion
@@ -66,10 +65,9 @@ namespace WPF.ViewModels
         /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
-        public MainWindowViewModel(IDataBaseConnect dataBaseConnect)
+        public MainWindowViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
             LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
-            DataBaseConnect = dataBaseConnect;
 
             ShowRemainingMoneyCalculationCommand =
                 new DelegateCommand(() => SetShowRemainingMoneyCalculationView(), () => true);
