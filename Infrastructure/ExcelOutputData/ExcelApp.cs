@@ -108,9 +108,9 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected abstract string SetSheetFontName();
         /// <summary>
-        /// エクセルシートのフォントの書式を設定します
+        /// エクセルシートの書式を設定します
         /// </summary>
-        protected abstract void SetSheetFontStyle();
+        protected abstract void SetSheetStyle();
         /// <summary>
         /// エクセルシートの出力用紙を設定します
         /// </summary>

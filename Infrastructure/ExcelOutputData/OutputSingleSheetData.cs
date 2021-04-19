@@ -16,7 +16,7 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         public void DataOutput()
         {
-            SetSheetFontStyle();
+            SetSheetStyle();
             myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
             SetMargins();
             SetMerge();

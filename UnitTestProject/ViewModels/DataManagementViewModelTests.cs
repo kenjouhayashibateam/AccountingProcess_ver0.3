@@ -9,7 +9,7 @@ namespace WPF.ViewModels.Tests
     public class DataManagementViewModelTests
     {
         readonly DataManagementViewModel vm = new DataManagementViewModel(new LocalConnectInfrastructure()) ;
-        LoginRep loginRep = LoginRep.GetInstance();
+        LoginStaff loginRep = LoginStaff.GetInstance();
 
         [TestMethod()]
         public void 担当者の登録時フィールドプロパティ()
@@ -164,7 +164,7 @@ namespace WPF.ViewModels.Tests
         }
         private void SetAdminPermissionRep()
         {
-            LoginRep rep = LoginRep.GetInstance();
+            LoginStaff rep = LoginStaff.GetInstance();
             rep.SetRep(new Rep("aaa", "bbb", "ccc", true, true));
         }
     }

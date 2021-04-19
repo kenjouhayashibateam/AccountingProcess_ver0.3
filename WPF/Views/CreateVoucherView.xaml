@@ -6,11 +6,24 @@
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:beharvior="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="750" Width="800">
+        Title="{Binding WindowTitle}" Height="800" Width="800">
     <Window.DataContext>
         <vm:CreateVoucherViewModel/>
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
+            <beharvior:ShowDiarog/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -22,75 +35,88 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="16*"/>
             </Grid.RowDefinitions>
             <GroupBox Header="出納データ登録" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.RowSpan="2">
+                    <Grid Grid.Row="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="4*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="貸方部門" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Grid.Row="1" Grid.Column="0" Name="DeptComboBox" ItemsSource="{Binding CreditDepts}" SelectedValue="{Binding SelectedCreditDept}" SelectedValuePath="{Binding SelectedCreditDept.Dept}" DisplayMemberPath="Dept" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Margin="5,1"/>
+                        <ComboBox Grid.Row="1" Grid.Column="0" Name="DeptComboBox" ItemsSource="{Binding CreditDepts}" SelectedValue="{Binding SelectedCreditDept}" SelectedValuePath="{Binding SelectedCreditDept.Dept}" DisplayMemberPath="Dept" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Margin="5,3"/>
                     </Grid>
-                    <Grid Grid.Row="2" Grid.RowSpan="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="4*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="科目コード" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Grid.Row="1" Grid.Column="0" Name="RegistrationSubjectCodeComboBox" beharvior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEditable="True" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" ItemsSource="{Binding AccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.SubjectCode}" DisplayMemberPath="SubjectCode" Margin="5,1"/>
+                        <ComboBox Grid.Row="1" Grid.Column="0" Name="RegistrationSubjectCodeComboBox" beharvior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" IsEditable="True" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" ItemsSource="{Binding AccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.SubjectCode}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="RegistrationSubject" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" ItemsSource="{Binding AccountingSubjects}" SelectedValue="{Binding SelectedAccontingSubject}" SelectedValuePath="{Binding SelectedAccontingSubject.Subject}" Text="{Binding ComboAccountingSubject,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Subject" Margin="5,1"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="RegistrationSubject" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" ItemsSource="{Binding AccountingSubjects}" SelectedValue="{Binding SelectedAccontingSubject}" SelectedValuePath="{Binding SelectedAccontingSubject.Subject}" Text="{Binding ComboAccountingSubject,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Subject" Margin="5,3"/>
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="内容" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Grid.Row="1" Grid.Column="2" x:Name="RegistrationContent" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" ItemsSource="{Binding Contents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.Text}" Text="{Binding ComboContent}" DisplayMemberPath="Text" Margin="5,1"/>
+                        <ComboBox Grid.Row="1" Grid.Column="2" x:Name="RegistrationContent" beharvior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" ItemsSource="{Binding Contents}" SelectedValue="{Binding SelectedContent}" SelectedValuePath="{Binding SelectedContent.Text}" Text="{Binding ComboContent}" DisplayMemberPath="Text" Margin="5,3"/>
                     </Grid>
-                    <TextBlock Grid.Row="4" Text="宛名" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <Grid Grid.Row="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="RegistrationAddresseeTextBox" Text="{Binding RegistrationAddressee}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
-                        <TextBox Grid.Column="1" x:Name="TitleTextBox" Text="{Binding AddresseeTitle}" InputMethod.PreferredImeState="on" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1,120,1"/>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="4*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="宛名" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="RegistrationAddresseeTextBox" Text="{Binding RegistrationAddressee}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
+                            <TextBox Grid.Column="1" x:Name="TitleTextBox" Text="{Binding AddresseeTitle}" InputMethod.PreferredImeState="on" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1,120,1"/>
+                        </Grid>
                     </Grid>
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="金額" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <Grid Grid.Row="7">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="RegistrationPriceTextBox" Text="{Binding RegistrationPriceDisplayValue}" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,1"/>
-                        <TextBlock Grid.Column="1" Text="円" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Column="2" Content="軽減税率チェック" VerticalAlignment="Center" IsChecked="{Binding IsReducedTaxRate}"/>
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="4*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="金額" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" x:Name="RegistrationPriceTextBox" Text="{Binding RegistrationPriceDisplayValue}" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,1"/>
+                            <TextBlock Grid.Column="1" Text="円" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="2" Content="軽減税率チェック" VerticalAlignment="Center" IsChecked="{Binding IsReducedTaxRate}"/>
+                        </Grid>                        
                     </Grid>
-                    <TextBlock Grid.Row="8" Text="入金日" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <DatePicker Grid.Row="9" beharvior:DatePickerAttachment.IsIMEModeOffGotFocus="True" SelectedDate="{Binding RegistrationAccountActivityDate}" Margin="5,1,200,1"/>
+                    <Grid Grid.Row="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="4*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="入金日" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <DatePicker Grid.Row="1" beharvior:DatePickerAttachment.IsIMEModeOffGotFocus="True" VerticalContentAlignment="Center" SelectedDate="{Binding RegistrationAccountActivityDate}" Margin="5,1,200,1"/>
+                    </Grid>
                     <Grid Grid.Row="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="4*"/>
@@ -109,7 +135,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*"/>
-                        <RowDefinition Height="7*"/>
+                        <RowDefinition Height="10*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
@@ -122,15 +148,15 @@
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="宛名" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <TextBox Grid.Row="1" Grid.Column="0" x:Name="VoucherAddresseeTextBox" Text="{Binding VoucherAddressee}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
+                        <TextBox Grid.Row="1" Grid.Column="0" x:Name="VoucherAddresseeTextBox" Text="{Binding VoucherAddressee,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
                         <TextBlock Text="様" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"/>
                     </Grid>
                     <DataGrid Grid.Row="1" x:Name="VoucherAddresseeContentsDataGrid" ItemsSource="{Binding VoucherContents}" SelectedValue="{Binding SelectedVoucherContent}" AutoGenerateColumns="False" Margin="5">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="勘定科目" Width="2*">
+                            <DataGridTemplateColumn Header="内容" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" HorizontalAlignment="Left" VerticalAlignment="Center"/>                                        
+                                        <TextBlock Text="{Binding Content.Text}" HorizontalAlignment="Left" VerticalAlignment="Center"/>                                        
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -144,7 +170,7 @@
                             <DataGridTemplateColumn Header="データ操作" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" Content="削除" Margin="2">
+                                        <Button x:Name="DeleteDataButton" Content="削除" FontSize="9" Margin="2">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.DeleteVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                             </Button.InputBindings>
@@ -164,7 +190,11 @@
                         <TextBlock Grid.Column="0" Text="合計金額 : " FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="1" Text="{Binding VoucherTotalAmountDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
                         <TextBlock Grid.Column="2" Text=" 円" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                        <Button Grid.Column="3" x:Name="OutputButton" Content="出力" Margin="5,3">
+                        <Button Grid.Column="3" x:Name="OutputButton" Content="出力" Margin="5,1">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding VoucherOutputCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding VoucherOutputCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
                         </Button>
                     </Grid>
                 </Grid>
@@ -189,7 +219,21 @@
                     <DatePicker Grid.Row="1" beharvior:DatePickerAttachment.IsIMEModeOffGotFocus="True" SelectedDate="{Binding SearchDate}" Margin="5,1"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="一覧" Grid.Row="1" Margin="5">
+            <GroupBox  Grid.Row="1" Margin="5">
+                <GroupBox.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="一覧 " VerticalAlignment="Center"/>
+                        <Button x:Name="DeleteDataButton" Grid.Column="1" Content="新規登録" FontSize="9" Margin="2">
+                            <Button.InputBindings>
+                                <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                    </Grid>
+                </GroupBox.Header>
                 <DataGrid AutoGenerateColumns="False" x:Name="SearchReceiptsAndExpenditureDataGrid" ItemsSource="{Binding SearchReceiptsAndExpenditures}" SelectedValue="{Binding SelectedSeachReceiptsAndExpenditure}" Margin="5">
                     <DataGrid.InputBindings>
                         <MouseBinding Command="{Binding AddVoucherContentCommand}" MouseAction="LeftDoubleClick"/>
@@ -223,15 +267,29 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="金額" Width="2*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
                     </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
         </Grid>
-        <Button x:Name="CloseButton" Grid.Column="1" Grid.Row="1" Content="閉じる" Margin="5">
-            <Button.InputBindings>
-                <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
-                <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
-            </Button.InputBindings>
-        </Button>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CloseButton" Grid.Column="1" Content="閉じる" Margin="5,20">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
+                    <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+        </Grid>
     </Grid>
 </Window>

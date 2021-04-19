@@ -11,6 +11,7 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
         Title="{Binding WindowTitle}" Height="1000" Width="1150" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
 
     <Window.DataContext>
@@ -150,7 +151,7 @@
                             <TextBlock Text="金額" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
                             <TextBox x:Name="PriceTextBox" Grid.Row="1" Grid.Column="0" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPriceEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3"/>
-                            <Button x:Name="ZeroAddButton" Content="000を付け足す" Grid.Column="2" Grid.Row="1" Margin="5,5,9,5">
+                            <Button x:Name="ZeroAddButton" IsEnabled="{Binding IsZeroEnabled}" Content="000を付け足す" Grid.Column="2" Grid.Row="1" Margin="5,5,9,5">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding ZeroAddCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding ZeroAddCommand}" MouseAction="LeftClick"/>
@@ -277,6 +278,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="RefreshListButton" Content="リストを再構築する" Grid.Column="0" Margin="5,1,1,3">
                                 <Button.InputBindings>
@@ -285,7 +287,13 @@
                                     <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <TextBlock Grid.Column="1" Text="{Binding ListTitle}" VerticalAlignment="Center"/>
+                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="1" Margin="5,1,1,3" Content="新規登録">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding ShowRegistrationCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <TextBlock Grid.Column="2" Text="{Binding ListTitle}" VerticalAlignment="Center"/>
                         </Grid>
                     </GroupBox.Header>
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" EnableColumnVirtualization="True" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">
@@ -399,6 +407,17 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsOutput}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="データ操作" Width="3*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="DeleteDataButton" Content="更新" FontSize="9" Margin="2">
+                                            <Button.InputBindings>
+                                                <MouseBinding Command="{Binding Path=DataContext.ShowUpdateCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                            </Button.InputBindings>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

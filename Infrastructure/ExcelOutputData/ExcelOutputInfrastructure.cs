@@ -39,5 +39,11 @@ namespace Infrastructure.ExcelOutputData
             ReceiptsAndExpenditureOutput raeo = new ReceiptsAndExpenditureOutput(receiptsAndExpenditures, previousDayBalance);
             raeo.Output();
         }
+
+        public void VoucherData(Voucher voucher)
+        {
+            VoucherOutput vo = new VoucherOutput(voucher);
+            vo.DataOutput();
+        }
     }
 }

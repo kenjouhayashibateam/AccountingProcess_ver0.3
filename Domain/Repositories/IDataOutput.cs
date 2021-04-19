@@ -25,20 +25,29 @@ namespace Domain.Repositories
         /// <param name="ceresaAmountWithUnit">セレサ川崎残高</param>
         /// <param name="wizeCoreAmountWithUnit">ワイズコア仮受金</param>
         void BalanceFinalAccount
-            (string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
-            string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, string wizeCoreAmountWithUnit);
+            (string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit,
+            string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
+            string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
+            string wizeCoreAmountWithUnit);
         /// <summary>
         /// 出納データを出力します
         /// </summary>
         /// <param name="receiptsAndExpenditures">出力する出納データ</param>
         /// <param name="previousDayBalance">出力する出納データの前日残高</param>
-        void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance);
+        void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure>
+            receiptsAndExpenditures,int previousDayBalance);
         /// <summary>
         /// 入出金伝票を出力します
         /// </summary>
         /// <param name="receiptsAndExpenditures">伝票出力する出納データ</param>
         /// <param name="loginRep">ログインしている担当者</param>
         /// <param name="isPayment">伝票の種類。入金チェック</param>
-        void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,Rep loginRep,bool isPayment,bool isPreviousDay);
+        void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure>
+            receiptsAndExpenditures,Rep loginRep,bool isPayment,bool isPreviousDay);
+        /// <summary>
+        /// 受納証を出力します
+        /// </summary>
+        /// <param name="voucher">出力する受納証</param>
+        void VoucherData(Voucher voucher);
     }
 }

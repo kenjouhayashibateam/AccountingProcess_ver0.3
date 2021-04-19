@@ -15,7 +15,8 @@ namespace WPF.ViewModels.Commands
         /// <returns>金庫金額計算ウィンドウインスタンス</returns>
         public static Window RemainingMoneyCalculation()
         {
-            if (AccountingProcessLocation.Location == "管理事務所") return new RemainingMoneyCalculationView();
+            if (AccountingProcessLocation.Location == "管理事務所")
+                return new RemainingMoneyCalculationView();
             else return new ShorendoCashBoxCalculationView();
         }
         /// <summary>
@@ -32,11 +33,18 @@ namespace WPF.ViewModels.Commands
         /// 出納管理画面を呼び出します
         /// </summary>
         /// <returns>出納管理ウィンドウインスタンス</returns>
-        public static Window ReceiptsAndExpenditureMangement() => new ReceiptsAndExpenditureMangementView();
+        public static Window ReceiptsAndExpenditureMangement() =>
+            new ReceiptsAndExpenditureMangementView();
         /// <summary>
         /// 受納証発行画面を呼び出します
         /// </summary>
         /// <returns>受納証発行ウィンドウインスタンス</returns>
         public static Window CreateVoucher() => new CreateVoucherView();
+        /// <summary>
+        /// 出納データ操作画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window ReceiptsAndExpenditureOperation() =>
+            new ReceiptsAndExpenditureOperationView();
     }
 }

@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -237,7 +236,7 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(StartRowPosition + 9, 16, StartRowPosition + 9, 19).Merge();
         }
 
-        protected override void SetSheetFontStyle() => myWorksheet.Style.Font.FontSize = 11;
+        protected override void SetSheetStyle() => myWorksheet.Style.Font.FontSize = 11;
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
 

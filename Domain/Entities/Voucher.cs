@@ -7,6 +7,16 @@ namespace Domain.Entities
     /// </summary>
     public class Voucher
     {
+        /// <param name="addressee">宛名</param>
+        /// <param name="receiptsAndExpenditures">出納データリスト</param>
+        /// <param name="totalAmount">総額</param>
+        public Voucher(string addressee, ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, int totalAmount)
+        {
+            ReceiptsAndExpenditures = receiptsAndExpenditures;
+            TotalAmount = totalAmount;
+            Addressee = addressee;
+        }
+
         /// <summary>
         /// 受納証に記載する出納データリスト
         /// </summary>

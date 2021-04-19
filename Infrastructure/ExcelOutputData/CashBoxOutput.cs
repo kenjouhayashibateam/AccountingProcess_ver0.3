@@ -208,7 +208,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;        
 
-        protected override void SetSheetFontStyle()
+        protected override void SetSheetStyle()
         {
             MySheetCellRange(1, 1, 20, 7).Style.NumberFormat.Format = "@";
             myWorksheet.Cell(21, 1).Style.Font.Bold = true;

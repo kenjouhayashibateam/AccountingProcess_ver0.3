@@ -74,7 +74,7 @@ namespace Infrastructure
 
             ObservableCollection<Content> list = new ObservableCollection<Content>
             {
-                new Content("content3",OtherMiscellaneousIncome,-1,"銘板彫刻",true),
+                new Content("content3",OtherMiscellaneousIncome,-1,"お布施",true),
                 new Content("content4",OtherContribution,-1,"骨壺",true),
                 new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),
                 new Content("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),
@@ -104,7 +104,8 @@ namespace Infrastructure
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
             CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true,true);
-
+            CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
+            AccountingSubject Ofuse = new AccountingSubject("id11", "815", "冥加読経料", true);
             AccountingSubject OtherMiscellaneousIncome = new AccountingSubject("id0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution = new AccountingSubject("id2", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome = new AccountingSubject("id3", "874", "その他茶所収入", true);
@@ -118,8 +119,8 @@ namespace Infrastructure
 
             ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>
             {
-                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
-                    new Content("content3",OtherMiscellaneousIncome,-1,"銘板彫刻",true),"山口家",5400,true,true,DateTime.Today,DefaultDate,false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content("content3",Ofuse,-1,"お布施",true),"山口家",30000,true,true,DateTime.Today,DefaultDate,false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,DefaultDate,false),
                 new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,

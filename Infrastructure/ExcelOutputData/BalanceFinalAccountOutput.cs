@@ -155,7 +155,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override string SetSheetFontName() => "ＭＳ ゴシック";
 
-        protected override void SetSheetFontStyle()
+        protected override void SetSheetStyle()
         {
             myWorksheet.Style.Font.FontSize = 11;
             myWorksheet.Style.Font.FontName = "ＭＳ Ｐゴシック";

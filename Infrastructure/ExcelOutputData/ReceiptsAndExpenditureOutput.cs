@@ -151,7 +151,7 @@ namespace Infrastructure.ExcelOutputData
             return d;
         }
 
-        protected override void SetSheetFontStyle() => myWorksheet.Style.Font.FontSize = 11;
+        protected override void SetSheetStyle() => myWorksheet.Style.Font.FontSize = 11;
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
 
