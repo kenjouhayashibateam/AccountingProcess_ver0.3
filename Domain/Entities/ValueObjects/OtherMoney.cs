@@ -15,16 +15,5 @@ namespace Domain.Entities.ValueObjects
         /// 金額
         /// </summary>
         public int Amount;
-        /// <summary>
-        /// 金額をカンマ区切り、単位をつけて返します
-        /// </summary>
-        /// <returns>00,000,000 円</returns>
-        public string AmountWithUnit()
-        {
-            string s = TextHelper.AmountWithUnit(Amount);
-            if (Amount < 1) return string.Empty;
-            else return s;
-                
-        }
     }
 }

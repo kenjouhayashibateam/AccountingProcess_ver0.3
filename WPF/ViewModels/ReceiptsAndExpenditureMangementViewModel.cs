@@ -90,20 +90,23 @@ namespace WPF.ViewModels
         /// <summary>
         /// 本日付で出力済みの伝票データのリスト
         /// </summary>
-        private ObservableCollection<ReceiptsAndExpenditure> TodayWroteList = new ObservableCollection<ReceiptsAndExpenditure>();
+        private ObservableCollection<ReceiptsAndExpenditure> TodayWroteList =
+            new ObservableCollection<ReceiptsAndExpenditure>();
         private SolidColorBrush detailBackGroundColor;
         private Cashbox Cashbox = Cashbox.GetInstance();
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         private readonly IDataOutput DataOutput;
-        private readonly ReceiptsAndExpenditureOperation ReceiptsAndExpenditureOperation;
+        private readonly ReceiptsAndExpenditureOperation ReceiptsAndExpenditureOperation =
+            ReceiptsAndExpenditureOperation.GetInstance();
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         #endregion
 
         public ReceiptsAndExpenditureMangementViewModel
             (IDataOutput dataOutput, IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            ReceiptsAndExpenditureOperation = ReceiptsAndExpenditureOperation.GetInstance();
             ReceiptsAndExpenditureOperation.Add(this);
+            ReceiptsAndExpenditureOperation.SetOperationType
+                (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             IsContainOutputted = false;
             SearchStartDate = DateTime.Today.AddDays(-1);
             SearchEndDate = DateTime.Today;
@@ -131,8 +134,8 @@ namespace WPF.ViewModels
         /// データ登録を行う画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowRegistrationCommand { get; set; }
-        private void ShowRegistration()
-            => CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());
+        private void ShowRegistration() => 
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());        
 
         /// <summary>
         /// 出納データリストを再検索するコマンド
@@ -198,7 +201,7 @@ namespace WPF.ViewModels
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
                 if (rae.IsPayment != isPayment) continue;
-                rae.IsOutput = true;
+                rae.IsUnprinted = true;
                 DataBaseConnect.Update(rae);
                 if (IsPreviousDayOutput)
                     DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);

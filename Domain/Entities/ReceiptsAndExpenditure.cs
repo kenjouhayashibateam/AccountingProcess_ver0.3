@@ -62,9 +62,9 @@ namespace Domain.Entities
         /// </summary>
         public DateTime OutputDate { get; set; }
         /// <summary>
-        /// 出力したかのチェック
+        /// 未出力かのチェック
         /// </summary>
-        public bool IsOutput { get; set; }
+        public bool IsUnprinted { get; set; }
         /// <summary>
         /// 軽減税率かのチェック
         /// </summary>
@@ -86,8 +86,9 @@ namespace Domain.Entities
         /// <param name="outputDate">出力日</param>
         /// <param name="isRedicedTaxRate">軽減税率チェック</param>
         public ReceiptsAndExpenditure
-            (int id, DateTime registrationDate, Rep registrationRep,string location, CreditDept creditDept, Content content, string detail, int price, bool isPayment, bool isValidity, 
-            DateTime accountActivityDate,DateTime outputDate,bool isRedicedTaxRate)
+            (int id, DateTime registrationDate, Rep registrationRep,string location, CreditDept creditDept, 
+                Content content, string detail, int price, bool isPayment, bool isValidity, 
+                DateTime accountActivityDate,DateTime outputDate,bool isRedicedTaxRate)
         {
             ID =id;
             RegistrationDate = registrationDate;
@@ -101,7 +102,7 @@ namespace Domain.Entities
             IsValidity = isValidity;
             AccountActivityDate = accountActivityDate;
             OutputDate = outputDate;
-            IsOutput = OutputDate != TextHelper.DefaultDate;
+            IsUnprinted = OutputDate == TextHelper.DefaultDate;
             IsReducedTaxRate = isRedicedTaxRate;
         }
     }

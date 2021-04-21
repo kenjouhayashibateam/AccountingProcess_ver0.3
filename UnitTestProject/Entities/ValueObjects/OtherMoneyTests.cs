@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities.Helpers;
 
 namespace Domain.Entities.ValueObjects.Tests
 {
@@ -15,7 +16,7 @@ namespace Domain.Entities.ValueObjects.Tests
         public void シナリオ()
         {
             OtherMoney otherMoney = new OtherMoney() { Amount = 1000 };
-            Assert.AreEqual(otherMoney.AmountWithUnit(), "1,000 円");
+            Assert.AreEqual(TextHelper.AmountWithUnit(otherMoney.Amount), "1,000 円");
         }
     }
 }

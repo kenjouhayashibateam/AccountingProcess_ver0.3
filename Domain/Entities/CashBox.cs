@@ -44,8 +44,10 @@ namespace Domain.Entities
             MoneyCategorys.Add(FiveYenBundle, new MoneyCategory(5 * BundleCount));
             MoneyCategorys.Add(TenYenBundle, new MoneyCategory(10 * BundleCount));
             MoneyCategorys.Add(FiftyYenBundle, new MoneyCategory(50 * BundleCount));
-            MoneyCategorys.Add(OneHundredYenBundle, new MoneyCategory(100 * BundleCount));
-            MoneyCategorys.Add(FiveHundredYenBundle, new MoneyCategory(500 * BundleCount));
+            MoneyCategorys.Add
+                (OneHundredYenBundle, new MoneyCategory(100 * BundleCount));
+            MoneyCategorys.Add
+                (FiveHundredYenBundle, new MoneyCategory(500 * BundleCount));
 
             OtherMoneys[0] = new OtherMoney();
             OtherMoneys[1] = new OtherMoney();
@@ -60,10 +62,7 @@ namespace Domain.Entities
         /// 金庫クラスのインスタンスを取得します
         /// </summary>
         /// <returns>シングルトンの金庫</returns>
-        public static Cashbox GetInstance()
-        {
-            return cashbox;
-        }
+        public static Cashbox GetInstance() => cashbox;
         /// <summary>
         /// 総金額を取得します
         /// </summary>
@@ -73,7 +72,8 @@ namespace Domain.Entities
             int I = 0;
 
             foreach (OtherMoney om in OtherMoneys) I += om.Amount;
-            foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys) I += mc.Value.Amount;            
+            foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys) 
+                I += mc.Value.Amount;            
             
             return I;
         }

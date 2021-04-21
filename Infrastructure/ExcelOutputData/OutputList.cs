@@ -50,8 +50,10 @@ namespace Infrastructure.ExcelOutputData
         {
             PageCount++;
             StartRowPosition = SetRowSizes().Length * (PageCount - 1) + 1;
-            for (int i = 0; i < SetRowSizes().Length; i++) myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
-            for (int i = 0; i < SetColumnSizes().Length; i++) myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];
+            for (int i = 0; i < SetRowSizes().Length; i++) 
+                myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
+            for (int i = 0; i < SetColumnSizes().Length; i++) 
+                myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];
             PageStyle();
         }
     }

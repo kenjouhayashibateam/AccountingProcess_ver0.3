@@ -58,5 +58,13 @@ namespace Domain.Entities.Helpers
 
             return nameArray[0];
         }
+        /// <summary>
+        /// 半角スペース
+        /// </summary>
+        public const string Space = " ";
+        /// <summary>
+        /// 全角スペース
+        /// </summary>
+        public const string SpaceF = "　";
     }
 }

@@ -31,7 +31,9 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         private int PreviousDayBalance;
 
-        public ReceiptsAndExpenditureOutput(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance ) : base(receiptsAndExpenditures)
+        public ReceiptsAndExpenditureOutput
+            (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,int previousDayBalance ) : 
+                base(receiptsAndExpenditures)
         {
             PreviousDayBalance = previousDayBalance;
         }
@@ -132,7 +134,8 @@ namespace Infrastructure.ExcelOutputData
                 .NumberFormat.SetFormat("#,##0");
         }
 
-        protected override double[] SetColumnSizes() => new double[] { 10.86, 4.71, 16.43, 16.43, 16.43, 9.14, 9.14, 9.14 };
+        protected override double[] SetColumnSizes() => new double[] 
+            { 10.86, 4.71, 16.43, 16.43, 16.43, 9.14, 9.14, 9.14 };
 
         protected override double SetMaeginsBottom() => ToInch(1);
 
@@ -168,10 +171,9 @@ namespace Infrastructure.ExcelOutputData
             SetStyleAndNextIndex();
         }
 
-        protected override void SetList(IEnumerable outputList)
-        {
-            ReceiptsAndExpenditures =(ObservableCollection<ReceiptsAndExpenditure>) outputList;
-        }
+        protected override void SetList(IEnumerable outputList) =>
+            ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
+        
 
         protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
     }

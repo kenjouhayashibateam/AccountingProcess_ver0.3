@@ -32,13 +32,18 @@ namespace WPF.ViewModels
         private string price;
         private string slipOutputDateTitle;
         private string dataOperationButtonContent;
+        private string supplement;
         #endregion
         #region Bools
         private bool isValidity;
+        private bool isValidityEnabled;
         private bool isReducedTaxRate;
         private bool isOutput;
         private bool isDataOperationButtonEnabled;
         private bool isPaymentCheck;
+        private bool isSupplementVisiblity;
+        private bool isReducedTaxRateVisiblity;
+        private bool isPaymentCheckEnabled;
         #endregion
         #region ObservableCollections
         private ObservableCollection<CreditDept> comboCreditDepts;
@@ -67,7 +72,7 @@ namespace WPF.ViewModels
             (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
-            SetDetailText();
+            SetDetailFieldProperty();
             OperationData.Add(this);
             if (OperationData.Data != null)
             {
@@ -83,9 +88,9 @@ namespace WPF.ViewModels
         public ReceiptsAndExpenditureOperationViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
-        /// 詳細テキストブロックのタイトルを設定します
+        /// 詳細メニューのプロパティをセットします
         /// </summary>
-        private void SetDetailText()
+        private void SetDetailFieldProperty()
         {
             switch(OperationData.GetOperationType())
             {
@@ -93,9 +98,13 @@ namespace WPF.ViewModels
                     OtherDescription = "その他詳細";
                     break;
                 case ReceiptsAndExpenditureOperation.OperationType.Voucher:
+                    IsPaymentCheck = true;
                     OtherDescription = "宛名";
                     break;
             }
+            IsPaymentCheckEnabled =
+                OperationData.GetOperationType() == 
+                ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure;
         }
         /// <summary>
         /// データ操作コマンド
@@ -152,7 +161,7 @@ namespace WPF.ViewModels
             if (OperationData.Data.Content.Text != ComboContentText)
                 UpdateCotent += $"内容 : {OperationData.Data.Content.Text} → {ComboContentText}\r\n";
 
-            if (OperationData.Data.Detail != DetailText)
+            if (OperationData.Data.Detail !=JoinDetail())
                 UpdateCotent += $"詳細 : {OperationData.Data.Detail} → {DetailText}\r\n";
 
             if (OperationData.Data.Price != IntAmount(price))
@@ -186,9 +195,9 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditure updateData =
                 new ReceiptsAndExpenditure
                 (ReceiptsAndExpenditureIDField, RegistrationDate, OperationRep,
-                OperationData.Data.Location, SelectedCreditDept, SelectedContent, DetailText,
-                IntAmount(price), IsPaymentCheck, IsValidity, AccountActivityDate, SlipOutputDate, 
-                IsReducedTaxRate);
+                OperationData.Data.Location, SelectedCreditDept, SelectedContent,
+                JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity, 
+                AccountActivityDate, SlipOutputDate, IsReducedTaxRate);
 
             DataBaseConnect.Update(updateData);
             OperationData.SetData(updateData);
@@ -204,6 +213,11 @@ namespace WPF.ViewModels
             CallShowMessageBox = true;
         }
         /// <summary>
+        /// DetailとSupplementを結合して返します
+        /// </summary>
+        /// <returns></returns>
+        private string JoinDetail() => $"{DetailText}{Space}{Supplement}".Trim();
+        /// <summary>
         /// 出納データを登録します
         /// </summary>
         private void DataRegistration()
@@ -211,8 +225,8 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditure rae =
                 new ReceiptsAndExpenditure
                 (0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location,
-                SelectedCreditDept, SelectedContent, DetailText, IntAmount(price), IsPaymentCheck,
-                IsValidity, AccountActivityDate, DefaultDate, IsReducedTaxRate);
+                SelectedCreditDept, SelectedContent,JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity,
+                AccountActivityDate, DefaultDate, IsReducedTaxRate);
 
             string depositAndWithdrawalText = IsPaymentCheck ? "入金" : "出金";
             if (CallConfirmationDataOperation
@@ -260,6 +274,7 @@ namespace WPF.ViewModels
             LoginRep loginRep = LoginRep.GetInstance();
             OperationRep = loginRep.Rep;
             SelectedCreditDept = ComboCreditDepts[0];
+            SlipOutputDate = DefaultDate;
             ComboCreditDeptText = SelectedCreditDept.Dept;
         }
         /// <summary>
@@ -279,11 +294,33 @@ namespace WPF.ViewModels
             ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
             ComboContentText = OperationData.Data.Content.Text;
             DetailText = OperationData.Data.Detail;
+            //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
+            //現状管理料のみだが、他に出てきた時にはelseif句で対応する
+            if (OperationData.Data.Content.Text.Contains("管理料")) ManagementFeeTextAllocation();
+            else
+            {
+                DetailText = OperationData.Data.Detail;
+                Supplement = string.Empty;
+            }
             Price = OperationData.Data.Price.ToString();
             AccountActivityDate = OperationData.Data.AccountActivityDate;
             RegistrationDate = OperationData.Data.RegistrationDate;
             IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
             OperationRep = OperationData.Data.RegistrationRep;
+        }
+        /// <summary>
+        /// 管理料のDetailを分割して、年度分の文字列をSupplementに配分します
+        /// </summary>
+        private void ManagementFeeTextAllocation()
+        {
+            string[] detailArray = OperationData.Data.Detail.Split(' ');
+            DetailText = string.Empty;
+
+            foreach (string s in detailArray)
+            {
+                if (s.Contains("年度分")) Supplement = s;
+                else DetailText += s;
+            }
         }
         /// <summary>
         /// 出納IDフィールド
@@ -569,6 +606,11 @@ namespace WPF.ViewModels
             {
                 selectedContent = value;
                 if (value != null) SetContentProperty();
+                else
+                {
+                    IsSupplementVisiblity = false;
+                    IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
+                }
                 CallPropertyChanged();
             }
         }
@@ -577,11 +619,20 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetContentProperty()
         {
-            if (selectedContent != null && selectedContent.FlatRate > 0)
+            IsSupplementVisiblity = ComboContentText.Contains("管理料");
+            IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
+
+            if(IsReducedTaxRateVisiblity)
+            {
+                IsReducedTaxRate = SelectedContent.Text == "供物";
+                return;
+            }
+
+            if ( selectedContent.FlatRate > 0)
                 Price = selectedContent.FlatRate.ToString();
             else Price = string.Empty;
 
-            IsReducedTaxRate = SelectedContent.Text == "供物";
+            Supplement = $"{DateTime.Now.Year},{DateTime.Now.Year + 1}年度分";
         }
         /// <summary>
         /// 詳細テキストブロックに表示するタイトル
@@ -678,12 +729,12 @@ namespace WPF.ViewModels
             set
             {
                 slipOutputDate = value;
-                if (slipOutputDate == DefaultDate) SlipOutputDateTitle = "伝票出力日（見出力）";
+                if (slipOutputDate == DefaultDate) SlipOutputDateTitle = "伝票出力日（未出力）";
                 else SlipOutputDateTitle = "伝票出力日";
                 CallPropertyChanged();
             }
         }
-        /// <summary>
+        /// <summary> 
         /// データ操作担当者
         /// </summary>
         public Rep OperationRep
@@ -756,6 +807,67 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 補足説明のVisiblity
+        /// </summary>
+        public bool IsSupplementVisiblity
+        {
+            get => isSupplementVisiblity;
+            set
+            {
+                isSupplementVisiblity = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 軽減税率チェックのVisiblity
+        /// </summary>
+        public bool IsReducedTaxRateVisiblity
+        {
+            get => isReducedTaxRateVisiblity;
+            set
+            {
+                isReducedTaxRateVisiblity = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 補足
+        /// </summary>
+        public string Supplement
+        {
+            get => supplement;
+            set
+            {
+                supplement = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 有効性チェックのEnabled
+        /// </summary>
+        public bool IsValidityEnabled
+        {
+            get => isValidityEnabled;
+            set
+            {
+                isValidityEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 入出金トグルボタンのEnabled
+        /// </summary>
+        public bool IsPaymentCheckEnabled
+        {
+            get => isPaymentCheckEnabled;
+            set
+            {
+                isPaymentCheckEnabled = value;
+                CallPropertyChanged();               
+            }
+        }
+
+        /// <summary>
         /// データ操作ボタンのEnabledを設定します
         /// </summary>
         public void SetDataOperationButtonEnabled() => IsDataOperationButtonEnabled = CanOperation();
@@ -769,10 +881,7 @@ namespace WPF.ViewModels
             !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
             !string.IsNullOrEmpty(Price) && 0 < IntAmount(price) & !IsOutput;
 
-        public void Notify()
-        {
-            SetReceiptsAndExpenditureProperty();
-        }
+        public void Notify() => SetReceiptsAndExpenditureProperty();        
 
         public override void SetRep(Rep rep)
         {
@@ -818,10 +927,11 @@ namespace WPF.ViewModels
 
         protected override void SetDetailLocked()
         {
-            if (CurrentOperation == DataOperation.更新)
+            IsValidityEnabled = CurrentOperation == DataOperation.更新;
+            
+            if (IsValidityEnabled)
                 ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
-            else
-            ComboCreditDeptText = ComboCreditDepts[0].Dept;
+            else ComboCreditDeptText = ComboCreditDepts[0].Dept;
         }
 
         protected override void SetDataOperationButtonContent(DataOperation operation) =>

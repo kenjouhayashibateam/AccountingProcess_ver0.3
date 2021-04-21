@@ -223,9 +223,12 @@ namespace Infrastructure.ExcelOutputData
                     i--;
                 }         
             }
+
             string ProvisoString(ReceiptsAndExpenditure rae)
                 => VoucherData.ReceiptsAndExpenditures.Count == 1 ?
-                rae.Content.Text : $"{rae.Content.Text} : {rae.PriceWithUnit}";
+                $"{rae.Content.Text}{AppendSupplement(rae)}" : 
+                $"{rae.Content.Text}{AppendSupplement(rae)}{TextHelper.Space}:{TextHelper.Space}" +
+                $"{rae.PriceWithUnit}";
             
             void MultipleLineOutput()
             {
@@ -238,6 +241,19 @@ namespace Infrastructure.ExcelOutputData
                     j--;
                     i--;
                 }
+            }
+
+            string AppendSupplement(ReceiptsAndExpenditure rae)
+            {
+                if (rae.Content.Text.Contains("管理料"))
+                {
+                    string[] array = rae.Detail.Split(' ');
+                    string s = default;
+                    foreach (string t in array)
+                        if (t.Contains("年度分")) s = $"{TextHelper.Space}{t}";
+                    return s;
+                }
+                else return string.Empty;
             }
         } 
   

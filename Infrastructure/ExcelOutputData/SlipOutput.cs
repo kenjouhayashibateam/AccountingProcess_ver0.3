@@ -17,7 +17,7 @@ namespace Infrastructure.ExcelOutputData
         protected ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
         protected Rep OutputRep;
         private readonly SlipType mySlipType;
-        private readonly bool IsPayment;//振替伝票出力機能を作成する際に使用する。現状は入出金の確認だけの機能
+        private readonly bool IsPayment;
         private readonly bool IsPreviousDay;
 
         public enum SlipType
@@ -27,7 +27,9 @@ namespace Infrastructure.ExcelOutputData
             Transter
         }
 
-        internal SlipOutput(ObservableCollection<ReceiptsAndExpenditure> outputDatas, Rep outputRep,SlipType slipType,bool isPreviousDay) : base(outputDatas)
+        internal SlipOutput
+            (ObservableCollection<ReceiptsAndExpenditure> outputDatas, Rep outputRep,
+                SlipType slipType, bool isPreviousDay) : base(outputDatas)
         {
             OutputRep = outputRep;
             mySlipType = slipType;
@@ -50,18 +52,20 @@ namespace Infrastructure.ExcelOutputData
             int TotalPrice = 0;
             DateTime currentDate = TextHelper.DefaultDate;
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
-            //foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.AccountActivityDate)
-            //    .ThenBy(r => r.IsPayment)
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending(r => r.IsPayment)
+            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending
+                (r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r=>r.Content.AccountingSubject.Subject)
                 .ThenBy(r=>r.Location)
                 .ThenBy(r=>r.CreditDept.Dept))
             {
                 if (rae.IsPayment!=IsPayment) continue;
-                if (string.IsNullOrEmpty(code)) code = rae.Content.AccountingSubject.SubjectCode;//codeの初期値を設定する
-                if (string.IsNullOrEmpty(subject)) subject = rae.Content.AccountingSubject.Subject;//subjectの初期値を設定する
-                if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;//currentDateの初期値を設定する
+                //codeの初期値を設定する
+                if (string.IsNullOrEmpty(code)) code = rae.Content.AccountingSubject.SubjectCode;
+                //subjectの初期値を設定する
+                if (string.IsNullOrEmpty(subject)) subject = rae.Content.AccountingSubject.Subject;
+                //currentDateの初期値を設定する
+                if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;
                 if (string.IsNullOrEmpty(content)) content = rae.Content.Text;//contentの初期値を設定する
                 if (string.IsNullOrEmpty(location)) location = rae.Location;
                 if (string.IsNullOrEmpty(creditDept)) creditDept = rae.CreditDept.Dept;
@@ -75,8 +79,9 @@ namespace Infrastructure.ExcelOutputData
                     isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
                     if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入出金日比較
                     if (!isGoNext) isGoNext = creditDept != rae.CreditDept.Dept;
-                    if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault(s => s == rae.Content.AccountingSubject.SubjectCode) != null) isGoNext = content != rae.Content.Text;
-                    //if (!isGoNext) isGoNext = IsStringEqualsReverse(content, rae.Content.Text); //伝票内容比較
+                    if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault
+                        (s => s == rae.Content.AccountingSubject.SubjectCode) != null) 
+                            isGoNext = content != rae.Content.Text;
                 }
                 else isGoNext = true;
 
@@ -95,7 +100,8 @@ namespace Infrastructure.ExcelOutputData
                     NextPage();//次のページへ
                 }
                 else TotalPrice += rae.Price;//ページ移動がなければ、総額に現在のデータのPriceを加算
-                //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、セルの場所を設定する
+                //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、
+                //セルの場所を設定する
                 if (contentCount <= 5)
                 {
                     inputRow = StartRowPosition  + contentCount;
@@ -107,23 +113,30 @@ namespace Infrastructure.ExcelOutputData
                     inputContentColumn = 11;
                 }
                 //伝票の詳細を設定したセルに出力する
-                myWorksheet.Cell(inputRow, inputContentColumn).Value = $"{rae.Content.Text} {rae.Detail} \\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
-                myWorksheet.Cell(StartRowPosition + 1, 16).Value = $"{rae.AccountActivityDate:M/d}";//{rae.Content.Text}伝票の一番上の右の欄に入金日を出力                
+                myWorksheet.Cell(inputRow, inputContentColumn).Value =
+                    $"{rae.Content.Text} {rae.Detail} \\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
+                //{rae.Content.Text}伝票の一番上の右の欄に入金日を出力                
+                myWorksheet.Cell(StartRowPosition + 1, 16).Value =
+                    $"{rae.AccountActivityDate:M/d}";
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
                 myWorksheet.Cell(StartRowPosition + 2, 16).Value = rae.Location; 
                 string s;
                 if (rae.IsReducedTaxRate) s = "※軽減税率";
                 else s = string.Empty;
                 myWorksheet.Cell(StartRowPosition + 3, 16).Value = s;
-                for (int i = 0; i < TotalPrice.ToString().Length; i++) myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
+                for (int i = 0; i < TotalPrice.ToString().Length; i++)
+                    myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
-                myWorksheet.Cell(StartRowPosition + 6, 20).Value = TextHelper.GetFirstName(OutputRep.Name);
+                myWorksheet.Cell(StartRowPosition + 6, 20).Value =
+                    TextHelper.GetFirstName(OutputRep.Name);
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = OutputDate.Day;
                 
-                string ass = $"{rae.Content.AccountingSubject.Subject} : {rae.Content.AccountingSubject.SubjectCode}";
+                string ass =
+                    $"{rae.Content.AccountingSubject.Subject} : " +
+                    $"{rae.Content.AccountingSubject.SubjectCode}";
                 switch(mySlipType)
                 {
                     case SlipType.Payment:
@@ -177,10 +190,14 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetCellsStyle()
         {
-            MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 5, 20).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
-            myWorksheet.Cell(StartRowPosition + 1, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-            myWorksheet.Cell(StartRowPosition + 1, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            myWorksheet.Cell(StartRowPosition + 2, 16).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 5, 20).Style
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+            myWorksheet.Cell(StartRowPosition + 1, 1).Style.
+                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+            myWorksheet.Cell(StartRowPosition + 1, 16).Style.
+                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            myWorksheet.Cell(StartRowPosition + 2, 16).Style.
+                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             for (int i = StartRowPosition + 1; i < StartRowPosition + 7; i++)
             {
                 myWorksheet.Cell(i, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
@@ -198,15 +215,21 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom)
                 .Alignment.SetShrinkToFit(true);
-            MySheetCellRange(StartRowPosition + 10, 1, StartRowPosition + 10, 13).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-            myWorksheet.Cell(StartRowPosition + 10, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-            MySheetCellRange(StartRowPosition + 10, 2, StartRowPosition + 10, 3).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            MySheetCellRange(StartRowPosition + 10, 4, StartRowPosition + 10, 13).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+            MySheetCellRange(StartRowPosition + 10, 1, StartRowPosition + 10, 13).Style
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+            myWorksheet.Cell(StartRowPosition + 10, 1).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+            MySheetCellRange(StartRowPosition + 10, 2, StartRowPosition + 10, 3).Style.
+                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            MySheetCellRange(StartRowPosition + 10, 4, StartRowPosition + 10, 13).Style.
+                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
         protected override double[] SetColumnSizes() => new double[] 
-        //{ 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
-        { 5, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29, 10.43, 5.29, 0.75, 5.43, 0.83, 4.57 };
+        //{ 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29,
+        //10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
+        { 5, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29,
+            10.43, 5.29, 0.75, 5.43, 0.83, 4.57 };
 
         protected override double[] SetRowSizes() => new double[]
         //{ 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
@@ -228,7 +251,8 @@ namespace Infrastructure.ExcelOutputData
                 MySheetCellRange(StartRowPosition + i, 1, StartRowPosition + i, 9).Merge();
                 MySheetCellRange(StartRowPosition + i, 11, StartRowPosition + i, 15).Merge();
             }
-            for (int i = 1; i < 5; i++) { MySheetCellRange(StartRowPosition + i, 16, StartRowPosition + i, 20).Merge(); }
+            for (int i = 1; i < 5; i++)
+            { MySheetCellRange(StartRowPosition + i, 16, StartRowPosition + i, 20).Merge(); }
             MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 7, 18).Merge();
             MySheetCellRange(StartRowPosition + 6, 20, StartRowPosition + 7, 20).Merge();
             MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 13).Merge();
@@ -240,7 +264,8 @@ namespace Infrastructure.ExcelOutputData
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
 
-        protected override void SetList(IEnumerable outputList) => ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
+        protected override void SetList(IEnumerable outputList) =>
+            ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
 
         protected override string SetSheetFontName() => "ＭＳ 明朝";
     }

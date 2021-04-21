@@ -27,8 +27,10 @@ namespace WPF.ViewModels
         {
             SetDataList();
             SetDelegateCommand();
-            SetDataRegistrationCommand = new DelegateCommand(() => SetDataOperation(DataOperation.登録), () => true);
-            SetDataUpdateCommand = new DelegateCommand(() => SetDataOperation(DataOperation.更新), () => true);
+            SetDataRegistrationCommand = new DelegateCommand(() => 
+                SetDataOperation(DataOperation.登録), () => true);
+            SetDataUpdateCommand = new DelegateCommand(() => 
+                SetDataOperation(DataOperation.更新), () => true);
         } 
         /// <summary>
         /// データ操作を「登録」にするコマンド
@@ -44,7 +46,8 @@ namespace WPF.ViewModels
         /// <param name="confirmationMessage">確認内容（プロパティ等）</param>
         /// <param name="titleOperationCategory">タイトルに表示するクラス名</param>
         /// <returns>OK、Cancelを返します</returns>
-        protected MessageBoxResult CallConfirmationDataOperation(string confirmationMessage, string titleOperationCategory)
+        protected MessageBoxResult CallConfirmationDataOperation
+            (string confirmationMessage, string titleOperationCategory)
         {
             MessageBox = new MessageBoxInfo()
             {
@@ -93,7 +96,8 @@ namespace WPF.ViewModels
         /// </summary>
         protected abstract void SetDataList();
         /// <summary>
-        /// データ操作のジャンルを切り替え、操作ボタンの表示文字列を入力し、コントロールの値をクリアして、Enableを設定します
+        /// データ操作のジャンルを切り替え、操作ボタンの表示文字列を入力し、
+        /// コントロールの値をクリアして、Enableを設定します
         /// </summary>
         /// <param name="Operation"></param>
         protected void SetDataOperation(DataOperation Operation)

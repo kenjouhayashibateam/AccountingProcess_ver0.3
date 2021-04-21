@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
+using Domain.Entities.Helpers;
 using System;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
@@ -77,7 +78,8 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
         }
 
-        protected override double[] SetColumnSizes() => new Double[] { 12.86, 6.88, 14.38, 12.86, 6.75, 6.75, 6.75 };
+        protected override double[] SetColumnSizes() => new Double[] 
+            { 12.86, 6.88, 14.38, 12.86, 6.75, 6.75, 6.75 };
 
         protected override void SetDataStrings()
         {
@@ -124,25 +126,38 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(11, 2).Value = myCashbox.MoneyCategorys[FiveYen].Count;
             myWorksheet.Cell(12, 2).Value = myCashbox.MoneyCategorys[OneYen].Count;
 
-            myWorksheet.Cell(4, 3).Value = myCashbox.MoneyCategorys[TenThousandYen].AmountWithUnit();
-            myWorksheet.Cell(5, 3).Value = myCashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
-            myWorksheet.Cell(6, 3).Value = myCashbox.MoneyCategorys[OneThousandYen].AmountWithUnit();
-            myWorksheet.Cell(7, 3).Value = myCashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
-            myWorksheet.Cell(8, 3).Value = myCashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
-            myWorksheet.Cell(9, 3).Value = myCashbox.MoneyCategorys[FiftyYen].AmountWithUnit();
-            myWorksheet.Cell(10, 3).Value = myCashbox.MoneyCategorys[TenYen].AmountWithUnit();
-            myWorksheet.Cell(11, 3).Value = myCashbox.MoneyCategorys[FiveYen].AmountWithUnit();
-            myWorksheet.Cell(12, 3).Value = myCashbox.MoneyCategorys[OneYen].AmountWithUnit();
+            myWorksheet.Cell(4, 3).Value =
+                myCashbox.MoneyCategorys[TenThousandYen].AmountWithUnit();
+            myWorksheet.Cell(5, 3).Value = 
+                myCashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
+            myWorksheet.Cell(6, 3).Value = 
+                myCashbox.MoneyCategorys[OneThousandYen].AmountWithUnit();
+            myWorksheet.Cell(7, 3).Value = 
+                myCashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
+            myWorksheet.Cell(8, 3).Value =
+                myCashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
+            myWorksheet.Cell(9, 3).Value =
+                myCashbox.MoneyCategorys[FiftyYen].AmountWithUnit();
+            myWorksheet.Cell(10, 3).Value =
+                myCashbox.MoneyCategorys[TenYen].AmountWithUnit();
+            myWorksheet.Cell(11, 3).Value = 
+                myCashbox.MoneyCategorys[FiveYen].AmountWithUnit();
+            myWorksheet.Cell(12, 3).Value =
+                myCashbox.MoneyCategorys[OneYen].AmountWithUnit();
 
-            myWorksheet.Cell(7, 5).Value = myCashbox.MoneyCategorys[FiveHundredYenBundle].Count;
-            myWorksheet.Cell(8, 5).Value = myCashbox.MoneyCategorys[OneHundredYenBundle].Count;
+            myWorksheet.Cell(7, 5).Value =
+                myCashbox.MoneyCategorys[FiveHundredYenBundle].Count;
+            myWorksheet.Cell(8, 5).Value = 
+                myCashbox.MoneyCategorys[OneHundredYenBundle].Count;
             myWorksheet.Cell(9, 5).Value = myCashbox.MoneyCategorys[FiftyYenBundle].Count;
             myWorksheet.Cell(10, 5).Value = myCashbox.MoneyCategorys[TenYenBundle].Count;
             myWorksheet.Cell(11, 5).Value = myCashbox.MoneyCategorys[FiveYenBundle].Count;
             myWorksheet.Cell(12, 5).Value = myCashbox.MoneyCategorys[OneYenBundle].Count;
 
-            myWorksheet.Cell(7, 6).Value = myCashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
-            myWorksheet.Cell(8, 6).Value = myCashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
+            myWorksheet.Cell(7, 6).Value = 
+                myCashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
+            myWorksheet.Cell(8, 6).Value = 
+                myCashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
             myWorksheet.Cell(9, 6).Value = myCashbox.MoneyCategorys[FiftyYenBundle].AmountWithUnit();
             myWorksheet.Cell(10, 6).Value = myCashbox.MoneyCategorys[TenYenBundle].AmountWithUnit();
             myWorksheet.Cell(11, 6).Value = myCashbox.MoneyCategorys[FiveYenBundle].AmountWithUnit();
@@ -158,12 +173,14 @@ namespace Infrastructure.ExcelOutputData
             if (i < 4)
                 {
                     myWorksheet.Cell(16 + i, 1).Value = myCashbox.OtherMoneys[i].Title;
-                    myWorksheet.Cell(16 + i, 2).Value = myCashbox.OtherMoneys[i].AmountWithUnit();
+                    myWorksheet.Cell(16 + i, 2).Value =
+                        TextHelper.AmountWithUnit(myCashbox.OtherMoneys[i].Amount);
                 }
                 else
                 {
                     myWorksheet.Cell(16 + (i - 4), 4).Value = myCashbox.OtherMoneys[i].Title;
-                    myWorksheet.Cell(16 + (i - 4), 5).Value = myCashbox.OtherMoneys[i].AmountWithUnit();
+                    myWorksheet.Cell(16 + (i - 4), 5).Value =
+                        TextHelper.AmountWithUnit(myCashbox.OtherMoneys[i].Amount);
                 }
             
             myWorksheet.Cell(21, 1).Value = $"合計　{myCashbox.GetTotalAmountWithUnit()}";
@@ -203,9 +220,9 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetRowSizes() =>
-            new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 32.25 };
-
-
+            new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 
+                                    18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 32.25 };
+        
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;        
 
         protected override void SetSheetStyle()

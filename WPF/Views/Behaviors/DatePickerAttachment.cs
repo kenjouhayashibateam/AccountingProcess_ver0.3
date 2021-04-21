@@ -50,7 +50,8 @@ namespace WPF.Views.Behaviors
                 InputMethod.SetPreferredImeState(tb, InputMethodState.Off);
             }
         }
-        private static void OffMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void OffMouseLeftButtonDown
+            (object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (!(sender is DatePicker dp)) { return; }
 

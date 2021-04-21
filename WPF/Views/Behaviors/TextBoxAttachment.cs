@@ -28,7 +28,8 @@ namespace WPF.Views.Behaviors
         }
 
         public static readonly DependencyProperty IsSelectAllOnGotFocusProperty =
-            DependencyProperty.RegisterAttached("IsSelectAllOnGotFocus", typeof(bool), typeof(TextBoxAttachment), new PropertyMetadata(false, (d, e) =>
+            DependencyProperty.RegisterAttached("IsSelectAllOnGotFocus", typeof(bool), 
+                typeof(TextBoxAttachment), new PropertyMetadata(false, (d, e) =>
             {
                 if (!(d is TextBox tb)) { return; }
                 if (!(e.NewValue is bool isSelectAll)) { return; }
@@ -53,7 +54,8 @@ namespace WPF.Views.Behaviors
             }
         }
 
-        private static void OnMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void OnMouseLeftButtonDown
+            (object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (!(sender is TextBox tb)) { return; }
 

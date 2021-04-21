@@ -83,7 +83,7 @@ namespace Infrastructure
 
             ObservableCollection<Content> list = new ObservableCollection<Content>
             {
-                new Content("content3",OtherMiscellaneousIncome,-1,"お布施",true),
+                new Content("content3",OtherMiscellaneousIncome,-1,"管理料",true),
                 new Content("content4",OtherContribution,-1,"骨壺",true),
                 new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),
                 new Content("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),
@@ -140,7 +140,7 @@ namespace Infrastructure
             {
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"お布施",true),"山口家",30000,true,true,DateTime.Today,DefaultDate,false),
+                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,DateTime.Today,DefaultDate,false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,

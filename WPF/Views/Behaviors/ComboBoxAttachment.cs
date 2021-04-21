@@ -53,11 +53,13 @@ namespace WPF.Views.Behaviors
             if (isIMEModeOnGotFocus)
             {
                 InputMethod.SetPreferredImeState(tb, InputMethodState.On);
-                InputMethod.SetPreferredImeConversionMode(tb, ImeConversionModeValues.FullShape | ImeConversionModeValues.Native);
+                InputMethod.SetPreferredImeConversionMode
+                    (tb, ImeConversionModeValues.FullShape | ImeConversionModeValues.Native);
             }
             else InputMethod.SetPreferredImeState(tb, InputMethodState.Off);
         }
-        private static void OnMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void OnMouseLeftButtonDown
+            (object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (!(sender is ComboBox cb)) { return; }
 
@@ -76,7 +78,8 @@ namespace WPF.Views.Behaviors
         }
 
         public static DependencyProperty SetIsIMEModeOffProperty =
-            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), typeof(ComboBoxAttachment), new PropertyMetadata(false, (d, e) =>
+            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), 
+                typeof(ComboBoxAttachment), new PropertyMetadata(false, (d, e) =>
             {
                 if (!(d is ComboBox cb)) return;
 
@@ -108,7 +111,8 @@ namespace WPF.Views.Behaviors
                 InputMethod.SetPreferredImeState(tb, InputMethodState.Off);
             }
         }
-        private static void OffMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void OffMouseLeftButtonDown
+            (object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (!(sender is ComboBox cb)) { return; }
 
@@ -117,20 +121,26 @@ namespace WPF.Views.Behaviors
             e.Handled = false;
         }
 
-        public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.RegisterAttached("MaxLength", typeof(int), typeof(ComboBoxAttachment), new UIPropertyMetadata(1, OnMaxLengthChanged));
+        public static readonly DependencyProperty MaxLengthProperty = 
+            DependencyProperty.RegisterAttached("MaxLength", typeof(int), typeof(ComboBoxAttachment), 
+                new UIPropertyMetadata(1, OnMaxLengthChanged));
 
-        public static void OnMaxLengthChanged(DependencyObject obj,DependencyPropertyChangedEventArgs args)
+        public static void OnMaxLengthChanged
+            (DependencyObject obj,DependencyPropertyChangedEventArgs args)
         {
             if (!(obj is ComboBox comboBox)) return;
             comboBox.Loaded +=
                 (s, e) =>
                 {
-                    if (!(comboBox.Template.FindName("PART_EditableTextBox", comboBox) is TextBox textBox)) return;
+                    if (!(comboBox.Template.FindName("PART_EditableTextBox", comboBox) is TextBox textBox))
+                        return;
+
                     textBox.MaxLength = (int)args.NewValue;
                 };
         }
         public static int GetMaxLength(DependencyObject obj0) => (int)obj0.GetValue(MaxLengthProperty);
-        public static void SetMaxLength(DependencyObject obj, int value) => obj.SetValue(MaxLengthProperty, value);
+        public static void SetMaxLength(DependencyObject obj, int value) =>
+            obj.SetValue(MaxLengthProperty, value);
     }
 }
 

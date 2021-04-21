@@ -27,7 +27,7 @@ namespace WPF.ViewModels
         private bool callShowMessageBox;
         #endregion
         
-        protected IDataBaseConnect DataBaseConnect;
+        public IDataBaseConnect DataBaseConnect;
 
         /// <summary>
         /// 画面タイトル
@@ -185,7 +185,8 @@ namespace WPF.ViewModels
         /// 引数のプロパティの変更を通知します
         /// </summary>
         /// <param name="propertyName">プロパティ名</param>
-        protected void CallPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected void CallPropertyChanged(string propertyName) => 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         /// <summary>
         /// ウィンドウ表示コマンドを設定します
         /// </summary>
@@ -230,7 +231,9 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="propertyName">プロパティ名</param>
         /// <param name="value"></param>
-        protected void SetNullOrEmptyError(string propertyName, string value) => ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName, Properties.Resources.NullErrorInfo);
+        protected void SetNullOrEmptyError(string propertyName, string value) => 
+            ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName, 
+                Properties.Resources.NullErrorInfo);
         /// <summary>
         /// エラーを追加します
         /// </summary>

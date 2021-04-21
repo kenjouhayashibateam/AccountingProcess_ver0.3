@@ -252,6 +252,8 @@ namespace WPF.ViewModels
         {
             SearchDate = OperationData.Data.AccountActivityDate;
             VoucherContents.Add(OperationData.Data);
+            SetTotalAmount();
+            SetOutputEnabled();
         }
     }
 }

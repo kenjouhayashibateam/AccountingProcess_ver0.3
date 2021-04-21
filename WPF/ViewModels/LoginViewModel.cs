@@ -149,8 +149,10 @@ namespace WPF.ViewModels
             switch(propertyName)
             {
                 case nameof(Password):
-                    ErrorsListOperation(string.IsNullOrEmpty(Password), propertyName, Properties.Resources.NullErrorInfo);
-                    ErrorsListOperation(password != CurrentRep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
+                    ErrorsListOperation
+                        (string.IsNullOrEmpty(Password), propertyName, Properties.Resources.NullErrorInfo);
+                    ErrorsListOperation
+                        (password != CurrentRep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
                     break;
                 default:
                     break;

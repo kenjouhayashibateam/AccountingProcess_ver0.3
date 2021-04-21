@@ -34,7 +34,8 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// エクセルファイルを保存しているフォルダのFullPath
         /// </summary>
-        protected readonly string openPath = System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
+        protected readonly string openPath =
+            System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
         /// <summary>
         /// コンストラクタ　ログ保存のインフラストラクチャを設定します
         /// </summary>

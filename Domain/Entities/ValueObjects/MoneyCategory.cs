@@ -83,10 +83,7 @@ namespace Domain.Entities.ValueObjects
         /// 金種クラスコンストラクタ
         /// </summary>
         /// <param name="category">金種</param>
-        public MoneyCategory(int category)
-        {
-            Category = category;
-        }
+        public MoneyCategory(int category) => Category = category;        
 
         /// <summary>
         /// 金銭の枚数

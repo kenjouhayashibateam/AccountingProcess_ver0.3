@@ -86,7 +86,9 @@ namespace Infrastructure
 
                 while (DataReader.Read())
                     reps.Add
-                        (new Rep((string)DataReader["staff_id"], (string)DataReader["name"], (string)DataReader["password"], (bool)DataReader["is_validity"], (bool)DataReader["is_permission"]));
+                        (new Rep((string)DataReader["staff_id"], (string)DataReader["name"], 
+                        (string)DataReader["password"], (bool)DataReader["is_validity"], 
+                        (bool)DataReader["is_permission"]));
             }
             return reps;
         }
@@ -106,10 +108,12 @@ namespace Infrastructure
             }
         }
 
-        public ObservableCollection<AccountingSubject> ReferenceAccountingSubject(string subjectCode, string subject, bool isTrueOnly)
+        public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
+            (string subjectCode, string subject, bool isTrueOnly)
         {
             SqlDataReader DataReader;
-            ObservableCollection<AccountingSubject> accountingSubjects = new ObservableCollection<AccountingSubject>();
+            ObservableCollection<AccountingSubject> accountingSubjects = 
+                new ObservableCollection<AccountingSubject>();
             SqlCommand Cmd = new SqlCommand();
 
             using (Cn)
@@ -122,7 +126,9 @@ namespace Infrastructure
 
                 while (DataReader.Read())
                     accountingSubjects.Add
-                        (new AccountingSubject((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], (string)DataReader["subject"], (bool)DataReader["is_validity"]));
+                        (new AccountingSubject((string)DataReader["accounting_subject_id"], 
+                        (string)DataReader["subject_code"], (string)DataReader["subject"], 
+                        (bool)DataReader["is_validity"]));
 
                 return accountingSubjects;
             }
@@ -157,7 +163,8 @@ namespace Infrastructure
             }
         }
   
-        public ObservableCollection<CreditDept> ReferenceCreditDept(string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly)
+        public ObservableCollection<CreditDept> ReferenceCreditDept
+            (string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly)
         {
             SqlDataReader DataReader;
             ObservableCollection<CreditDept> creditDepts = new ObservableCollection<CreditDept>();
@@ -172,7 +179,8 @@ namespace Infrastructure
                 DataReader = Cmd.ExecuteReader();
 
                 while (DataReader.Read()) creditDepts.Add
-                        (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"], (bool)DataReader["is_validity"], isShunjuenAccountOnly));
+                        (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"], 
+                        (bool)DataReader["is_validity"], isShunjuenAccountOnly));
             }
             return creditDepts;
        }
@@ -223,7 +231,9 @@ namespace Infrastructure
             }
         }
     
-        public ObservableCollection<Content> ReferenceContent(string contentText,string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
+        public ObservableCollection<Content> ReferenceContent
+            (string contentText,string accountingSubjectCode, 
+            string accountingSubject, bool isValidityTrueOnly)
         {
             ObservableCollection<Content> contents = new ObservableCollection<Content>();
             SqlCommand Cmd = new SqlCommand();
@@ -244,7 +254,8 @@ namespace Infrastructure
                         (
                             new Content((string)dr["content_id"], 
                             new AccountingSubject((string)dr["accounting_subject_id"], 
-                            (string)dr["subject_code"], (string)dr["subject"], true), (int)dr["flat_rate"], (string)dr["content"], (bool)dr["is_validity"]));
+                            (string)dr["subject_code"], (string)dr["subject"], true), (int)dr["flat_rate"],
+                            (string)dr["content"], (bool)dr["is_validity"]));
             }
             return contents;
         }
@@ -255,10 +266,14 @@ namespace Infrastructure
 
             using (Cn)
             {
-                using SqlDataReader DataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_accounting_subject", "@accounting_subject_id", id);
+                using SqlDataReader DataReader = 
+                    ReturnReaderCommandOneParameterStoredProc
+                        (Cmd, "call_accounting_subject", "@accounting_subject_id", id);
 
                 while (DataReader.Read())
-                    return new AccountingSubject((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], (string)DataReader["subject"], (bool)DataReader["is_validity"]);
+                    return new AccountingSubject
+                        ((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], 
+                            (string)DataReader["subject"], (bool)DataReader["is_validity"]);
             }
             return null;
         }
@@ -269,23 +284,28 @@ namespace Infrastructure
         /// <param name="parameterName">パラメータ名</param>
         /// <param name="parameter">パラメータ</param>
         /// <returns>ExecuteReader</returns>
-        private SqlDataReader ReturnReaderCommandOneParameterStoredProc(SqlCommand cmd, string commandText,string parameterName,string parameter)
+        private SqlDataReader ReturnReaderCommandOneParameterStoredProc
+            (SqlCommand cmd, string commandText,string parameterName,string parameter)
         {
             ADO_NewInstance_StoredProc(cmd,commandText);
             cmd.Parameters.AddWithValue(parameterName, parameter);
             return cmd.ExecuteReader();
         }
 
-        public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject(string contentText)
+        public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject
+            (string contentText)
         {
             SqlCommand Cmd = new SqlCommand();
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>();
 
             using(Cn)
             {
-                using SqlDataReader DataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "reference_affiliation_accounting_subject", "@content", contentText);
+                using SqlDataReader DataReader =
+                    ReturnReaderCommandOneParameterStoredProc
+                        (Cmd, "reference_affiliation_accounting_subject", "@content", contentText);
 
-                while (DataReader.Read()) list.Add(CallAccountingSubject((string)DataReader["accounting_subject_id"]));
+                while (DataReader.Read()) list.Add
+                        (CallAccountingSubject((string)DataReader["accounting_subject_id"]));
             }
             return list;
         }
@@ -298,28 +318,34 @@ namespace Infrastructure
             {
                 ADO_NewInstance_StoredProc(Cmd, "registration_receipts_and_expenditure");
                 Cmd.Parameters.AddWithValue("@location", receiptsAndExpenditure.Location);
-                Cmd.Parameters.AddWithValue("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
+                Cmd.Parameters.AddWithValue
+                    ("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
                 Cmd.Parameters.AddWithValue("@registration_date", receiptsAndExpenditure.RegistrationDate);
-                Cmd.Parameters.AddWithValue("@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID);
+                Cmd.Parameters.AddWithValue
+                    ("@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID);
                 Cmd.Parameters.AddWithValue("@credit_dept_id", receiptsAndExpenditure.CreditDept.ID);
                 Cmd.Parameters.AddWithValue("@content_id", receiptsAndExpenditure.Content.ID);
                 Cmd.Parameters.AddWithValue("@detail", receiptsAndExpenditure.Detail);
                 Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
                 Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
                 Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
+                Cmd.Parameters.AddWithValue
+                    ("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
                 return Cmd.ExecuteNonQuery();
             }
         }
 
         public ObservableCollection<ReceiptsAndExpenditure>ReferenceReceiptsAndExpenditure
             (
-                DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,string content,string detail, string accountingSubject,
-                string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, bool isValidityOnly,
-                DateTime accountActivityDateStart, DateTime accountActivityDateEnd,DateTime outputDateStart,DateTime outputDateEnd
+                DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
+                string content,string detail, string accountingSubject, string accountingSubjectCode, 
+                bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, 
+                bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
+                DateTime outputDateStart, DateTime outputDateEnd
             )
         {
-            ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>();
+            ObservableCollection<ReceiptsAndExpenditure> list =
+                new ObservableCollection<ReceiptsAndExpenditure>();
             SqlCommand Cmd = new SqlCommand();
             using (Cn)
             {
@@ -346,15 +372,24 @@ namespace Infrastructure
                 while (dataReader.Read())
                 {
                     
-                    paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
-                    paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
-                    paramAccountingSubject = new AccountingSubject((string)dataReader["accounting_subject_id"], (string)dataReader["subject_code"], (string)dataReader["subject"], true);
-                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                    paramRep =
+                        new Rep((string)dataReader["staff_id"], (string)dataReader["name"], 
+                            (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+                    paramCreditDept = 
+                        new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true, 
+                        (bool)dataReader["is_shunjuen_dept"]);
+                    paramAccountingSubject = 
+                        new AccountingSubject((string)dataReader["accounting_subject_id"], 
+                        (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, 
+                        (int)dataReader["flat_rate"], (string)dataReader["content"], true);
                     list.Add(new ReceiptsAndExpenditure
                         (
-                        (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"], paramCreditDept,
-                        paramContent, (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
-                        (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
+                        (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], 
+                        paramRep, (string)dataReader["location"], paramCreditDept, paramContent, 
+                        (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], 
+                        (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"], 
+                        (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
                         );
                 }
             }
@@ -373,7 +408,10 @@ namespace Infrastructure
                 dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_staff", "@staff_id", id);
 
                 while(dataReader.Read())
-                    rep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], (string)dataReader["password"], (bool)dataReader["is_validity"], (bool)dataReader["is_permission"]);
+                    rep = 
+                        new Rep((string)dataReader["staff_id"], (string)dataReader["name"], 
+                            (string)dataReader["password"], (bool)dataReader["is_validity"], 
+                            (bool)dataReader["is_permission"]);
             }
             return rep;
         }
@@ -386,10 +424,13 @@ namespace Infrastructure
 
             using(Cn)
             {
-                dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_credit_dept", "@credit_dept_id", id);
+                dataReader = 
+                    ReturnReaderCommandOneParameterStoredProc
+                        (Cmd, "call_credit_dept", "@credit_dept_id", id);
 
                 while (dataReader.Read())
-                    creditDept = new CreditDept((string)dataReader["credit_id"], (string)dataReader["account"], (bool)dataReader["is_validity"],(bool)dataReader["is_shunjuen"]);
+                    creditDept = new CreditDept((string)dataReader["credit_id"], (string)dataReader["account"], 
+                        (bool)dataReader["is_validity"],(bool)dataReader["is_shunjuen"]);
             }
             return creditDept;
         }
@@ -402,13 +443,15 @@ namespace Infrastructure
 
             using(Cn)
             {
-                dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_content", "@content_id", id);
+                dataReader = 
+                    ReturnReaderCommandOneParameterStoredProc(Cmd, "call_content", "@content_id", id);
 
                 while (dataReader.Read())
                     content = new Content
                         (
                             (string)dataReader["content_id"],
-                            new AccountingSubject((string)dataReader["accounting_subject_id"], (string)dataReader["subject_code"], (string)dataReader["subject"], true),
+                            new AccountingSubject((string)dataReader["accounting_subject_id"], 
+                            (string)dataReader["subject_code"], (string)dataReader["subject"], true),
                             (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"]
                         );
             }
@@ -424,16 +467,18 @@ namespace Infrastructure
                 ADO_NewInstance_StoredProc(Cmd, "update_receipts_and_expenditure");
                 Cmd.Parameters.AddWithValue("@receipts_and_expenditure_id", receiptsAndExpenditure.ID);
                 Cmd.Parameters.AddWithValue("@location", receiptsAndExpenditure.Location);
-                Cmd.Parameters.AddWithValue("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
+                Cmd.Parameters.AddWithValue
+                    ("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
                 Cmd.Parameters.AddWithValue("@credit_dept_id", receiptsAndExpenditure.CreditDept.ID);
                 Cmd.Parameters.AddWithValue("@content_id", receiptsAndExpenditure.Content.ID);
                 Cmd.Parameters.AddWithValue("@detail", receiptsAndExpenditure.Detail);
                 Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
                 Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
                 Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.IsOutput);
+                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.IsUnprinted);
                 Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
-                Cmd.Parameters.AddWithValue("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
+                Cmd.Parameters.AddWithValue
+                    ("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -468,7 +513,8 @@ namespace Infrastructure
             using (Cn)
             {
                 ADO_NewInstance_StoredProc(Cmd, "call_final_account_per_month");
-                DateTime previousMonthLastDay = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
+                DateTime previousMonthLastDay =
+                    DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
                 Cmd.Parameters.AddWithValue("@date", previousMonthLastDay);
 
                 SqlDataReader sdr = Cmd.ExecuteReader();

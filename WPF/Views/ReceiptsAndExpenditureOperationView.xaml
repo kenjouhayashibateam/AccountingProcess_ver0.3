@@ -15,6 +15,9 @@
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureOperationViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <behavior:MessageBoxBehavior/>
@@ -55,8 +58,8 @@
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding ReceiptsAndExpenditureIDFieldText}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
-                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" Margin="5,3.667,5.333,2"/>
+                    <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" IsEnabled="{Binding IsValidityEnabled}" Margin="5,0"/>
+                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3.667,5.333,2"/>
                     <Grid Grid.Row="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
@@ -93,8 +96,9 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding OtherDescription}" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <TextBox x:Name="DetailTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding DetailText,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
-                        <CheckBox Content="軽減税率のデータ" Grid.Row="1" Grid.Column="1" FontSize="14" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                    </Grid>
+                        <CheckBox Content="軽減税率のデータ" Grid.Row="1" Grid.Column="1" FontSize="14" Visibility="{Binding IsReducedTaxRateVisiblity,Converter={StaticResource VisibilityConverter}}" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                        <TextBox x:Name="SupplementTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding Supplement}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Visibility="{Binding IsSupplementVisiblity,Converter={StaticResource VisibilityConverter}}" Margin="5"/>
+                    </Grid> 
                     <Grid Grid.Row="6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>

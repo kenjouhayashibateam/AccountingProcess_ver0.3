@@ -43,7 +43,7 @@
             else
             {
                 Content content = (Content)obj;
-                return this.ID == content.ID;
+                return ID == content.ID;
             }
         }
 

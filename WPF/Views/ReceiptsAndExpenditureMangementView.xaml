@@ -252,7 +252,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="印刷済" Width="3*" >
+                            <!--<DataGridTemplateColumn Header="未印刷" Width="3*" >
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -260,14 +260,14 @@
                                 </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsOutput}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding IsUnprinted}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                                </DataGridTemplateColumn.CellTemplate>-->
+                            <!--</DataGridTemplateColumn>-->
                             <DataGridTemplateColumn Header="データ操作" Width="3*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" Content="更新" FontSize="9" Margin="2">
+                                        <Button x:Name="DeleteDataButton" Content="更新" FontSize="9" Margin="2" IsEnabled="{Binding IsUnprinted}">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.ShowUpdateCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                             </Button.InputBindings>

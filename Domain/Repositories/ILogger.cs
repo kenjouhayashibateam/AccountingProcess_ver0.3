@@ -14,7 +14,6 @@ namespace Domain.Repositories
             INFOMATION,
             ERROR
         }
-
         /// <summary>
         /// ログを出力します
         /// </summary>
