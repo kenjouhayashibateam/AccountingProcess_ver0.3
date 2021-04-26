@@ -10,7 +10,7 @@
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="800" Width="800">
+        Title="{Binding WindowTitle}" Height="900" Width="700">
     <Window.DataContext>
         <vm:CreateVoucherViewModel/>
     </Window.DataContext>
@@ -34,13 +34,13 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="15*"/>
-                <RowDefinition Height="16*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="6*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="7*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Grid.Row="0" Header="検索" Margin="5">
                     <Grid>
@@ -64,7 +64,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="一覧 " VerticalAlignment="Center"/>
-                            <Button x:Name="DeleteDataButton" Grid.Column="1" Content="新規登録" FontSize="9" Margin="2">
+                            <Button x:Name="DeleteDataButton" Grid.Column="1" Content="新規登録" Margin="2">
                                 <Button.InputBindings>
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
@@ -111,7 +111,7 @@
                             <DataGridTemplateColumn Header="受納証" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="AddVoucherListButton" Content="追加" FontSize="10" Margin="5,1">
+                                        <Button x:Name="AddVoucherListButton" Content="追加" FontSize="11" Margin="5,1">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.AddVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="Row.Index" MouseAction="LeftClick"/>
                                             </Button.InputBindings>
@@ -162,7 +162,7 @@
                             <DataGridTemplateColumn Header="データ操作" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" Content="削除" FontSize="9" Margin="2">
+                                        <Button x:Name="DeleteDataButton" Content="削除" FontSize="11" Margin="2">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.DeleteVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                             </Button.InputBindings>
@@ -182,7 +182,7 @@
                         <TextBlock Grid.Column="0" Text="合計金額 : " FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="1" Text="{Binding VoucherTotalAmountDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
                         <TextBlock Grid.Column="2" Text=" 円" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                        <Button Grid.Column="3" x:Name="OutputButton" Content="出力" IsEnabled="{Binding IsOutputButtonEnabled}" Margin="5,1">
+                        <Button Grid.Column="3" x:Name="OutputButton" Content="{Binding OutputButtonContent}" IsEnabled="{Binding IsOutputButtonEnabled}" Margin="5,1">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding VoucherOutputCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding VoucherOutputCommand}" MouseAction="LeftClick"/>

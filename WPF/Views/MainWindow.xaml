@@ -111,13 +111,13 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="ShowSlipManagementButton" Content="出納管理" Grid.Row="0" IsEnabled="{Binding IsSlipManagementEnabled}" Grid.Column="1" Margin="100,10">
+                    <Button x:Name="ShowSlipManagementButton" Content="{Binding ShowSlipManagementContent}" Grid.Row="0" IsEnabled="{Binding IsSlipManagementEnabled}" Grid.Column="1" Margin="100,10">
                         <Button.InputBindings>
                             <MouseBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" MouseAction="LeftClick"/>
                             <KeyBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" Key="Space"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="ShowVoucherOutputButton" Grid.Row="1" Content="受納証発行（出納データ登録）" Margin="100,10">
+                    <Button x:Name="ShowVoucherOutputButton" Grid.Row="1" Content="受納証発行" Margin="100,10">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowCreateVoucherCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowCreateVoucherCommand}" MouseAction="LeftClick"/>

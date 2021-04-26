@@ -21,6 +21,10 @@
         /// 有効性
         /// </summary>
         public bool IsValidity { get; set; }
+        /// <summary>
+        /// IDの数字
+        /// </summary>
+        public int Number { get => int.Parse(ID.Replace("accounting_subject", string.Empty)); }
 
         public AccountingSubject(string id,string subjectCode,string subject,bool isValidity)
         {

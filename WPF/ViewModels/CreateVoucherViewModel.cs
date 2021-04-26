@@ -20,6 +20,7 @@ namespace WPF.ViewModels
         #region Strings
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
+        private string outputButtonContent;
         #endregion
         #region ObservableCollections
         private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 
@@ -45,6 +46,7 @@ namespace WPF.ViewModels
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
             OperationData.Add(this);
             SearchDate = DateTime.Today;
+            OutputButtonContent = "出力";
             SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
@@ -64,10 +66,14 @@ namespace WPF.ViewModels
         /// 受納証データを出力するコマンド
         /// </summary>
         public DelegateCommand VoucherOutputCommand { get; set; }
-        private void VoucherOutput()
+        private async void VoucherOutput()
         {
-            DataOutput.VoucherData
-                (new Voucher(VoucherAddressee,VoucherContents,VoucherTotalAmount));
+            OutputButtonContent = "出力中";
+            IsOutputButtonEnabled = false;
+            await Task.Run(()=> DataOutput.VoucherData
+                (new Voucher(VoucherAddressee,VoucherContents,VoucherTotalAmount)));
+            OutputButtonContent = "出力";
+            IsOutputButtonEnabled = true;
         }
         /// <summary>
         /// 受納証の出納データリストに出納データを追加するコマンド
@@ -208,6 +214,18 @@ namespace WPF.ViewModels
             set
             {
                 isOutputButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出力ボタンのContent
+        /// </summary>
+        public string OutputButtonContent
+        {
+            get => outputButtonContent;
+            set
+            {
+                outputButtonContent = value;
                 CallPropertyChanged();
             }
         }

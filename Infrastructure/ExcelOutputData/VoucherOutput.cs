@@ -73,12 +73,6 @@ namespace Infrastructure.ExcelOutputData
             //タイトル欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 26);
             SetCellPropertyOriginalAndCopy(1, 1);
-            myWorksheet.Cell(1, CopyColumnPosition(1)).Style.Alignment.SetHorizontal
-                (XLAlignmentHorizontalValues.Right);
-            myWorksheet.Cell(1, 1).Style.Font.SetBold(true);
-            myWorksheet.Cell(1,CopyColumnPosition(1)).Style.Font.SetBold(true);
-            fontSize = 14;
-            SetAlignmentAndFontSize(1, CopyColumnPosition(7));
             //日付欄
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Center, 11);
             SetCellPropertyOriginalAndCopy(2, 6);
@@ -162,14 +156,13 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetColumnSizes() => new double[]
-        { 3.13, 6.88, 3.13, 1.38, 6.88, 12.63, 3.13, 3.13, 3.5, 15.18,
+        { 3.13, 6.88, 3.13, 1.38, 6.88, 12.63, 3.13, 3.13, 3.5, 14.86,
             3.13, 6.88, 3.13, 1.38, 6.88, 12.63, 3.13, 3.13, 3.5 };
 
         protected override void SetDataStrings()
         {
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
-            SetString(1, CopyColumnPosition(7), "(控え)");
             //日付
             SetStringOriginalAndCopy(2, 6, DateTime.Now.ToString("yyyy年MM月dd日"));
             //宛名
@@ -268,10 +261,7 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetMerge()
         {
             //タイトル
-            MySheetCellRange(1, 1, 1, 9).Merge();
-            //控え
-            MySheetCellRange(1, CopyColumnPosition(1), 1, CopyColumnPosition(6)).Merge();
-            MySheetCellRange(1, CopyColumnPosition(7), 1, CopyColumnPosition(9)).Merge();
+            SetMergeOriginalAndCopy(1, 1, 1, 9);
             //日付
             SetMergeOriginalAndCopy(2, 6, 2, 9);
             //宛名

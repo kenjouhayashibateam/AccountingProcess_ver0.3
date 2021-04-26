@@ -252,8 +252,8 @@ namespace Infrastructure
                 foreach (DataRow dr in dt.Rows)
                     contents.Add
                         (
-                            new Content((string)dr["content_id"], 
-                            new AccountingSubject((string)dr["accounting_subject_id"], 
+                            new Content((string)dr["content_id"],
+                            new AccountingSubject((string)dr["accounting_subject_id"],
                             (string)dr["subject_code"], (string)dr["subject"], true), (int)dr["flat_rate"],
                             (string)dr["content"], (bool)dr["is_validity"]));
             }
@@ -272,8 +272,9 @@ namespace Infrastructure
 
                 while (DataReader.Read())
                     return new AccountingSubject
-                        ((string)DataReader["accounting_subject_id"], (string)DataReader["subject_code"], 
-                            (string)DataReader["subject"], (bool)DataReader["is_validity"]);
+                        ((string)DataReader["accounting_subject_id"],
+                            (string)DataReader["subject_code"], (string)DataReader["subject"],
+                            (bool)DataReader["is_validity"]);
             }
             return null;
         }
@@ -475,7 +476,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
                 Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
                 Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_output", receiptsAndExpenditure.IsUnprinted);
+                Cmd.Parameters.AddWithValue("@is_unprinted", receiptsAndExpenditure.IsUnprinted);
                 Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
                 Cmd.Parameters.AddWithValue
                     ("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);

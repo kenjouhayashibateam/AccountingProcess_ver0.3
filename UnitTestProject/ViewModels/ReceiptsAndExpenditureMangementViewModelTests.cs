@@ -8,11 +8,11 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class ReceiptsAndExpenditureMangementViewModelTests
     {
-        private readonly ReceiptsAndExpenditureMangementViewModel
-            vm = new ReceiptsAndExpenditureMangementViewModel
-            (new ExcelOutputInfrastructure(), new LocalConnectInfrastructure());
+        //private readonly ReceiptsAndExpenditureMangementViewModel
+        //    vm = new ReceiptsAndExpenditureMangementViewModel
+        //    (new ExcelOutputInfrastructure(), new LocalConnectInfrastructure());
 
-        [TestMethod()]
-        [TestMethod()]
+        //[TestMethod()]
+        //[TestMethod()]
     }
 }

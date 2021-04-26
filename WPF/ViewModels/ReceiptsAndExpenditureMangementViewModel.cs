@@ -134,8 +134,13 @@ namespace WPF.ViewModels
         /// データ登録を行う画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowRegistrationCommand { get; set; }
-        private void ShowRegistration() => 
-            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());        
+        private void ShowRegistration()
+        {
+            ReceiptsAndExpenditureOperation.SetOperationType
+                (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
+            ReceiptsAndExpenditureOperation.SetData(null);
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());       
+        }
 
         /// <summary>
         /// 出納データリストを再検索するコマンド

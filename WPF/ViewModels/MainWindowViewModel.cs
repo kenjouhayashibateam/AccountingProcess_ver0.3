@@ -27,6 +27,7 @@ namespace WPF.ViewModels
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private string depositAmount;
         private string depositAmountInfo;
+        private string showSlipManagementContent;
         #endregion
 
         public enum Locations
@@ -100,6 +101,7 @@ namespace WPF.ViewModels
         {
             LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
             IsSlipManagementEnabled = false;
+            ShowSlipManagementContent = "出納管理";
             IsLogoutEnabled = false;
         }
         /// <summary>
@@ -113,6 +115,7 @@ namespace WPF.ViewModels
             {
                 CallNoLoginMessage();
                 IsSlipManagementEnabled = false;
+                ShowSlipManagementContent = "出納管理";
                 return;
             }
             //前月決算が登録されていれば登録ボタンを隠す
@@ -166,10 +169,16 @@ namespace WPF.ViewModels
         /// <returns></returns>
         public bool SetOperationButtonEnabled()
         {
+            ShowSlipManagementContent = "出納管理";
             if (!ReturnIsRepLogin()) return false;
             if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) return true;
             bool b=!string.IsNullOrEmpty(DepositAmount);
-            if (!b) CallDepositAmountEmptyMessage();
+            if (!b)
+            {
+                CallDepositAmountEmptyMessage();
+                ShowSlipManagementContent = "預かり金額を入力して下さい";
+            }
+
             return b;
         }
         /// <summary>
@@ -311,8 +320,11 @@ namespace WPF.ViewModels
             set
             {
                 AccountingProcessLocation.OriginalTotalAmount = TextHelper.IntAmount(value);
-                if (LoginRep.Rep.Name != string.Empty) IsSlipManagementEnabled = 
+                if (LoginRep.Rep.Name != string.Empty) IsSlipManagementEnabled =
                         AccountingProcessLocation.OriginalTotalAmount != 0;
+                if (ShorendoChecked) ShowSlipManagementContent =
+                        AccountingProcessLocation.OriginalTotalAmount == 0 ?
+                            "預かり金額を設定して下さい" : "出納管理";
                 depositAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
@@ -365,6 +377,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出納間画面表示ボタンのContent
+        /// </summary>
+        public string ShowSlipManagementContent
+        {
+            get => showSlipManagementContent;
+            set
+            {
+                showSlipManagementContent = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -380,6 +404,7 @@ namespace WPF.ViewModels
             DepositAmount =
                 TextHelper.CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = LoginRep.Rep.Name != string.Empty;
+            ShowSlipManagementContent = "出納管理";
         }
         /// <summary>
         /// 経理担当場所を青蓮堂に設定します
@@ -392,6 +417,8 @@ namespace WPF.ViewModels
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
+            if(AccountingProcessLocation.OriginalTotalAmount==0) ShowSlipManagementContent=
+                    "預かり金額を設定して下さい";
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック
