@@ -24,6 +24,8 @@ namespace WPF.ViewModels
         private bool isDepositMenuEnabled;
         private bool isRegistrationPerMonthFinalAccountVisiblity;
         private bool isLogoutEnabled;
+        private bool isCreateVoucherEnabled;
+        private bool isPartTransportRegistrationEnabled;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private string depositAmount;
         private string depositAmountInfo;
@@ -64,6 +66,10 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowCreateVoucherCommand { get; }
         /// <summary>
+        /// パート交通費データ登録画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowPartTimerTransPortCommand { get; }
+        /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
         public MainWindowViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
@@ -91,6 +97,8 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => RegistrationPerMonthFinalAccount(), () => true);
             LogoutCommand =
                 new DelegateCommand(() => Logout(), () => true);
+            ShowPartTimerTransPortCommand =
+                new DelegateCommand(() => SetShowPartTimerTransportRegistrationView(), () => true);
         }
         public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
         /// <summary>
@@ -101,6 +109,8 @@ namespace WPF.ViewModels
         {
             LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
             IsSlipManagementEnabled = false;
+            IsCreateVoucherEnabled = false;
+            IsPartTransportRegistrationEnabled = false;
             ShowSlipManagementContent = "出納管理";
             IsLogoutEnabled = false;
         }
@@ -206,6 +216,8 @@ namespace WPF.ViewModels
             bool b = LoginRep.Rep.ID != string.Empty;
             return b;
         }
+        private void SetShowPartTimerTransportRegistrationView() =>
+            CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration());
         /// <summary>
         /// 受納証発行画面を表示します
         /// </summary>
@@ -320,8 +332,9 @@ namespace WPF.ViewModels
             set
             {
                 AccountingProcessLocation.OriginalTotalAmount = TextHelper.IntAmount(value);
-                if (LoginRep.Rep.Name != string.Empty) IsSlipManagementEnabled =
+                if (LoginRep.Rep.Name != string.Empty) IsSlipManagementEnabled = IsCreateVoucherEnabled =
                         AccountingProcessLocation.OriginalTotalAmount != 0;
+                
                 if (ShorendoChecked) ShowSlipManagementContent =
                         AccountingProcessLocation.OriginalTotalAmount == 0 ?
                             "預かり金額を設定して下さい" : "出納管理";
@@ -389,6 +402,30 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 受納証出力画面表示ボタンのEnabled
+        /// </summary>
+        public bool IsCreateVoucherEnabled
+        {
+            get => isCreateVoucherEnabled;
+            set
+            {
+                isCreateVoucherEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// パート交通費データ登録画面表示ボタンのEnabled
+        /// </summary>
+        public bool IsPartTransportRegistrationEnabled
+        {
+            get => isPartTransportRegistrationEnabled;
+            set
+            {
+                isPartTransportRegistrationEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -403,7 +440,7 @@ namespace WPF.ViewModels
             DepositAmountInfo = "前日決算金額";
             DepositAmount =
                 TextHelper.CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
-            IsSlipManagementEnabled = LoginRep.Rep.Name != string.Empty;
+            IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = LoginRep.Rep.Name != string.Empty;
             ShowSlipManagementContent = "出納管理";
         }
         /// <summary>
@@ -414,6 +451,7 @@ namespace WPF.ViewModels
             ShorendoChecked = true;
             IsDepositMenuEnabled = true;
             ProcessFeatureEnabled = true;
+            IsPartTransportRegistrationEnabled = false;
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();

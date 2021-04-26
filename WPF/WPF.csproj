@@ -87,6 +87,7 @@
     <Compile Include="ViewModels\DataOperationViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureOperationViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
@@ -112,6 +113,9 @@
     <Compile Include="Views\Datas\ShowWindowData.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PartTimerTransportationExpensesRegistrationView.xaml.cs">
+      <DependentUpon>PartTimerTransportationExpensesRegistrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReceiptsAndExpenditureOperationView.xaml.cs">
       <DependentUpon>ReceiptsAndExpenditureOperationView.xaml</DependentUpon>
@@ -151,6 +155,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PartTimerTransportationExpensesRegistrationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReceiptsAndExpenditureOperationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

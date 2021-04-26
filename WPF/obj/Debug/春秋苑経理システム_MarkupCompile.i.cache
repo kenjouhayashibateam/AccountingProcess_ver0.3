@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
-8869629494
+9-1845250110
 
-401499653323
+421385036567
 22-613769826
-Views\CreateVoucherView.xaml;Views\DataManagementView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\ReceiptsAndExpenditureOperationView.xaml;Views\RemainingMoneyCalculationView.xaml;Views\ReceiptsAndExpenditureMangementView.xaml;Views\ShorendoCashBoxCalculationView.xaml;
+Views\CreateVoucherView.xaml;Views\DataManagementView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\PartTimerTransportationExpensesRegistrationView.xaml;Views\ReceiptsAndExpenditureOperationView.xaml;Views\RemainingMoneyCalculationView.xaml;Views\ReceiptsAndExpenditureMangementView.xaml;Views\ShorendoCashBoxCalculationView.xaml;
 
-False
+True
 

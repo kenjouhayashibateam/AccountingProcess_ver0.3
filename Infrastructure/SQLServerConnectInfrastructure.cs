@@ -488,8 +488,8 @@ namespace Infrastructure
         {
             SettingConectionString();
             SqlCommand Cmd = new SqlCommand("select dbo.return_previous_day_final_amount()",Cn);
-            Object obj;
             Cn.Open();
+            object obj;
             using (Cn) obj = Cmd.ExecuteScalar();
 
             return (int)obj;
