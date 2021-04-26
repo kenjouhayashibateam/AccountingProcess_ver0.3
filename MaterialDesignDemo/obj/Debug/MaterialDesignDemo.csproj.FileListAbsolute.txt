@@ -1,7 +1,0 @@
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\MaterialDesignDemo.csprojAssemblyReference.cache
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\MainWindow.g.cs
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\App.g.cs
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\MaterialDesignDemo_MarkupCompile.cache
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\MaterialDesignDemo_MarkupCompile.lref
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\ColorZones.baml
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\MaterialDesignDemo\obj\Debug\ColorZones.g.cs
