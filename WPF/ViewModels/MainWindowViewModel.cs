@@ -440,7 +440,8 @@ namespace WPF.ViewModels
             DepositAmountInfo = "前日決算金額";
             DepositAmount =
                 TextHelper.CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
-            IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = LoginRep.Rep.Name != string.Empty;
+            IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = IsCreateVoucherEnabled =
+                LoginRep.Rep.Name != string.Empty;
             ShowSlipManagementContent = "出納管理";
         }
         /// <summary>

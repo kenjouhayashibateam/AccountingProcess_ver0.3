@@ -106,3 +106,5 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsA
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureOperationView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\PartTimerTransportationExpensesRegistrationView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\PartTimerTransportationExpensesRegistrationView.baml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\PartTimerTransportationExpensesRegistrationView.g.cs
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\PartTimerTransportationExpensesRegistrationView.baml
