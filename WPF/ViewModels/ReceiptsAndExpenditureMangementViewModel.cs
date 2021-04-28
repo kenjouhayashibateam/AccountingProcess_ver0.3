@@ -206,7 +206,7 @@ namespace WPF.ViewModels
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
             {
                 if (rae.IsPayment != isPayment) continue;
-                rae.IsUnprinted = true;
+                rae.IsUnprinted = false;
                 DataBaseConnect.Update(rae);
                 if (IsPreviousDayOutput)
                     DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);

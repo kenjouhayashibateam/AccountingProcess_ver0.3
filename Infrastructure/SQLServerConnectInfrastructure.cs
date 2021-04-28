@@ -430,8 +430,8 @@ namespace Infrastructure
                         (Cmd, "call_credit_dept", "@credit_dept_id", id);
 
                 while (dataReader.Read())
-                    creditDept = new CreditDept((string)dataReader["credit_id"], (string)dataReader["account"], 
-                        (bool)dataReader["is_validity"],(bool)dataReader["is_shunjuen"]);
+                    creditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], 
+                        (bool)dataReader["is_validity"],(bool)dataReader["is_shunjuen_dept"]);
             }
             return creditDept;
         }

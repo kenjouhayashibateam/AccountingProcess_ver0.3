@@ -148,7 +148,7 @@ namespace Infrastructure.ExcelOutputData
                     default:
                         break;
                 };
-                s = rae.CreditDept.Dept == "その他" ? string.Empty : rae.CreditDept.Dept;
+                s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
             }
         }
