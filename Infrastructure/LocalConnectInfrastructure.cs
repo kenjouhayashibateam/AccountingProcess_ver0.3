@@ -31,16 +31,16 @@ namespace Infrastructure
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("id0", "882", "その他雑収入", true),
-                new AccountingSubject("id1", "822", "その他冥加金", true),
-                new AccountingSubject("id2", "874", "その他茶所収入", true),
-                new AccountingSubject("id3", "416", "仮受金", true),
-                new AccountingSubject("id4", "611", "旅費交通費", true),
-                new AccountingSubject("id5", "616", "消耗品費", true),
-                new AccountingSubject("id6", "621", "車両費", true),
-                new AccountingSubject("id7", "735", "苑内整備費", true),
-                new AccountingSubject("id8", "168", "仮払金", true),
-                new AccountingSubject("id9", "133", "セレサ川崎普通貯金", true)
+                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true),
+                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true),
+                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true),
+                new AccountingSubject("accounting_subject3", "416", "仮受金", true),
+                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true),
+                new AccountingSubject("accounting_subject5", "616", "消耗品費", true),
+                new AccountingSubject("accounting_subject6", "621", "車両費", true),
+                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true),
+                new AccountingSubject("accounting_subject8", "168", "仮払金", true),
+                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true)
             };
             return list;
         }
@@ -50,16 +50,16 @@ namespace Infrastructure
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("id0", "882", "その他雑収入", true),
-                new AccountingSubject("id1", "822", "その他冥加金", true),
-                new AccountingSubject("id2", "874", "その他茶所収入", true),
-                new AccountingSubject("id3", "416", "仮受金", true),
-                new AccountingSubject("id4", "611", "旅費交通費", true),
-                new AccountingSubject("id5", "616", "消耗品費", true),
-                new AccountingSubject("id6", "621", "車両費", true),
-                new AccountingSubject("id7", "735", "苑内整備費", true),
-                new AccountingSubject("id8", "168", "仮払金", true),
-                new AccountingSubject("id9", "133", "セレサ川崎普通貯金", true)
+                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true),
+                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true),
+                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true),
+                new AccountingSubject("accounting_subject3", "416", "仮受金", true),
+                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true),
+                new AccountingSubject("accounting_subject5", "616", "消耗品費", true),
+                new AccountingSubject("accounting_subject6", "621", "車両費", true),
+                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true),
+                new AccountingSubject("accounting_subject8", "168", "仮払金", true),
+                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true)
             };
             return list;
         }
@@ -68,18 +68,24 @@ namespace Infrastructure
             (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
             AccountingSubject OtherMiscellaneousIncome = 
-                new AccountingSubject("id0", "882", "その他雑収入", true);
-            AccountingSubject OtherContribution = new AccountingSubject("id1", "822", "その他冥加金", true);
+                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true);
+            AccountingSubject OtherContribution = 
+                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome = 
-                new AccountingSubject("id2", "874", "その他茶所収入", true);
-            AccountingSubject SuspenseReceiptMoney = new AccountingSubject("id3", "416", "仮受金", true);
-            AccountingSubject TravelExpense = new AccountingSubject("id4", "611", "旅費交通費", true);
-            AccountingSubject SuppliesExpense = new AccountingSubject("id5", "616", "消耗品費", true);
-            AccountingSubject VehicleFee = new AccountingSubject("id6", "621", "車両費", true);
+                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true);
+            AccountingSubject SuspenseReceiptMoney =
+                new AccountingSubject("accounting_subject3", "416", "仮受金", true);
+            AccountingSubject TravelExpense = 
+                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true);
+            AccountingSubject SuppliesExpense =
+                new AccountingSubject("accounting_subject5", "616", "消耗品費", true);
+            AccountingSubject VehicleFee = new AccountingSubject("accounting_subject6", "621", "車両費", true);
             AccountingSubject InternalMaintenanceExpenses = 
-                new AccountingSubject("id7", "735", "苑内整備費", true);
-            AccountingSubject SuspensePayment = new AccountingSubject("id8", "168", "仮払金", true);
-            AccountingSubject Seresa = new AccountingSubject("id9", "133", "セレサ川崎普通貯金", true);
+                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true);
+            AccountingSubject SuspensePayment = 
+                new AccountingSubject("accounting_subject8", "168", "仮払金", true);
+            AccountingSubject Seresa =
+                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true);
 
             ObservableCollection<Content> list = new ObservableCollection<Content>
             {
@@ -120,27 +126,34 @@ namespace Infrastructure
 
             CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true,true);
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
-            AccountingSubject Ofuse = new AccountingSubject("id11", "815", "冥加読経料", true);
+            AccountingSubject Ofuse = new AccountingSubject("accounting_subject11", "815", "冥加読経料", true);
             //AccountingSubject OtherMiscellaneousIncome =
-            //new AccountingSubject("id0", "882", "その他雑収入", true);
-            AccountingSubject OtherContribution = new AccountingSubject("id2", "822", "その他冥加金", true);
+            //new AccountingSubject("accounting_subject0", "882", "その他雑収入", true);
+            AccountingSubject OtherContribution =
+                new AccountingSubject("accounting_subject2", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome = 
-                new AccountingSubject("id3", "874", "その他茶所収入", true);
-            AccountingSubject SuspenseReceiptMoney = new AccountingSubject("id4", "416", "仮受金", true);
-            AccountingSubject TravelExpense = new AccountingSubject("id5", "611", "旅費交通費", true);
-            AccountingSubject SuppliesExpense = new AccountingSubject("id6", "616", "消耗品費", true);
-            AccountingSubject VehicleFee = new AccountingSubject("id7", "621", "車両費", true);
+                new AccountingSubject("accounting_subject3", "874", "その他茶所収入", true);
+            AccountingSubject SuspenseReceiptMoney = 
+                new AccountingSubject("accounting_subject4", "416", "仮受金", true);
+            AccountingSubject TravelExpense =
+                new AccountingSubject("accounting_subject5", "611", "旅費交通費", true);
+            AccountingSubject SuppliesExpense =
+                new AccountingSubject("accounting_subject6", "616", "消耗品費", true);
+            AccountingSubject VehicleFee = new AccountingSubject("accounting_subject7", "621", "車両費", true);
             AccountingSubject InternalMaintenanceExpenses = 
-                new AccountingSubject("id8", "735", "苑内整備費", true);
-            AccountingSubject SuspensePayment = new AccountingSubject("id9", "168", "仮払金", true);
-            AccountingSubject Seresa = new AccountingSubject("id10", "133","セレサ川崎普通貯金", true);
+                new AccountingSubject("accounting_subject8", "735", "苑内整備費", true);
+            AccountingSubject SuspensePayment =
+                new AccountingSubject("accounting_subject9", "168", "仮払金", true);
+            AccountingSubject Seresa =
+                new AccountingSubject("accounting_subject10", "133","セレサ川崎普通貯金", true);
 
             ObservableCollection<ReceiptsAndExpenditure> list = 
                 new ObservableCollection<ReceiptsAndExpenditure>
             {
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,DateTime.Today,DefaultDate,false),
+                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    DateTime.Today,DefaultDate,false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,

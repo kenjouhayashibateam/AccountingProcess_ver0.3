@@ -85,7 +85,6 @@ namespace WPF.ViewModels
             {
                 SetDataRegistrationCommand.Execute();
                 IsPaymentCheck = true;
-                FieldClear();
             } 
         }
         public ReceiptsAndExpenditureOperationViewModel() :
@@ -527,6 +526,7 @@ namespace WPF.ViewModels
             {
                 selectedAccountingSubjectCode = value;
                 if (value == null) ComboAccountingSubjectCode = string.Empty;
+                else ComboAccountingSubjectCode = value.SubjectCode;
                 CallPropertyChanged();
             }
         }
@@ -539,17 +539,22 @@ namespace WPF.ViewModels
             set
             {
                 if (comboAccountingSubjectText == value) return;
+                if (string.IsNullOrEmpty(value)) return;
                 SetDataOperationButtonEnabled();
                 if (string.IsNullOrEmpty(value))
                 {
                     ComboContents.Clear();
+                    return;
                 }
                 else ComboContents = 
                         DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
 
                 if (ComboContents.Count > 0) ComboContentText = ComboContents[0].Text;
                 else ComboContentText = string.Empty;
-                comboAccountingSubjectText = value;
+
+                AccountingSubject accountingSubject = 
+                    ComboAccountingSubjects.FirstOrDefault(r => r.Subject == value);
+                comboAccountingSubjectText = accountingSubject.Subject;
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
             }
@@ -575,6 +580,7 @@ namespace WPF.ViewModels
             set
             {
                 selectedAccountingSubject = value;
+                SelectedAccountingSubjectCode = value;
                 ComboContents = DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode, ComboAccountingSubjectText, true);
                 if (ComboContents.Count > 0) ComboContentText =
@@ -971,11 +977,11 @@ namespace WPF.ViewModels
 
         protected override void SetDataList()
         {
-            ComboContents =
-                DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
-            ComboAccountingSubjects =
-                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            ComboContents = new ObservableCollection<Content>();
+                //DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjectCodes =
+                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            ComboAccountingSubjects =
                 DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
         }
