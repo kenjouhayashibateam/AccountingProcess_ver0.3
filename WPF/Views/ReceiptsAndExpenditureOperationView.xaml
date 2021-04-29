@@ -65,8 +65,18 @@
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="貸方部門" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <ComboBox Name="CreditDeptComboBox" Grid.Row="1"  behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="true" ItemsSource="{Binding ComboCreditDepts}" Text="{Binding ComboCreditDeptText,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Dept" SelectedValue="{Binding SelectedCreditDept}" SelectedValuePath="{Binding SelectedCreditDept.ID}" Margin="5,3,180,3"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="貸方部門" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                        <ComboBox Name="CreditDeptComboBox" Grid.Row="1" Grid.Column="0" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="true" ItemsSource="{Binding ComboCreditDepts}" Text="{Binding ComboCreditDeptText,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Dept" SelectedValue="{Binding SelectedCreditDept}" SelectedValuePath="{Binding SelectedCreditDept.ID}" Margin="5,3,80,3"/>
+                        <Button x:Name="ShowAccountTitleListPDFFileButton" Grid.Column="1" Grid.Row="1" Content="勘定科目一覧を開く" Margin="30,5">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding ShowAccountTitleListPDFFileCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding ShowAccountTitleListPDFFileCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
                     </Grid>
                     <Grid Grid.Row="4">
                         <Grid.RowDefinitions>
@@ -81,8 +91,9 @@
                         <TextBlock Text="科目コード" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="勘定科目" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="内容" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.MaxLength="3" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>
-                        <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
+                        <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="1" Grid.Column="0" Text="{Binding ComboAccountingSubjectCode}" VerticalContentAlignment="Center" MaxLength="3" InputMethod.PreferredImeState="Off" Margin="5,3"/>
+                        <!--<ComboBox Name="AccountingSubjectCodeComboBox" Grid.Row="1" Grid.Column="0" IsEditable="True" behavior:ComboBoxAttachment.MaxLength="3" behavior:ComboBoxAttachment.IsIMEModeOffGotFocus="True" Text="{Binding ComboAccountingSubjectCode,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboAccountingSubjectCodes}" SelectedValue="{Binding SelectedAccountingSubjectCode}" SelectedValuePath="{Binding SelectedAccountingSubjectCode.ID}" DisplayMemberPath="SubjectCode" Margin="5,3"/>-->
+                        <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
                         <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent,Mode=TwoWay}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
                     </Grid>
                     <Grid Grid.Row="5">

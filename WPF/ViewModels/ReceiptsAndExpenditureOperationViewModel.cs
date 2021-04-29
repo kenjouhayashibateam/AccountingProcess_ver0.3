@@ -85,10 +85,16 @@ namespace WPF.ViewModels
             {
                 SetDataRegistrationCommand.Execute();
                 IsPaymentCheck = true;
+                FieldClear();
             } 
         }
         public ReceiptsAndExpenditureOperationViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 勘定科目一覧PDFを開くコマンド
+        /// </summary>
+        public DelegateCommand ShowAccountTitleListPDFFileCommand { get; set; }
+        private void ShowAccountTitleListPDFFile() => System.Diagnostics.Process.Start(".\\files\\AccountTitleList.pdf");
         /// <summary>
         /// 詳細メニューのプロパティをセットします
         /// </summary>
@@ -448,8 +454,7 @@ namespace WPF.ViewModels
                 if (comboCreditDeptText == value) return;
                 if (string.IsNullOrEmpty(value)) value = comboCreditDeptText;
                 SelectedCreditDept = ComboCreditDepts.FirstOrDefault(c => c.Dept == value);
-                if (SelectedCreditDept == null) comboCreditDeptText = string.Empty;
-                else comboCreditDeptText = SelectedCreditDept.Dept;
+                comboCreditDeptText = SelectedCreditDept == null ? string.Empty : SelectedCreditDept.Dept;
 
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboCreditDeptText), value);
@@ -478,16 +483,18 @@ namespace WPF.ViewModels
             set
             {
                 comboAccountingSubjectCode = string.Empty;
-                SetDataOperationButtonEnabled();
+
                 if (string.IsNullOrEmpty(value))
                 {
-                    ComboAccountingSubjects.Clear();
+                    ComboAccountingSubjects =
+                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
                     ComboAccountingSubjectText = string.Empty;
                 }
                 else ComboAccountingSubjects = 
                         DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
 
-                if (ComboAccountingSubjects.Count > 0)
+                if (ComboAccountingSubjects.Count != ComboAccountingSubjectCodes.Count &&
+                    ComboAccountingSubjects.Count!=0)
                 {
                     comboAccountingSubjectCode = ComboAccountingSubjects[0].SubjectCode;
                     ComboAccountingSubjectText = ComboAccountingSubjects[0].Subject;
@@ -495,12 +502,13 @@ namespace WPF.ViewModels
                 else
                 {
                     comboAccountingSubjectCode = string.Empty;
+                    SelectedAccountingSubject = null;
                     ComboAccountingSubjectText = string.Empty;
                     ComboContentText = string.Empty;
                     ComboContents.Clear();
                 }
                 SetDataOperationButtonEnabled();
-                ValidationProperty(nameof(ComboAccountingSubjectCode), value);
+                ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
                 CallPropertyChanged();
             }
         }
@@ -524,9 +532,14 @@ namespace WPF.ViewModels
             get => selectedAccountingSubjectCode;
             set
             {
+                if (selectedAccountingSubjectCode == value) return;
                 selectedAccountingSubjectCode = value;
                 if (value == null) ComboAccountingSubjectCode = string.Empty;
-                else ComboAccountingSubjectCode = value.SubjectCode;
+                else
+                {
+                    ComboAccountingSubjectCode = value.SubjectCode;
+                    SelectedAccountingSubject = value;
+                }
                 CallPropertyChanged();
             }
         }
@@ -539,24 +552,47 @@ namespace WPF.ViewModels
             set
             {
                 if (comboAccountingSubjectText == value) return;
-                if (string.IsNullOrEmpty(value)) return;
-                SetDataOperationButtonEnabled();
-                if (string.IsNullOrEmpty(value))
+
+                AccountingSubject accountingSubject = 
+                    ComboAccountingSubjects.FirstOrDefault(r => r.Subject == value);
+
+                if (accountingSubject == null)
                 {
-                    ComboContents.Clear();
+                    comboAccountingSubjectText = string.Empty;
+                    ValidationProperty(nameof(ComboAccountingSubjectText), comboAccountingSubjectText);
                     return;
                 }
-                else ComboContents = 
-                        DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
+                else comboAccountingSubjectText = accountingSubject.Subject;
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    PropertyClear();
+                    return;
+                }
+
+                SetDataOperationButtonEnabled();
+
+                ComboContents =                         
+                    DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
 
                 if (ComboContents.Count > 0) ComboContentText = ComboContents[0].Text;
                 else ComboContentText = string.Empty;
 
-                AccountingSubject accountingSubject = 
-                    ComboAccountingSubjects.FirstOrDefault(r => r.Subject == value);
                 comboAccountingSubjectText = accountingSubject.Subject;
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
+
+                void PropertyClear()
+                {
+                    if(accountingSubject.SubjectCode == ComboAccountingSubjectCode) return;
+
+                    comboAccountingSubjectText = string.Empty;
+                    ComboAccountingSubjects =
+                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                    ComboAccountingSubjectCode = string.Empty;
+                    ComboContents.Clear();
+                    ValidationProperty(nameof(ComboAccountingSubjectText), value);
+                }
             }
         }
         /// <summary>
@@ -582,10 +618,12 @@ namespace WPF.ViewModels
                 selectedAccountingSubject = value;
                 SelectedAccountingSubjectCode = value;
                 ComboContents = DataBaseConnect.ReferenceContent
-                    (string.Empty, ComboAccountingSubjectCode, ComboAccountingSubjectText, true);
+                    (string.Empty, ComboAccountingSubjectCode, ComboAccountingSubjectText ?? string.Empty, true);
                 if (ComboContents.Count > 0) ComboContentText =
                         ComboContents.Count != 0 ? ComboContents[0].Text : string.Empty;
                 else ComboContentText = string.Empty;
+
+                ComboAccountingSubjectText = value == null ? string.Empty : value.Subject;
 
                 CallPropertyChanged();
             }
@@ -600,8 +638,7 @@ namespace WPF.ViewModels
             {
                 comboContentText = value;
                 SelectedContent = ComboContents.FirstOrDefault(c => c.Text == comboContentText);
-                if (SelectedContent == null) comboContentText = string.Empty;
-                else comboContentText = SelectedContent.Text;
+                comboContentText = SelectedContent == null ? string.Empty : SelectedContent.Text;
 
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
@@ -634,6 +671,7 @@ namespace WPF.ViewModels
                 {
                     Supplement = string.Empty;
                     IsSupplementVisiblity = false;
+                    Price = string.Empty;
                     IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
                 }
                 CallPropertyChanged();
@@ -992,6 +1030,8 @@ namespace WPF.ViewModels
                 (() => ZeroAdd(), () => true);
             ReceiptsAndExpenditureDataOperationCommand = new DelegateCommand
                 (() => ReceiptsAndExpenditureDataOperation(), () => true);
+            ShowAccountTitleListPDFFileCommand = new DelegateCommand
+                (() => ShowAccountTitleListPDFFile(), () => true);
         }
     }
 }
