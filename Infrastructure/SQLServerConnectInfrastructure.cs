@@ -336,7 +336,7 @@ namespace Infrastructure
             }
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure>ReferenceReceiptsAndExpenditure
+        public  ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (
                 DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
                 string content,string detail, string accountingSubject, string accountingSubjectCode, 
@@ -350,7 +350,7 @@ namespace Infrastructure
             SqlCommand Cmd = new SqlCommand();
             using (Cn)
             {
-                ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure");
+                ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure_all_data");
                 Cmd.Parameters.AddWithValue("@location", location);
                 Cmd.Parameters.AddWithValue("@account_activity_date_start", accountActivityDateStart);
                 Cmd.Parameters.AddWithValue("@account_activity_date_end", accountActivityDateEnd);
@@ -365,11 +365,12 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
                 Cmd.Parameters.AddWithValue("@output_date_start", outputDateStart);
                 Cmd.Parameters.AddWithValue("@output_date_end", outputDateEnd);
-                using SqlDataReader dataReader = Cmd.ExecuteReader();
                 Rep paramRep;
                 CreditDept paramCreditDept;
                 AccountingSubject paramAccountingSubject;
                 Content paramContent;
+                using SqlDataReader dataReader= Cmd.ExecuteReader();
+
                 while (dataReader.Read())
                 {
                     
@@ -394,7 +395,6 @@ namespace Infrastructure
                         );
                 }
             }
-
             return list;
         }
 
@@ -535,6 +535,87 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@receipts_and_expenditure_id", receiptsAndExpenditure.ID);
                 return Cmd.ExecuteNonQuery();
             }
+        }
+
+        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
+            ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, 
+                string location, string creditDept, string content, string detail, string accountingSubject, string accountingSubjectCode, 
+                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly, 
+                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart, 
+                DateTime outputDateEnd, int pageCount)
+        {
+            ObservableCollection<ReceiptsAndExpenditure> list =
+                new ObservableCollection<ReceiptsAndExpenditure>();
+            int totalRows = default;
+            SqlCommand Cmd = new SqlCommand();
+            using (Cn)
+            {
+                SettingConectionString();
+                Cmd.Connection = Cn;
+                Cmd.CommandType = CommandType.Text;
+                Cmd.CommandText = $"select count(*)as return_count from reference_receipts_and_expenditure_data_view\r\n" +
+                    $"where location like '%' + '{location}' + '%'\r\n" +
+                    $"and account_activity_date between '{accountActivityDateStart.ToShortDateString()}' and" +
+                    $" '{accountActivityDateEnd.ToShortDateString()}'\r\n" +
+                    $"and dept like '%' + '{creditDept}' + '%'\r\n" +
+                    $"and content like '%' + '{content}' + '%'\r\n" +
+                    $"and detail like '%' + '{detail}' + '%'\r\n" +
+                    $"and is_payment =case when '{whichDepositAndWithdrawalOnly}'=" +
+                    $" 'true' then '{isPayment}' else is_payment end\r\n" +
+                    $"and output_date between '{outputDateStart.ToShortDateString()}' and '{outputDateEnd.ToShortDateString()}'\r\n" +
+                    $"and is_validity = case when '{isValidityOnly}' = 'true' then 'true' else is_validity end ";
+                Cn.Open();
+                using SqlDataReader countReader = Cmd.ExecuteReader();
+
+                while (countReader.Read()) totalRows = (int)countReader["return_count"];
+
+                ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure");
+                Cmd.Parameters.AddWithValue("@location", location);
+                Cmd.Parameters.AddWithValue("@account_activity_date_start", accountActivityDateStart);
+                Cmd.Parameters.AddWithValue("@account_activity_date_end", accountActivityDateEnd);
+                Cmd.Parameters.AddWithValue("@registration_date_start", registrationDateStart);
+                Cmd.Parameters.AddWithValue("@registration_date_end", registrationDateEnd);
+                Cmd.Parameters.AddWithValue("@credit_dept", creditDept);
+                Cmd.Parameters.AddWithValue("@content", content);
+                Cmd.Parameters.AddWithValue("@detail", detail);
+                Cmd.Parameters.AddWithValue("@limiting_is_payment", whichDepositAndWithdrawalOnly);
+                Cmd.Parameters.AddWithValue("@is_payment", isPayment);
+                Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
+                Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
+                Cmd.Parameters.AddWithValue("@output_date_start", outputDateStart);
+                Cmd.Parameters.AddWithValue("@output_date_end", outputDateEnd);
+                Cmd.Parameters.AddWithValue("@page", pageCount);
+                Rep paramRep;
+                CreditDept paramCreditDept;
+                AccountingSubject paramAccountingSubject;
+                Content paramContent;
+                using SqlDataReader dataReader = Cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+
+                    paramRep =
+                        new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                            (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+                    paramCreditDept =
+                        new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
+                        (bool)dataReader["is_shunjuen_dept"]);
+                    paramAccountingSubject =
+                        new AccountingSubject((string)dataReader["accounting_subject_id"],
+                        (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
+                        (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                    list.Add(new ReceiptsAndExpenditure
+                        (
+                        (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
+                        paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
+                        (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
+                        (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
+                        (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
+                        );
+                }
+            }
+            return (totalRows, list);
         }
     }
 }

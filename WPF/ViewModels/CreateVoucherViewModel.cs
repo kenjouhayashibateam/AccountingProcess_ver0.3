@@ -21,6 +21,7 @@ namespace WPF.ViewModels
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
         private string outputButtonContent;
+        private string listPageInfo;
         #endregion
         #region ObservableCollections
         private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 
@@ -36,7 +37,21 @@ namespace WPF.ViewModels
         /// 受納証の総額
         /// </summary>
         private int VoucherTotalAmount;
+        /// <summary>
+        /// リストデータの総数
+        /// </summary>
+        private int RowCount;
+        /// <summary>
+        /// リストのページ
+        /// </summary>
+        private int PageCount;
+        /// <summary>
+        /// リストのページの総数
+        /// </summary>
+        private int TotalPageCount;
         private bool isOutputButtonEnabled;
+        private bool isNextPageEnabled;
+        private bool isPrevPageEnabled;
         #endregion
 
         public CreateVoucherViewModel
@@ -52,6 +67,36 @@ namespace WPF.ViewModels
         public CreateVoucherViewModel() : this
             (DefaultInfrastructure.GetDefaultDataBaseConnect(),
             DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 次の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand NextPageListExpressCommand { get; set; }
+        private void NextPageListExpress()
+        {
+            if (PageCount == 0) return;
+            PageCount += PageCount == TotalPageCount ? 0 : 1;
+            CreateReceiptsAndExpenditures(SearchDate);
+        }
+        /// <summary>
+        /// 前の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand PrevPageListExpressCommand { get; set; }
+        private void PrevPageListExpress()
+        {
+            if (PageCount == 0) return;
+            if (PageCount > 1) PageCount--;
+            CreateReceiptsAndExpenditures(SearchDate);
+        }
+
+        private void SetListPageInfo()
+        {
+            int i = RowCount / 10;
+            i += RowCount % 10 == 0 ? 0 : 1;
+            TotalPageCount = i;
+            ListPageInfo = $"{PageCount}/{i}";
+            IsPrevPageEnabled = PageCount > 1;
+            IsNextPageEnabled = PageCount != i;
+        }
         /// <summary>
         /// 新規登録画面を表示するコマンド
         /// </summary>
@@ -161,13 +206,29 @@ namespace WPF.ViewModels
             set
             {
                 searchDate = value;
-                SearchReceiptsAndExpenditures =
-                    DataBaseConnect.ReferenceReceiptsAndExpenditure
+                CreateReceiptsAndExpenditures(value);
+                ObservableCollection<ReceiptsAndExpenditure> list = DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
                     string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
                     value, value, TextHelper.DefaultDate, new DateTime(9999, 1, 1));
+                PageCount = 1;
+                RowCount = list.Count;
                 CallPropertyChanged();
             }
+        }
+        private void CreateReceiptsAndExpenditures(DateTime accountActivityDate)
+        {
+            SearchReceiptsAndExpenditures =
+                DataBaseConnect.ReferenceReceiptsAndExpenditure
+                (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
+                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), PageCount).List;
+            RowCount =
+                DataBaseConnect.ReferenceReceiptsAndExpenditure
+                (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
+                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), PageCount).TotalRows;
+            SetListPageInfo();
         }
         /// <summary>
         /// 検索した出納データのリスト
@@ -178,6 +239,7 @@ namespace WPF.ViewModels
             set
             {
                 searchReceiptsAndExpenditures = value;
+                SetListPageInfo();
                 CallPropertyChanged();
             }
         }
@@ -229,6 +291,42 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// リストのページの案内
+        /// </summary>
+        public string ListPageInfo
+        {
+            get => listPageInfo;
+            set
+            {
+                listPageInfo = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 次の10件ボタンのEnabled
+        /// </summary>
+        public bool IsNextPageEnabled
+        {
+            get => isNextPageEnabled;
+            set
+            {
+                isNextPageEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 前の10件ボタンのEnabled
+        /// </summary>
+        public bool IsPrevPageEnabled
+        {
+            get => isPrevPageEnabled;
+            set
+            {
+                isPrevPageEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void SetRep(Rep rep)
         {
@@ -261,6 +359,10 @@ namespace WPF.ViewModels
                 (() => VoucherOutput(), () => true);
             ShowRegistrationCommand = new DelegateCommand
                 (() => ShowRegistration(), () => true);
+            NextPageListExpressCommand = new DelegateCommand
+                (() => NextPageListExpress(), () => true);
+            PrevPageListExpressCommand = new DelegateCommand
+                (() => PrevPageListExpress(), () => true);
         }
 
         protected override void SetWindowDefaultTitle() =>

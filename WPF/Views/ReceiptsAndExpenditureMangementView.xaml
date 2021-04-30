@@ -133,6 +133,9 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="RefreshListButton" Content="リストを再構築する" Grid.Column="0" Margin="5,1,1,3">
                                 <Button.InputBindings>
@@ -141,13 +144,26 @@
                                     <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="1" Margin="5,1,1,3" Content="新規登録">
+                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="1" Margin="5,1,5,3" Content="新規登録">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding ShowRegistrationCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <TextBlock Grid.Column="2" Text="{Binding ListTitle}" VerticalAlignment="Center"/>
+                            <Button x:Name="PrevButton" Grid.Column="3" Content="前の10件" IsEnabled="{Binding IsPrevPageEnabled}" Margin="5,1,5,3">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding PrevPageListExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding PrevPageListExpressCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <TextBlock Grid.Column="4" Text="{Binding ListPageInfo}" VerticalAlignment="Center"/>
+                            <Button x:Name="NextButton" Grid.Column="5" Content="次の10件" IsEnabled="{Binding IsNextPageEnabled}" Margin="5,1,5,3">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding NextPageListExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding NextPageListExpressCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
                         </Grid>
                     </GroupBox.Header>
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" EnableColumnVirtualization="True" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">

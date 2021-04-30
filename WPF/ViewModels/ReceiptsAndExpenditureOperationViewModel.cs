@@ -271,7 +271,6 @@ namespace WPF.ViewModels
                 Message = "登録しました"
             };
             CallShowMessageBox = true;
-
             FieldClear();
             DataOperationButtonContent = "登録";
         }
@@ -281,9 +280,11 @@ namespace WPF.ViewModels
         private void FieldClear()
         {
             IsValidity = true;
+            SelectedAccountingSubjectCode = null;
             ComboAccountingSubjectCode = string.Empty;
-            ComboAccountingSubjectText = string.Empty;
             SelectedAccountingSubject = null;
+            ComboAccountingSubjectText = string.Empty;
+            SelectedContent = null;
             ComboContentText = string.Empty;
             DetailText = string.Empty;
             Price = string.Empty;
@@ -488,6 +489,7 @@ namespace WPF.ViewModels
                 {
                     ComboAccountingSubjects =
                         DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                    SelectedAccountingSubject = null;
                     ComboAccountingSubjectText = string.Empty;
                 }
                 else ComboAccountingSubjects = 
@@ -552,6 +554,13 @@ namespace WPF.ViewModels
             set
             {
                 if (comboAccountingSubjectText == value) return;
+                if(string.IsNullOrEmpty(value))
+                {
+                    comboAccountingSubjectText = value;
+                    ValidationProperty(nameof(ComboAccountingSubjectText), value);
+                    CallPropertyChanged();
+                    return;
+                }
 
                 AccountingSubject accountingSubject = 
                     ComboAccountingSubjects.FirstOrDefault(r => r.Subject == value);

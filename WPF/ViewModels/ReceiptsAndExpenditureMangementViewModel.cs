@@ -29,6 +29,18 @@ namespace WPF.ViewModels
         private int previousDayFinalAccount;
         private int todayTotalAmount;
         /// <summary>
+        /// リストデータの総数
+        /// </summary>
+        private int RowCount;
+        /// <summary>
+        /// リストのページ
+        /// </summary>
+        private int PageCount;
+        /// <summary>
+        /// リストのページの総数
+        /// </summary>
+        private int TotalPageCount;
+        /// <summary>
         /// 金庫の締め時間
         /// </summary>
         private readonly int ClosingCashboxHour = 15;
@@ -55,6 +67,7 @@ namespace WPF.ViewModels
         private string withdrawalSlipsOutputButtonContent;
         private string referenceLocationCheckBoxContent;
         private string password;
+        private string listPageInfo;
         /// <summary>
         /// 当日決算の基準になる金額の種類。管理事務所なら前日決算、青蓮堂なら預り金額
         /// </summary>
@@ -79,6 +92,8 @@ namespace WPF.ViewModels
         private bool isPreviousDayOutputEnabled;
         private bool isPasswordEnabled;
         private bool passwordCharCheck;
+        private bool isPrevPageEnabled;
+        private bool isNextPageEnabled;
         #endregion
         #region DateTime
         private DateTime searchEndDate = new DateTime(9999, 1, 1);
@@ -113,13 +128,32 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             SetProperty();
             DefaultListExpress();
-            SetBalanceFinalAccount();
             IsPreviousDayOutputEnabled = false;
             SetDelegateCommand();
         }
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
             DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 次の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand NextPageListExpressCommand { get; set; }
+        private void NextPageListExpress()
+        {
+            if (PageCount == 0) return;
+            PageCount += PageCount == TotalPageCount ? 0 : 1;
+            ReferenceReceiptsAndExpenditures();
+        }
+        /// <summary>
+        /// 前の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand PrevPageListExpressCommand { get; set; }
+        private void PrevPageListExpress()
+        {
+            if (PageCount == 0) return;
+            if (PageCount > 1) PageCount--;
+            ReferenceReceiptsAndExpenditures();
+        }
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
@@ -146,7 +180,11 @@ namespace WPF.ViewModels
         /// 出納データリストを再検索するコマンド
         /// </summary>
         public DelegateCommand RefreshListCommand { get; set; }
-        private void RefreshList() => ReferenceReceiptsAndExpenditures();
+        private void RefreshList()
+        {
+            PageCount = 1;
+            ReferenceReceiptsAndExpenditures();
+        }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
         /// </summary>
@@ -226,6 +264,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
+            ObservableCollection<ReceiptsAndExpenditure> UnPrintedList;
+
             SearchStartDate = DateTime.Today;
             TodaysFinalAccount = TextHelper.AmountWithUnit(ReturnTodaysFinalAccount());
             SetOutputGroupEnabled();
@@ -238,22 +278,39 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
             WithdrawalSlipsOutputButtonContent = "出金伝票";
-            if (ClosingCashboxHour < DateTime.Now.Hour) ReceiptsAndExpenditures =
-                       DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                       AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty, 
-                       string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), 
-                       new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
-            else ReceiptsAndExpenditures = 
-                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1), 
-                    string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true, 
+            PageCount = ReceiptsAndExpenditures.Count > 0 ? 1 : 0;
+            if (ClosingCashboxHour < DateTime.Now.Hour)
+            {
+                ReceiptsAndExpenditures =
+                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
+                    AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
+                    string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
+                    new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), PageCount).List;
+                UnPrintedList =
+                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
+                    AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
+                    string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
+                    new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
+            }
+            else
+            {
+                ReceiptsAndExpenditures =
+                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
+                    string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
                     false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
-                    new DateTime(1900, 1, 1));
+                    new DateTime(1900, 1, 1), PageCount).List;
+                UnPrintedList =
+                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
+                    string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
+                    false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
+                    new DateTime(1900, 1, 1), PageCount).List;
+            }
             IsPreviousDayOutput = false;
             ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
             IsPreviousDayOutputEnabled = LoginRep.Rep.IsAdminPermisson;
             SetListTitle();
-            SetPeymentSum();
-            SetWithdrawalSumAndTransferSum();
+            SetPeymentSum(UnPrintedList);
+            SetWithdrawalSumAndTransferSum(UnPrintedList);
             SetCashboxTotalAmount();
         }
         /// <summary>
@@ -296,7 +353,6 @@ namespace WPF.ViewModels
                 TodaysFinalAccount = AmountWithUnit(todayTotalAmount);
             else TodaysFinalAccount = "数字が合っていません。確認して下さい。";
             SetOutputGroupEnabled();
-            SetBalanceFinalAccount();
         }
         /// <summary>
         /// 出納データ出力コマンド
@@ -352,6 +408,10 @@ namespace WPF.ViewModels
             RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
             ShowRegistrationCommand = new DelegateCommand(() => ShowRegistration(), () => true);
             ShowUpdateCommand = new DelegateCommand(() => ShowUpdate(), () => true);
+            PrevPageListExpressCommand = new DelegateCommand
+                (() => PrevPageListExpress(), () => true);
+            NextPageListExpressCommand = new DelegateCommand
+                (() => NextPageListExpress(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -362,13 +422,13 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出納データから出金データを取り出し、出金、振替に振り分けて合計を算出します
         /// </summary>
-        private void SetWithdrawalSumAndTransferSum()
+        private void SetWithdrawalSumAndTransferSum(ObservableCollection<ReceiptsAndExpenditure>allDataList)
         {
             WithdrawalSum = 0;
             TransferSum = 0;
             foreach (ReceiptsAndExpenditure rae in TodayWroteList)
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+            foreach (ReceiptsAndExpenditure rae in allDataList)
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
         }
         /// <summary>
@@ -385,12 +445,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 本日の入金合計を算出します
         /// </summary>
-        private void SetPeymentSum()
+        private void SetPeymentSum(ObservableCollection<ReceiptsAndExpenditure>allDataList)
         {
             int i = 0;
             foreach (ReceiptsAndExpenditure rae in TodayWroteList)
                 if (rae.IsPayment) i += rae.Price;
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+            foreach (ReceiptsAndExpenditure rae in allDataList)
                 if (rae.IsPayment) i += rae.Price;
             PaymentSum =i;
         }
@@ -443,6 +503,7 @@ namespace WPF.ViewModels
                 if (SearchEndDate < value) SearchEndDate = value;
                 searchStartDate = value;
                 if (!IsPeriodSearch) SearchEndDate = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -457,6 +518,7 @@ namespace WPF.ViewModels
             {
                 if (SearchStartDate > value) searchEndDate = SearchStartDate;
                 else searchEndDate = value;
+                PageCount =1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -482,6 +544,7 @@ namespace WPF.ViewModels
             set
             {
                 isAllShowItem = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -495,6 +558,7 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentOnly = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -508,6 +572,7 @@ namespace WPF.ViewModels
             set
             {
                 isWithdrawalOnly = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -521,7 +586,7 @@ namespace WPF.ViewModels
             set
             {
                 receiptsAndExpenditures = value;
-                SetBalanceFinalAccount();
+                SetListPageInfo();
                 CallPropertyChanged();
             }
         }
@@ -844,6 +909,7 @@ namespace WPF.ViewModels
                     SearchOutputDateEnd = DefaultDate;
                     SearchOutputDateStart = DefaultDate;
                 }
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -857,6 +923,7 @@ namespace WPF.ViewModels
             set
             {
                 isLocationSearch = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -870,6 +937,7 @@ namespace WPF.ViewModels
             set
             {
                 isValidityTrueOnly = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -884,6 +952,7 @@ namespace WPF.ViewModels
             {
                 if (SearchOutputDateEnd < value) searchStartDate = SearchOutputDateEnd;
                 else searchOutputDateStart = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -898,6 +967,7 @@ namespace WPF.ViewModels
             {
                 if (SearchOutputDateStart > value) searchOutputDateEnd = SearchOutputDateStart;
                 else searchOutputDateEnd = value;
+                PageCount = 1;
                 ReferenceReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
@@ -994,17 +1064,63 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 表示しているリストのページの案内
+        /// </summary>
+        public string ListPageInfo
+        {
+            get => listPageInfo;
+            set
+            {
+                listPageInfo = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 前の10件ボタンのEnabled
+        /// </summary>
+        public bool IsPrevPageEnabled
+        {
+            get => isPrevPageEnabled;
+            set
+            {
+                isPrevPageEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 次の10件ボタンのEnabled
+        /// </summary>
+        public bool IsNextPageEnabled
+        {
+            get => isNextPageEnabled;
+            set
+            {
+                isNextPageEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+
+        private void SetListPageInfo()
+        {
+            int i = RowCount / 10;
+            i += RowCount % 10 == 0 ? 0 : 1;
+            TotalPageCount = i;
+            ListPageInfo = $"{PageCount}/{i}";
+            IsPrevPageEnabled = PageCount > 1;
+            IsNextPageEnabled = PageCount != i;
+        }
+        /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
         /// </summary>
         public void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
-        private void SetBalanceFinalAccount()
+        private void SetBalanceFinalAccount(ObservableCollection<ReceiptsAndExpenditure> allDataList)
         {
            ListAmount = PreviousDayFinalAccount;
             
-            foreach(ReceiptsAndExpenditure receiptsAndExpenditure in ReceiptsAndExpenditures)
+            foreach(ReceiptsAndExpenditure receiptsAndExpenditure in allDataList)
             {
                 if (receiptsAndExpenditure.IsPayment) ListAmount += receiptsAndExpenditure.Price;
                 else ListAmount -= receiptsAndExpenditure.Price;
@@ -1091,14 +1207,9 @@ namespace WPF.ViewModels
             ListTitle = "描画中です。お待ちください。";
             CreateReceiptsAndExpenditures
                 (AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd, Location);
+            SetListPageInfo();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
-            SetAmountSum();
-            SetBalanceFinalAccount();
-        }
-        private void SetAmountSum()
-        {
-            SetPeymentSum();
-            SetWithdrawalSumAndTransferSum();
+
         }
         /// <summary>
         /// データベースに接続して出納データリストを生成します
@@ -1116,7 +1227,21 @@ namespace WPF.ViewModels
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart, 
+                accountActivityDateEnd, outputDateStart, outputDateEnd,PageCount).List;
+            RowCount=
+                DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
+                location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
+                IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
+                accountActivityDateEnd, outputDateStart, outputDateEnd, PageCount).TotalRows;
+            if (ReceiptsAndExpenditures.Count == 0) PageCount = 0;
+            ObservableCollection<ReceiptsAndExpenditure> allDataList =
+                DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
+                location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
+                IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd);
+            SetBalanceFinalAccount(allDataList);
+            SetPeymentSum(allDataList);
+            SetWithdrawalSumAndTransferSum(allDataList);
         }
 
         protected override void SetWindowDefaultTitle() => DefaultWindowTitle = 
