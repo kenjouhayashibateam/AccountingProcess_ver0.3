@@ -194,7 +194,9 @@ namespace WPF.ViewModels
             IsPeriodSearch = true;
             SearchOutputDateStart = DefaultDate;
             SearchOutputDateEnd = DefaultDate;
-            SearchStartDate = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
+            SearchStartDate =
+                DateTime.Today.Day == 1 ? DateTime.Today.AddDays(-10) :
+                DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             SearchEndDate = DateTime.Today;
             switch(AccountingProcessLocation.Location)
             {
@@ -338,7 +340,10 @@ namespace WPF.ViewModels
         /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
         /// </summary>
         private void SetOutputGroupEnabled() =>
-            IsOutputGroupEnabled = Cashbox.GetTotalAmount() == ListAmount;
+            IsOutputGroupEnabled =
+            IsPaymentSlipsOutputEnabled=
+            IsWithdrawalSlipsOutputEnabled=
+            IsBalanceFinalAccountOutputEnabled= Cashbox.GetTotalAmount() == ListAmount;
         /// <summary>
         /// 金庫データをViewにセットする
         /// </summary>
@@ -1257,6 +1262,7 @@ namespace WPF.ViewModels
             }
         }
 
-        public void Notify() => RefreshList();        
+        public void Notify() => RefreshList();
+
     }
 }

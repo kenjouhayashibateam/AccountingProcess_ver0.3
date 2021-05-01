@@ -145,7 +145,7 @@ namespace WPF.ViewModels
                     $"を登録します。\r\n\r\nよろしいですか？",
                 Image = MessageBoxImage.Question,
                 Title = "登録確認",
-                Button = MessageBoxButton.OKCancel
+                Button = MessageBoxButton.YesNo
             };
             CallPropertyChanged(nameof(MessageBox));
             return MessageBox.Result;
@@ -157,7 +157,7 @@ namespace WPF.ViewModels
         public DelegateCommand RegistrationPerMonthFinalAccountCommand { get; set; }
         private void RegistrationPerMonthFinalAccount()
         {
-            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.Cancel) return;
+            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) return;
             DataBaseConnect.RegistrationPerMonthFinalAccount();
             IsRegistrationPerMonthFinalAccountVisiblity = false;//前月決算が登録されたので、登録ボタンを隠す
         }

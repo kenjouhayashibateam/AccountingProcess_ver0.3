@@ -491,9 +491,23 @@ namespace WPF.ViewModels
                         DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
                     SelectedAccountingSubject = null;
                     ComboAccountingSubjectText = string.Empty;
+                    ComboContents.Clear();
+                    SetDataOperationButtonEnabled();
+                    ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
+                    CallPropertyChanged();
+                    return;
                 }
-                else ComboAccountingSubjects = 
-                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                int i = int.TryParse(value, out int j) ? j : 0;
+                if (i == 0) comboAccountingSubjectCode = value == "000" ? value : string.Empty;
+                else comboAccountingSubjectCode = value;
+
+                if (comboAccountingSubjectCode.Length == 3) ComboAccountingSubjects =
+                           DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                else
+                {
+                    ComboAccountingSubjects.Clear();
+                    ComboContents.Clear();
+                }
 
                 if (ComboAccountingSubjects.Count != ComboAccountingSubjectCodes.Count &&
                     ComboAccountingSubjects.Count!=0)
@@ -503,12 +517,13 @@ namespace WPF.ViewModels
                 }
                 else
                 {
-                    comboAccountingSubjectCode = string.Empty;
+                    comboAccountingSubjectCode = value;
                     SelectedAccountingSubject = null;
                     ComboAccountingSubjectText = string.Empty;
                     ComboContentText = string.Empty;
                     ComboContents.Clear();
                 }
+
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
                 CallPropertyChanged();

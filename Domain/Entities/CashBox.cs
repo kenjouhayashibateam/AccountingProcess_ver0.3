@@ -73,8 +73,7 @@ namespace Domain.Entities
 
             foreach (OtherMoney om in OtherMoneys) I += om.Amount;
             foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys) 
-                I += mc.Value.Amount;            
-            
+                I += mc.Value.Amount;
             return I;
         }
         /// <summary>
@@ -82,6 +81,5 @@ namespace Domain.Entities
         /// </summary>
         /// <returns>0,000,000 円</returns>
         public string GetTotalAmountWithUnit() => TextHelper.AmountWithUnit(GetTotalAmount());
-    
     }
 }
