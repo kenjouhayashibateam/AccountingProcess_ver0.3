@@ -102,6 +102,7 @@ namespace WPF.ViewModels
         private DateTime searchOutputDateStart = DefaultDate;
         #endregion
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
+        private ObservableCollection<ReceiptsAndExpenditure> AllDataList;
         /// <summary>
         /// 本日付で出力済みの伝票データのリスト
         /// </summary>
@@ -195,8 +196,9 @@ namespace WPF.ViewModels
             SearchOutputDateStart = DefaultDate;
             SearchOutputDateEnd = DefaultDate;
             SearchStartDate =
-                DateTime.Today.Day == 1 ? DateTime.Today.AddDays(-10) :
-                DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
+                DateTime.Today.Day == 1 ? 
+                    DateTime.Today.AddDays(-10) :
+                    DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             SearchEndDate = DateTime.Today;
             switch(AccountingProcessLocation.Location)
             {
@@ -242,8 +244,8 @@ namespace WPF.ViewModels
         private void SlipsOutputProcess(bool isPayment)
         {
             DataOutput.PaymentAndWithdrawalSlips
-                (ReceiptsAndExpenditures, LoginRep.Rep, isPayment, IsPreviousDayOutput);
-            foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+                (AllDataList, LoginRep.Rep, isPayment, IsPreviousDayOutput);
+            foreach (ReceiptsAndExpenditure rae in AllDataList)
             {
                 if (rae.IsPayment != isPayment) continue;
                 rae.IsUnprinted = false;
@@ -266,8 +268,6 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
-            ObservableCollection<ReceiptsAndExpenditure> UnPrintedList;
-
             SearchStartDate = DateTime.Today;
             TodaysFinalAccount = TextHelper.AmountWithUnit(ReturnTodaysFinalAccount());
             SetOutputGroupEnabled();
@@ -288,7 +288,7 @@ namespace WPF.ViewModels
                     AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
                     string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
                     new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), PageCount).List;
-                UnPrintedList =
+                AllDataList =
                     DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                     AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
                     string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
@@ -301,18 +301,18 @@ namespace WPF.ViewModels
                     string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
                     false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
                     new DateTime(1900, 1, 1), PageCount).List;
-                UnPrintedList =
+                AllDataList =
                     DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                     string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
                     false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
-                    new DateTime(1900, 1, 1), PageCount).List;
+                    new DateTime(1900, 1, 1));
             }
             IsPreviousDayOutput = false;
             ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
             IsPreviousDayOutputEnabled = LoginRep.Rep.IsAdminPermisson;
             SetListTitle();
-            SetPeymentSum(UnPrintedList);
-            SetWithdrawalSumAndTransferSum(UnPrintedList);
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
             SetCashboxTotalAmount();
         }
         /// <summary>
@@ -368,7 +368,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             await Task.Run(() =>
-            DataOutput.ReceiptsAndExpenditureData(ReceiptsAndExpenditures, PreviousDayFinalAccount));
+            DataOutput.ReceiptsAndExpenditureData(AllDataList, PreviousDayFinalAccount));
             ReceiptsAndExpenditureOutputButtonContent = "出納データ";
             IsOutputGroupEnabled = true;
         }
@@ -427,13 +427,13 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出納データから出金データを取り出し、出金、振替に振り分けて合計を算出します
         /// </summary>
-        private void SetWithdrawalSumAndTransferSum(ObservableCollection<ReceiptsAndExpenditure>allDataList)
+        private void SetWithdrawalSumAndTransferSum()
         {
             WithdrawalSum = 0;
             TransferSum = 0;
             foreach (ReceiptsAndExpenditure rae in TodayWroteList)
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
-            foreach (ReceiptsAndExpenditure rae in allDataList)
+            foreach (ReceiptsAndExpenditure rae in AllDataList)
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
         }
         /// <summary>
@@ -450,12 +450,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 本日の入金合計を算出します
         /// </summary>
-        private void SetPeymentSum(ObservableCollection<ReceiptsAndExpenditure>allDataList)
+        private void SetPeymentSum()
         {
             int i = 0;
             foreach (ReceiptsAndExpenditure rae in TodayWroteList)
                 if (rae.IsPayment) i += rae.Price;
-            foreach (ReceiptsAndExpenditure rae in allDataList)
+            foreach (ReceiptsAndExpenditure rae in AllDataList)
                 if (rae.IsPayment) i += rae.Price;
             PaymentSum =i;
         }
@@ -1121,11 +1121,11 @@ namespace WPF.ViewModels
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
-        private void SetBalanceFinalAccount(ObservableCollection<ReceiptsAndExpenditure> allDataList)
+        private void SetBalanceFinalAccount()
         {
            ListAmount = PreviousDayFinalAccount;
             
-            foreach(ReceiptsAndExpenditure receiptsAndExpenditure in allDataList)
+            foreach(ReceiptsAndExpenditure receiptsAndExpenditure in AllDataList)
             {
                 if (receiptsAndExpenditure.IsPayment) ListAmount += receiptsAndExpenditure.Price;
                 else ListAmount -= receiptsAndExpenditure.Price;
@@ -1238,15 +1238,16 @@ namespace WPF.ViewModels
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd, PageCount).TotalRows;
-            if (ReceiptsAndExpenditures.Count == 0) PageCount = 0;
-            ObservableCollection<ReceiptsAndExpenditure> allDataList =
+            AllDataList =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd);
-            SetBalanceFinalAccount(allDataList);
-            SetPeymentSum(allDataList);
-            SetWithdrawalSumAndTransferSum(allDataList);
+
+            if (ReceiptsAndExpenditures.Count == 0) PageCount = 0;
+            SetBalanceFinalAccount();
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
         }
 
         protected override void SetWindowDefaultTitle() => DefaultWindowTitle = 

@@ -94,7 +94,8 @@ namespace WPF.ViewModels
         /// 勘定科目一覧PDFを開くコマンド
         /// </summary>
         public DelegateCommand ShowAccountTitleListPDFFileCommand { get; set; }
-        private void ShowAccountTitleListPDFFile() => System.Diagnostics.Process.Start(".\\files\\AccountTitleList.pdf");
+        private void ShowAccountTitleListPDFFile() =>
+            System.Diagnostics.Process.Start(".\\files\\AccountTitleList.pdf");
         /// <summary>
         /// 詳細メニューのプロパティをセットします
         /// </summary>
@@ -311,10 +312,10 @@ namespace WPF.ViewModels
             IsOutputCheckEnabled = true;
             SelectedCreditDept = OperationData.Data.CreditDept;
             ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
+            ComboContentText = OperationData.Data.Content.Text;
+            ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
             SelectedAccountingSubjectCode = OperationData.Data.Content.AccountingSubject;
             ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
-            ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
-            ComboContentText = OperationData.Data.Content.Text;
             DetailText = OperationData.Data.Detail;
             //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
             //現状管理料のみだが、他に出てきた時にはelseif句で対応する
@@ -485,7 +486,7 @@ namespace WPF.ViewModels
             {
                 comboAccountingSubjectCode = string.Empty;
 
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value)&&OperationData.Data==null)
                 {
                     ComboAccountingSubjects =
                         DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
@@ -497,6 +498,9 @@ namespace WPF.ViewModels
                     CallPropertyChanged();
                     return;
                 }
+
+                if (OperationData.Data != null) return;
+
                 int i = int.TryParse(value, out int j) ? j : 0;
                 if (i == 0) comboAccountingSubjectCode = value == "000" ? value : string.Empty;
                 else comboAccountingSubjectCode = value;
@@ -642,7 +646,8 @@ namespace WPF.ViewModels
                 selectedAccountingSubject = value;
                 SelectedAccountingSubjectCode = value;
                 ComboContents = DataBaseConnect.ReferenceContent
-                    (string.Empty, ComboAccountingSubjectCode, ComboAccountingSubjectText ?? string.Empty, true);
+                    (string.Empty, ComboAccountingSubjectCode,
+                        ComboAccountingSubjectText ?? string.Empty, true);
                 if (ComboContents.Count > 0) ComboContentText =
                         ComboContents.Count != 0 ? ComboContents[0].Text : string.Empty;
                 else ComboContentText = string.Empty;
@@ -970,16 +975,32 @@ namespace WPF.ViewModels
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
         /// </summary>
-        public void SetDataOperationButtonEnabled() => IsDataOperationButtonEnabled = CanOperation();
+        public void SetDataOperationButtonEnabled() =>
+            IsDataOperationButtonEnabled = CanOperation();
         /// <summary>
         /// 出納データ操作時の必須のフィールドにデータが入力されているかを確認し、判定結果を返します
         /// </summary>
         /// <returns>判定結果</returns>
-        private bool CanOperation() =>
-            !string.IsNullOrEmpty(ComboCreditDeptText) & !string.IsNullOrEmpty(ComboContentText) &
-            !string.IsNullOrEmpty(ComboAccountingSubjectText) &
-            !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
-            !string.IsNullOrEmpty(Price) && 0 < IntAmount(price) & !IsOutput;
+        private bool CanOperation()
+        {
+            bool b = !string.IsNullOrEmpty(ComboCreditDeptText) &
+                !string.IsNullOrEmpty(ComboContentText) &
+                !string.IsNullOrEmpty(ComboAccountingSubjectText) &
+                !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
+                !string.IsNullOrEmpty(Price) && 0 < IntAmount(price) & !IsOutput;
+
+            if (!b) return false;
+
+            b=SlipOutputDate == DefaultDate;
+            if (!b) b = LoginRep.GetInstance().Rep.IsAdminPermisson &&
+                     $"{SlipOutputDate.Year}{SlipOutputDate.Month}" ==
+                     $"{DateTime.Today.Year}{DateTime.Today.Month}";
+
+            if (!b) DataOperationButtonContent =
+                    "更新は管理者権限所有者が、今月中の出力データでのみ許可されます";
+
+            return b;
+        }
 
         public void Notify() => SetReceiptsAndExpenditureProperty();        
 
