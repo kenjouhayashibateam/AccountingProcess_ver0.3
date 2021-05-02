@@ -11,7 +11,7 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="1000" Width="1150" FocusManager.FocusedElement="{Binding ElementName=RegistrationRadioButton}">
+        Title="{Binding WindowTitle}" Height="1000" Width="1150">
 
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>

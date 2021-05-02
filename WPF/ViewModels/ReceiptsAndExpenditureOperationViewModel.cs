@@ -223,7 +223,7 @@ namespace WPF.ViewModels
                 Message = "更新しました"
             };
             CallShowMessageBox = true;
-            DataOperationButtonContent = "登録";
+            DataOperationButtonContent = "更新";
 
             IsDataOperationButtonEnabled = true;
         }
@@ -281,9 +281,11 @@ namespace WPF.ViewModels
         private void FieldClear()
         {
             IsValidity = true;
+            OperationData.SetData(null);
+            ComboAccountingSubjectCodes.Clear();
             SelectedAccountingSubjectCode = null;
             ComboAccountingSubjectCode = string.Empty;
-            SelectedAccountingSubject = null;
+            if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
             ComboAccountingSubjectText = string.Empty;
             SelectedContent = null;
             ComboContentText = string.Empty;
@@ -294,7 +296,6 @@ namespace WPF.ViewModels
             LoginRep loginRep = LoginRep.GetInstance();
             OperationRep = loginRep.Rep;
             if (SelectedCreditDept == null) SelectedCreditDept = ComboCreditDepts[0];
-            ComboCreditDeptText = SelectedCreditDept.Dept;
             SlipOutputDate = DefaultDate;
             IsOutput = false;
             IsOutputCheckEnabled = false;
@@ -304,6 +305,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetReceiptsAndExpenditureProperty()
         {
+            OperationRep = OperationData.Data.RegistrationRep;
             ReceiptsAndExpenditureIDField = OperationData.Data.ID;
             IsValidity = OperationData.Data.IsValidity;
             IsPaymentCheck = OperationData.Data.IsPayment;
@@ -314,7 +316,7 @@ namespace WPF.ViewModels
             ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
             ComboContentText = OperationData.Data.Content.Text;
             ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
-            SelectedAccountingSubjectCode = OperationData.Data.Content.AccountingSubject;
+            //SelectedAccountingSubjectCode = OperationData.Data.Content.AccountingSubject;
             ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
             DetailText = OperationData.Data.Detail;
             //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
@@ -329,8 +331,8 @@ namespace WPF.ViewModels
             AccountActivityDate = OperationData.Data.AccountActivityDate;
             RegistrationDate = OperationData.Data.RegistrationDate;
             IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
-            OperationRep = OperationData.Data.RegistrationRep;
-        }
+              //SelectedCreditDept = OperationData.Data.CreditDept;
+      }
         /// <summary>
         /// 管理料のDetailを分割して、年度分の文字列をSupplementに配分します
         /// </summary>
@@ -454,11 +456,8 @@ namespace WPF.ViewModels
             set
             {
                 if (comboCreditDeptText == value) return;
-                if (string.IsNullOrEmpty(value)) value = comboCreditDeptText;
+                comboCreditDeptText = value;
                 SelectedCreditDept = ComboCreditDepts.FirstOrDefault(c => c.Dept == value);
-                comboCreditDeptText = SelectedCreditDept == null ? string.Empty : SelectedCreditDept.Dept;
-
-                SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboCreditDeptText), value);
                 CallPropertyChanged();
             }
@@ -471,7 +470,6 @@ namespace WPF.ViewModels
             get => selectedCreditDept; 
             set 
             {
-                if (selectedCreditDept != null && selectedCreditDept.Equals(value)) return;
                 selectedCreditDept = value;
                 CallPropertyChanged();
             }
@@ -488,18 +486,11 @@ namespace WPF.ViewModels
 
                 if (string.IsNullOrEmpty(value)&&OperationData.Data==null)
                 {
-                    ComboAccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
-                    SelectedAccountingSubject = null;
-                    ComboAccountingSubjectText = string.Empty;
-                    ComboContents.Clear();
-                    SetDataOperationButtonEnabled();
+                    SetField();
                     ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
                     CallPropertyChanged();
                     return;
                 }
-
-                if (OperationData.Data != null) return;
 
                 int i = int.TryParse(value, out int j) ? j : 0;
                 if (i == 0) comboAccountingSubjectCode = value == "000" ? value : string.Empty;
@@ -509,8 +500,10 @@ namespace WPF.ViewModels
                            DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
                 else
                 {
-                    ComboAccountingSubjects.Clear();
-                    ComboContents.Clear();
+                    SetField();
+                    ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
+                    CallPropertyChanged();
+                    return;
                 }
 
                 if (ComboAccountingSubjects.Count != ComboAccountingSubjectCodes.Count &&
@@ -522,7 +515,7 @@ namespace WPF.ViewModels
                 else
                 {
                     comboAccountingSubjectCode = value;
-                    SelectedAccountingSubject = null;
+                    if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
                     ComboAccountingSubjectText = string.Empty;
                     ComboContentText = string.Empty;
                     ComboContents.Clear();
@@ -531,6 +524,17 @@ namespace WPF.ViewModels
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
                 CallPropertyChanged();
+                void SetField()
+                {
+                    ComboAccountingSubjects =
+                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                    if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
+                    ComboAccountingSubjectText = string.Empty;
+                    ComboContents.Clear();
+                    if (SelectedContent != null) SelectedContent = null;
+                    SetDataOperationButtonEnabled();
+
+                }
             }
         }
         /// <summary>
@@ -553,7 +557,7 @@ namespace WPF.ViewModels
             get => selectedAccountingSubjectCode;
             set
             {
-                if (selectedAccountingSubjectCode == value) return;
+                if (selectedAccountingSubjectCode != null && selectedAccountingSubjectCode.Equals(value)) return;
                 selectedAccountingSubjectCode = value;
                 if (value == null) ComboAccountingSubjectCode = string.Empty;
                 else
@@ -573,6 +577,7 @@ namespace WPF.ViewModels
             set
             {
                 if (comboAccountingSubjectText == value) return;
+                
                 if(string.IsNullOrEmpty(value))
                 {
                     comboAccountingSubjectText = value;
@@ -665,9 +670,13 @@ namespace WPF.ViewModels
             get => comboContentText;
             set
             {
-                comboContentText = value;
-                SelectedContent = ComboContents.FirstOrDefault(c => c.Text == comboContentText);
-                comboContentText = SelectedContent == null ? string.Empty : SelectedContent.Text;
+                SelectedContent = ComboContents.FirstOrDefault(c => c.Text == value);
+                if (SelectedContent == null)
+                {
+                    comboContentText = string.Empty;
+                    Price = string.Empty;
+                }
+                else comboContentText = SelectedContent.Text;
 
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
@@ -1034,7 +1043,7 @@ namespace WPF.ViewModels
                     break;
                 case nameof(ComboCreditDeptText):
                     SetNullOrEmptyError(propertyName, value.ToString());
-                    ErrorsListOperation
+                    if (!string.IsNullOrEmpty(value.ToString())) ErrorsListOperation
                         (SelectedCreditDept == null, propertyName, "貸方部門をリストから選択してください");
                     break;                                             
             }            
@@ -1049,7 +1058,7 @@ namespace WPF.ViewModels
         protected override void SetDetailLocked()
         {
             IsValidityEnabled = CurrentOperation == DataOperation.更新;
-            
+
             if (IsValidityEnabled)
                 ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
             else ComboCreditDeptText = ComboCreditDepts[0].Dept;

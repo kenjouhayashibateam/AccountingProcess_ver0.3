@@ -25,8 +25,8 @@ namespace WPF.ViewModels
 
         public DataOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
-            SetDataList();
             SetDelegateCommand();
+            SetDataList();
             SetDataRegistrationCommand = new DelegateCommand(() => 
                 SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() => 
