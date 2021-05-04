@@ -143,7 +143,7 @@ namespace WPF.ViewModels
         {
             if (PageCount == 0) return;
             PageCount += PageCount == TotalPageCount ? 0 : 1;
-            ReferenceReceiptsAndExpenditures();
+            ReferenceReceiptsAndExpenditures(false);
         }
         /// <summary>
         /// 前の10件を表示するコマンド
@@ -153,7 +153,7 @@ namespace WPF.ViewModels
         {
             if (PageCount == 0) return;
             if (PageCount > 1) PageCount--;
-            ReferenceReceiptsAndExpenditures();
+            ReferenceReceiptsAndExpenditures(false);
         }
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
@@ -183,8 +183,7 @@ namespace WPF.ViewModels
         public DelegateCommand RefreshListCommand { get; set; }
         private void RefreshList()
         {
-            PageCount = 1;
-            ReferenceReceiptsAndExpenditures();
+            ReferenceReceiptsAndExpenditures(true);
         }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
@@ -356,7 +355,7 @@ namespace WPF.ViewModels
                 "金庫の金額を計上して下さい" : $"金庫の金額 : {AmountWithUnit(todayTotalAmount)}";
             if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum)
                 TodaysFinalAccount = AmountWithUnit(todayTotalAmount);
-            else TodaysFinalAccount = "数字が合っていません。確認して下さい。";
+            else TodaysFinalAccount = "数字が合っていません。";
             SetOutputGroupEnabled();
         }
         /// <summary>
@@ -508,8 +507,7 @@ namespace WPF.ViewModels
                 if (SearchEndDate < value) SearchEndDate = value;
                 searchStartDate = value;
                 if (!IsPeriodSearch) SearchEndDate = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -524,7 +522,7 @@ namespace WPF.ViewModels
                 if (SearchStartDate > value) searchEndDate = SearchStartDate;
                 else searchEndDate = value;
                 PageCount =1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -549,8 +547,7 @@ namespace WPF.ViewModels
             set
             {
                 isAllShowItem = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -563,8 +560,7 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentOnly = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -577,8 +573,7 @@ namespace WPF.ViewModels
             set
             {
                 isWithdrawalOnly = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -914,8 +909,7 @@ namespace WPF.ViewModels
                     SearchOutputDateEnd = DefaultDate;
                     SearchOutputDateStart = DefaultDate;
                 }
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -928,8 +922,7 @@ namespace WPF.ViewModels
             set
             {
                 isLocationSearch = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -942,8 +935,7 @@ namespace WPF.ViewModels
             set
             {
                 isValidityTrueOnly = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -957,8 +949,7 @@ namespace WPF.ViewModels
             {
                 if (SearchOutputDateEnd < value) searchStartDate = SearchOutputDateEnd;
                 else searchOutputDateStart = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -972,8 +963,7 @@ namespace WPF.ViewModels
             {
                 if (SearchOutputDateStart > value) searchOutputDateEnd = SearchOutputDateStart;
                 else searchOutputDateEnd = value;
-                PageCount = 1;
-                ReferenceReceiptsAndExpenditures();
+                ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -1179,7 +1169,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出納データを検索して、リストに格納します
         /// </summary>
-        private void ReferenceReceiptsAndExpenditures()
+        private void ReferenceReceiptsAndExpenditures(bool isPageCountReset)
         {
             DateTime AccountActivityDateStart;
             DateTime AccountActivityDateEnd;
@@ -1211,7 +1201,8 @@ namespace WPF.ViewModels
 
             ListTitle = "描画中です。お待ちください。";
             CreateReceiptsAndExpenditures
-                (AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd, Location);
+                (AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd,
+                    Location,isPageCountReset);
             SetListPageInfo();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
 
@@ -1226,8 +1217,9 @@ namespace WPF.ViewModels
         /// <param name="location"></param>
         private void CreateReceiptsAndExpenditures
             (DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart, 
-            DateTime outputDateEnd, string location)
+            DateTime outputDateEnd, string location,bool isPageCountReset)
         {
+            PageCount = isPageCountReset ? 1 : PageCount;
             ReceiptsAndExpenditures = 
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,

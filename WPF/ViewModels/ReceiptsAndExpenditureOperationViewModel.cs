@@ -34,6 +34,7 @@ namespace WPF.ViewModels
         private string slipOutputDateTitle;
         private string dataOperationButtonContent;
         private string supplement;
+        private string supplementInfo;
         #endregion
         #region Bools
         private bool isValidity;
@@ -74,7 +75,6 @@ namespace WPF.ViewModels
             (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
-            SetDetailFieldProperty();
             OperationData.Add(this);
             if (OperationData.Data != null)
             {
@@ -104,11 +104,11 @@ namespace WPF.ViewModels
             switch(OperationData.GetOperationType())
             {
                 case ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure:
-                    OtherDescription = "その他詳細";
+                    SetDetailTitle("その他詳細", string.Empty);
                     break;
                 case ReceiptsAndExpenditureOperation.OperationType.Voucher:
                     IsPaymentCheck = true;
-                    OtherDescription = "宛名";
+                    SetDetailTitle("宛名", string.Empty);
                     break;
             }
             IsPaymentCheckEnabled =
@@ -139,6 +139,7 @@ namespace WPF.ViewModels
         /// </summary>
         private async void DataUpdate()
         {
+            IsDataOperationButtonEnabled = false;
             if (OperationData.Data == null) return;
 
             string UpdateCotent = string.Empty;
@@ -200,6 +201,7 @@ namespace WPF.ViewModels
                 System.Windows.MessageBoxResult.Cancel)
             {
                 SetReceiptsAndExpenditureProperty();
+                IsDataOperationButtonEnabled = true;
                 return;
             }
 
@@ -211,7 +213,6 @@ namespace WPF.ViewModels
                 AccountActivityDate, SlipOutputDate, IsReducedTaxRate);
 
             DataOperationButtonContent = "更新中";
-            IsDataOperationButtonEnabled = false;
             await Task.Run(() => DataBaseConnect.Update(updateData));
             OperationData.SetData(updateData);
             OperationData.Notify();
@@ -237,6 +238,7 @@ namespace WPF.ViewModels
         /// </summary>
         private async void DataRegistration()
         {
+            IsDataOperationButtonEnabled = false;
             ReceiptsAndExpenditure rae =
                 new ReceiptsAndExpenditure
                 (0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location,
@@ -244,23 +246,26 @@ namespace WPF.ViewModels
                 AccountActivityDate, DefaultDate, IsReducedTaxRate);
 
             string depositAndWithdrawalText = IsPaymentCheck ? "入金" : "出金";
-             if (CallConfirmationDataOperation
-                    (
-                        $"経理担当場所\t : {rae.Location}\r\n" +
-                        $"入出金日\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n" +
-                        $"入出金\t\t : {depositAndWithdrawalText}\r\n" +
-                        $"貸方勘定\t\t : {rae.CreditDept.Dept}\r\n" +
-                        $"コード\t\t : {rae.Content.AccountingSubject.SubjectCode}\r\n" +
-                        $"勘定科目\t\t : {rae.Content.AccountingSubject.Subject}\r\n" +
-                        $"内容\t\t : {rae.Content.Text}\r\n" +
-                        $"詳細\t\t : {JoinDetail()}\r\n金額\t\t : {AmountWithUnit(rae.Price)}\r\n" +
-                        $"軽減税率\t\t : {rae.IsReducedTaxRate}\r\n" +
-                        $"有効性\t\t : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票"
-                    )
-                    == System.Windows.MessageBoxResult.Cancel) return;
+            if (CallConfirmationDataOperation
+                   (
+                       $"経理担当場所\t : {rae.Location}\r\n" +
+                       $"入出金日\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n" +
+                       $"入出金\t\t : {depositAndWithdrawalText}\r\n" +
+                       $"貸方勘定\t\t : {rae.CreditDept.Dept}\r\n" +
+                       $"コード\t\t : {rae.Content.AccountingSubject.SubjectCode}\r\n" +
+                       $"勘定科目\t\t : {rae.Content.AccountingSubject.Subject}\r\n" +
+                       $"内容\t\t : {rae.Content.Text}\r\n" +
+                       $"詳細\t\t : {JoinDetail()}\r\n金額\t\t : {AmountWithUnit(rae.Price)}\r\n" +
+                       $"軽減税率\t\t : {rae.IsReducedTaxRate}\r\n" +
+                       $"有効性\t\t : {rae.IsValidity}\r\n\r\n登録しますか？", "伝票"
+                   )
+                   == System.Windows.MessageBoxResult.Cancel)
+            {
+                IsDataOperationButtonEnabled = true;
+                return;
+            }
 
             DataOperationButtonContent = "登録中";
-            IsDataOperationButtonEnabled = false;
             await Task.Run(() => DataBaseConnect.Registration(rae));
             OperationData.SetData(rae);
             OperationData.Notify();
@@ -299,6 +304,7 @@ namespace WPF.ViewModels
             SlipOutputDate = DefaultDate;
             IsOutput = false;
             IsOutputCheckEnabled = false;
+            SetDetailFieldProperty();
         }
         /// <summary>
         /// フィールドにプロパティをセットします
@@ -314,25 +320,24 @@ namespace WPF.ViewModels
             IsOutputCheckEnabled = true;
             SelectedCreditDept = OperationData.Data.CreditDept;
             ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
-            ComboContentText = OperationData.Data.Content.Text;
             ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
-            //SelectedAccountingSubjectCode = OperationData.Data.Content.AccountingSubject;
+            ComboContentText = OperationData.Data.Content.Text;
             ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
             DetailText = OperationData.Data.Detail;
+            Price = OperationData.Data.Price.ToString();
+            AccountActivityDate = OperationData.Data.AccountActivityDate;
+            RegistrationDate = OperationData.Data.RegistrationDate;
+            IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
             //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
             //現状管理料のみだが、他に出てきた時にはelseif句で対応する
+            SetDetailFieldProperty();
             if (OperationData.Data.Content.Text.Contains("管理料")) ManagementFeeTextAllocation();
             else
             {
                 DetailText = OperationData.Data.Detail;
                 Supplement = string.Empty;
             }
-            Price = OperationData.Data.Price.ToString();
-            AccountActivityDate = OperationData.Data.AccountActivityDate;
-            RegistrationDate = OperationData.Data.RegistrationDate;
-            IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
-              //SelectedCreditDept = OperationData.Data.CreditDept;
-      }
+        }
         /// <summary>
         /// 管理料のDetailを分割して、年度分の文字列をSupplementに配分します
         /// </summary>
@@ -348,6 +353,17 @@ namespace WPF.ViewModels
                 if (t.Contains("年度分")) Supplement = t;
                 else DetailText += t;
             }
+            SetDetailTitle("支払者名", "必ず「年度分」の文字を入力");
+        }
+        /// <summary>
+        /// その他詳細、補足のタイトルをセットします
+        /// </summary>
+        /// <param name="otherDescriptionString">その他詳細</param>
+        /// <param name="supplementInfoString">補足</param>
+        private void SetDetailTitle(string otherDescriptionString,string supplementInfoString)
+        {
+            SupplementInfo = supplementInfoString;
+            OtherDescription = otherDescriptionString;
         }
         /// <summary>
         /// 出納IDフィールド
@@ -533,7 +549,6 @@ namespace WPF.ViewModels
                     ComboContents.Clear();
                     if (SelectedContent != null) SelectedContent = null;
                     SetDataOperationButtonEnabled();
-
                 }
             }
         }
@@ -720,7 +735,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetContentProperty()
         {
-            IsSupplementVisiblity = ComboContentText.Contains("管理料");
+            IsSupplementVisiblity = SelectedContent != null && SelectedContent.Text.Contains("管理料");
+
             IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
 
             if(IsReducedTaxRateVisiblity) IsReducedTaxRate = SelectedContent.Text == "供物";
@@ -731,10 +747,14 @@ namespace WPF.ViewModels
 
             if (SelectedAccountingSubject == null) return;
 
-            if(IsSupplementVisiblity)
-                Supplement = SelectedAccountingSubject.Number==26 ?
+            if (IsSupplementVisiblity)
+            {
+                Supplement = SelectedAccountingSubject.Number == 26 ?
                     $"{DateTime.Now.Year}年度分" :
                     $"{DateTime.Now.Year},{DateTime.Now.Year + 1}年度分";
+                SetDetailTitle("支払者名", "必ず「年度分」の文字を入力");
+            }
+            else SetDetailTitle("その他詳細", string.Empty);
         }
         /// <summary>
         /// 詳細テキストブロックに表示するタイトル
@@ -757,6 +777,7 @@ namespace WPF.ViewModels
             set
             {
                 detailText = value;
+                SetDataOperationButtonEnabled();
                 CallPropertyChanged();
             }
         }
@@ -941,6 +962,7 @@ namespace WPF.ViewModels
             set
             {
                 supplement = value;
+                ValidationProperty(nameof(Supplement), value);
                 CallPropertyChanged();
             }
         }
@@ -980,6 +1002,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 補足に促す注意
+        /// </summary>
+        public string SupplementInfo
+        {
+            get => supplementInfo;
+            set
+            {
+                supplementInfo = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
@@ -996,7 +1030,7 @@ namespace WPF.ViewModels
                 !string.IsNullOrEmpty(ComboContentText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
-                !string.IsNullOrEmpty(Price) && 0 < IntAmount(price) & !IsOutput;
+                !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
 
             if (!b) return false;
 
@@ -1045,7 +1079,14 @@ namespace WPF.ViewModels
                     SetNullOrEmptyError(propertyName, value.ToString());
                     if (!string.IsNullOrEmpty(value.ToString())) ErrorsListOperation
                         (SelectedCreditDept == null, propertyName, "貸方部門をリストから選択してください");
-                    break;                                             
+                    break;
+                case nameof(Supplement):
+                    if(ComboContentText!=null && ComboContentText.Contains("管理料"))
+                    {
+                        SetNullOrEmptyError(propertyName, value.ToString());
+                        ErrorsListOperation(!((string)value).Contains("年度分"), propertyName, "年度分を入力してください");
+                    }
+                    break;
             }            
         }
 
@@ -1070,7 +1111,6 @@ namespace WPF.ViewModels
         protected override void SetDataList()
         {
             ComboContents = new ObservableCollection<Content>();
-                //DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, true);
             ComboAccountingSubjectCodes =
                 DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
             ComboAccountingSubjects =

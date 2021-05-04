@@ -62,6 +62,7 @@ namespace WPF.ViewModels
             OperationData.Add(this);
             SearchDate = DateTime.Today;
             OutputButtonContent = "出力";
+            SetListPageInfo();
             SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
@@ -75,7 +76,7 @@ namespace WPF.ViewModels
         {
             if (PageCount == 0) return;
             PageCount += PageCount == TotalPageCount ? 0 : 1;
-            CreateReceiptsAndExpenditures(SearchDate);
+            CreateReceiptsAndExpenditures(SearchDate,false);
         }
         /// <summary>
         /// 前の10件を表示するコマンド
@@ -85,11 +86,12 @@ namespace WPF.ViewModels
         {
             if (PageCount == 0) return;
             if (PageCount > 1) PageCount--;
-            CreateReceiptsAndExpenditures(SearchDate);
+            CreateReceiptsAndExpenditures(SearchDate,false);
         }
 
         private void SetListPageInfo()
         {
+
             int i = RowCount / 10;
             i += RowCount % 10 == 0 ? 0 : 1;
             TotalPageCount = i;
@@ -206,18 +208,19 @@ namespace WPF.ViewModels
             set
             {
                 searchDate = value;
-                CreateReceiptsAndExpenditures(value);
-                ObservableCollection<ReceiptsAndExpenditure> list = DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                    string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
-                    value, value, TextHelper.DefaultDate, new DateTime(9999, 1, 1));
-                PageCount = 1;
-                RowCount = list.Count;
+                CreateReceiptsAndExpenditures(value, true);
                 CallPropertyChanged();
             }
         }
-        private void CreateReceiptsAndExpenditures(DateTime accountActivityDate)
+        private void CreateReceiptsAndExpenditures(DateTime accountActivityDate,bool isPageReset)
         {
+            PageCount = isPageReset ? 1 : PageCount;
+            ObservableCollection<ReceiptsAndExpenditure> allDataList=
+                DataBaseConnect.ReferenceReceiptsAndExpenditure
+                (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
+                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1));
+
             SearchReceiptsAndExpenditures =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
@@ -228,6 +231,7 @@ namespace WPF.ViewModels
                 (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
                 string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
                 accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), PageCount).TotalRows;
+            RowCount = allDataList.Count;
             SetListPageInfo();
         }
         /// <summary>

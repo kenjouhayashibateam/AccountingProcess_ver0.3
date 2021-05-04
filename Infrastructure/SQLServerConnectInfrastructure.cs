@@ -23,9 +23,10 @@ namespace Infrastructure
         {
             Cn = new SqlConnection
             {
-                ConnectionString = LoginRep.Rep.IsAdminPermisson
-                ? Properties.Settings.Default.SystemAdminConnection
-                : Properties.Settings.Default.AccountingProcessConnection
+                ConnectionString=Properties.Settings.Default.SystemAdminConnection
+                //ConnectionString = LoginRep.Rep.IsAdminPermisson
+                //? Properties.Settings.Default.SystemAdminConnection
+                //: Properties.Settings.Default.AccountingProcessConnection
             };
         }
         /// <summary>
