@@ -215,7 +215,7 @@ namespace WPF.ViewModels
         private void CreateReceiptsAndExpenditures(DateTime accountActivityDate,bool isPageReset)
         {
             PageCount = isPageReset ? 1 : PageCount;
-            ObservableCollection<ReceiptsAndExpenditure> allDataList=
+            ObservableCollection<ReceiptsAndExpenditure> allDataList =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
                 string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
@@ -372,7 +372,7 @@ namespace WPF.ViewModels
         protected override void SetWindowDefaultTitle() =>
             DefaultWindowTitle = $"受納証作成 : {AccountingProcessLocation.Location}";
 
-        public void Notify()
+        public void ReceiptsAndExpenditureOperationNotify()
         {
             SearchDate = OperationData.Data.AccountActivityDate;
             VoucherContents.Add(OperationData.Data);

@@ -1,0 +1,50 @@
+﻿using System.Collections.ObjectModel;
+
+namespace Domain.Entities
+{
+    /// <summary>
+    /// お布施一覧のアイテムクラス
+    /// </summary>
+    public class Condolence
+    {
+        /// <summary>
+        /// 出納データリスト
+        /// </summary>
+        public ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
+        /// <summary>
+        /// 僧侶の名前
+        /// </summary>
+        public string SoryoName { get; set; }
+        /// <summary>
+        /// 葬儀、法事のトグル。法事がTrue
+        /// </summary>
+        public bool IsMemorialService { get; set; }
+        /// <summary>
+        /// お布施
+        /// </summary>
+        public int Almsgiving { get; set; }
+        /// <summary>
+        /// 御車代
+        /// </summary>
+        public int CarTip { get; set; }
+        /// <summary>
+        /// 御膳料
+        /// </summary>
+        public int MealTip { get; set; }
+        /// <summary>
+        /// 御車代御膳料
+        /// </summary>
+        public int CarAndMealTip { get; set; }
+        /// <summary>
+        /// 備考
+        /// </summary>
+        public string Note { get; set; }
+
+        public Condolence(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, string soryoName, bool isMemorialService)
+        {
+            ReceiptsAndExpenditures = receiptsAndExpenditures;
+            SoryoName = soryoName;
+            IsMemorialService = isMemorialService;
+        }        
+    }
+}

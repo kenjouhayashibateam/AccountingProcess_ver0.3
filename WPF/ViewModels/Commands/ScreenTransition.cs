@@ -52,5 +52,7 @@ namespace WPF.ViewModels.Commands
         /// <returns>パート交通費データ登録ウィンドウインスタンス</returns>
         public static Window PartTimerTransportRegistration() =>
             new PartTimerTransportationExpensesRegistrationView();
+        public static Window CondolencesOperation() =>
+            new CondolenceOperationView();
     }
 }

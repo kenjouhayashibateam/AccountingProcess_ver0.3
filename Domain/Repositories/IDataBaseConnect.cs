@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
@@ -212,5 +213,10 @@ namespace Domain.Repositories
         /// 伝票の出力日を前日に変更します
         /// </summary>
         public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure);
+        /// <summary>
+        /// 信行寺の僧侶リストを返します
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, string> GetSoryoList();
     }
 }

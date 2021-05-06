@@ -79,6 +79,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />
+    <Compile Include="ViewModels\CreateCondolencesViewModel.cs" />
     <Compile Include="ViewModels\CreateVoucherViewModel.cs" />
     <Compile Include="ViewModels\DataManagementViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -98,6 +100,12 @@
     <Compile Include="Views\Behaviors\OutputDateConverter.cs" />
     <Compile Include="Views\Behaviors\SystemMenuBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
+    <Compile Include="Views\CondolenceOperationView.xaml.cs">
+      <DependentUpon>CondolenceOperationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateCondolencesView.xaml.cs">
+      <DependentUpon>CreateCondolencesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateVoucherView.xaml.cs">
       <DependentUpon>CreateVoucherView.xaml</DependentUpon>
     </Compile>
@@ -132,6 +140,14 @@
     </Compile>
     <Compile Include="Win32\Api\User32.cs" />
     <Compile Include="Win32\Constant.cs" />
+    <Page Include="Views\CondolenceOperationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateCondolencesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CreateVoucherView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

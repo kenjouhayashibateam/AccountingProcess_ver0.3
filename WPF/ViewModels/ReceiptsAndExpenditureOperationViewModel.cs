@@ -35,6 +35,10 @@ namespace WPF.ViewModels
         private string dataOperationButtonContent;
         private string supplement;
         private string supplementInfo;
+        /// <summary>
+        /// 補足に入る必須入力文字
+        /// </summary>
+        private string SupplementRequiredString;
         #endregion
         #region Bools
         private bool isValidity;
@@ -735,6 +739,9 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetContentProperty()
         {
+            if (SelectedContent.Text.Contains("管理料")) SupplementRequiredString = "年度分";
+            else SupplementRequiredString = string.Empty;
+
             IsSupplementVisiblity = SelectedContent != null && SelectedContent.Text.Contains("管理料");
 
             IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
@@ -752,7 +759,7 @@ namespace WPF.ViewModels
                 Supplement = SelectedAccountingSubject.Number == 26 ?
                     $"{DateTime.Now.Year}年度分" :
                     $"{DateTime.Now.Year},{DateTime.Now.Year + 1}年度分";
-                SetDetailTitle("支払者名", "必ず「年度分」の文字を入力");
+                SetDetailTitle("支払者名", $"必ず「{SupplementRequiredString}」の文字を入力");
             }
             else SetDetailTitle("その他詳細", string.Empty);
         }
@@ -776,7 +783,7 @@ namespace WPF.ViewModels
             get => detailText;
             set
             {
-                detailText = value;
+                detailText = value.Replace('　',' ');
                 SetDataOperationButtonEnabled();
                 CallPropertyChanged();
             }
@@ -802,8 +809,8 @@ namespace WPF.ViewModels
             set
             {
                 price = CommaDelimitedAmount(value);
-                SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(Price), price);
+                SetDataOperationButtonEnabled();
                 CallPropertyChanged();
             }
         }
@@ -963,6 +970,7 @@ namespace WPF.ViewModels
             {
                 supplement = value;
                 ValidationProperty(nameof(Supplement), value);
+                SetDataOperationButtonEnabled();
                 CallPropertyChanged();
             }
         }
@@ -1026,7 +1034,7 @@ namespace WPF.ViewModels
         /// <returns>判定結果</returns>
         private bool CanOperation()
         {
-            bool b = !string.IsNullOrEmpty(ComboCreditDeptText) &
+            bool b =!HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
                 !string.IsNullOrEmpty(ComboContentText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
@@ -1045,7 +1053,7 @@ namespace WPF.ViewModels
             return b;
         }
 
-        public void Notify() => SetReceiptsAndExpenditureProperty();        
+        public void ReceiptsAndExpenditureOperationNotify() => SetReceiptsAndExpenditureProperty();        
 
         public override void SetRep(Rep rep)
         {
@@ -1084,7 +1092,8 @@ namespace WPF.ViewModels
                     if(ComboContentText!=null && ComboContentText.Contains("管理料"))
                     {
                         SetNullOrEmptyError(propertyName, value.ToString());
-                        ErrorsListOperation(!((string)value).Contains("年度分"), propertyName, "年度分を入力してください");
+                        ErrorsListOperation(!((string)value).Contains(SupplementRequiredString), 
+                            propertyName, $"{SupplementRequiredString}を入力してください");
                     }
                     break;
             }            

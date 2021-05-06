@@ -44,7 +44,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(1, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(1, 5, 1, 7).Style
+            MySheetCellRange(1, 5, 2, 7).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             MySheetCellRange(3, 1, 3, 3).Style
@@ -90,6 +90,9 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(1, 5).Value = "本部長";
             myWorksheet.Cell(1, 6).Value = "副住職";
             myWorksheet.Cell(1, 7).Value = "係";
+            LoginRep loginRep = LoginRep.GetInstance();
+            if (loginRep.Rep != null) myWorksheet.Cell(2, 7).Value =
+                       TextHelper.GetFirstName(loginRep.Rep.Name);
 
             myWorksheet.Cell(3, 1).Value = "金種";
             myWorksheet.Cell(3, 2).Value = "数量";

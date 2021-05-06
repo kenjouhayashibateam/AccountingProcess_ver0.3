@@ -1255,7 +1255,7 @@ namespace WPF.ViewModels
             }
         }
 
-        public void Notify() => RefreshList();
+        public void ReceiptsAndExpenditureOperationNotify() => RefreshList();
 
     }
 }

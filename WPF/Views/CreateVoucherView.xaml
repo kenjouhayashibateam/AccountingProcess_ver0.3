@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPF.Views"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -90,42 +89,42 @@
                     </GroupBox.Header>
                     <DataGrid AutoGenerateColumns="False" x:Name="SearchReceiptsAndExpenditureDataGrid" ItemsSource="{Binding SearchReceiptsAndExpenditures}" SelectedValue="{Binding SelectedSeachReceiptsAndExpenditure}" Margin="5">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="コード" Width="1*">
+                            <DataGridTemplateColumn Header="コード" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="勘定科目" Width="2*">
+                            <DataGridTemplateColumn Header="勘定科目" Width="4*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="内容" Width="2*">
+                            <DataGridTemplateColumn Header="内容" Width="5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="詳細" Width="3*">
+                            <DataGridTemplateColumn Header="詳細" Width="6*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="金額" Width="2*">
+                            <DataGridTemplateColumn Header="金額" Width="3*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="受納証" Width="1*">
+                            <DataGridTemplateColumn Header="受納証" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button x:Name="AddVoucherListButton" Content="追加" FontSize="11" Margin="5,1">

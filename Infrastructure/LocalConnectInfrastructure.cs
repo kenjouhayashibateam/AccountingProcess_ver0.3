@@ -2,6 +2,7 @@
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static Domain.Entities.Helpers.TextHelper;
 
@@ -20,6 +21,22 @@ namespace Infrastructure
         public int CallFinalAccountPerMonth() => 0;
 
         public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
+
+        public Dictionary<int, string> GetSoryoList()
+        {
+            Dictionary<int, string> list = new Dictionary<int, string>()
+            {
+                { 0, "小林 謙" },
+                {1, "林飛 顕誠"},
+                {2,"西村 守弘" },
+                {3,"細江 洸" },
+                {4,"安静 至邦" },
+                {5,"石丸 恒平" },
+                {6,"髙橋 証規" }
+            };
+
+            return list;
+        }
 
         public int PreviousDayFinalAmount() => 0;
 

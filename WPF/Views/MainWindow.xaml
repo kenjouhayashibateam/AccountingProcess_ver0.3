@@ -126,7 +126,17 @@
                     </Button>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <Button Content="パート交通費登録" Grid.Row="0" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,60">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Button Content="お布施一覧管理" Grid.Row="0" Margin="5,20">
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
+                    </Button>
+                    <Button Content="パート交通費登録" Grid.Row="1" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,20">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowPartTimerTransPortCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowPartTimerTransPortCommand}" MouseAction="LeftClick"/>

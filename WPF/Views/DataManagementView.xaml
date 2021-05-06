@@ -12,7 +12,6 @@
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
-        xmlns:texthelper="clr-namespace:Domain.Entities.Helpers;assembly=Domain"
         Title="{Binding WindowTitle}" Height="600" Width="500" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=RepRegistrationButton}">
 
     <Window.DataContext>

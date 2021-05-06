@@ -2,6 +2,7 @@
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -617,6 +618,36 @@ namespace Infrastructure
                 }
             }
             return (totalRows, list);
+        }
+
+        public Dictionary<int, string> GetSoryoList()
+        {
+            Cn = new SqlConnection
+            {
+                ConnectionString =
+                "Data Source=192.168.44.163\\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;" +
+                "User ID=sa;Password=sqlserver"
+            };
+
+            Cn.Open();
+
+            SqlCommand Cmd = new SqlCommand
+            {
+                Connection = Cn,
+                CommandType = CommandType.Text,
+                CommandText = "select * from PersonInChargeMaster"
+            };
+
+            Dictionary<int, string> list = new Dictionary<int, string>();
+            using(Cn)
+            {
+                using SqlDataReader dataReader = Cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                    list.Add((int)dataReader["PersonInChargeID"], 
+                                    (string)dataReader["PersonInChargeName"]);   
+            }
+            return list;
         }
     }
 }

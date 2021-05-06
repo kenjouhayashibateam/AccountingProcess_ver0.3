@@ -4,7 +4,7 @@ namespace Domain.Entities
 {
     public interface IReceiptsAndExpenditureOperationObserver
     {
-        void Notify();
+        void ReceiptsAndExpenditureOperationNotify();
     }
     /// <summary>
     /// 操作する出納データをメモリに保持するクラス
@@ -49,7 +49,7 @@ namespace Domain.Entities
 
         public void Notify()
         {
-            foreach (IReceiptsAndExpenditureOperationObserver raeo in observers) raeo.Notify();
+            foreach (IReceiptsAndExpenditureOperationObserver raeo in observers) raeo.ReceiptsAndExpenditureOperationNotify();
         }
         public void Add(IReceiptsAndExpenditureOperationObserver operationObserver) =>
             observers.Add(operationObserver);

@@ -59,7 +59,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding ReceiptsAndExpenditureIDFieldText}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" IsEnabled="{Binding IsValidityEnabled}" Margin="5,0"/>
-                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3.667,5.333,2"/>
+                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3"/>
                     <Grid Grid.Row="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
