@@ -649,5 +649,10 @@ namespace Infrastructure
             }
             return list;
         }
+
+        public int Registration(Condolence condolence)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

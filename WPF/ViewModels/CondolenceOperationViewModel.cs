@@ -7,6 +7,9 @@ using static Domain.Entities.Helpers.TextHelper;
 using Infrastructure;
 using System.Collections.Generic;
 using WPF.ViewModels.Commands;
+using System.Threading.Tasks;
+using WPF.Views.Datas;
+using System.Windows;
 
 namespace WPF.ViewModels
 {
@@ -28,9 +31,10 @@ namespace WPF.ViewModels
         private string note;
         private string dataOperationButtonContent;
         /// <summary>
-        /// 検索する伝票内容
+        /// 検索する勘定科目コード
         /// </summary>
-        private string SearchContent { get; set; }
+        private string SearchAccountingSubjectCode { get; set; }
+        private string searchGanreContent;
         #endregion
         #region Bools
         private bool isMemorialService;
@@ -38,11 +42,13 @@ namespace WPF.ViewModels
         private bool isCarTipCheck;
         private bool isMealTipCheck;
         private bool isCarAndMealTipCheck;
+        private bool isAlmsgivingSearch;
+        private bool isOperationButtonEnabled;
         #endregion
         private Dictionary<int, string> soryoList;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
         private DateTime receiptsAndExpenditureSearchDate;
-        private DateTime registrationDate;
+        private DateTime accountActivityDate;
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         #endregion
 
@@ -50,55 +56,92 @@ namespace WPF.ViewModels
         { 
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsAlmsgivingCheck = true;
+            IsAlmsgivingSearch = true;
+            DataOperationButtonContent = DataOperation.登録.ToString();
         }
         public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
-        /// 御車代御膳料検索コマンド
+        /// データ操作コマンド
         /// </summary>
-        public DelegateCommand SearchCarAndMealTipCommand { get; set; }
-        private void SearchCarAndMealTip()
+        public DelegateCommand OperationDataCommand { get; set; }
+        private async void OperationData()
         {
-            IsCarAndMealTipCheck = true;
-            SearchContent = "御車代御膳料";
-            SetReceiptsAndExpenditures();
+            Condolence condolence = new Condolence
+                (OwnerName, SoryoName, isMemorialService, IntAmount(Almsgiving), IntAmount(CarTip),
+                    IntAmount(MealTip), IntAmount(CarAndMealTip), Note, AccountActivityDate);
+            
+            string content=condolence.IsMemorialService?"法事":"葬儀";
+
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = $"日付\t:{Space}{condolence.AccountActivityDate.ToShortDateString()}\r\n" +
+                                    $"施主名\t:{Space}{condolence.OwnerName}\r\n" +
+                                    $"担当僧侶\t:{Space}{condolence.SoryoName}\r\n" +
+                                    $"内容\t:{Space}{content}\r\n" +
+                                    $"合計金額\t:{Space}{TotalAmount}\r\n" +
+                                    $"御布施\t:{Space}{Almsgiving}\r\n" +
+                                    $"御車代\t:{Space}{CarTip}\t\n" +
+                                    $"御膳料\t:{Space}{MealTip}\t\n" +
+                                    $"御車代御膳料\t{Space}{CarAndMealTip}\t\n" +
+                                    $"備考\t:{Space}{Note}\r\n\r\n登録しますか？",
+                Button =MessageBoxButton.OKCancel,
+                Image = MessageBoxImage.Question,
+                Title = "登録確認"
+            };
+
+            if (MessageBox.Result == MessageBoxResult.Cancel) return;
+
+            IsOperationButtonEnabled = false;
+            DataOperationButtonContent = "登録中";
+            LoginRep loginRep = LoginRep.GetInstance();
+            await Task.Run(() => DataBaseConnect.Registration(condolence));
+            IsOperationButtonEnabled = true;
+            DataOperationButtonContent = "登録";
         }
         /// <summary>
-        /// 御膳料検索コマンド
+        /// 出納データの情報を登録データに入力するコマンド
         /// </summary>
-        public DelegateCommand SearchMealTipCommand { get; set; }
-        private void SearchMealTip()
+        public DelegateCommand InputPropertyCommand { get; set; }
+        private async void InputProperty()
         {
-            IsMealTipCheck = true;
-            SearchContent = "御膳料";
-            SetReceiptsAndExpenditures();
+            await Task.Delay(1);
+            AccountActivityDate = SelectedReceiptsAndExpenditure.AccountActivityDate;
+            OwnerName = SelectedReceiptsAndExpenditure.Detail;
+
+            switch(SearchAccountingSubjectCode)
+            {
+                case "815":
+                    Almsgiving = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    break;
+                case "832":
+                    SetAmount();
+                    break;
+            }
         }
-        /// <summary>
-        /// 御車代検索コマンド
-        /// </summary>
-        public DelegateCommand SearchCarTipCommand { get; set; }
-        private void SearchCarTip()
+
+        private void SetAmount()
         {
-            IsCarTipCheck = true;
-            SearchContent = "御車代";
-            SetReceiptsAndExpenditures();
-        }
-        /// <summary>
-        /// 御布施検索コマンド
-        /// </summary>
-        public DelegateCommand SearchAlmsgivingCommand { get; set; }
-        private void SearchAlmsgiving()
-        {
-            IsAlmsgivingCheck = true;
-            SearchContent = "御布施";
-            SetReceiptsAndExpenditures();
+            switch(SelectedReceiptsAndExpenditure.Content.Text)
+            {
+                case "御車代":
+                    CarTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    break;
+                case "御膳料":
+                    MealTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    break;
+                case "御車代御膳料":
+                    CarAndMealTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    break;
+            }
         }
         private void SetReceiptsAndExpenditures()
         {
             ReceiptsAndExpenditures =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Today, string.Empty, "法務部", SearchContent, string.Empty,
-                        string.Empty, string.Empty, true, true, true, true, ReceiptsAndExpenditureSearchDate,
-                        receiptsAndExpenditureSearchDate, DefaultDate, DateTime.Today);
+                    (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
+                        string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
+                        ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
+                        DateTime.Today);
         }
         /// <summary>
         /// 出納データリスト
@@ -106,7 +149,7 @@ namespace WPF.ViewModels
         public ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures
         {
             get => receiptsAndExpenditures;
-            set
+            set 
             {
                 receiptsAndExpenditures = value;
                 CallPropertyChanged();
@@ -139,12 +182,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 登録する日時
         /// </summary>
-        public DateTime Date
+        public DateTime AccountActivityDate
         {
-            get => registrationDate;
+            get => accountActivityDate;
             set
             {
-                registrationDate = value;
+                accountActivityDate = value;
                 CallPropertyChanged();
             }
         }
@@ -157,6 +200,7 @@ namespace WPF.ViewModels
             set
             {
                 carTip = value;
+                SetTotalAmount();
                 CallPropertyChanged();
             }
         }
@@ -181,6 +225,7 @@ namespace WPF.ViewModels
             set
             {
                 almsgiving = value;
+                SetTotalAmount();
                 CallPropertyChanged();
             }
         }
@@ -193,6 +238,7 @@ namespace WPF.ViewModels
             set
             {
                 mealTip = value;
+                SetTotalAmount();
                 CallPropertyChanged();
             }
         }
@@ -205,6 +251,7 @@ namespace WPF.ViewModels
             set
             {
                 carAndMealTip = value;
+                SetTotalAmount();
                 CallPropertyChanged();
             }
         }
@@ -220,6 +267,12 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        private void SetTotalAmount()
+        {
+            TotalAmount =
+                AmountWithUnit(IntAmount(Almsgiving) + IntAmount(CarTip) + IntAmount(MealTip) + 
+                    IntAmount(CarAndMealTip));
+        }
         /// <summary>
         /// 内容が法事かのチェック　Trueが法事、Falseが葬儀
         /// </summary>
@@ -229,6 +282,7 @@ namespace WPF.ViewModels
             set
             {
                 isMemorialService = value;
+                ContentText = value ? "法事" : "葬儀";
                 CallPropertyChanged();
             }
         }
@@ -339,6 +393,44 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 御布施か志納金のどちらで検索するか　御布施がTrue
+        /// </summary>
+        public bool IsAlmsgivingSearch
+        {
+            get => isAlmsgivingSearch;
+            set
+            {
+                isAlmsgivingSearch = value;
+                SearchGanreContent = value ? "志納金検索" : "御布施検索";
+                SearchAccountingSubjectCode = value ? "815" : "832";
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索するジャンルのContent
+        /// </summary>
+        public string SearchGanreContent
+        {
+            get => searchGanreContent;
+            set
+            {
+                searchGanreContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// データ操作ボタンのEnable
+        /// </summary>
+        public bool IsOperationButtonEnabled
+        {
+            get => isOperationButtonEnabled;
+            set
+            {
+                isOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void SetRep(Rep rep)
         {
@@ -365,10 +457,7 @@ namespace WPF.ViewModels
 
         protected override void SetDelegateCommand()
         {
-            SearchAlmsgivingCommand = new DelegateCommand(() => SearchAlmsgiving(), () => true);
-            SearchCarTipCommand = new DelegateCommand(() => SearchCarTip(), () => true);
-            SearchMealTipCommand = new DelegateCommand(() => SearchMealTip(), () => true);
-            SearchCarAndMealTipCommand = new DelegateCommand(() => SearchCarAndMealTip(), () => true);
+            InputPropertyCommand = new DelegateCommand(() => InputProperty(), () => true);
         }
 
         protected override void SetDetailLocked() { }

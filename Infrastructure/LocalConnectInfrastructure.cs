@@ -311,6 +311,8 @@ namespace Infrastructure
 
         public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
 
+        public int Registration(Condolence condolence) => 1;
+
         public int RegistrationPerMonthFinalAccount() => 1;
         
         public int Update(Rep rep) => 1;

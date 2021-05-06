@@ -39,6 +39,12 @@ namespace Domain.Repositories
         /// <returns>データ処理件数</returns>
         public int Registration(Content content);
         /// <summary>
+        /// 御布施一覧データ登録
+        /// </summary>
+        /// <param name="condolence">データ</param>
+        /// <returns></returns>
+        public int Registration(Condolence condolence);
+        /// <summary>
         /// 担当者データ更新
         /// </summary>
         /// <param name="rep">担当者</param>

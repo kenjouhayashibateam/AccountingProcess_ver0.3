@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
 
 namespace Domain.Entities
 {
@@ -8,9 +8,9 @@ namespace Domain.Entities
     public class Condolence
     {
         /// <summary>
-        /// 出納データリスト
+        /// 施主名
         /// </summary>
-        public ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
+        public string OwnerName { get; set; }
         /// <summary>
         /// 僧侶の名前
         /// </summary>
@@ -39,12 +39,23 @@ namespace Domain.Entities
         /// 備考
         /// </summary>
         public string Note { get; set; }
+        /// <summary>
+        /// 日付
+        /// </summary>
+        public DateTime AccountActivityDate { get; set; }
 
-        public Condolence(ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, string soryoName, bool isMemorialService)
+        public Condolence(string ownerName, string soryoName, bool isMemorialService, int almsgiving, 
+            int carTip, int mealTip, int carAndMealTip, string note, DateTime accountActivityDate)
         {
-            ReceiptsAndExpenditures = receiptsAndExpenditures;
+            OwnerName = ownerName;
             SoryoName = soryoName;
             IsMemorialService = isMemorialService;
-        }        
+            Almsgiving = almsgiving;
+            CarTip = carTip;
+            MealTip = mealTip;
+            CarAndMealTip = carAndMealTip;
+            Note = note;
+            AccountActivityDate = accountActivityDate;
+        }
     }
 }
