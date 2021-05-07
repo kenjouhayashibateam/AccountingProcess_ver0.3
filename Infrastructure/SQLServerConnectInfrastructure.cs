@@ -655,7 +655,22 @@ namespace Infrastructure
 
         public int Registration(Condolence condolence)
         {
-            throw new NotImplementedException();
+            SqlCommand Cmd = new SqlCommand();
+
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "registration_condolence");
+                Cmd.Parameters.AddWithValue("@execution_date", condolence.AccountActivityDate);
+                Cmd.Parameters.AddWithValue("@owner_name", condolence.OwnerName);
+                Cmd.Parameters.AddWithValue("@soryo_name", condolence.SoryoName);
+                Cmd.Parameters.AddWithValue("@is_memorial_service", condolence.IsMemorialService);
+                Cmd.Parameters.AddWithValue("@car_tip", condolence.CarTip);
+                Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
+                Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
+                Cmd.Parameters.AddWithValue("@note", condolence.Note);
+
+                return Cmd.ExecuteNonQuery();
+            }
         }
     }
 }

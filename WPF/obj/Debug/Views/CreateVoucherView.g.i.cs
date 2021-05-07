@@ -40,6 +40,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
 using WPF.ViewModels;
+using WPF.Views;
 using WPF.Views.Behaviors;
 
 

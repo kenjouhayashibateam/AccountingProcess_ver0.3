@@ -49,7 +49,8 @@ namespace Domain.Entities
 
         public void Notify()
         {
-            foreach (IReceiptsAndExpenditureOperationObserver raeo in observers) raeo.ReceiptsAndExpenditureOperationNotify();
+            foreach (IReceiptsAndExpenditureOperationObserver raeo in observers)
+                raeo.ReceiptsAndExpenditureOperationNotify();
         }
         public void Add(IReceiptsAndExpenditureOperationObserver operationObserver) =>
             observers.Add(operationObserver);

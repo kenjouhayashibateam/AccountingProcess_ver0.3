@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
@@ -15,7 +17,11 @@
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
     </i:Interaction.Behaviors>
-
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
@@ -152,7 +158,7 @@
                         <ToggleButton x:Name="ContentToggleButton" Grid.Row="1" Grid.Column="0" IsChecked="{Binding IsMemorialService}" Content="{Binding ContentText}" Margin="5"/>
                         <ComboBox Name="SoryoNameComboBox" Grid.Row="1" Grid.Column="1" IsEditable="True" ItemsSource="{Binding SoryoList}" DisplayMemberPath="Value" Text="{Binding SoryoName}" Margin="5"/>
                         <TextBox x:Name="NoteTextBox" Grid.Row="1" Grid.Column="2" Text="{Binding Note}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                        <Button x:Name="OperationButton" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsOperationButtonEnabled}" Grid.Column="3" Grid.Row="1" Margin="30,5">
+                        <Button x:Name="OperationButton" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsOperationButtonEnabled}" Grid.Column="3" Grid.Row="1" Margin="30,3">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding OperationDataCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding OperationDataCommand}" MouseAction="LeftClick"/>

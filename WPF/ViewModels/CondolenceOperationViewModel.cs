@@ -16,7 +16,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// お布施一覧登録ViewModel
     /// </summary>
-    public class CondolenceOperationViewModel:DataOperationViewModel
+    public class CondolenceOperationViewModel:DataOperationViewModel,ICondolenceObserver
     {
         #region Properties
         #region Strings
@@ -50,17 +50,21 @@ namespace WPF.ViewModels
         private DateTime receiptsAndExpenditureSearchDate=DefaultDate;
         private DateTime accountActivityDate;
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
+        private readonly CondolenceOperation OperationCondolence;
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
-        { 
+        {
+            OperationCondolence = CondolenceOperation.GetInstance();
+            OperationCondolence.Add(this);
             IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsAlmsgivingCheck = true;
             IsMemorialService = true;
             DataOperationButtonContent = DataOperation.登録.ToString();
         }
-        public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public CondolenceOperationViewModel() : 
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
         /// データ操作コマンド
         /// </summary>
@@ -75,17 +79,17 @@ namespace WPF.ViewModels
 
             MessageBox = new MessageBoxInfo()
             {
-                Message = $"日付\t:{Space}{condolence.AccountActivityDate.ToShortDateString()}\r\n" +
-                                    $"施主名\t:{Space}{condolence.OwnerName}\r\n" +
-                                    $"担当僧侶\t:{Space}{condolence.SoryoName}\r\n" +
-                                    $"内容\t:{Space}{content}\r\n" +
-                                    $"合計金額\t:{Space}{TotalAmount}\r\n" +
-                                    $"御布施\t:{Space}{Almsgiving}\r\n" +
-                                    $"御車代\t:{Space}{CarTip}\t\n" +
-                                    $"御膳料\t:{Space}{MealTip}\t\n" +
-                                    $"御車代御膳料\t{Space}{CarAndMealTip}\t\n" +
-                                    $"備考\t:{Space}{Note}\r\n\r\n登録しますか？",
-                Button =MessageBoxButton.OKCancel,
+                Message = $"日付\t\t:{Space}{condolence.AccountActivityDate.ToShortDateString()}\r\n" +
+                                    $"施主名\t\t:{Space}{condolence.OwnerName}\r\n" +
+                                    $"担当僧侶\t\t:{Space}{condolence.SoryoName}\r\n" +
+                                    $"内容\t\t:{Space}{content}\r\n" +
+                                    $"合計金額\t\t:{Space}{TotalAmount}\r\n" +
+                                    $"御布施\t\t:{Space}{Almsgiving}\r\n" +
+                                    $"御車代\t\t:{Space}{CarTip}\t\n" +
+                                    $"御膳料\t\t:{Space}{MealTip}\t\n" +
+                                    $"御車代御膳料\t:{Space}{CarAndMealTip}\t\n" +
+                                    $"備考\t\t:{Space}{Note}\r\n\r\n登録しますか？",
+                Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
                 Title = "登録確認"
             };
@@ -96,8 +100,27 @@ namespace WPF.ViewModels
             DataOperationButtonContent = "登録中";
             LoginRep loginRep = LoginRep.GetInstance();
             await Task.Run(() => DataBaseConnect.Registration(condolence));
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = "登録しました。",
+                Image = MessageBoxImage.Information,
+                Button = MessageBoxButton.OK,
+                Title = "登録完了"
+            };
+            OperationCondolence.SetData(condolence);
             IsOperationButtonEnabled = true;
             DataOperationButtonContent = "登録";
+            OperationCondolence.Notify();
+        }
+        private void FieldClear()
+        {
+            OwnerName = string.Empty;
+            SoryoName = string.Empty;
+            Almsgiving = string.Empty;
+            CarTip = string.Empty;
+            MealTip = string.Empty;
+            CarAndMealTip = string.Empty;
+            Note = string.Empty;
         }
         /// <summary>
         /// 出納データの情報を登録データに入力するコマンド
@@ -206,7 +229,7 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-        /// <summary>
+        /// <summary> 
         /// 登録する施主名
         /// </summary>
         public string OwnerName
@@ -214,10 +237,28 @@ namespace WPF.ViewModels
             get => ownerName;
             set
             {
-                ownerName = value;
+                if(ConfirmationOwnerName(ownerName,value)==MessageBoxResult.Yes) ownerName = value;
+                
                 ValidationProperty(nameof(OwnerName), value);
                 CallPropertyChanged();
             }
+        }
+        private MessageBoxResult ConfirmationOwnerName(string oldValue,string newValue)
+        {
+            if (oldValue == newValue) return MessageBoxResult.Yes;
+            if (string.IsNullOrEmpty(newValue)) return MessageBoxResult.Yes;
+            if (string.IsNullOrEmpty(oldValue)) return MessageBoxResult.Yes;
+
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = $"施主名が違います。\r\n" +
+                    $"旧施主名{Space}:{Space}{oldValue}\t新施主名{Space}:{Space}{newValue}\r\n\r\n" +
+                    $"よろしいですか？",
+                Image = MessageBoxImage.Question,
+                Button = MessageBoxButton.YesNo,
+                Title = "施主名確認"
+            };
+            return MessageBox.Result;
         }
         /// <summary>
         /// 登録するお布施
@@ -470,8 +511,9 @@ namespace WPF.ViewModels
         }
 
         private void SetIsOperationButtonEnabled() =>
-            IsOperationButtonEnabled = !string.IsNullOrEmpty(OwnerName) && !string.IsNullOrEmpty(SoryoName) &&
-                !string.IsNullOrEmpty(TotalAmount) && IntAmount(TotalAmount) != 0;
+            IsOperationButtonEnabled = !string.IsNullOrEmpty(OwnerName) &&
+                !string.IsNullOrEmpty(SoryoName) && !string.IsNullOrEmpty(TotalAmount) && 
+                IntAmount(TotalAmount) != 0;
 
         protected override void SetDataList()
         {
@@ -491,5 +533,7 @@ namespace WPF.ViewModels
 
         protected override void SetWindowDefaultTitle() =>
             WindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
+
+        public void CondolenceNotify() => FieldClear();
     }
 }

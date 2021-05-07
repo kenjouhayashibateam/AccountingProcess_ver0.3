@@ -11,7 +11,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// お布施一覧作成ViewModel
     /// </summary>
-    public class CreateCondolencesViewModel : BaseViewModel
+    public class CreateCondolencesViewModel : BaseViewModel,ICondolenceObserver
     {
         private ObservableCollection<Condolence> condolences;
 
@@ -49,5 +49,10 @@ namespace WPF.ViewModels
 
         protected override void SetWindowDefaultTitle() => 
             DefaultWindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
+
+        public void CondolenceNotify()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
