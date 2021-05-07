@@ -359,6 +359,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@registration_date_start", registrationDateStart);
                 Cmd.Parameters.AddWithValue("@registration_date_end", registrationDateEnd);
                 Cmd.Parameters.AddWithValue("@credit_dept", creditDept);
+                Cmd.Parameters.AddWithValue("@accounting_subject_code", accountingSubjectCode);
                 Cmd.Parameters.AddWithValue("@content", content);
                 Cmd.Parameters.AddWithValue("@detail", detail);
                 Cmd.Parameters.AddWithValue("@limiting_is_payment", whichDepositAndWithdrawalOnly);
@@ -560,6 +561,7 @@ namespace Infrastructure
                     $"and account_activity_date between '{accountActivityDateStart.ToShortDateString()}' and" +
                     $" '{accountActivityDateEnd.ToShortDateString()}'\r\n" +
                     $"and dept like '%' + '{creditDept}' + '%'\r\n" +
+                    $"and subject_code like '%'+'{accountingSubjectCode}'+'%'\r\n" +
                     $"and content like '%' + '{content}' + '%'\r\n" +
                     $"and detail like '%' + '{detail}' + '%'\r\n" +
                     $"and is_payment =case when '{whichDepositAndWithdrawalOnly}'=" +
@@ -578,6 +580,7 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@registration_date_start", registrationDateStart);
                 Cmd.Parameters.AddWithValue("@registration_date_end", registrationDateEnd);
                 Cmd.Parameters.AddWithValue("@credit_dept", creditDept);
+                Cmd.Parameters.AddWithValue("@accounting_subject_code", accountingSubjectCode);
                 Cmd.Parameters.AddWithValue("@content", content);
                 Cmd.Parameters.AddWithValue("@detail", detail);
                 Cmd.Parameters.AddWithValue("@limiting_is_payment", whichDepositAndWithdrawalOnly);

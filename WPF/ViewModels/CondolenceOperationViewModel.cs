@@ -20,15 +20,15 @@ namespace WPF.ViewModels
     {
         #region Properties
         #region Strings
-        private string carTip;
-        private string ownerName;
-        private string almsgiving;
-        private string mealTip;
-        private string carAndMealTip;
-        private string totalAmount;
-        private string contentText;
-        private string soryoName;
-        private string note;
+        private string carTip = string.Empty;
+        private string ownerName = string.Empty;
+        private string almsgiving = string.Empty;
+        private string mealTip = string.Empty;
+        private string carAndMealTip = string.Empty;
+        private string totalAmount = string.Empty;
+        private string contentText = string.Empty;
+        private string soryoName = string.Empty;
+        private string note = string.Empty;
         private string dataOperationButtonContent;
         /// <summary>
         /// 検索する勘定科目コード
@@ -47,16 +47,17 @@ namespace WPF.ViewModels
         #endregion
         private Dictionary<int, string> soryoList;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
-        private DateTime receiptsAndExpenditureSearchDate;
+        private DateTime receiptsAndExpenditureSearchDate=DefaultDate;
         private DateTime accountActivityDate;
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         { 
+            IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsAlmsgivingCheck = true;
-            IsAlmsgivingSearch = true;
+            IsMemorialService = true;
             DataOperationButtonContent = DataOperation.登録.ToString();
         }
         public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
@@ -188,6 +189,7 @@ namespace WPF.ViewModels
             set
             {
                 accountActivityDate = value;
+                ValidationProperty(nameof(AccountActivityDate), value);
                 CallPropertyChanged();
             }
         }
@@ -213,6 +215,7 @@ namespace WPF.ViewModels
             set
             {
                 ownerName = value;
+                ValidationProperty(nameof(OwnerName), value);
                 CallPropertyChanged();
             }
         }
@@ -264,6 +267,7 @@ namespace WPF.ViewModels
             set
             {
                 totalAmount = value;
+                ValidationProperty(nameof(TotalAmount), value);
                 CallPropertyChanged();
             }
         }
@@ -319,6 +323,7 @@ namespace WPF.ViewModels
             set
             {
                 soryoName = value;
+                ValidationProperty(nameof(SoryoName), value);
                 CallPropertyChanged();
             }
         }
@@ -331,6 +336,7 @@ namespace WPF.ViewModels
             set
             {
                 note = value;
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -404,6 +410,7 @@ namespace WPF.ViewModels
                 isAlmsgivingSearch = value;
                 SearchGanreContent = value ? "志納金検索" : "御布施検索";
                 SearchAccountingSubjectCode = value ? "815" : "832";
+                SetReceiptsAndExpenditures();
                 CallPropertyChanged();
             }
         }
@@ -444,8 +451,27 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            throw new NotImplementedException();
+            switch(propertyName)
+            {
+                case nameof(OwnerName):
+                    SetNullOrEmptyError(propertyName, (string)value);
+                    break;
+                case nameof(SoryoName):
+                    SetNullOrEmptyError(propertyName, (string)value);
+                    break;
+                case nameof(TotalAmount):
+                    SetNullOrEmptyError(propertyName, (string)value);
+                    if (GetErrors(propertyName) == null)
+                        ErrorsListOperation
+                            (IntAmount((string)value) == 0, propertyName, "金額が入力されていません");
+                    break;
+            }
+            SetIsOperationButtonEnabled();
         }
+
+        private void SetIsOperationButtonEnabled() =>
+            IsOperationButtonEnabled = !string.IsNullOrEmpty(OwnerName) && !string.IsNullOrEmpty(SoryoName) &&
+                !string.IsNullOrEmpty(TotalAmount) && IntAmount(TotalAmount) != 0;
 
         protected override void SetDataList()
         {
@@ -458,6 +484,7 @@ namespace WPF.ViewModels
         protected override void SetDelegateCommand()
         {
             InputPropertyCommand = new DelegateCommand(() => InputProperty(), () => true);
+            OperationDataCommand = new DelegateCommand(() => OperationData(), () => true);
         }
 
         protected override void SetDetailLocked() { }
