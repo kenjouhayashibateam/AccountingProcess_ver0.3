@@ -81,6 +81,29 @@ namespace Infrastructure
             return list;
         }
 
+        public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
+            (DateTime startDate, DateTime endDate, int pageCount)
+        {
+            ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
+            {
+                new Condolence(1,"あああ家","林飛",true,10000,5000,0,0,"佐野商店",DateTime.Today),
+                new Condolence(2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today)
+            };
+
+            return (list.Count, list);
+        }
+
+        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate)
+        {
+            ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
+            {
+                new Condolence(1,"あああ家","林飛",true,10000,5000,0,0,"佐野商店",DateTime.Today),
+                new Condolence(2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today)
+            };
+
+            return list;
+        }
+
         public ObservableCollection<Content> ReferenceContent
             (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
@@ -324,5 +347,7 @@ namespace Infrastructure
         public int Update(Content content) => 1;
 
         public int Update(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
+
+        public int Update(Condolence condolence) => 1;
     }
 }

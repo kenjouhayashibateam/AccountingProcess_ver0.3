@@ -97,6 +97,7 @@
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\DataGridAttachment.cs" />
     <Compile Include="Views\Behaviors\DatePickerAttachment.cs" />
+    <Compile Include="Views\Behaviors\IsMemorialServiceConverter.cs" />
     <Compile Include="Views\Behaviors\OutputDateConverter.cs" />
     <Compile Include="Views\Behaviors\SystemMenuBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />

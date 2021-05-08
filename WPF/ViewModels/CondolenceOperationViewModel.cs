@@ -72,7 +72,7 @@ namespace WPF.ViewModels
         private async void OperationData()
         {
             Condolence condolence = new Condolence
-                (OwnerName, SoryoName, isMemorialService, IntAmount(Almsgiving), IntAmount(CarTip),
+                (0, OwnerName, SoryoName, isMemorialService, IntAmount(Almsgiving), IntAmount(CarTip),
                     IntAmount(MealTip), IntAmount(CarAndMealTip), Note, AccountActivityDate);
             
             string content=condolence.IsMemorialService?"法事":"葬儀";

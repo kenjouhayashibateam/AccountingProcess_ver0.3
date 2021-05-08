@@ -28,7 +28,7 @@ namespace Domain.Repositories
             (string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit,
             string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
             string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
-            string wizeCoreAmountWithUnit);
+            string wizeCoreAmountWithUnit,bool yokohamaBankCheck,bool ceresaCheck);
         /// <summary>
         /// 出納データを出力します
         /// </summary>

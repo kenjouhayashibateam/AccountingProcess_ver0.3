@@ -8,6 +8,10 @@ namespace Domain.Entities
     public class Condolence
     {
         /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
         /// 施主名
         /// </summary>
         public string OwnerName { get; set; }
@@ -36,6 +40,10 @@ namespace Domain.Entities
         /// </summary>
         public int CarAndMealTip { get; set; }
         /// <summary>
+        /// 合計金額
+        /// </summary>
+        public int TotalAmount { get => Almsgiving + CarTip + MealTip + CarAndMealTip; }
+        /// <summary>
         /// 備考
         /// </summary>
         public string Note { get; set; }
@@ -44,9 +52,10 @@ namespace Domain.Entities
         /// </summary>
         public DateTime AccountActivityDate { get; set; }
 
-        public Condolence(string ownerName, string soryoName, bool isMemorialService, int almsgiving, 
+        public Condolence(int id, string ownerName, string soryoName, bool isMemorialService, int almsgiving, 
             int carTip, int mealTip, int carAndMealTip, string note, DateTime accountActivityDate)
         {
+            ID = id;
             OwnerName = ownerName;
             SoryoName = soryoName;
             IsMemorialService = isMemorialService;

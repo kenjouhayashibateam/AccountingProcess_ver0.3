@@ -30,6 +30,7 @@
             <b:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
+    
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
             <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>

@@ -40,6 +40,14 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         private readonly string CeresaAmountWithUnit;
         /// <summary>
+        /// 横浜銀行変化なしチェック
+        /// </summary>
+        private readonly bool YokohamaBankCheck;
+        /// <summary>
+        /// セレサ川崎変化なしチェック
+        /// </summary>
+        private readonly bool CeresaCheck;
+        /// <summary>
         /// ワイズコア仮受金
         /// </summary>
         private readonly string WizeCoreAmountWithUnit;
@@ -56,7 +64,7 @@ namespace Infrastructure.ExcelOutputData
                 string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, 
                 string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
                 string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, 
-                string wizeCoreAmountWithUnit
+                string wizeCoreAmountWithUnit,bool yokohamaBankCheck,bool ceresaCheck
             )
         {
             PreviousDayFinalAccountWithUnit = previousDayFinalAccountWithUnit;
@@ -67,6 +75,8 @@ namespace Infrastructure.ExcelOutputData
             YokohamaBankAmountWithUnit = yokohamaBankAmountWithUnit;
             CeresaAmountWithUnit = ceresaAmountWithUnit;
             WizeCoreAmountWithUnit = wizeCoreAmountWithUnit;
+            YokohamaBankCheck = yokohamaBankCheck;
+            CeresaCheck = ceresaCheck;
         }
 
         protected override void SetBorderStyle()
@@ -128,8 +138,10 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(10, 5).Value = TodayFinalAccountWithUnit;
             myWorksheet.Cell(12, 1).Value = "横浜銀行残高";
             myWorksheet.Cell(12, 2).Value = YokohamaBankAmountWithUnit;
+            myWorksheet.Cell(12, 4).Value = YokohamaBankCheck ? "変化なしです" : string.Empty;
             myWorksheet.Cell(13, 1).Value = "セレサ川崎残高";
             myWorksheet.Cell(13, 2).Value = CeresaAmountWithUnit;
+            myWorksheet.Cell(13, 4).Value = CeresaCheck ? "変化なしです" : string.Empty;
             myWorksheet.Cell(14, 1).Value = "ワイズコア仮受金";
             myWorksheet.Cell(14, 2).Value = WizeCoreAmountWithUnit;
             myWorksheet.Cell(16, 4).Value = "信行寺　春秋苑";

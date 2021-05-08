@@ -549,30 +549,9 @@ namespace Infrastructure
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
-            int totalRows = default;
             SqlCommand Cmd = new SqlCommand();
             using (Cn)
             {
-                SettingConectionString();
-                Cmd.Connection = Cn;
-                Cmd.CommandType = CommandType.Text;
-                Cmd.CommandText = $"select count(*)as return_count from reference_receipts_and_expenditure_data_view\r\n" +
-                    $"where location like '%' + '{location}' + '%'\r\n" +
-                    $"and account_activity_date between '{accountActivityDateStart.ToShortDateString()}' and" +
-                    $" '{accountActivityDateEnd.ToShortDateString()}'\r\n" +
-                    $"and dept like '%' + '{creditDept}' + '%'\r\n" +
-                    $"and subject_code like '%'+'{accountingSubjectCode}'+'%'\r\n" +
-                    $"and content like '%' + '{content}' + '%'\r\n" +
-                    $"and detail like '%' + '{detail}' + '%'\r\n" +
-                    $"and is_payment =case when '{whichDepositAndWithdrawalOnly}'=" +
-                    $" 'true' then '{isPayment}' else is_payment end\r\n" +
-                    $"and output_date between '{outputDateStart.ToShortDateString()}' and '{outputDateEnd.ToShortDateString()}'\r\n" +
-                    $"and is_validity = case when '{isValidityOnly}' = 'true' then 'true' else is_validity end ";
-                Cn.Open();
-                using SqlDataReader countReader = Cmd.ExecuteReader();
-
-                while (countReader.Read()) totalRows = (int)countReader["return_count"];
-
                 ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure");
                 Cmd.Parameters.AddWithValue("@location", location);
                 Cmd.Parameters.AddWithValue("@account_activity_date_start", accountActivityDateStart);
@@ -620,7 +599,10 @@ namespace Infrastructure
                         );
                 }
             }
-            return (totalRows, list);
+            return (ReferenceReceiptsAndExpenditure(registrationDateStart, registrationDateEnd, location, creditDept, 
+                content, detail, accountingSubject, accountingSubjectCode, whichDepositAndWithdrawalOnly, isPayment, 
+                isContainOutputted, isValidityOnly, accountActivityDateStart, accountActivityDateEnd, outputDateStart, 
+                outputDateEnd).Count, list);
         }
 
         public Dictionary<int, string> GetSoryoList()
@@ -638,7 +620,7 @@ namespace Infrastructure
             {
                 Connection = Cn,
                 CommandType = CommandType.Text,
-                CommandText = "select * from PersonInChargeMaster"
+                CommandText = "select * from PersonInChargeMaster where OrderNumber>0"
             };
 
             Dictionary<int, string> list = new Dictionary<int, string>();
@@ -671,6 +653,78 @@ namespace Infrastructure
 
                 return Cmd.ExecuteNonQuery();
             }
+        }
+
+        public int Update(Condolence condolence)
+        {
+            SqlCommand Cmd = new SqlCommand();
+
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "update_condolence");
+                Cmd.Parameters.AddWithValue("@condolence_id", condolence.ID);
+                Cmd.Parameters.AddWithValue("@execuion_date", condolence.AccountActivityDate);
+                Cmd.Parameters.AddWithValue("@owner_name", condolence.OwnerName);
+                Cmd.Parameters.AddWithValue("@soryo_name", condolence.SoryoName);
+                Cmd.Parameters.AddWithValue("@is_memorial_service", condolence.IsMemorialService);
+                Cmd.Parameters.AddWithValue("@car_tip", condolence.CarTip);
+                Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
+                Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
+                Cmd.Parameters.AddWithValue("@note", condolence.Note);
+
+                return Cmd.ExecuteNonQuery();
+            }
+        }
+
+        public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
+            (DateTime startDate, DateTime endDate, int pageCount)
+        {
+            ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
+            SqlCommand Cmd = new SqlCommand();
+
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "reference_condolence");
+                Cmd.Parameters.AddWithValue("@start_date", startDate);
+                Cmd.Parameters.AddWithValue("@end_date", endDate);
+                Cmd.Parameters.AddWithValue("@page", pageCount);
+
+                SqlDataReader dataReader = Cmd.ExecuteReader();
+                while(dataReader.Read())
+                {
+                    list.Add(new Condolence((int)dataReader["condolence_id"], (string)dataReader["owner_name"],
+                        (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
+                        (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"], 
+                        (int)dataReader["car_and_meal_tip"], (string)dataReader["note"],
+                        (DateTime)dataReader["execution_date"]));                    
+                }
+            }
+            return (ReferenceCondolence(startDate, endDate).Count, list);
+        }
+
+        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate)
+        {
+            ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
+            SqlCommand Cmd = new SqlCommand();
+
+            using(Cn)
+            {
+                ADO_NewInstance_StoredProc(Cmd, "reference_condolence_all_data");
+                Cmd.Parameters.AddWithValue("@start_date", startDate);
+                Cmd.Parameters.AddWithValue("@end_date", endDate);
+
+                SqlDataReader dataReader = Cmd.ExecuteReader();
+
+                while(dataReader.Read())
+                {
+                    list.Add(new Condolence((int)dataReader["condolence_id"], (string)dataReader["owner_name"],
+                        (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
+                        (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
+                        (int)dataReader["car_and_meal_tip"], (string)dataReader["note"],
+                        (DateTime)dataReader["execution_date"]));
+                }
+            }
+            return list;
         }
     }
 }

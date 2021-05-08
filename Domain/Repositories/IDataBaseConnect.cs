@@ -224,5 +224,27 @@ namespace Domain.Repositories
         /// </summary>
         /// <returns></returns>
         public Dictionary<int, string> GetSoryoList();
+        /// <summary>
+        /// 御布施一覧データを更新します
+        /// </summary>
+        /// <param name="condolence">更新する御布施一覧データ</param>
+        /// <returns></returns>
+        public int Update(Condolence condolence);
+        /// <summary>
+        /// 御布施一覧データを検索します
+        /// </summary>
+        /// <param name="startDate">検索最古日時</param>
+        /// <param name="dateTime">検索最新日時</param>
+        /// <returns></returns>
+        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate);
+        /// <summary>
+        /// 御布施一覧データを検索します
+        /// </summary>
+        /// <param name="startDate">検索最古日時</param>
+        /// <param name="endDate">検索最新日時</param>
+        /// <param name="pageCount">ページカウント</param>
+        /// <returns></returns>
+        public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
+            (DateTime startDate, DateTime endDate, int pageCount);
     }
 }

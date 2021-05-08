@@ -104,7 +104,7 @@ namespace WPF.ViewModels
             ShowPartTimerTransPortCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()), () => true);
             ShowCreateCondolencesCommand = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.CondolencesOperation()), () => true);
+                (() => CreateShowWindowCommand(ScreenTransition.CreateCondolences()), () => true);
         }
         public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
         /// <summary>

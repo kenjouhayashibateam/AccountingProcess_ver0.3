@@ -94,6 +94,8 @@ namespace WPF.ViewModels
         private bool passwordCharCheck;
         private bool isPrevPageEnabled;
         private bool isNextPageEnabled;
+        private bool isYokohamaBankCheck;
+        private bool isCeresaCheck;
         #endregion
         #region DateTime
         private DateTime searchEndDate = new DateTime(9999, 1, 1);
@@ -218,9 +220,9 @@ namespace WPF.ViewModels
         private async void WithdrawalSlipsOutput()
         {
             WithdrawalSlipsOutputButtonContent = "出力中";
-            IsWithdrawalSlipsOutputEnabled = false;
+            IsOutputGroupEnabled = false;
             await Task.Run(() => SlipsOutputProcess(false));
-            IsWithdrawalSlipsOutputEnabled = true;
+            IsOutputGroupEnabled = true;
             WithdrawalSlipsOutputButtonContent = "出金伝票";
         }
 
@@ -231,9 +233,9 @@ namespace WPF.ViewModels
         private async void PaymentSlipsOutput()
         {
             PaymentSlipsOutputButtonContent = "出力中";
-            IsPaymentSlipsOutputEnabled = false;
+            IsOutputGroupEnabled = false;
             await Task.Run(() => SlipsOutputProcess(true));
-            IsPaymentSlipsOutputEnabled = true;
+            IsOutputGroupEnabled = true;
             PaymentSlipsOutputButtonContent = "入金伝票";
         }
         /// <summary>
@@ -385,8 +387,8 @@ namespace WPF.ViewModels
             await Task.Run(() =>
             DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
                 PeymentSumDisplayValue,WithdrawalSumDisplayValue, TransferSumDisplayValue, 
-                TodaysFinalAccount, YokohamaBankAmount, 
-                CeresaAmount, WizeCoreAmount));
+                TodaysFinalAccount, AmountWithUnit(IntAmount( YokohamaBankAmount)), 
+                AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount,IsYokohamaBankCheck,IsCeresaCheck));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
         }
@@ -1091,6 +1093,30 @@ namespace WPF.ViewModels
             set
             {
                 isNextPageEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 横浜銀行残高の変化なしチェック
+        /// </summary>
+        public bool IsYokohamaBankCheck
+        {
+            get => isYokohamaBankCheck;
+            set
+            {
+                isYokohamaBankCheck = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// セレサ川崎残高の変化なしチェック
+        /// </summary>
+        public bool IsCeresaCheck
+        {
+            get => isCeresaCheck;
+            set
+            {
+                isCeresaCheck = value;
                 CallPropertyChanged();
             }
         }
