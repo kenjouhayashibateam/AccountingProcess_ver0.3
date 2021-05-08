@@ -220,14 +220,7 @@ namespace WPF.ViewModels
             await Task.Run(() => DataBaseConnect.Update(updateData));
             OperationData.SetData(updateData);
             OperationData.Notify();
-            MessageBox = new MessageBoxInfo
-            {
-                Button = System.Windows.MessageBoxButton.OK,
-                Image = System.Windows.MessageBoxImage.Information,
-                Title = "更新完了",
-                Message = "更新しました"
-            };
-            CallShowMessageBox = true;
+            CallCompletedUpdate();
             DataOperationButtonContent = "更新";
 
             IsDataOperationButtonEnabled = true;
@@ -273,15 +266,9 @@ namespace WPF.ViewModels
             await Task.Run(() => DataBaseConnect.Registration(rae));
             OperationData.SetData(rae);
             OperationData.Notify();
-            MessageBox = new MessageBoxInfo
-            {
-                Button = System.Windows.MessageBoxButton.OK,
-                Image = System.Windows.MessageBoxImage.Information,
-                Title = "登録完了",
-                Message = "登録しました"
-            };
             CallShowMessageBox = true;
             FieldClear();
+            CallCompletedRegistration();
             DataOperationButtonContent = "登録";
         }
         /// <summary>
@@ -333,7 +320,7 @@ namespace WPF.ViewModels
             RegistrationDate = OperationData.Data.RegistrationDate;
             IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
             //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
-            //現状管理料のみだが、他に出てきた時にはelseif句で対応する
+            //現状管理料のみだが、他に出てきた時にはelse if句で対応する
             SetDetailFieldProperty();
             if (OperationData.Data.Content.Text.Contains("管理料")) ManagementFeeTextAllocation();
             else

@@ -71,6 +71,7 @@ namespace WPF.ViewModels
             set
             {
                 messageBox = value;
+                CallShowMessageBox = true;
                 CallPropertyChanged();
             }
         }

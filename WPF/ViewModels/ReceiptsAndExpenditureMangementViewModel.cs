@@ -5,7 +5,6 @@ using Domain.Repositories;
 using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -245,7 +244,7 @@ namespace WPF.ViewModels
         private void SlipsOutputProcess(bool isPayment)
         {
             DataOutput.PaymentAndWithdrawalSlips
-                (AllDataList, LoginRep.Rep, isPayment, IsPreviousDayOutput);
+                (AllDataList, isPayment, IsPreviousDayOutput);
             foreach (ReceiptsAndExpenditure rae in AllDataList)
             {
                 if (rae.IsPayment != isPayment) continue;

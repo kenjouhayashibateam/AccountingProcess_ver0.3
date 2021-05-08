@@ -43,11 +43,16 @@ namespace Domain.Repositories
         /// <param name="loginRep">ログインしている担当者</param>
         /// <param name="isPayment">伝票の種類。入金チェック</param>
         void PaymentAndWithdrawalSlips(ObservableCollection<ReceiptsAndExpenditure>
-            receiptsAndExpenditures,Rep loginRep,bool isPayment,bool isPreviousDay);
+            receiptsAndExpenditures,bool isPayment,bool isPreviousDay);
         /// <summary>
         /// 受納証を出力します
         /// </summary>
         /// <param name="voucher">出力する受納証</param>
         void VoucherData(Voucher voucher);
+        /// <summary>
+        /// 御布施一覧データを出力します
+        /// </summary>
+        /// <param name="condolences"></param>
+        void Condolences(ObservableCollection<Condolence> condolences);
     }
 }

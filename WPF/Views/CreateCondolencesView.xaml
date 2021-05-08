@@ -197,7 +197,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="ShowUpdateViewButton" Content="詳細" Margin="5,1">
-                                    
+                                    <Button.InputBindings>
+                                        <MouseBinding Command="{Binding Path=DataContext.ShowUpdateViewCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                    </Button.InputBindings>
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -211,7 +213,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Name="OutputButton" Margin="5">
+            <Button Grid.Column="1" Name="OutputButton" Content="{Binding OutputButtonContent}" Margin="5">
                 
             </Button>
             <Button Grid.Column="2" Name="CloseButton" Content="閉じる" Margin="5">

@@ -69,6 +69,7 @@
     <Compile Include="DefaultInfrastructure.cs" />
     <Compile Include="ExcelOutputData\BalanceFinalAccountOutput.cs" />
     <Compile Include="ExcelOutputData\CashBoxOutput.cs" />
+    <Compile Include="ExcelOutputData\CondolencesOutput.cs" />
     <Compile Include="ExcelOutputData\ExcelApp.cs" />
     <Compile Include="ExcelOutputData\OutputSingleSheetData.cs" />
     <Compile Include="ExcelOutputData\ExcelOutputInfrastructure.cs" />

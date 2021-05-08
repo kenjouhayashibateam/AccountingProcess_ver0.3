@@ -87,7 +87,7 @@ namespace Infrastructure
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
                 new Condolence(1,"あああ家","林飛",true,10000,5000,0,0,"佐野商店",DateTime.Today),
-                new Condolence(2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today)
+                new Condolence(2,"いいい家","安田",false,50000,0,0,5000,string.Empty,DateTime.Today)
             };
 
             return (list.Count, list);
@@ -98,7 +98,7 @@ namespace Infrastructure
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
                 new Condolence(1,"あああ家","林飛",true,10000,5000,0,0,"佐野商店",DateTime.Today),
-                new Condolence(2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today)
+                new Condolence(2,"いいい家","安田",false,50000,0,0,5000,string.Empty,DateTime.Today)
             };
 
             return list;

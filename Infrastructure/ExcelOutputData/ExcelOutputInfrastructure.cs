@@ -31,12 +31,18 @@ namespace Infrastructure.ExcelOutputData
             cbo.DataOutput();
         }
 
+        public void Condolences(ObservableCollection<Condolence> condolences)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void PaymentAndWithdrawalSlips
-            (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,
-                Rep loginRep,bool isPayment,bool isPreviousDay)
+            (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, bool isPayment,
+                bool isPreviousDay)
         {
             SlipType st = (isPayment) ? SlipType.Payment : SlipType.Withdrawal;
-            SlipOutput pso = new SlipOutput(receiptsAndExpenditures,loginRep,st,isPreviousDay);
+            LoginRep loginRep = LoginRep.GetInstance();
+            SlipOutput pso = new SlipOutput(receiptsAndExpenditures,loginRep.Rep,st,isPreviousDay);
             pso.Output();
         }
 

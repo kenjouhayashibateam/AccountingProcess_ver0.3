@@ -12,10 +12,7 @@ namespace Infrastructure.ExcelOutputData
     {
         private readonly Voucher VoucherData;
 
-        public VoucherOutput(Voucher voucher)
-        {
-            VoucherData = voucher;
-        }
+        public VoucherOutput(Voucher voucher) => VoucherData = voucher;        
 
         private int CopyColumnPosition(int originalColumn) =>
             originalColumn + SetColumnSizes().Length / 2 + 1;

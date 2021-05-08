@@ -4,6 +4,7 @@ using Domain.Repositories;
 using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using static Domain.Entities.Helpers.TextHelper;
 
@@ -30,17 +31,21 @@ namespace WPF.ViewModels
         /// リストのページの総数
         /// </summary>
         private string listPageInfo;
+        private string outputButtonContent="出力";
         private bool isPrevPageEnabled;
         private bool isNextPageEnabled;
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
         private Condolence selectedCondolence;
+        private readonly CondolenceOperation condolenceOperation;
         private DateTime searchStartDate;
         private DateTime searchEndDate;
         #endregion
 
         public CreateCondolencesViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
+            condolenceOperation = CondolenceOperation.GetInstance();
+            condolenceOperation.Add(this);
             SearchStartDate = DateTime.Today.AddDays(1 * (-1 * (DateTime.Today.Day - 1)));
             SearchEndDate = DateTime.Today;
             ShowRegistrationViewCommand = new DelegateCommand
@@ -49,8 +54,27 @@ namespace WPF.ViewModels
                 (() => NextPageListExpress(), () => true);
             PrevPageListExpressCommand = new DelegateCommand
                 (() => PrevPageListExpress(), () => true);
+            ShowUpdateViewCommand = new DelegateCommand
+                (() => ShowUpdateView(), () => true);
+            OutputCommand = new DelegateCommand
+                (() => Output(), () => true);
         }
         public CreateCondolencesViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public DelegateCommand OutputCommand { get; set; }
+        private void Output()
+        {
+
+        }
+        /// <summary>
+        /// 更新画面を表示するコマンド
+        /// </summary>
+        public DelegateCommand ShowUpdateViewCommand { get; set; }
+        private async void ShowUpdateView()
+        {
+            await Task.Delay(1);
+            condolenceOperation.SetData(SelectedCondolence);
+            CreateShowWindowCommand(ScreenTransition.CondolenceOperation());
+        }
         /// <summary>
         /// 前の10件を表示するコマンド
         /// </summary>
@@ -164,6 +188,19 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出力ボタンのContent
+        /// </summary>
+        public string OutputButtonContent
+        {
+            get => outputButtonContent;
+            set
+            {
+                outputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+
 
         private void SetListPageInfo()
         {

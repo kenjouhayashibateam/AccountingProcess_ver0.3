@@ -6,7 +6,6 @@
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"

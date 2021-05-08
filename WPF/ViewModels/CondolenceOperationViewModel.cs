@@ -50,70 +50,56 @@ namespace WPF.ViewModels
         private DateTime receiptsAndExpenditureSearchDate=DefaultDate;
         private DateTime accountActivityDate;
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
-        private readonly CondolenceOperation OperationCondolence;
+        private readonly CondolenceOperation condolenceOperation;
+        private Condolence OperationCondolence;
+        private int ID { get; set; }
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
-            OperationCondolence = CondolenceOperation.GetInstance();
-            OperationCondolence.Add(this);
+            condolenceOperation = CondolenceOperation.GetInstance();
+            condolenceOperation.Add(this);
             IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsAlmsgivingCheck = true;
             IsMemorialService = true;
-            DataOperationButtonContent = DataOperation.登録.ToString();
+            if(condolenceOperation.GetData()==null)
+            {
+                SetDataRegistrationCommand.Execute();
+                FieldClear();
+            }
+            else
+            {
+                SetDataUpdateCommand.Execute();
+                SetProperty();
+            }
         }
         public CondolenceOperationViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
-        /// データ操作コマンド
+        /// プロパティをセットします
         /// </summary>
-        public DelegateCommand OperationDataCommand { get; set; }
-        private async void OperationData()
+        private void SetProperty()
         {
-            Condolence condolence = new Condolence
-                (0, OwnerName, SoryoName, isMemorialService, IntAmount(Almsgiving), IntAmount(CarTip),
-                    IntAmount(MealTip), IntAmount(CarAndMealTip), Note, AccountActivityDate);
-            
-            string content=condolence.IsMemorialService?"法事":"葬儀";
-
-            MessageBox = new MessageBoxInfo()
-            {
-                Message = $"日付\t\t:{Space}{condolence.AccountActivityDate.ToShortDateString()}\r\n" +
-                                    $"施主名\t\t:{Space}{condolence.OwnerName}\r\n" +
-                                    $"担当僧侶\t\t:{Space}{condolence.SoryoName}\r\n" +
-                                    $"内容\t\t:{Space}{content}\r\n" +
-                                    $"合計金額\t\t:{Space}{TotalAmount}\r\n" +
-                                    $"御布施\t\t:{Space}{Almsgiving}\r\n" +
-                                    $"御車代\t\t:{Space}{CarTip}\t\n" +
-                                    $"御膳料\t\t:{Space}{MealTip}\t\n" +
-                                    $"御車代御膳料\t:{Space}{CarAndMealTip}\t\n" +
-                                    $"備考\t\t:{Space}{Note}\r\n\r\n登録しますか？",
-                Button = MessageBoxButton.OKCancel,
-                Image = MessageBoxImage.Question,
-                Title = "登録確認"
-            };
-
-            if (MessageBox.Result == MessageBoxResult.Cancel) return;
-
-            IsOperationButtonEnabled = false;
-            DataOperationButtonContent = "登録中";
-            LoginRep loginRep = LoginRep.GetInstance();
-            await Task.Run(() => DataBaseConnect.Registration(condolence));
-            MessageBox = new MessageBoxInfo()
-            {
-                Message = "登録しました。",
-                Image = MessageBoxImage.Information,
-                Button = MessageBoxButton.OK,
-                Title = "登録完了"
-            };
-            OperationCondolence.SetData(condolence);
-            IsOperationButtonEnabled = true;
-            DataOperationButtonContent = "登録";
-            OperationCondolence.Notify();
+            Condolence condolence = condolenceOperation.GetData();
+            ID = condolence.ID;
+            AccountActivityDate = condolence.AccountActivityDate;
+            OwnerName = condolence.OwnerName;
+            IsMemorialService = condolence.IsMemorialService;
+            SoryoName = condolence.SoryoName;
+            Almsgiving = AmountWithUnit(condolence.Almsgiving);
+            CarTip = AmountWithUnit(condolence.CarTip);
+            MealTip = AmountWithUnit(condolence.MealTip);
+            CarAndMealTip = AmountWithUnit(condolence.CarAndMealTip);
+            Note = condolence.Note;
         }
+        /// <summary>
+        /// プロパティをクリアします
+        /// </summary>
         private void FieldClear()
         {
+            ID = 0;
+            AccountActivityDate = DefaultDate;
             OwnerName = string.Empty;
             SoryoName = string.Empty;
             Almsgiving = string.Empty;
@@ -121,6 +107,135 @@ namespace WPF.ViewModels
             MealTip = string.Empty;
             CarAndMealTip = string.Empty;
             Note = string.Empty;
+        }
+        /// <summary>
+        /// データ操作コマンド
+        /// </summary>
+        public DelegateCommand OperationDataCommand { get; set; }
+        private void OperationData()
+        {
+            OperationCondolence = new Condolence
+                (ID, OwnerName, SoryoName, isMemorialService, IntAmount(Almsgiving), IntAmount(CarTip),
+                    IntAmount(MealTip), IntAmount(CarAndMealTip), Note, AccountActivityDate);   
+            
+            switch(CurrentOperation)
+            {
+                case DataOperation.更新:
+                    DataUpdate();
+                    break;
+                case DataOperation.登録:
+                    DataRegistration();
+                    break;
+            }
+        }
+        /// <summary>
+        /// データを更新します
+        /// </summary>
+        private async void DataUpdate()
+        {
+            IsOperationButtonEnabled = false;
+            string updateContent=string.Empty;
+            Condolence condolence = condolenceOperation.GetData();
+
+            if (OperationCondolence.AccountActivityDate != condolence.AccountActivityDate)
+                updateContent +=
+                    $"入金日{Space}:{Space}{condolence.AccountActivityDate.ToShortDateString()}" +
+                    $"{Space}→{Space}{OperationCondolence.AccountActivityDate.ToShortDateString()}\r\n";
+
+            if (OperationCondolence.OwnerName != condolence.OwnerName)
+                updateContent +=
+                    $"施主名{Space}:{Space}{condolence.OwnerName}{Space}→{Space}" +
+                    $"{OperationCondolence.OwnerName}\r\n";
+
+            if (condolence.SoryoName != OperationCondolence.SoryoName)
+                updateContent +=
+                    $"担当僧侶{Space}:{Space}{condolence.SoryoName}{Space}→{Space}" +
+                    $"{OperationCondolence.SoryoName}\r\n";
+
+            if (condolence.IsMemorialService != OperationCondolence.IsMemorialService)
+                updateContent +=
+                    $"内容{Space}:{Space}{(condolence.IsMemorialService ? "法事" : "葬儀")}{Space}→{Space}" +
+                    $"{(OperationCondolence.IsMemorialService ? "法事" : "葬儀")}\r\n";
+
+            if (condolence.CarTip != OperationCondolence.CarTip)
+                updateContent +=
+                    $"御車代{Space}:{Space}{AmountWithUnit(condolence.CarTip)}{Space}→{Space}" +
+                    $"{AmountWithUnit(OperationCondolence.CarTip)}\r\n";
+
+            if (condolence.MealTip != OperationCondolence.MealTip)
+                updateContent +=
+                    $"御膳料{Space}:{Space}{AmountWithUnit(condolence.MealTip)}{Space}→{Space}" +
+                    $"{AmountWithUnit(OperationCondolence.MealTip)}\r\n";
+
+            if (condolence.CarAndMealTip != OperationCondolence.CarAndMealTip)
+                updateContent +=
+                    $"御車代御膳料{Space}:{Space}{AmountWithUnit(condolence.CarAndMealTip)}{Space}→" +
+                    $"{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\r\n";
+
+            if (condolence.Note != OperationCondolence.Note)
+                updateContent +=
+                    $"備考{Space}:{Space}{condolence.Note}{Space}→{Space}{OperationCondolence.Note}\r\n";
+
+            if(string.IsNullOrEmpty(updateContent))
+            {
+                CallNoRequiredUpdateMessage();
+                return;
+            }
+
+            if(CallConfirmationDataOperation($"{updateContent}\r\n\r\n更新しますか？","御布施一覧データ")
+                ==MessageBoxResult.Cancel)
+            {
+                SetProperty();
+                IsOperationButtonEnabled = true;
+                return;
+            }
+
+            DataOperationButtonContent = "更新中";
+            await Task.Run(() => DataBaseConnect.Update(OperationCondolence));
+            condolenceOperation.SetData(OperationCondolence);
+            CallCompletedUpdate();
+            DataOperationButtonContent = "更新";
+            isOperationButtonEnabled = true;
+        }
+        /// <summary>
+        /// データを登録します
+        /// </summary>
+        private async void DataRegistration()
+        {         
+            string content=OperationCondolence.IsMemorialService?"法事":"葬儀";
+            
+            IsOperationButtonEnabled = false;
+            
+            MessageBox = new MessageBoxInfo()
+            {
+
+                Message =
+                    $"日付\t\t:{Space}{OperationCondolence.AccountActivityDate.ToShortDateString()}\r\n" +
+                    $"施主名\t\t:{Space}{OperationCondolence.OwnerName}\r\n" +
+                    $"担当僧侶\t\t:{Space}{OperationCondolence.SoryoName}\r\n" +
+                    $"内容\t\t:{Space}{content}\r\n" +
+                    $"合計金額\t\t:{Space}{TotalAmount}\r\n" +
+                    $"御布施\t\t:{Space}{Almsgiving}\r\n" +
+                    $"御車代\t\t:{Space}{CarTip}\t\n" +
+                    $"御膳料\t\t:{Space}{MealTip}\t\n" +
+                    $"御車代御膳料\t:{Space}{CarAndMealTip}\t\n" +
+                    $"備考\t\t:{Space}{Note}\r\n\r\n登録しますか？",
+                Button = MessageBoxButton.OKCancel,
+                Image = MessageBoxImage.Question,
+                Title = "登録確認"
+            };
+
+            if (MessageBox.Result == MessageBoxResult.Cancel) return;
+
+            DataOperationButtonContent = "登録中";
+            LoginRep loginRep = LoginRep.GetInstance();
+            await Task.Run(() => DataBaseConnect.Registration(OperationCondolence));
+            condolenceOperation.SetData(OperationCondolence);
+            condolenceOperation.Notify();
+            FieldClear();
+            CallCompletedRegistration();
+            IsOperationButtonEnabled = true;
+            DataOperationButtonContent = "登録";
         }
         /// <summary>
         /// 出納データの情報を登録データに入力するコマンド

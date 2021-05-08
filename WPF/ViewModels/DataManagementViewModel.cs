@@ -252,18 +252,18 @@ namespace WPF.ViewModels
                     $"パスワード : {new string('*', RepNewPassword.Length)}\r\n" +
                     $"有効性 : {CurrentRep.IsValidity}\r\n管理者権限 : {CurrentRep.IsAdminPermisson}\r\n " +
                     $"\r\n登録しますか？",
-                    "担 当者") == MessageBoxResult.Cancel)
+                    "担当者") == MessageBoxResult.Cancel)
                 return;
 
             IsRepOperationButtonEnabled = false;
             RepDataOperationButtonContent = "登録中";
             LoginRep loginRep = LoginRep.GetInstance();
             await Task.Run(() => DataBaseConnect.Registration(CurrentRep));
-            IsRepOperationButtonEnabled = true;
-            RepDataOperationButtonContent = "登録";
-
+            CallCompletedRegistration();
             RepDetailClear();
             RepList = DataBaseConnect.ReferenceRep(string.Empty, RepValidityTrueOnly);
+            IsRepOperationButtonEnabled = true;
+            RepDataOperationButtonContent = "登録";
         }
         /// <summary>
         /// 担当者データの変更、リストを最新データに更新します
@@ -299,11 +299,12 @@ namespace WPF.ViewModels
             RepDataOperationButtonContent = "更新中";
             LoginRep loginRep = LoginRep.GetInstance();
             await Task.Run(() => DataBaseConnect.Update(CurrentRep));
+            RepDetailClear();
+            RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
+            CallCompletedUpdate();
             IsRepOperationButtonEnabled = true;
             RepDataOperationButtonContent = "更新";
 
-            RepDetailClear();
-            RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
         }
         /// <summary>
         /// 新しいパスワード入力欄の文字を隠すかのチェックを切り替えます
@@ -839,7 +840,9 @@ namespace WPF.ViewModels
                 IsAccountingSubjectOperationButtonEnabled = true;
                 return;
             }
-            IsAccountingSubjectOperationButtonEnabled = !string.IsNullOrEmpty(AccountingSubjectCodeField) & !string.IsNullOrEmpty(AccountingSubjectField);
+            IsAccountingSubjectOperationButtonEnabled = 
+                !string.IsNullOrEmpty(AccountingSubjectCodeField) & 
+                !string.IsNullOrEmpty(AccountingSubjectField);
         }
         /// <summary>
         /// 勘定科目データ操作コマンド
@@ -884,7 +887,10 @@ namespace WPF.ViewModels
             }
         }
         private void CreateAccountSubjects() =>
-            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(ReferenceAccountingSubjectCode, ReferenceAccountingSubject, IsAccountingSubjectValidityTrueOnly);        
+            AccountingSubjects =
+                DataBaseConnect.ReferenceAccountingSubject
+                    (ReferenceAccountingSubjectCode, ReferenceAccountingSubject, 
+                        IsAccountingSubjectValidityTrueOnly);        
         /// <summary>
         /// 検索する勘定科目
         /// </summary>
@@ -956,19 +962,25 @@ namespace WPF.ViewModels
         /// </summary>
         private async void AccountSubjectRetistration()
         {
-            CurrentAccountingSubject = new AccountingSubject(null, AccountingSubjectCodeField, AccountingSubjectField, IsAccountingSubjectValidity);
-            if (CallConfirmationDataOperation($"勘定科目コード : {CurrentAccountingSubject.SubjectCode}\r\n勘定科目 : {CurrentAccountingSubject.Subject}" +
-                $"\r\n有効性 : {CurrentAccountingSubject.IsValidity}\r\n\r\n登録しますか？", "勘定科目") == MessageBoxResult.Cancel) return;
+            CurrentAccountingSubject = 
+                new AccountingSubject(null, AccountingSubjectCodeField, AccountingSubjectField,
+                    IsAccountingSubjectValidity);
+            if (CallConfirmationDataOperation
+                ($"勘定科目コード : {CurrentAccountingSubject.SubjectCode}\r\n" +
+                $"勘定科目 : {CurrentAccountingSubject.Subject}" +
+                $"\r\n有効性 : {CurrentAccountingSubject.IsValidity}\r\n\r\n登録しますか？", "勘定科目") == 
+                MessageBoxResult.Cancel) return;
 
             IsAccountingSubjectOperationButtonEnabled = false;
             AccountingSubnectOperationButtonContent = "登録中";
             await Task.Run(() => DataBaseConnect.Registration(CurrentAccountingSubject));
+            AccountingSubjectDetailFieldClear();
+            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
+                (string.Empty, string.Empty, IsAccountingSubjectValidityTrueOnly);
+            AffiliationAccountingSubjects = AccountingSubjects;
+            CallCompletedRegistration();
             IsAccountingSubjectOperationButtonEnabled = true;
             AccountingSubnectOperationButtonContent = "登録";
-
-            AccountingSubjectDetailFieldClear();
-            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, IsAccountingSubjectValidityTrueOnly);
-            AffiliationAccountingSubjects = AccountingSubjects;
         }
         /// <summary>
         /// 勘定科目詳細フィールドをクリアします
@@ -1009,10 +1021,13 @@ namespace WPF.ViewModels
                 return;
             }
 
-            if (CallConfirmationDataOperation($"有効性 : {CurrentAccountingSubject.IsValidity} → {IsAccountingSubjectValidity}", "勘定科目") == MessageBoxResult.Cancel)
+            if (CallConfirmationDataOperation
+                ($"有効性 : {CurrentAccountingSubject.IsValidity} → " +
+                    $"{IsAccountingSubjectValidity}", "勘定科目") == MessageBoxResult.Cancel)
                 return;
-
             CurrentAccountingSubject.IsValidity = IsAccountingSubjectValidity;
+            DataBaseConnect.Update(CurrentAccountingSubject);
+            CallCompletedUpdate();
         }
         #endregion
         #region CreditDeptOperation
@@ -1212,11 +1227,12 @@ namespace WPF.ViewModels
             CreditDeptOperationButtonContent = "登録中";
             IsCreditDeptOperationButtonEnabled = false;
             await Task.Run(() => DataBaseConnect.Registration(CurrentCreditDept));
+            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, IsCreditDeptValidityTrueOnly,false);
+            CreditDeptFieldClear();
+            CallCompletedRegistration();
             CreditDeptOperationButtonContent = "登録";
             IsCreditDeptOperationButtonEnabled = true;
 
-            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, IsCreditDeptValidityTrueOnly,false);
-            CreditDeptFieldClear();
         }
         private void CreditDeptFieldClear()
         {
@@ -1237,6 +1253,7 @@ namespace WPF.ViewModels
             CreditDeptOperationButtonContent = "更新中";
             IsCreditDeptOperationButtonEnabled = false;
             await Task.Run(() => DataBaseConnect.Update(CurrentCreditDept));
+            CallCompletedUpdate();
             IsCreditDeptOperationButtonEnabled = true;
             CreditDeptOperationButtonContent = "更新";
         }
@@ -1418,7 +1435,8 @@ namespace WPF.ViewModels
                 return;
             }
 
-            IsContentOperationEnabled = affiliationAccountingSubject != null & !string.IsNullOrEmpty(ContentField);
+            IsContentOperationEnabled = 
+                affiliationAccountingSubject != null & !string.IsNullOrEmpty(ContentField);
         }
         /// <summary>
         /// 伝票内容データ操作コマンド
@@ -1485,7 +1503,9 @@ namespace WPF.ViewModels
             }
         }
         private void CreateContents() =>
-            Contents = DataBaseConnect.ReferenceContent(ReferenceContent, ReferenceAccountingSubjectCodeBelognsContent, ReferenceAccountingSubjectBelognsContent, IsContentValidityTrueOnly);
+            Contents = DataBaseConnect.ReferenceContent(ReferenceContent, 
+                ReferenceAccountingSubjectCodeBelognsContent, ReferenceAccountingSubjectBelognsContent, 
+                IsContentValidityTrueOnly);
         /// <summary>
         /// 検索メニューのEnable
         /// </summary>
@@ -1520,8 +1540,10 @@ namespace WPF.ViewModels
             {
                 if (affiliationAccountingSubjectCode == value) return;
                 affiliationAccountingSubjectCode = value;
-                if (value != null) AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
-                if (AffiliationAccountingSubjects.Count > 0) AffiliationAccountingSubject = AffiliationAccountingSubjects[0];
+                if (value != null) AffiliationAccountingSubjects =
+                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                if (AffiliationAccountingSubjects.Count > 0) 
+                    AffiliationAccountingSubject = AffiliationAccountingSubjects[0];
                 ReferenceAccountingSubjectCodeBelognsContent = value;
                 CallPropertyChanged();
             }
@@ -1576,18 +1598,22 @@ namespace WPF.ViewModels
             int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
             CurrentContent = new Content(null, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
             string flatRateInfo = (i > 0) ? TextHelper.AmountWithUnit(i) : "金額設定無し";
-            if (CallConfirmationDataOperation($"伝票内容 : {CurrentContent.Text}\r\n勘定科目 : {CurrentContent.AccountingSubject.Subject}\r\n" +
-                $"定額 : {flatRateInfo}\r\n有効性 : {CurrentContent.IsValidity}", "伝票内容") == MessageBoxResult.Cancel)
+            if (CallConfirmationDataOperation($"伝票内容 : {CurrentContent.Text}\r\n" +
+                $"勘定科目 : {CurrentContent.AccountingSubject.Subject}\r\n" +
+                $"定額 : {flatRateInfo}\r\n有効性 : {CurrentContent.IsValidity}", "伝票内容")
+                == MessageBoxResult.Cancel)
                 return;
 
             ContentDataOperationContent = "登録中";
             IsContentOperationEnabled = false;
             await Task.Run(() => DataBaseConnect.Registration(CurrentContent));
+            Contents = DataBaseConnect.ReferenceContent
+                (string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
+            ContentDetailFieldClear();
+            CallCompletedRegistration();
             IsContentOperationEnabled = true;
             ContentDataOperationContent = "登録";
 
-            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
-            ContentDetailFieldClear();
         }
         /// <summary>
         /// 詳細に表示された伝票内容をクリアします
@@ -1615,28 +1641,34 @@ namespace WPF.ViewModels
             int newFlatRate = TextHelper.IntAmount(FlatRateField);
             if (newFlatRate < 0) newFlatRate = 0;
 
-            if (oldFlatRate != newFlatRate)updateContents= $"定額 : {TextHelper.AmountWithUnit(CurrentContent.FlatRate)} → {FlatRateField}円\r\n";
-            if (CurrentContent.IsValidity != IsContentValidity) updateContents += $"有効性 : {CurrentContent.IsValidity} → {IsContentValidity}\r\n";
+            if (oldFlatRate != newFlatRate)updateContents= 
+                    $"定額 : {TextHelper.AmountWithUnit(CurrentContent.FlatRate)} → {FlatRateField}円\r\n";
+            if (CurrentContent.IsValidity != IsContentValidity) updateContents += 
+                    $"有効性 : {CurrentContent.IsValidity} → {IsContentValidity}\r\n";
 
             if(updateContents.Length==0)
             {
                 CallNoRequiredUpdateMessage();
                 return;
             }
-            if (CallConfirmationDataOperation($"伝票内容 : {ContentField}\r\n\r\n{updateContents}", "伝票内容") == MessageBoxResult.Cancel)
+            if (CallConfirmationDataOperation
+                ($"伝票内容 : {ContentField}\r\n\r\n{updateContents}", "伝票内容") == MessageBoxResult.Cancel)
                 return;
 
             int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
-            CurrentContent = new Content(ContentIDField, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
+            CurrentContent =
+                new Content(ContentIDField, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
 
             IsContentOperationEnabled = false;
             ContentDataOperationContent = "更新中";
             await Task.Run(() => DataBaseConnect.Update(CurrentContent));
+            ContentDetailFieldClear();
+            Contents = DataBaseConnect.ReferenceContent
+                (string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
+            CallCompletedUpdate();
             ContentDataOperationContent = "更新";
             IsContentOperationEnabled = true;
 
-            ContentDetailFieldClear();
-            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
         }
         #endregion
 
