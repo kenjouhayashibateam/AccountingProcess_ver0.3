@@ -19,6 +19,7 @@ namespace WPF.ViewModels
         private Rep currentRep;
         private string password;
         private bool passwordCharCheck;
+        private bool windowCloseSwich;
         private string repName;
         private bool isLoginButtonEnabled;
 
@@ -39,6 +40,7 @@ namespace WPF.ViewModels
                 CallPropertyChanged(nameof(MessageBox));
                 LoginRep loginRep = LoginRep.GetInstance();
                 loginRep.SetRep(CurrentRep);
+                WindowCloseSwich = true;
             }
             else
             {
@@ -136,6 +138,20 @@ namespace WPF.ViewModels
             {
                 isLoginButtonEnabled = value;
                 CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ウィンドウを閉じるフラグを立てるbool
+        /// </summary>
+        public bool WindowCloseSwich
+        {
+            get => windowCloseSwich;
+            set
+            {
+                if (windowCloseSwich == value) return;
+                windowCloseSwich = value;
+                CallPropertyChanged();
+                windowCloseSwich = false;
             }
         }
 

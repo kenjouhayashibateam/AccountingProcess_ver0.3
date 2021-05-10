@@ -79,6 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\Commands\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />
     <Compile Include="ViewModels\CreateCondolencesViewModel.cs" />
     <Compile Include="ViewModels\CreateVoucherViewModel.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Views\Datas\IClosing.cs" />
     <Compile Include="Views\Datas\InputValidation.cs" />
     <Compile Include="Views\Datas\MessageBoxInfo.cs" />
+    <Compile Include="Views\Datas\Pagination.cs" />
     <Compile Include="Views\Datas\ShowWindowData.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>

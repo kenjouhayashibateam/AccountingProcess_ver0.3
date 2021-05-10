@@ -25,7 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Header="出納データ検索" Margin="5">
@@ -41,7 +41,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <DatePicker Grid.Column="1" SelectedDate="{Binding ReceiptsAndExpenditureSearchDate}" VerticalAlignment="Center" Margin="5"/>
+                        <DatePicker Grid.Column="1" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" SelectedDate="{Binding ReceiptsAndExpenditureSearchDate}" VerticalAlignment="Center" Margin="5"/>
                     </Grid>
                 </GroupBox>
                 <Grid Grid.Row="1">
@@ -58,7 +58,25 @@
                 </Grid>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="1" Header="出納データ一覧" Margin="5">
+        <GroupBox Grid.Row="1" Margin="5">
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="出納データ一覧" Grid.Column="0" VerticalAlignment="Center"/>
+                    <Button x:Name="PrevButton" Grid.Column="1" Content="前の10件" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1">
+                        
+                    </Button>
+                    <TextBlock Grid.Column="2" Text="{Binding Pagination.ListPageInfo}" Margin="5"/>
+                    <Button x:Name="NextButton" Grid.Column="3" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}">
+                        
+                    </Button>
+                </Grid>
+            </GroupBox.Header>
             <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding ReceiptsAndExpenditures}" SelectedValue="{Binding SelectedReceiptsAndExpenditure}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="1*" Header="入金日">
@@ -107,7 +125,8 @@
         <GroupBox Header="登録内容" Grid.Row="2" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
@@ -146,6 +165,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
@@ -154,16 +174,26 @@
                         <TextBlock Text="内容" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="担当僧侶" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="備考" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBlock Text="窓口受付者" Grid.Row="0" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBlock Text="郵送担当者" Grid.Row="0" Grid.Column="4" VerticalAlignment="Bottom" Margin="5,0"/>
                         <ToggleButton x:Name="ContentToggleButton" Grid.Row="1" Grid.Column="0" IsChecked="{Binding IsMemorialService}" Content="{Binding ContentText}" Margin="5"/>
                         <ComboBox Name="SoryoNameComboBox" Grid.Row="1" Grid.Column="1" IsEditable="True" ItemsSource="{Binding SoryoList}" DisplayMemberPath="Value" Text="{Binding SoryoName}" Margin="5"/>
                         <TextBox x:Name="NoteTextBox" Grid.Row="1" Grid.Column="2" Text="{Binding Note}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                        <Button x:Name="OperationButton" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsOperationButtonEnabled}" Grid.Column="3" Grid.Row="1" Margin="30,3">
-                            <Button.InputBindings>
-                                <KeyBinding Command="{Binding OperationDataCommand}" Key="Space"/>
-                                <MouseBinding Command="{Binding OperationDataCommand}" MouseAction="LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
+                        <TextBox x:Name="CounterReceiverTextBox" Grid.Row="1" Grid.Column="3" Text="{Binding CounterReceiver}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                        <TextBox x:Name="MailRepresentativeTextBox" Grid.Row="1" Grid.Column="4" Text="{Binding MailRepresentative}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
                     </Grid>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="OperationButton" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsOperationButtonEnabled}" Grid.Column="1" Margin="3">
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding OperationDataCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding OperationDataCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
+                    </Button>
                 </Grid>
             </Grid>
         </GroupBox>

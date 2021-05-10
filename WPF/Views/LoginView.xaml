@@ -29,6 +29,9 @@
         <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
+        <ib:DataTrigger Binding="{Binding WindowCloseSwich}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"/>
+        </ib:DataTrigger>
     </ib:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>

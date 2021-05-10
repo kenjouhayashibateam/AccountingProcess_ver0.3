@@ -64,22 +64,21 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="一覧 " VerticalAlignment="Center"/>
+                            <TextBlock Text="一覧 " Grid.Column="0" VerticalAlignment="Center"/>
                             <Button x:Name="DeleteDataButton" Grid.Column="1" Content="新規登録" Margin="2">
                                 <Button.InputBindings>
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="PrevButton" Grid.Column="3" Content="前の10件" IsEnabled="{Binding IsPrevPageEnabled}" Margin="5,1,5,3">
+                            <Button x:Name="PrevButton" Grid.Column="2" Content="前の10件" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding PrevPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <TextBlock Grid.Column="4" Text="{Binding ListPageInfo}" VerticalAlignment="Center"/>
-                            <Button x:Name="NextButton" Grid.Column="5" Content="次の10件" IsEnabled="{Binding IsNextPageEnabled}" Margin="5,1,5,3">
+                            <TextBlock Grid.Column="3" Text="{Binding Pagination.ListPageInfo}" VerticalAlignment="Center"/>
+                            <Button x:Name="NextButton" Grid.Column="4" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding NextPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding NextPageListExpressCommand}" MouseAction="LeftClick"/>

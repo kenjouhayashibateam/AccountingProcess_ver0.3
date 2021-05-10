@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
+using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
@@ -16,36 +17,31 @@ namespace WPF.ViewModels
     public class CreateCondolencesViewModel : BaseViewModel,ICondolenceObserver
     {
         #region Properties
-        #region Ints
-        private int TotalPageCount;
         /// <summary>
-        /// リストデータの総数
-        /// </summary>
-        private int RowCount;
-        /// <summary>
-        /// リストのページ
-        /// </summary>
-        private int PageCount;
-        #endregion
-        /// <summary>
-        /// リストのページの総数
+        /// 現在のページとリストのページの総数
         /// </summary>
         private string listPageInfo;
         private string outputButtonContent="出力";
         private bool isPrevPageEnabled;
         private bool isNextPageEnabled;
+        private bool isOutputButtonEnabled;
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
         private Condolence selectedCondolence;
         private readonly CondolenceOperation condolenceOperation;
         private DateTime searchStartDate;
         private DateTime searchEndDate;
+        private readonly IDataOutput DataOutput;
+        private Pagination pagination;
         #endregion
 
-        public CreateCondolencesViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
+        public CreateCondolencesViewModel
+            (IDataBaseConnect dataBaseConnect,IDataOutput dataOutput) : base(dataBaseConnect)
         {
+            DataOutput = dataOutput;
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
+            Pagination = new Pagination();
             SearchStartDate = DateTime.Today.AddDays(1 * (-1 * (DateTime.Today.Day - 1)));
             SearchEndDate = DateTime.Today;
             ShowRegistrationViewCommand = new DelegateCommand
@@ -59,11 +55,20 @@ namespace WPF.ViewModels
             OutputCommand = new DelegateCommand
                 (() => Output(), () => true);
         }
-        public CreateCondolencesViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public CreateCondolencesViewModel() :
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
+                    DefaultInfrastructure.GetDefaultDataOutput()){ }
+        /// <summary>
+        /// 御布施一覧出力コマンド
+        /// </summary>
         public DelegateCommand OutputCommand { get; set; }
-        private void Output()
+        private async void Output()
         {
-
+            OutputButtonContent = "出力中";
+            IsOutputButtonEnabled = false;
+            await Task.Run(() => DataOutput.Condolences(Condolences));
+            OutputButtonContent = "出力";
+            IsOutputButtonEnabled = true;
         }
         /// <summary>
         /// 更新画面を表示するコマンド
@@ -81,9 +86,7 @@ namespace WPF.ViewModels
         public DelegateCommand PrevPageListExpressCommand { get; set; }
         private void PrevPageListExpress()
         {
-            if (PageCount == 0) return;
-            if (PageCount > 1) PageCount--;
-            CreateCondolences(false);
+            if (Pagination.PageCountSubtractAndCanPrevPageExpress()) CreateCondolences(false);
         }
         /// <summary>
         /// 次の10件を表示するコマンド
@@ -91,9 +94,7 @@ namespace WPF.ViewModels
         public DelegateCommand NextPageListExpressCommand { get; }
         private void NextPageListExpress()
         {
-            if (PageCount == 0) return;
-            PageCount += PageCount == TotalPageCount ? 0 : 1;
-            CreateCondolences(false);
+            if (Pagination.PageCountAddAndCanNextPageExpress()) CreateCondolences(false);
         }
         /// <summary>
         /// データ登録画面を表示するコマンド
@@ -110,7 +111,7 @@ namespace WPF.ViewModels
             set
             {
                 condolences = value;
-                SetListPageInfo();
+                ValidationProperty(nameof(Condolences), value);
                 CallPropertyChanged();
             }
         }
@@ -200,34 +201,59 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-
-        private void SetListPageInfo()
+        /// <summary>
+        /// 出力ボタンのEnabled
+        /// </summary>
+        public bool IsOutputButtonEnabled
         {
-            int i = RowCount / 10;
-            i += RowCount % 10 == 0 ? 0 : 1;
-            TotalPageCount = i;
-            ListPageInfo = $"{PageCount}/{i}";
-            IsPrevPageEnabled = PageCount > 1;
-            IsNextPageEnabled = PageCount != i;
+            get => isOutputButtonEnabled;
+            set
+            {
+                isOutputButtonEnabled = value;
+                CallPropertyChanged();
+            }
         }
+        /// <summary>
+        /// ページネーション
+        /// </summary>
+        public Pagination Pagination
+        {
+            get => pagination;
+            set
+            {
+                pagination = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 法事チェックで変換する文字列
+        /// </summary>
+        /// <param name="isMemorialService"></param>
+        /// <returns></returns>
         public string ConvertContentText(bool isMemorialService) => isMemorialService ? "法事" : "葬儀";
         /// <summary>
         /// 御布施一覧リストを検索して生成します
         /// </summary>
         private void CreateCondolences(bool isPageCountReset)
         {
-            PageCount = isPageCountReset ? 1 : PageCount;
+            //PageCount = isPageCountReset ? 1 : PageCount;
+            Pagination.CountReset(isPageCountReset);
 
-            Condolences =
-                DataBaseConnect.ReferenceCondolence(SearchStartDate, SearchEndDate, PageCount).List;
-            RowCount =
-                DataBaseConnect.ReferenceCondolence(SearchStartDate, SearchEndDate,PageCount).TotalRows;
+            var(count,list)=
+                DataBaseConnect.ReferenceCondolence(SearchStartDate, SearchEndDate, Pagination.PageCount);
+            Condolences = list;
+            //RowCount = count;
+            Pagination.TotalRowCount = count;
+
             AllList =
                 DataBaseConnect.ReferenceCondolence(SearchStartDate, SearchEndDate);
 
-            if (AllList.Count == 0) PageCount = 0;
-            SetListPageInfo();
+            //if (AllList.Count == 0) PageCount = 0;
+            if (AllList.Count == 0) Pagination.PageCount = 0;
+            ValidationProperty(nameof(Condolences), AllList);
+            IsOutputButtonEnabled = AllList.Count > 0;
+            Pagination.SetListPageInfo();
+            //SetListPageInfo();
         }
         public override void SetRep(Rep rep)
         {
@@ -241,7 +267,9 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            throw new System.NotImplementedException();
+            ErrorsListOperation
+                (((ObservableCollection<Condolence>)value).Count < 1, propertyName, 
+                    "出力するデータがありません");
         }
 
         protected override void SetWindowDefaultTitle() => 

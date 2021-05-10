@@ -542,10 +542,11 @@ namespace Infrastructure
 
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
             ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, 
-                string location, string creditDept, string content, string detail, string accountingSubject, string accountingSubjectCode, 
-                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly, 
-                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart, 
-                DateTime outputDateEnd, int pageCount)
+                string location, string creditDept, string content, string detail, string accountingSubject, 
+                string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, 
+                bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, 
+                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, 
+                int pageCount)
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
@@ -599,10 +600,10 @@ namespace Infrastructure
                         );
                 }
             }
-            return (ReferenceReceiptsAndExpenditure(registrationDateStart, registrationDateEnd, location, creditDept, 
-                content, detail, accountingSubject, accountingSubjectCode, whichDepositAndWithdrawalOnly, isPayment, 
-                isContainOutputted, isValidityOnly, accountActivityDateStart, accountActivityDateEnd, outputDateStart, 
-                outputDateEnd).Count, list);
+            return (ReferenceReceiptsAndExpenditure(registrationDateStart, registrationDateEnd, location,
+                creditDept, content, detail, accountingSubject, accountingSubjectCode, 
+                whichDepositAndWithdrawalOnly, isPayment, isContainOutputted, isValidityOnly, 
+                accountActivityDateStart, accountActivityDateEnd, outputDateStart, outputDateEnd).Count, list);
         }
 
         public Dictionary<int, string> GetSoryoList()
@@ -650,6 +651,8 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
                 Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
                 Cmd.Parameters.AddWithValue("@note", condolence.Note);
+                Cmd.Parameters.AddWithValue("@counter_receiver", condolence.CounterReceiver);
+                Cmd.Parameters.AddWithValue("@mail_representative", condolence.MailRepresentative);
 
                 return Cmd.ExecuteNonQuery();
             }
@@ -671,6 +674,8 @@ namespace Infrastructure
                 Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
                 Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
                 Cmd.Parameters.AddWithValue("@note", condolence.Note);
+                Cmd.Parameters.AddWithValue("@counter_receiver", condolence.CounterReceiver);
+                Cmd.Parameters.AddWithValue("@mail_representative", condolence.MailRepresentative);
 
                 return Cmd.ExecuteNonQuery();
             }
@@ -692,17 +697,20 @@ namespace Infrastructure
                 SqlDataReader dataReader = Cmd.ExecuteReader();
                 while(dataReader.Read())
                 {
-                    list.Add(new Condolence((int)dataReader["condolence_id"], (string)dataReader["owner_name"],
+                    list.Add(new Condolence((int)dataReader["condolence_id"], 
+                        (string)dataReader["owner_name"],
                         (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
                         (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"], 
                         (int)dataReader["car_and_meal_tip"], (string)dataReader["note"],
-                        (DateTime)dataReader["execution_date"]));                    
+                        (DateTime)dataReader["execution_date"],(string)dataReader["counter_receiver"],
+                        (string)dataReader["mail_representative"]));                    
                 }
             }
             return (ReferenceCondolence(startDate, endDate).Count, list);
         }
 
-        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate)
+        public ObservableCollection<Condolence> 
+            ReferenceCondolence(DateTime startDate, DateTime endDate)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             SqlCommand Cmd = new SqlCommand();
@@ -717,11 +725,13 @@ namespace Infrastructure
 
                 while(dataReader.Read())
                 {
-                    list.Add(new Condolence((int)dataReader["condolence_id"], (string)dataReader["owner_name"],
+                    list.Add(new Condolence((int)dataReader["condolence_id"], 
+                        (string)dataReader["owner_name"],
                         (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
                         (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
                         (int)dataReader["car_and_meal_tip"], (string)dataReader["note"],
-                        (DateTime)dataReader["execution_date"]));
+                        (DateTime)dataReader["execution_date"], (string)dataReader["counter_receiver"],
+                        (string)dataReader["mail_representative"]));
                 }
             }
             return list;

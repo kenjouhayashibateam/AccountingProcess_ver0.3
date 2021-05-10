@@ -30,6 +30,8 @@ namespace WPF.ViewModels
         private string soryoName = string.Empty;
         private string note = string.Empty;
         private string dataOperationButtonContent;
+        private string counterReceiver;
+        private string mailRepresentative;
         /// <summary>
         /// 検索する勘定科目コード
         /// </summary>
@@ -53,12 +55,14 @@ namespace WPF.ViewModels
         private readonly CondolenceOperation condolenceOperation;
         private Condolence OperationCondolence;
         private int ID { get; set; }
+        private Pagination pagination;
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
+            Pagination = new Pagination();
             IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsAlmsgivingCheck = true;
@@ -77,6 +81,22 @@ namespace WPF.ViewModels
         public CondolenceOperationViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
+        /// 前の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand PrevPageListExpressCommand { get; set; }
+        private void PrevPageListExpress()
+        {
+            if(Pagination.PageCountSubtractAndCanPrevPageExpress()) SetReceiptsAndExpenditures(false);
+        }
+        /// <summary>
+        /// 次の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand NextPageListExpressCommand { get; set; }
+        private void NextPageListExpress()
+        {
+            if(Pagination.PageCountAddAndCanNextPageExpress()) SetReceiptsAndExpenditures(false);
+        }
+        /// <summary>
         /// プロパティをセットします
         /// </summary>
         private void SetProperty()
@@ -92,6 +112,8 @@ namespace WPF.ViewModels
             MealTip = AmountWithUnit(condolence.MealTip);
             CarAndMealTip = AmountWithUnit(condolence.CarAndMealTip);
             Note = condolence.Note;
+            CounterReceiver = condolence.CounterReceiver;
+            MailRepresentative = condolence.MailRepresentative;
         }
         /// <summary>
         /// プロパティをクリアします
@@ -107,6 +129,8 @@ namespace WPF.ViewModels
             MealTip = string.Empty;
             CarAndMealTip = string.Empty;
             Note = string.Empty;
+            CounterReceiver = string.Empty;
+            MailRepresentative = string.Empty;
         }
         /// <summary>
         /// データ操作コマンド
@@ -115,8 +139,9 @@ namespace WPF.ViewModels
         private void OperationData()
         {
             OperationCondolence = new Condolence
-                (ID, OwnerName, SoryoName, isMemorialService, IntAmount(Almsgiving), IntAmount(CarTip),
-                    IntAmount(MealTip), IntAmount(CarAndMealTip), Note, AccountActivityDate);   
+                (ID, OwnerName, GetFirstName(SoryoName), isMemorialService, IntAmount(Almsgiving),
+                    IntAmount(CarTip), IntAmount(MealTip), IntAmount(CarAndMealTip), Note,
+                    AccountActivityDate, CounterReceiver, MailRepresentative);
             
             switch(CurrentOperation)
             {
@@ -176,6 +201,16 @@ namespace WPF.ViewModels
                 updateContent +=
                     $"備考{Space}:{Space}{condolence.Note}{Space}→{Space}{OperationCondolence.Note}\r\n";
 
+            if (condolence.CounterReceiver != OperationCondolence.CounterReceiver)
+                updateContent +=
+                    $"窓口受付者{Space}:{Space}{condolence.CounterReceiver}{Space}→" +
+                    $"{Space}{OperationCondolence.CounterReceiver}\r\n";
+
+            if (condolence.MailRepresentative != OperationCondolence.MailRepresentative)
+                updateContent +=
+                    $"郵送担当者{Space}:{Space}{condolence.MailRepresentative}{Space}→" +
+                    $"{Space}{OperationCondolence.MailRepresentative}\r\n";
+
             if(string.IsNullOrEmpty(updateContent))
             {
                 CallNoRequiredUpdateMessage();
@@ -219,7 +254,9 @@ namespace WPF.ViewModels
                     $"御車代\t\t:{Space}{CarTip}\t\n" +
                     $"御膳料\t\t:{Space}{MealTip}\t\n" +
                     $"御車代御膳料\t:{Space}{CarAndMealTip}\t\n" +
-                    $"備考\t\t:{Space}{Note}\r\n\r\n登録しますか？",
+                    $"備考\t\t:{Space}{Note}\r\n" +
+                    $"窓口受付者\t\t:{Space}{CounterReceiver}\r\n" +
+                    $"郵送担当者\t\t:{Space}{MailRepresentative}\r\n\r\n登録しますか？",
                 Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
                 Title = "登録確認"
@@ -273,14 +310,19 @@ namespace WPF.ViewModels
                     break;
             }
         }
-        private void SetReceiptsAndExpenditures()
+        private void SetReceiptsAndExpenditures(bool isCountReset)
         {
-            ReceiptsAndExpenditures =
+            Pagination.CountReset(isCountReset);
+
+            var(totalRow,list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
                         string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
-                        DateTime.Today);
+                        DateTime.Today,Pagination.PageCount);
+            ReceiptsAndExpenditures = list;
+            Pagination.TotalRowCount = totalRow;
+            Pagination.SetListPageInfo();
         }
         /// <summary>
         /// 出納データリスト
@@ -302,7 +344,7 @@ namespace WPF.ViewModels
             get => receiptsAndExpenditureSearchDate; set
             {
                 receiptsAndExpenditureSearchDate = value;
-                SetReceiptsAndExpenditures();
+                SetReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -566,7 +608,7 @@ namespace WPF.ViewModels
                 isAlmsgivingSearch = value;
                 SearchGanreContent = value ? "志納金検索" : "御布施検索";
                 SearchAccountingSubjectCode = value ? "815" : "832";
-                SetReceiptsAndExpenditures();
+                SetReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -591,6 +633,40 @@ namespace WPF.ViewModels
             set
             {
                 isOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 窓口受付者
+        /// </summary>
+        public string CounterReceiver
+        {
+            get => counterReceiver;
+            set
+            {
+                counterReceiver = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 郵送担当者
+        /// </summary>
+        public string MailRepresentative
+        {
+            get => mailRepresentative;
+            set
+            {
+                mailRepresentative = value;
+                CallPropertyChanged();
+            }
+        }
+
+        public Pagination Pagination
+        {
+            get => pagination;
+            set
+            {
+                pagination = value;
                 CallPropertyChanged();
             }
         }
@@ -642,6 +718,8 @@ namespace WPF.ViewModels
         {
             InputPropertyCommand = new DelegateCommand(() => InputProperty(), () => true);
             OperationDataCommand = new DelegateCommand(() => OperationData(), () => true);
+            PrevPageListExpressCommand = new DelegateCommand(() => PrevPageListExpress(), () => true);
+            NextPageListExpressCommand = new DelegateCommand(() => NextPageListExpress(), () => true);
         }
 
         protected override void SetDetailLocked() { }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Domain.Entities.Helpers
 {
@@ -7,6 +8,21 @@ namespace Domain.Entities.Helpers
     /// </summary>
     public class TextHelper
     {
+        /// <summary>
+        /// 和暦Culture
+        /// </summary>
+        public static CultureInfo JapanCulture
+        {
+            get
+            {
+                CultureInfo value = new CultureInfo("ja-JP", true);
+                value.DateTimeFormat.Calendar = new JapaneseCalendar();
+                return value;
+            }
+        }
+        /// <summary>
+        /// nullに出来ない場合のdefaultの日付
+        /// </summary>
         public static DateTime DefaultDate = DateTime.Parse("1900/01/01");
         /// <summary>
         /// 金額を3桁ごとのカンマ区切りにして、単位をつけて返します

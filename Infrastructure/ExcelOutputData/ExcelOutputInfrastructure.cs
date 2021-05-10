@@ -33,7 +33,8 @@ namespace Infrastructure.ExcelOutputData
 
         public void Condolences(ObservableCollection<Condolence> condolences)
         {
-            throw new System.NotImplementedException();
+            CondolencesOutput co = new CondolencesOutput(condolences);
+            co.DataOutput();
         }
 
         public void PaymentAndWithdrawalSlips

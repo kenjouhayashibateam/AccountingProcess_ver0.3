@@ -51,11 +51,21 @@ namespace Domain.Entities
         /// 日付
         /// </summary>
         public DateTime AccountActivityDate { get; set; }
+        /// <summary>
+        /// 窓口受付者
+        /// </summary>
+        public string CounterReceiver { get; set; }
+        /// <summary>
+        /// 郵送担当者
+        /// </summary>
+        public string MailRepresentative { get; set; }
 
-        public Condolence(int id, string ownerName, string soryoName, bool isMemorialService, int almsgiving, 
-            int carTip, int mealTip, int carAndMealTip, string note, DateTime accountActivityDate)
+        public Condolence
+            (int iD, string ownerName, string soryoName, bool isMemorialService, int almsgiving, int carTip, 
+                int mealTip, int carAndMealTip, string note, DateTime accountActivityDate, string counterReceiver, 
+                string mailRepresentative)
         {
-            ID = id;
+            ID = iD;
             OwnerName = ownerName;
             SoryoName = soryoName;
             IsMemorialService = isMemorialService;
@@ -65,6 +75,8 @@ namespace Domain.Entities
             CarAndMealTip = carAndMealTip;
             Note = note;
             AccountActivityDate = accountActivityDate;
+            CounterReceiver = counterReceiver;
+            MailRepresentative = mailRepresentative;
         }
     }
 }

@@ -2,6 +2,8 @@
 using Domain.Entities;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -11,77 +13,160 @@ namespace Infrastructure.ExcelOutputData
     internal class CondolencesOutput : OutputSingleSheetData
     {
         private readonly ObservableCollection<Condolence> Condolences;
-        private int MaxRow = 2;
+        private int pageNumber = 1;
+        //Rowのスタート位置インデックス
+        private int StartRowIndex { get => ((pageNumber - 1) * SetRowSizes().Length); }
 
-        public CondolencesOutput(ObservableCollection<Condolence> condolences) => Condolences = condolences;
+        public CondolencesOutput(ObservableCollection<Condolence> condolences) =>
+            Condolences = condolences;
 
         protected override void SetBorderStyle()
         {
-            MySheetCellRange(2, 1, MaxRow, 13).Style
+            MySheetCellRange(StartRowIndex + 2, 1, SetRowSizes().Length * pageNumber, 14).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
-                .Border.SetRightBorder(XLBorderStyleValues.Thin);     
+                .Border.SetRightBorder(XLBorderStyleValues.Thin);
         }
 
         protected override void SetCellsStyle()
         {
-            throw new NotImplementedException();
+            //シートのフォントサイズ
+            myWorksheet.Style.Font.FontSize = 11;
+            //用紙の向き
+            myWorksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
+            //タイトル欄
+            MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 2, SetColumnSizes().Length).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+            //データ全体
+            MySheetCellRange
+                (StartRowIndex + 3, 1, SetRowSizes().Length * pageNumber, SetColumnSizes().Length).Style
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+            //日付、施主名、内容、担当僧侶
+            MySheetCellRange(StartRowIndex + 3, 1, SetRowSizes().Length * pageNumber, 4).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            //合計金額、御布施、御車代、御膳料、御車代御膳料
+            MySheetCellRange(StartRowIndex + 3, 5, SetRowSizes().Length * pageNumber, 9).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+            //窓口、郵送
+            MySheetCellRange(StartRowIndex + 3, 10, SetRowSizes().Length * pageNumber, 11).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+            //備考
+            MySheetCellRange(StartRowIndex + 3, 14, SetRowSizes().Length * pageNumber, 14).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
+                .Alignment.SetShrinkToFit(true);
         }
 
-        protected override double[] SetColumnSizes()
-        {
-            throw new NotImplementedException();
-        }
+        protected override double[] SetColumnSizes() => new double[]
+            {5,9,7.55,8.18,13,13,13,13,13,6.18,6.18,6.18,6.18,13.45};
 
         protected override void SetDataStrings()
         {
-            throw new NotImplementedException();
+            int i = 1;
+            int currentRow=1;
+            int dateMergeStartRow = 3;
+            DateTime currentDate = DefaultDate;
+
+            foreach (Condolence condolence in Condolences.OrderBy(c=>c.AccountActivityDate))
+            {
+                if(i==20)
+                {
+                    pageNumber++;
+                    MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
+                    i = 1;
+                }
+                if(i==1)
+                {
+                    SetNewPage();
+                    //タイトル欄　年
+                    myWorksheet.Cell(StartRowIndex + i, 1).Value =
+                        $"{condolence.AccountActivityDate.ToString($"gg{Space}y{Space}年",JapanCulture)}";
+                    i++;
+                    currentRow = StartRowIndex + i;
+                    //タイトル欄フィールドタイトル
+                    myWorksheet.Cell(currentRow, 1).Value = "日付";
+                    myWorksheet.Cell(currentRow, 2).Value = "施主名";
+                    myWorksheet.Cell(currentRow, 3).Value = "内容";
+                    myWorksheet.Cell(currentRow, 4).Value = "担当僧侶";
+                    myWorksheet.Cell(currentRow, 5).Value = "合計金額";
+                    myWorksheet.Cell(currentRow, 6).Value = "御布施";
+                    myWorksheet.Cell(currentRow, 7).Value = "御車代";
+                    myWorksheet.Cell(currentRow, 8).Value = "御膳料";
+                    myWorksheet.Cell(currentRow, 9).Value = "御車代御膳料";
+                    myWorksheet.Cell(currentRow, 10).Value = "窓口";
+                    myWorksheet.Cell(currentRow, 11).Value = "郵送";
+                    myWorksheet.Cell(currentRow, 12).Value = "支配人";
+                    myWorksheet.Cell(currentRow, 13).Value = "本部長";
+                    myWorksheet.Cell(currentRow, 14).Value = "備考";
+                    i++;
+                    currentDate = condolence.AccountActivityDate;
+                    dateMergeStartRow = StartRowIndex + i;
+                }
+                currentRow = StartRowIndex + i;
+                //前のデータと日付が変わった時点で、同じ日付のセルを結合する
+                if(currentDate!=condolence.AccountActivityDate)
+                {
+                    MySheetCellRange(dateMergeStartRow, 1, currentRow - 1, 1).Merge();
+                    currentDate = condolence.AccountActivityDate;
+                    dateMergeStartRow = currentRow;
+                }
+                //各フィールド入力
+                myWorksheet.Cell(currentRow, 1).Value =
+                    $"{condolence.AccountActivityDate:M/d}\r\n{condolence.AccountActivityDate:(ddd)}";
+                myWorksheet.Cell(currentRow, 2).Value = condolence.OwnerName;
+                myWorksheet.Cell(currentRow, 3).Value = condolence.IsMemorialService ? "法事" : "葬儀";
+                myWorksheet.Cell(currentRow, 4).Value = GetFirstName(condolence.SoryoName);
+                myWorksheet.Cell(currentRow, 5).Value = AmountWithUnit(condolence.TotalAmount);
+                myWorksheet.Cell(currentRow, 6).Value = AmountWithUnit(condolence.Almsgiving);
+                myWorksheet.Cell(currentRow, 7).Value = AmountWithUnit(condolence.CarTip);
+                myWorksheet.Cell(currentRow, 8).Value = AmountWithUnit(condolence.MealTip);
+                myWorksheet.Cell(currentRow, 9).Value = AmountWithUnit(condolence.CarAndMealTip);
+                myWorksheet.Cell(currentRow, 10).Value = condolence.CounterReceiver;
+                myWorksheet.Cell(currentRow, 11).Value = condolence.MailRepresentative;
+                myWorksheet.Cell(currentRow, 14).Value = condolence.Note;
+                i++;
+            }
+            MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
+            MySheetCellRange
+                (currentRow + 1, 1, SetRowSizes().Length * pageNumber, SetColumnSizes().Length).Style
+                    .Border.SetBottomBorder(XLBorderStyleValues.None)
+                    .Border.SetRightBorder(XLBorderStyleValues.None)
+                    .Border.SetLeftBorder(XLBorderStyleValues.None)
+                    .Border.SetTopBorder(XLBorderStyleValues.None);
+
+            void SetNewPage()
+            {
+                if (pageNumber == 1) return;
+                SetCellsStyle();
+                SetMerge();
+                SetBorderStyle();
+                for (int i = 0; i < SetRowSizes().Length; i++)
+                { myWorksheet.Row(StartRowIndex + i + 1).Height = SetRowSizes()[i]; }
+            }
         }
 
-        protected override double SetMaeginsBottom()
-        {
-            throw new NotImplementedException();
-        }
+        protected override double SetMaeginsBottom() => ToInch(1.4);
 
-        protected override double SetMaeginsLeft()
-        {
-            throw new NotImplementedException();
-        }
+        protected override double SetMaeginsLeft() => ToInch(0.6);
 
-        protected override double SetMaeginsRight()
-        {
-            throw new NotImplementedException();
-        }
+        protected override double SetMaeginsRight() => ToInch(0.6);
 
-        protected override double SetMaeginsTop()
-        {
-            throw new NotImplementedException();
-        }
+        protected override double SetMaeginsTop() => ToInch(1.9);
 
-        protected override void SetMerge()
-        {
-            throw new NotImplementedException();
-        }
+        protected override void SetMerge() => 
+            MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 1, SetColumnSizes().Length).Merge();
 
-        protected override double[] SetRowSizes()
-        {
-            throw new NotImplementedException();
-        }
+        protected override double[] SetRowSizes() => new double[]
+            { 20.5, 13, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5,
+                27.5, 27.5, 27.5 };
 
-        protected override string SetSheetFontName()
-        {
-            throw new NotImplementedException();
-        }
+        protected override string SetSheetFontName() => "ＭＳ ゴシック";
 
-        protected override void SetSheetStyle()
-        {
-            throw new NotImplementedException();
-        }
+        protected override void SetSheetStyle()=>
+            myWorksheet.Style.NumberFormat.Format = "@";
 
-        protected override XLPaperSize SheetPaperSize()
-        {
-            throw new NotImplementedException();
-        }
+        protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
     }
 }

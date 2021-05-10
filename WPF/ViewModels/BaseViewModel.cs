@@ -15,7 +15,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// ビューモデルの共通処理クラス
     /// </summary>
-    public abstract class BaseViewModel : INotifyPropertyChanged, INotifyDataErrorInfo, ILoginRepObserver
+    public abstract class BaseViewModel : NotifyPropertyChanged, INotifyDataErrorInfo, ILoginRepObserver
     {
         #region Properties
         private MessageBoxInfo messageBox;
@@ -34,7 +34,6 @@ namespace WPF.ViewModels
         /// </summary>
         protected string DefaultWindowTitle { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         /// <summary>
@@ -170,24 +169,6 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="window"></param>
         protected void DoCloseWindow(Window window) => window.Close();
-        /// <summary>
-        /// プロパティ変更通知イベントを呼び出します
-        /// </summary>
-        protected void CallPropertyChanged()
-        {
-            StackFrame caller = new StackFrame(1);
-            string[] methodNames = caller.GetMethod().Name.Split('_');
-            int i = methodNames.Length - 1;
-            string propertyName = methodNames[i];
-
-            CallPropertyChanged(propertyName);
-        }
-        /// <summary>
-        /// 引数のプロパティの変更を通知します
-        /// </summary>
-        /// <param name="propertyName">プロパティ名</param>
-        protected void CallPropertyChanged(string propertyName) => 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         /// <summary>
         /// ウィンドウ表示コマンドを設定します
         /// </summary>

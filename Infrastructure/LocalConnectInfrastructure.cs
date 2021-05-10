@@ -86,8 +86,56 @@ namespace Infrastructure
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
-                new Condolence(1,"あああ家","林飛",true,10000,5000,0,0,"佐野商店",DateTime.Today),
-                new Condolence(2,"いいい家","安田",false,50000,0,0,5000,string.Empty,DateTime.Today)
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬")
             };
 
             return (list.Count, list);
@@ -97,8 +145,56 @@ namespace Infrastructure
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
-                new Condolence(1,"あああ家","林飛",true,10000,5000,0,0,"佐野商店",DateTime.Today),
-                new Condolence(2,"いいい家","安田",false,50000,0,0,5000,string.Empty,DateTime.Today)
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬"),
+                new Condolence
+                    (1,"あああ家","林飛",false,10000,5000,0,0,"佐野商店",DateTime.Today,"深瀬",string.Empty),
+                new Condolence
+                    (2,"いいい家","安田",true,50000,0,0,5000,string.Empty,DateTime.Today,string.Empty,"藤井"),
+                new Condolence
+                    (3,"ううう家","林飛 顕誠",false,300000,10000,10000,0,"大成祭典",DateTime.Today.AddDays(-1),
+                        "藤井",string.Empty),
+                new Condolence
+                    (4,"えええ家","安田 一貴",true,50000,10000,5000,0,string.Empty,DateTime.Today.AddDays(-1),
+                        string.Empty,"深瀬")
             };
 
             return list;
@@ -234,12 +330,13 @@ namespace Infrastructure
             return returnList;
         }
 
-        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List) ReferenceReceiptsAndExpenditure
-            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept, 
-                string content, string detail, string accountingSubject, string accountingSubjectCode, 
-                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly, 
-                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart, 
-                DateTime outputDateEnd, int pageCount)
+        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List) 
+            ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, 
+                string location, string creditDept, string content, string detail, string accountingSubject, 
+                string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, 
+                bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, 
+                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, 
+                int pageCount)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
@@ -310,7 +407,7 @@ namespace Infrastructure
                     ("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),
                         3130000,false,true, DateTime.Today,DefaultDate,false)
             };
-            return (1, returnList);
+            return (returnList.Count, returnList);
         }
 
         public ObservableCollection<Rep> ReferenceRep(string repName, bool isValidity)

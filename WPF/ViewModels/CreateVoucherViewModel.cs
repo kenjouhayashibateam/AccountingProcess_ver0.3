@@ -7,6 +7,7 @@ using WPF.ViewModels.Commands;
 using Domain.Entities;
 using System;
 using System.Threading.Tasks;
+using WPF.Views.Datas;
 
 namespace WPF.ViewModels
 {
@@ -37,21 +38,10 @@ namespace WPF.ViewModels
         /// 受納証の総額
         /// </summary>
         private int VoucherTotalAmount;
-        /// <summary>
-        /// リストデータの総数
-        /// </summary>
-        private int RowCount;
-        /// <summary>
-        /// リストのページ
-        /// </summary>
-        private int PageCount;
-        /// <summary>
-        /// リストのページの総数
-        /// </summary>
-        private int TotalPageCount;
         private bool isOutputButtonEnabled;
         private bool isNextPageEnabled;
         private bool isPrevPageEnabled;
+        private Pagination pagination;
         #endregion
 
         public CreateVoucherViewModel
@@ -60,9 +50,10 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
             OperationData.Add(this);
+            Pagination = new Pagination();
             SearchDate = DateTime.Today;
             OutputButtonContent = "出力";
-            SetListPageInfo();
+            Pagination.SetListPageInfo();
             SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
@@ -74,9 +65,8 @@ namespace WPF.ViewModels
         public DelegateCommand NextPageListExpressCommand { get; set; }
         private void NextPageListExpress()
         {
-            if (PageCount == 0) return;
-            PageCount += PageCount == TotalPageCount ? 0 : 1;
-            CreateReceiptsAndExpenditures(SearchDate,false);
+            if (Pagination.PageCountAddAndCanNextPageExpress())
+                CreateReceiptsAndExpenditures(SearchDate,false);
         }
         /// <summary>
         /// 前の10件を表示するコマンド
@@ -84,20 +74,8 @@ namespace WPF.ViewModels
         public DelegateCommand PrevPageListExpressCommand { get; set; }
         private void PrevPageListExpress()
         {
-            if (PageCount == 0) return;
-            if (PageCount > 1) PageCount--;
-            CreateReceiptsAndExpenditures(SearchDate,false);
-        }
-
-        private void SetListPageInfo()
-        {
-
-            int i = RowCount / 10;
-            i += RowCount % 10 == 0 ? 0 : 1;
-            TotalPageCount = i;
-            ListPageInfo = $"{PageCount}/{i}";
-            IsPrevPageEnabled = PageCount > 1;
-            IsNextPageEnabled = PageCount != i;
+            if (Pagination.PageCountSubtractAndCanPrevPageExpress())
+                CreateReceiptsAndExpenditures(SearchDate,false);
         }
         /// <summary>
         /// 新規登録画面を表示するコマンド
@@ -214,25 +192,16 @@ namespace WPF.ViewModels
         }
         private void CreateReceiptsAndExpenditures(DateTime accountActivityDate,bool isPageReset)
         {
-            PageCount = isPageReset ? 1 : PageCount;
-            ObservableCollection<ReceiptsAndExpenditure> allDataList =
+            Pagination.CountReset(isPageReset);
+            var(count,list)=
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
                 string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
-                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1));
-
-            SearchReceiptsAndExpenditures =
-                DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
-                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), PageCount).List;
-            RowCount =
-                DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
-                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), PageCount).TotalRows;
-            RowCount = allDataList.Count;
-            SetListPageInfo();
+                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), 
+                Pagination.PageCount);
+            SearchReceiptsAndExpenditures = list;
+            Pagination.TotalRowCount = count;
+            Pagination.SetListPageInfo();
         }
         /// <summary>
         /// 検索した出納データのリスト
@@ -243,7 +212,6 @@ namespace WPF.ViewModels
             set
             {
                 searchReceiptsAndExpenditures = value;
-                SetListPageInfo();
                 CallPropertyChanged();
             }
         }
@@ -328,6 +296,18 @@ namespace WPF.ViewModels
             set
             {
                 isPrevPageEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ページネーション
+        /// </summary>
+        public Pagination Pagination
+        {
+            get => pagination;
+            set
+            {
+                pagination = value;
                 CallPropertyChanged();
             }
         }
