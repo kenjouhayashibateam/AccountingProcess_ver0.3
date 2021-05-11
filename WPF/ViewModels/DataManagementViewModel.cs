@@ -7,6 +7,7 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using Domain.Entities;
+using WPF.ViewModels.Datas;
 
 namespace WPF.ViewModels
 {

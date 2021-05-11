@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using WPF.ViewModels.Commands;
+using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 

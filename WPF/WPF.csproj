@@ -79,15 +79,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\Commands\NotifyPropertyChanged.cs" />
+    <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />
     <Compile Include="ViewModels\CreateCondolencesViewModel.cs" />
     <Compile Include="ViewModels\CreateVoucherViewModel.cs" />
     <Compile Include="ViewModels\DataManagementViewModel.cs" />
-    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Datas\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
-    <Compile Include="ViewModels\Commands\ScreenTransition.cs" />
-    <Compile Include="ViewModels\DataOperationViewModel.cs" />
+    <Compile Include="ViewModels\Datas\ScreenTransition.cs" />
+    <Compile Include="ViewModels\Datas\DataOperationViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />

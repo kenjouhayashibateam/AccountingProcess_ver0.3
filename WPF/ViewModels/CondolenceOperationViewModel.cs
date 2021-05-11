@@ -10,6 +10,7 @@ using WPF.ViewModels.Commands;
 using System.Threading.Tasks;
 using WPF.Views.Datas;
 using System.Windows;
+using WPF.ViewModels.Datas;
 
 namespace WPF.ViewModels
 {
@@ -86,7 +87,7 @@ namespace WPF.ViewModels
         public DelegateCommand PrevPageListExpressCommand { get; set; }
         private void PrevPageListExpress()
         {
-            if(Pagination.PageCountSubtractAndCanPrevPageExpress()) SetReceiptsAndExpenditures(false);
+            if(Pagination.CanPageCountSubtractAndCanPrevPageExpress()) SetReceiptsAndExpenditures(false);
         }
         /// <summary>
         /// 次の10件を表示するコマンド
@@ -94,7 +95,7 @@ namespace WPF.ViewModels
         public DelegateCommand NextPageListExpressCommand { get; set; }
         private void NextPageListExpress()
         {
-            if(Pagination.PageCountAddAndCanNextPageExpress()) SetReceiptsAndExpenditures(false);
+            if(Pagination.CanPageCountAddAndCanNextPageExpress()) SetReceiptsAndExpenditures(false);
         }
         /// <summary>
         /// プロパティをセットします
@@ -322,7 +323,7 @@ namespace WPF.ViewModels
                         DateTime.Today,Pagination.PageCount);
             ReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = totalRow;
-            Pagination.SetListPageInfo();
+            Pagination.SetProperty();
         }
         /// <summary>
         /// 出納データリスト

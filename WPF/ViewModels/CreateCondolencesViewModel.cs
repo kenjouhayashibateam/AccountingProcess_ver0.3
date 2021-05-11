@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
+using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
@@ -86,7 +87,7 @@ namespace WPF.ViewModels
         public DelegateCommand PrevPageListExpressCommand { get; set; }
         private void PrevPageListExpress()
         {
-            if (Pagination.PageCountSubtractAndCanPrevPageExpress()) CreateCondolences(false);
+            if (Pagination.CanPageCountSubtractAndCanPrevPageExpress()) CreateCondolences(false);
         }
         /// <summary>
         /// 次の10件を表示するコマンド
@@ -94,7 +95,7 @@ namespace WPF.ViewModels
         public DelegateCommand NextPageListExpressCommand { get; }
         private void NextPageListExpress()
         {
-            if (Pagination.PageCountAddAndCanNextPageExpress()) CreateCondolences(false);
+            if (Pagination.CanPageCountAddAndCanNextPageExpress()) CreateCondolences(false);
         }
         /// <summary>
         /// データ登録画面を表示するコマンド
@@ -252,7 +253,7 @@ namespace WPF.ViewModels
             if (AllList.Count == 0) Pagination.PageCount = 0;
             ValidationProperty(nameof(Condolences), AllList);
             IsOutputButtonEnabled = AllList.Count > 0;
-            Pagination.SetListPageInfo();
+            Pagination.SetProperty();
             //SetListPageInfo();
         }
         public override void SetRep(Rep rep)

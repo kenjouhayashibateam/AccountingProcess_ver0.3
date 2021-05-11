@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using WPF.ViewModels.Commands;
-using WPF.Views.Datas;
+using WPF.ViewModels.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels

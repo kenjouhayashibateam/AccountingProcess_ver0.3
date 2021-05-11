@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using WPF.ViewModels.Commands;
+using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
@@ -131,7 +132,7 @@ namespace WPF.ViewModels
         public DelegateCommand NextPageListExpressCommand { get; set; }
         private void NextPageListExpress()
         {
-            if (Pagination.PageCountAddAndCanNextPageExpress())
+            if (Pagination.CanPageCountAddAndCanNextPageExpress())
                 ReferenceReceiptsAndExpenditures(false);
         }
         /// <summary>
@@ -140,7 +141,7 @@ namespace WPF.ViewModels
         public DelegateCommand PrevPageListExpressCommand { get; set; }
         private void PrevPageListExpress()
         {
-            if (Pagination.PageCountSubtractAndCanPrevPageExpress())
+            if (Pagination.CanPageCountSubtractAndCanPrevPageExpress())
                 ReferenceReceiptsAndExpenditures(false);
         }
         /// <summary>
@@ -1179,7 +1180,7 @@ namespace WPF.ViewModels
             CreateReceiptsAndExpenditures
                 (AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd,
                     Location,isPageCountReset);
-            Pagination.SetListPageInfo();
+            Pagination.SetProperty();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
 
         }

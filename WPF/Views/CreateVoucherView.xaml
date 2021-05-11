@@ -17,6 +17,9 @@
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <behavior:ShowDiarog/>
         </interactions:PropertyChangedTrigger>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>

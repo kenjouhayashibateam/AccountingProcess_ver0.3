@@ -6,6 +6,7 @@ using Infrastructure;
 using System;
 using System.Windows;
 using WPF.ViewModels.Commands;
+using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 
 namespace WPF.ViewModels

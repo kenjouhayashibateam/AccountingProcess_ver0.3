@@ -8,6 +8,7 @@ using Domain.Entities;
 using System;
 using System.Threading.Tasks;
 using WPF.Views.Datas;
+using WPF.ViewModels.Datas;
 
 namespace WPF.ViewModels
 {
@@ -53,7 +54,7 @@ namespace WPF.ViewModels
             Pagination = new Pagination();
             SearchDate = DateTime.Today;
             OutputButtonContent = "出力";
-            Pagination.SetListPageInfo();
+            Pagination.SetProperty();
             SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
@@ -65,7 +66,7 @@ namespace WPF.ViewModels
         public DelegateCommand NextPageListExpressCommand { get; set; }
         private void NextPageListExpress()
         {
-            if (Pagination.PageCountAddAndCanNextPageExpress())
+            if (Pagination.CanPageCountAddAndCanNextPageExpress())
                 CreateReceiptsAndExpenditures(SearchDate,false);
         }
         /// <summary>
@@ -74,7 +75,7 @@ namespace WPF.ViewModels
         public DelegateCommand PrevPageListExpressCommand { get; set; }
         private void PrevPageListExpress()
         {
-            if (Pagination.PageCountSubtractAndCanPrevPageExpress())
+            if (Pagination.CanPageCountSubtractAndCanPrevPageExpress())
                 CreateReceiptsAndExpenditures(SearchDate,false);
         }
         /// <summary>
@@ -109,6 +110,17 @@ namespace WPF.ViewModels
             await Task.Delay(1);
             if (SelectedSeachReceiptsAndExpenditure == null) return;
             if (VoucherContents.Contains(SelectedSeachReceiptsAndExpenditure)) return;
+            if(VoucherContents.Count==8)
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message = "9件以上のデータは受納証に載せられません。\r\n受納証を分けて発行してください。",
+                    Image = System.Windows.MessageBoxImage.Warning,
+                    Button = System.Windows.MessageBoxButton.OK,
+                    Title = "内容件数上限超過"
+                };
+                return;
+            }
             VoucherContents.Add(SelectedSeachReceiptsAndExpenditure);
             SetTotalAmount();
             SetOutputEnabled();
@@ -201,7 +213,7 @@ namespace WPF.ViewModels
                 Pagination.PageCount);
             SearchReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = count;
-            Pagination.SetListPageInfo();
+            Pagination.SetProperty();
         }
         /// <summary>
         /// 検索した出納データのリスト

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using WPF.ViewModels.Commands;
+using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 
 namespace WPF.ViewModels
