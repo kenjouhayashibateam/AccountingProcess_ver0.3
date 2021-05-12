@@ -26,6 +26,7 @@ namespace WPF.ViewModels
         private string almsgiving = string.Empty;
         private string mealTip = string.Empty;
         private string carAndMealTip = string.Empty;
+        private string socialGathering = string.Empty;
         private string totalAmount = string.Empty;
         private string contentText = string.Empty;
         private string soryoName = string.Empty;
@@ -36,16 +37,14 @@ namespace WPF.ViewModels
         /// <summary>
         /// 検索する勘定科目コード
         /// </summary>
-        private string SearchAccountingSubjectCode { get; set; }
+        private string SearchAccountingSubjectCode { get; set; } = string.Empty;
         private string searchGanreContent;
         #endregion
         #region Bools
         private bool isMemorialService;
-        private bool isAlmsgivingCheck;
-        private bool isCarTipCheck;
-        private bool isMealTipCheck;
-        private bool isCarAndMealTipCheck;
-        private bool isAlmsgivingSearch;
+        private bool isAlmsgivingSearch = true;
+        private bool isTipSearch;
+        private bool isSocalGatheringSearch;
         private bool isOperationButtonEnabled;
         #endregion
         private Dictionary<int, string> soryoList;
@@ -64,9 +63,7 @@ namespace WPF.ViewModels
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
             Pagination = new Pagination();
-            IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
-            IsAlmsgivingCheck = true;
             IsMemorialService = true;
             if(condolenceOperation.GetData()==null)
             {
@@ -81,6 +78,36 @@ namespace WPF.ViewModels
         }
         public CondolenceOperationViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 懇志検索コマンド
+        /// </summary>
+        public DelegateCommand SocialGatheringSearchCommand { get; set; }
+        private void SocialGatheringSearch()
+        {
+            IsSocalGatheringSearch = true;
+            SearchAccountingSubjectCode = "831";
+            SetReceiptsAndExpenditures(true);
+        }
+        /// <summary>
+        /// 志納金検索コマンド
+        /// </summary>
+        public DelegateCommand TipSearchCommand { get; set; }
+        private void TipSearch()
+        {
+            IsTipSearch = true;
+            SearchAccountingSubjectCode = "832";
+            SetReceiptsAndExpenditures(true);
+        }
+        /// <summary>
+        /// 御布施検索コマンド
+        /// </summary>
+        public DelegateCommand AlmsgivingSearchCommand { get; set; }
+        private void AlmsgivingSearch()
+        {
+            IsAlmsgivingSearch = true;
+            SearchAccountingSubjectCode = "815";
+            SetReceiptsAndExpenditures(true);
+        }
         /// <summary>
         /// 前の10件を表示するコマンド
         /// </summary>
@@ -112,6 +139,7 @@ namespace WPF.ViewModels
             CarTip = AmountWithUnit(condolence.CarTip);
             MealTip = AmountWithUnit(condolence.MealTip);
             CarAndMealTip = AmountWithUnit(condolence.CarAndMealTip);
+            SocialGathering = AmountWithUnit(condolence.SocialGathering);
             Note = condolence.Note;
             CounterReceiver = condolence.CounterReceiver;
             MailRepresentative = condolence.MailRepresentative;
@@ -129,6 +157,7 @@ namespace WPF.ViewModels
             CarTip = string.Empty;
             MealTip = string.Empty;
             CarAndMealTip = string.Empty;
+            SocialGathering = string.Empty;
             Note = string.Empty;
             CounterReceiver = string.Empty;
             MailRepresentative = string.Empty;
@@ -141,8 +170,8 @@ namespace WPF.ViewModels
         {
             OperationCondolence = new Condolence
                 (ID, OwnerName, GetFirstName(SoryoName), isMemorialService, IntAmount(Almsgiving),
-                    IntAmount(CarTip), IntAmount(MealTip), IntAmount(CarAndMealTip), Note,
-                    AccountActivityDate, CounterReceiver, MailRepresentative);
+                    IntAmount(CarTip), IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering),
+                    Note, AccountActivityDate, CounterReceiver, MailRepresentative);
             
             switch(CurrentOperation)
             {
@@ -197,6 +226,11 @@ namespace WPF.ViewModels
                 updateContent +=
                     $"御車代御膳料{Space}:{Space}{AmountWithUnit(condolence.CarAndMealTip)}{Space}→" +
                     $"{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\r\n";
+
+            if (condolence.SocialGathering != OperationCondolence.SocialGathering)
+                updateContent +=
+                    $"懇志{Space}:{Space}{AmountWithUnit(condolence.SocialGathering)}{Space}→" +
+                    $"{Space}{AmountWithUnit(OperationCondolence.SocialGathering)}\r\n";
 
             if (condolence.Note != OperationCondolence.Note)
                 updateContent +=
@@ -255,6 +289,7 @@ namespace WPF.ViewModels
                     $"御車代\t\t:{Space}{CarTip}\t\n" +
                     $"御膳料\t\t:{Space}{MealTip}\t\n" +
                     $"御車代御膳料\t:{Space}{CarAndMealTip}\t\n" +
+                    $"懇志\t\t;{Space}{SocialGathering}\r\n" +
                     $"備考\t\t:{Space}{Note}\r\n" +
                     $"窓口受付者\t\t:{Space}{CounterReceiver}\r\n" +
                     $"郵送担当者\t\t:{Space}{MailRepresentative}\r\n\r\n登録しますか？",
@@ -292,6 +327,9 @@ namespace WPF.ViewModels
                     break;
                 case "832":
                     SetAmount();
+                    break;
+                case "831":
+                    SocialGathering = SelectedReceiptsAndExpenditure.PriceWithUnit;
                     break;
             }
         }
@@ -342,7 +380,8 @@ namespace WPF.ViewModels
         /// </summary>
         public DateTime ReceiptsAndExpenditureSearchDate
         {
-            get => receiptsAndExpenditureSearchDate; set
+            get => receiptsAndExpenditureSearchDate; 
+            set
             {
                 receiptsAndExpenditureSearchDate = value;
                 SetReceiptsAndExpenditures(true);
@@ -396,7 +435,6 @@ namespace WPF.ViewModels
             set
             {
                 if(ConfirmationOwnerName(ownerName,value)==MessageBoxResult.Yes) ownerName = value;
-                
                 ValidationProperty(nameof(OwnerName), value);
                 CallPropertyChanged();
             }
@@ -473,8 +511,8 @@ namespace WPF.ViewModels
         private void SetTotalAmount()
         {
             TotalAmount =
-                AmountWithUnit(IntAmount(Almsgiving) + IntAmount(CarTip) + IntAmount(MealTip) + 
-                    IntAmount(CarAndMealTip));
+                AmountWithUnit(IntAmount(Almsgiving) + IntAmount(CarTip) + IntAmount(MealTip) +
+                    IntAmount(CarAndMealTip) + IntAmount(SocialGathering));
         }
         /// <summary>
         /// 内容が法事かのチェック　Trueが法事、Falseが葬儀
@@ -551,55 +589,7 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// お布施チェック
-        /// </summary>
-        public bool IsAlmsgivingCheck
-        {
-            get => isAlmsgivingCheck;
-            set
-            {
-                isAlmsgivingCheck = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 御車代チェック
-        /// </summary>
-        public bool IsCarTipCheck
-        {
-            get => isCarTipCheck;
-            set
-            {
-                isCarTipCheck = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 御膳料チェック
-        /// </summary>
-        public bool IsMealTipCheck
-        {
-            get => isMealTipCheck;
-            set
-            {
-                isMealTipCheck = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 御車代御膳料チェック
-        /// </summary>
-        public bool IsCarAndMealTipCheck
-        {
-            get => isCarAndMealTipCheck;
-            set
-            {
-                isCarAndMealTipCheck = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 御布施か志納金のどちらで検索するか　御布施がTrue
+        /// 御布施検索チェック
         /// </summary>
         public bool IsAlmsgivingSearch
         {
@@ -607,9 +597,6 @@ namespace WPF.ViewModels
             set
             {
                 isAlmsgivingSearch = value;
-                SearchGanreContent = value ? "志納金検索" : "御布施検索";
-                SearchAccountingSubjectCode = value ? "815" : "832";
-                SetReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
         }
@@ -661,13 +648,51 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// ページネーション
+        /// </summary>
         public Pagination Pagination
         {
             get => pagination;
             set
             {
                 pagination = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 登録する懇志
+        /// </summary>
+        public string SocialGathering
+        {
+            get => socialGathering;
+            set
+            {
+                socialGathering = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 志納金検索チェック
+        /// </summary>
+        public bool IsTipSearch
+        {
+            get => isTipSearch;
+            set
+            {
+                isTipSearch = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 懇志検索チェック
+        /// </summary>
+        public bool IsSocalGatheringSearch
+        {
+            get => isSocalGatheringSearch;
+            set
+            {
+                isSocalGatheringSearch = value;
                 CallPropertyChanged();
             }
         }
@@ -721,6 +746,9 @@ namespace WPF.ViewModels
             OperationDataCommand = new DelegateCommand(() => OperationData(), () => true);
             PrevPageListExpressCommand = new DelegateCommand(() => PrevPageListExpress(), () => true);
             NextPageListExpressCommand = new DelegateCommand(() => NextPageListExpress(), () => true);
+            AlmsgivingSearchCommand = new DelegateCommand(() => AlmsgivingSearch(), () => true);
+            TipSearchCommand = new DelegateCommand(() => TipSearch(), () => true);
+            SocialGatheringSearchCommand = new DelegateCommand(() => SocialGatheringSearch(), () => true);
         }
 
         protected override void SetDetailLocked() { }

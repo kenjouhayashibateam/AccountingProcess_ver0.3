@@ -221,7 +221,7 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
             MySheetCellRange(StartRowPosition + 10, 2, StartRowPosition + 10, 3).Style.
                 Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            MySheetCellRange(StartRowPosition + 10, 4, StartRowPosition + 10, 13).Style.
+            MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 10, 13).Style.
                 Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
@@ -233,7 +233,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override double[] SetRowSizes() => new double[]
         //{ 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
-        { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 32.25 };
+        { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 31.5 };
 
     protected override double SetMaeginsBottom() => ToInch(0);
 

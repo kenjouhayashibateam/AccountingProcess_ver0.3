@@ -40,6 +40,10 @@ namespace Domain.Entities
         /// </summary>
         public int CarAndMealTip { get; set; }
         /// <summary>
+        /// 懇志
+        /// </summary>
+        public int SocialGathering { get; set; }
+        /// <summary>
         /// 合計金額
         /// </summary>
         public int TotalAmount { get => Almsgiving + CarTip + MealTip + CarAndMealTip; }
@@ -62,7 +66,7 @@ namespace Domain.Entities
 
         public Condolence
             (int iD, string ownerName, string soryoName, bool isMemorialService, int almsgiving, int carTip, 
-                int mealTip, int carAndMealTip, string note, DateTime accountActivityDate, string counterReceiver, 
+                int mealTip, int carAndMealTip, int socialGethering, string note, DateTime accountActivityDate, string counterReceiver, 
                 string mailRepresentative)
         {
             ID = iD;
@@ -73,6 +77,7 @@ namespace Domain.Entities
             CarTip = carTip;
             MealTip = mealTip;
             CarAndMealTip = carAndMealTip;
+            SocialGathering = socialGethering;
             Note = note;
             AccountActivityDate = accountActivityDate;
             CounterReceiver = counterReceiver;

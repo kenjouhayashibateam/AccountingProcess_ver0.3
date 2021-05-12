@@ -10,7 +10,7 @@
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="450" Width="1000">
+        Title="{Binding WindowTitle}" Height="500" Width="1100">
     <Window.DataContext>
         <vm:CreateCondolencesViewModel/>
     </Window.DataContext>
@@ -33,7 +33,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Header="検索メニュー" Margin="5">
@@ -100,7 +100,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="内容" Width="1*">
+                    <DataGridTemplateColumn Header="内容" Width="2*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -124,7 +124,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="御布施" Width="2*">
+                    <DataGridTemplateColumn Header="御布施" Width="3*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -136,7 +136,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="御車代" Width="2*">
+                    <DataGridTemplateColumn Header="御車代" Width="3*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -148,7 +148,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="御膳料" Width="2*">
+                    <DataGridTemplateColumn Header="御膳料" Width="3*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -160,7 +160,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="御車代御膳料" Width="2*">
+                    <DataGridTemplateColumn Header="御車代御膳料" Width="3*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -172,7 +172,19 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="合計金額" Width="2*">
+                    <DataGridTemplateColumn Header="懇志" Width="3*">
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SocialGathering,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="合計金額" Width="3*">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -184,21 +196,21 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="備考" Width="4*">
+                    <DataGridTemplateColumn Header="備考" Width="3*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="窓口" Width="1*">
+                    <DataGridTemplateColumn Header="窓口" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding CounterReceiver}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="郵送" Width="1*">
+                    <DataGridTemplateColumn Header="郵送" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding MailRepresentative}" VerticalAlignment="Center" HorizontalAlignment="Center"/>

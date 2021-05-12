@@ -59,6 +59,7 @@ namespace Domain.Entities.Helpers
         /// <returns>000000</returns>
         public static int IntAmount(string amount)
         {
+            if (string.IsNullOrEmpty(amount)) return 0;
             string s = amount.Replace(Properties.Resources.Unit, string.Empty);
             s = s.Replace(",", string.Empty);
             return CommaDelimitedAmount(s) == string.Empty ? 0 : int.Parse(s);

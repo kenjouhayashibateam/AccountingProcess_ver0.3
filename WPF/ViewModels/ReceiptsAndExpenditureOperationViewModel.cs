@@ -278,6 +278,7 @@ namespace WPF.ViewModels
         {
             IsValidity = true;
             OperationData.SetData(null);
+            ComboCreditDeptText = string.Empty;
             ComboAccountingSubjectCodes.Clear();
             SelectedAccountingSubjectCode = null;
             ComboAccountingSubjectCode = string.Empty;

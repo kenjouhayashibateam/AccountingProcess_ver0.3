@@ -697,13 +697,13 @@ namespace Infrastructure
                 SqlDataReader dataReader = Cmd.ExecuteReader();
                 while(dataReader.Read())
                 {
-                    list.Add(new Condolence((int)dataReader["condolence_id"], 
+                    list.Add(new Condolence((int)dataReader["condolence_id"],
                         (string)dataReader["owner_name"],
                         (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
-                        (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"], 
-                        (int)dataReader["car_and_meal_tip"], (string)dataReader["note"],
-                        (DateTime)dataReader["execution_date"],(string)dataReader["counter_receiver"],
-                        (string)dataReader["mail_representative"]));                    
+                        (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
+                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gethering"],
+                        (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
+                        (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
                 }
             }
             return (ReferenceCondolence(startDate, endDate).Count, list);
@@ -725,13 +725,13 @@ namespace Infrastructure
 
                 while(dataReader.Read())
                 {
-                    list.Add(new Condolence((int)dataReader["condolence_id"], 
+                    list.Add(new Condolence((int)dataReader["condolence_id"],
                         (string)dataReader["owner_name"],
                         (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
                         (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
-                        (int)dataReader["car_and_meal_tip"], (string)dataReader["note"],
-                        (DateTime)dataReader["execution_date"], (string)dataReader["counter_receiver"],
-                        (string)dataReader["mail_representative"]));
+                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gethering"],
+                        (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
+                        (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
                 }
             }
             return list;

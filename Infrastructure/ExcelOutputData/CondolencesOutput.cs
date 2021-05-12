@@ -22,7 +22,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetBorderStyle()
         {
-            MySheetCellRange(StartRowIndex + 2, 1, SetRowSizes().Length * pageNumber, 14).Style
+            MySheetCellRange(StartRowIndex + 2, 1, SetRowSizes().Length * pageNumber, 15).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
@@ -32,7 +32,9 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetCellsStyle()
         {
             //シートのフォントサイズ
-            myWorksheet.Style.Font.FontSize = 11;
+            myWorksheet.Style.Font.FontSize = 10;
+            //シートのセルを「縮小して全体を表示」設定にする
+            myWorksheet.Style.Alignment.SetShrinkToFit(true);
             //用紙の向き
             myWorksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
             //タイトル欄
@@ -46,21 +48,20 @@ namespace Infrastructure.ExcelOutputData
             //日付、施主名、内容、担当僧侶
             MySheetCellRange(StartRowIndex + 3, 1, SetRowSizes().Length * pageNumber, 4).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            //合計金額、御布施、御車代、御膳料、御車代御膳料
-            MySheetCellRange(StartRowIndex + 3, 5, SetRowSizes().Length * pageNumber, 9).Style
+            //合計金額、御布施、御車代、御膳料、御車代御膳料、懇志
+            MySheetCellRange(StartRowIndex + 3, 5, SetRowSizes().Length * pageNumber, 10).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             //窓口、郵送
-            MySheetCellRange(StartRowIndex + 3, 10, SetRowSizes().Length * pageNumber, 11).Style
+            MySheetCellRange(StartRowIndex + 3, 11, SetRowSizes().Length * pageNumber, 12).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //備考
-            MySheetCellRange(StartRowIndex + 3, 14, SetRowSizes().Length * pageNumber, 14).Style
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
-                .Alignment.SetShrinkToFit(true);
+            MySheetCellRange(StartRowIndex + 3, 15, SetRowSizes().Length * pageNumber, 16).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
         protected override double[] SetColumnSizes() => new double[]
-            {5,9,7.55,8.18,13,13,13,13,13,6.18,6.18,6.18,6.18,13.45};
+            {4.86,9,6.29,6.29,11.71,11.71,11.71,11.71,11.71,11.71,6.14,6.14,6.14,6.14,12.71};
 
         protected override void SetDataStrings()
         {
@@ -71,7 +72,7 @@ namespace Infrastructure.ExcelOutputData
 
             foreach (Condolence condolence in Condolences.OrderBy(c=>c.AccountActivityDate))
             {
-                if(i==20)
+                if(i==17)
                 {
                     pageNumber++;
                     MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
@@ -95,11 +96,12 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(currentRow, 7).Value = "御車代";
                     myWorksheet.Cell(currentRow, 8).Value = "御膳料";
                     myWorksheet.Cell(currentRow, 9).Value = "御車代御膳料";
-                    myWorksheet.Cell(currentRow, 10).Value = "窓口";
-                    myWorksheet.Cell(currentRow, 11).Value = "郵送";
-                    myWorksheet.Cell(currentRow, 12).Value = "支配人";
-                    myWorksheet.Cell(currentRow, 13).Value = "本部長";
-                    myWorksheet.Cell(currentRow, 14).Value = "備考";
+                    myWorksheet.Cell(currentRow, 10).Value = "懇志";
+                    myWorksheet.Cell(currentRow, 11).Value = "窓口";
+                    myWorksheet.Cell(currentRow, 12).Value = "郵送";
+                    myWorksheet.Cell(currentRow, 13).Value = "支配人";
+                    myWorksheet.Cell(currentRow, 14).Value = "本部長";
+                    myWorksheet.Cell(currentRow, 15).Value = "備考";
                     i++;
                     currentDate = condolence.AccountActivityDate;
                     dateMergeStartRow = StartRowIndex + i;
@@ -123,9 +125,10 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(currentRow, 7).Value = AmountWithUnit(condolence.CarTip);
                 myWorksheet.Cell(currentRow, 8).Value = AmountWithUnit(condolence.MealTip);
                 myWorksheet.Cell(currentRow, 9).Value = AmountWithUnit(condolence.CarAndMealTip);
-                myWorksheet.Cell(currentRow, 10).Value = condolence.CounterReceiver;
-                myWorksheet.Cell(currentRow, 11).Value = condolence.MailRepresentative;
-                myWorksheet.Cell(currentRow, 14).Value = condolence.Note;
+                myWorksheet.Cell(currentRow, 10).Value = AmountWithUnit(condolence.SocialGathering);
+                myWorksheet.Cell(currentRow, 11).Value = condolence.CounterReceiver;
+                myWorksheet.Cell(currentRow, 12).Value = condolence.MailRepresentative;
+                myWorksheet.Cell(currentRow,15).Value= condolence.Note;
                 i++;
             }
             MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
@@ -149,9 +152,9 @@ namespace Infrastructure.ExcelOutputData
 
         protected override double SetMaeginsBottom() => ToInch(1.4);
 
-        protected override double SetMaeginsLeft() => ToInch(0.6);
+        protected override double SetMaeginsLeft() => ToInch(0.1);
 
-        protected override double SetMaeginsRight() => ToInch(0.6);
+        protected override double SetMaeginsRight() => ToInch(0.1);
 
         protected override double SetMaeginsTop() => ToInch(1.9);
 
@@ -159,8 +162,7 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 1, SetColumnSizes().Length).Merge();
 
         protected override double[] SetRowSizes() => new double[]
-            { 20.5, 13, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5, 27.5,
-                27.5, 27.5, 27.5 };
+            { 20.5, 13, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5};
 
         protected override string SetSheetFontName() => "ＭＳ ゴシック";
 
