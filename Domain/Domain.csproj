@@ -45,11 +45,9 @@
   <ItemGroup>
     <Compile Include="Entities\CashBox.cs" />
     <Compile Include="Entities\Condolence.cs" />
-    <Compile Include="Entities\CondolenceOperation.cs" />
     <Compile Include="Entities\Helpers\TextHelper.cs" />
     <Compile Include="Entities\LoginRep.cs" />
     <Compile Include="Entities\ReceiptsAndExpenditure.cs" />
-    <Compile Include="Entities\ReceiptsAndExpenditureOperation.cs" />
     <Compile Include="Entities\ValueObjects\AccountingSubject.cs" />
     <Compile Include="Entities\ValueObjects\AccountingProcessLocation.cs" />
     <Compile Include="Entities\ValueObjects\Content.cs" />

@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="700" Width="900">
+        Title="{Binding WindowTitle}" Height="800" Width="900">
     <Window.DataContext>
         <vm:CondolenceOperationViewModel/>
     </Window.DataContext>
@@ -24,7 +24,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="6*"/>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>

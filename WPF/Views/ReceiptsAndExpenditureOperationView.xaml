@@ -11,7 +11,7 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
         
-        Title="{Binding WindowTitle}" Height="700" Width="420">
+        Title="{Binding WindowTitle}" Height="750" Width="420">
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureOperationViewModel/>
     </Window.DataContext>
@@ -22,6 +22,9 @@
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <behavior:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
+        <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
+            <behavior:ShowDiarog/>
+        </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
@@ -29,6 +32,9 @@
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
+        </ib:DataTrigger>
+        <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
 
@@ -48,6 +54,7 @@
                         <RowDefinition Height="2*"/>
                         <RowDefinition Height="2*"/>
                         <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="3*"/>
                         <RowDefinition Height="3*"/>
                         <RowDefinition Height="3*"/>
@@ -59,8 +66,14 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding ReceiptsAndExpenditureIDFieldText}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" IsEnabled="{Binding IsValidityEnabled}" Margin="5,0"/>
-                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3"/>
-                    <Grid Grid.Row="3">
+                    <Button x:Name="PropertyInputWizard" Grid.Row="2" Content="入力ウィザードを開く(登録のみ)※工事中" IsEnabled="{Binding IsInputWizardEnabled}" Margin="5,3">
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding ShowWizardCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding ShowWizardCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
+                    </Button>
+                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="3" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3"/>
+                    <Grid Grid.Row="4">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
@@ -78,7 +91,7 @@
                         <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" Grid.Column="1" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Text="{Binding ComboAccountingSubjectText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboAccountingSubjects}" SelectedValue="{Binding SelectedAccountingSubject,Mode=TwoWay}" SelectedValuePath="{Binding SelectedAccountingSubject.ID}" DisplayMemberPath="Subject" Margin="5,3"/>
                         <ComboBox Name="ContentComboBox" Grid.Row="1" Grid.Column="2" Margin="5,3" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" Text="{Binding ComboContentText,UpdateSourceTrigger=LostFocus}" ItemsSource="{Binding ComboContents}" SelectedValue="{Binding SelectedContent,Mode=TwoWay}" SelectedValuePath="{Binding SelectedContent.ID}" DisplayMemberPath="Text"/>
                     </Grid>
-                    <Grid Grid.Row="4">
+                    <Grid Grid.Row="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
@@ -96,7 +109,7 @@
                             </Button.InputBindings>
                         </Button>
                     </Grid>
-                    <Grid Grid.Row="5">
+                    <Grid Grid.Row="6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
@@ -111,7 +124,7 @@
                         <CheckBox Content="軽減税率のデータ" Grid.Row="1" Grid.Column="1" FontSize="14" Visibility="{Binding IsReducedTaxRateVisiblity,Converter={StaticResource VisibilityConverter}}" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                         <TextBox x:Name="SupplementTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding Supplement}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Visibility="{Binding IsSupplementVisiblity,Converter={StaticResource VisibilityConverter}}" Margin="5,3"/>
                     </Grid> 
-                    <Grid Grid.Row="6">
+                    <Grid Grid.Row="7">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
@@ -131,7 +144,7 @@
                             </Button.InputBindings>
                         </Button>
                     </Grid>
-                    <Grid Grid.Row="7">
+                    <Grid Grid.Row="8">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="3*"/>
                             <RowDefinition Height="4*"/>
@@ -139,7 +152,7 @@
                         <TextBlock Text="入出金日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" InputMethod.PreferredImeState="off" HorizontalAlignment="Left" Margin="5,3"/>
                     </Grid>
-                    <Grid Grid.Row="8">
+                    <Grid Grid.Row="9">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
@@ -153,7 +166,7 @@
                         <TextBlock Text="{Binding SlipOutputDateTitle}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <DatePicker x:Name="SlipOutputDate" Grid.Row="1" Grid.Column="1" SelectedDate="{Binding SlipOutputDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
                     </Grid>
-                    <Grid Grid.Row="9">
+                    <Grid Grid.Row="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="3*"/>
@@ -161,7 +174,7 @@
                         <TextBlock Text="登録担当者" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <TextBox x:Name="RegistrationRepNameTextBox" Grid.Row="1" IsEnabled="False" Text="{Binding OperationRep.Name}" VerticalContentAlignment="Center" Margin="5,3,200,3"/>
                     </Grid>
-                    <CheckBox Content="印刷済みフラグ" Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="{Binding IsOutputCheckEnabled}" IsChecked="{Binding IsOutput}" Margin="5"/>
+                    <CheckBox Content="印刷済みフラグ" Grid.Row="11" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="{Binding IsOutputCheckEnabled}" IsChecked="{Binding IsOutput}" Margin="5"/>
                 </Grid>
                 <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5,0">
                     <Button.InputBindings>

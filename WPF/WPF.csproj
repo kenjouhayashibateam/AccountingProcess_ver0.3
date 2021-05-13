@@ -79,6 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\Datas\CondolenceOperation.cs" />
     <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />
     <Compile Include="ViewModels\CreateCondolencesViewModel.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="ViewModels\DataManagementViewModel.cs" />
     <Compile Include="ViewModels\Datas\BaseViewModel.cs" />
     <Compile Include="ViewModels\Commands\DelegateCommand.cs" />
+    <Compile Include="ViewModels\Datas\ReceiptsAndExpenditureOperation.cs" />
     <Compile Include="ViewModels\Datas\ScreenTransition.cs" />
     <Compile Include="ViewModels\Datas\DataOperationViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -131,6 +133,12 @@
     </Compile>
     <Compile Include="Views\ReceiptsAndExpenditureOperationView.xaml.cs">
       <DependentUpon>ReceiptsAndExpenditureOperationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationPage1.xaml.cs">
+      <DependentUpon>ReceiptsAndExpenditureRegistrationPage1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationWizardView.xaml.cs">
+      <DependentUpon>ReceiptsAndExpenditureRegistrationWizardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">
       <DependentUpon>RemainingMoneyCalculationView.xaml</DependentUpon>
@@ -180,6 +188,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReceiptsAndExpenditureOperationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationPage1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationWizardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,6 +266,10 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PageModels\" />
+    <Folder Include="Pages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

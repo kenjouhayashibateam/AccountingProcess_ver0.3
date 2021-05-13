@@ -1,0 +1,17 @@
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\bin\Debug\test.exe.config
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\bin\Debug\test.exe
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\bin\Debug\test.pdb
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.csprojAssemblyReference.cache
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\MainWindow.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\testpage.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\App.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test_MarkupCompile.cache
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test_MarkupCompile.lref
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\MainWindow.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\testpage.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.g.resources
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.Properties.Resources.resources
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.csproj.GenerateResource.cache
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.csproj.CoreCompileInputs.cache
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.exe
+C:\Users\001\source\repos\AccountingProcess_ver0.3\test\obj\Debug\test.pdb

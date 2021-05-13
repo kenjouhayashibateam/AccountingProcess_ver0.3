@@ -51,6 +51,7 @@ namespace WPF.ViewModels
         private bool isSupplementVisiblity;
         private bool isReducedTaxRateVisiblity;
         private bool isPaymentCheckEnabled;
+        private bool isInputWizardEnabled;
         #endregion
         #region ObservableCollections
         private ObservableCollection<CreditDept> comboCreditDepts;
@@ -94,6 +95,9 @@ namespace WPF.ViewModels
         }
         public ReceiptsAndExpenditureOperationViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public DelegateCommand ShowWizardCommand { get; set; }
+        private void ShowWizard() =>
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureRegistrationWizard());
         /// <summary>
         /// 勘定科目一覧PDFを開くコマンド
         /// </summary>
@@ -491,7 +495,7 @@ namespace WPF.ViewModels
             set
             {
                 comboAccountingSubjectCode = string.Empty;
-
+                
                 if (string.IsNullOrEmpty(value)&&OperationData.Data==null)
                 {
                     SetField();
@@ -532,6 +536,7 @@ namespace WPF.ViewModels
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
                 CallPropertyChanged();
+                
                 void SetField()
                 {
                     ComboAccountingSubjects =
@@ -1010,6 +1015,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 登録ウィザードボタンのEnabled
+        /// </summary>
+        public bool IsInputWizardEnabled
+        {
+            get => isInputWizardEnabled;
+            set
+            {
+                isInputWizardEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
@@ -1096,6 +1113,7 @@ namespace WPF.ViewModels
         protected override void SetDetailLocked()
         {
             IsValidityEnabled = CurrentOperation == DataOperation.更新;
+            IsInputWizardEnabled = CurrentOperation == DataOperation.登録;
 
             if (IsValidityEnabled)
                 ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
@@ -1123,6 +1141,8 @@ namespace WPF.ViewModels
                 (() => ReceiptsAndExpenditureDataOperation(), () => true);
             ShowAccountTitleListPDFFileCommand = new DelegateCommand
                 (() => ShowAccountTitleListPDFFile(), () => true);
+            ShowWizardCommand = new DelegateCommand
+                (() => ShowWizard(), () => true);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace WPF.ViewModels
         #endregion
         #region Bools
         private bool isMemorialService;
-        private bool isAlmsgivingSearch = true;
+        private bool isAlmsgivingSearch;
         private bool isTipSearch;
         private bool isSocalGatheringSearch;
         private bool isOperationButtonEnabled;
@@ -63,6 +63,7 @@ namespace WPF.ViewModels
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
             Pagination = new Pagination();
+            IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsMemorialService = true;
             if(condolenceOperation.GetData()==null)
@@ -105,7 +106,6 @@ namespace WPF.ViewModels
         private void AlmsgivingSearch()
         {
             IsAlmsgivingSearch = true;
-            SearchAccountingSubjectCode = "815";
             SetReceiptsAndExpenditures(true);
         }
         /// <summary>
@@ -597,6 +597,7 @@ namespace WPF.ViewModels
             set
             {
                 isAlmsgivingSearch = value;
+                if(value) SearchAccountingSubjectCode = "815";
                 CallPropertyChanged();
             }
         }
@@ -681,6 +682,7 @@ namespace WPF.ViewModels
             set
             {
                 isTipSearch = value;
+                if (value) SearchAccountingSubjectCode = "832";
                 CallPropertyChanged();
             }
         }
@@ -693,6 +695,7 @@ namespace WPF.ViewModels
             set
             {
                 isSocalGatheringSearch = value;
+                if (value) SearchAccountingSubjectCode = "831";
                 CallPropertyChanged();
             }
         }
