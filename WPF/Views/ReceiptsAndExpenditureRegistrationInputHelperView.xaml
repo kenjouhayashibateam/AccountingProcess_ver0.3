@@ -1,0 +1,67 @@
+﻿<Window x:Class="WPF.Views.ReceiptsAndExpenditureRegistrationInputHelperView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF.Views"
+        xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="450" Width="400">
+    <Window.DataContext>
+        <vm:ReceiptsAndExpenditureRegistrationHelperViewModel/>
+    </Window.DataContext>
+    <ib:Interaction.Triggers>       
+        <ib:DataTrigger Binding="{Binding WindowCloseSwich}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="伝票内容検索" Grid.Row="0" Margin="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SearchContentTextBox" Grid.Column="1" Text="{Binding SearchContentText}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5"/>
+         </Grid>
+        </GroupBox>
+        <GroupBox Header="一覧" Grid.Row="1" Margin="5">
+            <DataGrid ItemsSource="{Binding Contents}" SelectedValue="{Binding SelectedContent}" AutoGenerateColumns="False" Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="内容" Binding="{Binding Text}" Width="1*" IsReadOnly="True" />
+                    <DataGridTextColumn Header="科目コード" Binding="{Binding AccountingSubject.SubjectCode}" Width="1*" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="勘定科目" Binding="{Binding AccountingSubject.Subject}" Width="1*" IsReadOnly="True"/>
+                    <DataGridTemplateColumn Header="アイテム操作" Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="InputButton" Content="選択" VerticalAlignment="Center" Margin="5,1">
+                                    <Button.InputBindings>
+                                        <KeyBinding Command="{Binding Path=DataContext.InputContentCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Key="Space"/>
+                                        <MouseBinding Command="{Binding Path=DataContext.InputContentCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
+                                    </Button.InputBindings>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CloseButton" Grid.Column="1" Content="閉じる" Margin="5">
+                
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

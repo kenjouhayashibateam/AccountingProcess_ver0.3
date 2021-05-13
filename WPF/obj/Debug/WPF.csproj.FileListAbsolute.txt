@@ -120,3 +120,5 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsA
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationWizardView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationPage1.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationWizard\ReceiptsAndExpenditureRegistrationWizardView.baml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationInputHelperView.g.cs
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationInputHelperView.baml

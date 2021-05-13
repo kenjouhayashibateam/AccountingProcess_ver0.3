@@ -74,6 +74,7 @@ namespace WPF.ViewModels
         private SolidColorBrush detailBackGroundColor;
         private readonly ReceiptsAndExpenditureOperation OperationData;
         private int receiptsAndExpenditureIDField;
+        LoginRep loginRep = LoginRep.GetInstance();
         #endregion
 
         public ReceiptsAndExpenditureOperationViewModel
@@ -96,8 +97,11 @@ namespace WPF.ViewModels
         public ReceiptsAndExpenditureOperationViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         public DelegateCommand ShowWizardCommand { get; set; }
-        private void ShowWizard() =>
-            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureRegistrationWizard());
+        private void ShowWizard()
+        {
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureRegistrationHelper());
+            SetReceiptsAndExpenditureProperty();
+        }
         /// <summary>
         /// 勘定科目一覧PDFを開くコマンド
         /// </summary>
@@ -294,7 +298,6 @@ namespace WPF.ViewModels
             Price = string.Empty;
             AccountActivityDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
-            LoginRep loginRep = LoginRep.GetInstance();
             OperationRep = loginRep.Rep;
             if (SelectedCreditDept == null) SelectedCreditDept = ComboCreditDepts[0];
             SlipOutputDate = DefaultDate;
@@ -307,7 +310,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetReceiptsAndExpenditureProperty()
         {
-            OperationRep = OperationData.Data.RegistrationRep;
+            OperationRep = OperationData.Data.RegistrationRep ?? loginRep.Rep;
             ReceiptsAndExpenditureIDField = OperationData.Data.ID;
             IsValidity = OperationData.Data.IsValidity;
             IsPaymentCheck = OperationData.Data.IsPayment;

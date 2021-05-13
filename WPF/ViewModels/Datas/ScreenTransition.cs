@@ -1,7 +1,6 @@
 ﻿using Domain.Entities.ValueObjects;
 using System.Windows;
 using WPF.Views;
-using WPF.Views.ReceiptsAndExpenditureRegistrationWizard;
 
 namespace WPF.ViewModels.Datas
 {
@@ -66,7 +65,7 @@ namespace WPF.ViewModels.Datas
         public static Window CreateCondolences() =>
             new CreateCondolencesView();
 
-        public static Window ReceiptsAndExpenditureRegistrationWizard() =>
-            new ReceiptsAndExpenditureWizardView();
+        public static Window ReceiptsAndExpenditureRegistrationHelper() =>
+            new ReceiptsAndExpenditureRegistrationInputHelperView();
     }
 }
