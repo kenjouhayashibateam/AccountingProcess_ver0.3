@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
@@ -196,7 +197,7 @@ namespace WPF.ViewModels
 
             if (OperationData.Data.OutputDate != SlipOutputDate)
                 UpdateCotent += $"出力日 : {OperationData.Data.OutputDate.ToShortDateString()} → " +
-                                             $"{SlipOutputDate.ToShortDateString()}\r\n";
+                    $"{(SlipOutputDate==DefaultDate?"未出力":SlipOutputDate.ToShortDateString())}\r\n";
 
             if (OperationData.Data.IsReducedTaxRate != IsReducedTaxRate)
                 UpdateCotent +=
@@ -205,6 +206,7 @@ namespace WPF.ViewModels
             if (UpdateCotent.Length == 0)
             {
                 CallNoRequiredUpdateMessage();
+                IsDataOperationButtonEnabled = true;
                 return;
             }
 
@@ -316,14 +318,14 @@ namespace WPF.ViewModels
             IsPaymentCheck = OperationData.Data.IsPayment;
             SlipOutputDate = OperationData.Data.OutputDate;
             IsOutput = OperationData.Data.OutputDate != DefaultDate;
-            IsOutputCheckEnabled = true;
+            IsOutputCheckEnabled = OperationData.Data.ID > 0;
             SelectedCreditDept = OperationData.Data.CreditDept;
             ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
             ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
             ComboContentText = OperationData.Data.Content.Text;
             ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
             DetailText = OperationData.Data.Detail;
-            Price = OperationData.Data.Price.ToString();
+            Price = SetPrice();
             AccountActivityDate = OperationData.Data.AccountActivityDate;
             RegistrationDate = OperationData.Data.RegistrationDate;
             IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
@@ -335,6 +337,14 @@ namespace WPF.ViewModels
             {
                 DetailText = OperationData.Data.Detail;
                 Supplement = string.Empty;
+            }
+
+            string SetPrice()
+            {
+                if (OperationData.Data.Price == 0)
+                    return OperationData.Data.Content.FlatRate > 0 ? CommaDelimitedAmount(OperationData.Data.Content.FlatRate) : string.Empty;
+
+                return CommaDelimitedAmount(OperationData.Data.Price);
             }
         }
         /// <summary>
@@ -881,6 +891,7 @@ namespace WPF.ViewModels
             set
             {
                 isOutput = value;
+                SetOutputDate(value);
                 CallPropertyChanged();
             }
         }
@@ -1005,6 +1016,13 @@ namespace WPF.ViewModels
                 isOutputCheckEnabled = value;
                 CallPropertyChanged();
             }
+        }
+        private void SetOutputDate(bool value)
+        {
+            if (value) SlipOutputDate =
+                     OperationData.Data.OutputDate == DefaultDate ?
+                         DateTime.Today : OperationData.Data.OutputDate;
+            else SlipOutputDate = DefaultDate;
         }
         /// <summary>
         /// 補足に促す注意
