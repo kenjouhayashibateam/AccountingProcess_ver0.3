@@ -62,6 +62,7 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected void ExcelOpen()
         {
+            myWorksheet.Protect("excel");
             myWorkbook.SaveAs(openPath);
             myWorkbooks.Open(Filename: openPath, ReadOnly: true);
             App.Visible = true;
