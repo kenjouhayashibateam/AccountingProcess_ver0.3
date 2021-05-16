@@ -131,7 +131,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,20">
+                    <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsCreateVoucherEnabled}" Margin="5,20">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>

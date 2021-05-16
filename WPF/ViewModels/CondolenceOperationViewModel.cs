@@ -34,6 +34,7 @@ namespace WPF.ViewModels
         private string dataOperationButtonContent;
         private string counterReceiver;
         private string mailRepresentative;
+        private string fixToggleContent;
         /// <summary>
         /// 検索する勘定科目コード
         /// </summary>
@@ -46,6 +47,9 @@ namespace WPF.ViewModels
         private bool isTipSearch;
         private bool isSocalGatheringSearch;
         private bool isOperationButtonEnabled;
+        private bool isReceptionBlank;
+        private bool fixToggle;
+        private bool isFixToggleEnabled;
         #endregion
         private Dictionary<int, string> soryoList;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
@@ -56,6 +60,7 @@ namespace WPF.ViewModels
         private Condolence OperationCondolence;
         private int ID { get; set; }
         private Pagination pagination;
+        public Dictionary<int, string> NoteStrings { get; set; }
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
@@ -66,6 +71,15 @@ namespace WPF.ViewModels
             IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsMemorialService = true;
+            IsReceptionBlank = false;
+            FixToggle = true;
+            NoteStrings = new Dictionary<int, string>()
+            {
+                {1,"佐野商店" },
+                {2,"徳島" },
+                {3,"緑山メモリアルパーク" }
+            };
+
             if(condolenceOperation.GetData()==null)
             {
                 SetDataRegistrationCommand.Execute();
@@ -141,8 +155,10 @@ namespace WPF.ViewModels
             CarAndMealTip = AmountWithUnit(condolence.CarAndMealTip);
             SocialGathering = AmountWithUnit(condolence.SocialGathering);
             Note = condolence.Note;
+            FixToggle = string.IsNullOrEmpty(condolence.MailRepresentative);
             CounterReceiver = condolence.CounterReceiver;
             MailRepresentative = condolence.MailRepresentative;
+            IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) && string.IsNullOrEmpty(condolence.MailRepresentative);
         }
         /// <summary>
         /// プロパティをクリアします
@@ -159,8 +175,7 @@ namespace WPF.ViewModels
             CarAndMealTip = string.Empty;
             SocialGathering = string.Empty;
             Note = string.Empty;
-            CounterReceiver = string.Empty;
-            MailRepresentative = string.Empty;
+            IsReceptionBlank = false;
         }
         /// <summary>
         /// データ操作コマンド
@@ -169,9 +184,10 @@ namespace WPF.ViewModels
         private void OperationData()
         {
             OperationCondolence = new Condolence
-                (ID, OwnerName, GetFirstName(SoryoName), isMemorialService, IntAmount(Almsgiving),
+                (ID,AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName), isMemorialService, IntAmount(Almsgiving),
                     IntAmount(CarTip), IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering),
-                    Note, AccountActivityDate, CounterReceiver, MailRepresentative);
+                    Note, AccountActivityDate, IsReceptionBlank ? string.Empty : CounterReceiver, 
+                    IsReceptionBlank ? string.Empty : MailRepresentative);
             
             switch(CurrentOperation)
             {
@@ -249,6 +265,7 @@ namespace WPF.ViewModels
             if(string.IsNullOrEmpty(updateContent))
             {
                 CallNoRequiredUpdateMessage();
+                SetProperty();
                 return;
             }
 
@@ -263,7 +280,9 @@ namespace WPF.ViewModels
             DataOperationButtonContent = "更新中";
             await Task.Run(() => DataBaseConnect.Update(OperationCondolence));
             condolenceOperation.SetData(OperationCondolence);
+            condolenceOperation.Notify();
             CallCompletedUpdate();
+            SetProperty();
             DataOperationButtonContent = "更新";
             isOperationButtonEnabled = true;
         }
@@ -284,21 +303,25 @@ namespace WPF.ViewModels
                     $"施主名\t\t:{Space}{OperationCondolence.OwnerName}\r\n" +
                     $"担当僧侶\t\t:{Space}{OperationCondolence.SoryoName}\r\n" +
                     $"内容\t\t:{Space}{content}\r\n" +
-                    $"合計金額\t\t:{Space}{TotalAmount}\r\n" +
-                    $"御布施\t\t:{Space}{Almsgiving}\r\n" +
-                    $"御車代\t\t:{Space}{CarTip}\t\n" +
-                    $"御膳料\t\t:{Space}{MealTip}\t\n" +
-                    $"御車代御膳料\t:{Space}{CarAndMealTip}\t\n" +
-                    $"懇志\t\t;{Space}{SocialGathering}\r\n" +
-                    $"備考\t\t:{Space}{Note}\r\n" +
-                    $"窓口受付者\t\t:{Space}{CounterReceiver}\r\n" +
-                    $"郵送担当者\t\t:{Space}{MailRepresentative}\r\n\r\n登録しますか？",
+                    $"合計金額\t\t:{Space}{AmountWithUnit(OperationCondolence.TotalAmount)}\r\n" +
+                    $"御布施\t\t:{Space}{AmountWithUnit(OperationCondolence.Almsgiving)}\r\n" +
+                    $"御車代\t\t:{Space}{AmountWithUnit(OperationCondolence.CarTip)}\t\n" +
+                    $"御膳料\t\t:{Space}{AmountWithUnit(OperationCondolence.MealTip)}\t\n" +
+                    $"御車代御膳料\t:{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\t\n" +
+                    $"懇志\t\t;{Space}{AmountWithUnit(OperationCondolence.SocialGathering)}\r\n" +
+                    $"備考\t\t:{Space}{OperationCondolence.Note}\r\n" +
+                    $"窓口受付者\t:{Space}{OperationCondolence.CounterReceiver}\r\n" +
+                    $"郵送担当者\t:{Space}{OperationCondolence.MailRepresentative}\r\n\r\n登録しますか？",
                 Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
                 Title = "登録確認"
             };
 
-            if (MessageBox.Result == MessageBoxResult.Cancel) return;
+            if (MessageBox.Result == MessageBoxResult.Cancel)
+            {
+                IsOperationButtonEnabled = true;
+                return;
+            }
 
             DataOperationButtonContent = "登録中";
             LoginRep loginRep = LoginRep.GetInstance();
@@ -699,6 +722,59 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 窓口、郵送欄を空欄にするかチェック
+        /// </summary>
+        public bool IsReceptionBlank
+        {
+            get => isReceptionBlank;
+            set
+            {
+                isReceptionBlank = value;
+                IsFixToggleEnabled = !value;
+                if (value) FixToggle = true;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 窓口、郵送対応トグル　窓口がtrue
+        /// </summary>
+        public bool FixToggle
+        {
+            get => fixToggle;
+            set
+            {
+                fixToggle = value;
+                MailRepresentative = value ? string.Empty : LoginRepName;
+                CounterReceiver = value ? LoginRepName : string.Empty;
+                FixToggleContent = value ? "窓口受付" : "郵送対応";
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 窓口、郵送トグルのContent
+        /// </summary>
+        public string FixToggleContent
+        {
+            get => fixToggleContent;
+            set
+            {
+                fixToggleContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 窓口、郵送トグルのEnabled
+        /// </summary>
+        public bool IsFixToggleEnabled
+        {
+            get => isFixToggleEnabled;
+            set
+            {
+                isFixToggleEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void SetRep(Rep rep)
         {
@@ -706,6 +782,7 @@ namespace WPF.ViewModels
             else
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
+                LoginRepName = rep.Name;
                 WindowTitle = $"{DefaultWindowTitle}（ログイン : {GetFirstName(rep.Name)}）";
             }
         }

@@ -101,8 +101,11 @@ namespace WPF.ViewModels
         /// データ登録画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowRegistrationViewCommand { get; }
-        private void ShowRegistrationView() => 
+        private void ShowRegistrationView()
+        {
+            condolenceOperation.SetData(null);
             CreateShowWindowCommand(ScreenTransition.CondolenceOperation());
+        }
         /// <summary>
         /// お布施一覧のアイテムリスト
         /// </summary>
@@ -241,13 +244,15 @@ namespace WPF.ViewModels
             Pagination.CountReset(isPageCountReset);
 
             var(count,list)=
-                DataBaseConnect.ReferenceCondolence(SearchStartDate, SearchEndDate, Pagination.PageCount);
+                DataBaseConnect.ReferenceCondolence
+                    (SearchStartDate, SearchEndDate,AccountingProcessLocation.Location, Pagination.PageCount);
             Condolences = list;
             //RowCount = count;
             Pagination.TotalRowCount = count;
 
             AllList =
-                DataBaseConnect.ReferenceCondolence(SearchStartDate, SearchEndDate);
+                DataBaseConnect.ReferenceCondolence
+                    (SearchStartDate, SearchEndDate,AccountingProcessLocation.Location);
 
             //if (AllList.Count == 0) PageCount = 0;
             if (AllList.Count == 0) Pagination.PageCount = 0;

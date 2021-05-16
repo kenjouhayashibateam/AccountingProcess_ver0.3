@@ -12,6 +12,10 @@ namespace Domain.Entities
         /// </summary>
         public int ID { get; set; }
         /// <summary>
+        /// 経理担当場所
+        /// </summary>
+        public string Location { get; set; }
+        /// <summary>
         /// 施主名
         /// </summary>
         public string OwnerName { get; set; }
@@ -65,11 +69,12 @@ namespace Domain.Entities
         public string MailRepresentative { get; set; }
 
         public Condolence
-            (int iD, string ownerName, string soryoName, bool isMemorialService, int almsgiving, int carTip, 
+            (int iD,string location, string ownerName, string soryoName, bool isMemorialService, int almsgiving, int carTip, 
                 int mealTip, int carAndMealTip, int socialGethering, string note, DateTime accountActivityDate, string counterReceiver, 
                 string mailRepresentative)
         {
             ID = iD;
+            Location = location;
             OwnerName = ownerName;
             SoryoName = soryoName;
             IsMemorialService = isMemorialService;

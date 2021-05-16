@@ -236,7 +236,7 @@ namespace Domain.Repositories
         /// <param name="startDate">検索最古日時</param>
         /// <param name="dateTime">検索最新日時</param>
         /// <returns></returns>
-        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate);
+        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate,string location);
         /// <summary>
         /// 御布施一覧データを検索します
         /// </summary>
@@ -245,6 +245,6 @@ namespace Domain.Repositories
         /// <param name="pageCount">ページカウント</param>
         /// <returns></returns>
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate, int pageCount);
+            (DateTime startDate, DateTime endDate,string location, int pageCount);
     }
 }

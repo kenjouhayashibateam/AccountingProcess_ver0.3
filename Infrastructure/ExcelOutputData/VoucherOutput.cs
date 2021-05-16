@@ -91,7 +91,7 @@ namespace Infrastructure.ExcelOutputData
             SetLocalProperty(XLAlignmentHorizontalValues.Left, XLAlignmentVerticalValues.Bottom, 11);
             SetCellPropertyOriginalAndCopy(6, 2);
             //但し書き欄
-            SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 11);
+            SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 14);
             SetRangeProperyOriginalAndCopy(7, 2, 10, 8);
             MySheetCellRange(7, 2, 10, 8).Style.Alignment.SetShrinkToFit(true);
             MySheetCellRange(7, CopyColumnPosition(2), 10, CopyColumnPosition(8)).Style
@@ -312,7 +312,7 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetRowSizes() => new double[] 
-            { 37, 18, 37.5, 37.5, 37.5, 37.5, 18, 18, 18, 18, 37.5, 18, 18.5, 18.5, 18, 18 };
+            { 37, 18, 37.5, 37.5, 37.5, 37.5, 22.5, 22.5, 22.5, 22.5, 37.5, 18, 18.5, 18.5, 18, 18 };
 
         protected override string SetSheetFontName() => "ＭＳ 明朝";
 

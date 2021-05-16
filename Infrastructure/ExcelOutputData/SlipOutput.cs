@@ -233,7 +233,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override double[] SetRowSizes() => new double[]
         //{ 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
-        { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 31.5 };
+        { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 30 };
 
     protected override double SetMaeginsBottom() => ToInch(0);
 

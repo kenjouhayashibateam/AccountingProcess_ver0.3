@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
+using static Domain.Entities.Helpers.TextHelper;
 using Domain.Repositories;
 using System;
 using System.Collections.Generic;
@@ -643,16 +644,19 @@ namespace Infrastructure
             using(Cn)
             {
                 ADO_NewInstance_StoredProc(Cmd, "registration_condolence");
-                Cmd.Parameters.AddWithValue("@execution_date", condolence.AccountActivityDate);
+                Cmd.Parameters.AddWithValue("@account_activity_date", condolence.AccountActivityDate);
+                Cmd.Parameters.AddWithValue("@location", condolence.Location);
                 Cmd.Parameters.AddWithValue("@owner_name", condolence.OwnerName);
                 Cmd.Parameters.AddWithValue("@soryo_name", condolence.SoryoName);
                 Cmd.Parameters.AddWithValue("@is_memorial_service", condolence.IsMemorialService);
+                Cmd.Parameters.AddWithValue("@almsgiving", condolence.Almsgiving);
                 Cmd.Parameters.AddWithValue("@car_tip", condolence.CarTip);
                 Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
                 Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
+                Cmd.Parameters.AddWithValue("@social_gathering", condolence.SocialGathering);
                 Cmd.Parameters.AddWithValue("@note", condolence.Note);
-                Cmd.Parameters.AddWithValue("@counter_receiver", condolence.CounterReceiver);
-                Cmd.Parameters.AddWithValue("@mail_representative", condolence.MailRepresentative);
+                Cmd.Parameters.AddWithValue("@counter_receiver", GetFirstName(condolence.CounterReceiver));
+                Cmd.Parameters.AddWithValue("@mail_representative", GetFirstName(condolence.MailRepresentative));
 
                 return Cmd.ExecuteNonQuery();
             }
@@ -666,23 +670,26 @@ namespace Infrastructure
             {
                 ADO_NewInstance_StoredProc(Cmd, "update_condolence");
                 Cmd.Parameters.AddWithValue("@condolence_id", condolence.ID);
-                Cmd.Parameters.AddWithValue("@execuion_date", condolence.AccountActivityDate);
+                Cmd.Parameters.AddWithValue("@location", condolence.Location);
+                Cmd.Parameters.AddWithValue("@account_activity_date", condolence.AccountActivityDate);
                 Cmd.Parameters.AddWithValue("@owner_name", condolence.OwnerName);
                 Cmd.Parameters.AddWithValue("@soryo_name", condolence.SoryoName);
                 Cmd.Parameters.AddWithValue("@is_memorial_service", condolence.IsMemorialService);
+                Cmd.Parameters.AddWithValue("@almsgiving", condolence.Almsgiving);
                 Cmd.Parameters.AddWithValue("@car_tip", condolence.CarTip);
                 Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
                 Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
+                Cmd.Parameters.AddWithValue("@social_gathering", condolence.SocialGathering);
                 Cmd.Parameters.AddWithValue("@note", condolence.Note);
-                Cmd.Parameters.AddWithValue("@counter_receiver", condolence.CounterReceiver);
-                Cmd.Parameters.AddWithValue("@mail_representative", condolence.MailRepresentative);
+                Cmd.Parameters.AddWithValue("@counter_receiver", GetFirstName(condolence.CounterReceiver));
+                Cmd.Parameters.AddWithValue("@mail_representative", GetFirstName(condolence.MailRepresentative));
 
                 return Cmd.ExecuteNonQuery();
             }
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate, int pageCount)
+            (DateTime startDate, DateTime endDate,string location, int pageCount)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             SqlCommand Cmd = new SqlCommand();
@@ -692,25 +699,26 @@ namespace Infrastructure
                 ADO_NewInstance_StoredProc(Cmd, "reference_condolence");
                 Cmd.Parameters.AddWithValue("@start_date", startDate);
                 Cmd.Parameters.AddWithValue("@end_date", endDate);
+                Cmd.Parameters.AddWithValue("@location", location); 
                 Cmd.Parameters.AddWithValue("@page", pageCount);
 
                 SqlDataReader dataReader = Cmd.ExecuteReader();
                 while(dataReader.Read())
                 {
                     list.Add(new Condolence((int)dataReader["condolence_id"],
-                        (string)dataReader["owner_name"],
+                        (string)dataReader["location"], (string)dataReader["owner_name"],
                         (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
                         (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
-                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gethering"],
+                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
                         (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
                         (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
                 }
             }
-            return (ReferenceCondolence(startDate, endDate).Count, list);
+            return (ReferenceCondolence(startDate, endDate,location).Count, list);
         }
 
         public ObservableCollection<Condolence> 
-            ReferenceCondolence(DateTime startDate, DateTime endDate)
+            ReferenceCondolence(DateTime startDate, DateTime endDate,string location)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             SqlCommand Cmd = new SqlCommand();
@@ -720,16 +728,17 @@ namespace Infrastructure
                 ADO_NewInstance_StoredProc(Cmd, "reference_condolence_all_data");
                 Cmd.Parameters.AddWithValue("@start_date", startDate);
                 Cmd.Parameters.AddWithValue("@end_date", endDate);
+                Cmd.Parameters.AddWithValue("@location",location);
 
                 SqlDataReader dataReader = Cmd.ExecuteReader();
 
                 while(dataReader.Read())
                 {
                     list.Add(new Condolence((int)dataReader["condolence_id"],
-                        (string)dataReader["owner_name"],
+                        (string)dataReader["location"], (string)dataReader["owner_name"],
                         (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
                         (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
-                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gethering"],
+                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
                         (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
                         (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
                 }
