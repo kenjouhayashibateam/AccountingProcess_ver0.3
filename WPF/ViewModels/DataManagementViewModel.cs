@@ -279,6 +279,14 @@ namespace WPF.ViewModels
                 CurrentRep.IsValidity = IsRepValidity;
             }
 
+            if(CurrentRep.IsAdminPermisson!=IsRepDataAdminPermisson)
+            {
+                updateContents +=
+                    $"管理者権限{TextHelper.Space}:{TextHelper.Space}{CurrentRep.IsAdminPermisson}{TextHelper.Space}→" +
+                    $"{TextHelper.Space}{IsRepDataAdminPermisson}";
+                CurrentRep.IsAdminPermisson = IsRepDataAdminPermisson;
+            }
+
             if (RepNewPassword.Length > 0)
             {
                 updateContents += $"パスワード変更 : {new string('*', RepNewPassword.Length)}\r\n";

@@ -246,5 +246,31 @@ namespace Domain.Repositories
         /// <returns></returns>
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
             (DateTime startDate, DateTime endDate,string location, int pageCount);
+        /// <summary>
+        /// 受納証に異なった文字列を表示する伝票内容を登録します
+        /// </summary>
+        /// <param name="id">伝票内容ID</param>
+        /// <param name="contentConvertText">表示する伝票内容文字列</param>
+        /// <returns></returns>
+        public int Registration(string id, string contentConvertText);
+        /// <summary>
+        /// 受納証に異なった文字列を表示する伝票内容を更新します
+        /// </summary>
+        /// <param name="id">伝票内容ID</param>
+        /// <param name="contentConvertText">表示する伝票内容文字列</param>
+        /// <returns></returns>
+        public int Update(string id, string contentConvertText);
+        /// <summary>
+        /// 受納証に異なった文字列を表示する伝票内容を呼び出します
+        /// </summary>
+        /// <param name="id">検索する伝票内容ID</param>
+        /// <returns></returns>
+        public string CallContentConvertText(string id);
+        /// <summary>
+        /// 受納証に異なった文字列を表示する伝票内容データを削除します
+        /// </summary>
+        /// <param name="id">削除する伝票内容ID</param>
+        /// <returns></returns>
+        public int DeleteContentConvertText(string id);
     }
 }

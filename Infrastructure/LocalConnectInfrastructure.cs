@@ -22,11 +22,13 @@ namespace Infrastructure
 
         public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
 
+        public int DeleteContentConvertText(string id) => 1;
+
         public Dictionary<int, string> GetSoryoList()
         {
             Dictionary<int, string> list = new Dictionary<int, string>()
             {
-                { 0, "小林 謙" },
+                {0, "小林 謙" },
                 {1, "林飛 顕誠"},
                 {2,"西村 守弘" },
                 {3,"細江 洸" },
@@ -239,6 +241,8 @@ namespace Infrastructure
             return list;            
         }
 
+        public string CallContentConvertText(string id) => "法事冥加";
+
         public ObservableCollection<CreditDept> ReferenceCreditDept
             (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
         {
@@ -433,6 +437,8 @@ namespace Infrastructure
 
         public int Registration(Condolence condolence) => 1;
 
+        public int Registration(string id, string contentConvertText) => 1;
+
         public int RegistrationPerMonthFinalAccount() => 1;
         
         public int Update(Rep rep) => 1;
@@ -446,5 +452,7 @@ namespace Infrastructure
         public int Update(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
 
         public int Update(Condolence condolence) => 1;
+
+        public int Update(string id, string contentConvertText) => 1;
     }
 }

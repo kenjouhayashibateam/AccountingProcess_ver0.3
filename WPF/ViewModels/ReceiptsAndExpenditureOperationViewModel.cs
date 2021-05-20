@@ -75,7 +75,7 @@ namespace WPF.ViewModels
         private SolidColorBrush detailBackGroundColor;
         private readonly ReceiptsAndExpenditureOperation OperationData;
         private int receiptsAndExpenditureIDField;
-        LoginRep loginRep = LoginRep.GetInstance();
+        readonly LoginRep loginRep = LoginRep.GetInstance();
         #endregion
 
         public ReceiptsAndExpenditureOperationViewModel
@@ -517,8 +517,8 @@ namespace WPF.ViewModels
                     return;
                 }
 
-                int i = int.TryParse(value, out int j) ? j : 0;
-                if (i == 0) comboAccountingSubjectCode = value == "000" ? value : string.Empty;
+                if (!System.Text.RegularExpressions.Regex.IsMatch(value, @"\d"))
+                    comboAccountingSubjectCode = string.Empty;
                 else comboAccountingSubjectCode = value;
 
                 if (comboAccountingSubjectCode.Length == 3) ComboAccountingSubjects =

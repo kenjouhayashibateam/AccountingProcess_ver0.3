@@ -44,299 +44,293 @@ namespace Infrastructure
             cmd.CommandText = commandText;
             Cn.Open();
         }
-   
-        public int Registration(Rep rep)
-        {
-            SqlCommand Cmd = new SqlCommand();
-            using (Cn) 
-            {
-                ADO_NewInstance_StoredProc(Cmd,"registration_staff");
-                Cmd.Parameters.AddWithValue("@staff_name", rep.Name);
-                Cmd.Parameters.AddWithValue("@password", rep.Password);
-                Cmd.Parameters.AddWithValue("@validity", rep.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_permission", rep.IsAdminPermisson);
-                return Cmd.ExecuteNonQuery();
-            }
-        }
-       
-        public int Update(Rep rep)
+        /// ストアドを実行するコマンドを返します
+        /// </summary>
+        /// <param name="commandText">ストアドプロシージャ名</param>
+        /// <param name="parameterName">パラメータ名</param>
+        /// <param name="parameter">パラメータ</param>
+        /// <returns></returns>
+        private SqlCommand ReturnGeneretedOneParameterCommand
+            (string commandText, Dictionary<string, object> parameters)
         {
             SqlCommand Cmd = new SqlCommand();
 
             using (Cn)
             {
-                ADO_NewInstance_StoredProc(Cmd,"update_staff");
-                Cmd.Parameters.AddWithValue("@staff_id", rep.ID);
-                Cmd.Parameters.AddWithValue("@staff_name", rep.Name);
-                Cmd.Parameters.AddWithValue("@password", rep.Password);
-                Cmd.Parameters.AddWithValue("@is_validity", rep.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_permission", rep.IsAdminPermisson);
-                Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
-                return Cmd.ExecuteNonQuery();
+                ADO_NewInstance_StoredProc(Cmd, commandText);
+
+                foreach (KeyValuePair<string, object> param in parameters)
+                    Cmd.Parameters.AddWithValue(param.Key, param.Value);
             }
+
+            return Cmd;
+        }
+
+        public int Registration(Rep rep)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                { "@staff_name", rep.Name },
+                { "@password", rep.Password},
+                { "@validity", rep.IsValidity},
+                {"@is_permission", rep.IsAdminPermisson }
+            };
+
+            return ReturnGeneretedOneParameterCommand("registration_staff", parameters).ExecuteNonQuery();
+        }
+
+        public int Update(Rep rep)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                {"@staff_id", rep.ID },{"@staff_name", rep.Name },{"@password", rep.Password },
+                {"@is_validity", rep.IsValidity },{"@is_permission", rep.IsAdminPermisson },
+                {"@operation_staff_id", LoginRep.Rep.ID }
+            };
+
+            return ReturnGeneretedOneParameterCommand
+                ("update_staff", parameters).ExecuteNonQuery();
         }
        
         public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidityTrueOnly)
         {
-            SqlCommand Cmd = new SqlCommand();
             ObservableCollection<Rep> reps = new ObservableCollection<Rep>();
-            using (Cn)
-            {
-                ADO_NewInstance_StoredProc(Cmd,"reference_staff");
-                Cmd.Parameters.Add(new SqlParameter("@staff_name", repName));
-                Cmd.Parameters.Add(new SqlParameter("@true_only", isValidityTrueOnly));
-                SqlDataReader DataReader = Cmd.ExecuteReader();
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {{ "@staff_name", repName},{ "@true_only", isValidityTrueOnly}};
 
-                while (DataReader.Read())
-                    reps.Add
-                        (new Rep((string)DataReader["staff_id"], (string)DataReader["name"], 
-                        (string)DataReader["password"], (bool)DataReader["is_validity"], 
-                        (bool)DataReader["is_permission"]));
-            }
+            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+                ("reference_staff",parameters).ExecuteReader();
+            while (DataReader.Read())
+                reps.Add
+                    (new Rep((string)DataReader["staff_id"], (string)DataReader["name"], 
+                    (string)DataReader["password"], (bool)DataReader["is_validity"], 
+                    (bool)DataReader["is_permission"]));
+
             return reps;
         }
      
         public int Registration(AccountingSubject accountingSubject)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"registration_accounting_subject");
-                Cmd.Parameters.AddWithValue("@subject_code", accountingSubject.SubjectCode);
-                Cmd.Parameters.AddWithValue("@subject", accountingSubject.Subject);
-                Cmd.Parameters.AddWithValue("@validity", accountingSubject.IsValidity);
-                Cmd.Parameters.AddWithValue("@staff_id", LoginRep.Rep.ID);
-                return Cmd.ExecuteNonQuery();
-            }
+                {"@subject_code", accountingSubject.SubjectCode},{"@subject", accountingSubject.Subject },
+                { "@validity", accountingSubject.IsValidity},{"@staff_id", LoginRep.Rep.ID}
+            };
+
+            return ReturnGeneretedOneParameterCommand
+                ("registration_accounting_subject", parameters).ExecuteNonQuery();
         }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
             (string subjectCode, string subject, bool isTrueOnly)
         {
-            SqlDataReader DataReader;
             ObservableCollection<AccountingSubject> accountingSubjects = 
                 new ObservableCollection<AccountingSubject>();
-            SqlCommand Cmd = new SqlCommand();
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@subject_code", subjectCode},{"@subject", subject},{"@true_only", isTrueOnly} };
 
-            using (Cn)
-            {
-                ADO_NewInstance_StoredProc(Cmd,"reference_accounting_subject");
-                Cmd.Parameters.AddWithValue("@subject_code", subjectCode);
-                Cmd.Parameters.AddWithValue("@subject", subject);
-                Cmd.Parameters.AddWithValue("@true_only", isTrueOnly);
-                DataReader = Cmd.ExecuteReader();
-
-                while (DataReader.Read())
-                    accountingSubjects.Add
-                        (new AccountingSubject((string)DataReader["accounting_subject_id"], 
-                        (string)DataReader["subject_code"], (string)DataReader["subject"], 
-                        (bool)DataReader["is_validity"]));
-
-                return accountingSubjects;
-            }
+            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+                    ("reference_accounting_subject", parameters).ExecuteReader();
+            
+            while (DataReader.Read())
+                accountingSubjects.Add
+                    (new AccountingSubject((string)DataReader["accounting_subject_id"], 
+                    (string)DataReader["subject_code"], (string)DataReader["subject"], 
+                    (bool)DataReader["is_validity"]));
+            
+            return accountingSubjects;
         }
             
         public int Update(AccountingSubject accountingSubject)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"update_accounting_subject");
-                Cmd.Parameters.AddWithValue("@accounting_subject_id", accountingSubject.ID);
-                Cmd.Parameters.AddWithValue("@is_validity", accountingSubject.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
-                return Cmd.ExecuteNonQuery();
-            }
+                {"@accounting_subject_id", accountingSubject.ID},{"@is_validity", accountingSubject.IsValidity},
+                { "@operation_staff_id", LoginRep.Rep.ID}
+            };
+
+            return ReturnGeneretedOneParameterCommand
+                ("update_accounting_subject", parameters).ExecuteNonQuery();
         }
   
         public int Registration(CreditDept creditDept)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"registration_credit_dept");
-                Cmd.Parameters.AddWithValue("@account", creditDept.Dept);
-                Cmd.Parameters.AddWithValue("@is_validity", creditDept.IsValidity);
-                Cmd.Parameters.AddWithValue("@staff_id", LoginRep.Rep.ID);
-                Cmd.Parameters.AddWithValue("@is_shunjuen_account", creditDept.IsShunjuenAccount);
-                return Cmd.ExecuteNonQuery();
-            }
+                {"@account", creditDept.Dept },{"@is_validity", creditDept.IsValidity},{"@staff_id", LoginRep.Rep.ID},
+                { "@is_shunjuen_account", creditDept.IsShunjuenAccount}
+            };
+
+            return ReturnGeneretedOneParameterCommand
+                ("registration_credit_dept", parameters).ExecuteNonQuery();
         }
-  
+
         public ObservableCollection<CreditDept> ReferenceCreditDept
-            (string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly)
+            (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
         {
-            SqlDataReader DataReader;
             ObservableCollection<CreditDept> creditDepts = new ObservableCollection<CreditDept>();
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"reference_credit_dept");
-                Cmd.Parameters.AddWithValue("@dept", account);
-                Cmd.Parameters.AddWithValue("@true_only", isValidityTrueOnly);
-                Cmd.Parameters.AddWithValue("@shunjuen_account_only", isShunjuenAccountOnly);
-                DataReader = Cmd.ExecuteReader();
+                {"@dept", account },{ "@true_only", isValidityTrueOnly},
+                {"@shunjuen_account_only", isShunjuenAccountOnly }
+            };
 
-                while (DataReader.Read()) creditDepts.Add
-                        (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"], 
-                        (bool)DataReader["is_validity"], isShunjuenAccountOnly));
-            }
+            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+                ("reference_credit_dept", parameters).ExecuteReader();
+
+            while (DataReader.Read()) creditDepts.Add
+                    (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"],
+                    (bool)DataReader["is_validity"], isShunjuenAccountOnly));
+
             return creditDepts;
-       }
+        }
      
         public int Update(CreditDept creditDept)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"update_credit_dept");
-                Cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
-                Cmd.Parameters.AddWithValue("@is_validity", creditDept.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
-                return Cmd.ExecuteNonQuery();
-            }
+                {"@credit_dept_id", creditDept.ID},{ "@is_validity", creditDept.IsValidity},
+                {"@operation_staff_id", LoginRep.Rep.ID }
+            };
+
+            return ReturnGeneretedOneParameterCommand("update_credit_dept", parameters).ExecuteNonQuery();
         }
    
         public int Registration(Content content)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"registration_content");
-                Cmd.Parameters.AddWithValue("@account_subject_id", content.AccountingSubject.ID);
-                Cmd.Parameters.AddWithValue("@content", content.Text);
-                Cmd.Parameters.AddWithValue("@flat_rate", content.FlatRate);
-                Cmd.Parameters.AddWithValue("@is_validity", content.IsValidity);
-                Cmd.Parameters.AddWithValue("@staff_id", LoginRep.Rep.ID);
-                return Cmd.ExecuteNonQuery();
-            }
+                { "@account_subject_id", content.AccountingSubject.ID},{"@content", content.Text},
+                {"@flat_rate", content.FlatRate},{"@is_validity", content.IsValidity },{"@staff_id", LoginRep.Rep.ID}
+            };
+
+            return ReturnGeneretedOneParameterCommand("registration_content", parameters).ExecuteNonQuery();
         }
    
         public int Update(Content content)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd,"update_content");
-                Cmd.Parameters.AddWithValue("@content_id", content.ID);
-                Cmd.Parameters.AddWithValue("@content", content.Text);
-                Cmd.Parameters.AddWithValue("@flat_rate", content.FlatRate);
-                Cmd.Parameters.AddWithValue("@is_validity", content.IsValidity);
-                Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
-                return Cmd.ExecuteNonQuery();
-            }
+                { "@content_id", content.ID},{"@content", content.Text},{"@flat_rate", content.FlatRate},
+                {"@is_validity", content.IsValidity },{"@operation_staff_id", LoginRep.Rep.ID}
+            };
+
+            return ReturnGeneretedOneParameterCommand("update_content", parameters).ExecuteNonQuery();
         }
     
         public ObservableCollection<Content> ReferenceContent
-            (string contentText,string accountingSubjectCode, 
-            string accountingSubject, bool isValidityTrueOnly)
+            (string contentText,string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
             ObservableCollection<Content> contents = new ObservableCollection<Content>();
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "reference_content");
-                Cmd.Parameters.AddWithValue("@content", contentText);
-                Cmd.Parameters.AddWithValue("@subject_code", accountingSubjectCode);
-                Cmd.Parameters.AddWithValue("@subject", accountingSubject);
-                Cmd.Parameters.AddWithValue("@true_only", isValidityTrueOnly);
-                SqlDataAdapter sda = new SqlDataAdapter(Cmd);
+                { "@content", contentText},{"@subject_code", accountingSubjectCode},{"@subject", accountingSubject},
+                { "@true_only", isValidityTrueOnly}
+            };
 
-                using DataTable dt = new DataTable();
-                sda.Fill(dt);
-                foreach (DataRow dr in dt.Rows)
-                    contents.Add
-                        (
-                            new Content((string)dr["content_id"],
-                            new AccountingSubject((string)dr["accounting_subject_id"],
-                            (string)dr["subject_code"], (string)dr["subject"], true), (int)dr["flat_rate"],
-                            (string)dr["content"], (bool)dr["is_validity"]));
+            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("reference_content", parameters).ExecuteReader();
+
+            while(dataReader.Read())
+            {
+                contents.Add
+                    (
+                        new Content((string)dataReader["content_id"],
+                        new AccountingSubject((string)dataReader["accounting_subject_id"],
+                            (string)dataReader["subject_code"], (string)dataReader["subject"], true),
+                        (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"])
+                    );
             }
             return contents;
         }
 
         public AccountingSubject CallAccountingSubject(string id)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
-            {
-                using SqlDataReader DataReader = 
-                    ReturnReaderCommandOneParameterStoredProc
-                        (Cmd, "call_accounting_subject", "@accounting_subject_id", id);
-
-                while (DataReader.Read())
-                    return new AccountingSubject
-                        ((string)DataReader["accounting_subject_id"],
-                            (string)DataReader["subject_code"], (string)DataReader["subject"],
-                            (bool)DataReader["is_validity"]);
-            }
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { { "@accounting_subject_id", id} };
+            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+                    ("call_accounting_subject",parameters ).ExecuteReader();
+            
+            while (DataReader.Read())
+                return new AccountingSubject
+                    ((string)DataReader["accounting_subject_id"],
+                    (string)DataReader["subject_code"], (string)DataReader["subject"],
+                    (bool)DataReader["is_validity"]);
+            
             return null;
-        }
-        /// <summary>
-        /// パラメータが一つのストアドプロシージャを実行し、DataReaderを返します
-        /// </summary>
-        /// <param name="commandText">ストアドプロシージャ名</param>
-        /// <param name="parameterName">パラメータ名</param>
-        /// <param name="parameter">パラメータ</param>
-        /// <returns>ExecuteReader</returns>
-        private SqlDataReader ReturnReaderCommandOneParameterStoredProc
-            (SqlCommand cmd, string commandText,string parameterName,string parameter)
-        {
-            ADO_NewInstance_StoredProc(cmd,commandText);
-            cmd.Parameters.AddWithValue(parameterName, parameter);
-            return cmd.ExecuteReader();
         }
 
         public ObservableCollection<AccountingSubject> ReferenceAffiliationAccountingSubject
             (string contentText)
         {
-            SqlCommand Cmd = new SqlCommand();
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>();
-
-            using(Cn)
-            {
-                using SqlDataReader DataReader =
-                    ReturnReaderCommandOneParameterStoredProc
-                        (Cmd, "reference_affiliation_accounting_subject", "@content", contentText);
-
-                while (DataReader.Read()) list.Add
-                        (CallAccountingSubject((string)DataReader["accounting_subject_id"]));
-            }
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@content", contentText}};
+            using SqlDataReader DataReader =
+                ReturnGeneretedOneParameterCommand
+                    ("reference_affiliation_accounting_subject",parameters ).ExecuteReader();
+            
+            while (DataReader.Read()) list.Add
+                    (CallAccountingSubject((string)DataReader["accounting_subject_id"]));
+            
             return list;
         }
 
         public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using(Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "registration_receipts_and_expenditure");
-                Cmd.Parameters.AddWithValue("@location", receiptsAndExpenditure.Location);
-                Cmd.Parameters.AddWithValue
-                    ("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
-                Cmd.Parameters.AddWithValue("@registration_date", receiptsAndExpenditure.RegistrationDate);
-                Cmd.Parameters.AddWithValue
-                    ("@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID);
-                Cmd.Parameters.AddWithValue("@credit_dept_id", receiptsAndExpenditure.CreditDept.ID);
-                Cmd.Parameters.AddWithValue("@content_id", receiptsAndExpenditure.Content.ID);
-                Cmd.Parameters.AddWithValue("@detail", receiptsAndExpenditure.Detail);
-                Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
-                Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
-                Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue
-                    ("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
-                return Cmd.ExecuteNonQuery();
+                { "@location", receiptsAndExpenditure.Location},
+                {"@account_activity_date", receiptsAndExpenditure.AccountActivityDate},
+                { "@registration_date", receiptsAndExpenditure.RegistrationDate},
+                { "@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID},
+                {"@credit_dept_id", receiptsAndExpenditure.CreditDept.ID },
+                { "@content_id", receiptsAndExpenditure.Content.ID},{ "@detail", receiptsAndExpenditure.Detail},
+                { "@price", receiptsAndExpenditure.Price},{"@is_payment", receiptsAndExpenditure.IsPayment},
+                { "@is_validity", receiptsAndExpenditure.IsValidity},
+                {"@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate}
+            };
+
+            return ReturnGeneretedOneParameterCommand("registration_receipts_and_expenditure", parameters).ExecuteNonQuery();
+        }
+
+        private ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
+            (Dictionary<string,object> parameters)
+        {
+            ObservableCollection<ReceiptsAndExpenditure> list =
+                new ObservableCollection<ReceiptsAndExpenditure>();
+            Rep paramRep;
+            CreditDept paramCreditDept;
+            AccountingSubject paramAccountingSubject;
+            Content paramContent;
+
+            using SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("reference_receipts_and_expenditure_all_data", parameters).ExecuteReader();
+
+            while (dataReader.Read())
+            {
+
+                paramRep =
+                    new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                        (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+                paramCreditDept =
+                    new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
+                    (bool)dataReader["is_shunjuen_dept"]);
+                paramAccountingSubject =
+                    new AccountingSubject((string)dataReader["accounting_subject_id"],
+                    (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
+                    (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                list.Add(new ReceiptsAndExpenditure
+                    (
+                    (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
+                    paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
+                    (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
+                    (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
+                    (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
+                    );
             }
+            return list;
         }
 
         public  ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
@@ -348,144 +342,89 @@ namespace Infrastructure
                 DateTime outputDateStart, DateTime outputDateEnd
             )
         {
-            ObservableCollection<ReceiptsAndExpenditure> list =
-                new ObservableCollection<ReceiptsAndExpenditure>();
-            SqlCommand Cmd = new SqlCommand();
-            using (Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure_all_data");
-                Cmd.Parameters.AddWithValue("@location", location);
-                Cmd.Parameters.AddWithValue("@account_activity_date_start", accountActivityDateStart);
-                Cmd.Parameters.AddWithValue("@account_activity_date_end", accountActivityDateEnd);
-                Cmd.Parameters.AddWithValue("@registration_date_start", registrationDateStart);
-                Cmd.Parameters.AddWithValue("@registration_date_end", registrationDateEnd);
-                Cmd.Parameters.AddWithValue("@credit_dept", creditDept);
-                Cmd.Parameters.AddWithValue("@accounting_subject_code", accountingSubjectCode);
-                Cmd.Parameters.AddWithValue("@content", content);
-                Cmd.Parameters.AddWithValue("@detail", detail);
-                Cmd.Parameters.AddWithValue("@limiting_is_payment", whichDepositAndWithdrawalOnly);
-                Cmd.Parameters.AddWithValue("@is_payment", isPayment);
-                Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
-                Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
-                Cmd.Parameters.AddWithValue("@output_date_start", outputDateStart);
-                Cmd.Parameters.AddWithValue("@output_date_end", outputDateEnd);
-                Rep paramRep;
-                CreditDept paramCreditDept;
-                AccountingSubject paramAccountingSubject;
-                Content paramContent;
-                using SqlDataReader dataReader= Cmd.ExecuteReader();
-
-                while (dataReader.Read())
-                {
-                    
-                    paramRep =
-                        new Rep((string)dataReader["staff_id"], (string)dataReader["name"], 
-                            (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
-                    paramCreditDept = 
-                        new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true, 
-                        (bool)dataReader["is_shunjuen_dept"]);
-                    paramAccountingSubject = 
-                        new AccountingSubject((string)dataReader["accounting_subject_id"], 
-                        (string)dataReader["subject_code"], (string)dataReader["subject"], true);
-                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, 
-                        (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-                    list.Add(new ReceiptsAndExpenditure
-                        (
-                        (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"], 
-                        paramRep, (string)dataReader["location"], paramCreditDept, paramContent, 
-                        (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], 
-                        (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"], 
-                        (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
-                        );
-                }
-            }
-            return list;
+                { "@location", location},{"@account_activity_date_start", accountActivityDateStart},
+                { "@account_activity_date_end", accountActivityDateEnd},
+                {"@registration_date_start", registrationDateStart},{"@registration_date_end", registrationDateEnd},
+                { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
+                {"@content", content},{"@detail", detail},{"@limiting_is_payment", whichDepositAndWithdrawalOnly},
+                {"@is_payment", isPayment },{"@contain_outputted", isContainOutputted},
+                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
+                { "@output_date_end", outputDateEnd}
+            };
+            
+            return ReferenceReceiptsAndExpenditure(parameters);
         }
 
         public Rep CallRep(string id)
         {
-            SqlCommand Cmd = new SqlCommand();
-            SqlDataReader dataReader;
             Rep rep=default;
 
-            using(Cn)
-            {
-                dataReader = ReturnReaderCommandOneParameterStoredProc(Cmd, "call_staff", "@staff_id", id);
-
-                while(dataReader.Read())
-                    rep = 
-                        new Rep((string)dataReader["staff_id"], (string)dataReader["name"], 
-                            (string)dataReader["password"], (bool)dataReader["is_validity"], 
-                            (bool)dataReader["is_permission"]);
-            }
+            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("call_staff", new Dictionary<string, object>() {{ "@staff_id", id }}).ExecuteReader();
+            
+            while(dataReader.Read())
+                rep = 
+                    new Rep((string)dataReader["staff_id"], (string)dataReader["name"], 
+                    (string)dataReader["password"], (bool)dataReader["is_validity"], 
+                    (bool)dataReader["is_permission"]);
+            
             return rep;
         }
 
         public CreditDept CallCreditDept(string id)
         {
-            SqlCommand Cmd = new SqlCommand();
-            SqlDataReader dataReader;
             CreditDept creditDept = default;
 
-            using(Cn)
-            {
-                dataReader = 
-                    ReturnReaderCommandOneParameterStoredProc
-                        (Cmd, "call_credit_dept", "@credit_dept_id", id);
-
-                while (dataReader.Read())
-                    creditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], 
-                        (bool)dataReader["is_validity"],(bool)dataReader["is_shunjuen_dept"]);
-            }
+            SqlDataReader dataReader =
+                ReturnGeneretedOneParameterCommand
+                    ("call_credit_dept",new Dictionary<string, object>() { { "@credit_dept_id", id } })
+                        .ExecuteReader();
+            
+            while (dataReader.Read())
+                creditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], 
+                    (bool)dataReader["is_validity"],(bool)dataReader["is_shunjuen_dept"]);            
+            
             return creditDept;
         }
 
         public Content CallContent(string id)
         {
-            SqlCommand Cmd = new SqlCommand();
-            SqlDataReader dataReader;
             Content content = default;
 
-            using(Cn)
-            {
-                dataReader = 
-                    ReturnReaderCommandOneParameterStoredProc(Cmd, "call_content", "@content_id", id);
+            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("call_content", new Dictionary<string, object>() { { "@content_id", id } }).ExecuteReader();
+            
+            while (dataReader.Read())
+                content = new Content
+                    (
+                        (string)dataReader["content_id"],
+                        new AccountingSubject((string)dataReader["accounting_subject_id"], 
+                        (string)dataReader["subject_code"], (string)dataReader["subject"], true),
+                        (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"]
+                    );
 
-                while (dataReader.Read())
-                    content = new Content
-                        (
-                            (string)dataReader["content_id"],
-                            new AccountingSubject((string)dataReader["accounting_subject_id"], 
-                            (string)dataReader["subject_code"], (string)dataReader["subject"], true),
-                            (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"]
-                        );
-            }
             return content;
         }
 
         public int Update(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using(Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "update_receipts_and_expenditure");
-                Cmd.Parameters.AddWithValue("@receipts_and_expenditure_id", receiptsAndExpenditure.ID);
-                Cmd.Parameters.AddWithValue("@location", receiptsAndExpenditure.Location);
-                Cmd.Parameters.AddWithValue
-                    ("@account_activity_date", receiptsAndExpenditure.AccountActivityDate);
-                Cmd.Parameters.AddWithValue("@credit_dept_id", receiptsAndExpenditure.CreditDept.ID);
-                Cmd.Parameters.AddWithValue("@content_id", receiptsAndExpenditure.Content.ID);
-                Cmd.Parameters.AddWithValue("@detail", receiptsAndExpenditure.Detail);
-                Cmd.Parameters.AddWithValue("@price", receiptsAndExpenditure.Price);
-                Cmd.Parameters.AddWithValue("@is_payment", receiptsAndExpenditure.IsPayment);
-                Cmd.Parameters.AddWithValue("@is_validity", receiptsAndExpenditure.IsValidity);
-                Cmd.Parameters.AddWithValue("@is_unprinted", receiptsAndExpenditure.IsUnprinted);
-                Cmd.Parameters.AddWithValue("@operation_staff_id", LoginRep.Rep.ID);
-                Cmd.Parameters.AddWithValue
-                    ("@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate);
-                return Cmd.ExecuteNonQuery();
-            }
+                { "@receipts_and_expenditure_id", receiptsAndExpenditure.ID},
+                { "@location", receiptsAndExpenditure.Location},
+                {"@account_activity_date", receiptsAndExpenditure.AccountActivityDate },
+                { "@credit_dept_id", receiptsAndExpenditure.CreditDept.ID},
+                { "@content_id", receiptsAndExpenditure.Content.ID},
+                { "@detail", receiptsAndExpenditure.Detail},{ "@price", receiptsAndExpenditure.Price},
+                { "@is_payment", receiptsAndExpenditure.IsPayment},
+                { "@is_validity", receiptsAndExpenditure.IsValidity},
+                {"@is_unprinted", receiptsAndExpenditure.IsUnprinted},{"@operation_staff_id", LoginRep.Rep.ID},
+                { "@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate}
+            };
+
+            return ReturnGeneretedOneParameterCommand("update_receipts_and_expenditure", parameters).ExecuteNonQuery();
         }
 
         public int PreviousDayFinalAmount()
@@ -512,34 +451,25 @@ namespace Infrastructure
 
         public int CallFinalAccountPerMonth()
         {
-            SqlCommand Cmd = new SqlCommand();
             int i=default;
-
-            using (Cn)
-            {
-                ADO_NewInstance_StoredProc(Cmd, "call_final_account_per_month");
-                DateTime previousMonthLastDay =
-                    DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
-                Cmd.Parameters.AddWithValue("@date", previousMonthLastDay);
-
-                SqlDataReader sdr = Cmd.ExecuteReader();
-
-                while (sdr.Read()) i = (int)sdr["amount"];
-            }
+            DateTime previousMonthLastDay =
+                DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
+            
+            SqlDataReader sdr = ReturnGeneretedOneParameterCommand
+                ("call_final_account_per_month",
+                    new Dictionary<string, object>() { { "@date", previousMonthLastDay } })
+                    .ExecuteReader();
+            
+            while (sdr.Read()) i = (int)sdr["amount"];
+        
             return i;
         }
 
-        public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure)
-        {
-            SqlCommand Cmd = new SqlCommand();
-
-            using (Cn)
-            {
-                ADO_NewInstance_StoredProc(Cmd, "update_receipts_and_expenditure");
-                Cmd.Parameters.AddWithValue("@receipts_and_expenditure_id", receiptsAndExpenditure.ID);
-                return Cmd.ExecuteNonQuery();
-            }
-        }
+        public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure)=>
+            ReturnGeneretedOneParameterCommand
+                ("update_receipts_and_expenditure",
+                    new Dictionary<string, object>() { { "@receipts_and_expenditure_id", receiptsAndExpenditure.ID } })
+                    .ExecuteNonQuery();
 
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
             ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, 
@@ -551,60 +481,52 @@ namespace Infrastructure
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
-            SqlCommand Cmd = new SqlCommand();
-            using (Cn)
+
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "reference_receipts_and_expenditure");
-                Cmd.Parameters.AddWithValue("@location", location);
-                Cmd.Parameters.AddWithValue("@account_activity_date_start", accountActivityDateStart);
-                Cmd.Parameters.AddWithValue("@account_activity_date_end", accountActivityDateEnd);
-                Cmd.Parameters.AddWithValue("@registration_date_start", registrationDateStart);
-                Cmd.Parameters.AddWithValue("@registration_date_end", registrationDateEnd);
-                Cmd.Parameters.AddWithValue("@credit_dept", creditDept);
-                Cmd.Parameters.AddWithValue("@accounting_subject_code", accountingSubjectCode);
-                Cmd.Parameters.AddWithValue("@content", content);
-                Cmd.Parameters.AddWithValue("@detail", detail);
-                Cmd.Parameters.AddWithValue("@limiting_is_payment", whichDepositAndWithdrawalOnly);
-                Cmd.Parameters.AddWithValue("@is_payment", isPayment);
-                Cmd.Parameters.AddWithValue("@contain_outputted", isContainOutputted);
-                Cmd.Parameters.AddWithValue("@validity_true_only", isValidityOnly);
-                Cmd.Parameters.AddWithValue("@output_date_start", outputDateStart);
-                Cmd.Parameters.AddWithValue("@output_date_end", outputDateEnd);
-                Cmd.Parameters.AddWithValue("@page", pageCount);
-                Rep paramRep;
-                CreditDept paramCreditDept;
-                AccountingSubject paramAccountingSubject;
-                Content paramContent;
-                using SqlDataReader dataReader = Cmd.ExecuteReader();
+                { "@location", location},{"@account_activity_date_start", accountActivityDateStart},
+                { "@account_activity_date_end", accountActivityDateEnd},
+                {"@registration_date_start", registrationDateStart},{"@registration_date_end", registrationDateEnd},
+                { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
+                {"@content", content},{"@detail", detail},{"@limiting_is_payment", whichDepositAndWithdrawalOnly},
+                {"@is_payment", isPayment },{"@contain_outputted", isContainOutputted},
+                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
+                { "@output_date_end", outputDateEnd},{"@page", pageCount}
+            };
 
-                while (dataReader.Read())
-                {
-
-                    paramRep =
-                        new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
-                            (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
-                    paramCreditDept =
-                        new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
-                        (bool)dataReader["is_shunjuen_dept"]);
-                    paramAccountingSubject =
-                        new AccountingSubject((string)dataReader["accounting_subject_id"],
-                        (string)dataReader["subject_code"], (string)dataReader["subject"], true);
-                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
-                        (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-                    list.Add(new ReceiptsAndExpenditure
-                        (
+            Rep paramRep;
+            CreditDept paramCreditDept;
+            AccountingSubject paramAccountingSubject;
+            Content paramContent;
+            SqlDataReader dataReader = 
+                ReturnGeneretedOneParameterCommand
+                    ("reference_receipts_and_expenditure",parameters).ExecuteReader();
+            
+            while (dataReader.Read())
+            {
+                paramRep =
+                    new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                    (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+                paramCreditDept =
+                    new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
+                    (bool)dataReader["is_shunjuen_dept"]);
+                paramAccountingSubject =
+                    new AccountingSubject((string)dataReader["accounting_subject_id"],
+                    (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
+                    (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                list.Add(new ReceiptsAndExpenditure
+                    (
                         (int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
                         paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
                         (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
                         (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
                         (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"])
-                        );
-                }
+                    );
             }
-            return (ReferenceReceiptsAndExpenditure(registrationDateStart, registrationDateEnd, location,
-                creditDept, content, detail, accountingSubject, accountingSubjectCode, 
-                whichDepositAndWithdrawalOnly, isPayment, isContainOutputted, isValidityOnly, 
-                accountActivityDateStart, accountActivityDateEnd, outputDateStart, outputDateEnd).Count, list);
+            parameters.Remove("@page");
+
+            return (ReferenceReceiptsAndExpenditure(parameters).Count, list);
         }
 
         public Dictionary<int, string> GetSoryoList()
@@ -639,81 +561,60 @@ namespace Infrastructure
 
         public int Registration(Condolence condolence)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using(Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "registration_condolence");
-                Cmd.Parameters.AddWithValue("@account_activity_date", condolence.AccountActivityDate);
-                Cmd.Parameters.AddWithValue("@location", condolence.Location);
-                Cmd.Parameters.AddWithValue("@owner_name", condolence.OwnerName);
-                Cmd.Parameters.AddWithValue("@soryo_name", condolence.SoryoName);
-                Cmd.Parameters.AddWithValue("@is_memorial_service", condolence.IsMemorialService);
-                Cmd.Parameters.AddWithValue("@almsgiving", condolence.Almsgiving);
-                Cmd.Parameters.AddWithValue("@car_tip", condolence.CarTip);
-                Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
-                Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
-                Cmd.Parameters.AddWithValue("@social_gathering", condolence.SocialGathering);
-                Cmd.Parameters.AddWithValue("@note", condolence.Note);
-                Cmd.Parameters.AddWithValue("@counter_receiver", GetFirstName(condolence.CounterReceiver));
-                Cmd.Parameters.AddWithValue("@mail_representative", GetFirstName(condolence.MailRepresentative));
-
-                return Cmd.ExecuteNonQuery();
-            }
+                {"@account_activity_date", condolence.AccountActivityDate },{"@location", condolence.Location},
+                {"@owner_name", condolence.OwnerName },{"@soryo_name", condolence.SoryoName},
+                {"@is_memorial_service", condolence.IsMemorialService },{"@almsgiving", condolence.Almsgiving},
+                { "@car_tip", condolence.CarTip},{"@meal_tip", condolence.MealTip},
+                {"@car_and_meal_tip", condolence.CarAndMealTip},
+                {"@social_gathering", condolence.SocialGathering},{"@note", condolence.Note},
+                { "@counter_receiver", GetFirstName(condolence.CounterReceiver)},
+                {"@mail_representative", GetFirstName(condolence.MailRepresentative) }
+            };
+            
+            return ReturnGeneretedOneParameterCommand
+                ("registration_condolence",parameters).ExecuteNonQuery();
         }
 
         public int Update(Condolence condolence)
         {
-            SqlCommand Cmd = new SqlCommand();
-
-            using(Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                ADO_NewInstance_StoredProc(Cmd, "update_condolence");
-                Cmd.Parameters.AddWithValue("@condolence_id", condolence.ID);
-                Cmd.Parameters.AddWithValue("@location", condolence.Location);
-                Cmd.Parameters.AddWithValue("@account_activity_date", condolence.AccountActivityDate);
-                Cmd.Parameters.AddWithValue("@owner_name", condolence.OwnerName);
-                Cmd.Parameters.AddWithValue("@soryo_name", condolence.SoryoName);
-                Cmd.Parameters.AddWithValue("@is_memorial_service", condolence.IsMemorialService);
-                Cmd.Parameters.AddWithValue("@almsgiving", condolence.Almsgiving);
-                Cmd.Parameters.AddWithValue("@car_tip", condolence.CarTip);
-                Cmd.Parameters.AddWithValue("@meal_tip", condolence.MealTip);
-                Cmd.Parameters.AddWithValue("@car_and_meal_tip", condolence.CarAndMealTip);
-                Cmd.Parameters.AddWithValue("@social_gathering", condolence.SocialGathering);
-                Cmd.Parameters.AddWithValue("@note", condolence.Note);
-                Cmd.Parameters.AddWithValue("@counter_receiver", GetFirstName(condolence.CounterReceiver));
-                Cmd.Parameters.AddWithValue("@mail_representative", GetFirstName(condolence.MailRepresentative));
-
-                return Cmd.ExecuteNonQuery();
-            }
+                {"@condolence_id", condolence.ID },{"@account_activity_date", condolence.AccountActivityDate },
+                {"@location", condolence.Location},{"@owner_name", condolence.OwnerName },
+                {"@soryo_name", condolence.SoryoName},{"@is_memorial_service", condolence.IsMemorialService },
+                {"@almsgiving", condolence.Almsgiving},{ "@car_tip", condolence.CarTip},
+                {"@meal_tip", condolence.MealTip},{"@car_and_meal_tip", condolence.CarAndMealTip},
+                {"@social_gathering", condolence.SocialGathering},{"@note", condolence.Note},
+                { "@counter_receiver", GetFirstName(condolence.CounterReceiver)},
+                {"@mail_representative", GetFirstName(condolence.MailRepresentative) }
+            };
+            
+            return ReturnGeneretedOneParameterCommand("update_condolence",parameters).ExecuteNonQuery();
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
             (DateTime startDate, DateTime endDate,string location, int pageCount)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
-            SqlCommand Cmd = new SqlCommand();
-
-            using(Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@start_date", startDate},{"@end_date", endDate},{"@location", location},{"@page", pageCount } };
+            
+            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("reference_condolence",parameters).ExecuteReader();
+            
+            while(dataReader.Read())
             {
-                ADO_NewInstance_StoredProc(Cmd, "reference_condolence");
-                Cmd.Parameters.AddWithValue("@start_date", startDate);
-                Cmd.Parameters.AddWithValue("@end_date", endDate);
-                Cmd.Parameters.AddWithValue("@location", location); 
-                Cmd.Parameters.AddWithValue("@page", pageCount);
-
-                SqlDataReader dataReader = Cmd.ExecuteReader();
-                while(dataReader.Read())
-                {
-                    list.Add(new Condolence((int)dataReader["condolence_id"],
-                        (string)dataReader["location"], (string)dataReader["owner_name"],
-                        (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
-                        (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
-                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
-                        (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
-                        (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
-                }
-            }
+                list.Add(new Condolence((int)dataReader["condolence_id"],
+                    (string)dataReader["location"], (string)dataReader["owner_name"],
+                    (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
+                    (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
+                    (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
+                    (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
+                    (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
+            }    
+            
             return (ReferenceCondolence(startDate, endDate,location).Count, list);
         }
 
@@ -721,29 +622,56 @@ namespace Infrastructure
             ReferenceCondolence(DateTime startDate, DateTime endDate,string location)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
-            SqlCommand Cmd = new SqlCommand();
-
-            using(Cn)
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {{ "@start_date", startDate},{"@end_date", endDate},{"@location",location } };
+            
+            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("reference_condolence_all_data",parameters).ExecuteReader();
+            
+            while(dataReader.Read())
             {
-                ADO_NewInstance_StoredProc(Cmd, "reference_condolence_all_data");
-                Cmd.Parameters.AddWithValue("@start_date", startDate);
-                Cmd.Parameters.AddWithValue("@end_date", endDate);
-                Cmd.Parameters.AddWithValue("@location",location);
-
-                SqlDataReader dataReader = Cmd.ExecuteReader();
-
-                while(dataReader.Read())
-                {
-                    list.Add(new Condolence((int)dataReader["condolence_id"],
-                        (string)dataReader["location"], (string)dataReader["owner_name"],
-                        (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
-                        (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
-                        (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
-                        (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
-                        (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
-                }
+                list.Add(new Condolence((int)dataReader["condolence_id"],
+                    (string)dataReader["location"], (string)dataReader["owner_name"],
+                    (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
+                    (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
+                    (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
+                    (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
+                    (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
             }
+            
             return list;
         }
+
+        public int Registration(string id, string contentConvertText)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@content_id", id},{"@convert_tex", contentConvertText}};
+            
+            return ReturnGeneretedOneParameterCommand
+                ("registration_content_convert_voucher",parameters).ExecuteNonQuery();
+        }
+
+        public int Update(string id, string contentConvertText)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@content_id", id},{"@convert_text", contentConvertText}};
+            
+            return ReturnGeneretedOneParameterCommand
+                ("update_content_convert_voucher",parameters).ExecuteNonQuery();
+        }
+
+        public string CallContentConvertText(string id)
+        {
+            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+                ("reference_content_convert_voucher",
+                    new Dictionary<string, object>() { { "@content_id", id } }).ExecuteReader();
+
+            return (string)dataReader["convert_text"];
+        }
+
+        public int DeleteContentConvertText(string id)=>
+            ReturnGeneretedOneParameterCommand
+                ("delete_content_convert_voucher", 
+                    new Dictionary<string, object>() { { "@content_id", id } }).ExecuteNonQuery();
     }
 }
