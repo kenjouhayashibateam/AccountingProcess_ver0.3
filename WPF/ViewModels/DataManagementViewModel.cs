@@ -87,12 +87,17 @@ namespace WPF.ViewModels
         private string affiliationAccountingSubjectCode;
         private string referenceAccountingSubjectCodeBelognsContent = string.Empty;
         private string referenceAccountingSubjectBelognsContent = string.Empty;
+        private string contentConvertText;
+        private string contentConvertOperationContent;
         private bool isContentValidity;
         private bool isContentOperationEnabled;
         private bool isAffiliationAccountingSubjectEnabled;
         private bool isContentFieldEnabled;
         private bool isContentValidityTrueOnly;
         private bool isContentReferenceMenuEnabled;
+        private bool isContentConvertButtonVisibility;
+        private bool isContentConvertOperationButtonEnabled;
+        private bool isContentConvertVoucherRegistration;
         private ObservableCollection<AccountingSubject> affiliationAccountingSubjects;
         private AccountingSubject affiliationAccountingSubject;
         private Content currentContent;　
@@ -119,6 +124,8 @@ namespace WPF.ViewModels
                                                                 () => IsCreditDeptOperationButtonEnabled);
             ContentDataOperationCommand =
                 new DelegateCommand(() => ContentDataOperation(), () => IsContentOperationEnabled);
+            ContentConvertVoucherOperationCommand = new DelegateCommand
+                (() => ContentConvertVoucherOperation(), () => true);
         }
 
         protected override void SetDataList()
@@ -1465,10 +1472,12 @@ namespace WPF.ViewModels
                 {
                     ContentIDField = currentContent.ID;
                     IsContentValidity = currentContent.IsValidity;
-                    AffiliationAccountingSubject =currentContent.AccountingSubject;
-                    AffiliationAccountingSubjectCode = currentContent.AccountingSubject.SubjectCode;
                     ContentField = currentContent.Text;
                     FlatRateField = currentContent.FlatRate.ToString();
+                    AffiliationAccountingSubjectCode = currentContent.AccountingSubject.SubjectCode;
+                    IsContentConvertButtonVisibility = true;
+                    ContentConvertText = DataBaseConnect.CallContentConvertText(ContentIDField);
+                    IsContentConvertVoucherRegistration = string.IsNullOrEmpty(ContentConvertText);
                 }
                 CallPropertyChanged();
             }
@@ -1583,7 +1592,83 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-       
+        /// <summary>
+        /// 受納証用ContentConvertデータ操作ボタンのVisiblity
+        /// </summary>
+        public bool IsContentConvertButtonVisibility
+        {
+            get => isContentConvertButtonVisibility;
+            set
+            {
+                isContentConvertButtonVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 受納証の但し書き文字列
+        /// </summary>
+        public string ContentConvertText
+        {
+            get => contentConvertText;
+            set
+            {
+                contentConvertText = value;
+                if(!IsContentConvertVoucherRegistration)
+                    IsContentConvertOperationButtonEnabled = !string.IsNullOrEmpty(value);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 受納証用文字列データを登録、更新します
+        /// </summary>
+        public DelegateCommand ContentConvertVoucherOperationCommand { get; set; }
+        private async void ContentConvertVoucherOperation()
+        {
+            ContentConvertOperationContent = "書込中";
+            IsContentConvertOperationButtonEnabled = false;
+            if (IsContentConvertVoucherRegistration)
+                await Task.Run(() => DataBaseConnect.Registration(ContentField, ContentConvertText));
+            else
+                await Task.Run(() => DataBaseConnect.Update(ContentIDField, ContentConvertText));
+            IsContentConvertVoucherRegistration = false;
+            IsContentConvertOperationButtonEnabled = true;
+        }
+        /// <summary>
+        /// 受納証の但し書きデータ操作が登録か更新か。登録ならtrue
+        /// </summary>
+        private bool IsContentConvertVoucherRegistration
+        {
+            get => isContentConvertVoucherRegistration;
+            set
+            {
+                ContentConvertOperationContent = value ? "登録" : "更新";
+                isContentConvertVoucherRegistration = value;
+            }
+        }
+        /// <summary>
+        /// 受納証の但し書き文字列操作ボタンのContent
+        /// </summary>
+        public string ContentConvertOperationContent
+        {
+            get => contentConvertOperationContent;
+            set
+            {
+                contentConvertOperationContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 受納証但し書き文字列操作ボタンのEnabled
+        /// </summary>
+        public bool IsContentConvertOperationButtonEnabled
+        {
+            get => isContentConvertOperationButtonEnabled;
+            set
+            {
+                isContentConvertOperationButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
         /// <summary>
         /// 伝票内容データを登録、更新します
         /// </summary>
@@ -1636,6 +1721,7 @@ namespace WPF.ViewModels
             FlatRateField = string.Empty;
             ContentField = string.Empty;
             IsContentValidity = true;
+            IsContentConvertButtonVisibility = false;
         }
         /// <summary>
         /// 伝票内容データを更新します
@@ -1677,7 +1763,6 @@ namespace WPF.ViewModels
             CallCompletedUpdate();
             ContentDataOperationContent = "更新";
             IsContentOperationEnabled = true;
-
         }
         #endregion
 

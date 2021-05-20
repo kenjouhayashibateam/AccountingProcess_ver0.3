@@ -669,9 +669,9 @@ namespace Infrastructure
             return (string)dataReader["convert_text"];
         }
 
-        public int DeleteContentConvertText(string id)=>
+        public int DeleteContentConvertText(string id) =>
             ReturnGeneretedOneParameterCommand
-                ("delete_content_convert_voucher", 
+                ("delete_content_convert_voucher",
                     new Dictionary<string, object>() { { "@content_id", id } }).ExecuteNonQuery();
     }
 }
