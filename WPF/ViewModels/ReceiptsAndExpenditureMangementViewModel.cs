@@ -4,6 +4,7 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -55,6 +56,8 @@ namespace WPF.ViewModels
         private string withdrawalSlipsOutputButtonContent;
         private string referenceLocationCheckBoxContent;
         private string password;
+        private string selectedSortColumn;
+        private string sortDirectionContent;
         /// <summary>
         /// 当日決算の基準になる金額の種類。管理事務所なら前日決算、青蓮堂なら預り金額
         /// </summary>
@@ -81,6 +84,7 @@ namespace WPF.ViewModels
         private bool passwordCharCheck;
         private bool isYokohamaBankCheck;
         private bool isCeresaCheck;
+        private bool sortDirectionIsASC;
         #endregion
         #region DateTime
         private DateTime searchEndDate = new DateTime(9999, 1, 1);
@@ -105,6 +109,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOperation.GetInstance();
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private Pagination pagination;
+        private Dictionary<int, string> sortColumnList;
         #endregion
 
         public ReceiptsAndExpenditureMangementViewModel
@@ -114,18 +119,24 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOperation.Add(this);
             ReceiptsAndExpenditureOperation.SetOperationType
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
-            IsContainOutputted = false;
-            SearchStartDate = DateTime.Today.AddDays(-1);
-            SearchEndDate = DateTime.Today;
+            SetSortColumnList();
             DataOutput = dataOutput;
             SetProperty();
             DefaultListExpress();
             IsPreviousDayOutputEnabled = false;
             SetDelegateCommand();
+
         }
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
             DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        private void SetSortColumnList() =>
+            SortColumnList = new Dictionary<int, string>()
+            {
+                {0, "ID"},
+                {1,"科目コード" },
+                {2,"入出金日" }
+            };
         /// <summary>
         /// 次の10件を表示するコマンド
         /// </summary>
@@ -256,6 +267,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
+            SelectedSortColumn = SortColumnList[0];
             SearchStartDate = DateTime.Today;
             TodaysFinalAccount = TextHelper.AmountWithUnit(ReturnTodaysFinalAccount());
             SetOutputGroupEnabled();
@@ -264,6 +276,10 @@ namespace WPF.ViewModels
             IsPaymentSlipsOutputEnabled = true;
             IsWithdrawalSlipsOutputEnabled = true;
             IsAllShowItem = true;
+            SortDirectionIsASC = false;
+            IsContainOutputted = false;
+            SearchStartDate = DateTime.Today.AddDays(-1);
+            SearchEndDate = DateTime.Today;
             BalanceFinalAccountOutputButtonContent = "収支日報";
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
@@ -274,7 +290,8 @@ namespace WPF.ViewModels
                     DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                     AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
                     string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
-                    new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), Pagination.PageCount).List;
+                    new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), Pagination.PageCount,SelectedSortColumn,
+                    SortDirectionIsASC).List;
                 AllDataList =
                     DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                     AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
@@ -287,7 +304,7 @@ namespace WPF.ViewModels
                     DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                     string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
                     false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
-                    new DateTime(1900, 1, 1), Pagination.PageCount).List;
+                    new DateTime(1900, 1, 1), Pagination.PageCount,SelectedSortColumn,SortDirectionIsASC).List;
                 AllDataList =
                     DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                     string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
@@ -1080,6 +1097,57 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ソート内容リスト
+        /// </summary>
+        public Dictionary<int, string> SortColumnList
+        {
+            get => sortColumnList;
+            set
+            {
+                sortColumnList = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ソート方向トグル　昇順がTrue
+        /// </summary>
+        public bool SortDirectionIsASC
+        {
+            get => sortDirectionIsASC;
+            set
+            {
+                sortDirectionIsASC = value;
+                SortDirectionContent = value ? "降順で検索（現在昇順）" : "昇順で検索（現在降順）";
+                ReferenceReceiptsAndExpenditures(true);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択されたソートするカラム名
+        /// </summary>
+        public string SelectedSortColumn
+        {
+            get => selectedSortColumn;
+            set
+            {
+                selectedSortColumn = value;
+                ReferenceReceiptsAndExpenditures(true);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ソートする方向トグルのContent
+        /// </summary>
+        public string SortDirectionContent
+        {
+            get => sortDirectionContent;
+            set
+            {
+                sortDirectionContent = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
@@ -1202,7 +1270,8 @@ namespace WPF.ViewModels
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
-                accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount);
+                accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount,SelectedSortColumn,
+                SortDirectionIsASC);
             Pagination.TotalRowCount = count;
             ReceiptsAndExpenditures = list;
             AllDataList =

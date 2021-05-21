@@ -136,6 +136,8 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="RefreshListButton" Content="リストを再構築する" Grid.Column="0" Margin="5,1,1,3">
                                 <Button.InputBindings>
@@ -164,6 +166,8 @@
                                     <MouseBinding Command="{Binding NextPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
+                            <ComboBox Name="SortGanreComboBox" Grid.Column="6" ItemsSource="{Binding SortColumnList}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding SelectedSortColumn}" VerticalContentAlignment="Center" Margin="5,1,5,3"/>
+                            <ToggleButton Content="{Binding SortDirectionContent}" Grid.Column="7" IsChecked="{Binding SortDirectionIsASC}" Margin="5,1,5,3"/>
                         </Grid>
                     </GroupBox.Header>
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" EnableColumnVirtualization="True" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False">

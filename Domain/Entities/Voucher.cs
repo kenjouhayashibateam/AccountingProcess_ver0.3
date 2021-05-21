@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace Domain.Entities
 {
@@ -11,14 +12,22 @@ namespace Domain.Entities
         /// <param name="receiptsAndExpenditures">出納データリスト</param>
         /// <param name="totalAmount">総額</param>
         public Voucher
-            (string addressee, ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,
-                int totalAmount)
+            (int id, string addressee, ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,
+                DateTime outputDate)
         {
+            ID = id;
             ReceiptsAndExpenditures = receiptsAndExpenditures;
-            TotalAmount = totalAmount;
+            OutputDate = outputDate;
             Addressee = addressee;
         }
-
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
+        /// 発行日
+        /// </summary>
+        public DateTime OutputDate { get; set; }
         /// <summary>
         /// 受納証に記載する出納データリスト
         /// </summary>
@@ -26,7 +35,16 @@ namespace Domain.Entities
         /// <summary>
         /// 冥加金欄に記載する金額
         /// </summary>
-        public int TotalAmount { get; set; }
+        public int TotalAmount 
+        {
+            get
+            {
+                int i = default;
+                foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
+                    i += rae.Price;
+                return i;
+            }
+        }
         /// <summary>
         /// 受納証宛名
         /// </summary>

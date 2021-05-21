@@ -38,7 +38,6 @@ namespace WPF.ViewModels
         /// <summary>
         /// 受納証の総額
         /// </summary>
-        private int VoucherTotalAmount;
         private bool isOutputButtonEnabled;
         private bool isNextPageEnabled;
         private bool isPrevPageEnabled;
@@ -53,7 +52,7 @@ namespace WPF.ViewModels
             OperationData.Add(this);
             Pagination = new Pagination();
             SearchDate = DateTime.Today;
-            OutputButtonContent = "出力";
+            OutputButtonContent = "登録して出力";
             Pagination.SetProperty();
             SetDelegateCommand();
         }
@@ -94,11 +93,24 @@ namespace WPF.ViewModels
         public DelegateCommand VoucherOutputCommand { get; set; }
         private async void VoucherOutput()
         {
+            if ((MessageBox = new MessageBoxInfo()
+            {
+                Message = "出力します。よろしいですか？",
+                Image = System.Windows.MessageBoxImage.Question,
+                Title = "登録確認",
+                Button = System.Windows.MessageBoxButton.OKCancel
+            }).Result == System.Windows.MessageBoxResult.Cancel) return;
+
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
-            await Task.Run(()=> DataOutput.VoucherData
-                (new Voucher(VoucherAddressee,VoucherContents,VoucherTotalAmount)));
-            OutputButtonContent = "出力";
+            await Task.Run(() => DataBaseConnect.Registration
+                (new Voucher(0, VoucherAddressee, VoucherContents, DateTime.Today)));
+            Voucher voucher = DataBaseConnect.CallLatestVoucher();
+            voucher.ReceiptsAndExpenditures = VoucherContents;
+            foreach(ReceiptsAndExpenditure rae in VoucherContents)
+                await Task.Run(() => DataBaseConnect.Registration(voucher.ID, rae.ID));
+            await Task.Run(()=> DataOutput.VoucherData(voucher));
+            OutputButtonContent = "登録して出力";
             IsOutputButtonEnabled = true;
         }
         /// <summary>
@@ -184,7 +196,6 @@ namespace WPF.ViewModels
             get => voucherTotalAmountDisplayValue;
             set
             {
-                VoucherTotalAmount = TextHelper.IntAmount(value);
                 voucherTotalAmountDisplayValue =TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
@@ -210,7 +221,7 @@ namespace WPF.ViewModels
                 (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
                 string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
                 accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), 
-                Pagination.PageCount);
+                Pagination.PageCount,"ID",false);
             SearchReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = count;
             Pagination.SetProperty();

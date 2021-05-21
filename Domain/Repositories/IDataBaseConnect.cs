@@ -194,13 +194,15 @@ namespace Domain.Repositories
         /// <param name="outputDateStart">伝票発行日検索開始日時</param>
         /// <param name="outputDateEnd">伝票発行日検索最終日時</param>
         /// <param name="pageCount">ページカウント</param>
+        /// <param name="sortColumn">ソートカラム</param>
+        /// <param name="sortDirection">ソート方向</param>
         /// <returns></returns>
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List) ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
                 string content, string detail, string accountingSubject, string accountingSubjectCode,
                 bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
                 DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
-                DateTime outputDateEnd,int pageCount);
+                DateTime outputDateEnd,int pageCount,string sortColumn,bool sortDirection);
         /// <summary>
         /// 前日決算額を返します
         /// </summary>
@@ -272,5 +274,23 @@ namespace Domain.Repositories
         /// <param name="id">削除する伝票内容ID</param>
         /// <returns></returns>
         public int DeleteContentConvertText(string id);
+        /// <summary>
+        /// 受納証を登録します
+        /// </summary>
+        /// <param name="voucher"></param>
+        /// <returns></returns>
+        public int Registration(Voucher voucher);
+        /// <summary>
+        /// 最新のVoucherデータを呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public Voucher CallLatestVoucher();
+        /// <summary>
+        /// 受納証GTBLを登録します
+        /// </summary>
+        /// <param name="voucherID"></param>
+        /// <param name="receiptsAndExpenditureID"></param>
+        /// <returns></returns>
+        public int Registration(int voucherID, int receiptsAndExpenditureID);
     }
 }

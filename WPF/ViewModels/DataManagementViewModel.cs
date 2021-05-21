@@ -3,6 +3,7 @@ using System.Windows;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using Domain.Entities.Helpers;
+using static Domain.Entities.Helpers.TextHelper; 
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
@@ -1613,8 +1614,7 @@ namespace WPF.ViewModels
             set
             {
                 contentConvertText = value;
-                if(!IsContentConvertVoucherRegistration)
-                    IsContentConvertOperationButtonEnabled = !string.IsNullOrEmpty(value);
+                IsContentConvertOperationButtonEnabled = !string.IsNullOrEmpty(value);
                 CallPropertyChanged();
             }
         }
@@ -1690,17 +1690,22 @@ namespace WPF.ViewModels
         private async void ContentRegistration()
         {
             int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
-            CurrentContent = new Content(null, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
-            string flatRateInfo = (i > 0) ? TextHelper.AmountWithUnit(i) : "金額設定無し";
+            CurrentContent = new Content(string.Empty, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
+            string flatRateInfo = (i > 0) ? AmountWithUnit(i) : "金額設定無し";
+            string confirmationVoucherText = string.IsNullOrEmpty(ContentConvertText) ? 
+                string.Empty : $"\r\n受納証但し書き{Space}:{Space}{ContentConvertText}";
+
             if (CallConfirmationDataOperation($"伝票内容 : {CurrentContent.Text}\r\n" +
                 $"勘定科目 : {CurrentContent.AccountingSubject.Subject}\r\n" +
-                $"定額 : {flatRateInfo}\r\n有効性 : {CurrentContent.IsValidity}", "伝票内容")
+                $"定額 : {flatRateInfo}\r\n有効性 : {CurrentContent.IsValidity}{confirmationVoucherText}", "伝票内容")
                 == MessageBoxResult.Cancel)
                 return;
 
             ContentDataOperationContent = "登録中";
             IsContentOperationEnabled = false;
             await Task.Run(() => DataBaseConnect.Registration(CurrentContent));
+            if (!string.IsNullOrEmpty(ContentConvertText))
+                await Task.Run(() => RegistrationContentConvertVoucherText());
             Contents = DataBaseConnect.ReferenceContent
                 (string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
             ContentDetailFieldClear();
@@ -1708,6 +1713,28 @@ namespace WPF.ViewModels
             IsContentOperationEnabled = true;
             ContentDataOperationContent = "登録";
 
+            void RegistrationContentConvertVoucherText()
+            {
+                ObservableCollection<Content> contents = DataBaseConnect.ReferenceContent
+                    (CurrentContent.Text, CurrentContent.AccountingSubject.SubjectCode, 
+                        CurrentContent.AccountingSubject.Subject, true);
+
+                if (contents.Count > 1)
+                {
+                    MessageBox = new Views.Datas.MessageBoxInfo()
+                    {
+                        Message = $"登録内容が重複していませんか？確認してください\r\n" +
+                            $"伝票内容が一つに絞り込めなかったため、受納証但し書きデータは登録されません。",
+                        Image = MessageBoxImage.Warning,
+                        Title = "受納証但し書きデータが登録できませんでした",
+                        Button = MessageBoxButton.OK
+                    };
+                    return;
+                }
+                string id = contents[0].ID;
+
+                DataBaseConnect.Registration(id, ContentConvertText);
+            }
         }
         /// <summary>
         /// 詳細に表示された伝票内容をクリアします

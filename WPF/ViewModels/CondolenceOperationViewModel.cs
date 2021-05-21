@@ -381,7 +381,7 @@ namespace WPF.ViewModels
                     (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
                         string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
-                        DateTime.Today,Pagination.PageCount);
+                        DateTime.Today,Pagination.PageCount,"ID",false);
             ReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = totalRow;
             Pagination.SetProperty();

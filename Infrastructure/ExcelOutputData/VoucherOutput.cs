@@ -70,6 +70,9 @@ namespace Infrastructure.ExcelOutputData
             //タイトル欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 26);
             SetCellPropertyOriginalAndCopy(1, 1);
+            //ナンバー
+            SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Bottom, 11);
+            SetCellPropertyOriginalAndCopy(1, 7);
             //日付欄
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Center, 11);
             SetCellPropertyOriginalAndCopy(2, 6);
@@ -160,6 +163,8 @@ namespace Infrastructure.ExcelOutputData
         {
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
+            //ナンバー
+            SetStringOriginalAndCopy(1, 7, $"№{VoucherData.ID}");
             //日付
             SetStringOriginalAndCopy(2, 6, DateTime.Now.ToString("yyyy年MM月dd日"));
             //宛名
@@ -258,7 +263,8 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetMerge()
         {
             //タイトル
-            SetMergeOriginalAndCopy(1, 1, 1, 9);
+            SetMergeOriginalAndCopy(1, 1, 1, 6);
+            SetMergeOriginalAndCopy(1, 7, 1, 9);
             //日付
             SetMergeOriginalAndCopy(2, 6, 2, 9);
             //宛名

@@ -340,7 +340,7 @@ namespace Infrastructure
                 string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, 
                 bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, 
                 DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, 
-                int pageCount)
+                int pageCount, string sortColumn, bool sortDirection)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
@@ -454,5 +454,16 @@ namespace Infrastructure
         public int Update(Condolence condolence) => 1;
 
         public int Update(string id, string contentConvertText) => 1;
+
+        public int Registration(Voucher voucher) => 1;
+
+        public Voucher CallLatestVoucher() =>
+            new Voucher(0, string.Empty,
+                ReferenceReceiptsAndExpenditure(DateTime.Today, DateTime.Today, string.Empty, string.Empty,
+                        string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true, DateTime.Today, 
+                        DateTime.Today,DateTime.Today,DateTime.Today),
+                DateTime.Today);
+
+        public int Registration(int voucherID, int receiptsAndExpenditureID) => 1;
     }
 }

@@ -32,17 +32,22 @@ namespace Infrastructure
             };
         }
         /// <summary>
-        /// ストアドプロシージャを実行するコマンドを生成します
+        /// sqlを実行するコマンドを生成します
         /// </summary>
-        /// <param name="commandText">ストアドプロシージャ名</param>
-        private void ADO_NewInstance_StoredProc(SqlCommand cmd, string commandText)
+        /// <param name="commandText"></param>
+        private SqlCommand NewCommand(CommandType commandType,string commandText)
         {
             SettingConectionString();
 
-            cmd.Connection = Cn;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = commandText;
+            SqlCommand Cmd = new SqlCommand()
+            {
+                Connection = Cn,
+                CommandType = commandType,
+                CommandText = commandText
+            };
+
             Cn.Open();
+            return Cmd;
         }
         /// ストアドを実行するコマンドを返します
         /// </summary>
@@ -50,14 +55,14 @@ namespace Infrastructure
         /// <param name="parameterName">パラメータ名</param>
         /// <param name="parameter">パラメータ</param>
         /// <returns></returns>
-        private SqlCommand ReturnGeneretedOneParameterCommand
+        private SqlCommand ReturnGeneretedParameterCommand
             (string commandText, Dictionary<string, object> parameters)
         {
-            SqlCommand Cmd = new SqlCommand();
+            SqlCommand Cmd;
 
             using (Cn)
             {
-                ADO_NewInstance_StoredProc(Cmd, commandText);
+                Cmd=NewCommand(CommandType.StoredProcedure, commandText);
 
                 foreach (KeyValuePair<string, object> param in parameters)
                     Cmd.Parameters.AddWithValue(param.Key, param.Value);
@@ -76,7 +81,7 @@ namespace Infrastructure
                 {"@is_permission", rep.IsAdminPermisson }
             };
 
-            return ReturnGeneretedOneParameterCommand("registration_staff", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("registration_staff", parameters).ExecuteNonQuery();
         }
 
         public int Update(Rep rep)
@@ -88,7 +93,7 @@ namespace Infrastructure
                 {"@operation_staff_id", LoginRep.Rep.ID }
             };
 
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("update_staff", parameters).ExecuteNonQuery();
         }
        
@@ -98,7 +103,7 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {{ "@staff_name", repName},{ "@true_only", isValidityTrueOnly}};
 
-            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader DataReader = ReturnGeneretedParameterCommand
                 ("reference_staff",parameters).ExecuteReader();
             while (DataReader.Read())
                 reps.Add
@@ -117,7 +122,7 @@ namespace Infrastructure
                 { "@validity", accountingSubject.IsValidity},{"@staff_id", LoginRep.Rep.ID}
             };
 
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("registration_accounting_subject", parameters).ExecuteNonQuery();
         }
 
@@ -129,7 +134,7 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@subject_code", subjectCode},{"@subject", subject},{"@true_only", isTrueOnly} };
 
-            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader DataReader = ReturnGeneretedParameterCommand
                     ("reference_accounting_subject", parameters).ExecuteReader();
             
             while (DataReader.Read())
@@ -149,7 +154,7 @@ namespace Infrastructure
                 { "@operation_staff_id", LoginRep.Rep.ID}
             };
 
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("update_accounting_subject", parameters).ExecuteNonQuery();
         }
   
@@ -161,7 +166,7 @@ namespace Infrastructure
                 { "@is_shunjuen_account", creditDept.IsShunjuenAccount}
             };
 
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("registration_credit_dept", parameters).ExecuteNonQuery();
         }
 
@@ -175,7 +180,7 @@ namespace Infrastructure
                 {"@shunjuen_account_only", isShunjuenAccountOnly }
             };
 
-            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader DataReader = ReturnGeneretedParameterCommand
                 ("reference_credit_dept", parameters).ExecuteReader();
 
             while (DataReader.Read()) creditDepts.Add
@@ -193,7 +198,7 @@ namespace Infrastructure
                 {"@operation_staff_id", LoginRep.Rep.ID }
             };
 
-            return ReturnGeneretedOneParameterCommand("update_credit_dept", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("update_credit_dept", parameters).ExecuteNonQuery();
         }
    
         public int Registration(Content content)
@@ -204,7 +209,7 @@ namespace Infrastructure
                 {"@flat_rate", content.FlatRate},{"@is_validity", content.IsValidity },{"@staff_id", LoginRep.Rep.ID}
             };
 
-            return ReturnGeneretedOneParameterCommand("registration_content", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("registration_content", parameters).ExecuteNonQuery();
         }
    
         public int Update(Content content)
@@ -215,7 +220,7 @@ namespace Infrastructure
                 {"@is_validity", content.IsValidity },{"@operation_staff_id", LoginRep.Rep.ID}
             };
 
-            return ReturnGeneretedOneParameterCommand("update_content", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("update_content", parameters).ExecuteNonQuery();
         }
     
         public ObservableCollection<Content> ReferenceContent
@@ -228,7 +233,7 @@ namespace Infrastructure
                 { "@true_only", isValidityTrueOnly}
             };
 
-            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_content", parameters).ExecuteReader();
 
             while(dataReader.Read())
@@ -248,7 +253,7 @@ namespace Infrastructure
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { { "@accounting_subject_id", id} };
-            SqlDataReader DataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader DataReader = ReturnGeneretedParameterCommand
                     ("call_accounting_subject",parameters ).ExecuteReader();
             
             while (DataReader.Read())
@@ -267,7 +272,7 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@content", contentText}};
             using SqlDataReader DataReader =
-                ReturnGeneretedOneParameterCommand
+                ReturnGeneretedParameterCommand
                     ("reference_affiliation_accounting_subject",parameters ).ExecuteReader();
             
             while (DataReader.Read()) list.Add
@@ -291,7 +296,7 @@ namespace Infrastructure
                 {"@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate}
             };
 
-            return ReturnGeneretedOneParameterCommand("registration_receipts_and_expenditure", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("registration_receipts_and_expenditure", parameters).ExecuteNonQuery();
         }
 
         private ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
@@ -304,7 +309,7 @@ namespace Infrastructure
             AccountingSubject paramAccountingSubject;
             Content paramContent;
 
-            using SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            using SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_receipts_and_expenditure_all_data", parameters).ExecuteReader();
 
             while (dataReader.Read())
@@ -361,7 +366,7 @@ namespace Infrastructure
         {
             Rep rep=default;
 
-            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("call_staff", new Dictionary<string, object>() {{ "@staff_id", id }}).ExecuteReader();
             
             while(dataReader.Read())
@@ -378,7 +383,7 @@ namespace Infrastructure
             CreditDept creditDept = default;
 
             SqlDataReader dataReader =
-                ReturnGeneretedOneParameterCommand
+                ReturnGeneretedParameterCommand
                     ("call_credit_dept",new Dictionary<string, object>() { { "@credit_dept_id", id } })
                         .ExecuteReader();
             
@@ -393,7 +398,7 @@ namespace Infrastructure
         {
             Content content = default;
 
-            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("call_content", new Dictionary<string, object>() { { "@content_id", id } }).ExecuteReader();
             
             while (dataReader.Read())
@@ -424,7 +429,7 @@ namespace Infrastructure
                 { "@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate}
             };
 
-            return ReturnGeneretedOneParameterCommand("update_receipts_and_expenditure", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("update_receipts_and_expenditure", parameters).ExecuteNonQuery();
         }
 
         public int PreviousDayFinalAmount()
@@ -440,11 +445,11 @@ namespace Infrastructure
 
         public int RegistrationPerMonthFinalAccount()
         {
-            SqlCommand Cmd = new SqlCommand();
+            SqlCommand Cmd;
 
             using(Cn)
             {
-                ADO_NewInstance_StoredProc(Cmd, "registration_final_account_per_month_table");
+                Cmd=NewCommand(CommandType.Text, "registration_final_account_per_month_table");
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -455,7 +460,7 @@ namespace Infrastructure
             DateTime previousMonthLastDay =
                 DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
             
-            SqlDataReader sdr = ReturnGeneretedOneParameterCommand
+            SqlDataReader sdr = ReturnGeneretedParameterCommand
                 ("call_final_account_per_month",
                     new Dictionary<string, object>() { { "@date", previousMonthLastDay } })
                     .ExecuteReader();
@@ -466,7 +471,7 @@ namespace Infrastructure
         }
 
         public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure)=>
-            ReturnGeneretedOneParameterCommand
+            ReturnGeneretedParameterCommand
                 ("update_receipts_and_expenditure",
                     new Dictionary<string, object>() { { "@receipts_and_expenditure_id", receiptsAndExpenditure.ID } })
                     .ExecuteNonQuery();
@@ -477,7 +482,7 @@ namespace Infrastructure
                 string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, 
                 bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, 
                 DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, 
-                int pageCount)
+                int pageCount, string sortColumn, bool sortDirection)
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
@@ -491,7 +496,7 @@ namespace Infrastructure
                 {"@content", content},{"@detail", detail},{"@limiting_is_payment", whichDepositAndWithdrawalOnly},
                 {"@is_payment", isPayment },{"@contain_outputted", isContainOutputted},
                 {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
-                { "@output_date_end", outputDateEnd},{"@page", pageCount}
+                { "@output_date_end", outputDateEnd},{"@page", pageCount},{"@column",sortColumn},{ "@is_order_asc",sortDirection}
             };
 
             Rep paramRep;
@@ -499,7 +504,7 @@ namespace Infrastructure
             AccountingSubject paramAccountingSubject;
             Content paramContent;
             SqlDataReader dataReader = 
-                ReturnGeneretedOneParameterCommand
+                ReturnGeneretedParameterCommand
                     ("reference_receipts_and_expenditure",parameters).ExecuteReader();
             
             while (dataReader.Read())
@@ -525,6 +530,8 @@ namespace Infrastructure
                     );
             }
             parameters.Remove("@page");
+            parameters.Remove("@column");
+            parameters.Remove("@is_order_asc");
 
             return (ReferenceReceiptsAndExpenditure(parameters).Count, list);
         }
@@ -573,7 +580,7 @@ namespace Infrastructure
                 {"@mail_representative", GetFirstName(condolence.MailRepresentative) }
             };
             
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("registration_condolence",parameters).ExecuteNonQuery();
         }
 
@@ -591,7 +598,7 @@ namespace Infrastructure
                 {"@mail_representative", GetFirstName(condolence.MailRepresentative) }
             };
             
-            return ReturnGeneretedOneParameterCommand("update_condolence",parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("update_condolence",parameters).ExecuteNonQuery();
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
@@ -601,7 +608,7 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@start_date", startDate},{"@end_date", endDate},{"@location", location},{"@page", pageCount } };
             
-            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_condolence",parameters).ExecuteReader();
             
             while(dataReader.Read())
@@ -625,7 +632,7 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {{ "@start_date", startDate},{"@end_date", endDate},{"@location",location } };
             
-            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_condolence_all_data",parameters).ExecuteReader();
             
             while(dataReader.Read())
@@ -647,7 +654,7 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@content_id", id},{"@convert_tex", contentConvertText}};
             
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("registration_content_convert_voucher",parameters).ExecuteNonQuery();
         }
 
@@ -656,22 +663,63 @@ namespace Infrastructure
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@content_id", id},{"@convert_text", contentConvertText}};
             
-            return ReturnGeneretedOneParameterCommand
+            return ReturnGeneretedParameterCommand
                 ("update_content_convert_voucher",parameters).ExecuteNonQuery();
         }
 
         public string CallContentConvertText(string id)
         {
-            SqlDataReader dataReader = ReturnGeneretedOneParameterCommand
+            if (string.IsNullOrEmpty(id)) return string.Empty;
+
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_content_convert_voucher",
                     new Dictionary<string, object>() { { "@content_id", id } }).ExecuteReader();
+            string s = default;
+            while (dataReader.Read())
+            { s= (string)dataReader["convert_text"] ?? string.Empty; }
 
-            return (string)dataReader["convert_text"];
+            return s;
         }
 
         public int DeleteContentConvertText(string id) =>
-            ReturnGeneretedOneParameterCommand
+            ReturnGeneretedParameterCommand
                 ("delete_content_convert_voucher",
                     new Dictionary<string, object>() { { "@content_id", id } }).ExecuteNonQuery();
+
+        public int Registration(Voucher voucher)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {
+                { "@output_date",voucher.OutputDate},{"@addressee",voucher.Addressee},{"@is_validity",true},
+                {"@registration_staff_id",LoginRep.GetInstance().Rep.ID }
+            };
+
+            return ReturnGeneretedParameterCommand
+                ("registration_voucher", parameters).ExecuteNonQuery();
+        }
+
+        public int Registration(int voucherID,int receiptsAndExpenditureID)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            {{ "@voucher_id",voucherID},{"@receipts_and_expenditure_id",receiptsAndExpenditureID}};
+
+            return ReturnGeneretedParameterCommand
+                ("registration_voucher_gtbl", parameters).ExecuteNonQuery();
+        }
+
+        public Voucher CallLatestVoucher()
+        {
+            SqlDataReader dataReader=NewCommand
+                (CommandType.Text,
+                    "select * from vouchers_master where voucher_id=ident_current('vouchers_master')").ExecuteReader();
+            Voucher voucher=new Voucher
+                (0,string.Empty,new ObservableCollection<ReceiptsAndExpenditure>(),DateTime.Today);
+            while (dataReader.Read())
+                voucher = new Voucher
+                    ((int)dataReader["voucher_id"], (string)dataReader["addressee"], 
+                        new ObservableCollection<ReceiptsAndExpenditure>(), (DateTime)dataReader["output_date"]);
+
+            return voucher;
+        }
     }
 }
