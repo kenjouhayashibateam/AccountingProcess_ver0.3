@@ -103,15 +103,21 @@ namespace WPF.ViewModels
 
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
-            await Task.Run(() => DataBaseConnect.Registration
-                (new Voucher(0, VoucherAddressee, VoucherContents, DateTime.Today)));
-            Voucher voucher = DataBaseConnect.CallLatestVoucher();
-            voucher.ReceiptsAndExpenditures = VoucherContents;
-            foreach(ReceiptsAndExpenditure rae in VoucherContents)
-                await Task.Run(() => DataBaseConnect.Registration(voucher.ID, rae.ID));
+            Voucher voucher;
+            VoucherRegistration();
             await Task.Run(()=> DataOutput.VoucherData(voucher));
             OutputButtonContent = "登録して出力";
             IsOutputButtonEnabled = true;
+            
+            void VoucherRegistration()
+            {
+                DataBaseConnect.Registration
+                    (new Voucher(0, VoucherAddressee, VoucherContents, DateTime.Today));
+                voucher = DataBaseConnect.CallLatestVoucher();
+                voucher.ReceiptsAndExpenditures = VoucherContents;
+                foreach (ReceiptsAndExpenditure rae in VoucherContents)
+                    DataBaseConnect.Registration(voucher.ID, rae.ID);
+            }
         }
         /// <summary>
         /// 受納証の出納データリストに出納データを追加するコマンド
@@ -218,7 +224,7 @@ namespace WPF.ViewModels
             Pagination.CountReset(isPageReset);
             var(count,list)=
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (TextHelper.DefaultDate, new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                (TextHelper.DefaultDate, new DateTime(9999, 1, 1),AccountingProcessLocation.Location, string.Empty,
                 string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
                 accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), 
                 Pagination.PageCount,"ID",false);

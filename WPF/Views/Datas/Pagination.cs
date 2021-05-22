@@ -1,19 +1,47 @@
-﻿using WPF.ViewModels.Datas;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using WPF.ViewModels.Datas;
 
 namespace WPF.Views.Datas
 {
+    public interface IPagenationObserver
+    {
+        void SortNotify();
+        void PageNotify();
+    }
     /// <summary>
     /// ページネーションクラス
     /// </summary>
-    public class Pagination:NotifyPropertyChanged
+    public sealed class Pagination:NotifyPropertyChanged
     {
+        private readonly static Pagination pagination = new Pagination();
+        public static Pagination GetPagination() => pagination;
         private int totalRowCount;
         private int pageCount;
         private int totalPageCount;
         private string listPageInfo;
+        private string sortDirectionContent;
+        private string selectedSortColumn;
+        private const string ASCCONTENT= "降順で検索（現在昇順）";
+        private const string DESCCONTENT = "昇順で検索（現在降順）";
         private bool isPrevPageEnabled;
         private bool isNextPageEnabled;
+        private bool sortDirectionIsASC;
+        private Dictionary<int, string> sortColumns;
+        private readonly List<IPagenationObserver> pagenationObservers = new List<IPagenationObserver>();
 
+        /// <summary>
+        /// ソートする方向トグルのContent
+        /// </summary>
+        public string SortDirectionContent
+        {
+            get => sortDirectionContent;
+            set
+            {
+                sortDirectionContent = value;
+                CallPropertyChanged();
+            }
+        }
         /// <summary>
         /// ItemSourceのトータルのレコード数
         /// </summary>
@@ -87,6 +115,19 @@ namespace WPF.Views.Datas
             }
         }
         /// <summary>
+        /// DataGridをソートするカラムリスト
+        /// </summary>
+        public Dictionary<int, string> SortColumns
+        {
+            get => sortColumns;
+            set
+            {
+                sortColumns = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 総レコード数から総ページ数を算出して、各プロパティに値を入力します
         /// </summary>
         public void SetProperty()
@@ -125,6 +166,45 @@ namespace WPF.Views.Datas
         public void CountReset(bool isReset)
         {
             if (isReset) PageCount = 1;
+        }
+        /// <summary>
+        /// ソート方向トグル　昇順がTrue
+        /// </summary>
+        public bool SortDirectionIsASC
+        {
+            get => sortDirectionIsASC;
+            set
+            {
+                sortDirectionIsASC = value;
+                SortDirectionContent = value ?
+                    ASCCONTENT : DESCCONTENT;
+                SortNotification();
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択されたソートするカラム名
+        /// </summary>
+        public string SelectedSortColumn
+        {
+            get => selectedSortColumn;
+            set
+            {
+                selectedSortColumn = value;
+                SortNotification();
+                CallPropertyChanged();
+            }
+        }
+        public void Add(IPagenationObserver pagenationObserver) =>
+            pagenationObservers.Add(pagenationObserver);
+        private void PageNotification()
+        {
+            foreach (IPagenationObserver po in pagenationObservers) po.PageNotify();
+        }
+
+        private void SortNotification()
+        {
+            foreach (IPagenationObserver po in pagenationObservers) po.SortNotify();
         }
     }
 }

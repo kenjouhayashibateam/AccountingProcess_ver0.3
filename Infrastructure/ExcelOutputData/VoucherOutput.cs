@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
 using Domain.Entities.Helpers;
+using static Domain.Entities.Helpers.TextHelper;
+using Domain.Repositories;
 using System;
 
 namespace Infrastructure.ExcelOutputData
@@ -161,6 +163,9 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetDataStrings()
         {
+            string prevText=default;
+            int provisoAmount=default;
+
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
             //ナンバー
@@ -211,30 +216,55 @@ namespace Infrastructure.ExcelOutputData
 
             void SingleLineOutput()
             {
-                int i = VoucherData.ReceiptsAndExpenditures.Count - 1;
+                int i = VoucherData.ReceiptsAndExpenditures.Count-1;
                 foreach(ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
                 {
-                    SetStringOriginalAndCopy((10 - i), 2, ProvisoString(rae));
+
+                    if (prevText == ReturnProvisoContent(rae))
+                    {
+                        provisoAmount += rae.Price;
+                        SetStringOriginalAndCopy((10 - (i + 1)), 2, string.Empty);
+                    }
+                    else
+                    {
+                        provisoAmount = rae.Price;
+                        prevText = ReturnProvisoContent(rae);
+                    }
+                        SetStringOriginalAndCopy((10 - i), 2, ProvisoString(rae));
+                    
                     i--;
                 }         
             }
 
-            string ProvisoString(ReceiptsAndExpenditure rae)
-                => VoucherData.ReceiptsAndExpenditures.Count == 1 ?
-                $"{rae.Content.Text}{AppendSupplement(rae)}" : 
-                $"{rae.Content.Text}{AppendSupplement(rae)}{TextHelper.Space}:{TextHelper.Space}" +
-                $"{rae.PriceWithUnit}";
-            
+            string ReturnProvisoContent(ReceiptsAndExpenditure rae)
+            {
+                IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
+
+                return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
+            }
+
+            string ProvisoString(ReceiptsAndExpenditure rae)=>
+                VoucherData.ReceiptsAndExpenditures.Count == 1 ?
+                    $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}" :
+                    $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}{Space}:{Space}" +
+                    $"{AmountWithUnit(provisoAmount)}";
             void MultipleLineOutput()
             {
-                int i = 7;
-                int j = 3;
+                int i = 8;
+                int j = 4;
                 foreach(ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
                 {
+                    if (prevText == ReturnProvisoContent(rae))
+                        provisoAmount += rae.Price;
+                    else
+                    {
+                        provisoAmount = rae.Price;
+                        j--;
+                        i--;
+                    }
+
                     if (i > 3) SetStringOriginalAndCopy(10 - j, 2, ProvisoString(rae));
                     else SetStringOriginalAndCopy(10 - i, 6, ProvisoString(rae));
-                    j--;
-                    i--;
                 }
             }
 
@@ -245,7 +275,7 @@ namespace Infrastructure.ExcelOutputData
                     string[] array = rae.Detail.Split(' ');
                     string s = default;
                     foreach (string t in array)
-                        if (t.Contains("年度分")) s = $"{TextHelper.Space}{t}";
+                        if (t.Contains("年度分")) s = $"{Space}{t}";
                     return s;
                 }
                 else return string.Empty;
