@@ -465,5 +465,8 @@ namespace Infrastructure
                 DateTime.Today);
 
         public int Registration(int voucherID, int receiptsAndExpenditureID) => 1;
+
+        public Content CallLatestContent() => new Content
+                    ("content3", CallAccountingSubject(string.Empty), -1, "管理料", true);
     }
 }

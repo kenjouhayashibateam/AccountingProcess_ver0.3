@@ -1627,9 +1627,11 @@ namespace WPF.ViewModels
             ContentConvertOperationContent = "書込中";
             IsContentConvertOperationButtonEnabled = false;
             if (IsContentConvertVoucherRegistration)
-                await Task.Run(() => DataBaseConnect.Registration(ContentField, ContentConvertText));
+                await Task.Run(() => 
+                DataBaseConnect.Registration(ContentField, ContentConvertText));
             else
-                await Task.Run(() => DataBaseConnect.Update(ContentIDField, ContentConvertText));
+                await Task.Run(() => 
+                DataBaseConnect.Update(ContentIDField, ContentConvertText));
             IsContentConvertVoucherRegistration = false;
             IsContentConvertOperationButtonEnabled = true;
         }

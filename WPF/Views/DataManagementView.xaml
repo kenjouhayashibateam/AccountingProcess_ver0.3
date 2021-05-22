@@ -430,9 +430,12 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="受納証表記" VerticalAlignment="Bottom" Grid.Column="0" Margin="5,0"/>
                                     <Button x:Name="ConvertContentOperationButton" Grid.Column="1" IsEnabled="{Binding IsContentConvertOperationButtonEnabled}" Content="{Binding ContentConvertOperationContent}" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="5,3,5,1">
-                                        
+                                        <Button.InputBindings>
+                                            <KeyBinding Command="{Binding ContentConvertVoucherOperationCommand}" Key="Space"/>
+                                            <MouseBinding Command="{Binding ContentConvertVoucherOperationCommand}" MouseAction="LeftClick"/>
+                                        </Button.InputBindings>
                                     </Button>
-                                    <Button x:Name="ConvertContentDeleteButton" Content="削除" Grid.Column="2" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}"  Margin="5,3,5,1">
+                                    <Button x:Name="ConvertContentDeleteButton" Content="削除" Grid.Column="2" IsEnabled="{Binding IsContentConvertOperationButtonEnabled}" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}"  Margin="5,3,5,1">
                                         
                                     </Button>
                                 </Grid>

@@ -570,9 +570,11 @@ namespace Infrastructure
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                {"@account_activity_date", condolence.AccountActivityDate },{"@location", condolence.Location},
+                {"@account_activity_date", condolence.AccountActivityDate },
+                {"@location", condolence.Location},
                 {"@owner_name", condolence.OwnerName },{"@soryo_name", condolence.SoryoName},
-                {"@is_memorial_service", condolence.IsMemorialService },{"@almsgiving", condolence.Almsgiving},
+                {"@is_memorial_service", condolence.IsMemorialService },
+                {"@almsgiving", condolence.Almsgiving},
                 { "@car_tip", condolence.CarTip},{"@meal_tip", condolence.MealTip},
                 {"@car_and_meal_tip", condolence.CarAndMealTip},
                 {"@social_gathering", condolence.SocialGathering},{"@note", condolence.Note},
@@ -588,9 +590,11 @@ namespace Infrastructure
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                {"@condolence_id", condolence.ID },{"@account_activity_date", condolence.AccountActivityDate },
+                {"@condolence_id", condolence.ID },{"@account_activity_date",
+                    condolence.AccountActivityDate },
                 {"@location", condolence.Location},{"@owner_name", condolence.OwnerName },
-                {"@soryo_name", condolence.SoryoName},{"@is_memorial_service", condolence.IsMemorialService },
+                {"@soryo_name", condolence.SoryoName},
+                {"@is_memorial_service", condolence.IsMemorialService },
                 {"@almsgiving", condolence.Almsgiving},{ "@car_tip", condolence.CarTip},
                 {"@meal_tip", condolence.MealTip},{"@car_and_meal_tip", condolence.CarAndMealTip},
                 {"@social_gathering", condolence.SocialGathering},{"@note", condolence.Note},
@@ -606,7 +610,8 @@ namespace Infrastructure
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             Dictionary<string, object> parameters = new Dictionary<string, object>()
-            { {"@start_date", startDate},{"@end_date", endDate},{"@location", location},{"@page", pageCount } };
+            { {"@start_date", startDate},{"@end_date", endDate},
+                {"@location", location},{"@page", pageCount } };
             
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_condolence",parameters).ExecuteReader();
@@ -690,7 +695,8 @@ namespace Infrastructure
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                { "@output_date",voucher.OutputDate},{"@addressee",voucher.Addressee},{"@is_validity",true},
+                { "@output_date",voucher.OutputDate},
+                {"@addressee",voucher.Addressee},{"@is_validity",true},
                 {"@registration_staff_id",LoginRep.GetInstance().Rep.ID }
             };
 
@@ -711,15 +717,33 @@ namespace Infrastructure
         {
             SqlDataReader dataReader=NewCommand
                 (CommandType.Text,
-                    "select * from vouchers_master where voucher_id=ident_current('vouchers_master')").ExecuteReader();
+                    "select * from vouchers_master where voucher_id=ident_current('vouchers_master')")
+                .ExecuteReader();
             Voucher voucher=new Voucher
                 (0,string.Empty,new ObservableCollection<ReceiptsAndExpenditure>(),DateTime.Today);
             while (dataReader.Read())
                 voucher = new Voucher
                     ((int)dataReader["voucher_id"], (string)dataReader["addressee"], 
-                        new ObservableCollection<ReceiptsAndExpenditure>(), (DateTime)dataReader["output_date"]);
+                        new ObservableCollection<ReceiptsAndExpenditure>(), 
+                        (DateTime)dataReader["output_date"]);
 
             return voucher;
+        }
+
+        public Content CallLatestContent()
+        {
+            SqlDataReader dataReader = NewCommand
+                (CommandType.Text,
+                    "select * from contents_master where content_id=ident_current('contents_master')")
+                .ExecuteReader();
+            Content content = new Content
+                (string.Empty, null, 0, string.Empty, false);
+            while (dataReader.Read())
+                content = new Content
+                    ((string)dataReader["content_id"],
+                        CallAccountingSubject((string)dataReader["accounting_subject_id"]),
+                        (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"]);
+            return content;
         }
     }
 }
