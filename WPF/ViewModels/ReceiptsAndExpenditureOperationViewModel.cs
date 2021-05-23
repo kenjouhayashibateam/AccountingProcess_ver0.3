@@ -484,6 +484,7 @@ namespace WPF.ViewModels
                 comboCreditDeptText = value;
                 SelectedCreditDept = ComboCreditDepts.FirstOrDefault(c => c.Dept == value);
                 ValidationProperty(nameof(ComboCreditDeptText), value);
+                SetDataOperationButtonEnabled();
                 CallPropertyChanged();
             }
         }

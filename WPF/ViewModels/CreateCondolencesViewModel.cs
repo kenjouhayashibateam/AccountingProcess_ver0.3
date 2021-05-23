@@ -15,7 +15,8 @@ namespace WPF.ViewModels
     /// <summary>
     /// お布施一覧作成ViewModel
     /// </summary>
-    public class CreateCondolencesViewModel : BaseViewModel,ICondolenceObserver
+    public class CreateCondolencesViewModel : BaseViewModel,ICondolenceObserver,
+        IPagenationObserver
     {
         #region Properties
         /// <summary>
@@ -42,7 +43,8 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
-            Pagination = new Pagination();
+            Pagination = Pagination.GetPagination();
+            Pagination.Add(this);
             SearchStartDate = DateTime.Today.AddDays(1 * (-1 * (DateTime.Today.Day - 1)));
             SearchEndDate = DateTime.Today;
             ShowRegistrationViewCommand = new DelegateCommand
@@ -85,18 +87,12 @@ namespace WPF.ViewModels
         /// 前の10件を表示するコマンド
         /// </summary>
         public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress()
-        {
-            if (Pagination.CanPageCountSubtractAndCanPrevPageExpress()) CreateCondolences(false);
-        }
+        private void PrevPageListExpress() => Pagination.PageCountSubtract();
         /// <summary>
         /// 次の10件を表示するコマンド
         /// </summary>
         public DelegateCommand NextPageListExpressCommand { get; }
-        private void NextPageListExpress()
-        {
-            if (Pagination.CanPageCountAddAndCanNextPageExpress()) CreateCondolences(false);
-        }
+        private void NextPageListExpress() => Pagination.PageCountAdd();
         /// <summary>
         /// データ登録画面を表示するコマンド
         /// </summary>
@@ -282,5 +278,9 @@ namespace WPF.ViewModels
             DefaultWindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
 
         public void CondolenceNotify() => CreateCondolences(true);
+
+        public void SortNotify() => CreateCondolences(true);
+
+        public void PageNotify()=>CreateCondolences(false);
     }
 }

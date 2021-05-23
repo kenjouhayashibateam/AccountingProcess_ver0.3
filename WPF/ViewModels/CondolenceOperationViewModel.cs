@@ -17,7 +17,8 @@ namespace WPF.ViewModels
     /// <summary>
     /// お布施一覧登録ViewModel
     /// </summary>
-    public class CondolenceOperationViewModel:DataOperationViewModel,ICondolenceObserver
+    public class CondolenceOperationViewModel:DataOperationViewModel,ICondolenceObserver,
+        IPagenationObserver
     {
         #region Properties
         #region Strings
@@ -67,7 +68,8 @@ namespace WPF.ViewModels
         {
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
-            Pagination = new Pagination();
+            Pagination = Pagination.GetPagination();
+            Pagination.Add(this);
             IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
             IsMemorialService = true;
@@ -126,18 +128,12 @@ namespace WPF.ViewModels
         /// 前の10件を表示するコマンド
         /// </summary>
         public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress()
-        {
-            if(Pagination.CanPageCountSubtractAndCanPrevPageExpress()) SetReceiptsAndExpenditures(false);
-        }
+        private void PrevPageListExpress() => Pagination.PageCountSubtract();
         /// <summary>
         /// 次の10件を表示するコマンド
         /// </summary>
         public DelegateCommand NextPageListExpressCommand { get; set; }
-        private void NextPageListExpress()
-        {
-            if(Pagination.CanPageCountAddAndCanNextPageExpress()) SetReceiptsAndExpenditures(false);
-        }
+        private void NextPageListExpress() => Pagination.PageCountAdd();
         /// <summary>
         /// プロパティをセットします
         /// </summary>
@@ -837,5 +833,9 @@ namespace WPF.ViewModels
             WindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
 
         public void CondolenceNotify() => FieldClear();
+
+        public void SortNotify() => SetReceiptsAndExpenditures(true);
+
+        public void PageNotify() => SetReceiptsAndExpenditures(false);
     }
 }

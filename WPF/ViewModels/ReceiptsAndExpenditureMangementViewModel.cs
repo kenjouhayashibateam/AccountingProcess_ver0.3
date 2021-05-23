@@ -137,20 +137,12 @@ namespace WPF.ViewModels
         /// 次の10件を表示するコマンド
         /// </summary>
         public DelegateCommand NextPageListExpressCommand { get; set; }
-        private void NextPageListExpress()
-        {
-            if (Pagination.CanPageCountAddAndCanNextPageExpress())
-                ReferenceReceiptsAndExpenditures(false);
-        }
+        private void NextPageListExpress() => Pagination.PageCountAdd();
         /// <summary>
         /// 前の10件を表示するコマンド
         /// </summary>
         public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress()
-        {
-            if (Pagination.CanPageCountSubtractAndCanPrevPageExpress())
-                ReferenceReceiptsAndExpenditures(false);
-        }
+        private void PrevPageListExpress() => Pagination.PageCountSubtract();
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
         /// </summary>

@@ -198,6 +198,8 @@ namespace Infrastructure.ExcelOutputData
                 Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             myWorksheet.Cell(StartRowPosition + 2, 16).Style.
                 Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            myWorksheet.Cell(StartRowPosition + 3, 16).Style.
+                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             for (int i = StartRowPosition + 1; i < StartRowPosition + 7; i++)
             {
                 myWorksheet.Cell(i, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);

@@ -1628,7 +1628,7 @@ namespace WPF.ViewModels
             IsContentConvertOperationButtonEnabled = false;
             if (IsContentConvertVoucherRegistration)
                 await Task.Run(() => 
-                DataBaseConnect.Registration(ContentField, ContentConvertText));
+                DataBaseConnect.Registration(ContentIDField, ContentConvertText));
             else
                 await Task.Run(() => 
                 DataBaseConnect.Update(ContentIDField, ContentConvertText));
@@ -1705,9 +1705,9 @@ namespace WPF.ViewModels
 
             ContentDataOperationContent = "登録中";
             IsContentOperationEnabled = false;
-            await Task.Run(() => DataBaseConnect.Registration(CurrentContent));
-            if (!string.IsNullOrEmpty(ContentConvertText))
-                await Task.Run(() => RegistrationContentConvertVoucherText());
+            
+            await Task.Run(() => RegistrationContentAndConvertVoucherText());
+
             Contents = DataBaseConnect.ReferenceContent
                 (string.Empty, string.Empty,string.Empty, IsContentValidityTrueOnly);
             ContentDetailFieldClear();
@@ -1715,12 +1715,15 @@ namespace WPF.ViewModels
             IsContentOperationEnabled = true;
             ContentDataOperationContent = "登録";
 
-            void RegistrationContentConvertVoucherText()
+            void RegistrationContentAndConvertVoucherText()
             {
+                DataBaseConnect.Registration(CurrentContent);
                 ObservableCollection<Content> contents = DataBaseConnect.ReferenceContent
                     (CurrentContent.Text, CurrentContent.AccountingSubject.SubjectCode, 
                         CurrentContent.AccountingSubject.Subject, true);
 
+                if (string.IsNullOrEmpty(ContentConvertText)) return;
+                
                 if (contents.Count > 1)
                 {
                     MessageBox = new Views.Datas.MessageBoxInfo()

@@ -657,7 +657,7 @@ namespace Infrastructure
         public int Registration(string id, string contentConvertText)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
-            { {"@content_id", id},{"@convert_tex", contentConvertText}};
+            { {"@content_id", id},{"@convert_text", contentConvertText}};
             
             return ReturnGeneretedParameterCommand
                 ("registration_content_convert_voucher",parameters).ExecuteNonQuery();

@@ -143,21 +143,21 @@ namespace WPF.Views.Datas
         /// ページ数をマイナスした時に1以上になっているかを検証しまず
         /// </summary>
         /// <returns>1以上ならTrueを返します</returns>
-        public bool CanPageCountSubtractAndCanPrevPageExpress()
+        public void PageCountSubtract()
         {
-            if (PageCount == 0) return false;
+            if (PageCount == 0) return;
             if (PageCount > 1) PageCount--;
-            return true;
+            PageNotification();
         }
         /// <summary>
         /// ページ数をプラスした時に1以上かつ総ページ数を超えていないかを検証します
         /// </summary>
         /// <returns></returns>
-        public bool CanPageCountAddAndCanNextPageExpress()
+        public void PageCountAdd()
         {
-            if (PageCount == 0) return false;
+            if (PageCount == 0) return;
             PageCount += PageCount == TotalPageCount ? 0 : 1;
-            return true;
+            PageNotification();
         }
         /// <summary>
         /// ページ数をリセットします
