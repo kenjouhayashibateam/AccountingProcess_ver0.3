@@ -439,7 +439,7 @@
                                         
                                     </Button>
                                 </Grid>
-                                <TextBox x:Name="ConvertContentTextBox" Grid.Row="11" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Text="{Binding ContentConvertText}" Style="{StaticResource WatermarkTextbox}" Tag="伝票内容と同じ場合は不要です" Margin="5"/>
+                                <TextBox x:Name="ConvertContentTextBox" Grid.Row="11" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Text="{Binding ContentConvertText,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource WatermarkTextbox}" Tag="伝票内容と同じ場合は不要です" Margin="5"/>
                             </Grid>
                             <Button x:Name="ContentDataOperationButton" Grid.Row="1" IsEnabled="{Binding IsContentOperationEnabled}" Content="{Binding ContentDataOperationContent}" Margin="5">
                                 <Button.InputBindings>

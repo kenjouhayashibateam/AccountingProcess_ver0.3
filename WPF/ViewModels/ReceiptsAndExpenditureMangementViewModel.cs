@@ -111,12 +111,11 @@ namespace WPF.ViewModels
         public ReceiptsAndExpenditureMangementViewModel
             (IDataOutput dataOutput, IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            Pagination = new Pagination();
+            Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             ReceiptsAndExpenditureOperation.Add(this);
             ReceiptsAndExpenditureOperation.SetOperationType
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
-            SetSortColumnList();
             DataOutput = dataOutput;
             IsPreviousDayOutputEnabled = false;
             SetDelegateCommand();
@@ -126,7 +125,7 @@ namespace WPF.ViewModels
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
             DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
-        private void SetSortColumnList() =>
+        public void SetSortColumns() =>
             Pagination.SortColumns = new Dictionary<int, string>()
             {
                 {0, "ID"},

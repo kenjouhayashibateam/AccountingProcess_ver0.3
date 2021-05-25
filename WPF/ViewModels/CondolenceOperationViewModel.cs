@@ -1,16 +1,16 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
-using System;
-using System.Collections.ObjectModel;
 using Domain.Repositories;
-using static Domain.Entities.Helpers.TextHelper;
 using Infrastructure;
+using System;
 using System.Collections.Generic;
-using WPF.ViewModels.Commands;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using WPF.Views.Datas;
 using System.Windows;
+using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
@@ -154,7 +154,8 @@ namespace WPF.ViewModels
             FixToggle = string.IsNullOrEmpty(condolence.MailRepresentative);
             CounterReceiver = condolence.CounterReceiver;
             MailRepresentative = condolence.MailRepresentative;
-            IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) && string.IsNullOrEmpty(condolence.MailRepresentative);
+            IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) && 
+                string.IsNullOrEmpty(condolence.MailRepresentative);
         }
         /// <summary>
         /// プロパティをクリアします
@@ -180,9 +181,10 @@ namespace WPF.ViewModels
         private void OperationData()
         {
             OperationCondolence = new Condolence
-                (ID,AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName), isMemorialService, IntAmount(Almsgiving),
-                    IntAmount(CarTip), IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering),
-                    Note, AccountActivityDate, IsReceptionBlank ? string.Empty : CounterReceiver, 
+                (ID,AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
+                    isMemorialService,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip), 
+                    IntAmount(CarAndMealTip),IntAmount(SocialGathering),Note, AccountActivityDate, 
+                    IsReceptionBlank ? string.Empty : CounterReceiver, 
                     IsReceptionBlank ? string.Empty : MailRepresentative);
             
             switch(CurrentOperation)
@@ -824,7 +826,8 @@ namespace WPF.ViewModels
             NextPageListExpressCommand = new DelegateCommand(() => NextPageListExpress(), () => true);
             AlmsgivingSearchCommand = new DelegateCommand(() => AlmsgivingSearch(), () => true);
             TipSearchCommand = new DelegateCommand(() => TipSearch(), () => true);
-            SocialGatheringSearchCommand = new DelegateCommand(() => SocialGatheringSearch(), () => true);
+            SocialGatheringSearchCommand = new DelegateCommand
+                (() => SocialGatheringSearch(), () => true);
         }
 
         protected override void SetDetailLocked() { }
@@ -837,5 +840,11 @@ namespace WPF.ViewModels
         public void SortNotify() => SetReceiptsAndExpenditures(true);
 
         public void PageNotify() => SetReceiptsAndExpenditures(false);
+
+        public void SetSortColumns() =>
+            Pagination.SortColumns = new Dictionary<int, string>()
+            {
+                {0,"ID" },{1,"入金日"}
+            };
     }
 }

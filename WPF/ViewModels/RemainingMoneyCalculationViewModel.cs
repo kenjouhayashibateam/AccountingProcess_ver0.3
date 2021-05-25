@@ -1,12 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Domain.Repositories;
 using Infrastructure;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
 namespace WPF.ViewModels
 {

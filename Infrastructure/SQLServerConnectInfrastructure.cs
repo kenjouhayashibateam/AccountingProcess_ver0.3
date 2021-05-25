@@ -1,12 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
-using static Domain.Entities.Helpers.TextHelper;
 using Domain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace Infrastructure
 {

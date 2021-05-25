@@ -1,13 +1,13 @@
-﻿using static Domain.Entities.Helpers.TextHelper;
+﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
-using WPF.ViewModels.Datas;
-using System.Collections.ObjectModel;
-using Domain.Entities;
 using System;
-using WPF.ViewModels.Commands;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using WPF.ViewModels.Commands;
+using WPF.ViewModels.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {

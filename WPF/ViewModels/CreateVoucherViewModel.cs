@@ -1,14 +1,15 @@
-﻿using Domain.Entities.Helpers;
+﻿using Domain.Entities;
+using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using System.Collections.ObjectModel;
 using Domain.Repositories;
 using Infrastructure;
-using WPF.ViewModels.Commands;
-using Domain.Entities;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using WPF.Views.Datas;
+using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
 
 namespace WPF.ViewModels
 {
@@ -16,14 +17,13 @@ namespace WPF.ViewModels
     /// 受納証作成画面ViewModel
     /// </summary>
     public class CreateVoucherViewModel : BaseViewModel,
-        IReceiptsAndExpenditureOperationObserver
+        IReceiptsAndExpenditureOperationObserver,IPagenationObserver
     {
         #region Properties
         #region Strings
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
         private string outputButtonContent;
-        private string listPageInfo;
         #endregion
         #region ObservableCollections
         private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 
@@ -39,8 +39,6 @@ namespace WPF.ViewModels
         /// 受納証の総額
         /// </summary>
         private bool isOutputButtonEnabled;
-        private bool isNextPageEnabled;
-        private bool isPrevPageEnabled;
         private Pagination pagination;
         #endregion
 
@@ -50,25 +48,23 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
             OperationData.Add(this);
-            Pagination = new Pagination();
+            Pagination = Pagination.GetPagination();
+            Pagination.Add(this);
             SearchDate = DateTime.Today;
             OutputButtonContent = "登録して出力";
-            Pagination.SetProperty();
+            Pagination.SortDirectionIsASC = false;
+            Pagination.SelectedSortColumn = Pagination.SortColumns[0];
             SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
             (DefaultInfrastructure.GetDefaultDataBaseConnect(),
             DefaultInfrastructure.GetDefaultDataOutput()) { }
-        /// <summary>
-        /// 次の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand NextPageListExpressCommand { get; set; }
-        private void NextPageListExpress() => Pagination.PageCountAdd();
-        /// <summary>
-        /// 前の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress() => Pagination.PageCountSubtract();
+        public void SetSortColumns()=>
+            Pagination.SortColumns = new Dictionary<int, string>()
+            {
+                { 0,"ID"},
+                { 1,"コード"}
+            };
         /// <summary>
         /// 新規登録画面を表示するコマンド
         /// </summary>
@@ -131,6 +127,10 @@ namespace WPF.ViewModels
                 };
                 return;
             }
+            string convertText = 
+                DataBaseConnect.CallContentConvertText(SelectedSeachReceiptsAndExpenditure.Content.ID);
+            SelectedSeachReceiptsAndExpenditure.Content.Text =
+                convertText ?? SelectedSeachReceiptsAndExpenditure.Content.Text;
             VoucherContents.Add(SelectedSeachReceiptsAndExpenditure);
             SetTotalAmount();
             SetOutputEnabled();
@@ -207,19 +207,19 @@ namespace WPF.ViewModels
             set
             {
                 searchDate = value;
-                CreateReceiptsAndExpenditures(value, true);
+                CreateReceiptsAndExpenditures( true);
                 CallPropertyChanged();
             }
         }
-        private void CreateReceiptsAndExpenditures(DateTime accountActivityDate,bool isPageReset)
+        private void CreateReceiptsAndExpenditures(bool isPageReset)
         {
             Pagination.CountReset(isPageReset);
             var(count,list)=
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (TextHelper.DefaultDate, new DateTime(9999, 1, 1),AccountingProcessLocation.Location, string.Empty,
-                string.Empty, string.Empty, string.Empty, string.Empty, true, true, true, true,
-                accountActivityDate, accountActivityDate, TextHelper.DefaultDate, new DateTime(9999, 1, 1), 
-                Pagination.PageCount,"ID",false);
+                (TextHelper.DefaultDate, new DateTime(9999, 1, 1),
+                AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty, 
+                string.Empty, true, true, true, true, SearchDate,SearchDate, TextHelper.DefaultDate, 
+                new DateTime(9999, 1, 1), Pagination.PageCount,"ID",false);
             SearchReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = count;
             Pagination.SetProperty();
@@ -285,42 +285,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// リストのページの案内
-        /// </summary>
-        public string ListPageInfo
-        {
-            get => listPageInfo;
-            set
-            {
-                listPageInfo = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 次の10件ボタンのEnabled
-        /// </summary>
-        public bool IsNextPageEnabled
-        {
-            get => isNextPageEnabled;
-            set
-            {
-                isNextPageEnabled = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 前の10件ボタンのEnabled
-        /// </summary>
-        public bool IsPrevPageEnabled
-        {
-            get => isPrevPageEnabled;
-            set
-            {
-                isPrevPageEnabled = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// ページネーション
         /// </summary>
         public Pagination Pagination
@@ -364,10 +328,6 @@ namespace WPF.ViewModels
                 (() => VoucherOutput(), () => true);
             ShowRegistrationCommand = new DelegateCommand
                 (() => ShowRegistration(), () => true);
-            NextPageListExpressCommand = new DelegateCommand
-                (() => NextPageListExpress(), () => true);
-            PrevPageListExpressCommand = new DelegateCommand
-                (() => PrevPageListExpress(), () => true);
         }
 
         protected override void SetWindowDefaultTitle() =>
@@ -379,6 +339,16 @@ namespace WPF.ViewModels
             VoucherContents.Add(OperationData.Data);
             SetTotalAmount();
             SetOutputEnabled();
+        }
+
+        public void SortNotify()
+        {
+            CreateReceiptsAndExpenditures(true);
+        }
+
+        public void PageNotify()
+        {
+            CreateReceiptsAndExpenditures(false);
         }
     }
 }

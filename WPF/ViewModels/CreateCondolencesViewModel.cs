@@ -3,11 +3,11 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
-using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
@@ -24,8 +24,6 @@ namespace WPF.ViewModels
         /// </summary>
         private string listPageInfo;
         private string outputButtonContent="出力";
-        private bool isPrevPageEnabled;
-        private bool isNextPageEnabled;
         private bool isOutputButtonEnabled;
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
@@ -49,14 +47,10 @@ namespace WPF.ViewModels
             SearchEndDate = DateTime.Today;
             ShowRegistrationViewCommand = new DelegateCommand
                 (() => ShowRegistrationView(), () => true);
-            NextPageListExpressCommand = new DelegateCommand
-                (() => NextPageListExpress(), () => true);
-            PrevPageListExpressCommand = new DelegateCommand
-                (() => PrevPageListExpress(), () => true);
             ShowUpdateViewCommand = new DelegateCommand
                 (() => ShowUpdateView(), () => true);
             OutputCommand = new DelegateCommand
-                (() => Output(), () => true);
+                (() => Output(), () => true); 
         }
         public CreateCondolencesViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
@@ -83,16 +77,6 @@ namespace WPF.ViewModels
             condolenceOperation.SetData(SelectedCondolence);
             CreateShowWindowCommand(ScreenTransition.CondolenceOperation());
         }
-        /// <summary>
-        /// 前の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress() => Pagination.PageCountSubtract();
-        /// <summary>
-        /// 次の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand NextPageListExpressCommand { get; }
-        private void NextPageListExpress() => Pagination.PageCountAdd();
         /// <summary>
         /// データ登録画面を表示するコマンド
         /// </summary>
@@ -150,30 +134,6 @@ namespace WPF.ViewModels
             set
             {
                 listPageInfo = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 前の10件ボタンのEnabled
-        /// </summary>
-        public bool IsPrevPageEnabled
-        {
-            get => isPrevPageEnabled;
-            set
-            {
-                isPrevPageEnabled = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 次の10件ボタンのEnabled
-        /// </summary>
-        public bool IsNextPageEnabled
-        {
-            get => isNextPageEnabled;
-            set
-            {
-                isNextPageEnabled = value;
                 CallPropertyChanged();
             }
         }
@@ -236,26 +196,22 @@ namespace WPF.ViewModels
         /// </summary>
         private void CreateCondolences(bool isPageCountReset)
         {
-            //PageCount = isPageCountReset ? 1 : PageCount;
             Pagination.CountReset(isPageCountReset);
 
             var(count,list)=
                 DataBaseConnect.ReferenceCondolence
                     (SearchStartDate, SearchEndDate,AccountingProcessLocation.Location, Pagination.PageCount);
             Condolences = list;
-            //RowCount = count;
             Pagination.TotalRowCount = count;
 
             AllList =
                 DataBaseConnect.ReferenceCondolence
                     (SearchStartDate, SearchEndDate,AccountingProcessLocation.Location);
 
-            //if (AllList.Count == 0) PageCount = 0;
             if (AllList.Count == 0) Pagination.PageCount = 0;
             ValidationProperty(nameof(Condolences), AllList);
             IsOutputButtonEnabled = AllList.Count > 0;
             Pagination.SetProperty();
-            //SetListPageInfo();
         }
         public override void SetRep(Rep rep)
         {
@@ -282,5 +238,11 @@ namespace WPF.ViewModels
         public void SortNotify() => CreateCondolences(true);
 
         public void PageNotify()=>CreateCondolences(false);
+
+        public void SetSortColumns()=>
+            Pagination.SortColumns=new Dictionary<int, string>()
+            {
+                {0,"ID" },{1,"日付"},{2,"担当僧侶"}
+            };
     }
 }

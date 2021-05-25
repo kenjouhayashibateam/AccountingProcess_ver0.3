@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using WPF.ViewModels.Datas;
+using WPF.ViewModels.Commands;
 
-namespace WPF.Views.Datas
+namespace WPF.ViewModels.Datas
 {
     public interface IPagenationObserver
     {
         void SortNotify();
         void PageNotify();
+        void SetSortColumns();
     }
     /// <summary>
     /// ページネーションクラス
@@ -30,6 +30,23 @@ namespace WPF.Views.Datas
         private Dictionary<int, string> sortColumns;
         private readonly List<IPagenationObserver> pagenationObservers = new List<IPagenationObserver>();
 
+        private Pagination()
+        {
+            PrevPageListExpressCommand = new DelegateCommand
+                (() => PrevPageListExpress(), () => true);
+            NextPageListExpressCommand = new DelegateCommand
+                (() => NextPageListExpress(), () => true);
+        }
+        /// <summary>
+        /// 次の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand NextPageListExpressCommand { get; set; }
+        private void NextPageListExpress() => PageCountAdd();
+        /// <summary>
+        /// 前の10件を表示するコマンド
+        /// </summary>
+        public DelegateCommand PrevPageListExpressCommand { get; set; }
+        private void PrevPageListExpress() => PageCountSubtract();
         /// <summary>
         /// ソートする方向トグルのContent
         /// </summary>
@@ -140,9 +157,8 @@ namespace WPF.Views.Datas
             IsNextPageEnabled = PageCount != i;
         }
         /// <summary>
-        /// ページ数をマイナスした時に1以上になっているかを検証しまず
+        /// ページ数をマイナスした時に1以上になっているかを検証してページを通知します
         /// </summary>
-        /// <returns>1以上ならTrueを返します</returns>
         public void PageCountSubtract()
         {
             if (PageCount == 0) return;
@@ -150,7 +166,7 @@ namespace WPF.Views.Datas
             PageNotification();
         }
         /// <summary>
-        /// ページ数をプラスした時に1以上かつ総ページ数を超えていないかを検証します
+        /// ページ数をプラスした時に1以上かつ総ページ数を超えていないかを検証してページを通知します
         /// </summary>
         /// <returns></returns>
         public void PageCountAdd()
@@ -195,8 +211,11 @@ namespace WPF.Views.Datas
                 CallPropertyChanged();
             }
         }
-        public void Add(IPagenationObserver pagenationObserver) =>
+        public void Add(IPagenationObserver pagenationObserver)
+        {
             pagenationObservers.Add(pagenationObserver);
+            foreach (IPagenationObserver po in pagenationObservers) po.SetSortColumns();
+        }
         private void PageNotification()
         {
             foreach (IPagenationObserver po in pagenationObservers) po.PageNotify();

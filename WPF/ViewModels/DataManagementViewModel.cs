@@ -1,14 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Threading.Tasks;
-using WPF.ViewModels.Commands;
+﻿using Domain.Entities;
 using Domain.Entities.Helpers;
-using static Domain.Entities.Helpers.TextHelper; 
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
-using Domain.Entities;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
+using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {

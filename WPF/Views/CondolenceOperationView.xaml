@@ -88,11 +88,17 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="出納データ一覧" Grid.Column="0" VerticalAlignment="Center"/>
                     <Button x:Name="PrevButton" Grid.Column="1" Content="前の10件" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1">
-                        
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
                     </Button>
                     <TextBlock Grid.Column="2" Text="{Binding Pagination.ListPageInfo}" Margin="5"/>
                     <Button x:Name="NextButton" Grid.Column="3" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}">
-                        
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
                     </Button>
                 </Grid>
             </GroupBox.Header>

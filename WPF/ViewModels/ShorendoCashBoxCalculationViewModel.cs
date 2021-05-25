@@ -1,9 +1,9 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 using Infrastructure;
 using WPF.ViewModels.Datas;
+using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
 namespace WPF.ViewModels
 {
