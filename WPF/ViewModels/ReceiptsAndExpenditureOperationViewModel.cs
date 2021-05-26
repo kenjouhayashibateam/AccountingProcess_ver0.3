@@ -320,9 +320,9 @@ namespace WPF.ViewModels
             IsOutputCheckEnabled = OperationData.Data.ID > 0;
             SelectedCreditDept = OperationData.Data.CreditDept;
             ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
+            ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
             ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
             ComboContentText = OperationData.Data.Content.Text;
-            ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
             DetailText = OperationData.Data.Detail;
             Price = SetPrice();
             AccountActivityDate = OperationData.Data.AccountActivityDate;
@@ -341,7 +341,8 @@ namespace WPF.ViewModels
             string SetPrice()
             {
                 if (OperationData.Data.Price == 0)
-                    return OperationData.Data.Content.FlatRate > 0 ? CommaDelimitedAmount(OperationData.Data.Content.FlatRate) : string.Empty;
+                    return OperationData.Data.Content.FlatRate > 0 ? 
+                        CommaDelimitedAmount(OperationData.Data.Content.FlatRate) : string.Empty;
 
                 return CommaDelimitedAmount(OperationData.Data.Price);
             }
@@ -552,8 +553,9 @@ namespace WPF.ViewModels
                 
                 void SetField()
                 {
-                    ComboAccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                    //ComboAccountingSubjects =
+                    //    DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                    ComboAccountingSubjects.Clear();
                     if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
                     ComboAccountingSubjectText = string.Empty;
                     ComboContents.Clear();
@@ -674,7 +676,7 @@ namespace WPF.ViewModels
             set
             {
                 selectedAccountingSubject = value;
-                SelectedAccountingSubjectCode = value;
+                //SelectedAccountingSubjectCode = value;
                 ComboContents = DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode,
                         ComboAccountingSubjectText ?? string.Empty, true);

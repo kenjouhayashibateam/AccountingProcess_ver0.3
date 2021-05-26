@@ -19,18 +19,26 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="7*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="伝票内容検索" Grid.Row="0" Margin="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="SearchContentTextBox" Grid.Column="1" Text="{Binding SearchContentText}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="勘定科目" Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                <TextBlock Text="伝票内容" Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                <TextBox x:Name="SearchAccountingSubjectTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding SearchAccountingSubject}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,3"/>
+                <TextBox x:Name="SearchContentTextBox" Grid.Row="1" Grid.Column="2" Text="{Binding SearchContentText}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,3"/>
          </Grid>
         </GroupBox>
         <GroupBox Header="一覧" Grid.Row="1" Margin="5">

@@ -21,7 +21,6 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\ClosedX
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\ClosedXML.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\DocumentFormat.OpenXml.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\ExcelNumberFormat.xml
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csprojAssemblyReference.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Interop.TaskScheduler.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.ResolveComReference.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CondolenceOperationView.g.cs
@@ -120,3 +119,4 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.Core
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.AssemblyReference.cache

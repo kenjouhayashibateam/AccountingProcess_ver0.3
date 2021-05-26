@@ -17,6 +17,7 @@ namespace WPF.ViewModels
         private ObservableCollection<Content> contents;
         private Content selectedContent;
         private string searchContentText;
+        private string searchAccountingSubject;
         private bool windowCloseSwich;
 
         public ReceiptsAndExpenditureRegistrationHelperViewModel
@@ -57,13 +58,14 @@ namespace WPF.ViewModels
             set
             {
                 searchContentText = value;
-                if(!string.IsNullOrEmpty(value)) SetList(value);
+                if(!string.IsNullOrEmpty(value)) SetList();
                 CallPropertyChanged();
             }
         }
-        private void SetList(string value)
+        private void SetList()
         {
-            Contents = DataBaseConnect.ReferenceContent(value, string.Empty, string.Empty, true);
+            Contents = DataBaseConnect.ReferenceContent
+                    (SearchContentText, string.Empty, SearchAccountingSubject, true);
         }
         /// <summary>
         /// 伝票内容リスト
@@ -100,6 +102,19 @@ namespace WPF.ViewModels
                 windowCloseSwich = value;
                 CallPropertyChanged();
                 windowCloseSwich = false;
+            }
+        }
+        /// <summary>
+        /// 検索する勘定科目
+        /// </summary>
+        public string SearchAccountingSubject
+        {
+            get => searchAccountingSubject;
+            set
+            {
+                searchAccountingSubject = value;
+                if (!string.IsNullOrEmpty(value)) SetList();
+                CallPropertyChanged();
             }
         }
 

@@ -228,7 +228,7 @@
                                 </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding CreditDept.Dept,StringFormat=yy/M/d}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding CreditDept.Dept}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

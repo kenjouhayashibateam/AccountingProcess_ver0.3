@@ -12,7 +12,7 @@ namespace WPF.Views.Behaviors
         {
             DateTime dateTime = (DateTime)value;
 
-            return dateTime == TextHelper.DefaultDate ? "未出力":dateTime.ToString("yy/MM/dd");
+            return dateTime == TextHelper.DefaultDate ? "未出力" : dateTime.ToString("yy/MM/dd");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -21,7 +21,7 @@ namespace WPF.Views.Behaviors
         }
 
         private static OutputDateConverter _converter;
-        
+
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             return _converter ??= new OutputDateConverter();
