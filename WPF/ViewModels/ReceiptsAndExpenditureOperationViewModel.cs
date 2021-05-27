@@ -632,11 +632,10 @@ namespace WPF.ViewModels
 
                 SetDataOperationButtonEnabled();
 
-                ComboContents =                         
+                ComboContents =
                     DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
 
-                if (ComboContents.Count > 0) ComboContentText = ComboContents[0].Text;
-                else ComboContentText = string.Empty;
+                ComboContentText = ComboContents.Count > 0 ? ComboContents[0].Text : string.Empty;
 
                 comboAccountingSubjectText = accountingSubject.Subject;
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);

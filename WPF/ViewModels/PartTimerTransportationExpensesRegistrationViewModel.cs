@@ -57,7 +57,7 @@ namespace WPF.ViewModels
             if (registerCount == DataList.Count) countInfo = $"{DataList.Count}{Space}件";
             else countInfo = $"{registerCount}/{DataList.Count}{Space}件";
             //登録件数が0ならメソッドを終了する
-            if(registerCount==0)
+            if (registerCount == 0)
             {
                 NoRegistrationInfo();
                 return;
@@ -123,7 +123,7 @@ namespace WPF.ViewModels
             PartData partData;
 
             DataList = new ObservableCollection<PartData>();
-            for(int i =0; i<PasteDataArray.Length;i++)
+            for (int i = 0; i < PasteDataArray.Length; i++)
             {
                 subArray = PasteDataArray[i].Split('\t');
                 if(!CopyDataErrorCheck(subArray))
@@ -139,6 +139,7 @@ namespace WPF.ViewModels
           
             SetIsRegistrationEnabled();
         }
+
         private void SetListTitle() =>
             ListTitle = DataList.Count == 0 ? TITLE : $"{TITLE}{Space}:{Space}{DataList.Count}{Space}件";
 

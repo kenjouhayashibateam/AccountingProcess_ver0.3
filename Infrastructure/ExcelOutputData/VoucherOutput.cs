@@ -201,10 +201,12 @@ namespace Infrastructure.ExcelOutputData
             SetStringOriginalAndCopy(15, 1, "〒214-0036");
             //住所
             SetStringOriginalAndCopy(15, 3, "川崎市多摩区南生田８－１－１");
+            string imagePath = ".\\files\\ReceiptStamp.png";
+            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(12, 6));
             //係
             SetStringOriginalAndCopy(14, 8, "係");
             LoginRep loginRep = LoginRep.GetInstance();
-            SetStringOriginalAndCopy(15, 8, TextHelper.GetFirstName(loginRep.Rep.Name));
+            SetStringOriginalAndCopy(15, 8, GetFirstName(loginRep.Rep.Name));
 
             void SetStringOriginalAndCopy(int row,int column,string value)
             {
