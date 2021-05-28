@@ -152,21 +152,21 @@ namespace WPF.Views {
         
         #line 424 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal System.Windows.Controls.Button ReceiptsAndExpenditureOutputButton;
-        
-        #line default
-        #line hidden
-        
-        
-        #line 430 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
-        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button BalanceFinalAccountOutputButton;
         
         #line default
         #line hidden
         
         
-        #line 444 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
+        #line 439 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Button ShowReceiptsAndExpenditureManagementButton;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 445 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button ShowRemainingMoneyCalculationViewButton;
         
@@ -174,7 +174,7 @@ namespace WPF.Views {
         #line hidden
         
         
-        #line 450 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
+        #line 451 "..\..\..\Views\ReceiptsAndExpenditureMangementView.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button CloseButton;
         
@@ -255,10 +255,10 @@ namespace WPF.Views {
             this.WithdrawalSlipsOutputButton = ((System.Windows.Controls.Button)(target));
             return;
             case 13:
-            this.ReceiptsAndExpenditureOutputButton = ((System.Windows.Controls.Button)(target));
+            this.BalanceFinalAccountOutputButton = ((System.Windows.Controls.Button)(target));
             return;
             case 14:
-            this.BalanceFinalAccountOutputButton = ((System.Windows.Controls.Button)(target));
+            this.ShowReceiptsAndExpenditureManagementButton = ((System.Windows.Controls.Button)(target));
             return;
             case 15:
             this.ShowRemainingMoneyCalculationViewButton = ((System.Windows.Controls.Button)(target));

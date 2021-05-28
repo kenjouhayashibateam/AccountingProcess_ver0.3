@@ -80,6 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\CashJournalManagementViewModel.cs" />
     <Compile Include="ViewModels\Datas\CondolenceOperation.cs" />
     <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />
@@ -106,6 +107,9 @@
     <Compile Include="Views\Behaviors\OutputDateConverter.cs" />
     <Compile Include="Views\Behaviors\SystemMenuBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
+    <Compile Include="Views\CashJournalManagementView.xaml.cs">
+      <DependentUpon>CashJournalManagementView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CondolenceOperationView.xaml.cs">
       <DependentUpon>CondolenceOperationView.xaml</DependentUpon>
     </Compile>
@@ -150,6 +154,10 @@
     </Compile>
     <Compile Include="Win32\Api\User32.cs" />
     <Compile Include="Win32\Constant.cs" />
+    <Page Include="Views\CashJournalManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CondolenceOperationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -64,8 +64,17 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window CreateCondolences() =>
             new CreateCondolencesView();
-
+        /// <summary>
+        /// 出納データ登録ヘルパー画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
         public static Window ReceiptsAndExpenditureRegistrationHelper() =>
             new ReceiptsAndExpenditureRegistrationInputHelperView();
+        /// <summary>
+        /// 出納帳管理画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window CashJournalManagement() =>
+            new CashJournalManagementView();
     }
 }

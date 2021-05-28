@@ -172,7 +172,6 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetList(IEnumerable outputList) =>
             ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
         
-
         protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
     }
 }

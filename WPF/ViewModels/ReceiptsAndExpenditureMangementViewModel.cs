@@ -330,18 +330,11 @@ namespace WPF.ViewModels
             SetOutputGroupEnabled();
         }
         /// <summary>
-        /// 出納データ出力コマンド
+        /// 出納帳管理画面呼び出しコマンド
         /// </summary>
-        public DelegateCommand ReceiptsAndExpenditureOutputCommand { get; set; }
-        private async void ReceiptsAndExpenditureOutput()
-        {
-            ReceiptsAndExpenditureOutputButtonContent = "出力中";
-            IsOutputGroupEnabled = false;
-            await Task.Run(() =>
-            DataOutput.ReceiptsAndExpenditureData(AllDataList, PreviousDayFinalAccount));
-            ReceiptsAndExpenditureOutputButtonContent = "出納データ";
-            IsOutputGroupEnabled = true;
-        }
+        public DelegateCommand ShowCashJournalManagementCommand { get; set; }
+        private void ShowCashJournalManagement() =>
+            CreateShowWindowCommand(ScreenTransition.CashJournalManagement());
         /// <summary>
         /// 収支日報出力コマンド
         /// </summary>
@@ -367,8 +360,8 @@ namespace WPF.ViewModels
             BalanceFinalAccountOutputCommand =
                 new DelegateCommand(() => BalanceFinalAccountOutput(),
                 () => IsBalanceFinalAccountOutputEnabled);
-            ReceiptsAndExpenditureOutputCommand =
-                new DelegateCommand(() => ReceiptsAndExpenditureOutput(),
+            ShowCashJournalManagementCommand =
+                new DelegateCommand(() => ShowCashJournalManagement(),
                 () => IsReceiptsAndExpenditureOutputButtonEnabled);
             ShowRemainingCalculationViewCommand = 
                 new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
