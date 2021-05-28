@@ -107,28 +107,28 @@
                     <DataGridTemplateColumn Width="1*" Header="入金日">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="1*" Header="内容">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="1*" Header="詳細">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Detail}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="1*" Header="金額">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

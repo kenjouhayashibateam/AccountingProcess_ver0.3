@@ -184,7 +184,7 @@
                             </Style>
                         </DataGrid.ItemContainerStyle>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="有効性" Width="3*">
+                            <DataGridTemplateColumn Header="有効" Width="2*">
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -196,7 +196,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="入出金" Width="3*" SortMemberPath="AccountActivityDate">
+                            <DataGridTemplateColumn Header="入出金日" Width="3*" SortMemberPath="AccountActivityDate">
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -204,7 +204,7 @@
                                 </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -247,28 +247,28 @@
                             <DataGridTemplateColumn Header="勘定科目" Width="6*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="内容" Width="6*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Content.Text}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Content.Text}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="詳細" Width="7*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Detail}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Detail}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="金額" Width="4*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -387,7 +387,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="100,5,5,5">
+                    <Grid Grid.Row="0" Margin="80,5,5,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="8*"/>
                             <ColumnDefinition Width="2*"/>

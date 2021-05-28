@@ -1,7 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
-using Domain.Entities.ValueObjects;
-using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;

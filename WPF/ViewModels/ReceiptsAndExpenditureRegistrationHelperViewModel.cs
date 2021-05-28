@@ -16,8 +16,8 @@ namespace WPF.ViewModels
         private readonly ReceiptsAndExpenditureOperation OperationData;
         private ObservableCollection<Content> contents;
         private Content selectedContent;
-        private string searchContentText;
-        private string searchAccountingSubject;
+        private string searchContentText = string.Empty;
+        private string searchAccountingSubject = string.Empty;
         private bool windowCloseSwich;
 
         public ReceiptsAndExpenditureRegistrationHelperViewModel

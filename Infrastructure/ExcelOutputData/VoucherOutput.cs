@@ -203,6 +203,7 @@ namespace Infrastructure.ExcelOutputData
             SetStringOriginalAndCopy(15, 3, "川崎市多摩区南生田８－１－１");
             string imagePath = ".\\files\\ReceiptStamp.png";
             myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(12, 6));
+            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(12, 16));
             //係
             SetStringOriginalAndCopy(14, 8, "係");
             LoginRep loginRep = LoginRep.GetInstance();
@@ -284,7 +285,7 @@ namespace Infrastructure.ExcelOutputData
             }
         } 
   
-        protected override double SetMaeginsBottom() => ToInch(1.4);
+        protected override double SetMaeginsBottom() => ToInch(1.3);
 
         protected override double SetMaeginsLeft() => ToInch(1.3);
 

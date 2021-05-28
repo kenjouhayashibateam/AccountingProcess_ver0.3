@@ -61,14 +61,14 @@
                         <DataGridTemplateColumn Width="2*" Header="氏名">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="金額" Width="2*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding TransportationExpensesDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="{Binding TransportationExpensesDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

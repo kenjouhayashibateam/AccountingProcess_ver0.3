@@ -47,7 +47,7 @@
                     <DataGridTemplateColumn Header="内容" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -61,7 +61,7 @@
                     <DataGridTemplateColumn Header="勘定科目" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding AccountingSubject.Subject}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding AccountingSubject.Subject}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

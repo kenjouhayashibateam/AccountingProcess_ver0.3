@@ -30,7 +30,7 @@ namespace WPF.ViewModels
             new ObservableCollection<ReceiptsAndExpenditure>();
         private ObservableCollection<ReceiptsAndExpenditure> searchReceiptsAndExpenditures;
         #endregion
-        private DateTime searchDate;
+        private DateTime searchDate = DateTime.Today;
         private ReceiptsAndExpenditure selectedVoucherContent;
         private ReceiptsAndExpenditure selectedSeachReceiptsAndExpenditure;
         private readonly IDataOutput DataOutput;
@@ -50,10 +50,11 @@ namespace WPF.ViewModels
             OperationData.Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
+            SetSortColumns();
+            Pagination.SelectedSortColumn = Pagination.SortColumns[0];
+            Pagination.SortDirectionIsASC = false;
             SearchDate = DateTime.Today;
             OutputButtonContent = "登録して出力";
-            Pagination.SortDirectionIsASC = false;
-            Pagination.SelectedSortColumn = Pagination.SortColumns[0];
             SetDelegateCommand();
         }
         public CreateVoucherViewModel() : this
@@ -63,7 +64,7 @@ namespace WPF.ViewModels
             Pagination.SortColumns = new Dictionary<int, string>()
             {
                 { 0,"ID"},
-                { 1,"コード"}
+                { 1,"科目コード"}
             };
         /// <summary>
         /// 新規登録画面を表示するコマンド
@@ -214,12 +215,13 @@ namespace WPF.ViewModels
         private void CreateReceiptsAndExpenditures(bool isPageReset)
         {
             Pagination.CountReset(isPageReset);
-            var(count,list)=
+            (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (TextHelper.DefaultDate, new DateTime(9999, 1, 1),
-                AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty, 
-                string.Empty, true, true, true, true, SearchDate,SearchDate, TextHelper.DefaultDate, 
-                new DateTime(9999, 1, 1), Pagination.PageCount,"ID",false);
+                AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
+                string.Empty, true, true, true, true, SearchDate, SearchDate, TextHelper.DefaultDate,
+                new DateTime(9999, 1, 1), Pagination.PageCount, Pagination.SelectedSortColumn,
+                Pagination.SortDirectionIsASC);
             SearchReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = count;
             Pagination.SetProperty();
@@ -341,14 +343,8 @@ namespace WPF.ViewModels
             SetOutputEnabled();
         }
 
-        public void SortNotify()
-        {
-            CreateReceiptsAndExpenditures(true);
-        }
+        public void SortNotify() => CreateReceiptsAndExpenditures(true);
 
-        public void PageNotify()
-        {
-            CreateReceiptsAndExpenditures(false);
-        }
+        public void PageNotify() => CreateReceiptsAndExpenditures(false);        
     }
 }

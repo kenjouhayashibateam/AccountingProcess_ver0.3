@@ -44,6 +44,7 @@ namespace Infrastructure.ExcelOutputData
             string content = string.Empty ;
             string location = default;
             string creditDept = default;
+            string clerk = default;
 
             bool isGoNext = false;
             int contentCount = 0;
@@ -51,13 +52,14 @@ namespace Infrastructure.ExcelOutputData
             int inputContentColumn = 0;
             int TotalPrice = 0;
             DateTime currentDate = TextHelper.DefaultDate;
+
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending
                 (r => r.IsPayment)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
-                .ThenBy(r=>r.Content.AccountingSubject.Subject)
-                .ThenBy(r=>r.Location)
-                .ThenBy(r=>r.CreditDept.Dept))
+                .ThenBy(r => r.Content.AccountingSubject.Subject)
+                .ThenBy(r => r.Location)
+                .ThenBy(r => r.CreditDept.Dept))
             {
                 if (rae.IsPayment!=IsPayment) continue;
                 //codeの初期値を設定する
@@ -69,6 +71,7 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(content)) content = rae.Content.Text;//contentの初期値を設定する
                 if (string.IsNullOrEmpty(location)) location = rae.Location;
                 if (string.IsNullOrEmpty(creditDept)) creditDept = rae.CreditDept.Dept;
+                if (string.IsNullOrEmpty(clerk)) clerk = TextHelper.GetFirstName(rae.RegistrationRep.Name);
                 contentCount++;
 
                 isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
@@ -96,6 +99,7 @@ namespace Infrastructure.ExcelOutputData
                     TotalPrice = rae.Price;
                     creditDept = rae.CreditDept.Dept;
                     location = rae.Location;
+                    clerk = TextHelper.GetFirstName(rae.RegistrationRep.Name);
                     contentCount = 1;
                     NextPage();//次のページへ
                 }
@@ -128,12 +132,19 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
-                myWorksheet.Cell(StartRowPosition + 6, 20).Value =
-                    TextHelper.GetFirstName(OutputRep.Name);
+                if(TextHelper.GetFirstName(OutputRep.Name)==clerk)
+                    myWorksheet.Cell(StartRowPosition + 6, 20).Value =
+                        TextHelper.GetFirstName(OutputRep.Name);
+                else
+                {
+                    myWorksheet.Cell(StartRowPosition + 6, 20).Value = clerk;
+                    myWorksheet.Cell(StartRowPosition + 6, 18).Value =
+                        TextHelper.GetFirstName(OutputRep.Name);
+                }
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = OutputDate.Day;
-                
+               
                 string ass =
                     $"{rae.Content.AccountingSubject.Subject} : " +
                     $"{rae.Content.AccountingSubject.SubjectCode}";
@@ -209,7 +220,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(i, 11).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                 myWorksheet.Cell(i, 11).Style.Alignment.SetShrinkToFit(true);
             }
-            myWorksheet.Cell(StartRowPosition + 6, 20).Style
+            MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 6, 20).Style
                 //.Alignment.SetTopToBottom(true)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);

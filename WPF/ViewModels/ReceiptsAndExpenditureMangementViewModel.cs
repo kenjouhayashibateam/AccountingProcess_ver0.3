@@ -118,13 +118,13 @@ namespace WPF.ViewModels
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             DataOutput = dataOutput;
             IsPreviousDayOutputEnabled = false;
-            SetDelegateCommand();
             SetProperty();
+            SetDelegateCommand();
             DefaultListExpress();
         }
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
-            DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+                DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         public void SetSortColumns() =>
             Pagination.SortColumns = new Dictionary<int, string>()
             {
@@ -271,41 +271,12 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOutputButtonContent = "出納帳";
             PaymentSlipsOutputButtonContent = "入金伝票";
             WithdrawalSlipsOutputButtonContent = "出金伝票";
-            if (ClosingCashboxHour < DateTime.Now.Hour)
-            {
-                ReceiptsAndExpenditures =
-                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                    AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
-                    string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
-                    new DateTime(1900, 1, 1), new DateTime(1900, 1, 1), Pagination.PageCount, 
-                    Pagination.SelectedSortColumn,Pagination.SortDirectionIsASC).List;
-                AllDataList =
-                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                    AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
-                    string.Empty, false, true, false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
-                    new DateTime(1900, 1, 1), new DateTime(1900, 1, 1));
-            }
-            else
-            {
-                ReceiptsAndExpenditures =
-                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                    string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
-                    false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
-                    new DateTime(1900, 1, 1), Pagination.PageCount,Pagination.SelectedSortColumn,
-                    Pagination.SortDirectionIsASC).List;
-                AllDataList =
-                    DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                    string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, false, true,
-                    false, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), new DateTime(1900, 1, 1),
-                    new DateTime(1900, 1, 1));
-            }
+            IsLocationSearch = ClosingCashboxHour > DateTime.Now.Hour;
             IsPreviousDayOutput = false;
-            ReferenceLocationCheckBoxContent = $"{AccountingProcessLocation.Location}の伝票のみを表示";
+            ReferenceLocationCheckBoxContent = $"経理担当場所{Space}:{Space}" +
+                                                                        $"{AccountingProcessLocation.Location}の伝票のみを表示";
             IsPreviousDayOutputEnabled = LoginRep.Rep.IsAdminPermisson;
             SetListTitle();
-            SetPeymentSum();
-            SetWithdrawalSumAndTransferSum();
-            SetCashboxTotalAmount();
         }
         /// <summary>
         /// 一覧のタイトルをセットします
@@ -356,7 +327,6 @@ namespace WPF.ViewModels
                     $"リストの収支に対して現金が\r\n{AmountWithUnit(Math.Abs(difference))}" +
                     $"{(difference < 0 ? "超過" : "不足")}しています";
             }
-
             SetOutputGroupEnabled();
         }
         /// <summary>
@@ -1103,9 +1073,9 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetBalanceFinalAccount()
         {
-           ListAmount = PreviousDayFinalAccount;
-            
-            foreach(ReceiptsAndExpenditure receiptsAndExpenditure in AllDataList)
+            ListAmount = PreviousDayFinalAccount;
+
+            foreach (ReceiptsAndExpenditure receiptsAndExpenditure in AllDataList)
             {
                 if (receiptsAndExpenditure.IsPayment) ListAmount += receiptsAndExpenditure.Price;
                 else ListAmount -= receiptsAndExpenditure.Price;
@@ -1127,7 +1097,7 @@ namespace WPF.ViewModels
             }
             else BalanceFinalAccount = 
                     $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
-
+            SetCashboxTotalAmount();
             SetOutputButtonEnabled(ListAmount);
         }
         /// <summary>
@@ -1195,6 +1165,7 @@ namespace WPF.ViewModels
                     Location,isPageCountReset);
             Pagination.SetProperty();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
+            SetCashboxTotalAmount();
         }
         /// <summary>
         /// データベースに接続して出納データリストを生成します

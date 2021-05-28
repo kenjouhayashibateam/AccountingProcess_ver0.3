@@ -89,14 +89,14 @@
                     <DataGridTemplateColumn Header="日付" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="施主名" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding OwnerName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding OwnerName}" VerticalAlignment="Center" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -132,7 +132,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Almsgiving,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Almsgiving,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -144,7 +144,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding CarTip,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding CarTip,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -156,7 +156,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding MealTip,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding MealTip,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -168,7 +168,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding CarAndMealTip,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding CarAndMealTip,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -180,7 +180,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding SocialGathering,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding SocialGathering,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -192,14 +192,14 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding TotalAmount,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding TotalAmount,StringFormat={}{0:N0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="備考" Width="3*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding Note}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

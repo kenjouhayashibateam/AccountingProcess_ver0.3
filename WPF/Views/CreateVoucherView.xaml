@@ -89,7 +89,7 @@
                                     <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <ComboBox Name="SortContentComboBox" Grid.Column="5" ItemsSource="{Binding Pagination.SortColumns}" SelectedValue="{Binding Pagination.SelectedSortColumn}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalAlignment="Center" Margin="5,1,5,3"/>
+                            <ComboBox Name="SortContentComboBox" Grid.Column="5" ItemsSource="{Binding Pagination.SortColumns}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalContentAlignment="Center" Margin="5,1,5,3"/>
                             <ToggleButton Grid.Column="6" Content="{Binding Pagination.SortDirectionContent}" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="5,1,5,3"/>
                         </Grid>
                     </GroupBox.Header>
@@ -105,28 +105,28 @@
                             <DataGridTemplateColumn Header="勘定科目" Width="4*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="内容" Width="5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="詳細" Width="6*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="金額" Width="3*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
