@@ -61,7 +61,7 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.Location)
                 .ThenBy(r => r.CreditDept.Dept))
             {
-                if (rae.IsPayment!=IsPayment) continue;
+                if (rae.IsPayment != IsPayment) continue;
                 //codeの初期値を設定する
                 if (string.IsNullOrEmpty(code)) code = rae.Content.AccountingSubject.SubjectCode;
                 //subjectの初期値を設定する

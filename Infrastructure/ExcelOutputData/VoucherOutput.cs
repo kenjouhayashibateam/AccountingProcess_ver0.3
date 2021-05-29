@@ -30,12 +30,12 @@ namespace Infrastructure.ExcelOutputData
             //宛名欄
             SetBottomBorderOriginalAndCopy(3, 1, 3, 5);
             //総額欄
-            SetBottomBorderOriginalAndCopy(5, 2, 5, 8);
+            SetBottomBorderOriginalAndCopy(5, 2, 5, 9);
             //但し書き欄
-            SetBottomBorderOriginalAndCopy(10, 2, 10, 8);
+            SetBottomBorderOriginalAndCopy(10, 2, 10, 9);
             //係印欄
-            SetClerkMarkField(14, 8, 16, 9);
-            SetClerkMarkField(14, CopyColumnPosition(8), 16, CopyColumnPosition(9));
+            SetClerkMarkField(14, 9, 16, 10);
+            SetClerkMarkField(14, CopyColumnPosition(9), 16, CopyColumnPosition(10));
 
             void SetBottomBorderOriginalAndCopy(int row1,int column1,int row2,int column2)
             {
@@ -54,7 +54,7 @@ namespace Infrastructure.ExcelOutputData
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetDiagonalBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin);
-                MySheetCellRange(14, CopyColumnPosition(8), 16, CopyColumnPosition(9)).Style
+                MySheetCellRange(14, CopyColumnPosition(9), 16, CopyColumnPosition(10)).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
@@ -74,15 +74,17 @@ namespace Infrastructure.ExcelOutputData
             SetCellPropertyOriginalAndCopy(1, 1);
             //ナンバー
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Bottom, 11);
-            SetCellPropertyOriginalAndCopy(1, 7);
+            SetCellPropertyOriginalAndCopy(1, 8);
             //日付欄
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Center, 11);
-            SetCellPropertyOriginalAndCopy(2, 6);
+            SetCellPropertyOriginalAndCopy(2, 7);
             //宛名欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Bottom, 18);
-            SetRangeProperyOriginalAndCopy(3, 1, 3, 5);
+            SetRangeProperyOriginalAndCopy(3, 1, 3, 4);
             myWorksheet.Cell(3, 1).Style.Alignment.SetShrinkToFit(true);
             myWorksheet.Cell(3, CopyColumnPosition(1)).Style.Alignment.SetShrinkToFit(true);
+            SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Bottom, 18);
+            SetCellPropertyOriginalAndCopy(3, 5);
             //冥加金文字列
             SetLocalProperty(XLAlignmentHorizontalValues.Left, XLAlignmentVerticalValues.Bottom, 11);
             SetCellPropertyOriginalAndCopy(4, 2);
@@ -91,15 +93,15 @@ namespace Infrastructure.ExcelOutputData
             SetCellPropertyOriginalAndCopy(5, 3);
             //円也文字列
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Bottom, 11);
-            SetCellPropertyOriginalAndCopy(5, 7);
+            SetCellPropertyOriginalAndCopy(5, 8);
             //但し文字列
             SetLocalProperty(XLAlignmentHorizontalValues.Left, XLAlignmentVerticalValues.Bottom, 11);
             SetCellPropertyOriginalAndCopy(6, 2);
             //但し書き欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 14);
-            SetRangeProperyOriginalAndCopy(7, 2, 10, 8);
-            MySheetCellRange(7, 2, 10, 8).Style.Alignment.SetShrinkToFit(true);
-            MySheetCellRange(7, CopyColumnPosition(2), 10, CopyColumnPosition(8)).Style
+            SetRangeProperyOriginalAndCopy(7, 2, 10, 9);
+            MySheetCellRange(7, 2, 10, 9).Style.Alignment.SetShrinkToFit(true);
+            MySheetCellRange(7, CopyColumnPosition(2), 10, CopyColumnPosition(9)).Style
                 .Alignment.SetShrinkToFit(true);
             //上記有難くお受けしました文字列
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Bottom, 11);
@@ -112,7 +114,7 @@ namespace Infrastructure.ExcelOutputData
             SetCellPropertyOriginalAndCopy(13, 5);
             //係文字列、係印欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 11);
-            SetRangeProperyOriginalAndCopy(14, 8, 16, 9);
+            SetRangeProperyOriginalAndCopy(14, 9, 16, 10);
             //郵便番号欄
             SetLocalProperty(XLAlignmentHorizontalValues.Left, XLAlignmentVerticalValues.Center, 10);
             SetCellPropertyOriginalAndCopy(15, 1);
@@ -158,8 +160,8 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetColumnSizes() => new double[]
-        { 3.13, 6.88, 3.13, 1.38, 6.88, 12.63, 3.13, 3.13, 3.5, 14.86,
-            3.13, 6.88, 3.13, 1.38, 6.88, 12.63, 3.13, 3.13, 3.5 };
+        { 3.13, 6.88, 3.13, 1.38, 6.88, 4,7.86, 3.13, 3.13, 3.5, 14.86,
+            3.13, 6.88, 3.13, 1.38, 6.88,  4,7.86, 3.13, 3.13, 3.5 };
 
         protected override void SetDataStrings()
         {
@@ -169,16 +171,17 @@ namespace Infrastructure.ExcelOutputData
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
             //ナンバー
-            SetStringOriginalAndCopy(1, 7, $"№{VoucherData.ID}");
+            SetStringOriginalAndCopy(1, 8, $"№{VoucherData.ID}");
             //日付
-            SetStringOriginalAndCopy(2, 6, DateTime.Now.ToString("yyyy年MM月dd日"));
+            SetStringOriginalAndCopy(2, 7, DateTime.Now.ToString("yyyy年MM月dd日"));
             //宛名
-            SetStringOriginalAndCopy(3, 1, $"{VoucherData.Addressee}　様");
+            SetStringOriginalAndCopy(3, 1, VoucherData.Addressee);
+            SetStringOriginalAndCopy(3, 5, "様");
             //総額
             SetStringOriginalAndCopy(4, 2, "冥加金");
             SetStringOriginalAndCopy(5, 3, 
                 $"{TextHelper.CommaDelimitedAmount(VoucherData.TotalAmount)}-");
-            SetStringOriginalAndCopy(5, 7, "円也");
+            SetStringOriginalAndCopy(5, 8, "円也");
             SetStringOriginalAndCopy(6, 2, "但し");
             //但し書き
             if (VoucherData.ReceiptsAndExpenditures.Count < 5) SingleLineOutput();
@@ -202,12 +205,12 @@ namespace Infrastructure.ExcelOutputData
             //住所
             SetStringOriginalAndCopy(15, 3, "川崎市多摩区南生田８－１－１");
             string imagePath = ".\\files\\ReceiptStamp.png";
-            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(12, 6));
-            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(12, 16));
+            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 7));
+            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 18));
             //係
-            SetStringOriginalAndCopy(14, 8, "係");
+            SetStringOriginalAndCopy(14, 9, "係");
             LoginRep loginRep = LoginRep.GetInstance();
-            SetStringOriginalAndCopy(15, 8, GetFirstName(loginRep.Rep.Name));
+            SetStringOriginalAndCopy(15, 9, GetFirstName(loginRep.Rep.Name));
 
             void SetStringOriginalAndCopy(int row,int column,string value)
             {
@@ -226,14 +229,14 @@ namespace Infrastructure.ExcelOutputData
                     if (prevText == ReturnProvisoContent(rae))
                     {
                         provisoAmount += rae.Price;
-                        SetStringOriginalAndCopy((10 - (i + 1)), 2, string.Empty);
+                        SetStringOriginalAndCopy(10 - (i + 1), 2, string.Empty);
                     }
                     else
                     {
                         provisoAmount = rae.Price;
                         prevText = ReturnProvisoContent(rae);
                     }
-                        SetStringOriginalAndCopy((10 - i), 2, ProvisoString(rae));
+                        SetStringOriginalAndCopy(10 - i, 2, ProvisoString(rae));
                     
                     i--;
                 }         
@@ -296,16 +299,16 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetMerge()
         {
             //タイトル
-            SetMergeOriginalAndCopy(1, 1, 1, 6);
-            SetMergeOriginalAndCopy(1, 7, 1, 9);
+            SetMergeOriginalAndCopy(1, 1, 1, 7);
+            SetMergeOriginalAndCopy(1, 8, 1, 10);
             //日付
-            SetMergeOriginalAndCopy(2, 6, 2, 9);
+            SetMergeOriginalAndCopy(2, 7, 2, 10);
             //宛名
-            SetMergeOriginalAndCopy(3, 1, 3, 5);
+            SetMergeOriginalAndCopy(3, 1, 3, 4);
             //総額
-            SetMergeOriginalAndCopy(5, 3, 5, 6);
+            SetMergeOriginalAndCopy(5, 3, 5, 7);
             //円也
-            SetMergeOriginalAndCopy(5, 7, 5, 8);
+            SetMergeOriginalAndCopy(5, 8, 5, 9);
             //但し書き
             if(VoucherData.ReceiptsAndExpenditures.Count>4)
             {
@@ -313,34 +316,34 @@ namespace Infrastructure.ExcelOutputData
                 SetMergeOriginalAndCopy(8, 2, 8, 5);
                 SetMergeOriginalAndCopy(9, 2, 9, 5);
                 SetMergeOriginalAndCopy(10, 2, 10, 5);
-                SetMergeOriginalAndCopy(7, 6, 7, 8);
-                SetMergeOriginalAndCopy(8, 6, 8, 8);
-                SetMergeOriginalAndCopy(9, 6, 9, 8);
-                SetMergeOriginalAndCopy(10, 6, 10, 8);
+                SetMergeOriginalAndCopy(7, 6, 7, 9);
+                SetMergeOriginalAndCopy(8, 6, 8, 9);
+                SetMergeOriginalAndCopy(9, 6, 9, 9);
+                SetMergeOriginalAndCopy(10, 6, 10, 9);
             }
             else
             {
-                SetMergeOriginalAndCopy(7, 2, 7, 8);
-                SetMergeOriginalAndCopy(8, 2, 8, 8);
-                SetMergeOriginalAndCopy(9, 2, 9, 8);
-                SetMergeOriginalAndCopy(10, 2, 10, 8);
+                SetMergeOriginalAndCopy(7, 2, 7, 9);
+                SetMergeOriginalAndCopy(8, 2, 8, 9);
+                SetMergeOriginalAndCopy(9, 2, 9, 9);
+                SetMergeOriginalAndCopy(10, 2, 10, 9);
             }
             //上記有難くお受けしました
-            SetMergeOriginalAndCopy(11, 2, 11, 8);
+            SetMergeOriginalAndCopy(11, 2, 11, 9);
             //団体名
-            SetMergeOriginalAndCopy(13, 5, 14, 6);
+            SetMergeOriginalAndCopy(13, 5, 14, 7);
             //団体肩書
             SetMergeOriginalAndCopy(14, 1, 14, 3);
             //係
-            SetMergeOriginalAndCopy(14, 8, 14, 9);
+            SetMergeOriginalAndCopy(14, 9, 14, 10);
             //郵便番号
             SetMergeOriginalAndCopy(15, 1, 15, 2);
             //住所
-            SetMergeOriginalAndCopy(15, 3, 15, 6);
+            SetMergeOriginalAndCopy(15, 3, 15, 7);
             //係印
-            SetMergeOriginalAndCopy(15, 8, 16, 9);
+            SetMergeOriginalAndCopy(15, 9, 16, 10);
             //電話番号
-            SetMergeOriginalAndCopy(16, 2, 16, 6);
+            SetMergeOriginalAndCopy(16, 2, 16, 7);
 
             void SetMergeOriginalAndCopy(int row1, int column1, int row2, int column2)
             {

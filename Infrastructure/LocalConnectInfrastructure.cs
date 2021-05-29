@@ -241,7 +241,7 @@ namespace Infrastructure
             return list;            
         }
 
-        public string CallContentConvertText(string id) => "法事冥加";
+        public string CallContentConvertText(string id) => null;
 
         public ObservableCollection<CreditDept> ReferenceCreditDept
             (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
