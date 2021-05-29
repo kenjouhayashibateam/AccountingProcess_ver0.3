@@ -122,3 +122,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csp
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.AssemblyReference.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.baml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.g.cs
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.baml

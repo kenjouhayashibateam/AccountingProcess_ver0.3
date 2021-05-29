@@ -1,28 +1,92 @@
 ﻿using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
+using System;
+using System.Linq;
 using WPF.ViewModels.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
     public class CashJournalManagementViewModel : BaseViewModel
     {
-        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect) { }
-        public CashJournalManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        private string yearString;
+        private string monthString = "1";
+
+        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect) : 
+            base(dataBaseConnect) 
+        {
+            YearString = DateTime.Now.Year.ToString();
+            MonthString = DateTime.Now.Month.ToString();
+        }
+        public CashJournalManagementViewModel() : 
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 出力する年
+        /// </summary>
+        public string YearString
+        {
+            get => yearString;
+            set
+            {
+                yearString = int.TryParse(value, out int i) ? i.ToString() : string.Empty;
+                ValidationProperty(nameof(YearString), yearString);
+                CallPropertyChanged();
+                ValidationProperty(nameof(MonthString), MonthString);
+            }
+        }
+        /// <summary>
+        /// 出力する月
+        /// </summary>
+        public string MonthString
+        {
+            get => monthString;
+            set
+            {
+                monthString = int.TryParse(value, out int i) ? i.ToString() : string.Empty;
+                ValidationProperty(nameof(MonthString), monthString);
+                CallPropertyChanged();
+            }
+        }
 
         public override void SetRep(Rep rep)
         {
-            throw new System.NotImplementedException();
+            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+            else
+            {
+                IsAdminPermisson = rep.IsAdminPermisson;
+                WindowTitle = $"{DefaultWindowTitle}（ログイン : {GetFirstName(rep.Name)}）";
+            }
         }
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            throw new System.NotImplementedException();
+            switch (propertyName)
+            {
+                case nameof(YearString):
+                    {
+                        SetNullOrEmptyError(propertyName, (string)value);
+                        ErrorsListOperation
+                            (int.Parse((string)value) > DateTime.Now.Year, propertyName,
+                                "未来の出納帳は出せません");
+                        break;
+                    }
+                case nameof(MonthString):
+                    {
+                        SetNullOrEmptyError(propertyName, (string)value);
+                        int y = IntAmount(YearString);
+                        int m = IntAmount((string)value);
+                        ErrorsListOperation(!Enumerable.Range(1, 12).Contains(m), propertyName, "月が無効です");
+                        if (GetErrors(propertyName) == null) ErrorsListOperation
+                               (new DateTime(y, m, 1) > DateTime.Now, propertyName, "未来の出納帳は出せません");
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
 
-        protected override void SetWindowDefaultTitle()
-        {
-            throw new System.NotImplementedException();
-        }
+        protected override void SetWindowDefaultTitle() => DefaultWindowTitle =
+            $"出納帳出力{Space}:{Space}{AccountingProcessLocation.Location}";
     }
 }

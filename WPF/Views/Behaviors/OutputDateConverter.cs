@@ -15,16 +15,11 @@ namespace WPF.Views.Behaviors
             return dateTime == TextHelper.DefaultDate ? "未出力" : dateTime.ToString("yy/MM/dd");
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
 
         private static OutputDateConverter _converter;
 
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return _converter ??= new OutputDateConverter();
-        }
+        public override object ProvideValue(IServiceProvider serviceProvider) =>
+            _converter ??= new OutputDateConverter();
     }
 }

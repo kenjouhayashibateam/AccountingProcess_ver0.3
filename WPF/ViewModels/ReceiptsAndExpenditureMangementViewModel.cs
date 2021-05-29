@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
@@ -132,16 +131,6 @@ namespace WPF.ViewModels
                 {1,"科目コード" },
                 {2,"入出金日" }
             };
-        /// <summary>
-        /// 次の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand NextPageListExpressCommand { get; set; }
-        private void NextPageListExpress() => Pagination.PageCountAdd();
-        /// <summary>
-        /// 前の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress() => Pagination.PageCountSubtract();
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
@@ -350,7 +339,8 @@ namespace WPF.ViewModels
             DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
                 PeymentSumDisplayValue,WithdrawalSumDisplayValue, TransferSumDisplayValue, 
                 TodaysFinalAccount, AmountWithUnit(IntAmount( YokohamaBankAmount)), 
-                AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount,IsYokohamaBankCheck,IsCeresaCheck));
+                AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount,IsYokohamaBankCheck,
+                IsCeresaCheck));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
         }
@@ -376,10 +366,8 @@ namespace WPF.ViewModels
             RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
             ShowRegistrationCommand = new DelegateCommand(() => ShowRegistration(), () => true);
             ShowUpdateCommand = new DelegateCommand(() => ShowUpdate(), () => true);
-            PrevPageListExpressCommand = new DelegateCommand
-                (() => PrevPageListExpress(), () => true);
-            NextPageListExpressCommand = new DelegateCommand
-                (() => NextPageListExpress(), () => true);
+            ShowCashJournalManagementCommand = new DelegateCommand
+                (() => ShowCashJournalManagement(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -1202,7 +1190,7 @@ namespace WPF.ViewModels
             else
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                WindowTitle = $"{DefaultWindowTitle}（ログイン : {GetFirstName(rep.Name)}）";
             }
         }
 

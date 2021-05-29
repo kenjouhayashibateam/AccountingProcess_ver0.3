@@ -155,15 +155,15 @@
                             <TextBlock Grid.Column="2" Text="{Binding ListTitle}" VerticalAlignment="Center"/>
                             <Button x:Name="PrevButton" Grid.Column="3" Content="前の10件" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
-                                    <KeyBinding Command="{Binding PrevPageListExpressCommand}" Key="Space"/>
-                                    <MouseBinding Command="{Binding PrevPageListExpressCommand}" MouseAction="LeftClick"/>
+                                    <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <TextBlock Grid.Column="4" Text="{Binding Pagination.ListPageInfo}" VerticalAlignment="Center"/>
                             <Button x:Name="NextButton" Grid.Column="5" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
-                                    <KeyBinding Command="{Binding NextPageListExpressCommand}" Key="Space"/>
-                                    <MouseBinding Command="{Binding NextPageListExpressCommand}" MouseAction="LeftClick"/>
+                                    <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <ComboBox Name="SortGanreComboBox" Grid.Column="6" ItemsSource="{Binding Pagination.SortColumns}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalContentAlignment="Center" Margin="5,1,5,3"/>
@@ -192,7 +192,7 @@
                                 </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsValidity}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding IsValidity}" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

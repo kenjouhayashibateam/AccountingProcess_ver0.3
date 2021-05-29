@@ -4,13 +4,63 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
-        Title="CashJournalManagementView" Height="450" Width="800">
+        Title="{Binding WindowTitle}" Height="200" Width="350">
     <Window.DataContext>
         <vm:CashJournalManagementViewModel/>
     </Window.DataContext>
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="出力月を設定してボタンをクリックしてください" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="西暦" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox x:Name="YearTextBox" Text="{Binding YearString}" MaxLength="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Grid.Column="1" Margin="5"/>
+                    <TextBlock Text="年" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox x:Name="MonthTextBox" Grid.Column="3" Text="{Binding MonthString}" MaxLength="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Text="月の出納帳を出力する" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="OutputButton" Grid.Row="1" Grid.Column="1" Content="出力" Margin="5"></Button>
+                </Grid>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CloseButton" Content="閉じる" Grid.Column="1" Margin="5">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
+                    <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+        </Grid>
     </Grid>
 </Window>
