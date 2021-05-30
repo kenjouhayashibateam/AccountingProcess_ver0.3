@@ -35,7 +35,7 @@ namespace Domain.Repositories
         /// <param name="receiptsAndExpenditures">出力する出納データ</param>
         /// <param name="previousDayBalance">出力する出納データの前日残高</param>
         void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure>
-            receiptsAndExpenditures,int previousDayBalance);
+            receiptsAndExpenditures);
         /// <summary>
         /// 入出金伝票を出力します
         /// </summary>

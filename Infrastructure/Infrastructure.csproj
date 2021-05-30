@@ -75,7 +75,7 @@
     <Compile Include="ExcelOutputData\OutputSingleSheetData.cs" />
     <Compile Include="ExcelOutputData\ExcelOutputInfrastructure.cs" />
     <Compile Include="ExcelOutputData\OutputList.cs" />
-    <Compile Include="ExcelOutputData\ReceiptsAndExpenditureOutput.cs" />
+    <Compile Include="ExcelOutputData\CashJournalOutput.cs" />
     <Compile Include="ExcelOutputData\SlipOutput.cs" />
     <Compile Include="ExcelOutputData\VoucherOutput.cs" />
     <Compile Include="LocalConnectInfrastructure.cs" />

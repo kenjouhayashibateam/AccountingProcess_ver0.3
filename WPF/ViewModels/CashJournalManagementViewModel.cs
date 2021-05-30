@@ -1,26 +1,57 @@
-﻿using Domain.Entities.ValueObjects;
+﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
+    /// <summary>
+    /// 出納帳出力画面ViewModel
+    /// </summary>
     public class CashJournalManagementViewModel : BaseViewModel
     {
         private string yearString;
         private string monthString = "1";
+        private ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
+        private IDataOutput DataOutput;
 
-        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect) : 
+        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect,IDataOutput dataOutput) : 
             base(dataBaseConnect) 
         {
+            DataOutput = dataOutput;
             YearString = DateTime.Now.Year.ToString();
             MonthString = DateTime.Now.Month.ToString();
+            OutputCommand = new DelegateCommand(() => Output(), () => true);
         }
-        public CashJournalManagementViewModel() : 
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public CashJournalManagementViewModel() :
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect(), DefaultInfrastructure.GetDefaultDataOutput())
+        { }
+        /// <summary>
+        /// 出納帳出力コマンド
+        /// </summary>
+        public DelegateCommand OutputCommand { get; }
+        private async void Output()
+        {
+            DateTime searchDate = new DateTime(IntAmount(YearString), IntAmount(MonthString), 1);
+            
+            await Task.Run(
+                () => DataOutput.ReceiptsAndExpenditureData
+                    (
+                        DataBaseConnect.ReferenceReceiptsAndExpenditure
+                            (DefaultDate, DateTime.Now, string.Empty, string.Empty, string.Empty, string.Empty,
+                                string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now, searchDate,
+                                searchDate.AddMonths(1).AddDays(-1))
+                    )
+                );
+
+        }
         /// <summary>
         /// 出力する年
         /// </summary>

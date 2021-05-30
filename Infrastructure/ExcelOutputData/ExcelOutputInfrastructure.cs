@@ -48,10 +48,10 @@ namespace Infrastructure.ExcelOutputData
         }
 
         public void ReceiptsAndExpenditureData
-            (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, int previousDayBalance)
+            (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures)
         {
-            ReceiptsAndExpenditureOutput raeo = 
-                new ReceiptsAndExpenditureOutput(receiptsAndExpenditures, previousDayBalance);
+            CashJournalOutput raeo = 
+                new CashJournalOutput(receiptsAndExpenditures);
             raeo.Output();
         }
 
