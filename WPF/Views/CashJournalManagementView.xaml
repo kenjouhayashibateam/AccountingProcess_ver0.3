@@ -46,7 +46,7 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="OutputButton" Grid.Row="1" Grid.Column="1" Content="出力" Margin="5">
+                    <Button x:Name="OutputButton" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding OutputButtonEnabled}" Content="{Binding OutputButtonContent}" Margin="5">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding OutputCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding OutputCommand}" MouseAction="LeftClick"/>

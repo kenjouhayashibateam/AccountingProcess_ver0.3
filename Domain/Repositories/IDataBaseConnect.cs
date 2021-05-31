@@ -197,12 +197,14 @@ namespace Domain.Repositories
         /// <param name="sortColumn">ソートカラム</param>
         /// <param name="sortDirection">ソート方向</param>
         /// <returns></returns>
-        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List) ReferenceReceiptsAndExpenditure
-            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                string content, string detail, string accountingSubject, string accountingSubjectCode,
-                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
-                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
-                DateTime outputDateEnd,int pageCount,string sortColumn,bool sortDirection);
+        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
+            ReferenceReceiptsAndExpenditure
+                (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
+                    string content, string detail, string accountingSubject, string accountingSubjectCode,
+                    bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
+                    bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
+                    DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
+                    bool sortDirection);
         /// <summary>
         /// 前日決算額を返します
         /// </summary>
@@ -238,7 +240,8 @@ namespace Domain.Repositories
         /// <param name="startDate">検索最古日時</param>
         /// <param name="dateTime">検索最新日時</param>
         /// <returns></returns>
-        public ObservableCollection<Condolence> ReferenceCondolence(DateTime startDate, DateTime endDate,string location);
+        public ObservableCollection<Condolence> ReferenceCondolence
+            (DateTime startDate, DateTime endDate,string location);
         /// <summary>
         /// 御布施一覧データを検索します
         /// </summary>

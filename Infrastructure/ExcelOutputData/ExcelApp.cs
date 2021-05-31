@@ -90,7 +90,8 @@ namespace Infrastructure.ExcelOutputData
 
             myWorkbooks = App.Workbooks;
             //出力ファイルを検出して閉じる
-            foreach (Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks) if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);             
+            foreach (Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks)
+                if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);
             //開いているワークブックがなければエクセルアプリケーションを終了する
             if (myWorkbooks.Count == 0) App.Quit();
         }
@@ -171,6 +172,8 @@ namespace Infrastructure.ExcelOutputData
         /// <param name="cell2Row">終点CellのRow</param>
         /// <param name="cell2Column">終点CellのCulumn</param>
         /// <returns>ClosedXML.Excel.Range</returns>
-        protected IXLRange MySheetCellRange(int cell1Row, int cell1Column, int cell2Row, int cell2Column) => myWorksheet.Range(myWorksheet.Cell(cell1Row, cell1Column), myWorksheet.Cell(cell2Row, cell2Column));
+        protected IXLRange MySheetCellRange(int cell1Row, int cell1Column, int cell2Row, int cell2Column) =>
+            myWorksheet.Range
+                (myWorksheet.Cell(cell1Row, cell1Column), myWorksheet.Cell(cell2Row, cell2Column));
     }
 }

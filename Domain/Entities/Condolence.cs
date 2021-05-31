@@ -69,9 +69,9 @@ namespace Domain.Entities
         public string MailRepresentative { get; set; }
 
         public Condolence
-            (int iD,string location, string ownerName, string soryoName, bool isMemorialService, int almsgiving, int carTip, 
-                int mealTip, int carAndMealTip, int socialGethering, string note, DateTime accountActivityDate, string counterReceiver, 
-                string mailRepresentative)
+            (int iD,string location, string ownerName, string soryoName, bool isMemorialService, int almsgiving,
+                int carTip, int mealTip, int carAndMealTip, int socialGethering, string note,
+                DateTime accountActivityDate, string counterReceiver, string mailRepresentative)
         {
             ID = iD;
             Location = location;

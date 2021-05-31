@@ -58,7 +58,7 @@ namespace Infrastructure.ExcelOutputData
                     payment = 0;
                     withdrawal = 0;
                     SetStyleAndNextIndex();
-                    CurrentDate = rae.AccountActivityDate;
+                    CurrentDate = rae.OutputDate;
                     myWorksheet.Cell(ItemIndex + 1, 1).Value = rae.AccountActivityDate;
                     SetStyleAndNextIndex();
                 }

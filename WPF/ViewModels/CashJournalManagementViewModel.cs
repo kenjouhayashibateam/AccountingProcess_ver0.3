@@ -19,11 +19,13 @@ namespace WPF.ViewModels
     {
         private string yearString;
         private string monthString = "1";
-        private ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
-        private IDataOutput DataOutput;
+        private string outputButtonContent = "出力";
+        private bool outputButtonEnabled;
+        private readonly IDataOutput DataOutput;
 
-        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect,IDataOutput dataOutput) : 
-            base(dataBaseConnect) 
+        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect, 
+            IDataOutput dataOutput) :
+            base(dataBaseConnect)
         {
             DataOutput = dataOutput;
             YearString = DateTime.Now.Year.ToString();
@@ -31,7 +33,8 @@ namespace WPF.ViewModels
             OutputCommand = new DelegateCommand(() => Output(), () => true);
         }
         public CashJournalManagementViewModel() :
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect(), DefaultInfrastructure.GetDefaultDataOutput())
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
+                DefaultInfrastructure.GetDefaultDataOutput())
         { }
         /// <summary>
         /// 出納帳出力コマンド
@@ -40,17 +43,18 @@ namespace WPF.ViewModels
         private async void Output()
         {
             DateTime searchDate = new DateTime(IntAmount(YearString), IntAmount(MonthString), 1);
-            
+
+            OutputButtonContent = "出力中";
             await Task.Run(
                 () => DataOutput.ReceiptsAndExpenditureData
                     (
                         DataBaseConnect.ReferenceReceiptsAndExpenditure
                             (DefaultDate, DateTime.Now, string.Empty, string.Empty, string.Empty, string.Empty,
-                                string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now, searchDate,
-                                searchDate.AddMonths(1).AddDays(-1))
+                                string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now, 
+                                searchDate,searchDate.AddMonths(1).AddDays(-1))
                     )
                 );
-
+            OutputButtonContent = "出力";
         }
         /// <summary>
         /// 出力する年
@@ -79,7 +83,34 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出力ボタンのContent
+        /// </summary>
+        public string OutputButtonContent
+        {
+            get => outputButtonContent;
+            set
+            {
+                outputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出力ボタンのEnabled
+        /// </summary>
+        public bool OutputButtonEnabled
+        {
+            get => outputButtonEnabled;
+            set
+            {
+                outputButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
+        private void SetOutputButtonEnabled() =>
+            OutputButtonEnabled =
+                !HasErrors && !string.IsNullOrEmpty(YearString) && !string.IsNullOrEmpty(MonthString);
         public override void SetRep(Rep rep)
         {
             if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
@@ -115,6 +146,7 @@ namespace WPF.ViewModels
                 default:
                     break;
             }
+            SetOutputButtonEnabled();
         }
 
         protected override void SetWindowDefaultTitle() => DefaultWindowTitle =

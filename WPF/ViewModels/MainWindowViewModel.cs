@@ -103,7 +103,8 @@ namespace WPF.ViewModels
             LogoutCommand =
                 new DelegateCommand(() => Logout(), () => true);
             ShowPartTimerTransPortCommand = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()), () => true);
+                (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()), 
+                    () => true);
             ShowCreateCondolencesCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateCondolences()), () => true);
         }
