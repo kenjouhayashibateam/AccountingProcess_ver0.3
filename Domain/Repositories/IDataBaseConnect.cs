@@ -220,6 +220,12 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int CallFinalAccountPerMonth();
         /// <summary>
+        /// 決算額を返します
+        /// </summary>
+        /// <param name="monthEnd">呼び出す月最終日</param>
+        /// <returns></returns>
+        public int CallFinalAccountPerMonth(DateTime monthEnd);
+        /// <summary>
         /// 伝票の出力日を前日に変更します
         /// </summary>
         public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure);

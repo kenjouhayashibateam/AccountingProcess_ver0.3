@@ -20,6 +20,8 @@ namespace Infrastructure
 
         public int CallFinalAccountPerMonth() => 0;
 
+        public int CallFinalAccountPerMonth(DateTime monthEnd) => 10000;
+
         public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
 
         public int DeleteContentConvertText(string id) => 1;
@@ -317,44 +319,84 @@ namespace Infrastructure
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
                     ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
-                    DateTime.Today,DefaultDate,false),
-                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+               new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
-                        DefaultDate,false),
-                new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
+                        DateTime.Today.AddDays(-1),false),
+               new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,
-                        DateTime.Today.AddDays(1),DefaultDate,false),
-                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
+                        DateTime.Today.AddDays(1),DateTime.Today.AddDays(-1),false),
+               new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
                     new Content
                     ("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content7",TravelExpense,-1,"3ヶ月交通費",true),"坂本邦夫",12860,false,true,DateTime.Today,
-                        DefaultDate,false),
+                        DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content8",SuppliesExpense,-1,"コード、マウスパッド",true),"ヤマダ電機",2247,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content9",VehicleFee,-1,"ヴィッツ　ガソリン代",true),"アセント",4600,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content10",InternalMaintenanceExpenses,-1,"花苗",true),"ビバホーム",5827,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),
-                        3130000,false,true, DateTime.Today,DefaultDate,false)
-            };
+                        3130000,false,true, DateTime.Today,DateTime.Today.AddDays(-1),false),
+                            new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
+                        DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,
+                        DateTime.Today.AddDays(1),DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
+                    new Content
+                    ("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content7",TravelExpense,-1,"3ヶ月交通費",true),"坂本邦夫",12860,false,true,DateTime.Today,
+                        DateTime.Today.AddDays(-1),false),
+               new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content8",SuppliesExpense,-1,"コード、マウスパッド",true),"ヤマダ電機",2247,false,true,
+                        DateTime.Today,DateTime.Today.AddDays(-2),false),
+               new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content9",VehicleFee,-1,"ヴィッツ　ガソリン代",true),"アセント",4600,false,true,
+                        DateTime.Today,DateTime.Today.AddDays(-2),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content10",InternalMaintenanceExpenses,-1,"花苗",true),"ビバホーム",5827,false,true,
+                        DateTime.Today,DateTime.Today.AddDays(-2),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,
+                        DateTime.Today,DateTime.Today.AddDays(-2),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
+                    new Content
+                    ("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),
+                        3130000,false,true, DateTime.Today,DateTime.Today.AddDays(-2),false)
+                };
             return returnList;
         }
 
@@ -399,43 +441,43 @@ namespace Infrastructure
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
                     ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
-                    DateTime.Today,DefaultDate,false),
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
-                        DefaultDate,false),
+                        DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),string.Empty,900,true,true,
-                        DateTime.Today.AddDays(1),DefaultDate,false),
+                        DateTime.Today.AddDays(1),DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
                     new Content
                     ("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content7",TravelExpense,-1,"3ヶ月交通費",true),"坂本邦夫",12860,false,true,DateTime.Today,
-                        DefaultDate,false),
+                        DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content8",SuppliesExpense,-1,"コード、マウスパッド",true),"ヤマダ電機",2247,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content9",VehicleFee,-1,"ヴィッツ　ガソリン代",true),"アセント",4600,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content10",InternalMaintenanceExpenses,-1,"花苗",true),"ビバホーム",5827,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content11",SuspensePayment,-1,"法事両替用",true),"藤井泰子",120000,false,true,
-                        DateTime.Today,DefaultDate,false),
+                        DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content12",Seresa,-1,"口座入金",true),DateTime.Today.AddDays(-1).ToShortDateString(),
-                        3130000,false,true, DateTime.Today,DefaultDate,false)
+                        3130000,false,true, DateTime.Today,DateTime.Today.AddDays(-1),false)
             };
             return (returnList.Count, returnList);
         }

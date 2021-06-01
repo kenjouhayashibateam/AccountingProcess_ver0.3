@@ -465,17 +465,31 @@ namespace Infrastructure
 
         public int CallFinalAccountPerMonth()
         {
-            int i=default;
+            int i = default;
             DateTime previousMonthLastDay =
                 DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
-            
+
             SqlDataReader sdr = ReturnGeneretedParameterCommand
                 ("call_final_account_per_month",
                     new Dictionary<string, object>() { { "@date", previousMonthLastDay } })
                     .ExecuteReader();
-            
+
             while (sdr.Read()) i = (int)sdr["amount"];
-        
+
+            return i;
+        }
+
+        public int CallFinalAccountPerMonth(DateTime monthEnd)
+        {
+            int i = default;
+
+            SqlDataReader sdr = ReturnGeneretedParameterCommand
+                ("call_final_account_per_month",
+                    new Dictionary<string, object>() { { "@date", monthEnd } })
+                    .ExecuteReader();
+
+            while (sdr.Read()) i = (int)sdr["amount"];
+
             return i;
         }
 

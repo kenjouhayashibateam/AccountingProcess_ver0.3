@@ -42,7 +42,10 @@ namespace WPF.ViewModels
         public DelegateCommand OutputCommand { get; }
         private async void Output()
         {
-            DateTime searchDate = new DateTime(IntAmount(YearString), IntAmount(MonthString), 1);
+            DateTime searchDateStart = new DateTime(IntAmount(YearString), IntAmount(MonthString), 1);
+            DateTime searchDateEnd =
+                searchDateStart == DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)) ? DateTime.Today :
+                                                searchDateStart.AddMonths(1).AddDays(-1);
 
             OutputButtonContent = "出力中";
             await Task.Run(
@@ -51,7 +54,7 @@ namespace WPF.ViewModels
                         DataBaseConnect.ReferenceReceiptsAndExpenditure
                             (DefaultDate, DateTime.Now, string.Empty, string.Empty, string.Empty, string.Empty,
                                 string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now, 
-                                searchDate,searchDate.AddMonths(1).AddDays(-1))
+                                searchDateStart,searchDateEnd)
                     )
                 );
             OutputButtonContent = "出力";
