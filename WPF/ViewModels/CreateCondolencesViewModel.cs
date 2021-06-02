@@ -23,7 +23,7 @@ namespace WPF.ViewModels
         /// 現在のページとリストのページの総数
         /// </summary>
         private string listPageInfo;
-        private string outputButtonContent="出力";
+        private string outputButtonContent = "出力";
         private bool isOutputButtonEnabled;
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
@@ -51,6 +51,7 @@ namespace WPF.ViewModels
                 (() => ShowUpdateView(), () => true);
             OutputCommand = new DelegateCommand
                 (() => Output(), () => true); 
+
         }
         public CreateCondolencesViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(),

@@ -642,7 +642,7 @@ namespace Infrastructure
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@start_date", startDate},{"@end_date", endDate},
-                {"@location", location},{"@page", pageCount } };
+                {"@location", string.Empty},{"@page", pageCount } };
             
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_condolence",parameters).ExecuteReader();

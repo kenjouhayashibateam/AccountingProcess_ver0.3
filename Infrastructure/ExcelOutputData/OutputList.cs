@@ -29,6 +29,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.PageSetup.PaperSize = SheetPaperSize();
             myWorksheet.Style.Font.FontName = SetSheetFontName();
             NextPage();
+            PageStyle();
         }
         /// <summary>
         /// 出力するリストを保持します
@@ -54,7 +55,6 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
             for (int i = 0; i < SetColumnSizes().Length; i++) 
                 myWorksheet.Column(i + 1).Width = SetColumnSizes()[i];
-            PageStyle();
         }
     }
 }

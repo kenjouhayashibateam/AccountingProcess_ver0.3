@@ -1,9 +1,7 @@
-﻿using Domain.Entities;
-using Domain.Entities.ValueObjects;
+﻿using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;

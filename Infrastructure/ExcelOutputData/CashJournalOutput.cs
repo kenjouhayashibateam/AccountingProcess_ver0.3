@@ -21,7 +21,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// 1ページあたりの行数
         /// </summary>
-        private readonly int OnePageRowCount = 50 ;
+        private readonly int OnePageRowCount = 54;
         /// <summary>
         /// 出納データリスト
         /// </summary>
@@ -52,16 +52,17 @@ namespace Infrastructure.ExcelOutputData
             int slipWithdrawal = default;
             bool firstPage = true;
             string detailString = default;
-            string currentSubject=string.Empty;
-            DateTime currentActivityDate=DefaultDate;
+            string currentSubjectCode = string.Empty;
+            string currentDept = string.Empty;
+            DateTime currentActivityDate = DefaultDate;
             string currentLocation = string.Empty;
 
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.OutputDate)
                 .ThenByDescending(r => r.IsPayment)
-                .ThenBy(r => r.CreditDept.ID)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
-                .ThenBy(r=>r.Location))
+                .ThenBy(r => r.CreditDept.ID)
+                .ThenBy(r => r.Location))
             {
                 if (pageRowCount == 1)
                 {
@@ -103,10 +104,11 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(StartRowPosition, 9).Value =
                         CommaDelimitedAmount(pageBalance);
                     payment = pagePayment = withdrawal = pageWithdrawal = 0;
-                    pageRowCount = 1;
                     SetStyleAndNextIndex();
+                    pageRowCount = 1;
                     MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
                         .Border.SetTopBorder(XLBorderStyleValues.Double);
+                    NextPage();
                 }
                                     
                 void SetItem()
@@ -125,13 +127,14 @@ namespace Infrastructure.ExcelOutputData
                         slipPayment = rae.IsPayment ? rae.Price : 0;
                         slipWithdrawal = rae.IsPayment ? 0 : rae.Price;
                         currentLocation = rae.Location;
+                        currentSubjectCode = rae.Content.AccountingSubject.SubjectCode;
+                        currentDept = rae.CreditDept.Dept;
                         if (rae.IsPayment) slipPayment = rae.Price;
                         else slipWithdrawal = rae.Price;
                         ItemIndex = 1;
                         detailString = rae.Detail;
-                        currentSubject = rae.Content.AccountingSubject.Subject;
                         myWorksheet.Cell(StartRowPosition, 3).Value = rae.Content.AccountingSubject.SubjectCode;
-                        myWorksheet.Cell(StartRowPosition, 4).Value = currentSubject;
+                        myWorksheet.Cell(StartRowPosition, 4).Value = rae.Content.AccountingSubject.Subject;
                         myWorksheet.Cell(StartRowPosition, 5).Value = rae.Content.Text;
                         myWorksheet.Cell(StartRowPosition, 6).Value = detailString;
                         SetPrice(StartRowPosition);
@@ -141,9 +144,9 @@ namespace Infrastructure.ExcelOutputData
 
                     bool IsSameSlip()
                     {
-                        return currentSubject == rae.Content.AccountingSubject.Subject &&
-                                ItemIndex < 9 && currentActivityDate == rae.AccountActivityDate &&
-                                currentLocation == rae.Location; ;
+                        return currentDept == rae.CreditDept.Dept &&
+                            currentSubjectCode == rae.Content.AccountingSubject.SubjectCode &&
+                            ItemIndex < 9 && currentLocation == rae.Location;
                     }
                 }
 

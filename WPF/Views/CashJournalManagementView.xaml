@@ -35,9 +35,9 @@
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="西暦" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                    <TextBox x:Name="YearTextBox" Text="{Binding YearString}" MaxLength="4" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Grid.Column="1" Margin="5"/>
+                    <TextBox x:Name="YearTextBox" Text="{Binding YearString,UpdateSourceTrigger=PropertyChanged}" MaxLength="4" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Grid.Column="1" Margin="5"/>
                     <TextBlock Text="年" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-                    <TextBox x:Name="MonthTextBox" Grid.Column="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Text="{Binding MonthString}" MaxLength="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBox x:Name="MonthTextBox" Grid.Column="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Text="{Binding MonthString,UpdateSourceTrigger=PropertyChanged}" MaxLength="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
                     <TextBlock Text="月の出納帳を出力する" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                 </Grid>
                 <Grid Grid.Row="1">

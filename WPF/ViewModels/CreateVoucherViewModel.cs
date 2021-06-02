@@ -31,6 +31,7 @@ namespace WPF.ViewModels
         private ObservableCollection<ReceiptsAndExpenditure> searchReceiptsAndExpenditures;
         #endregion
         private DateTime searchDate = DateTime.Today;
+        private DateTime outputDate;
         private ReceiptsAndExpenditure selectedVoucherContent;
         private ReceiptsAndExpenditure selectedSeachReceiptsAndExpenditure;
         private readonly IDataOutput DataOutput;
@@ -54,6 +55,7 @@ namespace WPF.ViewModels
             Pagination.SelectedSortColumn = Pagination.SortColumns[0];
             Pagination.SortDirectionIsASC = false;
             SearchDate = DateTime.Today;
+            OutputDate = DateTime.Today;
             OutputButtonContent = "登録して出力";
             SetDelegateCommand();
         }
@@ -94,14 +96,15 @@ namespace WPF.ViewModels
             IsOutputButtonEnabled = false;
             Voucher voucher;
             VoucherRegistration();
-            await Task.Run(()=> DataOutput.VoucherData(voucher));
+            await Task.Run(() => DataOutput.VoucherData(voucher));
             OutputButtonContent = "登録して出力";
             IsOutputButtonEnabled = true;
             
             void VoucherRegistration()
             {
-                DataBaseConnect.Registration
-                    (new Voucher(0, VoucherAddressee, VoucherContents, DateTime.Today));
+                voucher=new Voucher
+                    (0, VoucherAddressee, VoucherContents, OutputDate);
+                DataBaseConnect.Registration(voucher);
                 voucher = DataBaseConnect.CallLatestVoucher();
                 voucher.ReceiptsAndExpenditures = VoucherContents;
                 foreach (ReceiptsAndExpenditure rae in VoucherContents)
@@ -295,6 +298,18 @@ namespace WPF.ViewModels
             set
             {
                 pagination = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出力日
+        /// </summary>
+        public DateTime OutputDate
+        {
+            get => outputDate;
+            set
+            {
+                outputDate = value;
                 CallPropertyChanged();
             }
         }

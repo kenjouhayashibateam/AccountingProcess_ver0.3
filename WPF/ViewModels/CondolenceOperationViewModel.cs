@@ -182,8 +182,8 @@ namespace WPF.ViewModels
         {
             OperationCondolence = new Condolence
                 (ID,AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
-                    isMemorialService,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip), 
-                    IntAmount(CarAndMealTip),IntAmount(SocialGathering),Note, AccountActivityDate, 
+                    isMemorialService,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip),
+                    IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     IsReceptionBlank ? string.Empty : CounterReceiver, 
                     IsReceptionBlank ? string.Empty : MailRepresentative);
             
@@ -288,8 +288,8 @@ namespace WPF.ViewModels
         /// データを登録します
         /// </summary>
         private async void DataRegistration()
-        {         
-            string content=OperationCondolence.IsMemorialService?"法事":"葬儀";
+        {
+            string content = OperationCondolence.IsMemorialService ? "法事" : "葬儀";
             
             IsOperationButtonEnabled = false;
             

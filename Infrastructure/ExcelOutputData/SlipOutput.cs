@@ -102,6 +102,7 @@ namespace Infrastructure.ExcelOutputData
                     clerk = TextHelper.GetFirstName(rae.RegistrationRep.Name);
                     contentCount = 1;
                     NextPage();//次のページへ
+                    PageStyle();
                 }
                 else TotalPrice += rae.Price;//ページ移動がなければ、総額に現在のデータのPriceを加算
                 //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、
