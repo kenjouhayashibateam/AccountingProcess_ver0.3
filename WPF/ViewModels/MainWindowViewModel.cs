@@ -492,7 +492,7 @@ namespace WPF.ViewModels
                 else
                 {
                     IsAdminPermisson = rep.IsAdminPermisson;
-                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
                     IsLogoutEnabled = true;
                 }
             }

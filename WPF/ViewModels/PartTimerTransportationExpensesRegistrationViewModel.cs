@@ -227,7 +227,7 @@ namespace WPF.ViewModels
                 {
                     IsAdminPermisson = rep.IsAdminPermisson;
                     WindowTitle =
-                        $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                        $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
                 }
             }
         }

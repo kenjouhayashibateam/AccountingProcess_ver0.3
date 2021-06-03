@@ -781,7 +781,7 @@ namespace WPF.ViewModels
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
                 LoginRepName = rep.Name;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {GetFirstName(rep.Name)}）";
+                WindowTitle = $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
             }
         }
 

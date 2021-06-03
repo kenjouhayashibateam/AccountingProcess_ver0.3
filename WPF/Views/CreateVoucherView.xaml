@@ -219,14 +219,21 @@
         </Grid>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="ShowVoucherDataManagementView" Grid.Column="1" Content="データ管理" Margin="5,20">
+            <Button x:Name="ShowCondlenceOperationView" Grid.Column="1" Content="お布施一覧登録" Margin="5,20">
                 
             </Button>
-            <Button x:Name="CloseButton" Grid.Column="2" Content="閉じる" Margin="5,20">
+            <Button x:Name="ShowVoucherDataManagementView" Grid.Column="2" Content="データ管理" Margin="5,20">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding ShowVoucherManagementCommand}" Key="Space"/>
+                    <MouseBinding Command="{Binding ShowVoucherManagementCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+            <Button x:Name="CloseButton" Grid.Column="3" Content="閉じる" Margin="5,20">
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

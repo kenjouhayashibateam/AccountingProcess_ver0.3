@@ -210,7 +210,7 @@ namespace Infrastructure.ExcelOutputData
             //係
             SetStringOriginalAndCopy(14, 9, "係");
             LoginRep loginRep = LoginRep.GetInstance();
-            SetStringOriginalAndCopy(15, 9, GetFirstName(loginRep.Rep.Name));
+            SetStringOriginalAndCopy(15, 9, loginRep.Rep.FirstName);
 
             void SetStringOriginalAndCopy(int row,int column,string value)
             {

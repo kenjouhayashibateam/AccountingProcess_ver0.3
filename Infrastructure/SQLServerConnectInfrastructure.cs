@@ -25,7 +25,7 @@ namespace Infrastructure
         {
             Cn = new SqlConnection
             {
-                ConnectionString=Properties.Settings.Default.SystemAdminConnection
+                ConnectionString = Properties.Settings.Default.SystemAdminConnection
                 //ConnectionString = LoginRep.Rep.IsAdminPermisson
                 //? Properties.Settings.Default.SystemAdminConnection
                 //: Properties.Settings.Default.AccountingProcessConnection
@@ -276,7 +276,7 @@ namespace Infrastructure
             { {"@content", contentText}};
             using SqlDataReader DataReader =
                 ReturnGeneretedParameterCommand
-                    ("reference_affiliation_accounting_subject",parameters ).ExecuteReader();
+                    ("reference_affiliation_accounting_subject", parameters).ExecuteReader();
             
             while (DataReader.Read()) list.Add
                     (CallAccountingSubject((string)DataReader["accounting_subject_id"]));
@@ -746,17 +746,18 @@ namespace Infrastructure
 
         public Voucher CallLatestVoucher()
         {
-            SqlDataReader dataReader=NewCommand
+            SqlDataReader dataReader = NewCommand
                 (CommandType.Text,
-                    "select * from vouchers_master where voucher_id=ident_current('vouchers_master')")
+                    "select * from reference_voucher_view where voucher_id=ident_current('vouchers_master')")
                 .ExecuteReader();
-            Voucher voucher=new Voucher
-                (0,string.Empty,new ObservableCollection<ReceiptsAndExpenditure>(),DateTime.Today);
+            Voucher voucher = new Voucher
+                (0, string.Empty, new ObservableCollection<ReceiptsAndExpenditure>(), DateTime.Today, 
+                    LoginRep.GetInstance().Rep, true);
             while (dataReader.Read())
                 voucher = new Voucher
                     ((int)dataReader["voucher_id"], (string)dataReader["addressee"], 
-                        new ObservableCollection<ReceiptsAndExpenditure>(), 
-                        (DateTime)dataReader["output_date"]);
+                        new ObservableCollection<ReceiptsAndExpenditure>(),
+                        (DateTime)dataReader["output_date"],CallRep((string)dataReader["staff_id"]), (bool)dataReader["is_validity"]);
 
             return voucher;
         }
@@ -776,6 +777,58 @@ namespace Infrastructure
                         (int)dataReader["flat_rate"], (string)dataReader["content"],
                         (bool)dataReader["is_validity"]);
             return content;
+        }
+
+        public int Update(Voucher voucher)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@voucher_id",voucher.ID},{"@output_date",voucher.OutputDate},
+                {"@addressee",voucher.Addressee},{"@staff_id",LoginRep.GetInstance().Rep.ID},
+                {"@is_validity",voucher.IsValidity} };
+
+            return ReturnGeneretedParameterCommand("update_voucher", parameters).ExecuteNonQuery();
+        }
+
+        public ObservableCollection<Voucher> ReferenceVoucher
+            (DateTime outputDateStart, DateTime outputDateEnd, bool isValidityTrueOnly)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@output_date_start",outputDateStart},{"@output_date_end",outputDateEnd},
+                {"@is_validity_true_only",isValidityTrueOnly}};
+            ObservableCollection<Voucher> list = new ObservableCollection<Voucher>();
+
+            SqlDataReader dataReader = 
+                ReturnGeneretedParameterCommand("reference_voucher", parameters).ExecuteReader();
+
+            while (dataReader.Read())
+                list.Add(new Voucher
+                    ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
+                    CallVoucherGroupingReceiptsAndExpenditure((int)dataReader["voucher_id"]), 
+                    (DateTime)dataReader["output_date"], CallRep((string)dataReader["staff_id"]), 
+                    (bool)dataReader["is_validity"]));
+
+            return list;
+        }
+
+        public ObservableCollection<ReceiptsAndExpenditure> 
+            CallVoucherGroupingReceiptsAndExpenditure(int voucherID)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>()
+            { {"@voucher_id",voucherID}};
+            ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>();
+
+            SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                ("call_voucher_grouping_receipts_and_expenditure", parameters).ExecuteReader();
+
+            while (dataReader.Read())
+                list.Add(new ReceiptsAndExpenditure
+                    ((int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
+                        CallRep((string)dataReader["registration_staff_id"]), (string)dataReader["location"], 
+                        CallCreditDept((string)dataReader["credit_dept_id"]), CallContent((string)dataReader["content_id"]), 
+                        (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"], 
+                        (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"], 
+                        (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"]));
+            return list;
         }
     }
 }

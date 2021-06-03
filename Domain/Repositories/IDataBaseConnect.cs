@@ -306,5 +306,27 @@ namespace Domain.Repositories
         /// <param name="receiptsAndExpenditureID"></param>
         /// <returns></returns>
         public int Registration(int voucherID, int receiptsAndExpenditureID);
+        /// <summary>
+        /// 受納証データを更新します
+        /// </summary>
+        /// <param name="voucher"></param>
+        /// <returns></returns>
+        public int Update(Voucher voucher);
+        /// <summary>
+        /// 受納証データを検索します
+        /// </summary>
+        /// <param name="outputDateStart"></param>
+        /// <param name="outputDateEnd"></param>
+        /// <param name="isValidityTrueOnly"></param>
+        /// <returns></returns>
+        public ObservableCollection<Voucher> ReferenceVoucher
+            (DateTime outputDateStart, DateTime outputDateEnd, bool isValidityTrueOnly);
+        /// <summary>
+        /// 受納証データにグループされた出納データを呼び出します
+        /// </summary>
+        /// <param name="voucherID"></param>
+        /// <returns></returns>
+        public ObservableCollection<ReceiptsAndExpenditure>
+            CallVoucherGroupingReceiptsAndExpenditure(int voucherID);
     }
 }

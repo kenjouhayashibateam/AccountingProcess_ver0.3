@@ -71,7 +71,7 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(content)) content = rae.Content.Text;//contentの初期値を設定する
                 if (string.IsNullOrEmpty(location)) location = rae.Location;
                 if (string.IsNullOrEmpty(creditDept)) creditDept = rae.CreditDept.Dept;
-                if (string.IsNullOrEmpty(clerk)) clerk = TextHelper.GetFirstName(rae.RegistrationRep.Name);
+                if (string.IsNullOrEmpty(clerk)) clerk = rae.RegistrationRep.FirstName;
                 contentCount++;
 
                 isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
@@ -99,7 +99,7 @@ namespace Infrastructure.ExcelOutputData
                     TotalPrice = rae.Price;
                     creditDept = rae.CreditDept.Dept;
                     location = rae.Location;
-                    clerk = TextHelper.GetFirstName(rae.RegistrationRep.Name);
+                    clerk = rae.RegistrationRep.FirstName;
                     contentCount = 1;
                     NextPage();//次のページへ
                     PageStyle();
@@ -133,14 +133,14 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
-                if(TextHelper.GetFirstName(OutputRep.Name)==clerk)
+                if (OutputRep.FirstName == clerk)
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value =
-                        TextHelper.GetFirstName(OutputRep.Name);
+                        OutputRep.FirstName;
                 else
                 {
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value = clerk;
                     myWorksheet.Cell(StartRowPosition + 6, 18).Value =
-                        TextHelper.GetFirstName(OutputRep.Name);
+                        OutputRep.FirstName;
                 }
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;

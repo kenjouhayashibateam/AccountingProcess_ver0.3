@@ -124,7 +124,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(5, 3).Value = "本部長";
             myWorksheet.Cell(5, 4).Value = "副住職";
             myWorksheet.Cell(5, 5).Value = "係";
-            myWorksheet.Cell(6, 5).Value = TextHelper.GetFirstName(LoginRep.Rep.Name);
+            myWorksheet.Cell(6, 5).Value = LoginRep.Rep.FirstName;
             myWorksheet.Cell(8, 1).Value = "収支";
             myWorksheet.Cell(9, 1).Value = "前日より繰越";
             myWorksheet.Cell(9, 2).Value = "入金";

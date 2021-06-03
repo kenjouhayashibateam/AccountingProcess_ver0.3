@@ -39,7 +39,7 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !this.GetType().Equals(obj.GetType())) return false;
+            if (obj == null || !GetType().Equals(obj.GetType())) return false;
             else
             {
                 Content content = (Content)obj;

@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities.ValueObjects
+﻿using static Domain.Entities.Helpers.TextHelper;
+
+namespace Domain.Entities.ValueObjects
 {
     /// <summary>
     /// 担当者クラス
@@ -13,6 +15,7 @@
         /// 担当者名
         /// </summary>
         public string Name { get; set; }
+        public string FirstName => GetFirstName(Name);
         /// <summary>
         /// パスワード
         /// </summary>

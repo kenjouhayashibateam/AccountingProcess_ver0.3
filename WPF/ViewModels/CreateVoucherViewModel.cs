@@ -62,6 +62,15 @@ namespace WPF.ViewModels
         public CreateVoucherViewModel() : this
             (DefaultInfrastructure.GetDefaultDataBaseConnect(),
             DefaultInfrastructure.GetDefaultDataOutput()) { }
+        /// <summary>
+        /// 受納証管理画面を表示するコマンド
+        /// </summary>
+        public DelegateCommand ShowVoucherManagementCommand { get; set; }
+        private void ShowVoucherManagement() =>
+            CreateShowWindowCommand(ScreenTransition.VoucherManagement());
+        /// <summary>
+        /// ソートするカラムリストを設定します
+        /// </summary>
         public void SetSortColumns()=>
             Pagination.SortColumns = new Dictionary<int, string>()
             {
@@ -102,8 +111,8 @@ namespace WPF.ViewModels
             
             void VoucherRegistration()
             {
-                voucher=new Voucher
-                    (0, VoucherAddressee, VoucherContents, OutputDate);
+                voucher = new Voucher
+                    (0, VoucherAddressee, VoucherContents, OutputDate, LoginRep.GetInstance().Rep, true);
                 DataBaseConnect.Registration(voucher);
                 voucher = DataBaseConnect.CallLatestVoucher();
                 voucher.ReceiptsAndExpenditures = VoucherContents;
@@ -321,7 +330,7 @@ namespace WPF.ViewModels
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
                 WindowTitle =
-                    $"{DefaultWindowTitle}（ログイン : {TextHelper.GetFirstName(rep.Name)}）";
+                    $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
             }
         }
 
@@ -345,6 +354,8 @@ namespace WPF.ViewModels
                 (() => VoucherOutput(), () => true);
             ShowRegistrationCommand = new DelegateCommand
                 (() => ShowRegistration(), () => true);
+            ShowVoucherManagementCommand = new DelegateCommand
+                (() => ShowVoucherManagement(), () => true);
         }
 
         protected override void SetWindowDefaultTitle() =>

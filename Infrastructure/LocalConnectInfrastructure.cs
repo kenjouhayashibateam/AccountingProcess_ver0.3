@@ -530,11 +530,30 @@ namespace Infrastructure
                 ReferenceReceiptsAndExpenditure(DateTime.Today, DateTime.Today, string.Empty, string.Empty,
                         string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true, 
                         DateTime.Today, DateTime.Today,DateTime.Today,DateTime.Today),
-                DateTime.Today);
+                DateTime.Today, CallRep(string.Empty), true);
 
         public int Registration(int voucherID, int receiptsAndExpenditureID) => 1;
 
         public Content CallLatestContent() => new Content
                     ("content3", CallAccountingSubject(string.Empty), -1, "管理料", true);
+
+        public int Update(Voucher voucher) => 1;
+
+        public ObservableCollection<Voucher> ReferenceVoucher
+            (DateTime outputDateStart, DateTime outputDateEnd, bool isValidityTrueOnly)
+        {
+            ObservableCollection<Voucher> list = new ObservableCollection<Voucher>()
+            {
+                { new Voucher(1, "あああ",CallVoucherGroupingReceiptsAndExpenditure(0), DefaultDate, CallRep(string.Empty), true) }
+            };
+            return list;
+        }
+
+        public ObservableCollection<ReceiptsAndExpenditure> CallVoucherGroupingReceiptsAndExpenditure(int voucherID)
+        {
+            return ReferenceReceiptsAndExpenditure
+                     (DefaultDate, DefaultDate, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
+                         string.Empty, true, true, true, true, DefaultDate, DefaultDate, DefaultDate, DefaultDate);
+        }
     }
 }

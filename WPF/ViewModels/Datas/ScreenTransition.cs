@@ -76,5 +76,11 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window CashJournalManagement() =>
             new CashJournalManagementView();
+        /// <summary>
+        /// 受納証管理画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window VoucherManagement() =>
+            new VoucherManagementView();
     }
 }
