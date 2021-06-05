@@ -19,7 +19,6 @@ namespace WPF.ViewModels.Datas
         #region Properties
         private MessageBoxInfo messageBox;
         private DelegateCommand<Window> windowCloseCommand;
-        private string loginRepName;
         private string windowTitle;
         private bool isAdminPermisson;
         private bool callShowWindow;
@@ -126,18 +125,6 @@ namespace WPF.ViewModels.Datas
                 }
                 return windowCloseCommand;
             } set => windowCloseCommand = value; 
-        }
-        /// <summary>
-        /// ログイン担当者の名前
-        /// </summary>
-        public string LoginRepName
-        {
-            get => loginRepName;
-            set
-            {
-                loginRepName = value;
-                CallPropertyChanged();
-            }
         }
         /// <summary>
         /// ウィンドウタイトル

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
@@ -69,6 +70,67 @@ namespace WPF.ViewModels
         private void ShowVoucherManagement() =>
             CreateShowWindowCommand(ScreenTransition.VoucherManagement());
         /// <summary>
+        /// 受納証データを使用して御布施一覧を表示してデータ登録するコマンド
+        /// </summary>
+        public DelegateCommand ShowCondolenceOperationCommand { get; set; }
+        private void ShowCondolenceOperation()
+        {
+            string addressee = default;
+            int almsgiving = default;
+            int carTip = default;
+            int mealTip = default;
+            int carAndMealTip = default;
+            int socialGethering = default;
+            DateTime accountActivityDate = DefaultDate;
+            bool isHeadData = true;
+          
+            foreach(ReceiptsAndExpenditure rae in VoucherContents)
+            {
+                switch(rae.Content.AccountingSubject.SubjectCode)
+                {
+                    case ("815"):
+                        almsgiving = rae.Price;
+                        break;
+                    case ("831"):
+                        socialGethering = rae.Price;
+                        break;
+                    case ("832"):
+                        SetAmount();
+                        break;                        
+                }
+
+                if (isHeadData)
+                {
+                    addressee = rae.Detail;
+                    accountActivityDate = rae.AccountActivityDate;
+                }
+                
+                void SetAmount()
+                {
+                    switch (rae.Content.Text)
+                    {
+                        case "御車代":
+                            carTip = rae.Price;
+                            break;
+                        case "御膳料":
+                            mealTip = rae.Price;
+                            break;
+                        case "御車代御膳料":
+                            carAndMealTip = rae.Price;
+                            break;
+                    }
+                }
+            }
+
+            Condolence condolence = new Condolence
+                (0, AccountingProcessLocation.Location, addressee, string.Empty, true, almsgiving, carTip, mealTip, 
+                    carAndMealTip, socialGethering, string.Empty, accountActivityDate, LoginRep.GetInstance().Rep.Name, string.Empty);
+            CondolenceOperation co = CondolenceOperation.GetInstance();
+            co.SetData(condolence);
+
+            CreateShowWindowCommand(ScreenTransition.CondolenceOperation());
+        }
+        /// <summary>
         /// ソートするカラムリストを設定します
         /// </summary>
         public void SetSortColumns()=>
@@ -105,9 +167,10 @@ namespace WPF.ViewModels
             IsOutputButtonEnabled = false;
             Voucher voucher;
             VoucherRegistration();
-            await Task.Run(() => DataOutput.VoucherData(voucher));
+            await Task.Run(() => DataOutput.VoucherData(voucher, false));
+            VoucherAddressee = string.Empty;
+            VoucherContents.Clear();
             OutputButtonContent = "登録して出力";
-            IsOutputButtonEnabled = true;
             
             void VoucherRegistration()
             {
@@ -356,6 +419,8 @@ namespace WPF.ViewModels
                 (() => ShowRegistration(), () => true);
             ShowVoucherManagementCommand = new DelegateCommand
                 (() => ShowVoucherManagement(), () => true);
+            ShowCondolenceOperationCommand = new DelegateCommand
+                (() => ShowCondolenceOperation(), () => true);
         }
 
         protected override void SetWindowDefaultTitle() =>

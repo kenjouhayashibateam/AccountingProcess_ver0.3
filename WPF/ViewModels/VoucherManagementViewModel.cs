@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
@@ -16,22 +17,59 @@ namespace WPF.ViewModels
     /// </summary>
     public class VoucherManagementViewModel : BaseViewModel
     {
-        private DateTime searchDateStart;
-        private DateTime searchDateEnd;
+        private DateTime searchDateStart = DefaultDate;
+        private DateTime searchDateEnd = DefaultDate;
         private ObservableCollection<Voucher> vouchers;
+        private ObservableCollection<ReceiptsAndExpenditure> voucherContents;
+        public ReceiptsAndExpenditure SelectedReceiptsAndExpenditure;
         private Voucher selectedVoucher;
         private bool isValidity;
         private bool isInputReissueText;
         private bool isValidityTrueOnly = true;
+        private bool isOutputButtonEnabled;
+        private readonly IDataOutput DataOutput;
+        private string outputButtonContent= "選択したデータを再発行";
 
-        public VoucherManagementViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
+        public VoucherManagementViewModel
+            (IDataBaseConnect dataBaseConnect, IDataOutput dataOutput) : base(dataBaseConnect)
         {
+            DataOutput = dataOutput;
             SearchDateStart = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             SearchDateEnd = DateTime.Today;
-            IsOutputCheckOperationCommand = new DelegateCommand(() => IsOutputCheckOperation(), () => true);
+            IsOutputCheckOperationCommand = new DelegateCommand
+                (() => IsOutputCheckOperation(), () => true);
+            ReissueVoucherOutputCommand = new DelegateCommand
+                (() => ReissueVoucherOutput(), () => true);
         }
-        public VoucherManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public VoucherManagementViewModel() :
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect(), DefaultInfrastructure.GetDefaultDataOutput())
+        { }
+        /// <summary>
+        /// 受納証再発行コマンド
+        /// </summary>
+        public DelegateCommand ReissueVoucherOutputCommand { get; }
+        private async void ReissueVoucherOutput()
+        {
+            if ((MessageBox = new MessageBoxInfo()
+            {
+                Message = "出力します。よろしいですか？",
+                Image = System.Windows.MessageBoxImage.Question,
+                Title = "登録確認",
+                Button = System.Windows.MessageBoxButton.OKCancel
+            }).Result == System.Windows.MessageBoxResult.Cancel) return;
 
+            OutputButtonContent = "出力中";
+            IsOutputButtonEnabled = false;
+            VoucherUpdate();
+            await Task.Run(() => DataOutput.VoucherData(SelectedVoucher, IsInputReissueText));
+            OutputButtonContent = "選択したデータを再発行";
+
+            void VoucherUpdate()
+            {
+                SelectedVoucher.IsValidity = true;
+                DataBaseConnect.Update(SelectedVoucher);
+            }
+        }
         /// <summary>
         /// 出力チェック更新コマンド
         /// </summary>
@@ -100,6 +138,8 @@ namespace WPF.ViewModels
             set
             {
                 selectedVoucher = value;
+                IsOutputButtonEnabled = value != null;
+                if (value != null) VoucherContents = value.ReceiptsAndExpenditures;
                 CallPropertyChanged();
             }
         }
@@ -140,6 +180,42 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 選択した受納証データの出納データリスト
+        /// </summary>
+        public ObservableCollection<ReceiptsAndExpenditure> VoucherContents
+        {
+            get => voucherContents;
+            set
+            {
+                voucherContents = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出力ボタンのContent
+        /// </summary>
+        public string OutputButtonContent
+        {
+            get => outputButtonContent;
+            set
+            {
+                outputButtonContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出力ボタンのEnabled
+        /// </summary>
+        public bool IsOutputButtonEnabled
+        {
+            get => isOutputButtonEnabled;
+            set
+            {
+                isOutputButtonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         private void CreateVoucherList() =>
             Vouchers = DataBaseConnect.ReferenceVoucher(SearchDateStart, searchDateEnd, IsvalidityTrueOnly);        
@@ -157,6 +233,12 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
+            switch(propertyName)
+            {
+                case nameof(SelectedVoucher):
+                    ErrorsListOperation(value == null, propertyName, "受納証データが選択されていません");
+                    break;
+            }
         }
 
         protected override void SetWindowDefaultTitle() =>

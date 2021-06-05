@@ -130,24 +130,36 @@
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                         <CheckBox Content="「再発行」を印字する" IsChecked="{Binding IsInputReissueText}" Grid.Column="1" VerticalContentAlignment="Center" Margin="5"/>
-                        <Button Content="選択したデータを再発行" Grid.Column="2" Margin="5,3"></Button>
+                        <Button Content="{Binding OutputButtonContent}" IsEnabled="{Binding IsOutputButtonEnabled}" Grid.Column="2" Margin="5,3">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding ReissueVoucherOutputCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding ReissueVoucherOutputCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
                     </Grid>
                 </Grid>
             </GroupBox>
             <GroupBox Header="受納証内容" Grid.Column="1" Margin="5">
-                <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" AutoGenerateColumns="False" Margin="5">
+                <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" ItemsSource="{Binding VoucherContents}" AutoGenerateColumns="False" Margin="5">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="経理担当場所" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Location}" Margin="5"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="内容" Width="1*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock />
+                                    <TextBlock Text="{Binding Content.Text}" Margin="5"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="金額" Width="1*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock />
+                                    <TextBlock Text="{Binding PriceWithUnit}" Margin="5"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

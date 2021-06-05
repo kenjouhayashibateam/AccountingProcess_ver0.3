@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
-using Domain.Entities.Helpers;
+using Domain.Entities.ValueObjects;
 using System;
 
 namespace Infrastructure.ExcelOutputData
@@ -63,8 +63,8 @@ namespace Infrastructure.ExcelOutputData
             (
                 string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, 
                 string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
-                string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, 
-                string wizeCoreAmountWithUnit,bool yokohamaBankCheck,bool ceresaCheck
+                string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
+                string wizeCoreAmountWithUnit, bool yokohamaBankCheck, bool ceresaCheck
             )
         {
             PreviousDayFinalAccountWithUnit = previousDayFinalAccountWithUnit;
@@ -81,17 +81,30 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetBorderStyle()
         {
-            MySheetCellRange(5,3,6,5).Style
-                .Border.SetBottomBorder(XLBorderStyleValues.Thin)
-                .Border.SetTopBorder(XLBorderStyleValues.Thin)
-                .Border.SetLeftBorder(XLBorderStyleValues.Thin)
-                .Border.SetRightBorder(XLBorderStyleValues.Thin);
+            if (AccountingProcessLocation.Location == "管理事務所")
+            {
+                MySheetCellRange(5, 3, 6, 5).Style
+                    .Border.SetBottomBorder(XLBorderStyleValues.Thin)
+                    .Border.SetTopBorder(XLBorderStyleValues.Thin)
+                    .Border.SetLeftBorder(XLBorderStyleValues.Thin)
+                    .Border.SetRightBorder(XLBorderStyleValues.Thin);
+
+                 MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+            }
+            else
+            {
+                MySheetCellRange(5, 5, 6, 5).Style
+                    .Border.SetBottomBorder(XLBorderStyleValues.Thin)
+                    .Border.SetTopBorder(XLBorderStyleValues.Thin)
+                    .Border.SetLeftBorder(XLBorderStyleValues.Thin)
+                    .Border.SetRightBorder(XLBorderStyleValues.Thin);
+            }
+
             MySheetCellRange(9,1,10,5).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
-            MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
         }
 
         protected override void SetCellsStyle()
@@ -100,11 +113,10 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(3, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(5,3,5,5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            MySheetCellRange(5, 3, 5, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             myWorksheet.Cell(6, 5).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                //.Alignment.SetTopToBottom(true);
             myWorksheet.Cell(8, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
             MySheetCellRange(9, 1, 9, 5).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
@@ -121,30 +133,38 @@ namespace Infrastructure.ExcelOutputData
         {
             myWorksheet.Cell(2, 4).Value = DateTime.Today.ToString("yyyy年MM月dd日（ddd）");
             myWorksheet.Cell(3, 1).Value = "証憑綴り";
-            myWorksheet.Cell(5, 3).Value = "本部長";
-            myWorksheet.Cell(5, 4).Value = "副住職";
             myWorksheet.Cell(5, 5).Value = "係";
             myWorksheet.Cell(6, 5).Value = LoginRep.Rep.FirstName;
             myWorksheet.Cell(8, 1).Value = "収支";
-            myWorksheet.Cell(9, 1).Value = "前日より繰越";
             myWorksheet.Cell(9, 2).Value = "入金";
             myWorksheet.Cell(9, 3).Value = "出金";
-            myWorksheet.Cell(9, 4).Value = "社内振替";
             myWorksheet.Cell(9, 5).Value = "残高";
             myWorksheet.Cell(10, 1).Value = PreviousDayFinalAccountWithUnit;
             myWorksheet.Cell(10, 2).Value = PaymentWithUnit;
             myWorksheet.Cell(10, 3).Value = WithdrawalWithUnit;
-            myWorksheet.Cell(10, 4).Value = TranceferAmountWithUnit;
             myWorksheet.Cell(10, 5).Value = TodayFinalAccountWithUnit;
-            myWorksheet.Cell(12, 1).Value = "横浜銀行残高";
-            myWorksheet.Cell(12, 2).Value = YokohamaBankAmountWithUnit;
-            myWorksheet.Cell(12, 4).Value = YokohamaBankCheck ? "変化なしです" : string.Empty;
-            myWorksheet.Cell(13, 1).Value = "セレサ川崎残高";
-            myWorksheet.Cell(13, 2).Value = CeresaAmountWithUnit;
-            myWorksheet.Cell(13, 4).Value = CeresaCheck ? "変化なしです" : string.Empty;
-            myWorksheet.Cell(14, 1).Value = "ワイズコア仮受金";
-            myWorksheet.Cell(14, 2).Value = WizeCoreAmountWithUnit;
-            myWorksheet.Cell(16, 4).Value = "信行寺　春秋苑";
+
+            if (AccountingProcessLocation.Location == "管理事務所")
+            {
+                myWorksheet.Cell(5, 3).Value = "本部長";
+                myWorksheet.Cell(5, 4).Value = "副住職";
+                myWorksheet.Cell(9, 1).Value = "前日より繰越";
+                myWorksheet.Cell(9, 4).Value = "社内振替";
+                myWorksheet.Cell(10, 4).Value = TranceferAmountWithUnit;
+                myWorksheet.Cell(12, 1).Value = "横浜銀行残高";
+                myWorksheet.Cell(12, 2).Value = YokohamaBankAmountWithUnit;
+                myWorksheet.Cell(12, 4).Value = YokohamaBankCheck ? "変化なしです" : string.Empty;
+                myWorksheet.Cell(13, 1).Value = "セレサ川崎残高";
+                myWorksheet.Cell(13, 2).Value = CeresaAmountWithUnit;
+                myWorksheet.Cell(13, 4).Value = CeresaCheck ? "変化なしです" : string.Empty;
+                myWorksheet.Cell(14, 1).Value = "ﾜｲｽﾞｺｱ仮受金";
+                myWorksheet.Cell(14, 2).Value = WizeCoreAmountWithUnit;
+                myWorksheet.Cell(16, 4).Value = "信行寺　春秋苑";
+            }
+            else
+            {
+                myWorksheet.Cell(9, 1).Value = "預り金";
+            }
         }
 
         protected override double SetMaeginsBottom() => ToInch(1.2);

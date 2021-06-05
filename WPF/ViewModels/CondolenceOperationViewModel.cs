@@ -17,7 +17,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// お布施一覧登録ViewModel
     /// </summary>
-    public class CondolenceOperationViewModel:DataOperationViewModel,ICondolenceObserver,
+    public class CondolenceOperationViewModel : DataOperationViewModel, ICondolenceObserver,
         IPagenationObserver
     {
         #region Properties
@@ -64,7 +64,7 @@ namespace WPF.ViewModels
         public Dictionary<int, string> NoteStrings { get; set; }
         #endregion
 
-        public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
+        public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             condolenceOperation = CondolenceOperation.GetInstance();
             condolenceOperation.Add(this);
@@ -82,7 +82,7 @@ namespace WPF.ViewModels
                 {3,"緑山メモリアルパーク" }
             };
 
-            if(condolenceOperation.GetData()==null)
+            if (condolenceOperation.GetData() == null)
             {
                 SetDataRegistrationCommand.Execute();
                 FieldClear();
@@ -125,22 +125,13 @@ namespace WPF.ViewModels
             SetReceiptsAndExpenditures(true);
         }
         /// <summary>
-        /// 前の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress() => Pagination.PageCountSubtract();
-        /// <summary>
-        /// 次の10件を表示するコマンド
-        /// </summary>
-        public DelegateCommand NextPageListExpressCommand { get; set; }
-        private void NextPageListExpress() => Pagination.PageCountAdd();
-        /// <summary>
         /// プロパティをセットします
         /// </summary>
         private void SetProperty()
         {
             Condolence condolence = condolenceOperation.GetData();
             ID = condolence.ID;
+            if (ID == 0) SetDataOperation(DataOperation.登録);
             AccountActivityDate = condolence.AccountActivityDate;
             OwnerName = condolence.OwnerName;
             IsMemorialService = condolence.IsMemorialService;
@@ -181,7 +172,7 @@ namespace WPF.ViewModels
         private void OperationData()
         {
             OperationCondolence = new Condolence
-                (ID,AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
+                (ID, AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
                     isMemorialService,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip),
                     IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     IsReceptionBlank ? string.Empty : CounterReceiver, 
@@ -203,7 +194,7 @@ namespace WPF.ViewModels
         private async void DataUpdate()
         {
             IsOperationButtonEnabled = false;
-            string updateContent=string.Empty;
+            string updateContent = string.Empty;
             Condolence condolence = condolenceOperation.GetData();
 
             if (OperationCondolence.AccountActivityDate != condolence.AccountActivityDate)
@@ -267,8 +258,8 @@ namespace WPF.ViewModels
                 return;
             }
 
-            if(CallConfirmationDataOperation($"{updateContent}\r\n\r\n更新しますか？","御布施一覧データ")
-                ==MessageBoxResult.Cancel)
+            if (CallConfirmationDataOperation($"{updateContent}\r\n\r\n更新しますか？", "御布施一覧データ")
+                == MessageBoxResult.Cancel)
             {
                 SetProperty();
                 IsOperationButtonEnabled = true;
@@ -743,8 +734,8 @@ namespace WPF.ViewModels
             set
             {
                 fixToggle = value;
-                MailRepresentative = value ? string.Empty : LoginRepName;
-                CounterReceiver = value ? LoginRepName : string.Empty;
+                MailRepresentative = value ? string.Empty : LoginRep.GetInstance().Rep.Name;
+                CounterReceiver = value ? LoginRep.GetInstance().Rep.Name : string.Empty;
                 FixToggleContent = value ? "窓口受付" : "郵送対応";
                 CallPropertyChanged();
             }
@@ -780,7 +771,6 @@ namespace WPF.ViewModels
             else
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
-                LoginRepName = rep.Name;
                 WindowTitle = $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
             }
         }
@@ -822,8 +812,6 @@ namespace WPF.ViewModels
         {
             InputPropertyCommand = new DelegateCommand(() => InputProperty(), () => true);
             OperationDataCommand = new DelegateCommand(() => OperationData(), () => true);
-            PrevPageListExpressCommand = new DelegateCommand(() => PrevPageListExpress(), () => true);
-            NextPageListExpressCommand = new DelegateCommand(() => NextPageListExpress(), () => true);
             AlmsgivingSearchCommand = new DelegateCommand(() => AlmsgivingSearch(), () => true);
             TipSearchCommand = new DelegateCommand(() => TipSearch(), () => true);
             SocialGatheringSearchCommand = new DelegateCommand

@@ -48,7 +48,7 @@ namespace Domain.Repositories
         /// 受納証を出力します
         /// </summary>
         /// <param name="voucher">出力する受納証</param>
-        void VoucherData(Voucher voucher);
+        void VoucherData(Voucher voucher,bool isReissueText);
         /// <summary>
         /// 御布施一覧データを出力します
         /// </summary>

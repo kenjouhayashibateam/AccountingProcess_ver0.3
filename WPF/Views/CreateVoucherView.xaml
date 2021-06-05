@@ -224,8 +224,11 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="ShowCondlenceOperationView" Grid.Column="1" Content="お布施一覧登録" Margin="5,20">
-                
+            <Button x:Name="ShowCondlenceOperationView" Grid.Column="1" IsEnabled="{Binding IsOutputButtonEnabled}" Content="お布施一覧登録" Margin="5,20">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding ShowCondolenceOperationCommand}" Key="Space"/>
+                    <MouseBinding Command="{Binding ShowCondolenceOperationCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
             </Button>
             <Button x:Name="ShowVoucherDataManagementView" Grid.Column="2" Content="データ管理" Margin="5,20">
                 <Button.InputBindings>

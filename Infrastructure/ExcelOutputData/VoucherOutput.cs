@@ -13,8 +13,13 @@ namespace Infrastructure.ExcelOutputData
     internal class VoucherOutput : OutputSingleSheetData
     {
         private readonly Voucher VoucherData;
+        private readonly bool IsReissue;
 
-        public VoucherOutput(Voucher voucher) => VoucherData = voucher;        
+        public VoucherOutput(Voucher voucher, bool isReissue)
+        {
+            VoucherData = voucher;
+            IsReissue = isReissue;
+        }
 
         private int CopyColumnPosition(int originalColumn) =>
             originalColumn + SetColumnSizes().Length / 2 + 1;
@@ -70,7 +75,7 @@ namespace Infrastructure.ExcelOutputData
             int fontSize;
 
             //タイトル欄
-            SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 26);
+            SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Center, 26);
             SetCellPropertyOriginalAndCopy(1, 1);
             //ナンバー
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Bottom, 11);
@@ -170,6 +175,7 @@ namespace Infrastructure.ExcelOutputData
 
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
+            if (IsReissue) SetStringOriginalAndCopy(2, 2, "※再発行");
             //ナンバー
             SetStringOriginalAndCopy(1, 8, $"№{VoucherData.ID}");
             //日付
@@ -301,6 +307,7 @@ namespace Infrastructure.ExcelOutputData
             //タイトル
             SetMergeOriginalAndCopy(1, 1, 1, 7);
             SetMergeOriginalAndCopy(1, 8, 1, 10);
+            SetMergeOriginalAndCopy(2, 2, 2, 5);
             //日付
             SetMergeOriginalAndCopy(2, 7, 2, 10);
             //宛名

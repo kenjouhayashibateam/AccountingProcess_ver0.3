@@ -29,8 +29,8 @@ namespace WPF.ViewModels
         private ObservableCollection<Condolence> AllList;
         private Condolence selectedCondolence;
         private readonly CondolenceOperation condolenceOperation;
-        private DateTime searchStartDate;
-        private DateTime searchEndDate;
+        private DateTime searchStartDate = DefaultDate;
+        private DateTime searchEndDate = DefaultDate;
         private readonly IDataOutput DataOutput;
         private Pagination pagination;
         #endregion
@@ -64,7 +64,7 @@ namespace WPF.ViewModels
         {
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
-            await Task.Run(() => DataOutput.Condolences(Condolences));
+            await Task.Run(() => DataOutput.Condolences(AllList));
             OutputButtonContent = "出力";
             IsOutputButtonEnabled = true;
         }
@@ -110,6 +110,7 @@ namespace WPF.ViewModels
             {
                 searchStartDate = value;
                 if (value < SearchEndDate) CreateCondolences(true);
+                CreateCondolences(true);
                 CallPropertyChanged();
             }
         }
@@ -123,6 +124,7 @@ namespace WPF.ViewModels
             {
                 searchEndDate = value;
                 if (value > SearchStartDate) CreateCondolences(true);
+                CreateCondolences(true);
                 CallPropertyChanged();
             }
         }
@@ -199,15 +201,15 @@ namespace WPF.ViewModels
         {
             Pagination.CountReset(isPageCountReset);
 
-            var(count,list)=
+            var (count, list) =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate,AccountingProcessLocation.Location, Pagination.PageCount);
+                    (SearchStartDate, SearchEndDate, string.Empty, Pagination.PageCount);
             Condolences = list;
             Pagination.TotalRowCount = count;
 
             AllList =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate,AccountingProcessLocation.Location);
+                    (SearchStartDate, SearchEndDate, string.Empty);
 
             if (AllList.Count == 0) Pagination.PageCount = 0;
             ValidationProperty(nameof(Condolences), AllList);

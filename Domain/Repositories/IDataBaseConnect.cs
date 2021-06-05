@@ -295,11 +295,6 @@ namespace Domain.Repositories
         /// <returns></returns>
         public Voucher CallLatestVoucher();
         /// <summary>
-        /// 最新のContentデータを呼び出します
-        /// </summary>
-        /// <returns></returns>
-        public Content CallLatestContent();
-        /// <summary>
         /// 受納証GTBLを登録します
         /// </summary>
         /// <param name="voucherID"></param>

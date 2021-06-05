@@ -111,6 +111,13 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="1*" Header="経理担当場所">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Location}" Margin="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="1*" Header="内容">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -199,13 +206,15 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
+                        <TextBlock Text="葬儀、法事切り替え" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="担当僧侶" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="備考" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <CheckBox Content="窓口、郵送を空欄にする" Grid.Row="0" Grid.Column="3" VerticalAlignment="Bottom" IsChecked="{Binding IsReceptionBlank}" Margin="5"/>
+                        <TextBlock Text="窓口、郵送切り替え" Grid.Row="0" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0"/>
                         <ToggleButton x:Name="ContentToggleButton" Grid.Row="1" Grid.Column="0" IsChecked="{Binding IsMemorialService}" Content="{Binding ContentText}" VerticalContentAlignment="Center" Margin="5"/>
                         <ComboBox Name="SoryoNameComboBox" Grid.Row="1" Grid.Column="1" IsEditable="True" ItemsSource="{Binding SoryoList}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding SoryoName}" VerticalContentAlignment="Center" Margin="5"/>
                         <ComboBox x:Name="NoteTextComboBox" Grid.Row="1" Grid.Column="2" Text="{Binding Note}" VerticalContentAlignment="Center" ItemsSource="{Binding NoteStrings}" DisplayMemberPath="Value" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Margin="5"/>
                         <ToggleButton x:Name="ReceiverToggleButton" Grid.Row="1" Grid.Column="3" IsEnabled="{Binding IsFixToggleEnabled}" IsChecked="{Binding FixToggle}" Content="{Binding FixToggleContent}" Margin="5"/>
+                        <CheckBox Content="窓口、郵送を空欄にする" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" IsChecked="{Binding IsReceptionBlank}" Margin="5"/>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">

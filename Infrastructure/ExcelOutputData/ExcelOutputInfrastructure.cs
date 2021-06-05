@@ -55,9 +55,9 @@ namespace Infrastructure.ExcelOutputData
             raeo.Output();
         }
 
-        public void VoucherData(Voucher voucher)
+        public void VoucherData(Voucher voucher, bool isReissue)
         {
-            VoucherOutput vo = new VoucherOutput(voucher);
+            VoucherOutput vo = new VoucherOutput(voucher, isReissue);
             vo.DataOutput();
         }
     }
