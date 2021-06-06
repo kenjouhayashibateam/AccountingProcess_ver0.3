@@ -313,7 +313,7 @@ namespace Infrastructure
         }
 
         private ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
-            (Dictionary<string,object> parameters)
+            (Dictionary<string, object> parameters)
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
@@ -507,8 +507,8 @@ namespace Infrastructure
                 NewCommand(CommandType.Text,
                     $"select * from receipts_and_expenditure_data with(tablockx) begin tran " +
                     $"update receipts_and_expenditure_data " +
-                    $"set output_date={DateTime.Now.AddDays(-1) }" +
-                    $"where receipts_and_expenditure_id={receiptsAndExpenditure.ID} commit tran")
+                    $"set output_date='{DateTime.Now.AddDays(-1) }'" +
+                    $"where receipts_and_expenditure_id='{receiptsAndExpenditure.ID}' commit tran")
                 .ExecuteNonQuery();
 
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
@@ -541,9 +541,9 @@ namespace Infrastructure
             CreditDept paramCreditDept;
             AccountingSubject paramAccountingSubject;
             Content paramContent;
-            SqlDataReader dataReader = 
+            SqlDataReader dataReader =
                 ReturnGeneretedParameterCommand
-                    ("reference_receipts_and_expenditure",parameters).ExecuteReader();
+                    ("reference_receipts_and_expenditure", parameters).ExecuteReader();
             
             while (dataReader.Read())
             {
@@ -622,7 +622,7 @@ namespace Infrastructure
             };
             
             return ReturnGeneretedParameterCommand
-                ("registration_condolence",parameters).ExecuteNonQuery();
+                ("registration_condolence", parameters).ExecuteNonQuery();
         }
 
         public int Update(Condolence condolence)
@@ -642,7 +642,7 @@ namespace Infrastructure
             };
             
             return ReturnGeneretedParameterCommand
-                ("update_condolence",parameters).ExecuteNonQuery();
+                ("update_condolence", parameters).ExecuteNonQuery();
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
@@ -654,7 +654,7 @@ namespace Infrastructure
                 {"@location", string.Empty},{"@page", pageCount } };
             
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("reference_condolence",parameters).ExecuteReader();
+                ("reference_condolence", parameters).ExecuteReader();
             
             while(dataReader.Read())
             {

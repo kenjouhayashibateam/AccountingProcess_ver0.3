@@ -19,7 +19,7 @@ namespace WPF.ViewModels
         private readonly Cashbox myCashbox = Cashbox.GetInstance();
         private readonly IDataOutput DataOutput;
         private bool outputButtonEnabled;
-        private string outputButtonText="出力";
+        private string outputButtonText = "出力";
         #region AmountAndCount
         //表示用金額
         private string oneYenBundleAmountWithUnit;

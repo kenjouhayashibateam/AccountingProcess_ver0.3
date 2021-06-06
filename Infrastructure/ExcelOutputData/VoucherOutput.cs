@@ -170,9 +170,10 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetDataStrings()
         {
-            string prevText=default;
-            int provisoAmount=default;
-
+            string prevText = default;
+            string addresseeText;
+            int provisoAmount = default;
+           
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
             if (IsReissue) SetStringOriginalAndCopy(2, 2, "※再発行");
@@ -181,7 +182,13 @@ namespace Infrastructure.ExcelOutputData
             //日付
             SetStringOriginalAndCopy(2, 7, DateTime.Now.ToString("yyyy年MM月dd日"));
             //宛名
-            SetStringOriginalAndCopy(3, 1, VoucherData.Addressee);
+            if (VoucherData.Addressee.Length == 2)
+            {
+                addresseeText = $"{VoucherData.Addressee.Substring(0, 1)}{SpaceF}" +
+                    $"{VoucherData.Addressee.Substring(1, 1)}";
+            }
+            else addresseeText = VoucherData.Addressee;
+            SetStringOriginalAndCopy(3, 1, addresseeText);
             SetStringOriginalAndCopy(3, 5, "様");
             //総額
             SetStringOriginalAndCopy(4, 2, "冥加金");
@@ -282,15 +289,17 @@ namespace Infrastructure.ExcelOutputData
 
             string AppendSupplement(ReceiptsAndExpenditure rae)
             {
+                string s = default;
                 if (rae.Content.Text.Contains("管理料"))
                 {
                     string[] array = rae.Detail.Split(' ');
-                    string s = default;
                     foreach (string t in array)
                         if (t.Contains("年度分")) s = $"{Space}{t}";
-                    return s;
                 }
-                else return string.Empty;
+
+                if (rae.IsReducedTaxRate) s = "※軽減税率";
+
+                return s;
             }
         } 
   

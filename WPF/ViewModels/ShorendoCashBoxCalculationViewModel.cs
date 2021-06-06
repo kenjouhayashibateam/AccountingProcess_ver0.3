@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
 using Infrastructure;
 using WPF.ViewModels.Datas;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
@@ -10,319 +11,309 @@ namespace WPF.ViewModels
     /// <summary>
     /// 青蓮堂金庫金額計算ウィンドウViewModel
     /// </summary>
-    class ShorendoCashBoxCalculationViewModel : BaseViewModel
+    public class ShorendoCashBoxCalculationViewModel : BaseViewModel
     {
-        private string otherMoneyAmountDisplayValue1;
-        private string otherMoneyAmountDisplayValue2;
-        private string otherMoneyAmountDisplayValue3;
-        private string otherMoneyAmountDisplayValue4;
-        private string otherMoneyAmountDisplayValue5;
-        private string otherMoneyAmountDisplayValue6;
-        private string otherMoneyAmountDisplayValue7;
-        private string otherMoneyAmountDisplayValue8;
-        private string otherMoneyTitle1;
-        private string otherMoneyTitle2;
-        private string otherMoneyTitle3;
-        private string otherMoneyTitle4;
-        private string otherMoneyTitle5;
-        private string otherMoneyTitle6;
-        private string otherMoneyTitle7;
-        private string otherMoneyTitle8;
+        #region Properties
+        private string outputButtonText = "出力";
+        #region AmountAndCount
+        //表示用金額
+        private string oneYenAmountWithUnit;
+        private string tenThousandYenAmountWithUnit;
+        private string fiveThousandYenAmountWithUnit;
+        private string oneThousandYenAmountWithUnit;
+        private string fiveHundredYenAmountWithUnit;
+        private string oneHundredYenAmountWithUnit;
+        private string tenYenAmountWithUnit;
+        private string fiveYenAmountWithUnit;
+        //金銭数量
+        private int oneYenCount;
+        private int fiveYenCount;
+        private string fiftyYenAmountWithUnit;
+        private int tenYenCount;
+        private int fiftyYenCount;
+        private int oneHundredYenCount;
+        private int fiveHundredYenCount;
+        private int tenThousandYenCount;
+        private int fiveThousandYenCount;
+        private int oneThousandYenCount;
+        //総金額
         private string totalAmount;
-        private readonly Cashbox myCashbox = Cashbox.GetInstance();
+        #endregion
+        #endregion
 
-        public ShorendoCashBoxCalculationViewModel():
-            base(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        public ShorendoCashBoxCalculationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
         {
             SetProperty();
         }
-
+        public ShorendoCashBoxCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
-        /// 各金額プロパティをセットします
+        /// 各プロパティに値を入力します
         /// </summary>
-        /// <param name="value">ビューからの文字列</param>
-        /// <param name="otherMoneyAmount">金額</param>
-        /// <param name="otherMoneyAmountDisplayValue">表示用金額</param>
-        private void SetOtherMoneyAmount
-            (string value, int otherMoneyNumber, ref string otherMoneyAmountDisplayValue)
-        {
-            otherMoneyAmountDisplayValue = TextHelper.CommaDelimitedAmount(value);
-
-            myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = 
-                otherMoneyAmountDisplayValue != string.Empty ? 
-                    TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
-            TotalAmount = myCashbox.GetTotalAmountWithUnit();
-        }
-
         private void SetProperty()
         {
-            if (myCashbox.GetTotalAmount() == 0) return;
-
-            myCashbox.MoneyCategorys[OneYen].Count = 0;
-            myCashbox.MoneyCategorys[FiveYen].Count = 0;
-            myCashbox.MoneyCategorys[TenYen].Count = 0;
-            myCashbox.MoneyCategorys[FiftyYen].Count = 0;
-            myCashbox.MoneyCategorys[OneHundredYen].Count = 0;
-            myCashbox.MoneyCategorys[FiveHundredYen].Count = 0;
-            myCashbox.MoneyCategorys[OneThousandYen].Count = 0;
-            myCashbox.MoneyCategorys[FiveThousandYen].Count = 0;
-            myCashbox.MoneyCategorys[TenThousandYen].Count = 0;
-            myCashbox.MoneyCategorys[OneYenBundle].Count = 0;
-            myCashbox.MoneyCategorys[FiveYenBundle].Count = 0;
-            myCashbox.MoneyCategorys[TenYenBundle].Count = 0;
-            myCashbox.MoneyCategorys[FiftyYenBundle].Count = 0;
-            myCashbox.MoneyCategorys[OneHundredYenBundle].Count = 0;
-            myCashbox.MoneyCategorys[FiveHundredYenBundle].Count = 0;
-            OtherMoneyAmountDisplayValue1 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[0].Amount);
-            OtherMoneyAmountDisplayValue2 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[1].Amount);
-            OtherMoneyAmountDisplayValue3 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[2].Amount);
-            OtherMoneyAmountDisplayValue4 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[3].Amount);
-            OtherMoneyAmountDisplayValue5 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[4].Amount);
-            OtherMoneyAmountDisplayValue6 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[5].Amount);
-            OtherMoneyAmountDisplayValue7 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[6].Amount);
-            OtherMoneyAmountDisplayValue8 = 
-                TextHelper.CommaDelimitedAmount(myCashbox.OtherMoneys[7].Amount);
-            OtherMoneyTitle1 = myCashbox.OtherMoneys[0].Title;
-            OtherMoneyTitle2 = myCashbox.OtherMoneys[1].Title;
-            OtherMoneyTitle3 = myCashbox.OtherMoneys[2].Title;
-            OtherMoneyTitle4 = myCashbox.OtherMoneys[3].Title;
-            OtherMoneyTitle5 = myCashbox.OtherMoneys[4].Title;
-            OtherMoneyTitle6 = myCashbox.OtherMoneys[5].Title;
-            OtherMoneyTitle7 = myCashbox.OtherMoneys[6].Title;
-            OtherMoneyTitle8 = myCashbox.OtherMoneys[7].Title;
+            if (Cashbox.GetInstance().GetTotalAmount() == 0) return;
+            OneYenCount = Cashbox.GetInstance().MoneyCategorys[OneYen].Count;
+            FiveYenCount = Cashbox.GetInstance().MoneyCategorys[FiveYen].Count;
+            TenYenCount = Cashbox.GetInstance().MoneyCategorys[TenYen].Count;
+            FiftyYenCount = Cashbox.GetInstance().MoneyCategorys[FiftyYen].Count;
+            OneHundredYenCount = Cashbox.GetInstance().MoneyCategorys[OneHundredYen].Count;
+            FiveHundredYenCount = Cashbox.GetInstance().MoneyCategorys[FiveHundredYen].Count;
+            OneThousandYenCount = Cashbox.GetInstance().MoneyCategorys[OneThousandYen].Count;
+            FiveThousandYenCount = Cashbox.GetInstance().MoneyCategorys[FiveThousandYen].Count;
+            TenThousandYenCount = Cashbox.GetInstance().MoneyCategorys[TenThousandYen].Count;
         }
 
         /// <summary>
-        /// 金額１
+        /// 1万円札の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue1
+        public int TenThousandYenCount
         {
-            get => otherMoneyAmountDisplayValue1;
+            get => tenThousandYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 1, ref otherMoneyAmountDisplayValue1);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                tenThousandYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[TenThousandYen].Count = tenThousandYenCount;
+                TenThousandYenAmountWithUnit =
+                    Cashbox.GetInstance().MoneyCategorys[TenThousandYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額2
+        /// 5千円札の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue2
+        public int FiveThousandYenCount
         {
-            get => otherMoneyAmountDisplayValue2;
+            get => fiveThousandYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 2, ref otherMoneyAmountDisplayValue2);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                fiveThousandYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[FiveThousandYen].Count = fiveThousandYenCount;
+                FiveThousandYenAmountWithUnit =
+                    Cashbox.GetInstance().MoneyCategorys[FiveThousandYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額3
+        /// 千円札の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue3
+        public int OneThousandYenCount
         {
-            get => otherMoneyAmountDisplayValue3;
+            get => oneThousandYenCount;
             set
             {
-                SetOtherMoneyAmount(value,3, ref otherMoneyAmountDisplayValue3);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                oneThousandYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[OneThousandYen].Count = oneThousandYenCount;
+                OneThousandYenAmountWithUnit =
+                    Cashbox.GetInstance().MoneyCategorys[OneThousandYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額4
+        /// 500円玉の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue4
+        public int FiveHundredYenCount
         {
-            get => otherMoneyAmountDisplayValue4;
+            get => fiveHundredYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 4, ref otherMoneyAmountDisplayValue4);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                fiveHundredYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[FiveHundredYen].Count = fiveHundredYenCount;
+                FiveHundredYenAmountWithUnit =
+                    Cashbox.GetInstance().MoneyCategorys[FiveHundredYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額5
+        /// 100円玉の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue5
+        public int OneHundredYenCount
         {
-            get => otherMoneyAmountDisplayValue5;
+            get => oneHundredYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 5, ref otherMoneyAmountDisplayValue5);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                oneHundredYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[OneHundredYen].Count = oneHundredYenCount;
+                OneHundredYenAmountWithUnit =
+                    Cashbox.GetInstance().MoneyCategorys[OneHundredYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額6
+        /// 50円玉の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue6
+        public int FiftyYenCount
         {
-            get => otherMoneyAmountDisplayValue6;
+            get => fiftyYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 6, ref otherMoneyAmountDisplayValue6);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                fiftyYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[FiftyYen].Count = fiftyYenCount;
+                FiftyYenAmountWithUnit = Cashbox.GetInstance().MoneyCategorys[FiftyYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額7
+        /// 10円玉の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue7
+        public int TenYenCount
         {
-            get => otherMoneyAmountDisplayValue7;
+            get => tenYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 7, ref otherMoneyAmountDisplayValue7);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                tenYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[TenYen].Count = tenYenCount;
+                TenYenAmountWithUnit = Cashbox.GetInstance().MoneyCategorys[TenYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 金額8
+        /// 5円玉の枚数
         /// </summary>
-        public string OtherMoneyAmountDisplayValue8
+        public int FiveYenCount
         {
-            get => otherMoneyAmountDisplayValue8;
+            get => fiveYenCount;
             set
             {
-                SetOtherMoneyAmount(value, 8, ref otherMoneyAmountDisplayValue8);
-                ValidationProperty(nameof(OtherMoneyAmountDisplayValue1), value);
+                fiveYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[FiveYen].Count = fiveYenCount;
+                FiveYenAmountWithUnit = Cashbox.GetInstance().MoneyCategorys[FiveYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// 各その他釣り銭等欄に内容を入力します
+        /// 1円玉の枚数
         /// </summary>
-        /// <param name="value">内容</param>
-        /// <param name="otherMoneyNumber">欄のインデックス</param>
-        private void SetOtherMontyTitle(string value, int otherMoneyNumber) => 
-            myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;
-        /// <summary>
-        /// タイトル1
-        /// </summary>
-        public string OtherMoneyTitle1
+        public int OneYenCount
         {
-            get => otherMoneyTitle1;
+            get => oneYenCount;
             set
             {
-                otherMoneyTitle1 = value;
-                SetOtherMontyTitle(value, 1);
-                ValidationProperty(nameof(OtherMoneyTitle1), value);
+                oneYenCount = value;
+                Cashbox.GetInstance().MoneyCategorys[OneYen].Count = oneYenCount;
+                OneYenAmountWithUnit = Cashbox.GetInstance().MoneyCategorys[OneYen].AmountWithUnit();
+                TotalAmount = Cashbox.GetInstance().GetTotalAmountWithUnit();
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル2
+        /// 表示用一万円札合計金額
         /// </summary>
-        public string OtherMoneyTitle2
+        public string TenThousandYenAmountWithUnit
         {
-            get => otherMoneyTitle2;
+            get => tenThousandYenAmountWithUnit;
             set
             {
-                otherMoneyTitle2 = value;
-                SetOtherMontyTitle(value, 2);
-                ValidationProperty(nameof(OtherMoneyTitle2), value);
+                tenThousandYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル3
+        /// 表示用5千円札合計金額
         /// </summary>
-        public string OtherMoneyTitle3
+        public string FiveThousandYenAmountWithUnit
         {
-            get => otherMoneyTitle3;
+            get => fiveThousandYenAmountWithUnit;
             set
             {
-                otherMoneyTitle3 = value;
-                SetOtherMontyTitle(value, 3);
-                ValidationProperty(nameof(OtherMoneyTitle3), value);
+                fiveThousandYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル4
+        /// 表示用千円札合計金額
         /// </summary>
-        public string OtherMoneyTitle4
+        public string OneThousandYenAmountWithUnit
         {
-            get => otherMoneyTitle4;
+            get => oneThousandYenAmountWithUnit;
             set
             {
-                otherMoneyTitle4 = value;
-                SetOtherMontyTitle(value, 4);
-                ValidationProperty(nameof(OtherMoneyTitle4), value);
+                oneThousandYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル5
+        /// 表示用500円玉合計金額
         /// </summary>
-        public string OtherMoneyTitle5
+        public string FiveHundredYenAmountWithUnit
         {
-            get => otherMoneyTitle5;
+            get => fiveHundredYenAmountWithUnit;
             set
             {
-                otherMoneyTitle5 = value;
-                SetOtherMontyTitle(value, 5);
-                ValidationProperty(nameof(OtherMoneyTitle5), value);
+                fiveHundredYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル6
+        /// 表示用100円玉合計金額
         /// </summary>
-        public string OtherMoneyTitle6
+        public string OneHundredYenAmountWithUnit
         {
-            get => otherMoneyTitle6;
+            get => oneHundredYenAmountWithUnit;
             set
             {
-                otherMoneyTitle6 = value;
-                SetOtherMontyTitle(value, 6);
-                ValidationProperty(nameof(OtherMoneyTitle6), value);
+                oneHundredYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル7
+        /// 表示用10円玉合計金額
         /// </summary>
-        public string OtherMoneyTitle7
+        public string TenYenAmountWithUnit
         {
-            get => otherMoneyTitle7;
+            get => tenYenAmountWithUnit;
             set
             {
-                otherMoneyTitle7 = value;
-                SetOtherMontyTitle(value, 7);
-                ValidationProperty(nameof(OtherMoneyTitle7), value);
+                tenYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
         /// <summary>
-        /// タイトル8
+        /// 表示用5円玉合計金額
         /// </summary>
-        public string OtherMoneyTitle8
+        public string FiveYenAmountWithUnit
         {
-            get => otherMoneyTitle8;
+            get => fiveYenAmountWithUnit;
             set
             {
-                otherMoneyTitle8 = value;
-                SetOtherMontyTitle(value, 8);
-                ValidationProperty(nameof(OtherMoneyTitle8), value);
+                fiveYenAmountWithUnit = value;
                 CallPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// 1円玉合計金額
+        /// </summary>
+        public string OneYenAmountWithUnit
+        {
+            get => oneYenAmountWithUnit;
+            set
+            {
+                oneYenAmountWithUnit = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 50円玉合計金額
+        /// </summary>
+        public string FiftyYenAmountWithUnit
+        {
+            get => fiftyYenAmountWithUnit;
+            set
+            {
+                fiftyYenAmountWithUnit = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 表示用総金額
+        /// </summary>
         public string TotalAmount
         {
             get => totalAmount;
@@ -332,105 +323,22 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-        public override void ValidationProperty(string propertyName, object value)
+        /// <summary>
+        /// 出力ボタンのテキスト
+        /// </summary>
+        public string OutputButtonText
         {
-            switch (propertyName)
+            get => outputButtonText;
+            set
             {
-                case nameof(OtherMoneyTitle1):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle1) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1), 
-                            nameof(OtherMoneyAmountDisplayValue1), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle2):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle2) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2), 
-                            nameof(OtherMoneyAmountDisplayValue2), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle3):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle3) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3), 
-                            nameof(OtherMoneyAmountDisplayValue3), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle4):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle4) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4), 
-                            nameof(OtherMoneyAmountDisplayValue4), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle5):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle5) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5), 
-                            nameof(OtherMoneyAmountDisplayValue5), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle6):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle6) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6), 
-                            nameof(OtherMoneyAmountDisplayValue6), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle7):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle7) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7), 
-                            nameof(OtherMoneyAmountDisplayValue7), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyTitle8):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyTitle8) & 
-                            string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8), 
-                            nameof(OtherMoneyAmountDisplayValue8), "金額を入力して下さい");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue1):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue1) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle1), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue2):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue2) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle2), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue3):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue3) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle3), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue4):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue4) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle4), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue5):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue5) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle5), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue6):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue6) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle6), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue7):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue7) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle7), propertyName, "内容を入力してください");
-                    break;
-                case nameof(OtherMoneyAmountDisplayValue8):
-                    ErrorsListOperation
-                        (!string.IsNullOrEmpty(OtherMoneyAmountDisplayValue8) & 
-                            string.IsNullOrEmpty(OtherMoneyTitle8), propertyName, "内容を入力してください");
-                    break;
-                default:
-                    break;
+                outputButtonText = value;
+                CallPropertyChanged();
             }
         }
+        public override void ValidationProperty(string propertyName, object value)
+        { }
 
-        protected override void SetWindowDefaultTitle() => 
+        protected override void SetWindowDefaultTitle() =>
             DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
 
         public override void SetRep(Rep rep)

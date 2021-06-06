@@ -70,8 +70,8 @@ namespace WPF.ViewModels.Datas
         {
             MessageBox = new MessageBoxInfo
             {
-                Button = System.Windows.MessageBoxButton.OK,
-                Image = System.Windows.MessageBoxImage.Information,
+                Button = MessageBoxButton.OK,
+                Image = MessageBoxImage.Information,
                 Title = title,
                 Message = message
             };

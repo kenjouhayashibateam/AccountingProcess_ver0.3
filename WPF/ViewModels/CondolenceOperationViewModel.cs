@@ -43,19 +43,19 @@ namespace WPF.ViewModels
         private string searchGanreContent;
         #endregion
         #region Bools
-        private bool isMemorialService;
-        private bool isAlmsgivingSearch;
-        private bool isTipSearch;
-        private bool isSocalGatheringSearch;
-        private bool isOperationButtonEnabled;
-        private bool isReceptionBlank;
-        private bool fixToggle;
-        private bool isFixToggleEnabled;
+        private bool isMemorialService = false;
+        private bool isAlmsgivingSearch = false;
+        private bool isTipSearch = false;
+        private bool isSocalGatheringSearch = false;
+        private bool isOperationButtonEnabled = false;
+        private bool isReceptionBlank = false;
+        private bool fixToggle = false;
+        private bool isFixToggleEnabled = false;
         #endregion
         private Dictionary<int, string> soryoList;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
-        private DateTime receiptsAndExpenditureSearchDate=DefaultDate;
-        private DateTime accountActivityDate;
+        private DateTime receiptsAndExpenditureSearchDate = DefaultDate;
+        private DateTime accountActivityDate = DefaultDate;
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
         private readonly CondolenceOperation condolenceOperation;
         private Condolence OperationCondolence;
@@ -93,8 +93,7 @@ namespace WPF.ViewModels
                 SetProperty();
             }
         }
-        public CondolenceOperationViewModel() : 
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
         /// 懇志検索コマンド
         /// </summary>
@@ -145,7 +144,7 @@ namespace WPF.ViewModels
             FixToggle = string.IsNullOrEmpty(condolence.MailRepresentative);
             CounterReceiver = condolence.CounterReceiver;
             MailRepresentative = condolence.MailRepresentative;
-            IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) && 
+            IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) &&
                 string.IsNullOrEmpty(condolence.MailRepresentative);
         }
         /// <summary>
@@ -313,7 +312,6 @@ namespace WPF.ViewModels
             }
 
             DataOperationButtonContent = "登録中";
-            LoginRep loginRep = LoginRep.GetInstance();
             await Task.Run(() => DataBaseConnect.Registration(OperationCondolence));
             condolenceOperation.SetData(OperationCondolence);
             condolenceOperation.Notify();
@@ -367,7 +365,7 @@ namespace WPF.ViewModels
 
             var(totalRow,list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
+                    ( DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
                         string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
                         DateTime.Today,Pagination.PageCount,"ID",false);

@@ -83,20 +83,20 @@ namespace WPF.ViewModels
             int socialGethering = default;
             DateTime accountActivityDate = DefaultDate;
             bool isHeadData = true;
-          
-            foreach(ReceiptsAndExpenditure rae in VoucherContents)
+
+            foreach (ReceiptsAndExpenditure rae in VoucherContents)
             {
                 switch(rae.Content.AccountingSubject.SubjectCode)
                 {
-                    case ("815"):
+                    case "815":
                         almsgiving = rae.Price;
                         break;
-                    case ("831"):
+                    case "831":
                         socialGethering = rae.Price;
                         break;
-                    case ("832"):
+                    case "832":
                         SetAmount();
-                        break;                        
+                        break;
                 }
 
                 if (isHeadData)
@@ -192,7 +192,7 @@ namespace WPF.ViewModels
             await Task.Delay(1);
             if (SelectedSeachReceiptsAndExpenditure == null) return;
             if (VoucherContents.Contains(SelectedSeachReceiptsAndExpenditure)) return;
-            if(VoucherContents.Count==8)
+            if (VoucherContents.Count == 8)
             {
                 MessageBox = new MessageBoxInfo()
                 {
@@ -270,7 +270,7 @@ namespace WPF.ViewModels
             get => voucherTotalAmountDisplayValue;
             set
             {
-                voucherTotalAmountDisplayValue =TextHelper.CommaDelimitedAmount(value);
+                voucherTotalAmountDisplayValue = CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
@@ -290,13 +290,15 @@ namespace WPF.ViewModels
         private void CreateReceiptsAndExpenditures(bool isPageReset)
         {
             Pagination.CountReset(isPageReset);
+
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (TextHelper.DefaultDate, new DateTime(9999, 1, 1),
+                (DefaultDate, DateTime.Today,
                 AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
-                string.Empty, true, true, true, true, SearchDate, SearchDate, TextHelper.DefaultDate,
-                new DateTime(9999, 1, 1), Pagination.PageCount, Pagination.SelectedSortColumn,
+                string.Empty, true, true, true, true, SearchDate, SearchDate, DefaultDate,
+                DateTime.Today, Pagination.PageCount, Pagination.SelectedSortColumn,
                 Pagination.SortDirectionIsASC);
+
             SearchReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = count;
             Pagination.SetProperty();

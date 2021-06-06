@@ -63,24 +63,24 @@ namespace WPF.ViewModels
         #region bool
         private bool isPeriodSearch;
         private bool isSeachInfoVisibility;
-        private bool isAllShowItem;
-        private bool isPaymentOnly;
-        private bool isWithdrawalOnly;
+        private bool isAllShowItem = true;
+        private bool isPaymentOnly = false;
+        private bool isWithdrawalOnly = false;
         private bool isOutputGroupEnabled;
         private bool isBalanceFinalAccountOutputEnabled;
         private bool isReceiptsAndExpenditureOutputButtonEnabled;
         private bool isPaymentSlipsOutputEnabled;
         private bool isWithdrawalSlipsOutputEnabled;
         private bool isOutput;
-        private bool isContainOutputted;
-        private bool isLocationSearch;
-        private bool isValidityTrueOnly;
-        private bool isPreviousDayOutput;
-        private bool isPreviousDayOutputEnabled;
-        private bool isPasswordEnabled;
-        private bool passwordCharCheck;
-        private bool isYokohamaBankCheck;
-        private bool isCeresaCheck;
+        private bool isContainOutputted = false;
+        private bool isLocationSearch = false;
+        private bool isValidityTrueOnly = false;
+        private bool isPreviousDayOutput = false;
+        private bool isPreviousDayOutputEnabled = false;
+        private bool isPasswordEnabled = false;
+        private bool passwordCharCheck = false;
+        private bool isYokohamaBankCheck = false;
+        private bool isCeresaCheck = false;
         #endregion
         #region DateTime
         private DateTime searchEndDate = new DateTime(9999, 1, 1);
@@ -136,9 +136,9 @@ namespace WPF.ViewModels
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowUpdateCommand { get; set; }
-        private async void ShowUpdate()
+        private  void ShowUpdate()
         {
-            await Task.Delay(1);
+            //await Task.Delay(1);
             ReceiptsAndExpenditureOperation.SetData(SelectedReceiptsAndExpenditure);
             CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());
         }
@@ -338,9 +338,9 @@ namespace WPF.ViewModels
             IsOutputGroupEnabled = false;
             await Task.Run(() =>
             DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
-                PeymentSumDisplayValue,WithdrawalSumDisplayValue, TransferSumDisplayValue, 
-                TodaysFinalAccount, AmountWithUnit(IntAmount( YokohamaBankAmount)), 
-                AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount,IsYokohamaBankCheck,
+                PeymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
+                TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
+                AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount, IsYokohamaBankCheck,
                 IsCeresaCheck));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;

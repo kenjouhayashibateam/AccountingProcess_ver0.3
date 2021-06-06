@@ -753,7 +753,7 @@ namespace WPF.ViewModels
 
             IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
 
-            if(IsReducedTaxRateVisiblity) IsReducedTaxRate = SelectedContent.Text == "供物";
+            if (IsReducedTaxRateVisiblity) IsReducedTaxRate = SelectedContent.Text == "供物";            
             
             if ( selectedContent.FlatRate > 0)
                 Price = selectedContent.FlatRate.ToString();
@@ -965,6 +965,7 @@ namespace WPF.ViewModels
             set
             {
                 isReducedTaxRateVisiblity = value;
+                if (!value) IsReducedTaxRate = false;
                 CallPropertyChanged();
             }
         }
