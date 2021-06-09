@@ -509,8 +509,8 @@ namespace WPF.ViewModels
             set
             {
                 comboAccountingSubjectCode = string.Empty;
-                
-                if (string.IsNullOrEmpty(value)&&OperationData.Data==null)
+
+                if (string.IsNullOrEmpty(value) && OperationData.Data == null)
                 {
                     SetField();
                     ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);

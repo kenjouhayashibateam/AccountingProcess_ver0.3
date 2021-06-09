@@ -12,7 +12,7 @@ namespace WPF.ViewModels.Datas
     /// <summary>
     /// ページネーションクラス
     /// </summary>
-    public sealed class Pagination:NotifyPropertyChanged
+    public sealed class Pagination : NotifyPropertyChanged
     {
         public static Pagination GetPagination() => new Pagination();
         private int totalRowCount;

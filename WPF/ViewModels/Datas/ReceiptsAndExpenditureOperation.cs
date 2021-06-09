@@ -33,7 +33,7 @@ namespace WPF.ViewModels.Datas
             new List<IReceiptsAndExpenditureOperationObserver>();
 
         private static ReceiptsAndExpenditure OperationData;
-        
+
         private readonly static ReceiptsAndExpenditureOperation _receiptsAndExpenditureOperation
             = new ReceiptsAndExpenditureOperation();
 

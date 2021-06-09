@@ -14,10 +14,15 @@ namespace Infrastructure
         /// <returns>エクセル出力</returns>
         public static IDataOutput GetDefaultDataOutput() => new ExcelOutputInfrastructure();
         /// <summary>
+        /// ロガーインフラストラクチャのデフォルト
+        /// </summary>
+        /// <returns></returns>
+        public static ILogger GetLogger() => new LogFileInfrastructure();
+        /// <summary>
         /// DataBaseConnectインフラストラクチャのデフォルト
         /// </summary>
         /// <returns>SQLServer接続</returns>
         public static IDataBaseConnect GetDefaultDataBaseConnect() =>
-            new SQLServerConnectInfrastructure();
+            new LocalConnectInfrastructure();
     }
 }

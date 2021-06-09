@@ -197,7 +197,7 @@ namespace WPF.ViewModels
             WithdrawalSlipsOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             await Task.Run(() => SlipsOutputProcess(false));
-            IsOutputGroupEnabled = true;
+            SetOutputGroupEnabled();
             WithdrawalSlipsOutputButtonContent = "出金伝票";
         }
 
@@ -210,7 +210,7 @@ namespace WPF.ViewModels
             PaymentSlipsOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             await Task.Run(() => SlipsOutputProcess(true));
-            IsOutputGroupEnabled = true;
+            SetOutputGroupEnabled();
             PaymentSlipsOutputButtonContent = "入金伝票";
         }
         /// <summary>
@@ -292,11 +292,17 @@ namespace WPF.ViewModels
         /// <summary>
         /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
         /// </summary>
-        private void SetOutputGroupEnabled() =>
-            IsOutputGroupEnabled =
-            IsPaymentSlipsOutputEnabled=
-            IsWithdrawalSlipsOutputEnabled=
-            IsBalanceFinalAccountOutputEnabled= Cashbox.GetTotalAmount() == ListAmount;
+        private void SetOutputGroupEnabled()
+        {
+            bool b = Cashbox.GetTotalAmount() == ListAmount;
+            IsOutputGroupEnabled = b;
+            if (AccountingProcessLocation.Location == "管理事務所")
+                IsPaymentSlipsOutputEnabled = IsPasswordEnabled =
+                IsWithdrawalSlipsOutputEnabled = b;
+            else IsPaymentSlipsOutputEnabled = IsPasswordEnabled =
+                    IsWithdrawalSlipsOutputEnabled = false;
+            IsBalanceFinalAccountOutputEnabled= b;
+        }
         /// <summary>
         /// 金庫データをViewにセットする
         /// </summary>

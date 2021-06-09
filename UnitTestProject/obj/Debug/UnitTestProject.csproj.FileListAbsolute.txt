@@ -32,7 +32,6 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\D
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\Microsoft.Xaml.Behaviors.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\DocumentFormat.OpenXml.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\ExcelNumberFormat.xml
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csprojAssemblyReference.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.CoreCompileInputs.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.CopyComplete
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.dll
@@ -76,3 +75,4 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\Uni
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.AssemblyReference.cache

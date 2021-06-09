@@ -19,6 +19,7 @@ namespace Infrastructure
 
             streamWriter.WriteLine($"{info}{"\t"}{message}");
             streamWriter.Flush();
+            System.Diagnostics.Process.Start(Properties.Resources.LogFilePath);
         }
     }
 }

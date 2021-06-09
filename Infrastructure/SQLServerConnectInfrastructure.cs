@@ -17,7 +17,13 @@ namespace Infrastructure
     {
         private SqlConnection Cn;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
+        private readonly ILogger Logger;
 
+        public SQLServerConnectInfrastructure(ILogger logger)
+        {
+            Logger = logger;
+        }
+        public SQLServerConnectInfrastructure() : this(DefaultInfrastructure.GetLogger()) { }
         /// <summary>
         /// コネクションストリングを設定します。
         /// </summary>
@@ -46,7 +52,13 @@ namespace Infrastructure
                 CommandText = commandText
             };
 
-            Cn.Open();
+            try
+            {
+                Cn.Open();
+            }catch(Exception ex)
+            {
+                Logger.Log(ILogger.LogInfomation.ERROR, ex.Message);
+            }
             return Cmd;
         }
         /// ストアドを実行するコマンドを返します
@@ -62,7 +74,7 @@ namespace Infrastructure
 
             using (Cn)
             {
-                Cmd=NewCommand(CommandType.StoredProcedure, commandText);
+                Cmd = NewCommand(CommandType.StoredProcedure, commandText);
 
                 foreach (KeyValuePair<string, object> param in parameters)
                     Cmd.Parameters.AddWithValue(param.Key, param.Value);
@@ -817,7 +829,8 @@ namespace Infrastructure
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             { {"@voucher_id",voucherID}};
-            ObservableCollection<ReceiptsAndExpenditure> list = new ObservableCollection<ReceiptsAndExpenditure>();
+            ObservableCollection<ReceiptsAndExpenditure> list = 
+                new ObservableCollection<ReceiptsAndExpenditure>();
 
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("call_voucher_grouping_receipts_and_expenditure", parameters).ExecuteReader();
@@ -832,18 +845,18 @@ namespace Infrastructure
                 paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"], 
                     (string)dataReader["password"], (bool)dataReader["staff_validity"], 
                     (bool)dataReader["is_permission"]);
-                paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], 
-                    true, (bool)dataReader["is_shunjuen_dept"]);
+                paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"],
+                    (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
                 paramAccountingSubject = new AccountingSubject((string)dataReader["account_subject_id"], 
                     (string)dataReader["subject_code"], (string)dataReader["subject"], true);
                 paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject, 
                     (int)dataReader["flat_rate"], (string)dataReader["content"], true);
                 list.Add(new ReceiptsAndExpenditure
                     ((int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
-                        paramRep, (string)dataReader["location"], paramCreditDept, paramContent,(string)dataReader["detail"],
-                        (int)dataReader["price"], (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
-                        (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"],
-                        (bool)dataReader["is_reduced_tax_rate"]));
+                        paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
+                        (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
+                        (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
+                        (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"]));
             }
             return list;
         }

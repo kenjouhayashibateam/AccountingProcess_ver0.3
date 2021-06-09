@@ -3,7 +3,7 @@
     /// <summary>
     /// ウィンドウを閉じる際のキャンセル動作を制御するクラス
     /// </summary>
-    interface IClosing
+    public interface IClosing
     {
         bool OnClosing();
     }

@@ -27,9 +27,9 @@ namespace WPF.ViewModels.Datas
         {
             SetDelegateCommand();
             SetDataList();
-            SetDataRegistrationCommand = new DelegateCommand(() => 
+            SetDataRegistrationCommand = new DelegateCommand(() =>
                 SetDataOperation(DataOperation.登録), () => true);
-            SetDataUpdateCommand = new DelegateCommand(() => 
+            SetDataUpdateCommand = new DelegateCommand(() =>
                 SetDataOperation(DataOperation.更新), () => true);
         } 
         /// <summary>
@@ -66,7 +66,7 @@ namespace WPF.ViewModels.Datas
         /// 登録完了メッセージを生成、呼び出します
         /// </summary>
         protected void CallCompletedRegistration() => CallOkInfomationMessageBox("登録完了", "登録しました");
-        private void CallOkInfomationMessageBox(string title,string message)
+        private void CallOkInfomationMessageBox(string title, string message)
         {
             MessageBox = new MessageBoxInfo
             {
@@ -120,7 +120,7 @@ namespace WPF.ViewModels.Datas
         protected void SetDataOperation(DataOperation Operation)
         {
             CurrentOperation = Operation;
-            switch(CurrentOperation)
+            switch (CurrentOperation)
             {
                 case DataOperation.登録:
                     IsCheckedRegistration = true;
@@ -128,6 +128,8 @@ namespace WPF.ViewModels.Datas
                 case DataOperation.更新:
                     IsCheckedUpdate = true;
                     SetDataList();
+                    break;
+                default:
                     break;
             }
             SetDataOperationButtonContent(Operation);

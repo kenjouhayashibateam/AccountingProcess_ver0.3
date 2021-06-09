@@ -47,7 +47,7 @@ namespace Infrastructure.ExcelOutputData
             myWorkbook = new XLWorkbook();
             myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
         }
-        public ExcelApp() : this(new LogFileInfrastructure()) { }
+        public ExcelApp() : this(DefaultInfrastructure.GetLogger()) { }
 
         /// <summary>
         /// デストラクタ　エクセルプロセスを開放します
@@ -62,10 +62,17 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected void ExcelOpen()
         {
-            myWorksheet.Protect("excel");
-            myWorkbook.SaveAs(openPath);
-            myWorkbooks.Open(Filename: openPath, ReadOnly: true);
-            App.Visible = true;
+            try
+            {
+                myWorksheet.Protect("excel");
+                myWorkbook.SaveAs(openPath);
+                myWorkbooks.Open(Filename: openPath, ReadOnly: true);
+                App.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ILogger.LogInfomation.ERROR, ex.Message);
+            }
         }
         /// <summary>
         /// エクセルアプリケーションを呼び出します
@@ -90,7 +97,7 @@ namespace Infrastructure.ExcelOutputData
 
             myWorkbooks = App.Workbooks;
             //出力ファイルを検出して閉じる
-            foreach (Microsoft.Office.Interop.Excel.Workbook wb in myWorkbooks)
+            foreach (Workbook wb in myWorkbooks)
                 if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);
             //開いているワークブックがなければエクセルアプリケーションを終了する
             if (myWorkbooks.Count == 0) App.Quit();
@@ -122,22 +129,22 @@ namespace Infrastructure.ExcelOutputData
         /// エクセルシートのTopの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract Double SetMaeginsTop();
+        protected abstract double SetMaeginsTop();
         /// <summary>
         /// エクセルシートのLeftの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract Double SetMaeginsLeft();
+        protected abstract double SetMaeginsLeft();
         /// <summary>
         /// エクセルシートのRightの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract Double SetMaeginsRight();
+        protected abstract double SetMaeginsRight();
         /// <summary>
         /// エクセルシートのBottomの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract Double SetMaeginsBottom();
+        protected abstract double SetMaeginsBottom();
         /// <summary>
         /// エクセルシートのセルの結合を設定します
         /// </summary>

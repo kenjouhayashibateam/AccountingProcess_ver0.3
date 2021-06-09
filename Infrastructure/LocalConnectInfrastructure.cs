@@ -544,12 +544,14 @@ namespace Infrastructure
         {
             ObservableCollection<Voucher> list = new ObservableCollection<Voucher>()
             {
-                { new Voucher(1, "あああ",CallVoucherGroupingReceiptsAndExpenditure(0), DefaultDate, CallRep(string.Empty), true) }
+                { new Voucher(1, "あああ",CallVoucherGroupingReceiptsAndExpenditure(0), DefaultDate, 
+                    CallRep(string.Empty), true) }
             };
             return list;
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure> CallVoucherGroupingReceiptsAndExpenditure(int voucherID)
+        public ObservableCollection<ReceiptsAndExpenditure> 
+            CallVoucherGroupingReceiptsAndExpenditure(int voucherID)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
