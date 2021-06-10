@@ -36,6 +36,7 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\D
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.CopyComplete
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.AssemblyReference.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\ja\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.resources.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\ja\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.resources.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\ja\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
@@ -75,4 +76,3 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\Uni
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.pdb
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.AssemblyReference.cache

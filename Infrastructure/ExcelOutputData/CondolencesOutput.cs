@@ -118,7 +118,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(currentRow, 1).Value =
                     $"{condolence.AccountActivityDate:M/d}\r\n{condolence.AccountActivityDate:(ddd)}";
                 myWorksheet.Cell(currentRow, 2).Value = condolence.OwnerName;
-                myWorksheet.Cell(currentRow, 3).Value = condolence.IsMemorialService ? "法事" : "葬儀";
+                myWorksheet.Cell(currentRow, 3).Value = condolence.Content;
                 myWorksheet.Cell(currentRow, 4).Value = GetFirstName(condolence.SoryoName);
                 myWorksheet.Cell(currentRow, 5).Value = AmountWithUnit(condolence.TotalAmount);
                 myWorksheet.Cell(currentRow, 6).Value = AmountWithUnit(condolence.Almsgiving);

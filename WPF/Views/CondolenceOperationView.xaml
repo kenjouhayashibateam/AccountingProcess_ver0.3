@@ -96,7 +96,7 @@
                         </Button.InputBindings>
                     </Button>
                     <TextBlock Grid.Column="2" Text="{Binding Pagination.ListPageInfo}" Margin="5"/>
-                    <Button x:Name="NextButton" Grid.Column="3" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}">
+                    <Button x:Name="NextButton" Grid.Column="3" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
@@ -208,11 +208,11 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="葬儀、法事切り替え" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBlock Text="内容" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="担当僧侶" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="備考" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="窓口、郵送切り替え" Grid.Row="0" Grid.Column="3" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ToggleButton x:Name="ContentToggleButton" Grid.Row="1" Grid.Column="0" IsChecked="{Binding IsMemorialService}" Content="{Binding ContentText}" VerticalContentAlignment="Center" Margin="5"/>
+                        <ComboBox x:Name="ContentComboBox" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ContentStrings}" Text="{Binding ContentText}" DisplayMemberPath="Value" VerticalContentAlignment="Center" Margin="5"/>
                         <ComboBox Name="SoryoNameComboBox" Grid.Row="1" Grid.Column="1" IsEditable="True" ItemsSource="{Binding SoryoList}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding SoryoName}" VerticalContentAlignment="Center" Margin="5"/>
                         <ComboBox x:Name="NoteTextComboBox" Grid.Row="1" Grid.Column="2" Text="{Binding Note}" VerticalContentAlignment="Center" ItemsSource="{Binding NoteStrings}" DisplayMemberPath="Value" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Margin="5"/>
                         <ToggleButton x:Name="ReceiverToggleButton" Grid.Row="1" Grid.Column="3" IsEnabled="{Binding IsFixToggleEnabled}" IsChecked="{Binding FixToggle}" Content="{Binding FixToggleContent}" Margin="5"/>

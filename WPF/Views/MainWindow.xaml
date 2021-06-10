@@ -9,7 +9,7 @@
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="480" Width="800" WindowStartupLocation="CenterScreen" FocusManager.FocusedElement="{Binding ElementName=LoginButton}">
+        Title="{Binding WindowTitle}" Height="550" Width="800" WindowStartupLocation="CenterScreen" FocusManager.FocusedElement="{Binding ElementName=LoginButton}">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>

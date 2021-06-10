@@ -10,7 +10,7 @@
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="500" Width="1100">
+        Title="{Binding WindowTitle}" Height="500" Width="1150">
     <Window.DataContext>
         <vm:CreateCondolencesViewModel/>
     </Window.DataContext>
@@ -93,6 +93,13 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="経理担当場所" Width="3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Location}" VerticalAlignment="Center" Margin="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="施主名" Width="2*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -108,7 +115,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding IsMemorialService,Converter={b:IsMemorialServiceConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

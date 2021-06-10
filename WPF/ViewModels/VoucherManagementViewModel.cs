@@ -28,7 +28,7 @@ namespace WPF.ViewModels
         private bool isValidityTrueOnly = true;
         private bool isOutputButtonEnabled;
         private readonly IDataOutput DataOutput;
-        private string outputButtonContent= "選択したデータを再発行";
+        private string outputButtonContent = "選択したデータを再発行";
 
         public VoucherManagementViewModel
             (IDataBaseConnect dataBaseConnect, IDataOutput dataOutput) : base(dataBaseConnect)
@@ -61,7 +61,14 @@ namespace WPF.ViewModels
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
             VoucherUpdate();
-            await Task.Run(() => DataOutput.VoucherData(SelectedVoucher, IsInputReissueText));
+            try
+            {
+                await Task.Run(() => DataOutput.VoucherData(SelectedVoucher, IsInputReissueText));
+            }
+            catch (ApplicationException ex)
+            {
+                DefaultInfrastructure.GetLogger().Log(ILogger.LogInfomation.ERROR, ex.Message);
+            }
             OutputButtonContent = "選択したデータを再発行";
 
             void VoucherUpdate()

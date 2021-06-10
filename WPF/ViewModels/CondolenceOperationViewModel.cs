@@ -36,14 +36,14 @@ namespace WPF.ViewModels
         private string counterReceiver;
         private string mailRepresentative;
         private string fixToggleContent;
+        private string condolenceContent = "法事";
         /// <summary>
         /// 検索する勘定科目コード
         /// </summary>
         private string SearchAccountingSubjectCode { get; set; } = string.Empty;
-        private string searchGanreContent;
+        private string searchGanreContent = string.Empty;
         #endregion
         #region Bools
-        private bool isMemorialService = false;
         private bool isAlmsgivingSearch = false;
         private bool isTipSearch = false;
         private bool isSocalGatheringSearch = false;
@@ -53,26 +53,26 @@ namespace WPF.ViewModels
         private bool isFixToggleEnabled = false;
         #endregion
         private Dictionary<int, string> soryoList;
-        private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
+        private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures =
+            new ObservableCollection<ReceiptsAndExpenditure>();
         private DateTime receiptsAndExpenditureSearchDate = DefaultDate;
         private DateTime accountActivityDate = DefaultDate;
-        private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
-        private readonly CondolenceOperation condolenceOperation;
-        private Condolence OperationCondolence;
+        private ReceiptsAndExpenditure selectedReceiptsAndExpenditure = null;
+        private Condolence OperationCondolence = null;
         private int ID { get; set; }
         private Pagination pagination;
         public Dictionary<int, string> NoteStrings { get; set; }
+        public Dictionary<int, string> ContentStrings { get; set; }
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            condolenceOperation = CondolenceOperation.GetInstance();
-            condolenceOperation.Add(this);
+            CondolenceOperation.GetInstance().Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             IsAlmsgivingSearch = true;
             ReceiptsAndExpenditureSearchDate = DateTime.Today;
-            IsMemorialService = true;
+            CondolenceContent = "法事";
             IsReceptionBlank = false;
             FixToggle = true;
             NoteStrings = new Dictionary<int, string>()
@@ -81,8 +81,13 @@ namespace WPF.ViewModels
                 {2,"徳島" },
                 {3,"緑山メモリアルパーク" }
             };
-
-            if (condolenceOperation.GetData() == null)
+            ContentStrings = new Dictionary<int, string>()
+            {
+                {1,"法事" },
+                {2,"葬儀" },
+                {3,"法名授与" }
+            };
+            if (CondolenceOperation.GetInstance().GetData() == null)
             {
                 SetDataRegistrationCommand.Execute();
                 FieldClear();
@@ -128,12 +133,12 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
-            Condolence condolence = condolenceOperation.GetData();
+            Condolence condolence = CondolenceOperation.GetInstance().GetData();
             ID = condolence.ID;
-            if (ID == 0) SetDataOperation(DataOperation.登録);
+            if (ID == 0) { SetDataOperation(DataOperation.登録); }
             AccountActivityDate = condolence.AccountActivityDate;
             OwnerName = condolence.OwnerName;
-            IsMemorialService = condolence.IsMemorialService;
+            CondolenceContent = condolence.Content;
             SoryoName = condolence.SoryoName;
             Almsgiving = AmountWithUnit(condolence.Almsgiving);
             CarTip = AmountWithUnit(condolence.CarTip);
@@ -172,7 +177,7 @@ namespace WPF.ViewModels
         {
             OperationCondolence = new Condolence
                 (ID, AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
-                    isMemorialService,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip),
+                    condolenceContent,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip),
                     IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     IsReceptionBlank ? string.Empty : CounterReceiver, 
                     IsReceptionBlank ? string.Empty : MailRepresentative);
@@ -194,7 +199,7 @@ namespace WPF.ViewModels
         {
             IsOperationButtonEnabled = false;
             string updateContent = string.Empty;
-            Condolence condolence = condolenceOperation.GetData();
+            Condolence condolence = CondolenceOperation.GetInstance().GetData();
 
             if (OperationCondolence.AccountActivityDate != condolence.AccountActivityDate)
                 updateContent +=
@@ -211,10 +216,10 @@ namespace WPF.ViewModels
                     $"担当僧侶{Space}:{Space}{condolence.SoryoName}{Space}→{Space}" +
                     $"{OperationCondolence.SoryoName}\r\n";
 
-            if (condolence.IsMemorialService != OperationCondolence.IsMemorialService)
+            if (condolence.Content != OperationCondolence.Content)
                 updateContent +=
-                    $"内容{Space}:{Space}{(condolence.IsMemorialService ? "法事" : "葬儀")}{Space}→{Space}" +
-                    $"{(OperationCondolence.IsMemorialService ? "法事" : "葬儀")}\r\n";
+                    $"内容{Space}:{Space}{condolence.Content}{Space}→{Space}" +
+                    $"{OperationCondolence.Content}\r\n";
 
             if (condolence.CarTip != OperationCondolence.CarTip)
                 updateContent +=
@@ -250,7 +255,7 @@ namespace WPF.ViewModels
                     $"郵送担当者{Space}:{Space}{condolence.MailRepresentative}{Space}→" +
                     $"{Space}{OperationCondolence.MailRepresentative}\r\n";
 
-            if(string.IsNullOrEmpty(updateContent))
+            if (string.IsNullOrEmpty(updateContent))
             {
                 CallNoRequiredUpdateMessage();
                 SetProperty();
@@ -267,8 +272,8 @@ namespace WPF.ViewModels
 
             DataOperationButtonContent = "更新中";
             await Task.Run(() => DataBaseConnect.Update(OperationCondolence));
-            condolenceOperation.SetData(OperationCondolence);
-            condolenceOperation.Notify();
+            CondolenceOperation.GetInstance().SetData(OperationCondolence);
+            CondolenceOperation.GetInstance().Notify();
             CallCompletedUpdate();
             SetProperty();
             DataOperationButtonContent = "更新";
@@ -278,9 +283,7 @@ namespace WPF.ViewModels
         /// データを登録します
         /// </summary>
         private async void DataRegistration()
-        {
-            string content = OperationCondolence.IsMemorialService ? "法事" : "葬儀";
-            
+        {           
             IsOperationButtonEnabled = false;
             
             MessageBox = new MessageBoxInfo()
@@ -290,7 +293,7 @@ namespace WPF.ViewModels
                     $"日付\t\t:{Space}{OperationCondolence.AccountActivityDate.ToShortDateString()}\r\n" +
                     $"施主名\t\t:{Space}{OperationCondolence.OwnerName}\r\n" +
                     $"担当僧侶\t\t:{Space}{OperationCondolence.SoryoName}\r\n" +
-                    $"内容\t\t:{Space}{content}\r\n" +
+                    $"内容\t\t:{Space}{OperationCondolence.Content}\r\n" +
                     $"合計金額\t\t:{Space}{AmountWithUnit(OperationCondolence.TotalAmount)}\r\n" +
                     $"御布施\t\t:{Space}{AmountWithUnit(OperationCondolence.Almsgiving)}\r\n" +
                     $"御車代\t\t:{Space}{AmountWithUnit(OperationCondolence.CarTip)}\t\n" +
@@ -313,8 +316,8 @@ namespace WPF.ViewModels
 
             DataOperationButtonContent = "登録中";
             await Task.Run(() => DataBaseConnect.Registration(OperationCondolence));
-            condolenceOperation.SetData(OperationCondolence);
-            condolenceOperation.Notify();
+            CondolenceOperation.GetInstance().SetData(OperationCondolence);
+            CondolenceOperation.GetInstance().Notify();
             FieldClear();
             CallCompletedRegistration();
             IsOperationButtonEnabled = true;
@@ -527,13 +530,13 @@ namespace WPF.ViewModels
         /// <summary>
         /// 内容が法事かのチェック　Trueが法事、Falseが葬儀
         /// </summary>
-        public bool IsMemorialService
+        public string CondolenceContent
         {
-            get => isMemorialService;
+            get => condolenceContent;
             set
             {
-                isMemorialService = value;
-                ContentText = value ? "法事" : "葬儀";
+                condolenceContent = value;
+                ContentText = value;
                 CallPropertyChanged();
             }
         }

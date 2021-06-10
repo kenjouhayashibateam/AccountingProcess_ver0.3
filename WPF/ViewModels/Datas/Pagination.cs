@@ -18,14 +18,14 @@ namespace WPF.ViewModels.Datas
         private int totalRowCount;
         private int pageCount;
         private int totalPageCount;
-        private string listPageInfo;
-        private string sortDirectionContent;
-        private string selectedSortColumn;
-        private const string ASCCONTENT= "降順で検索（現在昇順）";
+        private string listPageInfo = "0/0";
+        private string sortDirectionContent = string.Empty;
+        private string selectedSortColumn = string.Empty;
+        private const string ASCCONTENT = "降順で検索（現在昇順）";
         private const string DESCCONTENT = "昇順で検索（現在降順）";
-        private bool isPrevPageEnabled;
-        private bool isNextPageEnabled;
-        private bool sortDirectionIsASC;
+        private bool isPrevPageEnabled = true;
+        private bool isNextPageEnabled = true;
+        private bool sortDirectionIsASC = true;
         private Dictionary<int, string> sortColumns;
         private readonly List<IPagenationObserver> pagenationObservers = new List<IPagenationObserver>();
 

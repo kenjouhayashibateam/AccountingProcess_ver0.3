@@ -61,6 +61,10 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\R
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.AssemblyReference.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.g.cs
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.baml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherManagementView.g.cs
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherManagementView.baml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SearchReceiptsAndExpenditureView.g.cs
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SearchReceiptsAndExpenditureView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\春秋苑経理システム.exe.config
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\春秋苑経理システム.exe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\春秋苑経理システム.pdb
@@ -99,6 +103,7 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsA
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationInputHelperView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RemainingMoneyCalculationView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureMangementView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SearchReceiptsAndExpenditureView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShorendoCashBoxCalculationView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherManagementView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\App.g.cs
@@ -117,6 +122,7 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsA
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureRegistrationInputHelperView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RemainingMoneyCalculationView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ReceiptsAndExpenditureMangementView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SearchReceiptsAndExpenditureView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShorendoCashBoxCalculationView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherManagementView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.g.resources
@@ -126,7 +132,3 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.Core
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherManagementView.g.cs
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\VoucherManagementView.baml
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SearchReceiptsAndExpenditureView.g.cs
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SearchReceiptsAndExpenditureView.baml

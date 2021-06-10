@@ -36,7 +36,7 @@ namespace WPF.ViewModels
         /// リストの収支金額
         /// </summary>
         private int ListAmount;
-       #endregion
+        #endregion
         #region string
         private string peymentSumDisplayValue;
         private string withdrawalSumDisplayValue;
@@ -61,17 +61,17 @@ namespace WPF.ViewModels
         private string FinalAccountCategory;
         #endregion
         #region bool
-        private bool isPeriodSearch;
-        private bool isSeachInfoVisibility;
+        private bool isPeriodSearch = true;
+        private bool isSeachInfoVisibility = true;
         private bool isAllShowItem = true;
         private bool isPaymentOnly = false;
         private bool isWithdrawalOnly = false;
-        private bool isOutputGroupEnabled;
+        private bool isOutputGroupEnabled = true;
         private bool isBalanceFinalAccountOutputEnabled;
         private bool isReceiptsAndExpenditureOutputButtonEnabled;
         private bool isPaymentSlipsOutputEnabled;
         private bool isWithdrawalSlipsOutputEnabled;
-        private bool isOutput;
+        private bool isOutput = false;
         private bool isContainOutputted = false;
         private bool isLocationSearch = false;
         private bool isValidityTrueOnly = false;
@@ -83,9 +83,9 @@ namespace WPF.ViewModels
         private bool isCeresaCheck = false;
         #endregion
         #region DateTime
-        private DateTime searchEndDate = new DateTime(9999, 1, 1);
+        private DateTime searchEndDate = DateTime.Today;
         private DateTime searchStartDate = DefaultDate;
-        private DateTime searchOutputDateEnd = new DateTime(9999, 1, 1);
+        private DateTime searchOutputDateEnd = DateTime.Today;
         private DateTime searchOutputDateStart = DefaultDate;
         #endregion
         #region ObservableCollection
@@ -301,7 +301,7 @@ namespace WPF.ViewModels
                 IsWithdrawalSlipsOutputEnabled = b;
             else IsPaymentSlipsOutputEnabled = IsPasswordEnabled =
                     IsWithdrawalSlipsOutputEnabled = false;
-            IsBalanceFinalAccountOutputEnabled= b;
+            IsBalanceFinalAccountOutputEnabled = b;
         }
         /// <summary>
         /// 金庫データをViewにセットする

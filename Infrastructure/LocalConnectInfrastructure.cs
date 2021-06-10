@@ -91,64 +91,64 @@ namespace Infrastructure
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
             };
 
@@ -161,64 +161,64 @@ namespace Infrastructure
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛",false,10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
                         string.Empty),
                 new Condolence
-                    (2,"管理事務所","いいい家","安田",true,50000,0,0,5000,5000,string.Empty,DateTime.Today,
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
                 new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠",false,300000,10000,10000,0,0,"大成祭典",
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
                         DateTime.Today.AddDays(-1),"藤井",string.Empty),
                 new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴",true,50000,10000,5000,0,0,string.Empty,
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
             };
 

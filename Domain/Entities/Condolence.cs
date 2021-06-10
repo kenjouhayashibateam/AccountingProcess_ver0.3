@@ -24,9 +24,9 @@ namespace Domain.Entities
         /// </summary>
         public string SoryoName { get; set; }
         /// <summary>
-        /// 葬儀、法事のトグル。法事がTrue
+        /// 内容
         /// </summary>
-        public bool IsMemorialService { get; set; }
+        public string Content { get; set; }
         /// <summary>
         /// お布施
         /// </summary>
@@ -69,7 +69,7 @@ namespace Domain.Entities
         public string MailRepresentative { get; set; }
 
         public Condolence
-            (int iD, string location, string ownerName, string soryoName, bool isMemorialService, int almsgiving,
+            (int iD, string location, string ownerName, string soryoName, string content, int almsgiving,
                 int carTip, int mealTip, int carAndMealTip, int socialGethering, string note,
                 DateTime accountActivityDate, string counterReceiver, string mailRepresentative)
         {
@@ -77,7 +77,7 @@ namespace Domain.Entities
             Location = location;
             OwnerName = ownerName;
             SoryoName = soryoName;
-            IsMemorialService = isMemorialService;
+            Content = content;
             Almsgiving = almsgiving;
             CarTip = carTip;
             MealTip = mealTip;

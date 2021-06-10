@@ -624,7 +624,7 @@ namespace Infrastructure
                 {"@account_activity_date", condolence.AccountActivityDate },
                 {"@location", condolence.Location},
                 {"@owner_name", condolence.OwnerName },{"@soryo_name", condolence.SoryoName},
-                {"@is_memorial_service", condolence.IsMemorialService },
+                {"@content", condolence.Content },
                 {"@almsgiving", condolence.Almsgiving},
                 { "@car_tip", condolence.CarTip},{"@meal_tip", condolence.MealTip},
                 {"@car_and_meal_tip", condolence.CarAndMealTip},
@@ -645,7 +645,7 @@ namespace Infrastructure
                     condolence.AccountActivityDate },
                 {"@location", condolence.Location},{"@owner_name", condolence.OwnerName },
                 {"@soryo_name", condolence.SoryoName},
-                {"@is_memorial_service", condolence.IsMemorialService },
+                {"@content", condolence.Content },
                 {"@almsgiving", condolence.Almsgiving},{ "@car_tip", condolence.CarTip},
                 {"@meal_tip", condolence.MealTip},{"@car_and_meal_tip", condolence.CarAndMealTip},
                 {"@social_gathering", condolence.SocialGathering},{"@note", condolence.Note},
@@ -672,7 +672,7 @@ namespace Infrastructure
             {
                 list.Add(new Condolence((int)dataReader["condolence_id"],
                     (string)dataReader["location"], (string)dataReader["owner_name"],
-                    (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
+                    (string)dataReader["soryo_name"], (string)dataReader["content"],
                     (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
                     (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
                     (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
@@ -682,8 +682,8 @@ namespace Infrastructure
             return (ReferenceCondolence(startDate, endDate,location).Count, list);
         }
 
-        public ObservableCollection<Condolence> 
-            ReferenceCondolence(DateTime startDate, DateTime endDate,string location)
+        public ObservableCollection<Condolence>
+            ReferenceCondolence(DateTime startDate, DateTime endDate, string location)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             Dictionary<string, object> parameters = new Dictionary<string, object>()
@@ -696,7 +696,7 @@ namespace Infrastructure
             {
                 list.Add(new Condolence((int)dataReader["condolence_id"],
                     (string)dataReader["location"], (string)dataReader["owner_name"],
-                    (string)dataReader["soryo_name"], (bool)dataReader["is_memorial_service"],
+                    (string)dataReader["soryo_name"], (string)dataReader["content"],
                     (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
                     (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
                     (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
@@ -733,7 +733,7 @@ namespace Infrastructure
                     new Dictionary<string, object>() { { "@content_id", id } }).ExecuteReader();
             string s = default;
             while (dataReader.Read())
-            { s= (string)dataReader["convert_text"] ?? string.Empty; }
+            { s = (string)dataReader["convert_text"] ?? string.Empty; }
 
             return s;
         }
