@@ -21,8 +21,8 @@ namespace Infrastructure
         /// <summary>
         /// DataBaseConnectインフラストラクチャのデフォルト
         /// </summary>
-        /// <returns>SQLServer接続</returns>
+        /// <returns>データベース接続</returns>
         public static IDataBaseConnect GetDefaultDataBaseConnect() =>
-            new LocalConnectInfrastructure();
+            new SQLServerConnectInfrastructure();
     }
 }

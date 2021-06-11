@@ -116,6 +116,7 @@
     <Compile Include="ViewModels\ReceiptsAndExpenditureRegistrationHelperViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
+    <Compile Include="ViewModels\SearchReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
     <Compile Include="ViewModels\VoucherManagementViewModel.cs" />
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />

@@ -19,7 +19,7 @@ namespace WPF.ViewModels
     /// 出納管理ウィンドウViewModel
     /// </summary>
     public class ReceiptsAndExpenditureMangementViewModel : BaseViewModel,
-        IReceiptsAndExpenditureOperationObserver,IPagenationObserver
+        IReceiptsAndExpenditureOperationObserver, IPagenationObserver
     {
         #region Properties
         #region int
@@ -89,8 +89,10 @@ namespace WPF.ViewModels
         private DateTime searchOutputDateStart = DefaultDate;
         #endregion
         #region ObservableCollection
-        private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures;
-        private ObservableCollection<ReceiptsAndExpenditure> AllDataList;
+        private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures =
+            new ObservableCollection<ReceiptsAndExpenditure>();
+        private ObservableCollection<ReceiptsAndExpenditure> AllDataList =
+            new ObservableCollection<ReceiptsAndExpenditure>();
         /// <summary>
         /// 本日付で出力済みの伝票データのリスト
         /// </summary>
@@ -103,7 +105,6 @@ namespace WPF.ViewModels
         private readonly IDataOutput DataOutput;
         private readonly ReceiptsAndExpenditureOperation ReceiptsAndExpenditureOperation =
             ReceiptsAndExpenditureOperation.GetInstance();
-        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private Pagination pagination;
         #endregion
 
@@ -113,17 +114,26 @@ namespace WPF.ViewModels
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             ReceiptsAndExpenditureOperation.Add(this);
+            ReferenceReceiptsAndExpenditures(true);
             ReceiptsAndExpenditureOperation.SetOperationType
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             DataOutput = dataOutput;
             IsPreviousDayOutputEnabled = false;
             SetProperty();
+
             SetDelegateCommand();
             DefaultListExpress();
         }
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
                 DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+
+        public DelegateCommand PasswordCheckReversCommand { get; set; }
+        /// <summary>
+        /// パスワードの文字を隠すかのチェックを反転させます
+        /// </summary>
+        private void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
+
         public void SetSortColumns() =>
             Pagination.SortColumns = new Dictionary<int, string>()
             {
@@ -136,9 +146,9 @@ namespace WPF.ViewModels
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowUpdateCommand { get; set; }
-        private  void ShowUpdate()
+        private async  void ShowUpdate()
         {
-            //await Task.Delay(1);
+            await Task.Delay(1);
             ReceiptsAndExpenditureOperation.SetData(SelectedReceiptsAndExpenditure);
             CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());
         }
@@ -160,6 +170,7 @@ namespace WPF.ViewModels
         public DelegateCommand RefreshListCommand { get; set; }
         private void RefreshList()
         {
+            SetCashboxTotalAmount();
             ReferenceReceiptsAndExpenditures(true);
         }
         /// <summary>
@@ -265,7 +276,8 @@ namespace WPF.ViewModels
             IsPreviousDayOutput = false;
             ReferenceLocationCheckBoxContent = $"経理担当場所{Space}:{Space}" +
                                                                         $"{AccountingProcessLocation.Location}の伝票のみを表示";
-            IsPreviousDayOutputEnabled = LoginRep.Rep.IsAdminPermisson;
+            IsPreviousDayOutputEnabled =
+                LoginRep.GetInstance().Rep != null && LoginRep.GetInstance().Rep.IsAdminPermisson;
             SetListTitle();
         }
         /// <summary>
@@ -375,6 +387,7 @@ namespace WPF.ViewModels
             ShowUpdateCommand = new DelegateCommand(() => ShowUpdate(), () => true);
             ShowCashJournalManagementCommand = new DelegateCommand
                 (() => ShowCashJournalManagement(), () => true);
+            PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -1051,11 +1064,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-        /// <summary>
-        /// パスワードの文字を隠すかのチェックを反転させます
-        /// </summary>
-        public void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
@@ -1108,7 +1116,7 @@ namespace WPF.ViewModels
                     ErrorsListOperation
                         (string.IsNullOrEmpty(Password), propertyName, Properties.Resources.NullErrorInfo);
                     ErrorsListOperation
-                        (password != LoginRep.Rep.Password, propertyName, 
+                        (password != LoginRep.GetInstance().Rep.Password, propertyName, 
                         Properties.Resources.PasswordErrorInfo);
                     break;
 
@@ -1164,17 +1172,17 @@ namespace WPF.ViewModels
         /// <param name="outputDateEnd"></param>
         /// <param name="location"></param>
         private void CreateReceiptsAndExpenditures
-            (DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart, 
-            DateTime outputDateEnd, string location,bool isPageCountReset)
+            (DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
+            DateTime outputDateEnd, string location, bool isPageCountReset)
         {
             Pagination.CountReset(isPageCountReset);
 
-            var(count,list)=
+            (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount,
-                Pagination.SelectedSortColumn,Pagination.SortDirectionIsASC);
+                Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
             Pagination.TotalRowCount = count;
             ReceiptsAndExpenditures = list;
             AllDataList =

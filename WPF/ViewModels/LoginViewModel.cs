@@ -128,7 +128,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// ログインコマンド
         /// </summary>
-        public DelegateCommand LoginCommand{get;}
+        public DelegateCommand LoginCommand { get; }
         /// <summary>
         /// ログインボタンEnable
         /// </summary>

@@ -44,25 +44,32 @@ namespace WPF.ViewModels
         private string searchGanreContent = string.Empty;
         #endregion
         #region Bools
-        private bool isAlmsgivingSearch = false;
+        private bool isAlmsgivingSearch = true;
         private bool isTipSearch = false;
         private bool isSocalGatheringSearch = false;
         private bool isOperationButtonEnabled = false;
         private bool isReceptionBlank = false;
-        private bool fixToggle = false;
+        private bool fixToggle = true;
         private bool isFixToggleEnabled = false;
         #endregion
         private Dictionary<int, string> soryoList;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures =
             new ObservableCollection<ReceiptsAndExpenditure>();
-        private DateTime receiptsAndExpenditureSearchDate = DefaultDate;
+        private DateTime receiptsAndExpenditureSearchDate = DateTime.Today;
         private DateTime accountActivityDate = DefaultDate;
-        private ReceiptsAndExpenditure selectedReceiptsAndExpenditure = null;
-        private Condolence OperationCondolence = null;
+        private ReceiptsAndExpenditure selectedReceiptsAndExpenditure =
+            new ReceiptsAndExpenditure(0, DefaultDate, LoginRep.GetInstance().Rep, string.Empty,
+                new CreditDept(string.Empty, string.Empty, true, true), 
+                    new Content(string.Empty, new AccountingSubject(string.Empty, string.Empty, string.Empty, true), 0, string.Empty, true), 
+                        string.Empty, 0, true, true, DefaultDate, DefaultDate, false);
+        private Condolence OperationCondolence = new Condolence(0, string.Empty, string.Empty, string.Empty, string.Empty, 
+            0, 0, 0, 0, 0, string.Empty, DefaultDate, string.Empty, string.Empty);
         private int ID { get; set; }
-        private Pagination pagination;
-        public Dictionary<int, string> NoteStrings { get; set; }
-        public Dictionary<int, string> ContentStrings { get; set; }
+        private Pagination pagination = Pagination.GetPagination();
+        public Dictionary<int, string> NoteStrings 
+        { get => new Dictionary<int, string>() { { 1, "佐野商店" }, { 2, "徳島" }, { 3, "緑山メモリアルパーク" } }; }
+        public Dictionary<int, string> ContentStrings 
+        { get => new Dictionary<int, string>() { { 1, "法事" }, { 2, "葬儀" }, { 3, "法名授与" } }; }
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
@@ -70,23 +77,7 @@ namespace WPF.ViewModels
             CondolenceOperation.GetInstance().Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
-            IsAlmsgivingSearch = true;
-            ReceiptsAndExpenditureSearchDate = DateTime.Today;
-            CondolenceContent = "法事";
-            IsReceptionBlank = false;
-            FixToggle = true;
-            NoteStrings = new Dictionary<int, string>()
-            {
-                {1,"佐野商店" },
-                {2,"徳島" },
-                {3,"緑山メモリアルパーク" }
-            };
-            ContentStrings = new Dictionary<int, string>()
-            {
-                {1,"法事" },
-                {2,"葬儀" },
-                {3,"法名授与" }
-            };
+            SetReceiptsAndExpenditures(true);
             if (CondolenceOperation.GetInstance().GetData() == null)
             {
                 SetDataRegistrationCommand.Execute();
@@ -177,9 +168,9 @@ namespace WPF.ViewModels
         {
             OperationCondolence = new Condolence
                 (ID, AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
-                    condolenceContent,IntAmount(Almsgiving),IntAmount(CarTip), IntAmount(MealTip),
+                    ContentText, IntAmount(Almsgiving), IntAmount(CarTip), IntAmount(MealTip),
                     IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
-                    IsReceptionBlank ? string.Empty : CounterReceiver, 
+                    IsReceptionBlank ? string.Empty : CounterReceiver,
                     IsReceptionBlank ? string.Empty : MailRepresentative);
             
             switch(CurrentOperation)
@@ -283,7 +274,7 @@ namespace WPF.ViewModels
         /// データを登録します
         /// </summary>
         private async void DataRegistration()
-        {           
+        {
             IsOperationButtonEnabled = false;
             
             MessageBox = new MessageBoxInfo()

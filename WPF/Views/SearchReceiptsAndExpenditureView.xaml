@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
-        Title="SearchReceiptsAndExpenditureView" Height="450" Width="800">
+        Title="SearchReceiptsAndExpenditureView" Height="450" Width="1100">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
@@ -115,14 +115,14 @@
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Row="0" AutoGenerateColumns="False" Margin="5">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="入出金日" Width="1*">
+                            <DataGridTemplateColumn Header="入出金日" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="1*" Header="貸方部門">
+                            <DataGridTemplateColumn Width="2*" Header="貸方部門">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="" VerticalAlignment="Center" Margin="5"/>
@@ -136,28 +136,28 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="1*" Header="勘定科目">
+                            <DataGridTemplateColumn Width="2*" Header="勘定科目">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="1*" Header="内容">
+                            <DataGridTemplateColumn Width="2*" Header="内容">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="1*" Header="詳細">
+                            <DataGridTemplateColumn Width="3*" Header="詳細">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="1*" Header="金額">
+                            <DataGridTemplateColumn Width="2*" Header="金額">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="" VerticalAlignment="Center" Margin="5"/>
