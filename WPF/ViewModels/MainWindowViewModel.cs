@@ -38,6 +38,7 @@ namespace WPF.ViewModels
             管理事務所,
             青蓮堂
         }
+        public DelegateCommand ShowSearchReceiptsAndExpenditureCommand { get; }
         /// <summary>
         /// 経理担当場所を管理事務所に設定するコマンド
         /// </summary>
@@ -107,6 +108,8 @@ namespace WPF.ViewModels
                     () => true);
             ShowCreateCondolencesCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateCondolences()), () => true);
+            ShowSearchReceiptsAndExpenditureCommand = new DelegateCommand
+                (() => CreateShowWindowCommand(ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
         }
         public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
         /// <summary>

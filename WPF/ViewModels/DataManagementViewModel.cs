@@ -1852,18 +1852,6 @@ namespace WPF.ViewModels
         }
 
         protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "データ管理";
-
-        public override void SetRep(Rep rep)
-        {
-            {
-                if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-                else
-                {
-                    IsAdminPermisson = rep.IsAdminPermisson;
-                    WindowTitle =
-                        $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
-                }
-            }
-        }
+        
     }
 }

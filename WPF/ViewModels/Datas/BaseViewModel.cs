@@ -231,7 +231,7 @@ namespace WPF.ViewModels.Datas
         /// <param name="proeprtyName">変化した要素のプロパティ名</param>
         protected void OnErrorsChanged(string proeprtyName)
         {
-            this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(proeprtyName));
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(proeprtyName));
         }
         /// <summary>
         /// エラーリストを操作します
@@ -249,7 +249,16 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         protected void ErrorsClear() => CurrentErrors.Clear();
 
-        public abstract void SetRep(Rep rep);
+        public virtual void SetRep(Rep rep)
+        {
+            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+            else
+            {
+                IsAdminPermisson = rep.IsAdminPermisson;
+                WindowTitle =
+                    $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
+            }
+        }
 
         /// <summary>
         /// 画面タイトルのみをセットします

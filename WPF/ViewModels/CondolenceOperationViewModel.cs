@@ -67,9 +67,9 @@ namespace WPF.ViewModels
         private int ID { get; set; }
         private Pagination pagination = Pagination.GetPagination();
         public Dictionary<int, string> NoteStrings 
-        { get => new Dictionary<int, string>() { { 1, "佐野商店" }, { 2, "徳島" }, { 3, "緑山メモリアルパーク" } }; }
+        { get => new Dictionary<int, string>() { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } }; }
         public Dictionary<int, string> ContentStrings 
-        { get => new Dictionary<int, string>() { { 1, "法事" }, { 2, "葬儀" }, { 3, "法名授与" } }; }
+        { get => new Dictionary<int, string>() { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" } }; }
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
@@ -88,6 +88,7 @@ namespace WPF.ViewModels
                 SetDataUpdateCommand.Execute();
                 SetProperty();
             }
+            InputProperty();
         }
         public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
@@ -140,6 +141,7 @@ namespace WPF.ViewModels
             FixToggle = string.IsNullOrEmpty(condolence.MailRepresentative);
             CounterReceiver = condolence.CounterReceiver;
             MailRepresentative = condolence.MailRepresentative;
+            IsAlmsgivingSearch = true;
             IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) &&
                 string.IsNullOrEmpty(condolence.MailRepresentative);
         }
@@ -158,6 +160,9 @@ namespace WPF.ViewModels
             CarAndMealTip = string.Empty;
             SocialGathering = string.Empty;
             Note = string.Empty;
+            FixToggle = true;
+            IsAlmsgivingSearch = true;
+            ContentText = ContentStrings[0];
             IsReceptionBlank = false;
         }
         /// <summary>
@@ -438,7 +443,7 @@ namespace WPF.ViewModels
             get => ownerName;
             set
             {
-                if(ConfirmationOwnerName(ownerName,value)==MessageBoxResult.Yes) ownerName = value;
+                if (ConfirmationOwnerName(ownerName, value) == MessageBoxResult.Yes) ownerName = value;
                 ValidationProperty(nameof(OwnerName), value);
                 CallPropertyChanged();
             }
@@ -754,16 +759,6 @@ namespace WPF.ViewModels
             {
                 isFixToggleEnabled = value;
                 CallPropertyChanged();
-            }
-        }
-
-        public override void SetRep(Rep rep)
-        {
-            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-            else
-            {
-                IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
             }
         }
 

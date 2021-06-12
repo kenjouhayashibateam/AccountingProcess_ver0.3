@@ -1199,16 +1199,6 @@ namespace WPF.ViewModels
         protected override void SetWindowDefaultTitle() => DefaultWindowTitle = 
             $"出納管理 : {AccountingProcessLocation.Location}";
 
-        public override void SetRep(Rep rep)
-        {
-            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-            else
-            {
-                IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {GetFirstName(rep.Name)}）";
-            }
-        }
-
         public void ReceiptsAndExpenditureOperationNotify() => RefreshList();
 
         public void SortNotify() => ReferenceReceiptsAndExpenditures(true);

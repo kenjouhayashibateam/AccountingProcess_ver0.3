@@ -118,16 +118,6 @@ namespace WPF.ViewModels
             }
         }
 
-        public override void SetRep(Rep rep)
-        {
-            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-            else
-            {
-                IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {GetFirstName(rep.Name)}）";
-            }
-        }
-
         public override void ValidationProperty(string propertyName, object value)
         {
         }

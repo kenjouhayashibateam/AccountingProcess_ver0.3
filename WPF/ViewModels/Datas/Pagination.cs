@@ -139,6 +139,7 @@ namespace WPF.ViewModels.Datas
             set
             {
                 sortColumns = value;
+                SelectedSortColumn = sortColumns[0];
                 CallPropertyChanged();
             }
         }

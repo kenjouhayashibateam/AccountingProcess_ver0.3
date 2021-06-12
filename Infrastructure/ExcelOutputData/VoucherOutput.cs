@@ -180,7 +180,7 @@ namespace Infrastructure.ExcelOutputData
             //ナンバー
             SetStringOriginalAndCopy(1, 8, $"№{VoucherData.ID}");
             //日付
-            SetStringOriginalAndCopy(2, 7, DateTime.Now.ToString("yyyy年MM月dd日"));
+            SetStringOriginalAndCopy(2, 7, VoucherData.OutputDate.ToString("yyyy年MM月dd日"));
             //宛名
             if (VoucherData.Addressee.Length == 2)
             {

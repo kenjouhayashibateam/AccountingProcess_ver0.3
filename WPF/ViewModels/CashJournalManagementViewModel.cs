@@ -112,15 +112,6 @@ namespace WPF.ViewModels
         private void SetOutputButtonEnabled() =>
             OutputButtonEnabled =
                 !HasErrors && !string.IsNullOrEmpty(YearString) && !string.IsNullOrEmpty(MonthString);
-        public override void SetRep(Rep rep)
-        {
-            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-            else
-            {
-                IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle = $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
-            }
-        }
 
         public override void ValidationProperty(string propertyName, object value)
         {

@@ -52,7 +52,6 @@ namespace WPF.ViewModels
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             SetSortColumns();
-            Pagination.SelectedSortColumn = Pagination.SortColumns[0];
             Pagination.SortDirectionIsASC = false;
             SearchDate = DateTime.Today;
             OutputDate = DateTime.Today;
@@ -384,17 +383,6 @@ namespace WPF.ViewModels
             {
                 outputDate = value;
                 CallPropertyChanged();
-            }
-        }
-
-        public override void SetRep(Rep rep)
-        {
-            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-            else
-            {
-                IsAdminPermisson = rep.IsAdminPermisson;
-                WindowTitle =
-                    $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
             }
         }
 

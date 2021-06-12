@@ -82,5 +82,11 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window VoucherManagement() =>
             new VoucherManagementView();
+        /// <summary>
+        /// 出納データ検索画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window SearchReceiptsAndExpenditure() =>
+            new SearchReceiptsAndExpenditureView();
     }
 }

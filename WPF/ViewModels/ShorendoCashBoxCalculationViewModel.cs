@@ -339,17 +339,5 @@ namespace WPF.ViewModels
 
         protected override void SetWindowDefaultTitle() =>
             DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
-
-        public override void SetRep(Rep rep)
-        {
-            {
-                if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
-                else
-                {
-                    IsAdminPermisson = rep.IsAdminPermisson;
-                    WindowTitle = $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
-                }
-            }
-        }
     }
 }

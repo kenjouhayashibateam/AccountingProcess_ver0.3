@@ -55,7 +55,8 @@ namespace Infrastructure
             try
             {
                 Cn.Open();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.Log(ILogger.LogInfomation.ERROR, ex.Message);
             }
@@ -248,7 +249,7 @@ namespace Infrastructure
         }
     
         public ObservableCollection<Content> ReferenceContent
-            (string contentText,string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
+            (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
         {
             ObservableCollection<Content> contents = new ObservableCollection<Content>();
             Dictionary<string, object> parameters = new Dictionary<string, object>()
@@ -376,14 +377,12 @@ namespace Infrastructure
             {
                 { "@location", location},{"@account_activity_date_start", accountActivityDateStart},
                 { "@account_activity_date_end", accountActivityDateEnd},
-                {"@registration_date_start", registrationDateStart},{"@registration_date_end",
-                    registrationDateEnd},
+                {"@registration_date_start", registrationDateStart},{"@registration_date_end", registrationDateEnd},
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
-                {"@content", content},{"@detail", detail},{"@limiting_is_payment",
-                    whichDepositAndWithdrawalOnly},
-                {"@is_payment", isPayment },{"@contain_outputted", isContainOutputted},
-                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
-                { "@output_date_end", outputDateEnd}
+                { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
+                {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
+                {"@contain_outputted", isContainOutputted}, {"@validity_true_only", isValidityOnly},
+                {"@output_date_start", outputDateStart}, { "@output_date_end", outputDateEnd}
             };
             
             return ReferenceReceiptsAndExpenditure(parameters);
@@ -538,15 +537,13 @@ namespace Infrastructure
             {
                 { "@location", location},{"@account_activity_date_start", accountActivityDateStart},
                 { "@account_activity_date_end", accountActivityDateEnd},
-                {"@registration_date_start", registrationDateStart},{"@registration_date_end",
-                    registrationDateEnd},
+                {"@registration_date_start", registrationDateStart},{"@registration_date_end", registrationDateEnd},
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
-                {"@content", content},{"@detail", detail},{"@limiting_is_payment", 
-                    whichDepositAndWithdrawalOnly},
-                {"@is_payment", isPayment },{"@contain_outputted", isContainOutputted},
-                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
-                { "@output_date_end", outputDateEnd},{"@page", pageCount},{"@column",sortColumn},
-                { "@is_order_asc",sortDirection}
+                { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
+                {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
+                {"@contain_outputted", isContainOutputted}, {"@validity_true_only", isValidityOnly},
+                {"@output_date_start", outputDateStart}, { "@output_date_end", outputDateEnd},{"@page", pageCount},
+                {"@column",sortColumn}, { "@is_order_asc",sortDirection}
             };
 
             Rep paramRep;
