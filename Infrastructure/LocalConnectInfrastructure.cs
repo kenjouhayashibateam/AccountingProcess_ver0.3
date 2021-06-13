@@ -441,7 +441,7 @@ namespace Infrastructure
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
                     ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
-                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                    DateTime.Today,DateTime.Today.AddDays(-1),true),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
                     ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,

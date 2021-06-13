@@ -43,7 +43,7 @@ namespace Domain.Entities
         /// <summary>
         /// 冥加金欄に記載する金額
         /// </summary>
-        public int TotalAmount 
+        public int TotalAmount
         {
             get
             {

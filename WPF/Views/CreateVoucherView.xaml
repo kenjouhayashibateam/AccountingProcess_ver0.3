@@ -8,11 +8,15 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:svcg="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="900" Width="600">
     <Window.DataContext>
         <vm:CreateVoucherViewModel/>
     </Window.DataContext>
+    <!--<Window.Resources>
+        <svcg:SvgViewbox x:Key="InputIcon" Source="{Binding InputSVGFullPath}"/>
+    </Window.Resources>-->
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <behavior:ShowDiarog/>
@@ -133,7 +137,7 @@
                             <DataGridTemplateColumn Header="受納証" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="AddVoucherListButton" Content="追加" FontSize="11" Margin="5,1">
+                                        <Button x:Name="AddVoucherListButton" Content="追加" Margin="5,1">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.AddVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="Row.Index" MouseAction="LeftClick"/>
                                             </Button.InputBindings>
@@ -158,15 +162,18 @@
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="宛名" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBlock Text="発行日" Grid.Row="0" Grid.Column="2" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <CheckBox Content="法事事前払い" Grid.Row="0" Grid.Column="3" IsChecked="{Binding IsPrepaid}" VerticalAlignment="Bottom" Margin="5,0"/>
                         <TextBox Grid.Row="1" Grid.Column="0" x:Name="VoucherAddresseeTextBox" Text="{Binding VoucherAddressee,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Margin="5,1"/>
                         <TextBlock Text="様" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="5,0"/>
-                        <DatePicker Grid.Row="1" Grid.Column="2" x:Name="OutputDatePicker" SelectedDate="{Binding OutputDate,UpdateSourceTrigger=PropertyChanged}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,2,150,2"/>
+                        <DatePicker Grid.Row="1" Grid.Column="2" x:Name="OutputDatePicker" SelectedDate="{Binding OutputDate,UpdateSourceTrigger=PropertyChanged}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,2,50,2"/>
+                        <DatePicker Grid.Row="1" Grid.Column="3" x:Name="PrepaidDatePicker" SelectedDate="{Binding PrepaidDate,UpdateSourceTrigger=PropertyChanged}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,0,50,2" Height="25" VerticalAlignment="Bottom"/>
                     </Grid>
                     <DataGrid Grid.Row="1" x:Name="VoucherAddresseeContentsDataGrid" ItemsSource="{Binding VoucherContents}" SelectedValue="{Binding SelectedVoucherContent}" AutoGenerateColumns="False" Margin="5">
                         <DataGrid.Columns>

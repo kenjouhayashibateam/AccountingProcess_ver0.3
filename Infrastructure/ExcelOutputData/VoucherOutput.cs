@@ -14,11 +14,13 @@ namespace Infrastructure.ExcelOutputData
     {
         private readonly Voucher VoucherData;
         private readonly bool IsReissue;
+        private readonly DateTime PrepaidDate;
 
-        public VoucherOutput(Voucher voucher, bool isReissue)
+        public VoucherOutput(Voucher voucher, bool isReissue, DateTime prepaidDate)
         {
             VoucherData = voucher;
             IsReissue = isReissue;
+            PrepaidDate = prepaidDate;
         }
 
         private int CopyColumnPosition(int originalColumn) =>
@@ -124,7 +126,7 @@ namespace Infrastructure.ExcelOutputData
             SetLocalProperty(XLAlignmentHorizontalValues.Left, XLAlignmentVerticalValues.Center, 10);
             SetCellPropertyOriginalAndCopy(15, 1);
             //住所欄
-            SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 10);
+            SetLocalProperty(XLAlignmentHorizontalValues.Left, XLAlignmentVerticalValues.Center, 10);
             SetCellPropertyOriginalAndCopy(15, 3);
             //電話番号欄
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Center, 10);
@@ -193,9 +195,11 @@ namespace Infrastructure.ExcelOutputData
             //総額
             SetStringOriginalAndCopy(4, 2, "冥加金");
             SetStringOriginalAndCopy(5, 3, 
-                $"{TextHelper.CommaDelimitedAmount(VoucherData.TotalAmount)}-");
+                $"{CommaDelimitedAmount(VoucherData.TotalAmount)}-");
             SetStringOriginalAndCopy(5, 8, "円也");
             SetStringOriginalAndCopy(6, 2, "但し");
+            //事前領収の日付
+            if (PrepaidDate != DefaultDate) SetStringOriginalAndCopy(6, 7, $"※{PrepaidDate:M/d}ご法事");
             //但し書き
             if (VoucherData.ReceiptsAndExpenditures.Count < 5) SingleLineOutput();
             else MultipleLineOutput();
@@ -225,7 +229,7 @@ namespace Infrastructure.ExcelOutputData
             LoginRep loginRep = LoginRep.GetInstance();
             SetStringOriginalAndCopy(15, 9, loginRep.Rep.FirstName);
 
-            void SetStringOriginalAndCopy(int row,int column,string value)
+            void SetStringOriginalAndCopy(int row, int column, string value)
             {
                 SetString(row, column, value);
                 SetString(row, CopyColumnPosition(column), value);
@@ -235,10 +239,9 @@ namespace Infrastructure.ExcelOutputData
 
             void SingleLineOutput()
             {
-                int i = VoucherData.ReceiptsAndExpenditures.Count-1;
-                foreach(ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
+                int i = VoucherData.ReceiptsAndExpenditures.Count - 1;
+                foreach (ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
                 {
-
                     if (prevText == ReturnProvisoContent(rae))
                     {
                         provisoAmount += rae.Price;
@@ -249,10 +252,10 @@ namespace Infrastructure.ExcelOutputData
                         provisoAmount = rae.Price;
                         prevText = ReturnProvisoContent(rae);
                     }
-                        SetStringOriginalAndCopy(10 - i, 2, ProvisoString(rae));
-                    
+                    SetStringOriginalAndCopy(10 - i, 2, ProvisoString(rae));
+
                     i--;
-                }         
+                }
             }
 
             string ReturnProvisoContent(ReceiptsAndExpenditure rae)
@@ -262,11 +265,16 @@ namespace Infrastructure.ExcelOutputData
                 return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
             }
 
-            string ProvisoString(ReceiptsAndExpenditure rae)=>
-                VoucherData.ReceiptsAndExpenditures.Count == 1 ?
+            string ProvisoString(ReceiptsAndExpenditure rae)
+            {
+                string s = VoucherData.ReceiptsAndExpenditures.Count == 1 ?
                     $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}" :
                     $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}{Space}:{Space}" +
                     $"{AmountWithUnit(provisoAmount)}";
+                s += rae.IsReducedTaxRate ? "※軽減税率" : string.Empty;
+                return s;
+            }
+             
             void MultipleLineOutput()
             {
                 int i = 8;
@@ -296,9 +304,6 @@ namespace Infrastructure.ExcelOutputData
                     foreach (string t in array)
                         if (t.Contains("年度分")) s = $"{Space}{t}";
                 }
-
-                if (rae.IsReducedTaxRate) s = "※軽減税率";
-
                 return s;
             }
         } 
@@ -325,8 +330,10 @@ namespace Infrastructure.ExcelOutputData
             SetMergeOriginalAndCopy(5, 3, 5, 7);
             //円也
             SetMergeOriginalAndCopy(5, 8, 5, 9);
+            //事前領収日
+            SetMergeOriginalAndCopy(6, 7, 6, 9);
             //但し書き
-            if(VoucherData.ReceiptsAndExpenditures.Count>4)
+            if (VoucherData.ReceiptsAndExpenditures.Count > 4)
             {
                 SetMergeOriginalAndCopy(7, 2, 7, 5);
                 SetMergeOriginalAndCopy(8, 2, 8, 5);
@@ -349,13 +356,13 @@ namespace Infrastructure.ExcelOutputData
             //団体名
             SetMergeOriginalAndCopy(13, 5, 14, 7);
             //団体肩書
-            SetMergeOriginalAndCopy(14, 1, 14, 3);
+            SetMergeOriginalAndCopy(14, 1, 14, 4);
             //係
             SetMergeOriginalAndCopy(14, 9, 14, 10);
             //郵便番号
             SetMergeOriginalAndCopy(15, 1, 15, 2);
             //住所
-            SetMergeOriginalAndCopy(15, 3, 15, 7);
+            SetMergeOriginalAndCopy(15, 3, 15, 8);
             //係印
             SetMergeOriginalAndCopy(15, 9, 16, 10);
             //電話番号

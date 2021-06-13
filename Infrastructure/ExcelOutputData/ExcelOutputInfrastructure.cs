@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
+using System;
 using System.Collections.ObjectModel;
 using static Infrastructure.ExcelOutputData.SlipOutput;
 
@@ -55,9 +56,9 @@ namespace Infrastructure.ExcelOutputData
             raeo.Output();
         }
 
-        public void VoucherData(Voucher voucher, bool isReissue)
+        public void VoucherData(Voucher voucher, bool isReissue, DateTime prepaidDate)
         {
-            VoucherOutput vo = new VoucherOutput(voucher, isReissue);
+            VoucherOutput vo = new VoucherOutput(voucher, isReissue, prepaidDate);
             vo.DataOutput();
         }
     }

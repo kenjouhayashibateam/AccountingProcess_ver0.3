@@ -63,7 +63,7 @@ namespace WPF.ViewModels
             VoucherUpdate();
             try
             {
-                await Task.Run(() => DataOutput.VoucherData(SelectedVoucher, IsInputReissueText));
+                await Task.Run(() => DataOutput.VoucherData(SelectedVoucher, IsInputReissueText, DefaultDate));
             }
             catch (ApplicationException ex)
             {

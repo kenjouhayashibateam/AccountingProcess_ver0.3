@@ -17,13 +17,14 @@ namespace WPF.ViewModels
     /// 受納証作成画面ViewModel
     /// </summary>
     public class CreateVoucherViewModel : BaseViewModel,
-        IReceiptsAndExpenditureOperationObserver,IPagenationObserver
+        IReceiptsAndExpenditureOperationObserver, IPagenationObserver
     {
         #region Properties
         #region Strings
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
         private string outputButtonContent;
+        //public string InputSVGFullPath{ get => System.IO.Path.GetFullPath("./svgFiles/input_black_24dp.svg"); }
         #endregion
         #region ObservableCollections
         private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 
@@ -32,19 +33,18 @@ namespace WPF.ViewModels
         #endregion
         private DateTime searchDate = DateTime.Today;
         private DateTime outputDate;
+        private DateTime prepaidDate = DefaultDate;
         private ReceiptsAndExpenditure selectedVoucherContent;
         private ReceiptsAndExpenditure selectedSeachReceiptsAndExpenditure;
         private readonly IDataOutput DataOutput;
         private readonly ReceiptsAndExpenditureOperation OperationData;
-        /// <summary>
-        /// 受納証の総額
-        /// </summary>
         private bool isOutputButtonEnabled;
+        private bool isPrepaid = false;
         private Pagination pagination;
         #endregion
 
         public CreateVoucherViewModel
-            (IDataBaseConnect dataBaseConnect,IDataOutput dataOutput) :base(dataBaseConnect)
+            (IDataBaseConnect dataBaseConnect, IDataOutput dataOutput) : base(dataBaseConnect)
         {
             DataOutput = dataOutput;
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
@@ -155,9 +155,9 @@ namespace WPF.ViewModels
         {
             if ((MessageBox = new MessageBoxInfo()
             {
-                Message = "出力します。よろしいですか？",
+                Message = "データベースに登録し、出力します。よろしいですか？",
                 Image = System.Windows.MessageBoxImage.Question,
-                Title = "登録確認",
+                Title = "操作確認",
                 Button = System.Windows.MessageBoxButton.OKCancel
             }).Result == System.Windows.MessageBoxResult.Cancel) return;
 
@@ -165,7 +165,7 @@ namespace WPF.ViewModels
             IsOutputButtonEnabled = false;
             Voucher voucher;
             VoucherRegistration();
-            await Task.Run(() => DataOutput.VoucherData(voucher, false));
+            await Task.Run(() => DataOutput.VoucherData(voucher, false, PrepaidDate));
             VoucherAddressee = string.Empty;
             VoucherContents.Clear();
             OutputButtonContent = "登録して出力";
@@ -382,6 +382,31 @@ namespace WPF.ViewModels
             set
             {
                 outputDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 事前領収の日付
+        /// </summary>
+        public DateTime PrepaidDate
+        {
+            get => prepaidDate;
+            set
+            {
+                prepaidDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 事前領収の日付を受納証に入力するか
+        /// </summary>
+        public bool IsPrepaid
+        {
+            get => isPrepaid;
+            set
+            {
+                isPrepaid = value;
+                PrepaidDate = value ? DateTime.Today : DefaultDate;
                 CallPropertyChanged();
             }
         }

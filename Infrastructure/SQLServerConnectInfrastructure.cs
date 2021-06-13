@@ -340,7 +340,6 @@ namespace Infrastructure
 
             while (dataReader.Read())
             {
-
                 paramRep =
                     new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
                         (string)dataReader["password"], true, (bool)dataReader["is_permission"]);

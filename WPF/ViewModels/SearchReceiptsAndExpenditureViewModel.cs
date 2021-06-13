@@ -307,9 +307,10 @@ namespace WPF.ViewModels
         {
             Pagination.CountReset(isPageReset);
             string creditDept = IsIndiscriminateDept ? string.Empty : SelectedCreditDept.Dept;
+            string subject = IsIndiscriminateAccountingSubject ? string.Empty : SearchAccountingSubject;
 
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) = DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (DefaultDate, DateTime.Today, string.Empty, creditDept, string.Empty, string.Empty, SearchAccountingSubject,
+                (DefaultDate, DateTime.Today, string.Empty, creditDept, string.Empty, string.Empty, subject,
                     string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), 
                     DateTime.Today, Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
             Pagination.TotalRowCount = count;
@@ -322,7 +323,7 @@ namespace WPF.ViewModels
 
             foreach(ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, string.Empty, string.Empty,
-                    SearchAccountingSubject, string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate,
+                    subject, string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate,
                     SearchEndDate, DefaultDate.AddDays(1), DateTime.Today))
             {
                 if (rae.IsPayment) payment += rae.Price;
