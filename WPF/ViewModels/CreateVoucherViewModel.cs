@@ -24,7 +24,7 @@ namespace WPF.ViewModels
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
         private string outputButtonContent;
-        //public string InputSVGFullPath{ get => System.IO.Path.GetFullPath("./svgFiles/input_black_24dp.svg"); }
+        public string InputSVGFullPath { get => System.IO.Path.GetFullPath("./svgFiles/input_black_24dp.svg"); }
         #endregion
         #region ObservableCollections
         private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 

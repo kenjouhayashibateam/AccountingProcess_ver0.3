@@ -211,9 +211,9 @@ namespace Domain.Repositories
         /// <returns>決算額</returns>
         public int PreviousDayFinalAmount();
         /// <summary>
-        /// 前月決算を登録します
+        /// 前年度決算を登録します
         /// </summary>
-        public int RegistrationPerMonthFinalAccount();
+        public int RegistrationPrecedingYearFinalAccount();
         /// <summary>
         /// 前月決算額を返します
         /// </summary>

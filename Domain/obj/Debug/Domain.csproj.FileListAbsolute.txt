@@ -1,11 +1,3 @@
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\Domain.dll
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\Domain.pdb
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.Properties.Resources.resources
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.GenerateResource.cache
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.dll
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.pdb
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\bin\Debug\Domain.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\bin\Debug\Domain.pdb
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.Properties.Resources.resources
@@ -13,3 +5,11 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.cspro
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\Domain.dll
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\Domain.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.Properties.Resources.resources
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.GenerateResource.cache
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.dll
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.pdb

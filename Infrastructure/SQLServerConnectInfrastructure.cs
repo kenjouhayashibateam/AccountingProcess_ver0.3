@@ -471,7 +471,7 @@ namespace Infrastructure
             return (int)obj;
         }
 
-        public int RegistrationPerMonthFinalAccount()
+        public int RegistrationPrecedingYearFinalAccount()
         {
             SqlCommand Cmd;
 

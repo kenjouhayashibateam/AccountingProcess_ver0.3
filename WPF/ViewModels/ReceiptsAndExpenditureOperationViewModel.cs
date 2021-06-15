@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
@@ -232,6 +233,20 @@ namespace WPF.ViewModels
             CallCompletedUpdate();
             DataOperationButtonContent = "更新";
 
+            if (OperationData.Data.OutputDate.Month != DateTime.Today.Month) CreateResubmitInfo();
+
+            void CreateResubmitInfo()
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message =
+                        $"訂正した出納帳（{OperationData.Data.OutputDate.Month}月分）を必ず印刷してください。",
+                    Image = System.Windows.MessageBoxImage.Information,
+                    Title = "要注意！！！",
+                    Button = System.Windows.MessageBoxButton.OK
+                };
+                CallPropertyChanged(nameof(MessageBox));
+            }
             IsDataOperationButtonEnabled = true;
         }
         /// <summary>
@@ -1070,15 +1085,21 @@ namespace WPF.ViewModels
 
             if (!b) return false;
 
-            b=SlipOutputDate == DefaultDate;
+            b = SlipOutputDate == DefaultDate;
+
             if (!b) b = LoginRep.GetInstance().Rep.IsAdminPermisson &&
-                     $"{SlipOutputDate.Year}{SlipOutputDate.Month}" ==
-                     $"{DateTime.Today.Year}{DateTime.Today.Month}";
+                     CurrentFiscalYearFirstDate < DateTime.Today;
 
             if (!b) DataOperationButtonContent =
-                    "更新は管理者権限所有者が、今月中の出力データでのみ許可されます";
+                    "更新は管理者権限所有者が、今年度中の出力データでのみ許可されます";
+            else b = IsInCorrectionDeadline();
 
+            if (b) b = LoginRep.GetInstance().Rep.IsAdminPermisson;
+            else DataOperationButtonContent =
+                    "訂正期限が過ぎています。";
             return b;
+
+            bool IsInCorrectionDeadline() => DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
         }
 
         public void ReceiptsAndExpenditureOperationNotify() => SetReceiptsAndExpenditureProperty();        

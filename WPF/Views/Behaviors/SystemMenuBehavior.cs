@@ -26,7 +26,7 @@ namespace WPF.Views.Behaviors
         }
         public static readonly DependencyProperty CanMinimizeProperty = 
             DependencyProperty.Register
-            ("CanMinimize", typeof(bool?), typeof(This), new PropertyMetadata(null, This.OnPropertyChanged));
+            ("CanMinimize", typeof(bool?), typeof(This), new PropertyMetadata(null, OnPropertyChanged));
         
         public bool? CanMaximize
         {

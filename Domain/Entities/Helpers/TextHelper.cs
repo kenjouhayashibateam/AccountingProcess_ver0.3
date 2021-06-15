@@ -21,6 +21,18 @@ namespace Domain.Entities.Helpers
             }
         }
         /// <summary>
+        /// 今年度初日
+        /// </summary>
+        public static DateTime CurrentFiscalYearFirstDate
+        {
+            get
+            {
+                int year = DateTime.Today.Year;
+                if (DateTime.Today.Month < 4) year--;
+                return new DateTime(year, 4, 1);
+            }
+        }
+        /// <summary>
         /// nullに出来ない場合のdefaultの日付
         /// </summary>
         public static DateTime DefaultDate = DateTime.Parse("1900/01/01");

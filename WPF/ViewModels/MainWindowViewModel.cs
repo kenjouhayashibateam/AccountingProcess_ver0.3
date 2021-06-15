@@ -100,7 +100,7 @@ namespace WPF.ViewModels
             ShowCreateVoucherCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateVoucher()), () => true);
             RegistrationPerMonthFinalAccountCommand =
-                new DelegateCommand(() => RegistrationPerMonthFinalAccount(), () => true);
+                new DelegateCommand(() => RegistrationPrecedingYearFinalAccount(), () => true);
             LogoutCommand =
                 new DelegateCommand(() => Logout(), () => true);
             ShowPartTimerTransPortCommand = new DelegateCommand
@@ -109,7 +109,8 @@ namespace WPF.ViewModels
             ShowCreateCondolencesCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateCondolences()), () => true);
             ShowSearchReceiptsAndExpenditureCommand = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
+                (() => CreateShowWindowCommand
+                    (ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
         }
         public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
         /// <summary>
@@ -130,8 +131,9 @@ namespace WPF.ViewModels
         /// </summary>
         private void ConfirmationPerMonthFinalAccount()
         {
-            //今日の日付が1日なら登録ボタンを可視化する
-            IsRegistrationPerMonthFinalAccountVisiblity = DateTime.Today.Day == 1;
+            //今日の日付が4月1日なら登録ボタンを可視化する
+            IsRegistrationPerMonthFinalAccountVisiblity =
+                DateTime.Today == TextHelper.CurrentFiscalYearFirstDate;
             if(string.IsNullOrEmpty(LoginRep.Rep.Name))
             {
                 CallNoLoginMessage();
@@ -145,14 +147,14 @@ namespace WPF.ViewModels
             //登録ボタンが可視化されていなければ処理を終了する
             if (!IsRegistrationPerMonthFinalAccountVisiblity) return;
             
-            RegistrationPerMonthFinalAccount();
+            RegistrationPrecedingYearFinalAccount();
         }
         private MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo()
         {
             MessageBox = new MessageBoxInfo()
             {
                 Message =
-                    $"前月決算額 {TextHelper.AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount())} " +
+                    $"前年度決算額 {TextHelper.AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount())} " +
                     $"を登録します。\r\n\r\nよろしいですか？",
                 Image = MessageBoxImage.Question,
                 Title = "登録確認",
@@ -166,11 +168,11 @@ namespace WPF.ViewModels
         /// 前月決算を登録します
         /// </summary>
         public DelegateCommand RegistrationPerMonthFinalAccountCommand { get; set; }
-        private void RegistrationPerMonthFinalAccount()
+        private void RegistrationPrecedingYearFinalAccount()
         {
             if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) return;
-            DataBaseConnect.RegistrationPerMonthFinalAccount();
-            IsRegistrationPerMonthFinalAccountVisiblity = false;//前月決算が登録されたので、登録ボタンを隠す
+            DataBaseConnect.RegistrationPrecedingYearFinalAccount();
+            IsRegistrationPerMonthFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
         }
         /// <summary>
         /// ログインしていないことを案内します

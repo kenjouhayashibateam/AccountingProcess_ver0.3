@@ -148,6 +148,7 @@
     <Compile Include="Views\Behaviors\DatePickerAttachment.cs" />
     <Compile Include="Views\Behaviors\IsMemorialServiceConverter.cs" />
     <Compile Include="Views\Behaviors\OutputDateConverter.cs" />
+    <Compile Include="Views\Behaviors\SvgViewboxAttachment.cs" />
     <Compile Include="Views\Behaviors\SystemMenuBehavior.cs" />
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
     <Compile Include="Views\CashJournalManagementView.xaml.cs">

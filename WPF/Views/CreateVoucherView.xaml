@@ -137,7 +137,10 @@
                             <DataGridTemplateColumn Header="受納証" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="AddVoucherListButton" Content="追加" Margin="5,1">
+                                        <Button x:Name="AddVoucherListButton" ToolTip="受納証に追加します" Margin="5,1">
+                                            <StackPanel>
+                                                <svcg:SvgViewbox  Height="10" behavior:SvgViewboxAttachment.Source="input_black_24dp.svg"/>
+                                            </StackPanel>
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.AddVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="Row.Index" MouseAction="LeftClick"/>
                                             </Button.InputBindings>
@@ -194,7 +197,10 @@
                             <DataGridTemplateColumn Header="データ操作" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" Content="削除" FontSize="11" Margin="2">
+                                        <Button x:Name="DeleteDataButton" FontSize="11" Margin="2">
+                                            <StackPanel>
+                                                <svcg:SvgViewbox Height="10" behavior:SvgViewboxAttachment.Source="TrashBox.svg"/>
+                                            </StackPanel>
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.DeleteVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                             </Button.InputBindings>
@@ -243,7 +249,10 @@
                     <MouseBinding Command="{Binding ShowVoucherManagementCommand}" MouseAction="LeftClick"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="CloseButton" Grid.Column="3" Content="閉じる" Margin="5,20">
+            <Button x:Name="CloseButton" Grid.Column="3" Margin="5,20">
+                <StackPanel>
+                    <svcg:SvgViewbox Height="20" Width="80" behavior:SvgViewboxAttachment.Source="Exit.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

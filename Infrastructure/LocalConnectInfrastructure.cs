@@ -507,7 +507,7 @@ namespace Infrastructure
 
         public int Registration(string id, string contentConvertText) => 1;
 
-        public int RegistrationPerMonthFinalAccount() => 1;
+        public int RegistrationPrecedingYearFinalAccount() => 1;
         
         public int Update(Rep rep) => 1;
 
