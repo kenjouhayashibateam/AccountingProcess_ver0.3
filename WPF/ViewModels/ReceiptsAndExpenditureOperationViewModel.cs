@@ -108,7 +108,7 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowAccountTitleListPDFFileCommand { get; set; }
         private void ShowAccountTitleListPDFFile() =>
-            System.Diagnostics.Process.Start(".\\files\\AccountTitleList.pdf");
+            System.Diagnostics.Process.Start(@".\files\AccountTitleList.pdf");
         /// <summary>
         /// 詳細メニューのプロパティをセットします
         /// </summary>

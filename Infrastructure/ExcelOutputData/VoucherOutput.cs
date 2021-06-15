@@ -221,7 +221,7 @@ namespace Infrastructure.ExcelOutputData
             SetStringOriginalAndCopy(15, 1, "〒214-0036");
             //住所
             SetStringOriginalAndCopy(15, 3, "川崎市多摩区南生田８－１－１");
-            string imagePath = ".\\files\\ReceiptStamp.png";
+            string imagePath = @".\files\ReceiptStamp.png";
             myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 7));
             myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 18));
             //係

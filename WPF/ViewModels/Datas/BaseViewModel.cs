@@ -161,7 +161,7 @@ namespace WPF.ViewModels.Datas
         /// <param name="window"></param>
         protected void CreateShowWindowCommand(Window window)
         {
-            ShowWindowCommand = new DelegateCommand(() =>SetShowWindow(window) , () => true);
+            ShowWindowCommand = new DelegateCommand(() => SetShowWindow(window), () => true);
             CallPropertyChanged(nameof(ShowWindowCommand));
             CallShowWindow = true;
         }

@@ -119,7 +119,7 @@ namespace Infrastructure.ExcelOutputData
                 }
                 //伝票の詳細を設定したセルに出力する
                 myWorksheet.Cell(inputRow, inputContentColumn).Value =
-                    $"{rae.Content.Text} {rae.Detail} \\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
+                    $@"{rae.Content.Text} {rae.Detail} \{TextHelper.CommaDelimitedAmount(rae.Price)}-";
                 //{rae.Content.Text}伝票の一番上の右の欄に入金日を出力                
                 myWorksheet.Cell(StartRowPosition + 1, 16).Value =
                     $"{rae.AccountActivityDate:M/d}";

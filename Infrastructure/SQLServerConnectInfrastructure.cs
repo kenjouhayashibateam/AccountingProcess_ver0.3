@@ -588,8 +588,8 @@ namespace Infrastructure
             Cn = new SqlConnection
             {
                 ConnectionString =
-                "Data Source=192.168.44.163\\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;" +
-                "User ID=sa;Password=sqlserver"
+                @"Data Source=192.168.44.163\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;" +
+                    "User ID=sa;Password=sqlserver"
             };
 
             Cn.Open();
