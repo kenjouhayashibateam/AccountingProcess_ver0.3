@@ -841,7 +841,7 @@ namespace WPF.ViewModels
                     AccountingSubjectIDField = currentAccountingSubject.ID;
                     AccountingSubjectCodeField = currentAccountingSubject.SubjectCode;
                     AccountingSubjectField = currentAccountingSubject.Subject;
-                    isAccountingSubjectValidity = currentAccountingSubject.IsValidity;
+                    IsAccountingSubjectValidity = currentAccountingSubject.IsValidity;
                     SetAccountingSubjectOperationButtonEnabled();
                 }
                 CallPropertyChanged();
@@ -898,6 +898,7 @@ namespace WPF.ViewModels
             get => referenceAccountingSubjectCode;
             set
             {
+                if (referenceAccountingSubject == value) return;
                 referenceAccountingSubjectCode = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
                 CreateAccountSubjects();
                 CallPropertyChanged();
@@ -1044,11 +1045,13 @@ namespace WPF.ViewModels
                 return;
             CurrentAccountingSubject.IsValidity = IsAccountingSubjectValidity;
             DataBaseConnect.Update(CurrentAccountingSubject);
+            AccountingSubjectDetailFieldClear();
+            CurrentAccountingSubject = null;
+            SetDataUpdateCommand.Execute();
             CallCompletedUpdate();
         }
         #endregion
         #region CreditDeptOperation
-
         /// <summary>
         /// 貸方勘定ID
         /// </summary>

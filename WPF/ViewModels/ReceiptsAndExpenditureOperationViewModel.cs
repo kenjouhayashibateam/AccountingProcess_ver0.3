@@ -1085,22 +1085,55 @@ namespace WPF.ViewModels
 
             if (!b) return false;
 
-            if (!b) b = LoginRep.GetInstance().Rep.IsAdminPermisson &&
-                     CurrentFiscalYearFirstDate < DateTime.Today;
+            if (OperationData.Data == null) return true;
 
-            if (!b) DataOperationButtonContent =
+            b = CurrentFiscalYearFirstDate < OperationData.Data.OutputDate;
+
+            if (!b)
+            {
+                DataOperationButtonContent =
                     "更新は管理者権限所有者が、今年度中の出力データでのみ許可されます";
-            else b = IsInCorrectionDeadline();
+                return false;
+            }
+            else b = IsExceptMonthUpdate();
+
 
             if (b) b = LoginRep.GetInstance().Rep.IsAdminPermisson;
             else DataOperationButtonContent =
                     "訂正期限が過ぎています。";
+
             return b;
 
             bool IsInCorrectionDeadline()
             {
                 if (SlipOutputDate == DefaultDate) return true;
-                return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
+                bool b = DateTime.Today > CurrentFiscalYearFirstDate.AddDays(20);
+                if (b) return OperationData.Data.OutputDate > CurrentFiscalYearFirstDate;
+                else return false;
+            }
+
+            bool IsExceptMonthUpdate()
+            {
+                bool b = DateTime.Today.Month == OperationData.Data.OutputDate.Month;
+                
+                if (b) return true;
+
+                if(IsInCorrectionDeadline()) CreateConfirmationMessage();
+
+                return IsInCorrectionDeadline();
+
+                void CreateConfirmationMessage()
+                {
+                    MessageBox = new MessageBoxInfo()
+                    {
+                        Message = $"今月以外のデータの変更は、出納帳に影響を及ぼします。\r\n" +
+                            $"変更後は必ず変更した月の出納帳を出力し、訂正を申し出て下さい。",
+                        Image = System.Windows.MessageBoxImage.Information,
+                        Button = System.Windows.MessageBoxButton.OK,
+                        Title = "変更する際の注意"
+                    };
+                    CallPropertyChanged(nameof(MessageBox));
+                }
             }
         }
 

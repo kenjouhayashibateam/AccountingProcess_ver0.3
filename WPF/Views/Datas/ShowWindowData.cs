@@ -10,6 +10,6 @@ namespace WPF.Views.Datas
         /// <summary>
         /// ウィンドウデータ
         /// </summary>
-        public Window WindowData = null;
+        public Window WindowData { get; set; } = null;
     }
 }

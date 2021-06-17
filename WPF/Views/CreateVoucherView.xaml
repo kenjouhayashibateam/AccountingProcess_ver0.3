@@ -80,14 +80,14 @@
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="PrevButton" Grid.Column="2" Content="前の10件" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
+                            <Button x:Name="PrevButton" Grid.Column="2" Content=" |&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <TextBlock Grid.Column="3" Text="{Binding Pagination.ListPageInfo}" VerticalAlignment="Center"/>
-                            <Button x:Name="NextButton" Grid.Column="4" Content="次の10件" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
+                            <Button x:Name="NextButton" Grid.Column="4" Content=">| " IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
@@ -139,7 +139,7 @@
                                     <DataTemplate>
                                         <Button x:Name="AddVoucherListButton" ToolTip="受納証に追加します" Margin="5,1">
                                             <StackPanel>
-                                                <svcg:SvgViewbox  Height="10" behavior:SvgViewboxAttachment.Source="input_black_24dp.svg"/>
+                                                <svcg:SvgViewbox  Height="15" behavior:SvgViewboxAttachment.Source="input_black_24dp.svg"/>
                                             </StackPanel>
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.AddVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="Row.Index" MouseAction="LeftClick"/>
@@ -197,9 +197,9 @@
                             <DataGridTemplateColumn Header="データ操作" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" FontSize="11" Margin="2">
+                                        <Button x:Name="DeleteDataButton" ToolTip="内容を削除します" FontSize="11" Margin="2">
                                             <StackPanel>
-                                                <svcg:SvgViewbox Height="10" behavior:SvgViewboxAttachment.Source="TrashBox.svg"/>
+                                                <svcg:SvgViewbox Height="14" behavior:SvgViewboxAttachment.Source="TrashBox.svg"/>
                                             </StackPanel>
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.DeleteVoucherContentCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>

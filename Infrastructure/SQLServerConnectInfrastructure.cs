@@ -172,7 +172,8 @@ namespace Infrastructure
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>()
             {
-                {"@accounting_subject_id", accountingSubject.ID},{"@is_validity", accountingSubject.IsValidity},
+                {"@accounting_subject_id", accountingSubject.ID},{ "@subject_code",accountingSubject.SubjectCode},
+                { "@subject",accountingSubject.Subject},{"@is_validity", accountingSubject.IsValidity},
                 { "@operation_staff_id", LoginRep.Rep.ID}
             };
 

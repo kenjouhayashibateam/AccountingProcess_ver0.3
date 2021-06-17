@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 using WPF.Views.Datas;
@@ -19,9 +18,9 @@ namespace WPF.Views.Behaviors
         {
             DependencyPropertyChangedEventArgs e = (DependencyPropertyChangedEventArgs)parameter;
             ShowWindowData showForm = (ShowWindowData)e.NewValue;
-            Window Parent = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
+            Window Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
 
-            showForm.WindowData.Owner = Parent;//親画面を代入
+            showForm.WindowData.Owner = Owner;//親画面を代入
             showForm.WindowData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             //showForm.WindowData.Owner.ShowInTaskbar = false;
             //showForm.WindowData.Owner.Visibility = Visibility.Hidden;//親画面を隠す
