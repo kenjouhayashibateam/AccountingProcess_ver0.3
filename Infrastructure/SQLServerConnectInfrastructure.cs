@@ -463,7 +463,7 @@ namespace Infrastructure
         public int PreviousDayFinalAmount()
         {
             SettingConectionString();
-            SqlCommand Cmd = new SqlCommand("select dbo.return_previous_day_final_amount()",Cn);
+            SqlCommand Cmd = new SqlCommand("select dbo.return_previous_day_final_amount()", Cn);
             Cn.Open();
             object obj;
             using (Cn) obj = Cmd.ExecuteScalar();
@@ -477,7 +477,7 @@ namespace Infrastructure
 
             using(Cn)
             {
-                Cmd = NewCommand(CommandType.Text, "registration_final_account_per_month_table");
+                Cmd = NewCommand(CommandType.Text, "registration_preceding_year_final_account_table");
                 return Cmd.ExecuteNonQuery();
             }
         }
@@ -498,18 +498,17 @@ namespace Infrastructure
             return i;
         }
 
-        public int CallFinalAccountPerMonth(DateTime monthEnd)
+        public int CallFinalAccountPerMonth(DateTime date)
         {
-            int i = default;
+            SettingConectionString();
+            SqlCommand Cmd = new SqlCommand("select dbo.call_previous_month_final_account(@date)", Cn);
+            Cmd.Parameters.AddWithValue("@date", date);
+            Cn.Open();
 
-            SqlDataReader sdr = ReturnGeneretedParameterCommand
-                ("call_final_account_per_month",
-                    new Dictionary<string, object>() { { "@date", monthEnd } })
-                    .ExecuteReader();
+            object obj;
+            using (Cn) obj = Cmd.ExecuteScalar( );
 
-            while (sdr.Read()) i = (int)sdr["amount"];
-
-            return i;
+            return (int)obj;
         }
 
         public int ReceiptsAndExpenditurePreviousDayChange

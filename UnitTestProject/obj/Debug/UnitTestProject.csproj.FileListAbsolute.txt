@@ -90,3 +90,17 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\D
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.csproj.CopyComplete
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\UnitTestProject\obj\Debug\UnitTestProject.pdb
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Converters.Wpf.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Rendering.Wpf.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Model.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Core.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Runtime.Wpf.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Dom.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Css.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Converters.Wpf.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Rendering.Wpf.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Model.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Core.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Runtime.Wpf.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Dom.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\UnitTestProject\bin\Debug\SharpVectors.Css.xml

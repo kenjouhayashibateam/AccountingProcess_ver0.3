@@ -1077,15 +1077,13 @@ namespace WPF.ViewModels
         /// <returns>判定結果</returns>
         private bool CanOperation()
         {
-            bool b =!HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
+            bool b = !HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
                 !string.IsNullOrEmpty(ComboContentText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
                 !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
 
             if (!b) return false;
-
-            b = SlipOutputDate == DefaultDate;
 
             if (!b) b = LoginRep.GetInstance().Rep.IsAdminPermisson &&
                      CurrentFiscalYearFirstDate < DateTime.Today;
@@ -1099,7 +1097,11 @@ namespace WPF.ViewModels
                     "訂正期限が過ぎています。";
             return b;
 
-            bool IsInCorrectionDeadline() => DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
+            bool IsInCorrectionDeadline()
+            {
+                if (SlipOutputDate == DefaultDate) return true;
+                return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
+            }
         }
 
         public void ReceiptsAndExpenditureOperationNotify() => SetReceiptsAndExpenditureProperty();        

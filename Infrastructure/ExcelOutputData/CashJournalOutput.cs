@@ -45,12 +45,13 @@ namespace Infrastructure.ExcelOutputData
             int payment = 0;
             int withdrawal = 0;
             int pageRowCount = 1;
-            int pagePayment=default;
-            int pageWithdrawal=default;
+            int pagePayment = default;
+            int pageWithdrawal = default;
             int pageBalance = default;
             int slipPayment = default;
             int slipWithdrawal = default;
             bool firstPage = true;
+            bool isPageMove = false;
             string detailString = default;
             string currentSubjectCode = string.Empty;
             string currentDept = string.Empty;
@@ -64,26 +65,30 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.CreditDept.ID)
                 .ThenBy(r => r.Location))
             {
+                if (isPageMove) PageMove();
+
                 if (pageRowCount == 1)
                 {
                     CurrentDate = rae.OutputDate;
                     SetMerge();
-                    myWorksheet.Cell(StartRowPosition, 1).Value = 
+                    MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Style
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+                    myWorksheet.Cell(StartRowPosition, 1).Value =
                         $"{rae.OutputDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
                     StartRowPosition++;
                     pageRowCount++;
                     myWorksheet.Cell(StartRowPosition, 1).Value = "日付";
                     myWorksheet.Cell(StartRowPosition, 3).Value = "コード";
-                    myWorksheet.Cell(StartRowPosition , 4).Value = "勘定科目";
-                    myWorksheet.Cell(StartRowPosition , 5).Value = "摘要";
-                    myWorksheet.Cell(StartRowPosition , 7).Value = "入金";
-                    myWorksheet.Cell(StartRowPosition , 8).Value = "出金";
-                    myWorksheet.Cell(StartRowPosition , 9).Value = "合計";
+                    myWorksheet.Cell(StartRowPosition, 4).Value = "勘定科目";
+                    myWorksheet.Cell(StartRowPosition, 5).Value = "摘要";
+                    myWorksheet.Cell(StartRowPosition, 7).Value = "入金";
+                    myWorksheet.Cell(StartRowPosition, 8).Value = "出金";
+                    myWorksheet.Cell(StartRowPosition, 9).Value = "合計";
                     SetStyleAndNextIndex();
                     pageRowCount++;
-                    SetBalance();
-                    myWorksheet.Cell(StartRowPosition, 1).Value = CurrentDate.Month;
-                    myWorksheet.Cell(StartRowPosition, 2).Value = CurrentDate.Day;
+                    SetPageBalance();
+                    SetStyleAndNextIndex();
+                    pageRowCount++;
                 }
                 else if (CurrentDate != rae.OutputDate)
                 {
@@ -93,9 +98,12 @@ namespace Infrastructure.ExcelOutputData
 
                 SetItem();
 
-                if (pageRowCount == OnePageRowCount)
+                isPageMove = pageRowCount == OnePageRowCount;
+
+                void PageMove()
                 {
-                    myWorksheet.Cell(StartRowPosition - 1, 9).Value = 
+                    if (IsSameSlip()) return;
+                       myWorksheet.Cell(StartRowPosition - 1, 9).Value =
                         CommaDelimitedAmount(pageBalance + payment - withdrawal);
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
@@ -108,9 +116,37 @@ namespace Infrastructure.ExcelOutputData
                     pageRowCount = 1;
                     MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
                         .Border.SetTopBorder(XLBorderStyleValues.Double);
+                    PreviousDayBalance = pageBalance;
+                    SetStyleAndNextIndex();
+                    isPageMove = false;
                     NextPage();
                 }
-                                    
+
+                void SetPageBalance()
+                {
+                    if (firstPage)
+                    {
+                        myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
+                        myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
+                        myWorksheet.Cell(StartRowPosition, 4).Value = "前月より繰越";
+                        PreviousDayBalance = DataBaseConnect.CallFinalAccountPerMonth
+                            (rae.OutputDate);
+                        myWorksheet.Cell(StartRowPosition, 9).Value =
+                            CommaDelimitedAmount(PreviousDayBalance);
+                        pageBalance += PreviousDayBalance;
+                        payment = pagePayment = withdrawal = pageWithdrawal = 0;
+                        firstPage = false;
+                    }
+                    else
+                    {
+                        myWorksheet.Cell(StartRowPosition, 4).Value = "前頁より繰越";
+                        myWorksheet.Cell(StartRowPosition, 9).Value =
+                            CommaDelimitedAmount(pageBalance);
+                        myWorksheet.Cell(StartRowPosition+1, 1).Value = CurrentDate.Month;
+                        myWorksheet.Cell(StartRowPosition+1, 2).Value = CurrentDate.Day;
+                    }
+                }
+
                 void SetItem()
                 {
                     if (IsSameSlip())
@@ -142,47 +178,25 @@ namespace Infrastructure.ExcelOutputData
                         pageRowCount++;
                     }
 
-                    bool IsSameSlip()
-                    {
-                        return currentDept == rae.CreditDept.Dept &&
-                            currentSubjectCode == rae.Content.AccountingSubject.SubjectCode &&
-                            ItemIndex < 9 && currentLocation == rae.Location;
-                    }
+                }
+                bool IsSameSlip()
+                {
+                    return currentDept == rae.CreditDept.Dept &&
+                        currentSubjectCode == rae.Content.AccountingSubject.SubjectCode &&
+                        ItemIndex < 9 && currentLocation == rae.Location;
                 }
 
                 void SetBalance()
                 {
-                    if(firstPage)
-                    {
-                        myWorksheet.Cell(StartRowPosition, 4).Value = "前月より繰越";
-                        PreviousDayBalance = DataBaseConnect.CallFinalAccountPerMonth
-                                (new DateTime(rae.OutputDate.Year,rae.OutputDate.Month,1).AddDays(-1));
-                        myWorksheet.Cell(StartRowPosition, 9).Value =
-                            CommaDelimitedAmount(PreviousDayBalance);
-                        pageBalance += PreviousDayBalance;
-                        payment = pagePayment = withdrawal = pageWithdrawal = 0;
-                        SetStyleAndNextIndex();
-                        pageRowCount++;
-                        firstPage = false;
-                    }
-                    else if(CurrentDate!=rae.OutputDate)
+                    if (CurrentDate != rae.OutputDate)
                     {
                         CurrentDate = rae.OutputDate;
-                        pageBalance +=  payment - withdrawal;
+                        pageBalance += payment - withdrawal;
                         PreviousDayBalance += payment - withdrawal;
                         myWorksheet.Cell(StartRowPosition - 1, 9).Value =
                             CommaDelimitedAmount(PreviousDayBalance);
                         payment = 0;
                         withdrawal = 0;
-                    }
-                    else
-                    {
-                        myWorksheet.Cell(StartRowPosition, 4).Value = "前頁より繰越";
-                        myWorksheet.Cell(StartRowPosition, 9).Value =
-                            CommaDelimitedAmount(pageBalance);
-                        PreviousDayBalance = pageBalance;
-                        SetStyleAndNextIndex();
-                        pageRowCount++;
                     }
                 }
 
@@ -190,22 +204,24 @@ namespace Infrastructure.ExcelOutputData
                 {
                     if (rae.IsPayment)
                     {
-                        myWorksheet.Cell(position , 7).Value = CommaDelimitedAmount(slipPayment);
+                        myWorksheet.Cell(position, 7).Value = CommaDelimitedAmount(slipPayment);
                         payment += rae.Price;
                         pagePayment += rae.Price;
                     }
                     else
                     {
-                        myWorksheet.Cell(position , 8).Value = CommaDelimitedAmount(slipWithdrawal);
+                        myWorksheet.Cell(position, 8).Value = CommaDelimitedAmount(slipWithdrawal);
                         withdrawal += rae.Price;
                         pageWithdrawal += rae.Price;
                     }
                 }
             }
 
-            if(pageRowCount==1)
+            if (pageRowCount == 1)
             {
                 SetMerge();
+                MySheetCellRange(StartRowPosition,1,StartRowPosition,SetColumnSizes().Length).Style
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
                 myWorksheet.Cell(StartRowPosition, 1).Value =
                     $"{CurrentDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
                 StartRowPosition++;
@@ -226,10 +242,10 @@ namespace Infrastructure.ExcelOutputData
                 SetStyleAndNextIndex();
                 pageRowCount++;
             }
-            else myWorksheet.Cell(StartRowPosition - 1, 9).Value = 
+            else myWorksheet.Cell(StartRowPosition - 1, 9).Value =
                 CommaDelimitedAmount(pageBalance + payment - withdrawal);
 
-            myWorksheet.Cell(StartRowPosition , 4).Value = "計";
+            myWorksheet.Cell(StartRowPosition, 4).Value = "計";
             myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
             myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
             PreviousDayBalance += payment - withdrawal;
