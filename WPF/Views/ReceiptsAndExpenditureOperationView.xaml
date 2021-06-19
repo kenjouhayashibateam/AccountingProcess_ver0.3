@@ -23,7 +23,7 @@
             <behavior:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
-            <behavior:ShowDiarog/>
+            <behavior:ShowDiarogBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
     <i:Interaction.Behaviors>

@@ -1150,15 +1150,13 @@ namespace WPF.ViewModels
             }
 
             string Location;
-            if (IsLocationSearch) Location = AccountingProcessLocation.Location;
-            else Location = string.Empty;
-
-            if (IsLocationSearch) Location = AccountingProcessLocation.Location;
+            Location = IsLocationSearch ? AccountingProcessLocation.Location : string.Empty;
 
             ListTitle = "描画中です。お待ちください。";
+
             CreateReceiptsAndExpenditures
                 (AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd,
-                    Location,isPageCountReset);
+                    Location, isPageCountReset);
             Pagination.SetProperty();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
             SetCashboxTotalAmount();
@@ -1173,7 +1171,7 @@ namespace WPF.ViewModels
         /// <param name="location"></param>
         private void CreateReceiptsAndExpenditures
             (DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
-            DateTime outputDateEnd, string location, bool isPageCountReset)
+                DateTime outputDateEnd, string location, bool isPageCountReset)
         {
             Pagination.CountReset(isPageCountReset);
 
@@ -1196,8 +1194,8 @@ namespace WPF.ViewModels
             SetWithdrawalSumAndTransferSum();
         }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = 
-            $"出納管理 : {AccountingProcessLocation.Location}";
+        protected override void SetWindowDefaultTitle() =>
+            DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";
 
         public void ReceiptsAndExpenditureOperationNotify() => RefreshList();
 

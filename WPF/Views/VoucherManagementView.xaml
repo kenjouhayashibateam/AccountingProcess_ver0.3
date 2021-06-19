@@ -52,7 +52,7 @@
                     <DatePicker Grid.Column="2" VerticalContentAlignment="Center" SelectedDate="{Binding SearchDateEnd}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5"/>
                     <TextBlock Text="までを検索する" Grid.Column="3" VerticalAlignment="Center" Margin="5"/>
                 </Grid>
-                <CheckBox Content="発行したデータのみ表示" IsChecked="{Binding IsAlsoIncludesFalseValidity}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <CheckBox Content="発行したデータのみ表示" IsChecked="{Binding IsvalidityTrueOnly}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid> 
         </GroupBox>
         <Grid Grid.Row="1">
@@ -68,7 +68,12 @@
                     </Grid.RowDefinitions>
                     <DataGrid x:Name="VoucherListDataGrid" Grid.Row="0" ItemsSource="{Binding Vouchers}" SelectedValue="{Binding SelectedVoucher}" AutoGenerateColumns="False" Margin="5">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="出力" Width="1*">
+                            <DataGridTemplateColumn Header="出力" Width="2*">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsValidity}" IsEnabled="False" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -96,7 +101,12 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="発行日" Width="2*">
+                            <DataGridTemplateColumn Header="発行日" Width="3*">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding OutputDate,StringFormat=yy/MM/dd}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -104,16 +114,26 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="発行者" Width="2*">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding OutputRep.FirstName}" Margin="5"/>
+                                        <TextBlock Text="{Binding OutputRep.FirstName}" HorizontalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="出力チェック" Width="2*">
+                            <DataGridTemplateColumn Header="出力チェック" Width="3*">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="反転" FontSize="11" Margin="2">
+                                        <Button Content="反転" FontSize="11" Margin="3">
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path= DataContext.IsOutputCheckOperationCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                             </Button.InputBindings>

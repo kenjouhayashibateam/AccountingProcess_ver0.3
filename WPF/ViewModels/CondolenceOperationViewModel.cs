@@ -78,6 +78,7 @@ namespace WPF.ViewModels
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             SetReceiptsAndExpenditures(true);
+            AlmsgivingSearchCommand.Execute();
             if (CondolenceOperation.GetInstance().GetData() == null)
             {
                 SetDataRegistrationCommand.Execute();

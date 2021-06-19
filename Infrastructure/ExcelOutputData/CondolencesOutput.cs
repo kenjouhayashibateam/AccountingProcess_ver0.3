@@ -66,19 +66,19 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetDataStrings()
         {
             int i = 1;
-            int currentRow=1;
+            int currentRow = 1;
             int dateMergeStartRow = 3;
             DateTime currentDate = DefaultDate;
 
-            foreach (Condolence condolence in Condolences.OrderBy(c=>c.AccountActivityDate))
+            foreach (Condolence condolence in Condolences.OrderBy(c => c.AccountActivityDate))
             {
-                if(i==17)
+                if (i == 17)
                 {
                     pageNumber++;
                     MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
                     i = 1;
                 }
-                if(i==1)
+                if (i == 1)
                 {
                     SetNewPage();
                     //タイトル欄　年
@@ -138,6 +138,11 @@ namespace Infrastructure.ExcelOutputData
                     .Border.SetRightBorder(XLBorderStyleValues.None)
                     .Border.SetLeftBorder(XLBorderStyleValues.None)
                     .Border.SetTopBorder(XLBorderStyleValues.None);
+            MySheetCellRange(i - 1, 1, i - 1, SetColumnSizes().Length).Style
+                .Border.SetRightBorder(XLBorderStyleValues.Thin)
+                .Border.SetLeftBorder(XLBorderStyleValues.Thin)
+                .Border.SetTopBorder(XLBorderStyleValues.Thin)
+                .Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
             void SetNewPage()
             {

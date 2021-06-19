@@ -167,7 +167,7 @@
       <DependentUpon>DataManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Behaviors\MessageBoxBehavior.cs" />
-    <Compile Include="Views\Behaviors\ShowDiarog.cs" />
+    <Compile Include="Views\Behaviors\ShowDiarogBehavior.cs" />
     <Compile Include="Views\Behaviors\TextBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\WindowClosingCancelBehavior.cs" />
     <Compile Include="Views\Datas\IClosing.cs" />

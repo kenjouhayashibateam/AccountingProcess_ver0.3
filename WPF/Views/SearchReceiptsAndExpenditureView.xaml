@@ -112,14 +112,14 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="RefleshListButton" Grid.Column="0" Content="リストを再構築" HorizontalAlignment="Center" Margin="5"></Button>
-                        <Button x:Name="PrevPageButton" Grid.Column="1" Content="&lt;&lt;" HorizontalAlignment="Center" Margin="5">
+                        <Button x:Name="PrevPageButton" Grid.Column="1" Content="|&lt;" HorizontalAlignment="Center" Margin="5">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                             </Button.InputBindings>
                         </Button>
                         <TextBlock Text="{Binding Pagination.ListPageInfo}" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
-                        <Button x:Name="NextPageButton" Grid.Column="3" Content=">>" HorizontalAlignment="Center" Margin="5">
+                        <Button x:Name="NextPageButton" Grid.Column="3" Content=">|" HorizontalAlignment="Center" Margin="5">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>

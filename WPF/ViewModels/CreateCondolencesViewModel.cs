@@ -43,7 +43,11 @@ namespace WPF.ViewModels
             condolenceOperation.Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
-            SearchStartDate = DateTime.Today.AddDays(1 * (-1 * (DateTime.Today.Day - 1)));
+            DayOfWeek dow = DateTime.Today.DayOfWeek;
+            int i = default;
+            if (dow == DayOfWeek.Sunday) i = -7;
+            else i = -(int)dow;
+            SearchStartDate = DateTime.Today.AddDays(i);
             SearchEndDate = DateTime.Today;
             ShowRegistrationViewCommand = new DelegateCommand
                 (() => ShowRegistrationView(), () => true);

@@ -8,7 +8,7 @@ namespace WPF.Views.Behaviors
     /// <summary>
     /// Window.ShowDialog動作
     /// </summary>
-    public class ShowDiarog : TriggerAction<FrameworkElement>
+    public class ShowDiarogBehavior : TriggerAction<FrameworkElement>
     {
         /// <summary>
         /// Window.ShowDialogを実行します
@@ -18,16 +18,11 @@ namespace WPF.Views.Behaviors
         {
             DependencyPropertyChangedEventArgs e = (DependencyPropertyChangedEventArgs)parameter;
             ShowWindowData showForm = (ShowWindowData)e.NewValue;
-            Window Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
 
-            showForm.WindowData.Owner = Owner;//親画面を代入
+            showForm.WindowData.Owner =
+                Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive); ;//親画面を代入
             showForm.WindowData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            //showForm.WindowData.Owner.ShowInTaskbar = false;
-            //showForm.WindowData.Owner.Visibility = Visibility.Hidden;//親画面を隠す
             showForm.WindowData.ShowDialog();
-            showForm.WindowData.Owner.ShowInTaskbar = true;
-            //showForm.WindowData.Owner.Visibility = Visibility.Visible;
-            //Application.Current.MainWindow.Visibility = Visibility.Visible;
         }
     }
 }

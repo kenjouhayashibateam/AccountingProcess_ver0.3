@@ -1809,7 +1809,7 @@ namespace WPF.ViewModels
                     SetNullOrEmptyError(propertyName, value.ToString());
                     break;
                 case nameof(RepCurrentPassword):
-                    if (IsRepPasswordEnabled) 
+                    if (IsRepPasswordEnabled)
                         ErrorsListOperation
                             (RepCurrentPassword != CurrentRep.Password, propertyName, 
                                 Properties.Resources.PasswordErrorInfo);
@@ -1820,7 +1820,7 @@ namespace WPF.ViewModels
                 case nameof(ConfirmationPassword):
                     if (!_isRepNewPasswordEnabled) break;
                     SetNullOrEmptyError(propertyName, value.ToString());
-                    if (GetErrors(propertyName)==null) 
+                    if (GetErrors(propertyName) == null)
                         ErrorsListOperation
                             (RepNewPassword != ConfirmationPassword, propertyName, 
                                 Properties.Resources.PasswordErrorInfo);

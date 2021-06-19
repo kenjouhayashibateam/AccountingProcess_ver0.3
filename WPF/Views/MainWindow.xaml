@@ -6,6 +6,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:svcg="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
@@ -24,7 +26,7 @@
 
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
-            <b:ShowDiarog/>
+            <b:ShowDiarogBehavior/>
         </interactions:PropertyChangedTrigger>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <b:MessageBoxBehavior/>
@@ -42,11 +44,11 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox x:Name="ShowFreeAccessViewGroupBox" Header="データ閲覧" Margin="5">
             <Grid>
@@ -188,7 +190,10 @@
                     <MouseBinding Command="{Binding LogoutCommand}" MouseAction="LeftClick"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="WindowCloseButton" Grid.Column="4" Content="閉じる"  Margin="10,15">
+            <Button x:Name="WindowCloseButton" Grid.Column="4" ToolTip="システムを終了します"  Margin="10,15">
+                <StackPanel>
+                    <svcg:SvgViewbox Height="30" behavior:SvgViewboxAttachment.Source="Exit.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>

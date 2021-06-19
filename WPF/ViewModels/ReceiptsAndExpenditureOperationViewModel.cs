@@ -1087,6 +1087,8 @@ namespace WPF.ViewModels
 
             if (OperationData.Data == null) return true;
 
+            if (OperationData.Data.OutputDate == DefaultDate) return true;
+
             b = CurrentFiscalYearFirstDate < OperationData.Data.OutputDate;
 
             if (!b)

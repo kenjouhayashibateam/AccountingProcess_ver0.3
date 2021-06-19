@@ -193,7 +193,7 @@ namespace WPF.ViewModels.Datas
         /// <summary>
         /// エラーリスト
         /// </summary>
-        public Dictionary<string, string> CurrentErrors=new Dictionary<string, string>();
+        public Dictionary<string, string> CurrentErrors = new Dictionary<string, string>();
         /// <summary>
         /// データが存在しない時のエラー操作
         /// </summary>
