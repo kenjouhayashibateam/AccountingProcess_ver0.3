@@ -45,6 +45,12 @@ namespace WPF.ViewModels
                 searchDateStart == DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)) ? DateTime.Today :
                                                 searchDateStart.AddMonths(1).AddDays(-1);
 
+            if (searchDateStart < new DateTime(2021, 4, 1))
+            {
+                CallOutputBlockingMessage();
+                return;
+            }
+
             OutputButtonContent = "出力中";
             await Task.Run(
                 () => DataOutput.ReceiptsAndExpenditureData
@@ -56,6 +62,18 @@ namespace WPF.ViewModels
                     )
                 );
             OutputButtonContent = "出力";
+
+            void CallOutputBlockingMessage()
+            {
+                MessageBox = new Views.Datas.MessageBoxInfo()
+                {
+                    Message = "2020年度以前の出納帳は、データ不足のため出力できません。",
+                    Image = System.Windows.MessageBoxImage.Information,
+                    Button = System.Windows.MessageBoxButton.OK,
+                    Title = "期間外出力"
+                };
+                CallPropertyChanged(nameof(MessageBox));
+            }
         }
         /// <summary>
         /// 出力する年

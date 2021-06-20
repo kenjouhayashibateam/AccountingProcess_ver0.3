@@ -23,7 +23,7 @@ namespace WPF.ViewModels.Datas
             更新
         }
 
-        public DataOperationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
+        public DataOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             SetDelegateCommand();
             SetDataList();
@@ -31,7 +31,7 @@ namespace WPF.ViewModels.Datas
                 SetDataOperation(DataOperation.登録), () => true);
             SetDataUpdateCommand = new DelegateCommand(() =>
                 SetDataOperation(DataOperation.更新), () => true);
-        } 
+        }
         /// <summary>
         /// データ操作を「登録」にするコマンド
         /// </summary>

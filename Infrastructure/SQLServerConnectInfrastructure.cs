@@ -856,5 +856,9 @@ namespace Infrastructure
             }
             return list;
         }
+
+        public int DeleteCondolence(int condolenceID) =>
+            ReturnGeneretedParameterCommand
+                ("delete_condolence", new Dictionary<string, object> { { "@id", condolenceID } }).ExecuteNonQuery();
     }
 }

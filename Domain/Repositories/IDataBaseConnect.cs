@@ -323,5 +323,11 @@ namespace Domain.Repositories
         /// <returns></returns>
         public ObservableCollection<ReceiptsAndExpenditure>
             CallVoucherGroupingReceiptsAndExpenditure(int voucherID);
+        /// <summary>
+        /// お布施一覧データを削除します
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int DeleteCondolence(int condolenceID);
     }
 }

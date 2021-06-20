@@ -14,7 +14,9 @@
     <Window.DataContext>
         <vm:CondolenceOperationViewModel/>
     </Window.DataContext>
-    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
     </i:Interaction.Behaviors>
@@ -221,10 +223,17 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="OperationButton" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsOperationButtonEnabled}" Grid.Column="1" Margin="3">
+                    <Button x:Name="DeleteButton" Content="データ削除" Grid.Column="1" Visibility="{Binding IsDeleteButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="3">
+                        <Button.InputBindings>
+                            <KeyBinding Command="{Binding DeleteCondolenceCommand}" Key="Space"/>
+                            <MouseBinding Command="{Binding DeleteCondolenceCommand}" MouseAction="LeftClick"/>
+                        </Button.InputBindings>
+                    </Button>
+                    <Button x:Name="OperationButton" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsOperationButtonEnabled}" Grid.Column="2" Margin="3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding OperationDataCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding OperationDataCommand}" MouseAction="LeftClick"/>

@@ -28,14 +28,14 @@ namespace WPF.ViewModels
         private string comboCreditDeptText;
         private string comboAccountingSubjectCode;
         private string comboAccountingSubjectText;
-        private string comboContentText;
+        private string comboContentText = string.Empty;
         private string otherDescription;
         private string detailText;
         private string price;
         private string slipOutputDateTitle;
         private string dataOperationButtonContent;
-        private string supplement;
-        private string supplementInfo;
+        private string supplement = string.Empty;
+        private string supplementInfo = string.Empty;
         /// <summary>
         /// 補足に入る必須入力文字
         /// </summary>
@@ -384,7 +384,7 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="otherDescriptionString">その他詳細</param>
         /// <param name="supplementInfoString">補足</param>
-        private void SetDetailTitle(string otherDescriptionString,string supplementInfoString)
+        private void SetDetailTitle(string otherDescriptionString, string supplementInfoString)
         {
             SupplementInfo = supplementInfoString;
             OtherDescription = otherDescriptionString;
@@ -722,6 +722,14 @@ namespace WPF.ViewModels
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
                 CallPropertyChanged();
+                if (!string.IsNullOrEmpty(value)) SetContentProperty();
+                else
+                {
+                    Supplement = string.Empty;
+                    IsSupplementVisiblity = false;
+                    Price = string.Empty;
+                    IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
+                }
             }
         }
         /// <summary>
@@ -745,14 +753,6 @@ namespace WPF.ViewModels
             set
             {
                 selectedContent = value;
-                if (value != null) SetContentProperty();
-                else
-                {
-                    Supplement = string.Empty;
-                    IsSupplementVisiblity = false;
-                    Price = string.Empty;
-                    IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
-                }
                 CallPropertyChanged();
             }
         }
@@ -968,6 +968,8 @@ namespace WPF.ViewModels
             set
             {
                 isSupplementVisiblity = value;
+                if (!value) Supplement = string.Empty;
+                ValidationProperty(nameof(IsSupplementVisiblity), value);
                 CallPropertyChanged();
             }
         }
@@ -1165,14 +1167,27 @@ namespace WPF.ViewModels
                         (SelectedCreditDept == null, propertyName, "貸方部門をリストから選択してください");
                     break;
                 case nameof(Supplement):
-                    if(ComboContentText!=null && ComboContentText.Contains("管理料"))
-                    {
+                    if(ComboContentText.Contains("管理料"))
                         SetNullOrEmptyError(propertyName, value.ToString());
-                        ErrorsListOperation(!((string)value).Contains(SupplementRequiredString), 
-                            propertyName, $"{SupplementRequiredString}を入力してください");
-                    }
+
+                    if (GetErrors(propertyName) == null)
+                        SetErrorSupplementRequiredStringContains();
                     break;
-            }            
+                case nameof(IsSupplementVisiblity):
+                    if (!(bool)value)
+                    {
+                        ErrorsListOperation(!string.IsNullOrEmpty(Supplement), nameof(Supplement),
+                            "VisiblityがFalseの場合は空文字にしてください。");
+                    }
+                    else SetErrorSupplementRequiredStringContains();
+                    break;
+            }
+
+            void SetErrorSupplementRequiredStringContains()
+            {
+                ErrorsListOperation(!Supplement.Contains(SupplementRequiredString),
+                    nameof(Supplement), $"{SupplementRequiredString}を入力してください");
+            }
         }
 
         protected override void SetWindowDefaultTitle()

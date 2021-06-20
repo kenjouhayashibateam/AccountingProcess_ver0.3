@@ -37,6 +37,7 @@ namespace WPF.ViewModels
         private string mailRepresentative;
         private string fixToggleContent;
         private string condolenceContent = "法事";
+        private string Location = string.Empty;
         /// <summary>
         /// 検索する勘定科目コード
         /// </summary>
@@ -51,6 +52,7 @@ namespace WPF.ViewModels
         private bool isReceptionBlank = false;
         private bool fixToggle = true;
         private bool isFixToggleEnabled = false;
+        private bool isDeleteButtonVisibility;
         #endregion
         private Dictionary<int, string> soryoList;
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures =
@@ -83,15 +85,53 @@ namespace WPF.ViewModels
             {
                 SetDataRegistrationCommand.Execute();
                 FieldClear();
+                InputProperty();
             }
             else
             {
                 SetDataUpdateCommand.Execute();
                 SetProperty();
             }
-            InputProperty();
         }
         public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// お布施一覧データ削除コマンド
+        /// </summary>
+        public DelegateCommand DeleteCondolenceCommand { get; set; }
+        private void DeleteCondolence()
+        {
+            OperationCondolence = new Condolence
+                (ID, Location, OwnerName, SoryoName, ContentText, IntAmount(Almsgiving), IntAmount(CarTip), 
+                    IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
+                    CounterReceiver, MailRepresentative);
+            if (DeleteConfirmation() == MessageBoxResult.No) return;
+            DataBaseConnect.DeleteCondolence(ID);
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = "削除しました。このまま新規登録ができます。",
+                Image = MessageBoxImage.Information,
+                Button = MessageBoxButton.OK,
+                Title = "削除完了"
+            };
+            CallPropertyChanged(nameof(MessageBox));
+            CondolenceOperation.GetInstance().Notify();
+            SetDataRegistrationCommand.Execute();
+            FieldClear();
+            InputProperty();
+        }
+        private  MessageBoxResult DeleteConfirmation()
+        {
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = $"ID{Space}:{Space}{ID}\r\n{PropertyContentsMessage()}" +
+                    $"\r\n\r\nデータを削除します。元に戻せませんがよろしいですか？",
+                Image = MessageBoxImage.Question,
+                Button = MessageBoxButton.YesNo,
+                Title = "削除確認"
+            };
+            CallPropertyChanged(nameof(MessageBox));
+            return MessageBox.Result;
+        }
         /// <summary>
         /// 懇志検索コマンド
         /// </summary>
@@ -130,6 +170,7 @@ namespace WPF.ViewModels
             ID = condolence.ID;
             if (ID == 0) { SetDataOperation(DataOperation.登録); }
             AccountActivityDate = condolence.AccountActivityDate;
+            Location = condolence.Location;
             OwnerName = condolence.OwnerName;
             CondolenceContent = condolence.Content;
             SoryoName = condolence.SoryoName;
@@ -145,6 +186,7 @@ namespace WPF.ViewModels
             IsAlmsgivingSearch = true;
             IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) &&
                 string.IsNullOrEmpty(condolence.MailRepresentative);
+            IsDeleteButtonVisibility = true;
         }
         /// <summary>
         /// プロパティをクリアします
@@ -165,6 +207,7 @@ namespace WPF.ViewModels
             IsAlmsgivingSearch = true;
             ContentText = ContentStrings[0];
             IsReceptionBlank = false;
+            IsDeleteButtonVisibility = false;
         }
         /// <summary>
         /// データ操作コマンド
@@ -286,20 +329,7 @@ namespace WPF.ViewModels
             MessageBox = new MessageBoxInfo()
             {
 
-                Message =
-                    $"日付\t\t:{Space}{OperationCondolence.AccountActivityDate.ToShortDateString()}\r\n" +
-                    $"施主名\t\t:{Space}{OperationCondolence.OwnerName}\r\n" +
-                    $"担当僧侶\t\t:{Space}{OperationCondolence.SoryoName}\r\n" +
-                    $"内容\t\t:{Space}{OperationCondolence.Content}\r\n" +
-                    $"合計金額\t\t:{Space}{AmountWithUnit(OperationCondolence.TotalAmount)}\r\n" +
-                    $"御布施\t\t:{Space}{AmountWithUnit(OperationCondolence.Almsgiving)}\r\n" +
-                    $"御車代\t\t:{Space}{AmountWithUnit(OperationCondolence.CarTip)}\t\n" +
-                    $"御膳料\t\t:{Space}{AmountWithUnit(OperationCondolence.MealTip)}\t\n" +
-                    $"御車代御膳料\t:{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\t\n" +
-                    $"懇志\t\t;{Space}{AmountWithUnit(OperationCondolence.SocialGathering)}\r\n" +
-                    $"備考\t\t:{Space}{OperationCondolence.Note}\r\n" +
-                    $"窓口受付者\t:{Space}{OperationCondolence.CounterReceiver}\r\n" +
-                    $"郵送担当者\t:{Space}{OperationCondolence.MailRepresentative}\r\n\r\n登録しますか？",
+                Message = $"{PropertyContentsMessage()}\r\n\r\n登録しますか？",
                 Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
                 Title = "登録確認"
@@ -319,6 +349,22 @@ namespace WPF.ViewModels
             CallCompletedRegistration();
             IsOperationButtonEnabled = true;
             DataOperationButtonContent = "登録";
+        }
+        private string PropertyContentsMessage()
+        {
+            return $"日付\t\t:{Space}{OperationCondolence.AccountActivityDate.ToShortDateString()}\r\n" +
+                $"施主名\t\t:{Space}{OperationCondolence.OwnerName}\r\n" +
+                $"担当僧侶\t\t:{Space}{OperationCondolence.SoryoName}\r\n" +
+                $"内容\t\t:{Space}{OperationCondolence.Content}\r\n" +
+                $"合計金額\t\t:{Space}{AmountWithUnit(OperationCondolence.TotalAmount)}\r\n" +
+                $"御布施\t\t:{Space}{AmountWithUnit(OperationCondolence.Almsgiving)}\r\n" +
+                $"御車代\t\t:{Space}{AmountWithUnit(OperationCondolence.CarTip)}\t\n" +
+                $"御膳料\t\t:{Space}{AmountWithUnit(OperationCondolence.MealTip)}\t\n" +
+                $"御車代御膳料\t:{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\t\n" +
+                $"懇志\t\t;{Space}{AmountWithUnit(OperationCondolence.SocialGathering)}\r\n" +
+                $"備考\t\t:{Space}{OperationCondolence.Note}\r\n" +
+                $"窓口受付者\t:{Space}{OperationCondolence.CounterReceiver}\r\n" +
+                $"郵送担当者\t:{Space}{OperationCondolence.MailRepresentative}";
         }
         /// <summary>
         /// 出納データの情報を登録データに入力するコマンド
@@ -762,6 +808,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 削除ボタンVisibility
+        /// </summary>
+        public bool IsDeleteButtonVisibility
+        {
+            get => isDeleteButtonVisibility;
+            set
+            {
+                isDeleteButtonVisibility = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
@@ -804,6 +862,7 @@ namespace WPF.ViewModels
             TipSearchCommand = new DelegateCommand(() => TipSearch(), () => true);
             SocialGatheringSearchCommand = new DelegateCommand
                 (() => SocialGatheringSearch(), () => true);
+            DeleteCondolenceCommand = new DelegateCommand(() => DeleteCondolence(), () => true);
         }
 
         protected override void SetDetailLocked() { }

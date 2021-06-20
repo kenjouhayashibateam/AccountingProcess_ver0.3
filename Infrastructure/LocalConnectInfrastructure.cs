@@ -589,5 +589,7 @@ namespace Infrastructure
 
             return returnList;
         }
+
+        public int DeleteCondolence(int condolenceID) => 1;
     }
 }
