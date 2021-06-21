@@ -39,7 +39,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 補足に入る必須入力文字
         /// </summary>
-        private string SupplementRequiredString;
+        private string SupplementRequiredString = string.Empty;
         #endregion
         #region Bools
         private bool isValidity;
