@@ -71,19 +71,7 @@ namespace Infrastructure.ExcelOutputData
                 {
                     CurrentDate = rae.OutputDate;
                     SetMerge();
-                    MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Style
-                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                    myWorksheet.Cell(StartRowPosition, 1).Value =
-                        $"{rae.OutputDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
-                    StartRowPosition++;
-                    pageRowCount++;
-                    myWorksheet.Cell(StartRowPosition, 1).Value = "日付";
-                    myWorksheet.Cell(StartRowPosition, 3).Value = "コード";
-                    myWorksheet.Cell(StartRowPosition, 4).Value = "勘定科目";
-                    myWorksheet.Cell(StartRowPosition, 5).Value = "摘要";
-                    myWorksheet.Cell(StartRowPosition, 7).Value = "入金";
-                    myWorksheet.Cell(StartRowPosition, 8).Value = "出金";
-                    myWorksheet.Cell(StartRowPosition, 9).Value = "合計";
+                    SetTitle();
                     SetStyleAndNextIndex();
                     pageRowCount++;
                     SetPageBalance();
@@ -103,8 +91,6 @@ namespace Infrastructure.ExcelOutputData
                 void PageMove()
                 {
                     if (IsSameSlip()) return;
-                       myWorksheet.Cell(StartRowPosition - 1, 9).Value =
-                        CommaDelimitedAmount(pageBalance + payment - withdrawal);
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
                     myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
@@ -142,8 +128,8 @@ namespace Infrastructure.ExcelOutputData
                         myWorksheet.Cell(StartRowPosition, 4).Value = "前頁より繰越";
                         myWorksheet.Cell(StartRowPosition, 9).Value =
                             CommaDelimitedAmount(pageBalance);
-                        myWorksheet.Cell(StartRowPosition+1, 1).Value = CurrentDate.Month;
-                        myWorksheet.Cell(StartRowPosition+1, 2).Value = CurrentDate.Day;
+                        myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
+                        myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
                     }
                 }
 
@@ -219,21 +205,7 @@ namespace Infrastructure.ExcelOutputData
 
             if (pageRowCount == 1)
             {
-                SetMerge();
-                MySheetCellRange(StartRowPosition,1,StartRowPosition,SetColumnSizes().Length).Style
-                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                myWorksheet.Cell(StartRowPosition, 1).Value =
-                    $"{CurrentDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
-                StartRowPosition++;
-                pageRowCount++;
-                myWorksheet.Cell(StartRowPosition, 1).Value = "日付";
-                myWorksheet.Cell(StartRowPosition, 3).Value = "コード";
-                myWorksheet.Cell(StartRowPosition, 4).Value = "勘定科目";
-                myWorksheet.Cell(StartRowPosition, 5).Value = "内容";
-                myWorksheet.Cell(StartRowPosition, 6).Value = "詳細";
-                myWorksheet.Cell(StartRowPosition, 7).Value = "入金";
-                myWorksheet.Cell(StartRowPosition, 8).Value = "出金";
-                myWorksheet.Cell(StartRowPosition, 9).Value = "合計";
+                SetTitle();
                 SetStyleAndNextIndex();
                 myWorksheet.Cell(StartRowPosition, 4).Value = "前頁より繰越";
                 myWorksheet.Cell(StartRowPosition, 9).Value =
@@ -251,12 +223,34 @@ namespace Infrastructure.ExcelOutputData
             PreviousDayBalance += payment - withdrawal;
             myWorksheet.Cell(StartRowPosition, 9).Value = CommaDelimitedAmount(PreviousDayBalance);
             SetStyleAndNextIndex();
-            MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
+            _ = MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
                 .Border.SetTopBorder(XLBorderStyleValues.Double);
             myWorksheet.Cell(StartRowPosition, 4).Value = "翌月へ繰越";
             myWorksheet.Cell(StartRowPosition, 9).Value = CommaDelimitedAmount(PreviousDayBalance);
             SetStyleAndNextIndex();
             ExcelOpen();
+
+            void SetTitle()
+            {
+                SetMerge();
+                _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Style
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
+                    .Border.SetRightBorder(XLBorderStyleValues.None)
+                    .Border.SetLeftBorder(XLBorderStyleValues.None)
+                    .Border.SetTopBorder(XLBorderStyleValues.None);
+                myWorksheet.Cell(StartRowPosition, 1).Value =
+                    $"{CurrentDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
+                StartRowPosition++;
+                pageRowCount++;
+                myWorksheet.Cell(StartRowPosition, 1).Value = "日付";
+                myWorksheet.Cell(StartRowPosition, 3).Value = "コード";
+                myWorksheet.Cell(StartRowPosition, 4).Value = "勘定科目";
+                myWorksheet.Cell(StartRowPosition, 5).Value = "内容";
+                myWorksheet.Cell(StartRowPosition, 6).Value = "詳細";
+                myWorksheet.Cell(StartRowPosition, 7).Value = "入金";
+                myWorksheet.Cell(StartRowPosition, 8).Value = "出金";
+                myWorksheet.Cell(StartRowPosition, 9).Value = "差引残高";
+            }
         }
         /// <summary>
         ///  インデックスに値を加える際に、データのセルのスタイルを設定します
@@ -267,41 +261,41 @@ namespace Infrastructure.ExcelOutputData
             SetBorderStyle();
             SetCellsStyle();
             SetMargins();
-            myWorksheet.Style.Alignment.SetShrinkToFit(true);
+            _ = myWorksheet.Style.Alignment.SetShrinkToFit(true);
             StartRowPosition++;
         }
 
         protected override void SetBorderStyle()
         {
-            MySheetCellRange(StartRowPosition , 1, StartRowPosition , 9).Style
+            _ = MySheetCellRange(StartRowPosition , 1, StartRowPosition , 9).Style
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin)
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            myWorksheet.Cell(StartRowPosition, 1).Style.Border.SetRightBorder(XLBorderStyleValues.Dashed);
-            myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetLeftBorder(XLBorderStyleValues.Dashed);
-            myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 3).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 6).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 7).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 7).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 8).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 8).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            myWorksheet.Cell(StartRowPosition, 9).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 1).Style.Border.SetRightBorder(XLBorderStyleValues.Dashed);
+            _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetLeftBorder(XLBorderStyleValues.Dashed);
+            _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 3).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 6).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 7).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 7).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 8).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 8).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 9).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
         }
 
         protected override void SetCellsStyle()
         {
-            MySheetCellRange(StartRowPosition, 1, StartRowPosition, 2).Style
+            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, 2).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            myWorksheet.Cell(StartRowPosition , 3).Style
+            _ = myWorksheet.Cell(StartRowPosition , 3).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(StartRowPosition , 4, StartRowPosition , 6).Style
+            _ = MySheetCellRange(StartRowPosition , 4, StartRowPosition , 6).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(StartRowPosition, 7, StartRowPosition, 9).Style
+            _ = MySheetCellRange(StartRowPosition, 7, StartRowPosition, 9).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
         }
@@ -319,14 +313,14 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Merge();
-            MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 2).Merge();
-            MySheetCellRange(StartRowPosition + 1, 5, StartRowPosition + 1, 6).Merge();
+            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Merge();
+            _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 2).Merge();
+            _ = MySheetCellRange(StartRowPosition + 1, 5, StartRowPosition + 1, 6).Merge();
         }
 
         protected override double[] SetRowSizes()
         {
-            double[] d=new double[OnePageRowCount];
+            double[] d = new double[OnePageRowCount];
             for (int i = 0; i < d.Length; i++) { d[i] = 15; }
             return d;
         }

@@ -23,7 +23,7 @@
 
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
-            <behavior:ShowDiarogBehavior/>
+            <behavior:ShowDialogBehavior/>
         </interactions:PropertyChangedTrigger>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <behavior:MessageBoxBehavior/>
@@ -326,7 +326,7 @@
                 <TextBlock Grid.Column="3" Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="4" Grid.Row="0" Text="金庫残高" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding PreviousDayFinalAccountDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding PeymentSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding PaymentSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding WithdrawalSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding TransferSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 <TextBlock Grid.Column="4" Grid.Row="1" Text="{Binding TodaysFinalAccount}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>

@@ -34,29 +34,29 @@ namespace Infrastructure.ExcelOutputData
             //シートのフォントサイズ
             myWorksheet.Style.Font.FontSize = 10;
             //シートのセルを「縮小して全体を表示」設定にする
-            myWorksheet.Style.Alignment.SetShrinkToFit(true);
+            _ = myWorksheet.Style.Alignment.SetShrinkToFit(true);
             //用紙の向き
             myWorksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
             //タイトル欄
-            MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 2, SetColumnSizes().Length).Style
+            _ = MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 2, SetColumnSizes().Length).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //データ全体
-            MySheetCellRange
+            _ = MySheetCellRange
                 (StartRowIndex + 3, 1, SetRowSizes().Length * pageNumber, SetColumnSizes().Length).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //日付、施主名、内容、担当僧侶
-            MySheetCellRange(StartRowIndex + 3, 1, SetRowSizes().Length * pageNumber, 4).Style
+            _ = MySheetCellRange(StartRowIndex + 3, 1, SetRowSizes().Length * pageNumber, 4).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             //合計金額、御布施、御車代、御膳料、御車代御膳料、懇志
-            MySheetCellRange(StartRowIndex + 3, 5, SetRowSizes().Length * pageNumber, 10).Style
+            _ = MySheetCellRange(StartRowIndex + 3, 5, SetRowSizes().Length * pageNumber, 10).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             //窓口、郵送
-            MySheetCellRange(StartRowIndex + 3, 11, SetRowSizes().Length * pageNumber, 12).Style
+            _ = MySheetCellRange(StartRowIndex + 3, 11, SetRowSizes().Length * pageNumber, 12).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //備考
-            MySheetCellRange(StartRowIndex + 3, 15, SetRowSizes().Length * pageNumber, 16).Style
+            _ = MySheetCellRange(StartRowIndex + 3, 15, SetRowSizes().Length * pageNumber, 16).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
@@ -75,7 +75,7 @@ namespace Infrastructure.ExcelOutputData
                 if (i == 17)
                 {
                     pageNumber++;
-                    MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
+                    _ = MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
                     i = 1;
                 }
                 if (i == 1)
@@ -110,7 +110,7 @@ namespace Infrastructure.ExcelOutputData
                 //前のデータと日付が変わった時点で、同じ日付のセルを結合する
                 if(currentDate!=condolence.AccountActivityDate)
                 {
-                    MySheetCellRange(dateMergeStartRow, 1, currentRow - 1, 1).Merge();
+                    _ = MySheetCellRange(dateMergeStartRow, 1, currentRow - 1, 1).Merge();
                     currentDate = condolence.AccountActivityDate;
                     dateMergeStartRow = currentRow;
                 }
@@ -131,14 +131,14 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(currentRow,15).Value= condolence.Note;
                 i++;
             }
-            MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
-            MySheetCellRange
+            _ = MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
+            _ = MySheetCellRange
                 (currentRow + 1, 1, SetRowSizes().Length * pageNumber, SetColumnSizes().Length).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.None)
                     .Border.SetRightBorder(XLBorderStyleValues.None)
                     .Border.SetLeftBorder(XLBorderStyleValues.None)
                     .Border.SetTopBorder(XLBorderStyleValues.None);
-            MySheetCellRange(i - 1, 1, i - 1, SetColumnSizes().Length).Style
+            _ = MySheetCellRange(i - 1, 1, i - 1, SetColumnSizes().Length).Style
                 .Border.SetRightBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)

@@ -50,7 +50,7 @@ namespace Domain.Entities
         /// <summary>
         /// 合計金額
         /// </summary>
-        public int TotalAmount { get => Almsgiving + CarTip + MealTip + CarAndMealTip; }
+        public int TotalAmount => Almsgiving + CarTip + MealTip + CarAndMealTip + SocialGathering;
         /// <summary>
         /// 備考
         /// </summary>

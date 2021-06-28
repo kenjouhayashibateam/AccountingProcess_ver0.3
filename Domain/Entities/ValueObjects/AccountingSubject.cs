@@ -24,9 +24,9 @@
         /// <summary>
         /// IDの数字
         /// </summary>
-        public int Number { get => int.Parse(ID.Replace("accounting_subject", string.Empty)); }
+        public int Number => int.Parse(ID.Replace("accounting_subject", string.Empty));
 
-        public AccountingSubject(string id,string subjectCode,string subject,bool isValidity)
+        public AccountingSubject(string id, string subjectCode, string subject, bool isValidity)
         {
             ID = id;
             SubjectCode = subjectCode;
@@ -38,11 +38,11 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !this.GetType().Equals(obj.GetType())) return false;
+            if (obj == null || !GetType().Equals(obj.GetType())) return false;
             else
             {
                 AccountingSubject accountingSubject = (AccountingSubject)obj;
-                return this.ID == accountingSubject.ID;
+                return ID == accountingSubject.ID;
             }
         }
     }

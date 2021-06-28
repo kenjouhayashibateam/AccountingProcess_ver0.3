@@ -81,6 +81,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetBorderStyle()
         {
+            //管理事務所と青蓮堂でボーダースタイルを変える
             if (AccountingProcessLocation.Location == "管理事務所")
             {
                 MySheetCellRange(5, 3, 6, 5).Style

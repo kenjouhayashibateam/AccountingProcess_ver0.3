@@ -13,67 +13,67 @@ namespace Infrastructure.ExcelOutputData
     {
         protected override void SetBorderStyle()
         {
-            MySheetCellRange(1, 5, 2, 7).Style
+            _ = MySheetCellRange(1, 5, 2, 7).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-            MySheetCellRange(3, 1, 12, 3).Style
+            _ = MySheetCellRange(3, 1, 12, 3).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-            MySheetCellRange(6, 4, 12, 7).Style
+            _ = MySheetCellRange(6, 4, 12, 7).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-            MySheetCellRange(15, 1, 19, 7).Style
+            _ = MySheetCellRange(15, 1, 19, 7).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin);
-            MySheetCellRange(6, 4, 12, 4).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            _ = MySheetCellRange(6, 4, 12, 4).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
         }
 
         protected override void SetCellsStyle()
         {
-            myWorksheet.Cell(1, 1).Style
+            _ = myWorksheet.Cell(1, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(1, 5, 2, 7).Style
+            _ = MySheetCellRange(1, 5, 2, 7).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(3, 1, 3, 3).Style
+            _ = MySheetCellRange(3, 1, 3, 3).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(4, 1, 12, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            MySheetCellRange(4, 1, 12, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            MySheetCellRange(4, 2, 12, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            MySheetCellRange(4, 3, 12, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            MySheetCellRange(6, 4, 6, 6).Style
+            _ = MySheetCellRange(4, 1, 12, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(4, 1, 12, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(4, 2, 12, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            _ = MySheetCellRange(4, 3, 12, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(6, 4, 6, 6).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(7, 4, 12, 4).Style
+            _ = MySheetCellRange(7, 4, 12, 4).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(7, 5, 12, 12).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            MySheetCellRange(7, 5, 12, 12).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            MySheetCellRange(7, 6, 12, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            MySheetCellRange(7, 6, 12, 6).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            myWorksheet.Cell(14, 1).Style
+            _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            _ = myWorksheet.Cell(14, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            MySheetCellRange(15, 1, 19, 7).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            MySheetCellRange(15, 1, 15, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            MySheetCellRange(16, 1, 19, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-            MySheetCellRange(16, 2, 19, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            MySheetCellRange(16, 4, 19, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-            MySheetCellRange(16, 5, 19, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            myWorksheet.Cell(21, 1).Style
+            _ = MySheetCellRange(15, 1, 19, 7).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(15, 1, 15, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            _ = MySheetCellRange(16, 1, 19, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            _ = MySheetCellRange(16, 2, 19, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(16, 4, 19, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            _ = MySheetCellRange(16, 5, 19, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = myWorksheet.Cell(21, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
         }
@@ -199,31 +199,31 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            MySheetCellRange(1, 1, 1, 3).Merge();
-            MySheetCellRange(6, 6, 6, 7).Merge();
-            MySheetCellRange(7, 6, 7, 7).Merge();
-            MySheetCellRange(8, 6, 8, 7).Merge();
-            MySheetCellRange(9, 6, 9, 7).Merge();
-            MySheetCellRange(10, 6, 10, 7).Merge();
-            MySheetCellRange(11, 6, 11, 7).Merge();
-            MySheetCellRange(12, 6, 12, 7).Merge();
+            _ = MySheetCellRange(1, 1, 1, 3).Merge();
+            _ = MySheetCellRange(6, 6, 6, 7).Merge();
+            _ = MySheetCellRange(7, 6, 7, 7).Merge();
+            _ = MySheetCellRange(8, 6, 8, 7).Merge();
+            _ = MySheetCellRange(9, 6, 9, 7).Merge();
+            _ = MySheetCellRange(10, 6, 10, 7).Merge();
+            _ = MySheetCellRange(11, 6, 11, 7).Merge();
+            _ = MySheetCellRange(12, 6, 12, 7).Merge();
 
-            MySheetCellRange(15, 2, 15, 3).Merge();
-            MySheetCellRange(16, 2, 16, 3).Merge();
-            MySheetCellRange(17, 2, 17, 3).Merge();
-            MySheetCellRange(18, 2, 18, 3).Merge();
-            MySheetCellRange(19, 2, 19, 3).Merge();
+            _ = MySheetCellRange(15, 2, 15, 3).Merge();
+            _ = MySheetCellRange(16, 2, 16, 3).Merge();
+            _ = MySheetCellRange(17, 2, 17, 3).Merge();
+            _ = MySheetCellRange(18, 2, 18, 3).Merge();
+            _ = MySheetCellRange(19, 2, 19, 3).Merge();
 
-            MySheetCellRange(15, 5, 15, 7).Merge();
-            MySheetCellRange(16, 5, 16, 7).Merge();
-            MySheetCellRange(17, 5, 17, 7).Merge();
-            MySheetCellRange(18, 5, 18, 7).Merge();
-            MySheetCellRange(19, 5, 19, 7).Merge();
-            MySheetCellRange(21, 1, 21, 7).Merge();
+            _ = MySheetCellRange(15, 5, 15, 7).Merge();
+            _ = MySheetCellRange(16, 5, 16, 7).Merge();
+            _ = MySheetCellRange(17, 5, 17, 7).Merge();
+            _ = MySheetCellRange(18, 5, 18, 7).Merge();
+            _ = MySheetCellRange(19, 5, 19, 7).Merge();
+            _ = MySheetCellRange(21, 1, 21, 7).Merge();
         }
 
         protected override double[] SetRowSizes() =>
-            new Double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 
+            new double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 
                                     18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 32.25 };
         
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;        

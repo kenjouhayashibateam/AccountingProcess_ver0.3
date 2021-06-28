@@ -66,7 +66,7 @@ namespace WPF.ViewModels
         #endregion
         #region CreditDeptProperties
         private string creditDeptIDField;
-        private string creditDeptField;
+        private string creditDeptField = string.Empty;
         private string creditDeptOperationButtonContent;
         private string referenceCreditDept;
         private bool isCreditDeptOperationButtonEnabled;
@@ -1135,7 +1135,7 @@ namespace WPF.ViewModels
             IsCreditDeptEnabled = true;
             IsCreditDeptReferenceMenuEnabled = false;
             IsCreditDeptOperationButtonEnabled = false;
-            IsShunjuenAccount = true;
+            IsShunjuenDept = true;
             CreditDeptField = string.Empty;
         }
         /// <summary>
@@ -1165,7 +1165,7 @@ namespace WPF.ViewModels
                     CreditDeptIDField = value.ID;
                     CreditDeptField = value.Dept;
                     IsCreditDeptValidity = value.IsValidity;
-                    IsShunjuenAccount = value.IsShunjuenAccount;
+                    IsShunjuenDept = value.IsShunjuenDept;
                 }
                 CallPropertyChanged();
             }
@@ -1240,7 +1240,7 @@ namespace WPF.ViewModels
         /// </summary>
         private async void CreditDeptDataRegistration()
         {
-            CurrentCreditDept = new CreditDept(null, CreditDeptField, IsCreditDeptValidity,IsShunjuenAccount);
+            CurrentCreditDept = new CreditDept(null, CreditDeptField, IsCreditDeptValidity,IsShunjuenDept);
 
            if (CallConfirmationDataOperation($"貸方勘定 : {CreditDeptField}\r\n有効性 : {IsCreditDeptValidity}", "貸方勘定") == MessageBoxResult.Cancel) return;
 
@@ -1543,7 +1543,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 春秋苑会計に掲載されるデータかのチェック
         /// </summary>
-        public bool IsShunjuenAccount
+        public bool IsShunjuenDept
         {
             get => isShunjuenDept;
             set

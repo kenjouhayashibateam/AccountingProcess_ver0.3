@@ -16,18 +16,16 @@ namespace WPF.ViewModels
     public class CashJournalManagementViewModel : BaseViewModel
     {
         private string yearString;
-        private string monthString = "1";
+        private string monthString = DateTime.Today.AddMonths(0).Month.ToString();
         private string outputButtonContent = "出力";
         private bool outputButtonEnabled;
         private readonly IDataOutput DataOutput;
 
-        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect, 
-            IDataOutput dataOutput) :
-            base(dataBaseConnect)
+        public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect,
+            IDataOutput dataOutput) : base(dataBaseConnect)
         {
             DataOutput = dataOutput;
             YearString = DateTime.Now.Year.ToString();
-            MonthString = DateTime.Now.Month.ToString();
             OutputCommand = new DelegateCommand(() => Output(), () => true);
         }
         public CashJournalManagementViewModel() :
@@ -52,6 +50,7 @@ namespace WPF.ViewModels
             }
 
             OutputButtonContent = "出力中";
+            OutputButtonEnabled = false;
             await Task.Run(
                 () => DataOutput.ReceiptsAndExpenditureData
                     (
@@ -62,6 +61,7 @@ namespace WPF.ViewModels
                     )
                 );
             OutputButtonContent = "出力";
+            OutputButtonEnabled = true;
 
             void CallOutputBlockingMessage()
             {

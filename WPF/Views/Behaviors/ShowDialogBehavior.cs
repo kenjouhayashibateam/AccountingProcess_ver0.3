@@ -8,7 +8,7 @@ namespace WPF.Views.Behaviors
     /// <summary>
     /// Window.ShowDialog動作
     /// </summary>
-    public class ShowDiarogBehavior : TriggerAction<FrameworkElement>
+    public class ShowDialogBehavior : TriggerAction<FrameworkElement>
     {
         /// <summary>
         /// Window.ShowDialogを実行します

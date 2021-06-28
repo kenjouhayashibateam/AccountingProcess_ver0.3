@@ -14,7 +14,7 @@ namespace Domain.Entities
         /// <summary>
         /// 金銭束の枚数
         /// </summary>
-        public static int BundleCount { get=>50;}
+        public static int BundleCount => 50;
         /// <summary>
         /// 金種リスト
         /// </summary>
@@ -27,7 +27,7 @@ namespace Domain.Entities
         /// <summary>
         /// メモリーに保持する金庫クラス
         /// </summary>
-        private readonly static Cashbox cashbox = new Cashbox();
+        private static readonly Cashbox cashbox = new Cashbox();
 
         private Cashbox()
         {
@@ -69,9 +69,10 @@ namespace Domain.Entities
         /// <returns>総金額</returns>
         public int GetTotalAmount()
         {
-            int I = 0;
+            int I = 0;//総金額変数
 
-            foreach (OtherMoney om in OtherMoneys) I += om.Amount;
+            foreach (OtherMoney om in OtherMoneys) I += om.Amount;//OtherMoneysの金額をすべて加算する
+            //MoneyCategorysの金額をすべて加算する
             foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys) 
                 I += mc.Value.Amount;
             return I;

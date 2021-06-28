@@ -121,7 +121,7 @@ namespace WPF.ViewModels
             string[] PasteDataArray = Clipboard.GetText().Replace("\r\n", "\n").Split(new[] { '\n', '\r' });
             string[] subArray;
             PartData partData;
-
+            
             DataList = new ObservableCollection<PartData>();
             for (int i = 0; i < PasteDataArray.Length; i++)
             {

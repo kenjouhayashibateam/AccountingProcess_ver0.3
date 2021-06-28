@@ -21,14 +21,14 @@ namespace Domain.Entities.ValueObjects
         /// <summary>
         /// 春秋苑会計に掲載されるデータかの判定
         /// </summary>
-        public bool IsShunjuenAccount { get; set; }
+        public bool IsShunjuenDept { get; set; }
 
         public CreditDept(string iD, string dept,bool isValidity,bool isShunjuenAccount)
         {
             ID = iD;
             Dept = dept;
             IsValidity = isValidity;
-            IsShunjuenAccount = isShunjuenAccount;
+            IsShunjuenDept = isShunjuenAccount;
         }
     }
 }

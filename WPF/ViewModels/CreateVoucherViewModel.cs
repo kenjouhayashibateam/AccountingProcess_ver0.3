@@ -168,6 +168,7 @@ namespace WPF.ViewModels
             await Task.Run(() => DataOutput.VoucherData(voucher, false, PrepaidDate));
             VoucherAddressee = string.Empty;
             VoucherContents.Clear();
+            SetTotalAmount();
             OutputButtonContent = "登録して出力";
             
             void VoucherRegistration()

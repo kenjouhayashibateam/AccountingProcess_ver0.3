@@ -12,8 +12,10 @@ namespace Domain.Entities
     /// </summary>
     public sealed class LoginRep
     {
+        //オブザーバーを格納するList
         private readonly List<ILoginRepObserver> observers = new List<ILoginRepObserver>();
         private readonly static LoginRep loginRep = new LoginRep();
+
         private Rep _rep;
 
         public Rep Rep => _rep;

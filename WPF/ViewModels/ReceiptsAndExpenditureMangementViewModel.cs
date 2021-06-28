@@ -23,7 +23,7 @@ namespace WPF.ViewModels
     {
         #region Properties
         #region int
-        private int peymentSum;
+        private int paymentSum;
         private int withdrawalSum;
         private int transferSum;
         private int previousDayFinalAccount;
@@ -38,7 +38,7 @@ namespace WPF.ViewModels
         private int ListAmount;
         #endregion
         #region string
-        private string peymentSumDisplayValue;
+        private string paymentSumDisplayValue;
         private string withdrawalSumDisplayValue;
         private string transferSumDisplayValue;
         private string previousDayFinalAccountDisplayValue;
@@ -172,6 +172,10 @@ namespace WPF.ViewModels
         {
             SetCashboxTotalAmount();
             ReferenceReceiptsAndExpenditures(true);
+            SetTodayWroteList();
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
+            SetBalanceFinalAccount();
         }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
@@ -183,7 +187,7 @@ namespace WPF.ViewModels
             SearchOutputDateStart = DefaultDate;
             SearchOutputDateEnd = DefaultDate;
             SearchStartDate =
-                DateTime.Today.Day == 1 ? 
+                DateTime.Today.Day == 1 ?
                     DateTime.Today.AddDays(-10) :
                     DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             SearchEndDate = DateTime.Today;
@@ -238,7 +242,7 @@ namespace WPF.ViewModels
                 rae.IsUnprinted = false;
                 DataBaseConnect.Update(rae);
                 if (IsPreviousDayOutput)
-                    DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
+                    _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
             }
         }
         /// <summary>
@@ -287,10 +291,7 @@ namespace WPF.ViewModels
         {
             if (AccountingProcessLocation.Location == "管理事務所")
             {
-                TodayWroteList=DataBaseConnect.ReferenceReceiptsAndExpenditure
-                   (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                        string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true, 
-                        new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), DateTime.Today, DateTime.Today);
+                SetTodayWroteList();
                 PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
                 FinalAccountCategory = "前日決算";
             }
@@ -301,6 +302,12 @@ namespace WPF.ViewModels
             }
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
         }
+        private void SetTodayWroteList() => 
+            TodayWroteList = DataBaseConnect.ReferenceReceiptsAndExpenditure
+                   (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
+                        string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
+                        new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), DateTime.Today, DateTime.Today);
+
         /// <summary>
         /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
         /// </summary>
@@ -356,7 +363,7 @@ namespace WPF.ViewModels
             IsOutputGroupEnabled = false;
             await Task.Run(() =>
             DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
-                PeymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
+                PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
                 TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
                 AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount, IsYokohamaBankCheck,
                 IsCeresaCheck));
@@ -614,11 +621,11 @@ namespace WPF.ViewModels
         /// </summary>
         public int PaymentSum
         {
-            get => peymentSum;
+            get => paymentSum;
             set
             {
-                peymentSum = value;
-                PeymentSumDisplayValue = AmountWithUnit(value);
+                paymentSum = value;
+                PaymentSumDisplayValue = AmountWithUnit(value);
                 CallPropertyChanged();
             }
         }
@@ -735,12 +742,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 表示用入金額
         /// </summary>
-        public string PeymentSumDisplayValue
+        public string PaymentSumDisplayValue
         {
-            get => peymentSumDisplayValue;
+            get => paymentSumDisplayValue;
             set
             {
-                peymentSumDisplayValue = value;
+                paymentSumDisplayValue = value;
                 CallPropertyChanged();
             }
         }
@@ -1077,7 +1084,7 @@ namespace WPF.ViewModels
                 else ListAmount -= receiptsAndExpenditure.Price;
             }
 
-            int todayAmount = default;
+            int todayAmount = 0;
 
             if (TodayWroteList.Count != 0)
             {
@@ -1132,6 +1139,10 @@ namespace WPF.ViewModels
             DateTime OutputDateStart;
             DateTime OutputDateEnd;
 
+            PaymentSum = 0;
+            WithdrawalSum = 0;
+            TransferSum = 0;
+
             if (IsPeriodSearch)
             {
                 AccountActivityDateStart = SearchStartDate;
@@ -1183,15 +1194,16 @@ namespace WPF.ViewModels
                 Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
             Pagination.TotalRowCount = count;
             ReceiptsAndExpenditures = list;
+
             AllDataList =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
                 location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd);
 
-            SetBalanceFinalAccount();
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
+            SetBalanceFinalAccount();
         }
 
         protected override void SetWindowDefaultTitle() =>

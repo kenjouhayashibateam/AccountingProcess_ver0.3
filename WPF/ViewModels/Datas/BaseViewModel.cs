@@ -207,7 +207,7 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         /// <param name="propertyName">追加するエラーのプロパティ名</param>
         /// <param name="error">エラー内容</param>
-        protected void AddError(string propertyName,string error)
+        protected void AddError(string propertyName, string error)
         {
             if (!CurrentErrors.ContainsKey(propertyName))
                 CurrentErrors.Add(propertyName, error);

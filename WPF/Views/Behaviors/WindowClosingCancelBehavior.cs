@@ -8,7 +8,7 @@ namespace WPF.Views.Behaviors
     /// <summary>
     /// Windowを閉じるのをキャンセルさせるBehavior
     /// </summary>
-    public class WindowClosingCancelBehavior:Behavior<Window>
+    public class WindowClosingCancelBehavior : Behavior<Window>
     {
         protected override void OnAttached()
         {

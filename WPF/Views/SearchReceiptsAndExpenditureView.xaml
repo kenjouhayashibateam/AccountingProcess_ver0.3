@@ -7,15 +7,15 @@
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="550" Width="1000">
+        Title="{Binding WindowTitle}" Height="550" Width="1100">
     <Window.DataContext>
         <vm:SearchReceiptsAndExpenditureViewModel/>
     </Window.DataContext>
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
@@ -148,7 +148,7 @@
                             </Style>
                         </DataGrid.ItemContainerStyle>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="入出金日" Width="2*">
+                            <DataGridTemplateColumn Header="入出金日" Width="3*">
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -160,7 +160,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="2*" Header="貸方部門">
+                            <DataGridTemplateColumn Width="3*" Header="貸方部門">
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -172,7 +172,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="1*" Header="コード">
+                            <DataGridTemplateColumn Width="2*" Header="コード">
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -184,28 +184,28 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="3*" Header="勘定科目">
+                            <DataGridTemplateColumn Width="5*" Header="勘定科目">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="3*" Header="内容">
+                            <DataGridTemplateColumn Width="5*" Header="内容">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="4*" Header="詳細">
+                            <DataGridTemplateColumn Width="7*" Header="詳細">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" Margin="5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="2*" Header="金額">
+                            <DataGridTemplateColumn Width="4*" Header="金額">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>

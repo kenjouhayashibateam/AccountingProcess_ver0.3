@@ -73,9 +73,9 @@ namespace WPF.ViewModels
         private DateTime slipOutputDate;
        #endregion
         private SolidColorBrush detailBackGroundColor;
-        private readonly ReceiptsAndExpenditureOperation OperationData;
+        private readonly ReceiptsAndExpenditureOperation OperationData = ReceiptsAndExpenditureOperation.GetInstance();
         private int receiptsAndExpenditureIDField;
-        readonly LoginRep loginRep = LoginRep.GetInstance();
+        private readonly LoginRep loginRep = LoginRep.GetInstance();
         #endregion
 
         public ReceiptsAndExpenditureOperationViewModel
@@ -233,7 +233,11 @@ namespace WPF.ViewModels
             CallCompletedUpdate();
             DataOperationButtonContent = "更新";
 
-            if (OperationData.Data.OutputDate.Month != DateTime.Today.Month) CreateResubmitInfo();
+            if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) return;
+
+            if (OperationData.Data.OutputDate == DefaultDate) return;
+            
+            CreateResubmitInfo();
 
             void CreateResubmitInfo()
             {
@@ -335,9 +339,12 @@ namespace WPF.ViewModels
             IsOutputCheckEnabled = OperationData.Data.ID > 0;
             SelectedCreditDept = OperationData.Data.CreditDept;
             ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
+            SelectedAccountingSubjectCode = OperationData.Data.Content.AccountingSubject;
             ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
+            SelectedAccountingSubject = OperationData.Data.Content.AccountingSubject;
             ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
             ComboContentText = OperationData.Data.Content.Text;
+            SelectedContent = OperationData.Data.Content;
             DetailText = OperationData.Data.Detail;
             Price = SetPrice();
             AccountActivityDate = OperationData.Data.AccountActivityDate;
@@ -648,7 +655,7 @@ namespace WPF.ViewModels
                 SetDataOperationButtonEnabled();
 
                 ComboContents =
-                    DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, true);
+                    DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, OperationData.Data == null);
 
                 ComboContentText = ComboContents.Count > 0 ? ComboContents[0].Text : string.Empty;
 
@@ -693,7 +700,7 @@ namespace WPF.ViewModels
                 //SelectedAccountingSubjectCode = value;
                 ComboContents = DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode,
-                        ComboAccountingSubjectText ?? string.Empty, true);
+                        ComboAccountingSubjectText ?? string.Empty, OperationData.Data == null);
                 if (ComboContents.Count > 0) ComboContentText =
                         ComboContents.Count != 0 ? ComboContents[0].Text : string.Empty;
                 else ComboContentText = string.Empty;
@@ -761,6 +768,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetContentProperty()
         {
+            if (SelectedContent == null) return;
+
             if (SelectedContent.Text.Contains("管理料")) SupplementRequiredString = "年度分";
             else SupplementRequiredString = string.Empty;
 
@@ -768,9 +777,9 @@ namespace WPF.ViewModels
 
             IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
 
-            if (IsReducedTaxRateVisiblity) IsReducedTaxRate = SelectedContent.Text == "供物";            
-            
-            if ( selectedContent.FlatRate > 0)
+            if (IsReducedTaxRateVisiblity) IsReducedTaxRate = SelectedContent.Text == "供物";
+
+            if (selectedContent.FlatRate > 0)
                 Price = selectedContent.FlatRate.ToString();
             else Price = string.Empty;
 
@@ -1213,10 +1222,10 @@ namespace WPF.ViewModels
         {
             ComboContents = new ObservableCollection<Content>();
             ComboAccountingSubjectCodes =
-                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, OperationData.Data == null);
             ComboAccountingSubjects =
-                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
-            ComboCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, OperationData.Data == null);
+            ComboCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, OperationData.Data == null, false);
         }
 
         protected override void SetDelegateCommand()

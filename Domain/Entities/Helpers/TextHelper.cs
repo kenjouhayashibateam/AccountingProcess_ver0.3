@@ -15,8 +15,8 @@ namespace Domain.Entities.Helpers
         {
             get
             {
-                CultureInfo value = new CultureInfo("ja-JP", true);
-                value.DateTimeFormat.Calendar = new JapaneseCalendar();
+                CultureInfo value = new CultureInfo("ja-JP", true);//和暦データを代入
+                value.DateTimeFormat.Calendar = new JapaneseCalendar();//データのカレンダーを和暦にする
                 return value;
             }
         }
@@ -28,8 +28,8 @@ namespace Domain.Entities.Helpers
             get
             {
                 int year = DateTime.Today.Year;
-                if (DateTime.Today.Month < 4) year--;
-                return new DateTime(year, 4, 1);
+                if (DateTime.Today.Month < 4) year--;//1月から3月までは前年の年度になるので年を1引く
+                return new DateTime(year, 4, 1);//年度の4月1日を返す
             }
         }
         /// <summary>
@@ -72,7 +72,7 @@ namespace Domain.Entities.Helpers
         public static int IntAmount(string amount)
         {
             if (string.IsNullOrEmpty(amount)) return 0;
-            string s = amount.Replace(Properties.Resources.Unit, string.Empty);
+            string s = amount.Replace(Properties.Resources.Unit, string.Empty);//***,*** 円に対応する。円を削除
             s = s.Replace(",", string.Empty);
             return CommaDelimitedAmount(s) == string.Empty ? 0 : int.Parse(s);
         }
@@ -83,6 +83,7 @@ namespace Domain.Entities.Helpers
         /// <returns>苗字</returns>
         public static string GetFirstName(string name)
         {
+            //空白でSplitして、最初の要素を返す
             string[] nameArray = name.Split(' ');
 
             return nameArray[0];

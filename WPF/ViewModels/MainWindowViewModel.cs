@@ -171,7 +171,7 @@ namespace WPF.ViewModels
         private void RegistrationPrecedingYearFinalAccount()
         {
             if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) return;
-            DataBaseConnect.RegistrationPrecedingYearFinalAccount();
+            _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
             IsRegistrationPerMonthFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
         }
         /// <summary>
@@ -237,9 +237,9 @@ namespace WPF.ViewModels
             MessageBox = new MessageBoxInfo()
             {
                 Message = "終了します。よろしいですか？",
-                Button = System.Windows.MessageBoxButton.YesNo,
+                Button = MessageBoxButton.YesNo,
                 Title = "経理システムの終了",
-                Image = System.Windows.MessageBoxImage.Question
+                Image = MessageBoxImage.Question
             };
 
             CallPropertyChanged(nameof(MessageBox));
@@ -443,7 +443,7 @@ namespace WPF.ViewModels
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
-            if(AccountingProcessLocation.OriginalTotalAmount==0) ShowSlipManagementContent=
+            if (AccountingProcessLocation.OriginalTotalAmount == 0) ShowSlipManagementContent =
                     "預かり金額を設定して下さい";
         }
         /// <summary>
@@ -478,8 +478,8 @@ namespace WPF.ViewModels
             ErrorsListOperation
                 (KanriJimushoChecked == false & ShorendoChecked == false, propertyName,
                     "経理担当場所を設定して下さい");
-            if (GetErrors(propertyName) == null) 
-                ErrorsListOperation(shorendoChecked == true & string.IsNullOrEmpty(DepositAmount), 
+            if (GetErrors(propertyName) == null)
+                ErrorsListOperation(shorendoChecked & string.IsNullOrEmpty(DepositAmount),
                     propertyName, "金額を入力してください");
         }
 
@@ -492,7 +492,7 @@ namespace WPF.ViewModels
                 {
                     WindowTitle = DefaultWindowTitle;
                     IsAdminPermisson = false;
-                    SetOperationButtonEnabled();
+                    _ = SetOperationButtonEnabled();
                 }
                 else
                 {

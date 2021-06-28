@@ -26,13 +26,13 @@
 
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
-            <b:ShowDiarogBehavior/>
+            <b:ShowDialogBehavior/>
         </interactions:PropertyChangedTrigger>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <b:MessageBoxBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
-    
+
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
             <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
@@ -104,7 +104,7 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
-                           <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" b:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" Margin="5,3"/>
+                            <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" b:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </Grid>
@@ -162,7 +162,7 @@
                         </Button.InputBindings>
                     </Button>
                 </Grid>
-            </Grid>            
+            </Grid>
         </GroupBox>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -179,8 +179,8 @@
                 </Button.InputBindings>
             </Button>
             <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="2" Visibility="{Binding IsAdminPermisson,Converter={StaticResource VisibilityConverter}}" Content="データ管理" Margin="10,15">
-                    <Button.InputBindings>
-                        <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
+                <Button.InputBindings>
+                    <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding ShowDataManagementCommand}" Key="Space"/>
                 </Button.InputBindings>
             </Button>

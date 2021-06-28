@@ -271,7 +271,7 @@ namespace Infrastructure.ExcelOutputData
                     $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}" :
                     $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}{Space}:{Space}" +
                     $"{AmountWithUnit(provisoAmount)}";
-                s += rae.IsReducedTaxRate ? "※軽減税率" : string.Empty;
+                s += rae.IsReducedTaxRate ? $"{Space}※軽減税率" : string.Empty;
                 return s;
             }
              

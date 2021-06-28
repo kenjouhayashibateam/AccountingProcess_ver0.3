@@ -17,7 +17,7 @@
  
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
-            <behavior:ShowDiarogBehavior/>
+            <behavior:ShowDialogBehavior/>
         </interactions:PropertyChangedTrigger>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
             <behavior:MessageBoxBehavior/>

@@ -32,10 +32,10 @@ namespace WPF.ViewModels
         private string contentText = string.Empty;
         private string soryoName = string.Empty;
         private string note = string.Empty;
-        private string dataOperationButtonContent;
-        private string counterReceiver;
-        private string mailRepresentative;
-        private string fixToggleContent;
+        private string dataOperationButtonContent = string.Empty;
+        private string counterReceiver = string.Empty;
+        private string mailRepresentative = string.Empty;
+        private string fixToggleContent = string.Empty;
         private string condolenceContent = "法事";
         private string Location = string.Empty;
         /// <summary>
@@ -52,30 +52,30 @@ namespace WPF.ViewModels
         private bool isReceptionBlank = false;
         private bool fixToggle = true;
         private bool isFixToggleEnabled = false;
-        private bool isDeleteButtonVisibility;
+        private bool isDeleteButtonVisibility = true;
         #endregion
-        private Dictionary<int, string> soryoList;
+        private Dictionary<int, string> soryoList = new Dictionary<int, string>();
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures =
             new ObservableCollection<ReceiptsAndExpenditure>();
         private DateTime receiptsAndExpenditureSearchDate = DateTime.Today;
         private DateTime accountActivityDate = DefaultDate;
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure =
             new ReceiptsAndExpenditure(0, DefaultDate, LoginRep.GetInstance().Rep, string.Empty,
-                new CreditDept(string.Empty, string.Empty, true, true), 
-                    new Content(string.Empty, new AccountingSubject(string.Empty, string.Empty, string.Empty, true), 0, string.Empty, true), 
+                new CreditDept(string.Empty, string.Empty, true, true),
+                    new Content(string.Empty, new AccountingSubject(string.Empty, string.Empty, string.Empty, true), 0, string.Empty, true),
                         string.Empty, 0, true, true, DefaultDate, DefaultDate, false);
-        private Condolence OperationCondolence = new Condolence(0, string.Empty, string.Empty, string.Empty, string.Empty, 
+        private Condolence OperationCondolence = new Condolence(0, string.Empty, string.Empty, string.Empty, string.Empty,
             0, 0, 0, 0, 0, string.Empty, DefaultDate, string.Empty, string.Empty);
-        private int ID { get; set; }
+        private int ID { get; set; } = 0;
         private Pagination pagination = Pagination.GetPagination();
-        public Dictionary<int, string> NoteStrings 
-        { get => new Dictionary<int, string>() { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } }; }
-        public Dictionary<int, string> ContentStrings 
-        { get => new Dictionary<int, string>() { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" } }; }
+        public Dictionary<int, string> NoteStrings => new Dictionary<int, string>() { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } };
+        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" } };
+        private readonly LoginRep GetLoginRep = LoginRep.GetInstance();
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
+            if (GetLoginRep.Rep == null) GetLoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, true, true));
             CondolenceOperation.GetInstance().Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
@@ -375,7 +375,7 @@ namespace WPF.ViewModels
             await Task.Delay(1);
             AccountActivityDate = SelectedReceiptsAndExpenditure.AccountActivityDate;
             OwnerName = SelectedReceiptsAndExpenditure.Detail;
-
+            
             switch(SearchAccountingSubjectCode)
             {
                 case "815":
@@ -414,7 +414,7 @@ namespace WPF.ViewModels
                     ( DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
                         string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
-                        DateTime.Today,Pagination.PageCount,"ID",false);
+                        DateTime.Today, Pagination.PageCount, "ID", false);
             ReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = totalRow;
             Pagination.SetProperty();
@@ -778,8 +778,8 @@ namespace WPF.ViewModels
             set
             {
                 fixToggle = value;
-                MailRepresentative = value ? string.Empty : LoginRep.GetInstance().Rep.Name;
-                CounterReceiver = value ? LoginRep.GetInstance().Rep.Name : string.Empty;
+                MailRepresentative = value ? string.Empty : GetLoginRep.Rep.Name;
+                CounterReceiver = value ? GetLoginRep.Rep.Name : string.Empty;
                 FixToggleContent = value ? "窓口受付" : "郵送対応";
                 CallPropertyChanged();
             }
