@@ -17,6 +17,7 @@ namespace WPF.ViewModels
     /// </summary>
     public class VoucherManagementViewModel : BaseViewModel
     {
+        
         private DateTime searchDateStart = DefaultDate;
         private DateTime searchDateEnd = DefaultDate;
         private ObservableCollection<Voucher> vouchers;
@@ -42,7 +43,8 @@ namespace WPF.ViewModels
                 (() => ReissueVoucherOutput(), () => true);
         }
         public VoucherManagementViewModel() :
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect(), DefaultInfrastructure.GetDefaultDataOutput())
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
+                DefaultInfrastructure.GetDefaultDataOutput())
         { }
         /// <summary>
         /// 受納証再発行コマンド
@@ -63,7 +65,8 @@ namespace WPF.ViewModels
             VoucherUpdate();
             try
             {
-                await Task.Run(() => DataOutput.VoucherData(SelectedVoucher, IsInputReissueText, DefaultDate));
+                await Task.Run(() =>
+                    DataOutput.VoucherData(SelectedVoucher, IsInputReissueText, DefaultDate));
             }
             catch (ApplicationException ex)
             {
@@ -224,20 +227,27 @@ namespace WPF.ViewModels
             }
         }
 
-        private void CreateVoucherList() =>
-            Vouchers = DataBaseConnect.ReferenceVoucher(SearchDateStart, searchDateEnd, IsvalidityTrueOnly);        
+        private void CreateVoucherList()
+        {
+            Vouchers =
+                DataBaseConnect.ReferenceVoucher(SearchDateStart, searchDateEnd, IsvalidityTrueOnly);
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(SelectedVoucher):
                     ErrorsListOperation(value == null, propertyName, "受納証データが選択されていません");
                     break;
+                default:
+                    break;
             }
         }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"受納証管理 : {AccountingProcessLocation.Location}";
+        }
     }
 }
