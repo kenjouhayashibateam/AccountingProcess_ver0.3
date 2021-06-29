@@ -22,7 +22,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetBorderStyle()
         {
-            MySheetCellRange(StartRowIndex + 2, 1, SetRowSizes().Length * pageNumber, 15).Style
+            _ = MySheetCellRange(StartRowIndex + 2, 1, SetRowSizes().Length * pageNumber, 15).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)

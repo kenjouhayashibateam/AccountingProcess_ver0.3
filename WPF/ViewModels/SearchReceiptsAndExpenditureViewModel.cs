@@ -45,7 +45,8 @@ namespace WPF.ViewModels
             Pagination.Add(this);
             CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
             SelectedCreditDept = CreditDepts[0];
-            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+            AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
+                (string.Empty, string.Empty, true);
             SearchEndDate = DateTime.Today;
             SearchStartDate = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             InputAllPeriodCommand = new DelegateCommand(() => InputAllPeriod(), () => true);
@@ -309,10 +310,12 @@ namespace WPF.ViewModels
             string creditDept = IsIndiscriminateDept ? string.Empty : SelectedCreditDept.Dept;
             string subject = IsIndiscriminateAccountingSubject ? string.Empty : SearchAccountingSubject;
 
-            (int count, ObservableCollection<ReceiptsAndExpenditure> list) = DataBaseConnect.ReferenceReceiptsAndExpenditure
+            (int count, ObservableCollection<ReceiptsAndExpenditure> list) = 
+                DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, string.Empty, string.Empty, subject,
-                    string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), 
-                    DateTime.Today, Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
+                    string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, 
+                    DefaultDate.AddDays(1), DateTime.Today, Pagination.PageCount,
+                    Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
             Pagination.TotalRowCount = count;
             ListTotalCountInfo = $"{count}{Space}件";
             ReceiptsAndExpenditures = list;

@@ -157,9 +157,9 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(11, 5).Value = myCashbox.MoneyCategorys[FiveYenBundle].Count;
             myWorksheet.Cell(12, 5).Value = myCashbox.MoneyCategorys[OneYenBundle].Count;
 
-            myWorksheet.Cell(7, 6).Value = 
+            myWorksheet.Cell(7, 6).Value =
                 myCashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
-            myWorksheet.Cell(8, 6).Value = 
+            myWorksheet.Cell(8, 6).Value =
                 myCashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
             myWorksheet.Cell(9, 6).Value = myCashbox.MoneyCategorys[FiftyYenBundle].AmountWithUnit();
             myWorksheet.Cell(10, 6).Value = myCashbox.MoneyCategorys[TenYenBundle].AmountWithUnit();

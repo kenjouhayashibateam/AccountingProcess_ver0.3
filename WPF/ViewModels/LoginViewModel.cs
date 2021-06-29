@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
@@ -29,7 +28,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void Login()
         {
-            if(Password==CurrentRep.Password)
+            if (Password == CurrentRep.Password)
             {
                 MessageBox = new MessageBoxInfo()
                 {
@@ -62,7 +61,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public LoginViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
+        public LoginViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             Reps = DataBaseConnect.ReferenceRep(string.Empty, true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
@@ -118,10 +117,12 @@ namespace WPF.ViewModels
             get => repName;
             set
             {
-                if (repName == value) return;
+                if (repName == value) { return; }
                 repName = value;
+
                 CurrentRep = Reps.FirstOrDefault(r => r.Name == repName);
-                if (CurrentRep == null) RepName = string.Empty;
+
+                if (CurrentRep == null) { RepName = string.Empty; }
                 CallPropertyChanged();
             }
         }
@@ -149,7 +150,7 @@ namespace WPF.ViewModels
             get => windowCloseSwich;
             set
             {
-                if (windowCloseSwich == value) return;
+                if (windowCloseSwich == value) { return; }
                 windowCloseSwich = value;
                 CallPropertyChanged();
                 windowCloseSwich = false;

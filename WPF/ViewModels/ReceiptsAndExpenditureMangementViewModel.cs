@@ -240,7 +240,7 @@ namespace WPF.ViewModels
             {
                 if (rae.IsPayment != isPayment) continue;
                 rae.IsUnprinted = false;
-                DataBaseConnect.Update(rae);
+                _ = DataBaseConnect.Update(rae);
                 if (IsPreviousDayOutput)
                     _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
             }

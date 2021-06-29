@@ -24,7 +24,7 @@ namespace WPF.Views.Behaviors
             get { return (bool?)GetValue(This.CanMinimizeProperty); }
             set { SetValue(CanMinimizeProperty, value); }
         }
-        public static readonly DependencyProperty CanMinimizeProperty = 
+        public static readonly DependencyProperty CanMinimizeProperty =
             DependencyProperty.Register
             ("CanMinimize", typeof(bool?), typeof(This), new PropertyMetadata(null, OnPropertyChanged));
         
@@ -33,7 +33,7 @@ namespace WPF.Views.Behaviors
             get { return (bool?)GetValue(CanMaximizeProperty); }
             set { SetValue(CanMaximizeProperty, value); }
         }
-        private static readonly DependencyProperty CanMaximizeProperty = 
+        private static readonly DependencyProperty CanMaximizeProperty =
             DependencyProperty.Register
             ("CanMaximize", typeof(bool?), typeof(This), new PropertyMetadata(null, OnPropertyChanged));
 
@@ -42,14 +42,14 @@ namespace WPF.Views.Behaviors
             get { return (bool)GetValue(EnableAltF4Property); }
             set { SetValue(EnableAltF4Property, value); }
         }
-        public static readonly DependencyProperty EnableAltF4Property = 
+        public static readonly DependencyProperty EnableAltF4Property =
             DependencyProperty.Register
             ("EnableAltF4", typeof(bool), typeof(This), new PropertyMetadata(true));
 
         private static void OnPropertyChanged
             (DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            if (obj is SystemMenuBehavior self)
+            if (obj is This self)
                 self.Apply();
         }
 
@@ -63,27 +63,27 @@ namespace WPF.Views.Behaviors
 
         private void Apply()
         {
-            if (this.AssociatedObject == null) return;
+            if (AssociatedObject == null) return;
             //スタイル
             var hwnd = new WindowInteropHelper(AssociatedObject).Handle;
             var style = User32.GetWindowLong(hwnd, Constant.GWL_STYLE);
 
-            if(IsVisible.HasValue)
+            if (IsVisible.HasValue)
             {
                 if (IsVisible.Value) style |= Constant.WS_SYSMENU;
                 else style &= ~Constant.WS_SYSMENU;
             }
-            if(CanMinimize.HasValue)
+            if (CanMinimize.HasValue)
             {
                 if (CanMinimize.Value) style |= Constant.WS_MINIMIZEBOX;
                 else style &= ~Constant.WS_MINIMIZEBOX;
             }
-            if(CanMaximize.HasValue)
+            if (CanMaximize.HasValue)
             {
                 if (CanMaximize.Value) style |= Constant.WS_MAXIMIZEBOX;
                 else style &= ~Constant.WS_MAXIMIZEBOX;
             }
-            User32.SetWindowLong(hwnd, Constant.GWL_STYLE, style);
+            _ = User32.SetWindowLong(hwnd, Constant.GWL_STYLE, style);
         }
     } 
 }

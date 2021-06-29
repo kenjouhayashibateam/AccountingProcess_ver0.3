@@ -42,16 +42,16 @@ namespace Infrastructure.ExcelOutputData
             (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures, bool isPayment,
                 bool isPreviousDay)
         {
-            SlipType st = (isPayment) ? SlipType.Payment : SlipType.Withdrawal;
+            SlipType st = isPayment ? SlipType.Payment : SlipType.Withdrawal;
             LoginRep loginRep = LoginRep.GetInstance();
-            SlipOutput pso = new SlipOutput(receiptsAndExpenditures,loginRep.Rep,st,isPreviousDay);
+            SlipOutput pso = new SlipOutput(receiptsAndExpenditures, loginRep.Rep, st, isPreviousDay);
             pso.Output();
         }
 
         public void ReceiptsAndExpenditureData
             (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures)
         {
-            CashJournalOutput raeo = 
+            CashJournalOutput raeo =
                 new CashJournalOutput(receiptsAndExpenditures);
             raeo.Output();
         }

@@ -46,7 +46,7 @@ namespace WPF.Views.Behaviors
         private static void OnTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
             if (!(sender is TextBox tb)) { return; }
-            var isSelectAllOnGotFocus = GetIsSelectAllOnGotFocus(tb);
+            bool isSelectAllOnGotFocus = GetIsSelectAllOnGotFocus(tb);
 
             if (isSelectAllOnGotFocus)
             {
@@ -60,7 +60,7 @@ namespace WPF.Views.Behaviors
             if (!(sender is TextBox tb)) { return; }
 
             if (tb.IsFocused) { return; }
-            tb.Focus();
+            _ = tb.Focus();
             e.Handled = true;
         }
     }

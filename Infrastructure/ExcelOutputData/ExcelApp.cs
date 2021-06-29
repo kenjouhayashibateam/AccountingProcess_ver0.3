@@ -64,9 +64,9 @@ namespace Infrastructure.ExcelOutputData
         {
             try
             {
-                myWorksheet.Protect("excel");
+                _ = myWorksheet.Protect("excel");
                 myWorkbook.SaveAs(openPath);
-                myWorkbooks.Open(Filename: openPath, ReadOnly: true);
+                _ = myWorkbooks.Open(Filename: openPath, ReadOnly: true);
                 App.Visible = true;
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         protected void SetMargins()
         {
-            myWorksheet.PageSetup.Margins
+            _ = myWorksheet.PageSetup.Margins
                 .SetLeft(SetMaeginsLeft())
                 .SetTop(SetMaeginsTop())
                 .SetRight(SetMaeginsRight())

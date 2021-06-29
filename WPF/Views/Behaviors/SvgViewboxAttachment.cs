@@ -9,7 +9,8 @@ namespace WPF.Views.Behaviors
         private static readonly string ResourceFullPath = System.IO.Path.GetFullPath("./SvgFiles");
 
         public static readonly DependencyProperty SouceProperty =
-            DependencyProperty.RegisterAttached("SetSource", typeof(string), typeof(SvgViewboxAttachment), new PropertyMetadata(string.Empty, (s, v) =>
+            DependencyProperty.RegisterAttached("SetSource", typeof(string), typeof(SvgViewboxAttachment),
+                new PropertyMetadata(string.Empty, (s, v) =>
               {
                   if (!(s is SvgViewbox svg)) return;
 

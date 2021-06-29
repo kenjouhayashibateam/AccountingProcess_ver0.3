@@ -23,7 +23,7 @@ namespace Domain.Entities.ValueObjects
         /// </summary>
         public bool IsShunjuenDept { get; set; }
 
-        public CreditDept(string iD, string dept,bool isValidity,bool isShunjuenAccount)
+        public CreditDept(string iD, string dept, bool isValidity, bool isShunjuenAccount)
         {
             ID = iD;
             Dept = dept;

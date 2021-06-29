@@ -17,7 +17,7 @@ namespace Infrastructure.ExcelOutputData
         public void DataOutput()
         {
             SetSheetStyle();
-            myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
+            _ = myWorksheet.PageSetup.SetPaperSize(SheetPaperSize());
             SetMargins();
             SetMerge();
             double[] RowSizes = SetRowSizes();

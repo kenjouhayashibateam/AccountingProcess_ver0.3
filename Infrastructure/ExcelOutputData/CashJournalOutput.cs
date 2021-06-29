@@ -100,7 +100,7 @@ namespace Infrastructure.ExcelOutputData
                     payment = pagePayment = withdrawal = pageWithdrawal = 0;
                     SetStyleAndNextIndex();
                     pageRowCount = 1;
-                    MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
+                    _ = MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
                         .Border.SetTopBorder(XLBorderStyleValues.Double);
                     PreviousDayBalance = pageBalance;
                     SetStyleAndNextIndex();

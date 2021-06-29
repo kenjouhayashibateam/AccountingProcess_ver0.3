@@ -78,7 +78,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
-        public MainWindowViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
+        public MainWindowViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
 
@@ -112,7 +112,7 @@ namespace WPF.ViewModels
                 (() => CreateShowWindowCommand
                     (ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
         }
-        public MainWindowViewModel():this(DefaultInfrastructure.GetDefaultDataBaseConnect()){}
+        public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
         /// ログアウトコマンド
         /// </summary>
@@ -195,7 +195,7 @@ namespace WPF.ViewModels
             ShowSlipManagementContent = "出納管理";
             if (!ReturnIsRepLogin()) return false;
             if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) return true;
-            bool b=!string.IsNullOrEmpty(DepositAmount);
+            bool b = !string.IsNullOrEmpty(DepositAmount);
             if (!b)
             {
                 CallDepositAmountEmptyMessage();
@@ -208,8 +208,8 @@ namespace WPF.ViewModels
         /// 経理担当場所が青蓮堂で、預り金のテキストボックスの値が0だった時に警告します
         /// </summary>
         private void CallDepositAmountEmptyMessage()
-        {    
-            if (TextHelper.IntAmount(DepositAmount)!=0) return;
+        {
+            if (TextHelper.IntAmount(DepositAmount) != 0) return;
             MessageBox = new MessageBoxInfo()
             {
                 Message =

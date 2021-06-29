@@ -9,6 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="1000" Width="1050">
@@ -139,14 +140,20 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="RefreshListButton" Content="リストを再構築する" Grid.Column="0" Margin="5,1,1,3">
+                            <Button x:Name="RefreshListButton" ToolTip="リストを再構築します" Grid.Column="0" Margin="5,1,1,3">
+                                <StackPanel>
+                                    <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Reload.svg"/>
+                                </StackPanel>
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding RefreshListCommand}" Key="Space"/>
                                     <KeyBinding Command="{Binding RefreshListCommand}" Key="Return"/>
                                     <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="1" Margin="5,1,5,3" Content="新規登録">
+                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="1" Margin="5,1,5,3" ToolTip="新規登録します">
+                                <StackPanel>
+                                    <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Register.svg"/>
+                                </StackPanel>
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding ShowRegistrationCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>

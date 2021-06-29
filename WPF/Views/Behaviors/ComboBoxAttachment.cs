@@ -59,12 +59,12 @@ namespace WPF.Views.Behaviors
             else InputMethod.SetPreferredImeState(tb, InputMethodState.Off);
         }
         private static void OnMouseLeftButtonDown
-            (object sender, System.Windows.Input.MouseButtonEventArgs e)
+            (object sender, MouseButtonEventArgs e)
         {
             if (!(sender is ComboBox cb)) { return; }
 
             if (cb.IsFocused) { return; }
-            cb.Focus();
+            _ = cb.Focus();
             e.Handled = false;
         }
         /// <summary>
@@ -117,7 +117,7 @@ namespace WPF.Views.Behaviors
             if (!(sender is ComboBox cb)) { return; }
 
             if (cb.IsFocused) { return; }
-            cb.Focus();
+            _ = cb.Focus();
             e.Handled = false;
         }
 
@@ -126,7 +126,7 @@ namespace WPF.Views.Behaviors
                 new UIPropertyMetadata(1, OnMaxLengthChanged));
 
         public static void OnMaxLengthChanged
-            (DependencyObject obj,DependencyPropertyChangedEventArgs args)
+            (DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             if (!(obj is ComboBox comboBox)) return;
             comboBox.Loaded +=

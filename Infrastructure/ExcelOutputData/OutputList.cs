@@ -50,7 +50,7 @@ namespace Infrastructure.ExcelOutputData
         protected void NextPage()
         {
             PageCount++;
-            StartRowPosition = SetRowSizes().Length * (PageCount - 1) + 1;
+            StartRowPosition = (SetRowSizes().Length * (PageCount - 1)) + 1;
             for (int i = 0; i < SetRowSizes().Length; i++) 
                 myWorksheet.Row(StartRowPosition + i).Height = SetRowSizes()[i];
             for (int i = 0; i < SetColumnSizes().Length; i++) 

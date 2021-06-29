@@ -29,7 +29,7 @@ namespace Domain.Entities.ValueObjects
         /// </summary>
         public bool IsAdminPermisson { get; set; }
 
-        public Rep(string repID, string name, string password, bool isValidity,bool isAdminPermisson)
+        public Rep(string repID, string name, string password, bool isValidity, bool isAdminPermisson)
         {
             ID = repID;
             Name = name;

@@ -15,7 +15,7 @@ namespace WPF.Views.Datas
         /// <summary>
         /// 表示するタイトルバー
         /// </summary>
-        public string Title { get; set; } = "";
+        public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// 表示するボタンを指定する値
@@ -41,6 +41,5 @@ namespace WPF.Views.Datas
         /// 結果
         /// </summary>
         public MessageBoxResult Result { get; set; } = MessageBoxResult.None;
-
     }
 }

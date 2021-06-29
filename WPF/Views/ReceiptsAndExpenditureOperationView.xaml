@@ -67,7 +67,7 @@
                     <TextBlock Text="{Binding ReceiptsAndExpenditureIDFieldText}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" IsEnabled="{Binding IsValidityEnabled}" Margin="5,0"/>
                     <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3"/>
-                    <Button x:Name="PropertyInputWizard" Grid.Row="3" Content="伝票内容から勘定科目を選択する(登録のみ)※工事中" IsEnabled="{Binding IsInputWizardEnabled}" Margin="5,3">
+                    <Button x:Name="PropertyInputWizard" Grid.Row="3" Content="伝票内容から勘定科目を選択する(登録のみ)" IsEnabled="{Binding IsInputWizardEnabled}" Margin="5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowWizardCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowWizardCommand}" MouseAction="LeftClick"/>

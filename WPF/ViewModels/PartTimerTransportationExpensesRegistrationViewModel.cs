@@ -25,7 +25,7 @@ namespace WPF.ViewModels
         private PartData selectedPartData;
         private bool isRegistrationEnabled;
 
-        public PartTimerTransportationExpensesRegistrationViewModel(IDataBaseConnect dataBaseConnect) : 
+        public PartTimerTransportationExpensesRegistrationViewModel(IDataBaseConnect dataBaseConnect) :
             base(dataBaseConnect)
         {
             DataPasteCommand = new DelegateCommand(() => DataPaste(), () => true);
@@ -66,15 +66,15 @@ namespace WPF.ViewModels
             if (ConfirmationRegistration(countInfo) == MessageBoxResult.Cancel) return;
             //出納データを登録してリストから削除する
             ReceiptsAndExpenditure rae;
-            foreach(PartData pd in pdList)
+            foreach (PartData pd in pdList)
             {
                 if (pd.IsExclusion) continue;
 
                 rae = templateReceiptsAndExpenditure;
                 rae.Detail = pd.Name;
                 rae.Price = pd.TransportationExpenses;
-                DataBaseConnect.Registration(rae);
-                DataList.Remove(pd);
+                _ = DataBaseConnect.Registration(rae);
+                _ = DataList.Remove(pd);
             }
             SetListTitle();
             ValidationProperty(nameof(DataList), DataList);

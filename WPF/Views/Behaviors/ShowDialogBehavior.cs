@@ -22,7 +22,7 @@ namespace WPF.Views.Behaviors
             showForm.WindowData.Owner =
                 Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive); ;//親画面を代入
             showForm.WindowData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            showForm.WindowData.ShowDialog();
+            _ = showForm.WindowData.ShowDialog();
         }
     }
 }

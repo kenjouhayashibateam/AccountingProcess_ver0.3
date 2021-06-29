@@ -137,7 +137,7 @@ namespace WPF.ViewModels
             {
                 fiveHundredYenCount = value;
                 myCashbox.MoneyCategorys[FiveHundredYen].Count = fiveHundredYenCount;
-                FiveHundredYenAmountWithUnit = 
+                FiveHundredYenAmountWithUnit =
                     myCashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
@@ -153,7 +153,7 @@ namespace WPF.ViewModels
             {
                 oneHundredYenCount = value;
                 myCashbox.MoneyCategorys[OneHundredYen].Count = oneHundredYenCount;
-                OneHundredYenAmountWithUnit = 
+                OneHundredYenAmountWithUnit =
                     myCashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
@@ -522,7 +522,7 @@ namespace WPF.ViewModels
 
             myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = 
                 otherMoneyAmountDisplayValue != string.Empty ? 
-                    TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
+                    _ = TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
             TotalAmount = myCashbox.GetTotalAmountWithUnit();
         }
         /// <summary>

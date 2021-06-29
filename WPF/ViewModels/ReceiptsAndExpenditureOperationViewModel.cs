@@ -227,7 +227,7 @@ namespace WPF.ViewModels
                 AccountActivityDate, SlipOutputDate, IsReducedTaxRate);
 
             DataOperationButtonContent = "更新中";
-            await Task.Run(() => DataBaseConnect.Update(updateData));
+            _ = await Task.Run(() => _ = DataBaseConnect.Update(updateData));
             OperationData.SetData(updateData);
             OperationData.Notify();
             CallCompletedUpdate();
@@ -291,7 +291,7 @@ namespace WPF.ViewModels
             }
 
             DataOperationButtonContent = "登録中";
-            await Task.Run(() => DataBaseConnect.Registration(rae));
+            _ = await Task.Run(() => _ = DataBaseConnect.Registration(rae));
             OperationData.SetData(rae);
             OperationData.Notify();
             CallShowMessageBox = true;

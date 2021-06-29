@@ -74,7 +74,7 @@ namespace WPF.ViewModels
             void VoucherUpdate()
             {
                 SelectedVoucher.IsValidity = true;
-                DataBaseConnect.Update(SelectedVoucher);
+                _ = DataBaseConnect.Update(SelectedVoucher);
             }
         }
         /// <summary>
@@ -96,7 +96,7 @@ namespace WPF.ViewModels
             if (MessageBox.Result == System.Windows.MessageBoxResult.No) return;
             IsValidity = !IsValidity;
             SelectedVoucher.IsValidity = IsValidity;
-            DataBaseConnect.Update(SelectedVoucher);
+            _ = DataBaseConnect.Update(SelectedVoucher);
         }
         /// <summary>
         /// 検索最古日

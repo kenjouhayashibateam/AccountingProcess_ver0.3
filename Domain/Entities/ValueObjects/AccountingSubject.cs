@@ -24,7 +24,14 @@
         /// <summary>
         /// IDの数字
         /// </summary>
-        public int Number => int.Parse(ID.Replace("accounting_subject", string.Empty));
+        public int Number
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ID)) { return 0; }
+                return int.Parse(ID.Replace("accounting_subject", string.Empty));
+            }
+        }
 
         public AccountingSubject(string id, string subjectCode, string subject, bool isValidity)
         {

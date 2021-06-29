@@ -42,8 +42,8 @@ namespace WPF.Views.Behaviors
         {
             if (!(sender is DatePicker dp)) { return; }
 
-            var isIMEModeOffGotFocus = GetIsIMEModeTrueOffGotFocus(dp);
-            var tb = dp.Template.FindName("PART_TextBox", dp) as TextBox;
+            bool isIMEModeOffGotFocus = GetIsIMEModeTrueOffGotFocus(dp);
+            TextBox tb = dp.Template.FindName("PART_TextBox", dp) as TextBox;
 
             if (isIMEModeOffGotFocus)
             {
@@ -51,12 +51,12 @@ namespace WPF.Views.Behaviors
             }
         }
         private static void OffMouseLeftButtonDown
-            (object sender, System.Windows.Input.MouseButtonEventArgs e)
+            (object sender, MouseButtonEventArgs e)
         {
             if (!(sender is DatePicker dp)) { return; }
 
             if (dp.IsFocused) { return; }
-            dp.Focus();
+            _ = dp.Focus();
             e.Handled = false;
         }
     }

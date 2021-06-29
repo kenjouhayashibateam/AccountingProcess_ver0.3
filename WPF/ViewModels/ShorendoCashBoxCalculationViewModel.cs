@@ -40,11 +40,14 @@ namespace WPF.ViewModels
         #endregion
         #endregion
 
-        public ShorendoCashBoxCalculationViewModel(IDataBaseConnect dataBaseConnect):base(dataBaseConnect)
+        public ShorendoCashBoxCalculationViewModel
+            (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             SetProperty();
         }
-        public ShorendoCashBoxCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public ShorendoCashBoxCalculationViewModel() :
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        { }
         /// <summary>
         /// 各プロパティに値を入力します
         /// </summary>

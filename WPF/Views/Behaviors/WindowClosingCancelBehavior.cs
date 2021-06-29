@@ -19,7 +19,7 @@ namespace WPF.Views.Behaviors
 
         private void Window_Closing(object sender,CancelEventArgs e)
         {
-            var window = sender as Window;
+            Window window = sender as Window;
 
             if (window.DataContext is IClosing) e.Cancel = (window.DataContext as IClosing).OnClosing();
         }
