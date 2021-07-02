@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:control="https://github.com/qtbui159/CypherBox"
@@ -33,6 +34,7 @@
             <ib:InvokeCommandAction Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

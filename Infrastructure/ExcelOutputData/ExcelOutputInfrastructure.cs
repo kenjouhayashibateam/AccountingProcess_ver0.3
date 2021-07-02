@@ -15,14 +15,14 @@ namespace Infrastructure.ExcelOutputData
         public void BalanceFinalAccount
             (string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit, 
                 string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
-                string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit, 
-                string wizeCoreAmountWithUnit,bool yokohamaBankCheck,bool ceresaCheck)
+                string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
+                string wizeCoreAmountWithUnit, bool yokohamaBankCheck, bool ceresaCheck)
         {
             BalanceFinalAccountOutput bfao =
                 new BalanceFinalAccountOutput
                     (previousDayFinalAccountWithUnit, paymentWithUnit, withdrawalWithUnit,
                         tranceferAmountWithUnit, todayFinalAccountWithUnit, yokohamaBankAmountWithUnit,
-                        ceresaAmountWithUnit, wizeCoreAmountWithUnit,yokohamaBankCheck,ceresaCheck);
+                        ceresaAmountWithUnit, wizeCoreAmountWithUnit, yokohamaBankCheck, ceresaCheck);
             bfao.DataOutput();
         }
 

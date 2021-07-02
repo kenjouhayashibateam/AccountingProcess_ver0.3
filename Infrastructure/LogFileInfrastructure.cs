@@ -15,11 +15,12 @@ namespace Infrastructure
         /// <param name="message">ログ内容</param>
         public void Log(ILogger.LogInfomation info, string message)
         {
+   
             StreamWriter streamWriter = new StreamWriter(Properties.Resources.LogFilePath, true);
 
             streamWriter.WriteLine($"{info}{"\t"}{message}");
             streamWriter.Flush();
-            System.Diagnostics.Process.Start(Properties.Resources.LogFilePath);
+            _ = System.Diagnostics.Process.Start(Properties.Resources.LogFilePath);
         }
     }
 }

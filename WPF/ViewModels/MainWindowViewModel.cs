@@ -27,10 +27,12 @@ namespace WPF.ViewModels
         private bool isLogoutEnabled;
         private bool isCreateVoucherEnabled;
         private bool isPartTransportRegistrationEnabled;
+        private bool isShunjuen;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private string depositAmount;
         private string depositAmountInfo;
         private string showSlipManagementContent;
+        private string accountingGenreContent;
         #endregion
 
         public enum Locations
@@ -81,6 +83,8 @@ namespace WPF.ViewModels
         public MainWindowViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+
+            IsShunjuen = true;
 
             ShowRemainingMoneyCalculationCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation()), () => true);
@@ -410,6 +414,31 @@ namespace WPF.ViewModels
             set
             {
                 isPartTransportRegistrationEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 春秋苑会計かのチェック
+        /// </summary>
+        public bool IsShunjuen
+        {
+            get => isShunjuen;
+            set
+            {
+                isShunjuen = value;
+                AccountingGenreContent = value ? "春秋苑会計（工事中)" : "ワイズコア（工事中）";                            
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 春秋苑会計トグルボタンのコンテント
+        /// </summary>
+        public string AccountingGenreContent
+        {
+            get => accountingGenreContent;
+            set
+            {
+                accountingGenreContent = value;
                 CallPropertyChanged();
             }
         }

@@ -286,10 +286,18 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="データ詳細" Width="3*">
+                            <DataGridTemplateColumn Header="詳細" Width="2*">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" Content="表示" FontSize="11" Margin="2">
+                                        <Button x:Name="DeleteDataButton" ToolTip="詳細を表示します" FontSize="11" Margin="2">
+                                            <StackPanel>
+                                                <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="font_size_magnifier_zoom_icon_149003.svg"/>
+                                            </StackPanel>
                                             <Button.InputBindings>
                                                 <MouseBinding Command="{Binding Path=DataContext.ShowUpdateCommand,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" MouseAction="LeftClick"/>
                                             </Button.InputBindings>

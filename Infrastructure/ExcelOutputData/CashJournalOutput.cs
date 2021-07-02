@@ -97,7 +97,7 @@ namespace Infrastructure.ExcelOutputData
                     pageBalance += payment - withdrawal;
                     myWorksheet.Cell(StartRowPosition, 9).Value =
                         CommaDelimitedAmount(pageBalance);
-                    payment = pagePayment = withdrawal = pageWithdrawal = 0;
+                    payment = withdrawal = 0;
                     SetStyleAndNextIndex();
                     pageRowCount = 1;
                     _ = MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
@@ -163,8 +163,8 @@ namespace Infrastructure.ExcelOutputData
                         SetStyleAndNextIndex();
                         pageRowCount++;
                     }
-
                 }
+
                 bool IsSameSlip()
                 {
                     return currentDept == rae.CreditDept.Dept &&
@@ -228,6 +228,10 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(StartRowPosition, 4).Value = "翌月へ繰越";
             myWorksheet.Cell(StartRowPosition, 9).Value = CommaDelimitedAmount(PreviousDayBalance);
             SetStyleAndNextIndex();
+            string s = LoginRep.GetInstance().Rep.Name ?? string.Empty;
+            _ = myWorksheet.PageSetup.Footer.Center.AddText
+                ($"&09{CurrentDate.ToString($"ggy年", JapanCulture)}{CurrentDate.Month}{Space}月{Space}-" +
+                    $"{Space}&P{Space}", XLHFOccurrence.AllPages);
             ExcelOpen();
 
             void SetTitle()
@@ -240,6 +244,10 @@ namespace Infrastructure.ExcelOutputData
                     .Border.SetTopBorder(XLBorderStyleValues.None);
                 myWorksheet.Cell(StartRowPosition, 1).Value =
                     $"{CurrentDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
+                string name = LoginRep.GetInstance().Rep.Name ?? string.Empty;
+                myWorksheet.Cell(StartRowPosition, SetColumnSizes().Length).Style.Font.FontSize = 9;
+                myWorksheet.Cell(StartRowPosition, SetColumnSizes().Length).Value =
+                    $"発行者{Space}{GetFirstName(name)}";
                 StartRowPosition++;
                 pageRowCount++;
                 myWorksheet.Cell(StartRowPosition, 1).Value = "日付";
@@ -267,7 +275,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetBorderStyle()
         {
-            _ = MySheetCellRange(StartRowPosition , 1, StartRowPosition , 9).Style
+            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, 9).Style
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin)
@@ -301,7 +309,7 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetColumnSizes() => new double[]
-            { 2.64,2.64, 4.71, 16.43, 16.43, 16.43, 10,10, 10 };
+            { 2.64,2.64, 4.71, 16.14, 16.14, 16.14, 11.14,11.14, 11.14 };
 
         protected override double SetMaeginsBottom() => ToInch(1);
 
@@ -313,7 +321,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Merge();
+            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length - 1).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 2).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 5, StartRowPosition + 1, 6).Merge();
         }
@@ -329,14 +337,12 @@ namespace Infrastructure.ExcelOutputData
         {
             myWorksheet.Style.Font.FontSize = 11;
             myWorksheet.Style.NumberFormat.Format = "@";
+            _ = myWorksheet.PageSetup.Margins.SetFooter(ToInch(0.5));
         }
 
         protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
 
-        protected override void PageStyle()
-        {
-            SetStyleAndNextIndex();
-        }
+        protected override void PageStyle() => SetStyleAndNextIndex();        
 
         protected override void SetList(IEnumerable outputList) =>
             ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;

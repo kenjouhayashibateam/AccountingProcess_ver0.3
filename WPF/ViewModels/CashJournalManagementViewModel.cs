@@ -138,9 +138,13 @@ namespace WPF.ViewModels
                 case nameof(YearString):
                     {
                         SetNullOrEmptyError(propertyName, (string)value);
-                        ErrorsListOperation
-                            (int.Parse((string)value) > DateTime.Now.Year, propertyName,
-                                "未来の出納帳は出せません");
+                        if (GetErrors(propertyName) == null) ErrorsListOperation
+                                (IntAmount((string)value) == 0, propertyName, "年が無効です");
+                        if (GetErrors(propertyName) == null) ErrorsListOperation
+                                (IntAmount((string)value) < 2021, propertyName, "2020年度以前は出せません");
+                        if (GetErrors(propertyName) == null) ErrorsListOperation
+                                (int.Parse((string)value) > DateTime.Now.Year, propertyName,
+                                    "未来の出納帳は出せません");
                         break;
                     }
                 case nameof(MonthString):
@@ -149,8 +153,8 @@ namespace WPF.ViewModels
                         int y = IntAmount(YearString);
                         int m = IntAmount((string)value);
                         ErrorsListOperation(!Enumerable.Range(1, 12).Contains(m), propertyName, "月が無効です");
-                        if (GetErrors(propertyName) == null) ErrorsListOperation
-                               (new DateTime(y, m, 1) > DateTime.Now, propertyName, "未来の出納帳は出せません");
+                        if (GetErrors(propertyName) == null && GetErrors(nameof(YearString)) == null) ErrorsListOperation
+                                   (new DateTime(y, m, 1) > DateTime.Now, propertyName, "未来の出納帳は出せません");
                         break;
                     }
                 default:

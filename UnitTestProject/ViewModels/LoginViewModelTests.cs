@@ -12,8 +12,7 @@ namespace WPF.ViewModels.Tests
     [TestClass()]
     public class LoginViewModelTests
     {
-        
-        readonly LoginViewModel vm=new LoginViewModel();
+        private readonly LoginViewModel vm = new LoginViewModel();
         [TestMethod()]
         public void シナリオ()
         {

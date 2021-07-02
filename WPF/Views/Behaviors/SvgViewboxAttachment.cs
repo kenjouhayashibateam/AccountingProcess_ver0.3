@@ -11,15 +11,12 @@ namespace WPF.Views.Behaviors
         public static readonly DependencyProperty SouceProperty =
             DependencyProperty.RegisterAttached("SetSource", typeof(string), typeof(SvgViewboxAttachment),
                 new PropertyMetadata(string.Empty, (s, v) =>
-              {
-                  if (!(s is SvgViewbox svg)) return;
+                {
+                    if (!(s is SvgViewbox svg)) return;
 
-                  svg.Source = new Uri($"{ResourceFullPath}/{v.NewValue}");
-              }));
+                    svg.Source = new Uri($"{ResourceFullPath}/{v.NewValue}");
+                }));
 
-        public static void SetSource(DependencyObject obj, string value)
-        {
-            obj.SetValue(SouceProperty, value);
-        }
+        public static void SetSource(DependencyObject obj, string value) { obj.SetValue(SouceProperty, value); }
     }
 }

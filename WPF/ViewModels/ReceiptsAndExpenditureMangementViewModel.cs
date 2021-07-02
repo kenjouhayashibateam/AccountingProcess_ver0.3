@@ -134,14 +134,13 @@ namespace WPF.ViewModels
         /// </summary>
         private void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
 
-        public void SetSortColumns() =>
-            Pagination.SortColumns = new Dictionary<int, string>()
-            {
-                {0, "ID"},
-                {1,"科目コード" },
-                {2,"入出金日" },
-                {3,"伝票出力日" }
-            };
+        public void SetSortColumns() => Pagination.SortColumns = new Dictionary<int, string>()
+        {
+            {0, "ID"},
+            {1,"科目コード" },
+            {2,"入出金日" },
+            {3,"伝票出力日" }
+        };
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
@@ -365,8 +364,8 @@ namespace WPF.ViewModels
             DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
                 PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
                 TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
-                AmountWithUnit(IntAmount(CeresaAmount)), WizeCoreAmount, IsYokohamaBankCheck,
-                IsCeresaCheck));
+                AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(WizeCoreAmount)),
+                IsYokohamaBankCheck, IsCeresaCheck));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
         }
@@ -1126,7 +1125,6 @@ namespace WPF.ViewModels
                         (password != LoginRep.GetInstance().Rep.Password, propertyName, 
                         Properties.Resources.PasswordErrorInfo);
                     break;
-
             }
         }
         /// <summary>

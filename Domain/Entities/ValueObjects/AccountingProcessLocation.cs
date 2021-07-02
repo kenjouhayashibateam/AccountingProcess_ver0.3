@@ -27,5 +27,9 @@ namespace Domain.Entities.ValueObjects
         /// </summary>
         /// <param name="location">場所</param>
         public static void SetLocation(string location) => Location = location;        
+        /// <summary>
+        /// 春秋苑の会計かﾜｲｽﾞｺｱの会計か
+        /// </summary>
+        public static bool IsAccountingGenreShunjuen { get; set; }
     }
 }
