@@ -161,11 +161,13 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="登録日" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <DatePicker x:Name="RegistrationDateTextBox" Grid.Row="1" Grid.Column="0" SelectedDate="{Binding RegistrationDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
                         <TextBlock Text="{Binding SlipOutputDateTitle}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <DatePicker x:Name="SlipOutputDate" Grid.Row="1" Grid.Column="1" SelectedDate="{Binding SlipOutputDate}" IsEnabled="False" HorizontalAlignment="Left" Margin="5,3"/>
+                        <CheckBox Content="印刷済みフラグ" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="{Binding IsOutputCheckEnabled}" IsChecked="{Binding IsOutput}" Margin="5"/>
                     </Grid>
                     <Grid Grid.Row="10">
                         <Grid.RowDefinitions>
@@ -175,7 +177,6 @@
                         <TextBlock Text="登録担当者" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
                         <TextBox x:Name="RegistrationRepNameTextBox" Grid.Row="1" IsEnabled="False" Text="{Binding OperationRep.Name}" VerticalContentAlignment="Center" Margin="5,3,200,3"/>
                     </Grid>
-                    <CheckBox Content="印刷済みフラグ" Grid.Row="11" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="{Binding IsOutputCheckEnabled}" IsChecked="{Binding IsOutput}" Margin="5"/>
                 </Grid>
                 <Button x:Name="OperationButton" Grid.Row="1" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding IsDataOperationButtonEnabled}" Margin="5,0">
                     <Button.InputBindings>

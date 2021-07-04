@@ -19,11 +19,6 @@ namespace Infrastructure
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private readonly ILogger Logger;
 
-        ~SQLServerConnectInfrastructure()
-        {
-            Cn.Close();
-        }
-
         public SQLServerConnectInfrastructure(ILogger logger)
         {
             Logger = logger;

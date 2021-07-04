@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Domain.Entities.Helpers
 {
@@ -8,6 +11,17 @@ namespace Domain.Entities.Helpers
     /// </summary>
     public class TextHelper
     {
+        /// <summary>
+        /// 和暦のイニシャル
+        /// </summary>
+        private static readonly Dictionary<int, string> EraInitials = new Dictionary<int, string>()
+        {
+            {1,"M" },
+            {2,"T" },
+            {3,"S" },
+            {4,"H" },
+            {5,"R" }
+        };
         /// <summary>
         /// 和暦Culture
         /// </summary>
@@ -96,5 +110,29 @@ namespace Domain.Entities.Helpers
         /// 全角スペース
         /// </summary>
         public const string SpaceF = "　";
+        /// <summary>
+        /// ハッシュ値を返します
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetHashValue(string value)
+        {
+            byte[] soltValue = Encoding.UTF8.GetBytes(value);
+            byte[] valueHash = new SHA256CryptoServiceProvider().ComputeHash(soltValue);
+            
+            StringBuilder returnValue = new StringBuilder();
+            
+            foreach(byte b in valueHash)
+            {
+                _ = returnValue.Append(b.ToString("x2"));
+            }
+            
+            return returnValue.ToString();
+        }
+        public static string GetEraInitial(DateTime dateTime)
+        {
+            JapaneseCalendar jc = new JapaneseCalendar();
+            return EraInitials[jc.GetEra(dateTime)];
+        }
     }
 }

@@ -169,7 +169,6 @@ namespace WPF.ViewModels
         public DelegateCommand RefreshListCommand { get; set; }
         private void RefreshList()
         {
-            SetCashboxTotalAmount();
             ReferenceReceiptsAndExpenditures(true);
             SetTodayWroteList();
             SetPeymentSum();
@@ -288,24 +287,23 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetListTitle()
         {
-            if (AccountingProcessLocation.Location == "管理事務所")
-            {
-                SetTodayWroteList();
-                PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
-                FinalAccountCategory = "前日決算";
-            }
-            else
-            {
-                previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
-                FinalAccountCategory = "預かり金額";
-            }
+            SetTodayWroteList();
+            
+            previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
+
+            FinalAccountCategory = AccountingProcessLocation.Location == "管理事務所" ? "前日決算" : "預かり金額";
+
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
         }
-        private void SetTodayWroteList() => 
+
+        private void SetTodayWroteList()
+        {
+            if (AccountingProcessLocation.Location == "管理事務所") return;
             TodayWroteList = DataBaseConnect.ReferenceReceiptsAndExpenditure
                    (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
                         string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
                         new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), DateTime.Today, DateTime.Today);
+        }
 
         /// <summary>
         /// Cashboxのトータル金額と決算額を比較して、OutputButtonのEnabledを設定します
@@ -329,8 +327,10 @@ namespace WPF.ViewModels
         {
             Cashbox = Cashbox.GetInstance();
             todayTotalAmount = Cashbox.GetTotalAmount();
-            CashBoxTotalAmount = todayTotalAmount == 0 ? 
+
+            CashBoxTotalAmount = todayTotalAmount == 0 ?
                 "金庫の金額を計上して下さい" : $"金庫の金額 : {AmountWithUnit(todayTotalAmount)}";
+
             if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum)
                 TodaysFinalAccount = AmountWithUnit(todayTotalAmount);
             else
@@ -408,10 +408,17 @@ namespace WPF.ViewModels
         {
             WithdrawalSum = 0;
             TransferSum = 0;
-            foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-                if (!rae.IsPayment) WithdrawalAllocation(rae);
+            if (AccountingProcessLocation.Location == "管理事務所")
+                foreach (ReceiptsAndExpenditure rae in TodayWroteList)
+                    ContainTodayWroteWithdrawal(rae);
+
             foreach (ReceiptsAndExpenditure rae in AllDataList)
                 if (!rae.IsPayment) WithdrawalAllocation(rae);
+
+            void ContainTodayWroteWithdrawal(ReceiptsAndExpenditure rae)
+            {
+                if (!rae.IsPayment) WithdrawalAllocation(rae);
+            }
         }
         /// <summary>
         /// 出金データを出金、振替に振り分けます
@@ -430,11 +437,14 @@ namespace WPF.ViewModels
         private void SetPeymentSum()
         {
             int i = 0;
-            foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-                if (rae.IsPayment) i += rae.Price;
+            if (AccountingProcessLocation.Location == "管理事務所")
+                foreach (ReceiptsAndExpenditure rae in TodayWroteList)
+                    ContainTodayWrotePayment(rae);
             foreach (ReceiptsAndExpenditure rae in AllDataList)
                 if (rae.IsPayment) i += rae.Price;
-            PaymentSum =i;
+            PaymentSum = i;
+
+            void ContainTodayWrotePayment(ReceiptsAndExpenditure rae) => i += rae.IsPayment ? rae.Price : 0;
         }
         /// <summary>
         /// 金庫の総計金額
@@ -1083,6 +1093,8 @@ namespace WPF.ViewModels
                 else ListAmount -= receiptsAndExpenditure.Price;
             }
 
+            if (AccountingProcessLocation.Location == "青蓮堂") TodayWroteList.Clear();
+
             int todayAmount = 0;
 
             if (TodayWroteList.Count != 0)
@@ -1097,7 +1109,7 @@ namespace WPF.ViewModels
                     $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}\r\n" +
                     $"（本日出力済み伝票 {AmountWithUnit(todayAmount)} 分を含む）";
             }
-            else BalanceFinalAccount = 
+            else BalanceFinalAccount =
                     $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
             SetCashboxTotalAmount();
             SetOutputButtonEnabled(ListAmount);

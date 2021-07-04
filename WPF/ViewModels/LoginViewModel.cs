@@ -28,6 +28,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void Login()
         {
+
+            string s = currentRep.PasswordHash;
             if (Password == CurrentRep.Password)
             {
                 MessageBox = new MessageBoxInfo()

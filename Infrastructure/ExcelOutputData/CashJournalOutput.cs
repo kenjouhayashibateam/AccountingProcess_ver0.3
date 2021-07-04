@@ -239,6 +239,7 @@ namespace Infrastructure.ExcelOutputData
                 SetMerge();
                 _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Style
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
+                    .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom)
                     .Border.SetRightBorder(XLBorderStyleValues.None)
                     .Border.SetLeftBorder(XLBorderStyleValues.None)
                     .Border.SetTopBorder(XLBorderStyleValues.None);
@@ -246,8 +247,13 @@ namespace Infrastructure.ExcelOutputData
                     $"{CurrentDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
                 string name = LoginRep.GetInstance().Rep.Name ?? string.Empty;
                 myWorksheet.Cell(StartRowPosition, SetColumnSizes().Length).Style.Font.FontSize = 9;
-                myWorksheet.Cell(StartRowPosition, SetColumnSizes().Length).Value =
-                    $"発行者{Space}{GetFirstName(name)}";
+                _ = myWorksheet.Cell(StartRowPosition, SetColumnSizes().Length - 1).Style
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
+                    .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
+                myWorksheet.Cell(StartRowPosition, SetColumnSizes().Length - 1).Value =
+                    $"発行{Space}:{Space}{GetEraInitial(DateTime.Today)}" +
+                    $"{DateTime.Today.ToString($"y.M.d", JapanCulture)}{Space}" +
+                    $"{GetFirstName(name)}";
                 StartRowPosition++;
                 pageRowCount++;
                 myWorksheet.Cell(StartRowPosition, 1).Value = "日付";
@@ -321,7 +327,9 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length - 1).Merge();
+            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length - 2).Merge();
+            _ = MySheetCellRange(StartRowPosition, SetColumnSizes().Length - 1, 
+                StartRowPosition, SetColumnSizes().Length).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 2).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 5, StartRowPosition + 1, 6).Merge();
         }
