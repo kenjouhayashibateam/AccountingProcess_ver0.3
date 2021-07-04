@@ -124,6 +124,7 @@ namespace WPF.ViewModels
             SetDelegateCommand();
             DefaultListExpress();
             SetBalanceFinalAccount();
+            RefreshList();
         }
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
@@ -299,7 +300,7 @@ namespace WPF.ViewModels
 
         private void SetTodayWroteList()
         {
-            if (AccountingProcessLocation.Location == "管理事務所") return;
+            if (AccountingProcessLocation.Location == "青蓮堂") return;
             TodayWroteList = DataBaseConnect.ReferenceReceiptsAndExpenditure
                    (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
                         string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
@@ -1096,19 +1097,23 @@ namespace WPF.ViewModels
 
             if (AccountingProcessLocation.Location == "青蓮堂") TodayWroteList.Clear();
 
-            int todayAmount = 0;
+            int todayPayment = 0;
+            int todayWithdrawal = default;
 
             if (TodayWroteList.Count != 0)
             {
                 foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
                 {
-                    if (receiptsAndExpenditure.IsPayment) todayAmount += receiptsAndExpenditure.Price;
-                    else todayAmount -= receiptsAndExpenditure.Price;
+                    if (receiptsAndExpenditure.IsPayment) todayPayment += receiptsAndExpenditure.Price;
+                    else todayWithdrawal += receiptsAndExpenditure.Price;
                 }
-                ListAmount += todayAmount;
+                ListAmount += todayPayment - todayWithdrawal;
                 BalanceFinalAccount =
-                    $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}\r\n" +
-                    $"（本日出力済み伝票 {AmountWithUnit(todayAmount)} 分を含む）";
+                    $"{FinalAccountCategory} + 入金伝票 - 出金伝票\r\n" +
+                    $"{PreviousDayFinalAccountDisplayValue}+{AmountWithUnit(PaymentSum)}-" +
+                    $"{AmountWithUnit(WithdrawalSum + TransferSum)}={AmountWithUnit(ListAmount)}\r\n" +
+                    $"（本日出力済み伝票{Space}入金{Space}:{AmountWithUnit(todayPayment)}、" +
+                    $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
             }
             else BalanceFinalAccount =
                     $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
