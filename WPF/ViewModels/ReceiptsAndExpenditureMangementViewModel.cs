@@ -119,10 +119,11 @@ namespace WPF.ViewModels
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             DataOutput = dataOutput;
             IsPreviousDayOutputEnabled = false;
+            PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
             SetProperty();
-
             SetDelegateCommand();
             DefaultListExpress();
+            SetBalanceFinalAccount();
         }
         public ReceiptsAndExpenditureMangementViewModel() : 
             this(DefaultInfrastructure.GetDefaultDataOutput(),
