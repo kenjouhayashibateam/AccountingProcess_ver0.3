@@ -56,10 +56,11 @@ namespace Infrastructure.ExcelOutputData
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending
                 (r => r.IsPayment)
+                .ThenBy(r => r.Location)
+                .ThenBy(r => r.CreditDept.Dept)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
-                .ThenBy(r => r.Location)
-                .ThenBy(r => r.CreditDept.Dept))
+                )
             {
                 if (rae.IsPayment != IsPayment) continue;
                 //codeの初期値を設定する

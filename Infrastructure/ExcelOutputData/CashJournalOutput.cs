@@ -60,10 +60,11 @@ namespace Infrastructure.ExcelOutputData
 
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.OutputDate)
                 .ThenByDescending(r => r.IsPayment)
+                .ThenBy(r => r.CreditDept.ID)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
-                .ThenBy(r => r.CreditDept.ID)
-                .ThenBy(r => r.Location))
+                .ThenBy(r => r.Location)
+                )
             {
                 if (isPageMove) PageMove();
 
