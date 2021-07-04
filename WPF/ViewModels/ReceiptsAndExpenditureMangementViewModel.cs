@@ -160,7 +160,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditureOperation.SetOperationType
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             ReceiptsAndExpenditureOperation.SetData(null);
-            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());       
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());
         }
 
         /// <summary>

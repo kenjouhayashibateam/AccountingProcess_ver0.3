@@ -24,7 +24,9 @@ namespace WPF.ViewModels
         /// </summary>
         private string listPageInfo;
         private string outputButtonContent = "出力";
+        private string locationLimitingContent;
         private bool isOutputButtonEnabled;
+        private bool isLocationLimiting;
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
         private Condolence selectedCondolence;
@@ -43,6 +45,7 @@ namespace WPF.ViewModels
             condolenceOperation.Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
+            LocationLimitingContent = $"{AccountingProcessLocation.Location}のデータのみを表示する";
             DayOfWeek dow = DateTime.Today.DayOfWeek;
             int i = default;
             if (dow == DayOfWeek.Sunday) i = -7;
@@ -55,7 +58,6 @@ namespace WPF.ViewModels
                 (() => ShowUpdateView(), () => true);
             OutputCommand = new DelegateCommand
                 (() => Output(), () => true); 
-
         }
         public CreateCondolencesViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
@@ -193,6 +195,32 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 表示するデータのLocationを限定するか
+        /// </summary>
+        public bool IsLocationLimiting
+        {
+            get => isLocationLimiting;
+            set
+            {
+                isLocationLimiting = value;
+                CreateCondolences(true);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// Location限定チェックのContent
+        /// </summary>
+        public string LocationLimitingContent
+        {
+            get => locationLimitingContent;
+            set
+            {
+                locationLimitingContent = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// 法事チェックで変換する文字列
         /// </summary>
         /// <param name="isMemorialService"></param>
@@ -205,15 +233,17 @@ namespace WPF.ViewModels
         {
             Pagination.CountReset(isPageCountReset);
 
+            string location = IsLocationLimiting ? AccountingProcessLocation.Location : string.Empty;
+
             var (count, list) =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate, string.Empty, Pagination.PageCount);
+                    (SearchStartDate, SearchEndDate, location, Pagination.PageCount);
             Condolences = list;
             Pagination.TotalRowCount = count;
 
             AllList =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate, string.Empty);
+                    (SearchStartDate, SearchEndDate, location);
 
             if (AllList.Count == 0) Pagination.PageCount = 0;
             ValidationProperty(nameof(Condolences), AllList);
