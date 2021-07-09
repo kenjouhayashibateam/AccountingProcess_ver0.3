@@ -329,28 +329,31 @@ namespace WPF.ViewModels
                     subject, string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate,
                     SearchEndDate, DefaultDate.AddDays(1), DateTime.Today))
             {
-                if (rae.IsPayment) payment += rae.Price;
-                else withdrawal += rae.Price;
+                if (rae.IsPayment) { payment += rae.Price; }
+                else { withdrawal += rae.Price; }
             }
             PaymentTotalAmountWithUnit = AmountWithUnit(payment);
             WithdwaralTotalAmountWithUnit = AmountWithUnit(withdrawal);
             ListTotalAmountWithUnit = AmountWithUnit(payment - withdrawal);
         }
 
-        public override void ValidationProperty(string propertyName, object value) {}
+        public override void ValidationProperty(string propertyName, object value) { }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = $"出納データ閲覧";
+        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = $"出納データ閲覧"; }
 
-        public void SortNotify() => CreateReceiptsAndExpenditures(true);
+        public void SortNotify() { CreateReceiptsAndExpenditures(true); }
 
-        public void PageNotify() => CreateReceiptsAndExpenditures(false);
+        public void PageNotify() { CreateReceiptsAndExpenditures(false); }
 
-        public void SetSortColumns() => Pagination.SortColumns =
-            new System.Collections.Generic.Dictionary<int, string>()
-            {
-                {0,"ID" },
-                {1,"入出金日" },
-                {2,"科目コード" }
-            };
+        public void SetSortColumns()
+        {
+            Pagination.SortColumns =
+                new System.Collections.Generic.Dictionary<int, string>()
+                {
+                    {0,"ID" },
+                    {1,"入出金日" },
+                    {2,"科目コード" }
+                };
+        }
     }
 }

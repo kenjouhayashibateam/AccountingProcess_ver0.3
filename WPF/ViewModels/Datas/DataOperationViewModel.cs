@@ -61,11 +61,13 @@ namespace WPF.ViewModels.Datas
         /// <summary>
         /// 更新完了メッセージを生成、呼び出します
         /// </summary>
-        protected void CallCompletedUpdate() => CallOkInfomationMessageBox("更新完了", "更新しました");
+        protected void CallCompletedUpdate() { CallOkInfomationMessageBox("更新完了", "更新しました"); }
+
         /// <summary>
         /// 登録完了メッセージを生成、呼び出します
         /// </summary>
-        protected void CallCompletedRegistration() => CallOkInfomationMessageBox("登録完了", "登録しました");
+        protected void CallCompletedRegistration() { CallOkInfomationMessageBox("登録完了", "登録しました"); }
+
         private void CallOkInfomationMessageBox(string title, string message)
         {
             MessageBox = new MessageBoxInfo

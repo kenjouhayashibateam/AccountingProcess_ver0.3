@@ -52,7 +52,7 @@ namespace WPF.ViewModels.Datas
             loginRep.Add(this);
             SetWindowDefaultTitle();
             WindowTitle = DefaultWindowTitle;
-            if (loginRep.Rep == null) IsAdminPermisson = false;
+            if (loginRep.Rep == null) { IsAdminPermisson = false; }
             else
             {
                 SetRep(loginRep.Rep);
@@ -84,7 +84,7 @@ namespace WPF.ViewModels.Datas
             get => callShowWindow;
             set
             {
-                if (callShowWindow == value) return;
+                if (callShowWindow == value) { return; }
                 callShowWindow = value;
                 CallPropertyChanged();
                 callShowWindow = false;
@@ -102,7 +102,7 @@ namespace WPF.ViewModels.Datas
             get => callShowMessageBox;
             set
             {
-                if (callShowMessageBox == value) return;
+                if (callShowMessageBox == value) { return; }
                 callShowMessageBox = value;
                 CallPropertyChanged();
                 callShowMessageBox = false;
@@ -119,12 +119,13 @@ namespace WPF.ViewModels.Datas
                 {
                     windowCloseCommand = new DelegateCommand<Window>
                         (
-                            (Window) => DoCloseWindow(Window), 
+                            (Window) => DoCloseWindow(Window),
                             (Window) => true
                         ); 
                 }
                 return windowCloseCommand;
-            } set => windowCloseCommand = value; 
+            }
+            set => windowCloseCommand = value;
         }
         /// <summary>
         /// ウィンドウタイトル
@@ -154,7 +155,8 @@ namespace WPF.ViewModels.Datas
         /// ウインドウを閉じます
         /// </summary>
         /// <param name="window"></param>
-        protected void DoCloseWindow(Window window) => window.Close();
+        protected void DoCloseWindow(Window window) { window.Close(); }
+
         /// <summary>
         /// ウィンドウ表示コマンドを設定します
         /// </summary>
@@ -187,8 +189,7 @@ namespace WPF.ViewModels.Datas
         /// <returns>エラー内容</returns>
         public IEnumerable GetErrors(string propertyName)
         {
-            if (!CurrentErrors.ContainsKey(propertyName)) return null;
-            return CurrentErrors[propertyName];
+            return !CurrentErrors.ContainsKey(propertyName) ? null : (IEnumerable)CurrentErrors[propertyName];
         }
         /// <summary>
         /// エラーリスト
@@ -199,9 +200,12 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         /// <param name="propertyName">プロパティ名</param>
         /// <param name="value"></param>
-        protected void SetNullOrEmptyError(string propertyName, string value) => 
-            ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName, 
+        protected void SetNullOrEmptyError(string propertyName, object value)
+        {
+            ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName,
                 Properties.Resources.NullErrorInfo);
+        }
+
         /// <summary>
         /// エラーを追加します
         /// </summary>
@@ -210,7 +214,7 @@ namespace WPF.ViewModels.Datas
         protected void AddError(string propertyName, string error)
         {
             if (!CurrentErrors.ContainsKey(propertyName))
-                CurrentErrors.Add(propertyName, error);
+            { CurrentErrors.Add(propertyName, error); }
 
             OnErrorsChanged(propertyName);
         }
@@ -221,7 +225,7 @@ namespace WPF.ViewModels.Datas
         protected void RemoveError(string propertyName)
         {
             if (CurrentErrors.ContainsKey(propertyName))
-                CurrentErrors.Remove(propertyName);
+            { _ = CurrentErrors.Remove(propertyName); }
 
             OnErrorsChanged(propertyName);
         }
@@ -241,17 +245,17 @@ namespace WPF.ViewModels.Datas
         /// <param name="exeption">エラー内容</param>
         protected void ErrorsListOperation(bool hasError, string propertyName,string exeption)
         {
-            if (hasError) AddError(propertyName, exeption);
-            else RemoveError(propertyName);            
+            if (hasError) { AddError(propertyName, exeption); }
+            else { RemoveError(propertyName); }
         }
         /// <summary>
         /// エラーをクリアします
         /// </summary>
-        protected void ErrorsClear() => CurrentErrors.Clear();
+        protected void ErrorsClear() { CurrentErrors.Clear(); }
 
         public virtual void SetRep(Rep rep)
         {
-            if (rep == null || string.IsNullOrEmpty(rep.Name)) WindowTitle = DefaultWindowTitle;
+            if (rep == null || string.IsNullOrEmpty(rep.Name)) { WindowTitle = DefaultWindowTitle; }
             else
             {
                 IsAdminPermisson = rep.IsAdminPermisson;

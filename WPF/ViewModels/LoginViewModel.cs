@@ -162,11 +162,11 @@ namespace WPF.ViewModels
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
         /// </summary>
-        public void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
+        public void CheckRevers() { PasswordCharCheck = !PasswordCharCheck; }
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(Password):
                     ErrorsListOperation
@@ -179,6 +179,6 @@ namespace WPF.ViewModels
             }
         }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "担当者ログイン";
+        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = "担当者ログイン"; }
     }
 }

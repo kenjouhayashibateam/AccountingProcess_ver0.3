@@ -14,22 +14,20 @@ namespace Domain.Entities
     {
         //オブザーバーを格納するList
         private readonly List<ILoginRepObserver> observers = new List<ILoginRepObserver>();
-        private readonly static LoginRep loginRep = new LoginRep();
+        private static readonly LoginRep loginRep = new LoginRep();
 
-        private Rep _rep;
+        public Rep Rep { get; private set; }
 
-        public Rep Rep => _rep;
-
-        public static LoginRep GetInstance() => loginRep;
+        public static LoginRep GetInstance() { return loginRep; }
 
         public void SetRep(Rep rep)
         {
-            _rep = rep;
-            foreach (ILoginRepObserver observer in observers) observer.SetRep(rep);
+            Rep = rep;
+            foreach (ILoginRepObserver observer in observers) { observer.SetRep(rep); }
         }
 
-        public void Add(ILoginRepObserver observer) => observers.Add(observer);
+        public void Add(ILoginRepObserver observer) { observers.Add(observer); }
 
-        public void Remove(ILoginRepObserver observer) => observers.Remove(observer);
+        public void Remove(ILoginRepObserver observer) { _ = observers.Remove(observer); }
     }
 }

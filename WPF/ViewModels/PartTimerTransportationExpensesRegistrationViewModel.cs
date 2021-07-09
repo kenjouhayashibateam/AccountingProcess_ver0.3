@@ -51,11 +51,10 @@ namespace WPF.ViewModels
             foreach (PartData pd in DataList)
             {
                 pdList.Add(pd);
-                if (!pd.IsExclusion) registerCount++;
+                if (!pd.IsExclusion) { registerCount++; }
             }
             //登録件数を文字列に格納する
-            if (registerCount == DataList.Count) countInfo = $"{DataList.Count}{Space}件";
-            else countInfo = $"{registerCount}/{DataList.Count}{Space}件";
+            countInfo = registerCount == DataList.Count ? $"{DataList.Count}{Space}件" : $"{registerCount}/{DataList.Count}{Space}件";
             //登録件数が0ならメソッドを終了する
             if (registerCount == 0)
             {
@@ -63,12 +62,12 @@ namespace WPF.ViewModels
                 return;
             }
             //登録確認
-            if (ConfirmationRegistration(countInfo) == MessageBoxResult.Cancel) return;
+            if (ConfirmationRegistration(countInfo) == MessageBoxResult.Cancel) { return; }
             //出納データを登録してリストから削除する
             ReceiptsAndExpenditure rae;
             foreach (PartData pd in pdList)
             {
-                if (pd.IsExclusion) continue;
+                if (pd.IsExclusion) { continue; }
 
                 rae = templateReceiptsAndExpenditure;
                 rae.Detail = pd.Name;
@@ -119,19 +118,17 @@ namespace WPF.ViewModels
         private void DataPaste()
         {
             string[] PasteDataArray = Clipboard.GetText().Replace("\r\n", "\n").Split(new[] { '\n', '\r' });
-            string[] subArray;
-            PartData partData;
-            
             DataList = new ObservableCollection<PartData>();
+
             for (int i = 0; i < PasteDataArray.Length; i++)
             {
-                subArray = PasteDataArray[i].Split('\t');
-                if(!CopyDataErrorCheck(subArray))
+                string[] subArray = PasteDataArray[i].Split('\t');
+                if (!CopyDataErrorCheck(subArray))
                 {
                     WarningCopyDataMessage();
                     return;
                 }
-                partData = new PartData(subArray[0], int.Parse(subArray[1]));
+                PartData partData = new PartData(subArray[0], int.Parse(subArray[1]));
                 DataList.Add(partData);
             }
             SetListTitle();
@@ -221,10 +218,12 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(DataList):
                     ErrorsListOperation(DataList.Count == 0, propertyName, "アイテムがありません");
+                    break;
+                default:
                     break;
             }
         }

@@ -12,25 +12,25 @@ namespace WPF.ViewModels.Datas
     /// </summary>
     public sealed class CondolenceOperation
     {
-        private readonly static CondolenceOperation _condolenceOperation = new CondolenceOperation();
+        private static readonly CondolenceOperation _condolenceOperation = new CondolenceOperation();
 
-        public static CondolenceOperation GetInstance() => _condolenceOperation;
+        public static CondolenceOperation GetInstance() { return _condolenceOperation; }
 
         private readonly List<ICondolenceObserver> observers = new List<ICondolenceObserver>();
 
         private static Condolence OperationData;
 
-        public void Add(ICondolenceObserver observer) => observers.Add(observer);
+        public void Add(ICondolenceObserver observer) { observers.Add(observer); }
 
-        public void Remove(ICondolenceObserver observer) => observers.Remove(observer);
+        public void Remove(ICondolenceObserver observer) { _ = observers.Remove(observer); }
 
-        public void SetData(Condolence condolence) => OperationData = condolence;
+        public void SetData(Condolence condolence) { OperationData = condolence; }
 
-        public Condolence GetData() => OperationData;
+        public Condolence GetData() { return OperationData; }
 
         public void Notify()
         {
-            foreach (ICondolenceObserver co in observers) co.CondolenceNotify();
+            foreach (ICondolenceObserver co in observers) { co.CondolenceNotify(); }
         }
     }
 }

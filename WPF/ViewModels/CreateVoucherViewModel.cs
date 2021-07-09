@@ -84,7 +84,7 @@ namespace WPF.ViewModels
 
             foreach (ReceiptsAndExpenditure rae in VoucherContents)
             {
-                switch(rae.Content.AccountingSubject.SubjectCode)
+                switch (rae.Content.AccountingSubject.SubjectCode)
                 {
                     case "815":
                         almsgiving = rae.Price;
@@ -94,6 +94,8 @@ namespace WPF.ViewModels
                         break;
                     case "832":
                         SetAmount();
+                        break;
+                    default:
                         break;
                 }
 
@@ -115,6 +117,8 @@ namespace WPF.ViewModels
                             break;
                         case "御車代御膳料":
                             carAndMealTip = rae.Price;
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -175,11 +179,11 @@ namespace WPF.ViewModels
             {
                 voucher = new Voucher
                     (0, VoucherAddressee, VoucherContents, OutputDate, LoginRep.GetInstance().Rep, true);
-                DataBaseConnect.Registration(voucher);
+                _ = DataBaseConnect.Registration(voucher);
                 voucher = DataBaseConnect.CallLatestVoucher();
                 voucher.ReceiptsAndExpenditures = VoucherContents;
                 foreach (ReceiptsAndExpenditure rae in VoucherContents)
-                    DataBaseConnect.Registration(voucher.ID, rae.ID);
+                    _ = DataBaseConnect.Registration(voucher.ID, rae.ID);
             }
         }
         /// <summary>
@@ -217,7 +221,7 @@ namespace WPF.ViewModels
         private async void DeleteVoucherContent()
         {
             await Task.Delay(1);
-            VoucherContents.Remove(selectedVoucherContent);
+            _ = VoucherContents.Remove(selectedVoucherContent);
             SetTotalAmount();
             SetOutputEnabled();
         }
@@ -243,7 +247,7 @@ namespace WPF.ViewModels
             }
         }
 
-        private void SetOutputEnabled()=>
+        private void SetOutputEnabled() =>
             IsOutputButtonEnabled = VoucherContents.Count != 0 & !string.IsNullOrEmpty(VoucherAddressee);
         
         /// <summary>
@@ -414,10 +418,12 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(VoucherAddressee):
                     SetNullOrEmptyError(propertyName, (string)value);
+                    break;
+                default:
                     break;
             }
         }
@@ -451,6 +457,6 @@ namespace WPF.ViewModels
 
         public void SortNotify() => CreateReceiptsAndExpenditures(true);
 
-        public void PageNotify() => CreateReceiptsAndExpenditures(false);        
+        public void PageNotify() => CreateReceiptsAndExpenditures(false);
     }
 }

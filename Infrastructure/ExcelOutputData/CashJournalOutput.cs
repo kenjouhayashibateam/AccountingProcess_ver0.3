@@ -52,6 +52,7 @@ namespace Infrastructure.ExcelOutputData
             int slipWithdrawal = default;
             bool firstPage = true;
             bool isPageMove = false;
+            bool isTaxRate=false;
             string detailString = default;
             string currentSubjectCode = string.Empty;
             string currentDept = string.Empty;
@@ -63,10 +64,11 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.CreditDept.ID)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
+                .ThenBy(r => r.IsReducedTaxRate)
                 .ThenBy(r => r.Location)
                 )
             {
-                if (isPageMove) PageMove();
+                if (isPageMove) { PageMove(); }
 
                 if (pageRowCount == 1)
                 {
@@ -91,7 +93,7 @@ namespace Infrastructure.ExcelOutputData
 
                 void PageMove()
                 {
-                    if (IsSameSlip()) return;
+                    if (IsSameSlip()) { return; }
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
                     myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
@@ -152,8 +154,9 @@ namespace Infrastructure.ExcelOutputData
                         currentLocation = rae.Location;
                         currentSubjectCode = rae.Content.AccountingSubject.SubjectCode;
                         currentDept = rae.CreditDept.Dept;
-                        if (rae.IsPayment) slipPayment = rae.Price;
-                        else slipWithdrawal = rae.Price;
+                        isTaxRate = rae.IsReducedTaxRate;
+                        if (rae.IsPayment) { slipPayment = rae.Price; }
+                        else { slipWithdrawal = rae.Price; }
                         ItemIndex = 1;
                         detailString = rae.Detail;
                         myWorksheet.Cell(StartRowPosition, 3).Value = rae.Content.AccountingSubject.SubjectCode;
@@ -215,8 +218,11 @@ namespace Infrastructure.ExcelOutputData
                 SetStyleAndNextIndex();
                 pageRowCount++;
             }
-            else myWorksheet.Cell(StartRowPosition - 1, 9).Value =
-                CommaDelimitedAmount(pageBalance + payment - withdrawal);
+            else
+            {
+                myWorksheet.Cell(StartRowPosition - 1, 9).Value =
+                    CommaDelimitedAmount(pageBalance + payment - withdrawal);
+            }
 
             myWorksheet.Cell(StartRowPosition, 4).Value = "計";
             myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
@@ -272,7 +278,7 @@ namespace Infrastructure.ExcelOutputData
         ///  </summary>
         private void SetStyleAndNextIndex()
         {
-            if (StartRowPosition == 1) return;
+            if (StartRowPosition == 1) { return; }
             SetBorderStyle();
             SetCellsStyle();
             SetMargins();
@@ -315,21 +321,24 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
         }
 
-        protected override double[] SetColumnSizes() => new double[]
-            { 2.64,2.64, 4.71, 16.14, 16.14, 16.14, 11.14,11.14, 11.14 };
+        protected override double[] SetColumnSizes()
+        {
+            return new double[]
+                { 2.64,2.64, 4.71, 16.14, 16.14, 16.14, 11.14,11.14, 11.14 };
+        }
 
-        protected override double SetMaeginsBottom() => ToInch(1);
+        protected override double SetMaeginsBottom() { return ToInch(1); }
 
-        protected override double SetMaeginsLeft() => ToInch(0.7);
+        protected override double SetMaeginsLeft() { return ToInch(0.7); }
 
-        protected override double SetMaeginsRight() => ToInch(0.7);
+        protected override double SetMaeginsRight() { return ToInch(0.7); }
 
-        protected override double SetMaeginsTop() => ToInch(1);
+        protected override double SetMaeginsTop() { return ToInch(1); }
 
         protected override void SetMerge()
         {
             _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length - 2).Merge();
-            _ = MySheetCellRange(StartRowPosition, SetColumnSizes().Length - 1, 
+            _ = MySheetCellRange(StartRowPosition, SetColumnSizes().Length - 1,
                 StartRowPosition, SetColumnSizes().Length).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 2).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 5, StartRowPosition + 1, 6).Merge();
@@ -349,13 +358,15 @@ namespace Infrastructure.ExcelOutputData
             _ = myWorksheet.PageSetup.Margins.SetFooter(ToInch(0.5));
         }
 
-        protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
 
-        protected override void PageStyle() => SetStyleAndNextIndex();        
+        protected override void PageStyle() { SetStyleAndNextIndex(); }
 
-        protected override void SetList(IEnumerable outputList) =>
+        protected override void SetList(IEnumerable outputList)
+        {
             ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
-        
-        protected override string SetSheetFontName() => "ＭＳ Ｐゴシック";
+        }
+
+        protected override string SetSheetFontName() { return "ＭＳ Ｐゴシック"; }
     }
 }

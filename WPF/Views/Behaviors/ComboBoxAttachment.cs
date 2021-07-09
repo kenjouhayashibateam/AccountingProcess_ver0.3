@@ -24,7 +24,7 @@ namespace WPF.Views.Behaviors
                 ("SetIsIMEModeOnProperty", typeof(bool), typeof(ComboBoxAttachment), 
                     new PropertyMetadata(false, (d, e) =>
             {
-                if (!(d is ComboBox cb)) return;
+                if (!(d is ComboBox cb)) { return; }
 
                 if (!(e.NewValue is bool isIMEMode)) { return; }
                 cb.GotFocus -= OnComboBoxGotFocus;
@@ -46,9 +46,9 @@ namespace WPF.Views.Behaviors
         {
             if (!(sender is ComboBox cb)) { return; }
 
-            var isIMEModeOnGotFocus = GetIsIMEModeTrueOnGotFocus(cb);
+            bool isIMEModeOnGotFocus = GetIsIMEModeTrueOnGotFocus(cb);
 
-            if (!(cb.Template.FindName("PART_EditableTextBox", cb) is TextBox tb)) return;
+            if (!(cb.Template.FindName("PART_EditableTextBox", cb) is TextBox tb)) { return; }
 
             if (isIMEModeOnGotFocus)
             {
@@ -56,7 +56,7 @@ namespace WPF.Views.Behaviors
                 InputMethod.SetPreferredImeConversionMode
                     (tb, ImeConversionModeValues.FullShape | ImeConversionModeValues.Native);
             }
-            else InputMethod.SetPreferredImeState(tb, InputMethodState.Off);
+            else { InputMethod.SetPreferredImeState(tb, InputMethodState.Off); }
         }
         private static void OnMouseLeftButtonDown
             (object sender, MouseButtonEventArgs e)
@@ -81,7 +81,7 @@ namespace WPF.Views.Behaviors
             DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), 
                 typeof(ComboBoxAttachment), new PropertyMetadata(false, (d, e) =>
             {
-                if (!(d is ComboBox cb)) return;
+                if (!(d is ComboBox cb)) { return; }
 
                 if (!(e.NewValue is bool isIMEMode)) { return; }
                 cb.GotFocus -= OffComboBoxGotFocus;
@@ -103,8 +103,8 @@ namespace WPF.Views.Behaviors
         {
             if (!(sender is ComboBox cb)) { return; }
 
-            var isIMEModeOffGotFocus = GetIsIMEModeTrueOffGotFocus(cb);
-            var tb = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
+            bool isIMEModeOffGotFocus = GetIsIMEModeTrueOffGotFocus(cb);
+            TextBox tb = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
 
             if (isIMEModeOffGotFocus)
             {
@@ -112,7 +112,7 @@ namespace WPF.Views.Behaviors
             }
         }
         private static void OffMouseLeftButtonDown
-            (object sender, System.Windows.Input.MouseButtonEventArgs e)
+            (object sender, MouseButtonEventArgs e)
         {
             if (!(sender is ComboBox cb)) { return; }
 
@@ -121,26 +121,26 @@ namespace WPF.Views.Behaviors
             e.Handled = false;
         }
 
-        public static readonly DependencyProperty MaxLengthProperty = 
-            DependencyProperty.RegisterAttached("MaxLength", typeof(int), typeof(ComboBoxAttachment), 
+        public static readonly DependencyProperty MaxLengthProperty =
+            DependencyProperty.RegisterAttached("MaxLength", typeof(int), typeof(ComboBoxAttachment),
                 new UIPropertyMetadata(1, OnMaxLengthChanged));
 
         public static void OnMaxLengthChanged
             (DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            if (!(obj is ComboBox comboBox)) return;
+            if (!(obj is ComboBox comboBox)) { return; }
             comboBox.Loaded +=
                 (s, e) =>
                 {
                     if (!(comboBox.Template.FindName("PART_EditableTextBox", comboBox) is TextBox textBox))
-                        return;
+                    { return; }
 
                     textBox.MaxLength = (int)args.NewValue;
                 };
         }
-        public static int GetMaxLength(DependencyObject obj0) => (int)obj0.GetValue(MaxLengthProperty);
-        public static void SetMaxLength(DependencyObject obj, int value) =>
-            obj.SetValue(MaxLengthProperty, value);
+        public static int GetMaxLength(DependencyObject obj0) { return (int)obj0.GetValue(MaxLengthProperty); }
+
+        public static void SetMaxLength(DependencyObject obj, int value) { obj.SetValue(MaxLengthProperty, value); }
     }
 }
 

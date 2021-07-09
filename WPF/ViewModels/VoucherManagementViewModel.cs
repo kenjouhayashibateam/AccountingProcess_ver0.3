@@ -17,7 +17,6 @@ namespace WPF.ViewModels
     /// </summary>
     public class VoucherManagementViewModel : BaseViewModel
     {
-        
         private DateTime searchDateStart = DefaultDate;
         private DateTime searchDateEnd = DefaultDate;
         private ObservableCollection<Voucher> vouchers;
@@ -58,7 +57,7 @@ namespace WPF.ViewModels
                 Image = System.Windows.MessageBoxImage.Question,
                 Title = "登録確認",
                 Button = System.Windows.MessageBoxButton.OKCancel
-            }).Result == System.Windows.MessageBoxResult.Cancel) return;
+            }).Result == System.Windows.MessageBoxResult.Cancel) { return; }
 
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
@@ -96,7 +95,7 @@ namespace WPF.ViewModels
                 Button = System.Windows.MessageBoxButton.YesNo
             };
             CallPropertyChanged(nameof(MessageBox));
-            if (MessageBox.Result == System.Windows.MessageBoxResult.No) return;
+            if (MessageBox.Result == System.Windows.MessageBoxResult.No) { return; }
             IsValidity = !IsValidity;
             SelectedVoucher.IsValidity = IsValidity;
             _ = DataBaseConnect.Update(SelectedVoucher);
@@ -149,7 +148,7 @@ namespace WPF.ViewModels
             {
                 selectedVoucher = value;
                 IsOutputButtonEnabled = value != null;
-                if (value != null) VoucherContents = value.ReceiptsAndExpenditures;
+                if (value != null) { VoucherContents = value.ReceiptsAndExpenditures; }
                 CallPropertyChanged();
             }
         }

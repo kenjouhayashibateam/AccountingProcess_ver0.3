@@ -87,8 +87,8 @@ namespace Domain.Entities
         /// <param name="isRedicedTaxRate">軽減税率チェック</param>
         public ReceiptsAndExpenditure
             (int id, DateTime registrationDate, Rep registrationRep,string location, CreditDept creditDept, 
-                Content content, string detail, int price, bool isPayment, bool isValidity, 
-                DateTime accountActivityDate,DateTime outputDate,bool isRedicedTaxRate)
+                Content content, string detail, int price, bool isPayment, bool isValidity,
+                DateTime accountActivityDate, DateTime outputDate, bool isRedicedTaxRate)
         {
             ID =id;
             RegistrationDate = registrationDate;

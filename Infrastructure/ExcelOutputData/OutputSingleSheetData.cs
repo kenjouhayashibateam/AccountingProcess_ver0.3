@@ -1,10 +1,4 @@
-﻿using System;
-using Domain.Repositories;
-using ClosedXML.Excel;
-using Microsoft.Office.Interop.Excel;
-using Microsoft.VisualBasic;
-
-namespace Infrastructure.ExcelOutputData
+﻿namespace Infrastructure.ExcelOutputData
 {
     /// <summary>
     /// 単票出力

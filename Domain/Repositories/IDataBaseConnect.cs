@@ -110,7 +110,7 @@ namespace Domain.Repositories
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <returns>伝票内容リスト</returns>
         public ObservableCollection<Content> ReferenceContent
-            (string contentText,string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly);
+            (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly);
         /// <summary>
         /// IDを基に勘定科目を呼び出します
         /// </summary>
@@ -247,7 +247,7 @@ namespace Domain.Repositories
         /// <param name="dateTime">検索最新日時</param>
         /// <returns></returns>
         public ObservableCollection<Condolence> ReferenceCondolence
-            (DateTime startDate, DateTime endDate,string location);
+            (DateTime startDate, DateTime endDate, string location);
         /// <summary>
         /// 御布施一覧データを検索します
         /// </summary>
@@ -256,7 +256,7 @@ namespace Domain.Repositories
         /// <param name="pageCount">ページカウント</param>
         /// <returns></returns>
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate,string location, int pageCount);
+            (DateTime startDate, DateTime endDate, string location, int pageCount);
         /// <summary>
         /// 受納証に異なった文字列を表示する伝票内容を登録します
         /// </summary>

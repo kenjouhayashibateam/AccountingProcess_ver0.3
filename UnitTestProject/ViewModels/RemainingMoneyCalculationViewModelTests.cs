@@ -8,7 +8,7 @@ namespace WPF.ViewModels.Tests
         [TestMethod]
         public void シナリオ()
         {
-            var vm = new RemainingMoneyCalculationViewModel
+            RemainingMoneyCalculationViewModel vm = new RemainingMoneyCalculationViewModel
             {
                 OneYenCount = 10,
                 FiveYenCount = 10,
@@ -57,7 +57,7 @@ namespace WPF.ViewModels.Tests
         [TestMethod]
         public void その他金庫の金額欄が数字かどうか()
         {
-            var vm = new RemainingMoneyCalculationViewModel
+            RemainingMoneyCalculationViewModel vm = new RemainingMoneyCalculationViewModel
             {
                 OtherMoneyAmountDisplayValue1 = "a",
                 OtherMoneyAmountDisplayValue2 = "a",

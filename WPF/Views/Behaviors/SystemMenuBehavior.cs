@@ -12,8 +12,8 @@ namespace WPF.Views.Behaviors
     {
         public bool? IsVisible
         {
-            get { return (bool?)GetValue(IsVisibleProperty); }
-            set { SetValue(IsVisibleProperty, value); }
+            get => (bool?)GetValue(IsVisibleProperty);
+            set => SetValue(IsVisibleProperty, value);
         }
         public static readonly DependencyProperty IsVisibleProperty =
             DependencyProperty.Register
@@ -21,8 +21,8 @@ namespace WPF.Views.Behaviors
 
         public bool? CanMinimize
         {
-            get { return (bool?)GetValue(This.CanMinimizeProperty); }
-            set { SetValue(CanMinimizeProperty, value); }
+            get => (bool?)GetValue(CanMinimizeProperty);
+            set => SetValue(CanMinimizeProperty, value);
         }
         public static readonly DependencyProperty CanMinimizeProperty =
             DependencyProperty.Register
@@ -30,8 +30,8 @@ namespace WPF.Views.Behaviors
         
         public bool? CanMaximize
         {
-            get { return (bool?)GetValue(CanMaximizeProperty); }
-            set { SetValue(CanMaximizeProperty, value); }
+            get => (bool?)GetValue(CanMaximizeProperty);
+            set => SetValue(CanMaximizeProperty, value);
         }
         private static readonly DependencyProperty CanMaximizeProperty =
             DependencyProperty.Register
@@ -39,8 +39,8 @@ namespace WPF.Views.Behaviors
 
         public bool EnableAltF4
         {
-            get { return (bool)GetValue(EnableAltF4Property); }
-            set { SetValue(EnableAltF4Property, value); }
+            get => (bool)GetValue(EnableAltF4Property);
+            set => SetValue(EnableAltF4Property, value);
         }
         public static readonly DependencyProperty EnableAltF4Property =
             DependencyProperty.Register
@@ -49,8 +49,7 @@ namespace WPF.Views.Behaviors
         private static void OnPropertyChanged
             (DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            if (obj is This self)
-                self.Apply();
+            if (obj is This self) { self.Apply(); }
         }
 
         protected override void OnAttached()
@@ -59,32 +58,32 @@ namespace WPF.Views.Behaviors
             base.OnAttached();
         }
 
-        private void OnSourceInitialized(object sender, EventArgs e) => Apply();        
+        private void OnSourceInitialized(object sender, EventArgs e) { Apply(); }
 
         private void Apply()
         {
-            if (AssociatedObject == null) return;
+            if (AssociatedObject == null) { return; }
             //スタイル
-            var hwnd = new WindowInteropHelper(AssociatedObject).Handle;
-            var style = User32.GetWindowLong(hwnd, Constant.GWL_STYLE);
+            IntPtr hwnd = new WindowInteropHelper(AssociatedObject).Handle;
+            int style = User32.GetWindowLong(hwnd, Constant.GWL_STYLE);
 
             if (IsVisible.HasValue)
             {
-                if (IsVisible.Value) style |= Constant.WS_SYSMENU;
-                else style &= ~Constant.WS_SYSMENU;
+                if (IsVisible.Value) { style |= Constant.WS_SYSMENU; }
+                else { style &= ~Constant.WS_SYSMENU; }
             }
             if (CanMinimize.HasValue)
             {
-                if (CanMinimize.Value) style |= Constant.WS_MINIMIZEBOX;
-                else style &= ~Constant.WS_MINIMIZEBOX;
+                if (CanMinimize.Value) { style |= Constant.WS_MINIMIZEBOX; }
+                else { style &= ~Constant.WS_MINIMIZEBOX; }
             }
             if (CanMaximize.HasValue)
             {
-                if (CanMaximize.Value) style |= Constant.WS_MAXIMIZEBOX;
-                else style &= ~Constant.WS_MAXIMIZEBOX;
+                if (CanMaximize.Value) { style |= Constant.WS_MAXIMIZEBOX; }
+                else { style &= ~Constant.WS_MAXIMIZEBOX; }
             }
             _ = User32.SetWindowLong(hwnd, Constant.GWL_STYLE, style);
         }
-    } 
+    }
 }
 

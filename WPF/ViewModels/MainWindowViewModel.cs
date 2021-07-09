@@ -138,7 +138,7 @@ namespace WPF.ViewModels
             //今日の日付が4月1日なら登録ボタンを可視化する
             IsRegistrationPerMonthFinalAccountVisiblity =
                 DateTime.Today == TextHelper.CurrentFiscalYearFirstDate;
-            if(string.IsNullOrEmpty(LoginRep.Rep.Name))
+            if (string.IsNullOrEmpty(LoginRep.Rep.Name))
             {
                 CallNoLoginMessage();
                 IsSlipManagementEnabled = false;
@@ -146,11 +146,11 @@ namespace WPF.ViewModels
                 return;
             }
             //前月決算が登録されていれば登録ボタンを隠す
-            if (IsRegistrationPerMonthFinalAccountVisiblity) 
-                IsRegistrationPerMonthFinalAccountVisiblity = DataBaseConnect.CallFinalAccountPerMonth() == 0;
+            if (IsRegistrationPerMonthFinalAccountVisiblity)
+            { IsRegistrationPerMonthFinalAccountVisiblity = DataBaseConnect.CallFinalAccountPerMonth() == 0; }
             //登録ボタンが可視化されていなければ処理を終了する
-            if (!IsRegistrationPerMonthFinalAccountVisiblity) return;
-            
+            if (!IsRegistrationPerMonthFinalAccountVisiblity) { return; }
+
             RegistrationPrecedingYearFinalAccount();
         }
         private MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo()
@@ -174,21 +174,24 @@ namespace WPF.ViewModels
         public DelegateCommand RegistrationPerMonthFinalAccountCommand { get; set; }
         private void RegistrationPrecedingYearFinalAccount()
         {
-            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) return;
+            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) { return; }
             _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
             IsRegistrationPerMonthFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
         }
         /// <summary>
         /// ログインしていないことを案内します
         /// </summary>
-        private void CallNoLoginMessage() =>
-            MessageBox = new MessageBoxInfo() 
-                { 
-                    Message = "ログインしてください", 
-                    Button = MessageBoxButton.OK, 
-                    Image = MessageBoxImage.Warning, 
-                    Title = "担当者データがありません" 
-                };
+        private void CallNoLoginMessage()
+        {
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = "ログインしてください",
+                Button = MessageBoxButton.OK,
+                Image = MessageBoxImage.Warning,
+                Title = "担当者データがありません"
+            };
+        }
+
         /// <summary>
         /// ログインしていて、なおかつ経理担当場所が管理事務所か、
         /// 青蓮堂の場合は預り金を設定している場合にTrueを返します
@@ -197,15 +200,16 @@ namespace WPF.ViewModels
         public bool SetOperationButtonEnabled()
         {
             ShowSlipManagementContent = "出納管理";
-            if (!ReturnIsRepLogin()) return false;
-            if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) return true;
+            if (!ReturnIsRepLogin()) { return false; }
+
+            if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) { return true; }
+
             bool b = !string.IsNullOrEmpty(DepositAmount);
             if (!b)
             {
                 CallDepositAmountEmptyMessage();
                 ShowSlipManagementContent = "預かり金額を入力して下さい";
             }
-
             return b;
         }
         /// <summary>
@@ -213,7 +217,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void CallDepositAmountEmptyMessage()
         {
-            if (TextHelper.IntAmount(DepositAmount) != 0) return;
+            if (TextHelper.IntAmount(DepositAmount) != 0) { return; }
             MessageBox = new MessageBoxInfo()
             {
                 Message =
@@ -256,7 +260,7 @@ namespace WPF.ViewModels
             get => callClosingMessage;
             set
             {
-                if (callClosingMessage == value) return;
+                if (callClosingMessage == value) { return; }
                 callClosingMessage = value;
                 CallPropertyChanged();
                 callClosingMessage = false;
@@ -283,7 +287,7 @@ namespace WPF.ViewModels
             set
             {
                 kanriJimushoChecked = value;
-                if (value) AccountingProcessLocation.SetLocation(Locations.管理事務所.ToString());
+                if (value) { AccountingProcessLocation.SetLocation(Locations.管理事務所.ToString()); }
                 ValidationProperty(nameof(KanriJimushoChecked), value);
                 CallPropertyChanged();
             }
@@ -297,7 +301,7 @@ namespace WPF.ViewModels
             set
             {
                 shorendoChecked = value;
-                if (value) AccountingProcessLocation.SetLocation(Locations.青蓮堂.ToString());
+                if (value) { AccountingProcessLocation.SetLocation(Locations.青蓮堂.ToString()); }
                 ValidationProperty(nameof(ShorendoChecked), value);
                 CallPropertyChanged();
             }
@@ -323,12 +327,18 @@ namespace WPF.ViewModels
             set
             {
                 AccountingProcessLocation.OriginalTotalAmount = TextHelper.IntAmount(value);
-                if (LoginRep.Rep.Name != string.Empty) IsSlipManagementEnabled = IsCreateVoucherEnabled =
+                if (LoginRep.Rep.Name != string.Empty)
+                {
+                    IsSlipManagementEnabled = IsCreateVoucherEnabled =
                         AccountingProcessLocation.OriginalTotalAmount != 0;
-                
-                if (ShorendoChecked) ShowSlipManagementContent =
+                }
+
+                if (ShorendoChecked)
+                {
+                    ShowSlipManagementContent =
                         AccountingProcessLocation.OriginalTotalAmount == 0 ?
                             "預かり金額を設定して下さい" : "出納管理";
+                }
                 depositAmount = TextHelper.CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
@@ -433,7 +443,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 春秋苑会計トグルボタンのコンテント
         /// </summary>
-        public string AccountingGenreContent
+         public string AccountingGenreContent
         {
             get => accountingGenreContent;
             set
@@ -472,8 +482,11 @@ namespace WPF.ViewModels
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
-            if (AccountingProcessLocation.OriginalTotalAmount == 0) ShowSlipManagementContent =
+            if (AccountingProcessLocation.OriginalTotalAmount == 0)
+            {
+                ShowSlipManagementContent =
                     "預かり金額を設定して下さい";
+            }
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック
@@ -489,10 +502,10 @@ namespace WPF.ViewModels
         {
             switch (propertyName)
             {
-                case nameof(kanriJimushoChecked):
+                case nameof(KanriJimushoChecked):
                     SetLocationErrorsListOperation(propertyName);
                     break;
-                case nameof(shorendoChecked):
+                case nameof(ShorendoChecked):
                     SetLocationErrorsListOperation(propertyName);
                     break;
                 default:
@@ -508,11 +521,13 @@ namespace WPF.ViewModels
                 (KanriJimushoChecked == false & ShorendoChecked == false, propertyName,
                     "経理担当場所を設定して下さい");
             if (GetErrors(propertyName) == null)
+            {
                 ErrorsListOperation(shorendoChecked & string.IsNullOrEmpty(DepositAmount),
                     propertyName, "金額を入力してください");
+            }
         }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "春秋苑経理システム";
+        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = "春秋苑経理システム"; }
 
         public override void SetRep(Rep rep)
         {

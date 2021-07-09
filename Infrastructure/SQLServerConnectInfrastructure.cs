@@ -76,7 +76,7 @@ namespace Infrastructure
                 Cmd = NewCommand(CommandType.StoredProcedure, commandText);
 
                 foreach (KeyValuePair<string, object> param in parameters)
-                { Cmd.Parameters.AddWithValue(param.Key, param.Value); }
+                { _ = Cmd.Parameters.AddWithValue(param.Key, param.Value); }
             }
 
             return Cmd;
@@ -809,7 +809,7 @@ namespace Infrastructure
                 {"@addressee",voucher.Addressee},{"@staff_id",LoginRep.GetInstance().Rep.ID},
                 {"@is_validity",voucher.IsValidity} };
 
-             return ReturnGeneretedParameterCommand("update_voucher", parameters).ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand("update_voucher", parameters).ExecuteNonQuery();
         }
 
         public ObservableCollection<Voucher> ReferenceVoucher

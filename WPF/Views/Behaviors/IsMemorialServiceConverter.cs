@@ -10,10 +10,12 @@ namespace WPF.Views.Behaviors
     /// </summary>
     public class IsMemorialServiceConverter : MarkupExtension, IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-            !(value is bool b) ? string.Empty : b ? "法事" : "葬儀";
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(value is bool b) ? string.Empty : b ? "法事" : "葬儀";
+        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { return null; }
 
         private static IsMemorialServiceConverter MemorialServiceConverter;
 

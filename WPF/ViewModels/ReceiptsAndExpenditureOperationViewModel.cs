@@ -93,7 +93,7 @@ namespace WPF.ViewModels
                 SetDataRegistrationCommand.Execute();
                 IsPaymentCheck = true;
                 FieldClear();
-            } 
+            }
         }
         public ReceiptsAndExpenditureOperationViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
@@ -107,14 +107,17 @@ namespace WPF.ViewModels
         /// 勘定科目一覧PDFを開くコマンド
         /// </summary>
         public DelegateCommand ShowAccountTitleListPDFFileCommand { get; set; }
-        private void ShowAccountTitleListPDFFile() =>
-            System.Diagnostics.Process.Start(@".\files\AccountTitleList.pdf");
+        private void ShowAccountTitleListPDFFile()
+        {
+            _ = System.Diagnostics.Process.Start(@".\files\AccountTitleList.pdf");
+        }
+
         /// <summary>
         /// 詳細メニューのプロパティをセットします
         /// </summary>
         private void SetDetailFieldProperty()
         {
-            switch(OperationData.GetOperationType())
+            switch (OperationData.GetOperationType())
             {
                 case ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure:
                     SetDetailTitle("その他詳細", string.Empty);
@@ -122,6 +125,8 @@ namespace WPF.ViewModels
                 case ReceiptsAndExpenditureOperation.OperationType.Voucher:
                     IsPaymentCheck = true;
                     SetDetailTitle("宛名", string.Empty);
+                    break;
+                default:
                     break;
             }
             IsPaymentCheckEnabled =
@@ -145,6 +150,8 @@ namespace WPF.ViewModels
                 case DataOperation.更新:
                     DataUpdate();
                     break;
+                default:
+                    break;
             }
         }
         /// <summary>
@@ -153,7 +160,7 @@ namespace WPF.ViewModels
         private async void DataUpdate()
         {
             IsDataOperationButtonEnabled = false;
-            if (OperationData.Data == null) return;
+            if (OperationData.Data == null) { return; }
 
             string UpdateCotent = string.Empty;
 
@@ -165,43 +172,63 @@ namespace WPF.ViewModels
             }
 
             if (OperationData.Data.AccountActivityDate != AccountActivityDate)
+            {
                 UpdateCotent +=
                     $"入出金日 : {OperationData.Data.AccountActivityDate.ToShortDateString()} → " +
                     $"{AccountActivityDate.ToShortDateString()}\r\n";
+            }
 
             if (OperationData.Data.CreditDept.Dept != ComboCreditDeptText)
+            {
                 UpdateCotent +=
                     $"貸方勘定 : {OperationData.Data.CreditDept.Dept} → {ComboCreditDeptText}\r\n";
+            }
 
             if (OperationData.Data.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode)
+            {
                 UpdateCotent +=
                     $"勘定科目コード : {OperationData.Data.Content.AccountingSubject.SubjectCode} → " +
                     $"{ComboAccountingSubjectCode}\r\n";
+            }
 
             if (OperationData.Data.Content.AccountingSubject.Subject != ComboAccountingSubjectText)
+            {
                 UpdateCotent += $"勘定科目 : {OperationData.Data.Content.AccountingSubject.Subject} → " +
                     $"{ComboAccountingSubjectText}\r\n";
+            }
 
             if (OperationData.Data.Content.Text != ComboContentText)
+            {
                 UpdateCotent += $"内容 : {OperationData.Data.Content.Text} → {ComboContentText}\r\n";
+            }
 
-            if (OperationData.Data.Detail !=JoinDetail())
+            if (OperationData.Data.Detail != JoinDetail())
+            {
                 UpdateCotent += $"詳細 : {OperationData.Data.Detail} → {JoinDetail()}\r\n";
+            }
 
             if (OperationData.Data.Price != IntAmount(price))
+            {
                 UpdateCotent += $"金額 : {AmountWithUnit(OperationData.Data.Price)} → " +
                     $"{AmountWithUnit(IntAmount(Price))}\r\n";
+            }
 
             if (OperationData.Data.IsValidity != IsValidity)
+            {
                 UpdateCotent += $"有効性 : {OperationData.Data.IsValidity} → {IsValidity}\r\n";
+            }
 
             if (OperationData.Data.OutputDate != SlipOutputDate)
+            {
                 UpdateCotent += $"出力日 : {OperationData.Data.OutputDate.ToShortDateString()} → " +
-                    $"{(SlipOutputDate==DefaultDate?"未出力":SlipOutputDate.ToShortDateString())}\r\n";
+                    $"{(SlipOutputDate == DefaultDate ? "未出力" : SlipOutputDate.ToShortDateString())}\r\n";
+            }
 
             if (OperationData.Data.IsReducedTaxRate != IsReducedTaxRate)
+            {
                 UpdateCotent +=
                     $"軽減税率データ : {OperationData.Data.IsReducedTaxRate} → {IsReducedTaxRate}\r\n";
+            }
 
             if (UpdateCotent.Length == 0)
             {
@@ -233,9 +260,9 @@ namespace WPF.ViewModels
             CallCompletedUpdate();
             DataOperationButtonContent = "更新";
 
-            if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) return;
+            if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) { return; }
 
-            if (OperationData.Data.OutputDate == DefaultDate) return;
+            if (OperationData.Data.OutputDate == DefaultDate) { return; }
             
             CreateResubmitInfo();
 
@@ -257,7 +284,8 @@ namespace WPF.ViewModels
         /// DetailとSupplementを結合して返します
         /// </summary>
         /// <returns></returns>
-        private string JoinDetail() => $"{DetailText}{Space}{Supplement}".Trim();
+        private string JoinDetail() { return $"{DetailText}{Space}{Supplement}".Trim(); }
+
         /// <summary>
         /// 出納データを登録します
         /// </summary>
@@ -310,7 +338,7 @@ namespace WPF.ViewModels
             ComboAccountingSubjectCodes.Clear();
             SelectedAccountingSubjectCode = null;
             ComboAccountingSubjectCode = string.Empty;
-            if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
+            if (SelectedAccountingSubject != null) { SelectedAccountingSubject = null; }
             ComboAccountingSubjectText = string.Empty;
             SelectedContent = null;
             ComboContentText = string.Empty;
@@ -319,7 +347,7 @@ namespace WPF.ViewModels
             AccountActivityDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
             OperationRep = loginRep.Rep;
-            if (SelectedCreditDept == null) SelectedCreditDept = ComboCreditDepts[0];
+            if (SelectedCreditDept == null) { SelectedCreditDept = ComboCreditDepts[0]; }
             SlipOutputDate = DefaultDate;
             IsOutput = false;
             IsOutputCheckEnabled = false;
@@ -353,7 +381,7 @@ namespace WPF.ViewModels
             //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
             //現状管理料のみだが、他に出てきた時にはelse if句で対応する
             SetDetailFieldProperty();
-            if (OperationData.Data.Content.Text.Contains("管理料")) ManagementFeeTextAllocation();
+            if (OperationData.Data.Content.Text.Contains("管理料")) { ManagementFeeTextAllocation(); }
             else
             {
                 DetailText = OperationData.Data.Detail;
@@ -362,11 +390,10 @@ namespace WPF.ViewModels
 
             string SetPrice()
             {
-                if (OperationData.Data.Price == 0)
-                    return OperationData.Data.Content.FlatRate > 0 ? 
-                        CommaDelimitedAmount(OperationData.Data.Content.FlatRate) : string.Empty;
-
-                return CommaDelimitedAmount(OperationData.Data.Price);
+                return OperationData.Data.Price == 0
+                    ? OperationData.Data.Content.FlatRate > 0 ?
+                        CommaDelimitedAmount(OperationData.Data.Content.FlatRate) : string.Empty
+                    : CommaDelimitedAmount(OperationData.Data.Price);
             }
         }
         /// <summary>
@@ -381,8 +408,8 @@ namespace WPF.ViewModels
 
             foreach (string t in detailArray)
             {
-                if (t.Contains("年度分")) Supplement = t;
-                else DetailText += t;
+                if (t.Contains("年度分")) { Supplement = t; }
+                else { DetailText += t; }
             }
             SetDetailTitle("支払者名", "必ず「年度分」の文字を入力");
         }
@@ -405,8 +432,7 @@ namespace WPF.ViewModels
             set
             {
                 receiptsAndExpenditureIDField = value;
-                if (value == 0) ReceiptsAndExpenditureIDFieldText = string.Empty;
-                else ReceiptsAndExpenditureIDFieldText = $"データID : {value}";
+                ReceiptsAndExpenditureIDFieldText = value == 0 ? string.Empty : $"データID : {value}";
             }
         }
         /// <summary>
@@ -502,7 +528,7 @@ namespace WPF.ViewModels
             get => comboCreditDeptText;
             set
             {
-                if (comboCreditDeptText == value) return;
+                if (comboCreditDeptText == value) { return; }
                 comboCreditDeptText = value;
                 SelectedCreditDept = ComboCreditDepts.FirstOrDefault(c => c.Dept == value);
                 ValidationProperty(nameof(ComboCreditDeptText), value);
@@ -515,8 +541,8 @@ namespace WPF.ViewModels
         /// </summary>
         public CreditDept SelectedCreditDept 
         { 
-            get => selectedCreditDept; 
-            set 
+            get => selectedCreditDept;
+            set
             {
                 selectedCreditDept = value;
                 CallPropertyChanged();
@@ -540,12 +566,14 @@ namespace WPF.ViewModels
                     return;
                 }
 
-                if (!System.Text.RegularExpressions.Regex.IsMatch(value, @"\d"))
-                    comboAccountingSubjectCode = string.Empty;
-                else comboAccountingSubjectCode = value;
+                comboAccountingSubjectCode =
+                    !System.Text.RegularExpressions.Regex.IsMatch(value, @"\d") ? string.Empty : value;
 
-                if (comboAccountingSubjectCode.Length == 3) ComboAccountingSubjects =
-                           DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                if (comboAccountingSubjectCode.Length == 3)
+                {
+                    ComboAccountingSubjects =
+                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                }
                 else
                 {
                     SetField();
@@ -563,7 +591,7 @@ namespace WPF.ViewModels
                 else
                 {
                     comboAccountingSubjectCode = value;
-                    if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
+                    if (SelectedAccountingSubject != null) { SelectedAccountingSubject = null; }
                     ComboAccountingSubjectText = string.Empty;
                     ComboContentText = string.Empty;
                     ComboContents.Clear();
@@ -578,10 +606,10 @@ namespace WPF.ViewModels
                     //ComboAccountingSubjects =
                     //    DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
                     ComboAccountingSubjects.Clear();
-                    if (SelectedAccountingSubject != null) SelectedAccountingSubject = null;
+                    if (SelectedAccountingSubject != null) { SelectedAccountingSubject = null; }
                     ComboAccountingSubjectText = string.Empty;
                     ComboContents.Clear();
-                    if (SelectedContent != null) SelectedContent = null;
+                    if (SelectedContent != null) { SelectedContent = null; }
                     SetDataOperationButtonEnabled();
                 }
             }
@@ -608,7 +636,7 @@ namespace WPF.ViewModels
             {
                 if (selectedAccountingSubjectCode != null && selectedAccountingSubjectCode.Equals(value)) return;
                 selectedAccountingSubjectCode = value;
-                if (value == null) ComboAccountingSubjectCode = string.Empty;
+                if (value == null) { ComboAccountingSubjectCode = string.Empty; }
                 else
                 {
                     ComboAccountingSubjectCode = value.SubjectCode;
@@ -625,9 +653,9 @@ namespace WPF.ViewModels
             get => comboAccountingSubjectText;
             set
             {
-                if (comboAccountingSubjectText == value) return;
-                
-                if(string.IsNullOrEmpty(value))
+                if (comboAccountingSubjectText == value) { return; }
+
+                if (string.IsNullOrEmpty(value))
                 {
                     comboAccountingSubjectText = value;
                     ValidationProperty(nameof(ComboAccountingSubjectText), value);
@@ -635,7 +663,7 @@ namespace WPF.ViewModels
                     return;
                 }
 
-                AccountingSubject accountingSubject = 
+                AccountingSubject accountingSubject =
                     ComboAccountingSubjects.FirstOrDefault(r => r.Subject == value);
 
                 if (accountingSubject == null)
@@ -644,7 +672,7 @@ namespace WPF.ViewModels
                     ValidationProperty(nameof(ComboAccountingSubjectText), comboAccountingSubjectText);
                     return;
                 }
-                else comboAccountingSubjectText = accountingSubject.Subject;
+                else { comboAccountingSubjectText = accountingSubject.Subject; }
 
                 if (string.IsNullOrEmpty(value))
                 {
@@ -665,7 +693,7 @@ namespace WPF.ViewModels
 
                 void PropertyClear()
                 {
-                    if(accountingSubject.SubjectCode == ComboAccountingSubjectCode) return;
+                    if (accountingSubject.SubjectCode == ComboAccountingSubjectCode) { return; }
 
                     comboAccountingSubjectText = string.Empty;
                     ComboAccountingSubjects =
@@ -701,9 +729,10 @@ namespace WPF.ViewModels
                 ComboContents = DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode,
                         ComboAccountingSubjectText ?? string.Empty, OperationData.Data == null);
-                if (ComboContents.Count > 0) ComboContentText =
-                        ComboContents.Count != 0 ? ComboContents[0].Text : string.Empty;
-                else ComboContentText = string.Empty;
+
+                ComboContentText =
+                    ComboContents.Count > 0 ? ComboContents.Count != 0 ?
+                        ComboContents[0].Text : string.Empty : string.Empty;
 
                 ComboAccountingSubjectText = value == null ? string.Empty : value.Subject;
 
@@ -724,12 +753,12 @@ namespace WPF.ViewModels
                     comboContentText = string.Empty;
                     Price = string.Empty;
                 }
-                else comboContentText = SelectedContent.Text;
+                else { comboContentText = SelectedContent.Text; }
 
                 SetDataOperationButtonEnabled();
                 ValidationProperty(nameof(ComboContentText), comboContentText);
                 CallPropertyChanged();
-                if (!string.IsNullOrEmpty(value)) SetContentProperty();
+                if (!string.IsNullOrEmpty(value)) { SetContentProperty(); }
                 else
                 {
                     Supplement = string.Empty;
@@ -768,22 +797,21 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetContentProperty()
         {
-            if (SelectedContent == null) return;
+            if (SelectedContent == null) { return; }
 
-            if (SelectedContent.Text.Contains("管理料")) SupplementRequiredString = "年度分";
-            else SupplementRequiredString = string.Empty;
+            SupplementRequiredString = SelectedContent.Text.Contains("管理料") ? "年度分" : string.Empty;
 
             IsSupplementVisiblity = SelectedContent != null && SelectedContent.Text.Contains("管理料");
 
             IsReducedTaxRateVisiblity = !IsSupplementVisiblity;
 
-            if (IsReducedTaxRateVisiblity) IsReducedTaxRate = SelectedContent.Text == "供物";
+            if (IsReducedTaxRateVisiblity) { IsReducedTaxRate = SelectedContent.Text == "供物"; }
 
             if (selectedContent.FlatRate > 0)
-                Price = selectedContent.FlatRate.ToString();
-            else Price = string.Empty;
+            { Price = selectedContent.FlatRate.ToString(); }
+            else { Price = string.Empty; }
 
-            if (SelectedAccountingSubject == null) return;
+            if (SelectedAccountingSubject == null) { return; }
 
             if (IsSupplementVisiblity)
             {
@@ -792,7 +820,7 @@ namespace WPF.ViewModels
                     $"{DateTime.Now.Year},{DateTime.Now.Year + 1}年度分";
                 SetDetailTitle("支払者名", $"必ず「{SupplementRequiredString}」の文字を入力");
             }
-            else SetDetailTitle("その他詳細", string.Empty);
+            else { SetDetailTitle("その他詳細", string.Empty); }
         }
         /// <summary>
         /// 詳細テキストブロックに表示するタイトル
@@ -890,8 +918,8 @@ namespace WPF.ViewModels
             set
             {
                 slipOutputDate = value;
-                if (slipOutputDate == DefaultDate) SlipOutputDateTitle = "伝票出力日（未出力）";
-                else SlipOutputDateTitle = "伝票出力日";
+                if (slipOutputDate == DefaultDate) { SlipOutputDateTitle = "伝票出力日（未出力）"; }
+                else { SlipOutputDateTitle = "伝票出力日"; }
                 CallPropertyChanged();
             }
         }
@@ -977,7 +1005,7 @@ namespace WPF.ViewModels
             set
             {
                 isSupplementVisiblity = value;
-                if (!value) Supplement = string.Empty;
+                if (!value) { Supplement = string.Empty; }
                 ValidationProperty(nameof(IsSupplementVisiblity), value);
                 CallPropertyChanged();
             }
@@ -991,7 +1019,7 @@ namespace WPF.ViewModels
             set
             {
                 isReducedTaxRateVisiblity = value;
-                if (!value) IsReducedTaxRate = false;
+                if (!value) { IsReducedTaxRate = false; }
                 CallPropertyChanged();
             }
         }
@@ -1030,7 +1058,7 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentCheckEnabled = value;
-                CallPropertyChanged();               
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1047,10 +1075,13 @@ namespace WPF.ViewModels
         }
         private void SetOutputDate(bool value)
         {
-            if (value) SlipOutputDate =
-                     OperationData.Data.OutputDate == DefaultDate ?
-                         DateTime.Today : OperationData.Data.OutputDate;
-            else SlipOutputDate = DefaultDate;
+            if (value)
+            {
+                SlipOutputDate =
+                    OperationData.Data.OutputDate == DefaultDate ?
+                        DateTime.Today : OperationData.Data.OutputDate;
+            }
+            else { SlipOutputDate = DefaultDate; }
         }
         /// <summary>
         /// 補足に促す注意
@@ -1080,8 +1111,11 @@ namespace WPF.ViewModels
         /// <summary>
         /// データ操作ボタンのEnabledを設定します
         /// </summary>
-        public void SetDataOperationButtonEnabled() =>
+        public void SetDataOperationButtonEnabled()
+        {
             IsDataOperationButtonEnabled = CanOperation();
+        }
+
         /// <summary>
         /// 出納データ操作時の必須のフィールドにデータが入力されているかを確認し、判定結果を返します
         /// </summary>
@@ -1094,11 +1128,11 @@ namespace WPF.ViewModels
                 !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
                 !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
 
-            if (!b) return false;
+            if (!b) { return false; }
 
-            if (OperationData.Data == null) return true;
+            if (OperationData.Data == null) { return true; }
 
-            if (OperationData.Data.OutputDate == DefaultDate) return true;
+            if (OperationData.Data.OutputDate == DefaultDate) { return true; }
 
             b = CurrentFiscalYearFirstDate < OperationData.Data.OutputDate;
 
@@ -1108,30 +1142,28 @@ namespace WPF.ViewModels
                     "更新は管理者権限所有者が、今年度中の出力データでのみ許可されます";
                 return false;
             }
-            else b = IsExceptMonthUpdate();
+            else { b = IsExceptMonthUpdate(); }
 
 
-            if (b) b = LoginRep.GetInstance().Rep.IsAdminPermisson;
-            else DataOperationButtonContent =
-                    "訂正期限が過ぎています。";
+            if (b) { b = LoginRep.GetInstance().Rep.IsAdminPermisson; }
+            else { DataOperationButtonContent = "訂正期限が過ぎています。"; }
 
             return b;
 
             bool IsInCorrectionDeadline()
             {
-                if (SlipOutputDate == DefaultDate) return true;
+                if (SlipOutputDate == DefaultDate) { return true; }
                 bool b = DateTime.Today > CurrentFiscalYearFirstDate.AddDays(20);
-                if (b) return OperationData.Data.OutputDate > CurrentFiscalYearFirstDate;
-                else return false;
+                return b && OperationData.Data.OutputDate > CurrentFiscalYearFirstDate;
             }
 
             bool IsExceptMonthUpdate()
             {
                 bool b = DateTime.Today.Month == OperationData.Data.OutputDate.Month;
-                
-                if (b) return true;
 
-                if(IsInCorrectionDeadline()) CreateConfirmationMessage();
+                if (b) { return true; }
+
+                if (IsInCorrectionDeadline()) { CreateConfirmationMessage(); }
 
                 return IsInCorrectionDeadline();
 
@@ -1150,37 +1182,44 @@ namespace WPF.ViewModels
             }
         }
 
-        public void ReceiptsAndExpenditureOperationNotify() => SetReceiptsAndExpenditureProperty();        
+        public void ReceiptsAndExpenditureOperationNotify() { SetReceiptsAndExpenditureProperty(); }
 
         public override void ValidationProperty(string propertyName, object value)
         {
             switch (propertyName)
             {
                 case nameof(ComboContentText):
-                    SetNullOrEmptyError(propertyName, value.ToString());
+                    SetNullOrEmptyError(propertyName, value);
                     break;
                 case nameof(ComboAccountingSubjectText):
-                    SetNullOrEmptyError(propertyName, value.ToString());
+                    SetNullOrEmptyError(propertyName, value);
                     break;
                 case nameof(ComboAccountingSubjectCode):
-                    SetNullOrEmptyError(propertyName, value.ToString());
+                    SetNullOrEmptyError(propertyName, value);
                     string s = (string)value;
                     ErrorsListOperation(s.Length != 3, propertyName, "コードは3桁で入力してください");
                     break;
                 case nameof(Price):
-                    SetNullOrEmptyError(propertyName, value.ToString());
+                    SetNullOrEmptyError(propertyName, value);
                     break;
                 case nameof(ComboCreditDeptText):
-                    SetNullOrEmptyError(propertyName, value.ToString());
-                    if (!string.IsNullOrEmpty(value.ToString())) ErrorsListOperation
-                        (SelectedCreditDept == null, propertyName, "貸方部門をリストから選択してください");
+                    SetNullOrEmptyError(propertyName, value);
+                    if (!string.IsNullOrEmpty(value.ToString()))
+                    {
+                        ErrorsListOperation
+                            (SelectedCreditDept == null, propertyName, "貸方部門をリストから選択してください");
+                    }
                     break;
                 case nameof(Supplement):
-                    if(ComboContentText.Contains("管理料"))
-                        SetNullOrEmptyError(propertyName, value.ToString());
+                    if (ComboContentText.Contains("管理料"))
+                    {
+                        SetNullOrEmptyError(propertyName, value);
+                    }
 
                     if (GetErrors(propertyName) == null)
+                    {
                         SetErrorSupplementRequiredStringContains();
+                    }
                     break;
                 case nameof(IsSupplementVisiblity):
                     if (!(bool)value)
@@ -1188,7 +1227,9 @@ namespace WPF.ViewModels
                         ErrorsListOperation(!string.IsNullOrEmpty(Supplement), nameof(Supplement),
                             "VisiblityがFalseの場合は空文字にしてください。");
                     }
-                    else SetErrorSupplementRequiredStringContains();
+                    else { SetErrorSupplementRequiredStringContains(); }
+                    break;
+                default:
                     break;
             }
 
@@ -1210,13 +1251,14 @@ namespace WPF.ViewModels
             IsValidityEnabled = CurrentOperation == DataOperation.更新;
             IsInputWizardEnabled = CurrentOperation == DataOperation.登録;
 
-            if (IsValidityEnabled)
-                ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
-            else ComboCreditDeptText = ComboCreditDepts[0].Dept;
+            ComboCreditDeptText =
+                IsValidityEnabled ? OperationData.Data.CreditDept.Dept : ComboCreditDepts[0].Dept;
         }
 
-        protected override void SetDataOperationButtonContent(DataOperation operation) =>
+        protected override void SetDataOperationButtonContent(DataOperation operation)
+        {
             DataOperationButtonContent = operation.ToString();
+        }
 
         protected override void SetDataList()
         {

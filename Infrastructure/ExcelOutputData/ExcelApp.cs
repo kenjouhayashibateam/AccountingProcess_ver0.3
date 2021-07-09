@@ -54,8 +54,8 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         ~ExcelApp()
         {
-            if (App == null) return;
-            if (App.Workbooks.Count == 0) App.Quit();
+            if (App == null) { return; }
+            if (App.Workbooks.Count == 0) { App.Quit(); }
         }
         /// <summary>
         /// データ出力エクセルファイルを開きます
@@ -98,9 +98,11 @@ namespace Infrastructure.ExcelOutputData
             myWorkbooks = App.Workbooks;
             //出力ファイルを検出して閉じる
             foreach (Workbook wb in myWorkbooks)
-                if (wb.Name == Properties.Resources.SaveFile) wb.Close(SaveChanges: false);
+            {
+                if (wb.Name == Properties.Resources.SaveFile) { wb.Close(SaveChanges: false); }
+            }
             //開いているワークブックがなければエクセルアプリケーションを終了する
-            if (myWorkbooks.Count == 0) App.Quit();
+            if (myWorkbooks.Count == 0) { App.Quit(); }
         }
         /// <summary>
         /// シートの余白を設定します
@@ -170,7 +172,8 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         /// <param name="x">メートル法での長さ</param>
         /// <returns>インチ法での長さ</returns>
-        protected double ToInch(double x) => x * 0.39370;
+        protected double ToInch(double x) { return x * 0.39370; }
+
         /// <summary>
         /// エクセルシートのCellの範囲を指定します
         /// </summary>
@@ -179,8 +182,10 @@ namespace Infrastructure.ExcelOutputData
         /// <param name="cell2Row">終点CellのRow</param>
         /// <param name="cell2Column">終点CellのCulumn</param>
         /// <returns>ClosedXML.Excel.Range</returns>
-        protected IXLRange MySheetCellRange(int cell1Row, int cell1Column, int cell2Row, int cell2Column) =>
-            myWorksheet.Range
+        protected IXLRange MySheetCellRange(int cell1Row, int cell1Column, int cell2Row, int cell2Column)
+        {
+            return myWorksheet.Range
                 (myWorksheet.Cell(cell1Row, cell1Column), myWorksheet.Cell(cell2Row, cell2Column));
+        }
     }
 }

@@ -119,14 +119,14 @@ namespace WPF.ViewModels
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             DataOutput = dataOutput;
             IsPreviousDayOutputEnabled = false;
-            PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount();
+            PreviousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
             SetProperty();
             SetDelegateCommand();
             DefaultListExpress();
             SetBalanceFinalAccount();
             RefreshList();
         }
-        public ReceiptsAndExpenditureMangementViewModel() : 
+        public ReceiptsAndExpenditureMangementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataOutput(),
                 DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
 
@@ -134,15 +134,22 @@ namespace WPF.ViewModels
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
         /// </summary>
-        private void CheckRevers() => PasswordCharCheck = !PasswordCharCheck;
-
-        public void SetSortColumns() => Pagination.SortColumns = new Dictionary<int, string>()
+        private void CheckRevers()
         {
-            {0, "ID"},
-            {1,"科目コード" },
-            {2,"入出金日" },
-            {3,"伝票出力日" }
-        };
+            PasswordCharCheck = !PasswordCharCheck;
+        }
+
+        public void SetSortColumns()
+        {
+            Pagination.SortColumns = new Dictionary<int, string>()
+            {
+                {0, "ID"},
+                {1,"科目コード" },
+                {2,"入出金日" },
+                {3,"伝票出力日" }
+            };
+        }
+
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
@@ -191,13 +198,15 @@ namespace WPF.ViewModels
                     DateTime.Today.AddDays(-10) :
                     DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             SearchEndDate = DateTime.Today;
-            switch(AccountingProcessLocation.Location)
+            switch (AccountingProcessLocation.Location)
             {
                 case "管理事務所":
                     IsLocationSearch = DateTime.Now.Hour >= ClosingCashboxHour;
                     break;
                 case "青蓮堂":
                     IsLocationSearch = true;
+                    break;
+                default:
                     break;
             }
             IsValidityTrueOnly = true;
@@ -1095,7 +1104,10 @@ namespace WPF.ViewModels
                 else ListAmount -= receiptsAndExpenditure.Price;
             }
 
-            if (AccountingProcessLocation.Location == "青蓮堂") TodayWroteList.Clear();
+            if (AccountingProcessLocation.Location == "青蓮堂")
+            {
+                TodayWroteList.Clear();
+            }
 
             int todayPayment = 0;
             int todayWithdrawal = default;
@@ -1222,13 +1234,15 @@ namespace WPF.ViewModels
             SetBalanceFinalAccount();
         }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}";
+        }
 
-        public void ReceiptsAndExpenditureOperationNotify() => RefreshList();
+        public void ReceiptsAndExpenditureOperationNotify() { RefreshList(); }
 
-        public void SortNotify() => ReferenceReceiptsAndExpenditures(true);
+        public void SortNotify() { ReferenceReceiptsAndExpenditures(true); }
 
-        public void PageNotify() => ReferenceReceiptsAndExpenditures(false);
+        public void PageNotify() { ReferenceReceiptsAndExpenditures(false); }
     }
 }

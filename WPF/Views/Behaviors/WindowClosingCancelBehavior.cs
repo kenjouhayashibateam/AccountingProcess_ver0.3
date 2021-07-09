@@ -17,11 +17,11 @@ namespace WPF.Views.Behaviors
             AssociatedObject.Closing += Window_Closing;
         }
 
-        private void Window_Closing(object sender,CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             Window window = sender as Window;
 
-            if (window.DataContext is IClosing) e.Cancel = (window.DataContext as IClosing).OnClosing();
+            if (window.DataContext is IClosing) { e.Cancel = (window.DataContext as IClosing).OnClosing(); }
         }
     }
 }

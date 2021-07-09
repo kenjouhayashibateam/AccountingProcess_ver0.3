@@ -25,15 +25,15 @@ namespace WPF.ViewModels.Commands
                 throw new ArgumentNullException(nameof(DelegateCommand) + ":" + nameof(canExecute));
         }
 
-        public bool CanExecute(object parameter) => _CanExecute();
+        public bool CanExecute(object parameter) { return _CanExecute(); }
 
-        public bool CanExecute() => _CanExecute();
+        public bool CanExecute() { return _CanExecute(); }
 
-        public void Execute(object parameter) => _Execute();
+        public void Execute(object parameter) { _Execute(); }
 
-        public void Execute() => _Execute();
+        public void Execute() { _Execute(); }
 
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+        public void RaiseCanExecuteChanged() { CommandManager.InvalidateRequerySuggested(); }
     }
 
     /// <summary>
@@ -60,10 +60,10 @@ namespace WPF.ViewModels.Commands
             _CanExecute = canExecute;
         }
 
-        public bool CanExecute(object parameter) => _CanExecute((T)parameter);
+        public bool CanExecute(object parameter) { return _CanExecute((T)parameter); }
 
-        public void Execute(object parameter) => _Execute((T)parameter);
+        public void Execute(object parameter) { _Execute((T)parameter); }
 
-        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+        public void RaiseCanExecuteChanged() { CommandManager.InvalidateRequerySuggested(); }
     }
 }

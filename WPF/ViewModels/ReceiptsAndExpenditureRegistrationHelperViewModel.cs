@@ -58,7 +58,7 @@ namespace WPF.ViewModels
             set
             {
                 searchContentText = value;
-                if(!string.IsNullOrEmpty(value)) SetList();
+                if (!string.IsNullOrEmpty(value)) { SetList(); }
                 CallPropertyChanged();
             }
         }
@@ -113,7 +113,7 @@ namespace WPF.ViewModels
             set
             {
                 searchAccountingSubject = value;
-                if (!string.IsNullOrEmpty(value)) SetList();
+                if (!string.IsNullOrEmpty(value)) { SetList(); }
                 CallPropertyChanged();
             }
         }
@@ -122,7 +122,9 @@ namespace WPF.ViewModels
         {
         }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"伝票内容逆引き入力{Space}:{AccountingProcessLocation.Location}";
+        }
     }
 }

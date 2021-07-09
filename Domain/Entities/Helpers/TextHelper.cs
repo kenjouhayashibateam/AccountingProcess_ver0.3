@@ -42,7 +42,7 @@ namespace Domain.Entities.Helpers
             get
             {
                 int year = DateTime.Today.Year;
-                if (DateTime.Today.Month < 4) year--;//1月から3月までは前年の年度になるので年を1引く
+                if (DateTime.Today.Month < 4) { year--; }//1月から3月までは前年の年度になるので年を1引く
                 return new DateTime(year, 4, 1);//年度の4月1日を返す
             }
         }
@@ -85,7 +85,7 @@ namespace Domain.Entities.Helpers
         /// <returns>000000</returns>
         public static int IntAmount(string amount)
         {
-            if (string.IsNullOrEmpty(amount)) return 0;
+            if (string.IsNullOrEmpty(amount)) { return 0; }
             string s = amount.Replace(Properties.Resources.Unit, string.Empty);//***,*** 円に対応する。円を削除
             s = s.Replace(",", string.Empty);
             return CommaDelimitedAmount(s) == string.Empty ? 0 : int.Parse(s);
@@ -119,14 +119,14 @@ namespace Domain.Entities.Helpers
         {
             byte[] soltValue = Encoding.UTF8.GetBytes(value);
             byte[] valueHash = new SHA256CryptoServiceProvider().ComputeHash(soltValue);
-            
+
             StringBuilder returnValue = new StringBuilder();
-            
-            foreach(byte b in valueHash)
+
+            foreach (byte b in valueHash)
             {
                 _ = returnValue.Append(b.ToString("x2"));
             }
-            
+
             return returnValue.ToString();
         }
         public static string GetEraInitial(DateTime dateTime)

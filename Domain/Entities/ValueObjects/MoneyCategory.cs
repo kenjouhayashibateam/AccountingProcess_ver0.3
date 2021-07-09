@@ -11,7 +11,6 @@ namespace Domain.Entities.ValueObjects
         /// 金種
         /// </summary>
         private readonly int Category;
-        private int count;
 
         /// <summary>
         /// 金種名
@@ -83,21 +82,21 @@ namespace Domain.Entities.ValueObjects
         /// 金種クラスコンストラクタ
         /// </summary>
         /// <param name="category">金種</param>
-        public MoneyCategory(int category) => Category = category;        
+        public MoneyCategory(int category) { Category = category; }
 
         /// <summary>
         /// 金銭の枚数
         /// </summary>
-        public int Count { get => count; set => count = value; }
+        public int Count { get; set; }
         /// <summary>
         /// 金額
         /// </summary>
-        public int Amount { get => Category * count; }
+        public int Amount => Category * Count;
 
         /// <summary>
         /// 表示用金額の文字列を返します。
         /// </summary>
         /// <returns>00,000,000 円</returns>
-        public string AmountWithUnit() => TextHelper.AmountWithUnit(Amount);
+        public string AmountWithUnit() { return TextHelper.AmountWithUnit(Amount); }
     }
 }

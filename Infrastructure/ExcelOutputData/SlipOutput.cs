@@ -45,7 +45,7 @@ namespace Infrastructure.ExcelOutputData
             string location = default;
             string creditDept = default;
             string clerk = default;
-
+            bool isTaxRate = false;
             bool isGoNext = false;
             int contentCount = 0;
             int inputRow = 0;
@@ -56,56 +56,50 @@ namespace Infrastructure.ExcelOutputData
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending
                 (r => r.IsPayment)
-                .ThenBy(r => r.Location)
                 .ThenBy(r => r.CreditDept.Dept)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
+                .ThenBy(r => r.IsReducedTaxRate)
+                .ThenBy(r => r.Location)
                 )
             {
-                if (rae.IsPayment != IsPayment) continue;
+                if (rae.IsPayment != IsPayment) { continue; }
                 //codeの初期値を設定する
-                if (string.IsNullOrEmpty(code)) code = rae.Content.AccountingSubject.SubjectCode;
+                if (string.IsNullOrEmpty(code)) { code = rae.Content.AccountingSubject.SubjectCode; }
                 //subjectの初期値を設定する
-                if (string.IsNullOrEmpty(subject)) subject = rae.Content.AccountingSubject.Subject;
+                if (string.IsNullOrEmpty(subject)) { subject = rae.Content.AccountingSubject.Subject; }
                 //currentDateの初期値を設定する
-                if (currentDate == TextHelper.DefaultDate) currentDate = rae.AccountActivityDate;
-                if (string.IsNullOrEmpty(content)) content = rae.Content.Text;//contentの初期値を設定する
-                if (string.IsNullOrEmpty(location)) location = rae.Location;
-                if (string.IsNullOrEmpty(creditDept)) creditDept = rae.CreditDept.Dept;
-                if (string.IsNullOrEmpty(clerk)) clerk = rae.RegistrationRep.FirstName;
+                if (currentDate == TextHelper.DefaultDate) { currentDate = rae.AccountActivityDate; }
+                if (string.IsNullOrEmpty(content)) { content = rae.Content.Text; }//contentの初期値を設定する}
+                if (string.IsNullOrEmpty(location)) { location = rae.Location; }
+                if (string.IsNullOrEmpty(creditDept)) { creditDept = rae.CreditDept.Dept; }
+                if (string.IsNullOrEmpty(clerk)) { clerk = rae.RegistrationRep.FirstName; }
                 contentCount++;
 
                 isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
 
                 //codeが同じならisGoNextにsubjectの比較結果を代入する
-                if (code == rae.Content.AccountingSubject.SubjectCode | isGoNext == false)
-                {
-                    isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
-                    if (!isGoNext) isGoNext = currentDate != rae.AccountActivityDate;//入出金日比較
-                    if (!isGoNext) isGoNext = creditDept != rae.CreditDept.Dept;
-                    if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault
-                        (s => s == rae.Content.AccountingSubject.SubjectCode) != null) 
-                            isGoNext = content != rae.Content.Text;
-                }
-                else isGoNext = true;
+                if (code == rae.Content.AccountingSubject.SubjectCode | isGoNext == false) { ValidateGonext(); }
+                else { isGoNext = true; }
 
                 currentDate = rae.AccountActivityDate;//入出金日を代入
-                if (!isGoNext) isGoNext = contentCount > 10;//11件以上は次のページに出力
+                if (!isGoNext) { isGoNext = contentCount > 10; }//11件以上は次のページに出力
                 //頁移動の有無による動作
                 if (isGoNext)
                 {
                     code = rae.Content.AccountingSubject.SubjectCode;
                     subject = rae.Content.AccountingSubject.Subject;
-                    content = rae.Content.Text;                    
+                    content = rae.Content.Text;
                     TotalPrice = rae.Price;
                     creditDept = rae.CreditDept.Dept;
                     location = rae.Location;
                     clerk = rae.RegistrationRep.FirstName;
+                    isTaxRate = rae.IsReducedTaxRate;
                     contentCount = 1;
                     NextPage();//次のページへ
                     PageStyle();
                 }
-                else TotalPrice += rae.Price;//ページ移動がなければ、総額に現在のデータのPriceを加算
+                else { TotalPrice += rae.Price; }//ページ移動がなければ、総額に現在のデータのPriceを加算
                 //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、
                 //セルの場所を設定する
                 if (contentCount <= 5)
@@ -126,17 +120,19 @@ namespace Infrastructure.ExcelOutputData
                     $"{rae.AccountActivityDate:M/d}";
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
                 myWorksheet.Cell(StartRowPosition + 2, 16).Value = rae.Location; 
-                string s;
-                if (rae.IsReducedTaxRate) s = "※軽減税率";
-                else s = string.Empty;
+                string s = rae.IsReducedTaxRate ? "※軽減税率" : string.Empty;
                 myWorksheet.Cell(StartRowPosition + 3, 16).Value = s;
                 for (int i = 0; i < TotalPrice.ToString().Length; i++)
+                {
                     myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
+                }
+
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
                 if (OutputRep.FirstName == clerk)
-                    myWorksheet.Cell(StartRowPosition + 6, 20).Value =
-                        OutputRep.FirstName;
+                {
+                    myWorksheet.Cell(StartRowPosition + 6, 20).Value = OutputRep.FirstName;
+                }
                 else
                 {
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value = clerk;
@@ -150,7 +146,7 @@ namespace Infrastructure.ExcelOutputData
                 string ass =
                     $"{rae.Content.AccountingSubject.Subject} : " +
                     $"{rae.Content.AccountingSubject.SubjectCode}";
-                switch(mySlipType)
+                switch (mySlipType)
                 {
                     case SlipType.Payment:
                         myWorksheet.Cell(StartRowPosition + 9, 14).Value = ass;
@@ -158,11 +154,24 @@ namespace Infrastructure.ExcelOutputData
                     case SlipType.Withdrawal:
                         myWorksheet.Cell(StartRowPosition + 9, 4).Value = ass;
                         break;
+                    case SlipType.Transter:
+                        break;
                     default:
                         break;
                 };
                 s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
+
+                void ValidateGonext()
+                {
+                    isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
+                    if (!isGoNext) { isGoNext = currentDate != rae.AccountActivityDate; }//入出金日比較
+                    if (!isGoNext) { isGoNext = creditDept != rae.CreditDept.Dept; }
+                    if (!isGoNext) { isGoNext = isTaxRate != rae.IsReducedTaxRate; }
+                    if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault
+                        (s => s == rae.Content.AccountingSubject.SubjectCode) != null)
+                    { isGoNext = content != rae.Content.Text; }
+                }
             }
         }
         /// <summary>
@@ -175,7 +184,7 @@ namespace Infrastructure.ExcelOutputData
         /// <param name="Value1">文字列1</param>
         /// <param name="Value2">文字列2</param>
         /// <returns></returns>
-        private bool IsStringEqualsReverse(string Value1, string Value2) => Value1 != Value2;
+        private bool IsStringEqualsReverse(string Value1, string Value2) { return Value1 != Value2; }
 
         public override void Output()
         {
@@ -236,23 +245,26 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
-        protected override double[] SetColumnSizes() => new double[] 
-        //{ 4.71, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29,
-        //10.14, 5.29, 0.92, 5.43, 0.92, 5.14 };
-        { 5, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29,
-            10.43, 5.29, 0.75, 5.43, 0.83, 4.57 };
+        protected override double[] SetColumnSizes()
+        {
+            return new double[]
+                { 5, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29,
+                    10.43, 5.29, 0.75, 5.43, 0.83, 4.57 };
+        }
 
-        protected override double[] SetRowSizes() => new double[]
-        //{ 28.5, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 29.25 };
-        { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 30 };
+        protected override double[] SetRowSizes()
+        {
+            return new double[]
+                { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 30 };
+        }
 
-    protected override double SetMaeginsBottom() => ToInch(0);
+        protected override double SetMaeginsBottom() { return ToInch(0); }
 
-        protected override double SetMaeginsLeft() => ToInch(2);
+        protected override double SetMaeginsLeft() { return ToInch(2); }
 
-        protected override double SetMaeginsRight() => ToInch(0.5);
+        protected override double SetMaeginsRight() { return ToInch(0.5); }
 
-        protected override double SetMaeginsTop() => ToInch(0);
+        protected override double SetMaeginsTop() { return ToInch(0); }
 
         protected override void SetMerge()
         {
@@ -271,13 +283,15 @@ namespace Infrastructure.ExcelOutputData
             _ = MySheetCellRange(StartRowPosition + 9, 16, StartRowPosition + 9, 19).Merge();
         }
 
-        protected override void SetSheetStyle() => myWorksheet.Style.Font.FontSize = 11;
+        protected override void SetSheetStyle() { myWorksheet.Style.Font.FontSize = 11; }
 
-        protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
 
-        protected override void SetList(IEnumerable outputList) =>
+        protected override void SetList(IEnumerable outputList)
+        {
             ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
+        }
 
-        protected override string SetSheetFontName() => "ＭＳ 明朝";
+        protected override string SetSheetFontName() { return "ＭＳ 明朝"; }
     }
 }

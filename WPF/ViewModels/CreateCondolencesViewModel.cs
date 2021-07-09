@@ -235,7 +235,7 @@ namespace WPF.ViewModels
 
             string location = IsLocationLimiting ? AccountingProcessLocation.Location : string.Empty;
 
-            var (count, list) =
+            (int count, ObservableCollection<Condolence> list) =
                 DataBaseConnect.ReferenceCondolence
                     (SearchStartDate, SearchEndDate, location, Pagination.PageCount);
             Condolences = list;

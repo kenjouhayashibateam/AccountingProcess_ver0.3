@@ -84,24 +84,24 @@ namespace Infrastructure.ExcelOutputData
             //管理事務所と青蓮堂でボーダースタイルを変える
             if (AccountingProcessLocation.Location == "管理事務所")
             {
-                MySheetCellRange(5, 3, 6, 5).Style
+                _ = MySheetCellRange(5, 3, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-                 MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+                _ = MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             }
             else
             {
-                MySheetCellRange(5, 5, 6, 5).Style
+                _ = MySheetCellRange(5, 5, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin);
             }
 
-            MySheetCellRange(9,1,10,5).Style
+            _ = MySheetCellRange(9, 1, 10, 5).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
@@ -111,24 +111,24 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetCellsStyle()
         {
             myWorksheet.Cell(2, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            myWorksheet.Cell(3, 1).Style
+            _ = myWorksheet.Cell(3, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             MySheetCellRange(5, 3, 5, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            myWorksheet.Cell(6, 5).Style
+            _ = myWorksheet.Cell(6, 5).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             myWorksheet.Cell(8, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-            MySheetCellRange(9, 1, 9, 5).Style
+            _ = MySheetCellRange(9, 1, 9, 5).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-            MySheetCellRange(10, 1, 10, 5).Style
+            _ = MySheetCellRange(10, 1, 10, 5).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
             MySheetCellRange(12, 2, 14, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
         }
 
-        protected override double[] SetColumnSizes() => new double[] { 16, 16, 16, 16, 16 };
+        protected override double[] SetColumnSizes() { return new double[] { 16, 16, 16, 16, 16 }; }
 
         protected override void SetDataStrings()
         {
@@ -168,28 +168,31 @@ namespace Infrastructure.ExcelOutputData
             }
         }
 
-        protected override double SetMaeginsBottom() => ToInch(1.2);
+        protected override double SetMaeginsBottom() { return ToInch(1.2); }
 
-        protected override double SetMaeginsLeft() => ToInch(1);
+        protected override double SetMaeginsLeft() { return ToInch(1); }
 
-        protected override double SetMaeginsRight() => ToInch(0.5);
+        protected override double SetMaeginsRight() { return ToInch(0.5); }
 
-        protected override double SetMaeginsTop() => ToInch(1.3);
+        protected override double SetMaeginsTop() { return ToInch(1.3); }
 
         protected override void SetMerge()
         {
-            MySheetCellRange(2, 4, 2, 5).Merge();
-            MySheetCellRange(3, 1, 3, 5).Merge();
-            MySheetCellRange(12, 2, 12, 3).Merge();
-            MySheetCellRange(13, 2, 13, 3).Merge();
-            MySheetCellRange(14, 2, 14, 3).Merge();
-            MySheetCellRange(16, 4, 16, 5).Merge();
+            _ = MySheetCellRange(2, 4, 2, 5).Merge();
+            _ = MySheetCellRange(3, 1, 3, 5).Merge();
+            _ = MySheetCellRange(12, 2, 12, 3).Merge();
+            _ = MySheetCellRange(13, 2, 13, 3).Merge();
+            _ = MySheetCellRange(14, 2, 14, 3).Merge();
+            _ = MySheetCellRange(16, 4, 16, 5).Merge();
         }
 
-        protected override double[] SetRowSizes() => new double[]
-            { 51, 18, 64.5, 57, 18, 42, 126, 18.75, 20.25, 42, 27.75, 21, 21, 21, 40.5, 20.25 };
+        protected override double[] SetRowSizes()
+        {
+            return new double[]
+                { 51, 18, 64.5, 57, 18, 42, 126, 18.75, 20.25, 42, 27.75, 21, 21, 21, 40.5, 20.25 };
+        }
 
-        protected override string SetSheetFontName() => "ＭＳ ゴシック";
+        protected override string SetSheetFontName() { return "ＭＳ ゴシック"; }
 
         protected override void SetSheetStyle()
         {
@@ -205,6 +208,6 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(16, 4).Style.Font.FontSize = 16;
         }
 
-        protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.B5Paper; }
     }
 }

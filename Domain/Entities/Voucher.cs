@@ -15,7 +15,7 @@ namespace Domain.Entities
         /// <param name="totalAmount">総額</param>
         public Voucher
             (int id, string addressee, ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures,
-                DateTime outputDate,Rep outputRep, bool isValidity)
+                DateTime outputDate, Rep outputRep, bool isValidity)
         {
             ID = id;
             ReceiptsAndExpenditures = receiptsAndExpenditures;
@@ -49,7 +49,7 @@ namespace Domain.Entities
             {
                 int i = default;
                 foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures)
-                    i += rae.Price;
+                { i += rae.Price; }
                 return i;
             }
         }

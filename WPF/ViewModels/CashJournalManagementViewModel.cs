@@ -56,8 +56,8 @@ namespace WPF.ViewModels
                     (
                         DataBaseConnect.ReferenceReceiptsAndExpenditure
                             (DefaultDate, DateTime.Now, string.Empty, string.Empty, string.Empty, string.Empty,
-                                string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now, 
-                                searchDateStart,searchDateEnd)
+                                string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now,
+                                searchDateStart, searchDateEnd)
                     )
                 );
             OutputButtonContent = "出力";
@@ -137,7 +137,7 @@ namespace WPF.ViewModels
             {
                 case nameof(YearString):
                     {
-                        SetNullOrEmptyError(propertyName, (string)value);
+                        SetNullOrEmptyError(propertyName, value);
                         if (GetErrors(propertyName) == null) ErrorsListOperation
                                 (IntAmount((string)value) == 0, propertyName, "年が無効です");
                         if (GetErrors(propertyName) == null) ErrorsListOperation
@@ -149,7 +149,7 @@ namespace WPF.ViewModels
                     }
                 case nameof(MonthString):
                     {
-                        SetNullOrEmptyError(propertyName, (string)value);
+                        SetNullOrEmptyError(propertyName, value);
                         int y = IntAmount(YearString);
                         int m = IntAmount((string)value);
                         ErrorsListOperation(!Enumerable.Range(1, 12).Contains(m), propertyName, "月が無効です");
@@ -163,7 +163,10 @@ namespace WPF.ViewModels
             SetOutputButtonEnabled();
         }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle =
-            $"出納帳出力{Space}:{Space}{AccountingProcessLocation.Location}";
+        protected override void SetWindowDefaultTitle()
+        {
+            DefaultWindowTitle =
+                $"出納帳出力{Space}:{Space}{AccountingProcessLocation.Location}";
+        }
     }
 }

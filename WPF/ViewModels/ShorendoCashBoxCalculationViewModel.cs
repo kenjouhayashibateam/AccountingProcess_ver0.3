@@ -53,7 +53,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
-            if (Cashbox.GetInstance().GetTotalAmount() == 0) return;
+            if (Cashbox.GetInstance().GetTotalAmount() == 0) { return; }
             OneYenCount = Cashbox.GetInstance().MoneyCategorys[OneYen].Count;
             FiveYenCount = Cashbox.GetInstance().MoneyCategorys[FiveYen].Count;
             TenYenCount = Cashbox.GetInstance().MoneyCategorys[TenYen].Count;
@@ -340,7 +340,9 @@ namespace WPF.ViewModels
         public override void ValidationProperty(string propertyName, object value)
         { }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
+        }
     }
 }

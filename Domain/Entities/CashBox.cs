@@ -62,7 +62,8 @@ namespace Domain.Entities
         /// 金庫クラスのインスタンスを取得します
         /// </summary>
         /// <returns>シングルトンの金庫</returns>
-        public static Cashbox GetInstance() => cashbox;
+        public static Cashbox GetInstance() { return cashbox; }
+
         /// <summary>
         /// 総金額を取得します
         /// </summary>
@@ -71,16 +72,16 @@ namespace Domain.Entities
         {
             int I = 0;//総金額変数
 
-            foreach (OtherMoney om in OtherMoneys) I += om.Amount;//OtherMoneysの金額をすべて加算する
+            foreach (OtherMoney om in OtherMoneys) { I += om.Amount; }//OtherMoneysの金額をすべて加算する
             //MoneyCategorysの金額をすべて加算する
-            foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys) 
-                I += mc.Value.Amount;
+            foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys)
+            { I += mc.Value.Amount; }
             return I;
         }
         /// <summary>
         /// 総金額をカンマ区切り、単位をつけて返します
         /// </summary>
         /// <returns>0,000,000 円</returns>
-        public string GetTotalAmountWithUnit() => TextHelper.AmountWithUnit(GetTotalAmount());
+        public string GetTotalAmountWithUnit() { return TextHelper.AmountWithUnit(GetTotalAmount()); }
     }
 }

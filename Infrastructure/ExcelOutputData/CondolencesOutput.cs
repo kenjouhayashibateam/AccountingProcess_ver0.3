@@ -15,10 +15,12 @@ namespace Infrastructure.ExcelOutputData
         private readonly ObservableCollection<Condolence> Condolences;
         private int pageNumber = 1;
         //Rowのスタート位置インデックス
-        private int StartRowIndex { get => ((pageNumber - 1) * SetRowSizes().Length); }
+        private int StartRowIndex => (pageNumber - 1) * SetRowSizes().Length;
 
-        public CondolencesOutput(ObservableCollection<Condolence> condolences) =>
+        public CondolencesOutput(ObservableCollection<Condolence> condolences)
+        {
             Condolences = condolences;
+        }
 
         protected override void SetBorderStyle()
         {
@@ -60,8 +62,11 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
         }
 
-        protected override double[] SetColumnSizes() => new double[]
-            {4.86,9,6.29,6.29,11.71,11.71,11.71,11.71,11.71,11.71,6.14,6.14,6.14,6.14,12.71};
+        protected override double[] SetColumnSizes()
+        {
+            return new double[]
+                {4.86,9,6.29,6.29,11.71,11.71,11.71,11.71,11.71,11.71,6.14,6.14,6.14,6.14,12.71};
+        }
 
         protected override void SetDataStrings()
         {
@@ -108,7 +113,7 @@ namespace Infrastructure.ExcelOutputData
                 }
                 currentRow = StartRowIndex + i;
                 //前のデータと日付が変わった時点で、同じ日付のセルを結合する
-                if(currentDate!=condolence.AccountActivityDate)
+                if (currentDate != condolence.AccountActivityDate)
                 {
                     _ = MySheetCellRange(dateMergeStartRow, 1, currentRow - 1, 1).Merge();
                     currentDate = condolence.AccountActivityDate;
@@ -128,7 +133,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(currentRow, 10).Value = AmountWithUnit(condolence.SocialGathering);
                 myWorksheet.Cell(currentRow, 11).Value = condolence.CounterReceiver;
                 myWorksheet.Cell(currentRow, 12).Value = condolence.MailRepresentative;
-                myWorksheet.Cell(currentRow,15).Value= condolence.Note;
+                myWorksheet.Cell(currentRow, 15).Value = condolence.Note;
                 i++;
             }
             _ = MySheetCellRange(dateMergeStartRow, 1, currentRow, 1).Merge();
@@ -146,7 +151,7 @@ namespace Infrastructure.ExcelOutputData
 
             void SetNewPage()
             {
-                if (pageNumber == 1) return;
+                if (pageNumber == 1) { return; }
                 SetCellsStyle();
                 SetMerge();
                 SetBorderStyle();
@@ -155,25 +160,32 @@ namespace Infrastructure.ExcelOutputData
             }
         }
 
-        protected override double SetMaeginsBottom() => ToInch(1.4);
+        protected override double SetMaeginsBottom() { return ToInch(1.4); }
 
-        protected override double SetMaeginsLeft() => ToInch(0.1);
+        protected override double SetMaeginsLeft() { return ToInch(0.1); }
 
-        protected override double SetMaeginsRight() => ToInch(0.1);
+        protected override double SetMaeginsRight() { return ToInch(0.1); }
 
-        protected override double SetMaeginsTop() => ToInch(1.9);
+        protected override double SetMaeginsTop() { return ToInch(1.9); }
 
-        protected override void SetMerge() => 
-            MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 1, SetColumnSizes().Length).Merge();
+        protected override void SetMerge()
+        {
+            _ = MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 1, SetColumnSizes().Length).Merge();
+        }
 
-        protected override double[] SetRowSizes() => new double[]
-            { 20.5, 13, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5};
+        protected override double[] SetRowSizes()
+        {
+            return new double[]
+                { 20.5, 13, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5, 34.5};
+        }
 
-        protected override string SetSheetFontName() => "ＭＳ ゴシック";
+        protected override string SetSheetFontName() { return "ＭＳ ゴシック"; }
 
-        protected override void SetSheetStyle()=>
+        protected override void SetSheetStyle()
+        {
             myWorksheet.Style.NumberFormat.Format = "@";
+        }
 
-        protected override XLPaperSize SheetPaperSize() => XLPaperSize.A4Paper;
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
     }
 }

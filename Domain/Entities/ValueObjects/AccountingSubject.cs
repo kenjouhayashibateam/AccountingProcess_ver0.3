@@ -24,14 +24,7 @@
         /// <summary>
         /// IDの数字
         /// </summary>
-        public int Number
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ID)) { return 0; }
-                return int.Parse(ID.Replace("accounting_subject", string.Empty));
-            }
-        }
+        public int Number => string.IsNullOrEmpty(ID) ? 0 : int.Parse(ID.Replace("accounting_subject", string.Empty));
 
         public AccountingSubject(string id, string subjectCode, string subject, bool isValidity)
         {
@@ -41,11 +34,11 @@
             IsValidity = isValidity;
         }
 
-        public override int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode() { return base.GetHashCode(); }
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !GetType().Equals(obj.GetType())) return false;
+            if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
             else
             {
                 AccountingSubject accountingSubject = (AccountingSubject)obj;

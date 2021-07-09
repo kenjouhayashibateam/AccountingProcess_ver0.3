@@ -23,13 +23,13 @@ namespace Infrastructure.ExcelOutputData
             PrepaidDate = prepaidDate;
         }
 
-        private int CopyColumnPosition(int originalColumn) =>
-            originalColumn + SetColumnSizes().Length / 2 + 1;
+        private int CopyColumnPosition(int originalColumn)
+        { return originalColumn + SetColumnSizes().Length / 2 + 1; }
 
         protected override void SetBorderStyle()
         {
             //ボーダーをすべて消去
-            myWorksheet.Style
+            _ = myWorksheet.Style
                 .Border.SetLeftBorder(XLBorderStyleValues.None)
                 .Border.SetTopBorder(XLBorderStyleValues.None)
                 .Border.SetRightBorder(XLBorderStyleValues.None)
@@ -49,19 +49,21 @@ namespace Infrastructure.ExcelOutputData
                 SetBottomBorderThin(row1, column1, row2, column2);
                 SetBottomBorderThin(row1, CopyColumnPosition(column1), row2, CopyColumnPosition(column2));
             }
-            void SetBottomBorderThin(int row1, int column1, int row2, int column2) =>
-                MySheetCellRange(row1, column1, row2, column2).Style.
+            void SetBottomBorderThin(int row1, int column1, int row2, int column2)
+            {
+                _ = MySheetCellRange(row1, column1, row2, column2).Style.
                     Border.SetBottomBorder(XLBorderStyleValues.Thin);
+            }
 
             void SetClerkMarkField(int row1, int column1, int row2, int column2)
             {
-                MySheetCellRange(row1, column1, row2, column2).Style
+                _ = MySheetCellRange(row1, column1, row2, column2).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetDiagonalBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin);
-                MySheetCellRange(14, CopyColumnPosition(9), 16, CopyColumnPosition(10)).Style
+                _ = MySheetCellRange(14, CopyColumnPosition(9), 16, CopyColumnPosition(10)).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
@@ -88,8 +90,8 @@ namespace Infrastructure.ExcelOutputData
             //宛名欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Bottom, 18);
             SetRangeProperyOriginalAndCopy(3, 1, 3, 4);
-            myWorksheet.Cell(3, 1).Style.Alignment.SetShrinkToFit(true);
-            myWorksheet.Cell(3, CopyColumnPosition(1)).Style.Alignment.SetShrinkToFit(true);
+            _ = myWorksheet.Cell(3, 1).Style.Alignment.SetShrinkToFit(true);
+            _ = myWorksheet.Cell(3, CopyColumnPosition(1)).Style.Alignment.SetShrinkToFit(true);
             SetLocalProperty(XLAlignmentHorizontalValues.Right, XLAlignmentVerticalValues.Bottom, 18);
             SetCellPropertyOriginalAndCopy(3, 5);
             //冥加金文字列
@@ -107,8 +109,8 @@ namespace Infrastructure.ExcelOutputData
             //但し書き欄
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Center, 14);
             SetRangeProperyOriginalAndCopy(7, 2, 10, 9);
-            MySheetCellRange(7, 2, 10, 9).Style.Alignment.SetShrinkToFit(true);
-            MySheetCellRange(7, CopyColumnPosition(2), 10, CopyColumnPosition(9)).Style
+            _ = MySheetCellRange(7, 2, 10, 9).Style.Alignment.SetShrinkToFit(true);
+            _ = MySheetCellRange(7, CopyColumnPosition(2), 10, CopyColumnPosition(9)).Style
                 .Alignment.SetShrinkToFit(true);
             //上記有難くお受けしました文字列
             SetLocalProperty(XLAlignmentHorizontalValues.Center, XLAlignmentVerticalValues.Bottom, 11);
@@ -153,22 +155,29 @@ namespace Infrastructure.ExcelOutputData
                                                                     CopyColumnPosition(column2));
             }
 
-            void SetRangeAlignmentAndFontSize(int row1, int column1, int row2, int column2) =>
-                MySheetCellRange(row1, column1, row2, column2).Style
+            void SetRangeAlignmentAndFontSize(int row1, int column1, int row2, int column2)
+            {
+                _ = MySheetCellRange(row1, column1, row2, column2).Style
                     .Alignment.SetHorizontal(horizontal)
                     .Alignment.SetVertical(vertical)
                     .Font.SetFontSize(fontSize);
+            }
 
-            void SetAlignmentAndFontSize(int row, int column) =>
-                myWorksheet.Cell(row, column).Style
+            void SetAlignmentAndFontSize(int row, int column)
+            {
+                _ = myWorksheet.Cell(row, column).Style
                     .Alignment.SetHorizontal(horizontal)
                     .Alignment.SetVertical(vertical)
                     .Font.SetFontSize(fontSize);
+            }
         }
 
-        protected override double[] SetColumnSizes() => new double[]
-        { 3.13, 6.88, 3.13, 1.38, 6.88, 4,7.86, 3.13, 3.13, 3.5, 14.86,
-            3.13, 6.88, 3.13, 1.38, 6.88,  4,7.86, 3.13, 3.13, 3.5 };
+        protected override double[] SetColumnSizes()
+        {
+            return new double[]
+            { 3.13, 6.88, 3.13, 1.38, 6.88, 4,7.86, 3.13, 3.13, 3.5, 14.86,
+                3.13, 6.88, 3.13, 1.38, 6.88,  4,7.86, 3.13, 3.13, 3.5 };
+        }
 
         protected override void SetDataStrings()
         {
@@ -178,18 +187,16 @@ namespace Infrastructure.ExcelOutputData
            
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
-            if (IsReissue) SetStringOriginalAndCopy(2, 2, "※再発行");
+            if (IsReissue) { SetStringOriginalAndCopy(2, 2, "※再発行"); }
             //ナンバー
             SetStringOriginalAndCopy(1, 8, $"№{VoucherData.ID}");
             //日付
             SetStringOriginalAndCopy(2, 7, VoucherData.OutputDate.ToString("yyyy年MM月dd日"));
             //宛名
-            if (VoucherData.Addressee.Length == 2)
-            {
-                addresseeText = $"{VoucherData.Addressee.Substring(0, 1)}{SpaceF}" +
-                    $"{VoucherData.Addressee.Substring(1, 1)}";
-            }
-            else addresseeText = VoucherData.Addressee;
+            addresseeText = VoucherData.Addressee.Length == 2
+                ? $"{VoucherData.Addressee.Substring(0, 1)}{SpaceF}" +
+                    $"{VoucherData.Addressee.Substring(1, 1)}"
+                : VoucherData.Addressee;
             SetStringOriginalAndCopy(3, 1, addresseeText);
             SetStringOriginalAndCopy(3, 5, "様");
             //総額
@@ -199,10 +206,10 @@ namespace Infrastructure.ExcelOutputData
             SetStringOriginalAndCopy(5, 8, "円也");
             SetStringOriginalAndCopy(6, 2, "但し");
             //事前領収の日付
-            if (PrepaidDate != DefaultDate) SetStringOriginalAndCopy(6, 7, $"※{PrepaidDate:M/d}ご法事");
+            if (PrepaidDate != DefaultDate) { SetStringOriginalAndCopy(6, 7, $"※{PrepaidDate:M/d}ご法事"); }
             //但し書き
-            if (VoucherData.ReceiptsAndExpenditures.Count < 5) SingleLineOutput();
-            else MultipleLineOutput();
+            if (VoucherData.ReceiptsAndExpenditures.Count < 5) { SingleLineOutput(); }
+            else { MultipleLineOutput(); }
             SetStringOriginalAndCopy(11, 2, "上記有難くお受けいたしました");
             //団体名、電話番号  
             if (VoucherData.ReceiptsAndExpenditures[0].CreditDept.Dept == "春秋苑")
@@ -222,8 +229,8 @@ namespace Infrastructure.ExcelOutputData
             //住所
             SetStringOriginalAndCopy(15, 3, "川崎市多摩区南生田８－１－１");
             string imagePath = @".\files\ReceiptStamp.png";
-            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 7));
-            myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 18));
+            _ = myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 7));
+            _ = myWorksheet.AddPicture(imagePath).MoveTo(myWorksheet.Cell(13, 18));
             //係
             SetStringOriginalAndCopy(14, 9, "係");
             LoginRep loginRep = LoginRep.GetInstance();
@@ -235,7 +242,7 @@ namespace Infrastructure.ExcelOutputData
                 SetString(row, CopyColumnPosition(column), value);
             }
 
-            void SetString(int row, int column, string value) => myWorksheet.Cell(row, column).Value = value;
+            void SetString(int row, int column, string value) { myWorksheet.Cell(row, column).Value = value; }
 
             void SingleLineOutput()
             {
@@ -290,8 +297,8 @@ namespace Infrastructure.ExcelOutputData
                         i--;
                     }
 
-                    if (i > 3) SetStringOriginalAndCopy(10 - j, 2, ProvisoString(rae));
-                    else SetStringOriginalAndCopy(10 - i, 6, ProvisoString(rae));
+                    if (i > 3) { SetStringOriginalAndCopy(10 - j, 2, ProvisoString(rae)); }
+                    else { SetStringOriginalAndCopy(10 - i, 6, ProvisoString(rae)); }
                 }
             }
 
@@ -302,19 +309,21 @@ namespace Infrastructure.ExcelOutputData
                 {
                     string[] array = rae.Detail.Split(' ');
                     foreach (string t in array)
-                        if (t.Contains("年度分")) s = $"{Space}{t}";
+                    {
+                        if (t.Contains("年度分")) { s = $"{Space}{t}"; }
+                    }
                 }
                 return s;
             }
-        } 
-  
-        protected override double SetMaeginsBottom() => ToInch(1.3);
+        }
 
-        protected override double SetMaeginsLeft() => ToInch(1.3);
+        protected override double SetMaeginsBottom() { return ToInch(1.3); }
 
-        protected override double SetMaeginsRight() => ToInch(1.3);
+        protected override double SetMaeginsLeft() { return ToInch(1.3); }
 
-        protected override double SetMaeginsTop() => ToInch(1.9);
+        protected override double SetMaeginsRight() { return ToInch(1.3); }
+
+        protected override double SetMaeginsTop() { return ToInch(1.9); }
 
         protected override void SetMerge()
         {
@@ -370,16 +379,19 @@ namespace Infrastructure.ExcelOutputData
 
             void SetMergeOriginalAndCopy(int row1, int column1, int row2, int column2)
             {
-                MySheetCellRange(row1, column1, row2, column2).Merge();
-                MySheetCellRange
+                _ = MySheetCellRange(row1, column1, row2, column2).Merge();
+                _ = MySheetCellRange
                     (row1, CopyColumnPosition(column1), row2, CopyColumnPosition(column2)).Merge();
             }
         }
 
-        protected override double[] SetRowSizes() => new double[] 
+        protected override double[] SetRowSizes()
+        {
+            return new double[]
             { 37, 18, 37.5, 37.5, 37.5, 37.5, 22.5, 22.5, 22.5, 22.5, 37.5, 18, 18.5, 18.5, 18, 18 };
+        }
 
-        protected override string SetSheetFontName() => "ＭＳ 明朝";
+        protected override string SetSheetFontName() { return "ＭＳ 明朝"; }
 
         protected override void SetSheetStyle()
         {
@@ -387,6 +399,6 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
         }
 
-        protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.B5Paper; }
     }
 }

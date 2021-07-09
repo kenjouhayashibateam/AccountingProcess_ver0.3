@@ -6,7 +6,7 @@ namespace Infrastructure
     /// <summary>
     /// ログファイル出力クラス
     /// </summary>
-  　public  class LogFileInfrastructure : ILogger
+    public class LogFileInfrastructure : ILogger
     {
         /// <summary>
         /// ログを出力します

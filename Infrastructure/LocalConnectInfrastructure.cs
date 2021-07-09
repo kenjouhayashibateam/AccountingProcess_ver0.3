@@ -10,21 +10,28 @@ namespace Infrastructure
 {
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
-        public AccountingSubject CallAccountingSubject(string id) => 
-            new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
+        public AccountingSubject CallAccountingSubject(string id)
+        {
+            return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
+        }
 
-        public Content CallContent(string id) => 
-            new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true);
+        public Content CallContent(string id)
+        {
+            return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true);
+        }
 
-        public CreditDept CallCreditDept(string id) => new CreditDept("credit_dept0", "春秋苑", true,true);
+        public CreditDept CallCreditDept(string id)
+        {
+            return new CreditDept("credit_dept0", "春秋苑", true, true);
+        }
 
-        public int CallFinalAccountPerMonth() => 0;
+        public int CallFinalAccountPerMonth() { return 0; }
 
-        public int CallFinalAccountPerMonth(DateTime monthEnd) => 10000;
+        public int CallFinalAccountPerMonth(DateTime monthEnd) { return 10000; }
 
-        public Rep CallRep(string id) => new Rep("rep0", "林飛 顕誠", "aaa", true, true);
+        public Rep CallRep(string id) { return new Rep("rep0", "林飛 顕誠", "aaa", true, true); }
 
-        public int DeleteContentConvertText(string id) => 1;
+        public int DeleteContentConvertText(string id) { return 1; }
 
         public Dictionary<int, string> GetSoryoList()
         {
@@ -42,10 +49,11 @@ namespace Infrastructure
             return list;
         }
 
-        public int PreviousDayFinalAmount() => 0;
+        public int PreviousDayFinalAmount() { return 0; }
 
         public int ReceiptsAndExpenditurePreviousDayChange
-            (ReceiptsAndExpenditure receiptsAndExpenditure) => 0;
+            (ReceiptsAndExpenditure receiptsAndExpenditure)
+        { return 0; }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
             (string subjectCode, string subject, bool isTrueOnly)
@@ -262,10 +270,10 @@ namespace Infrastructure
                 new Content("content11",SuspensePayment,-1,"法事両替用",true),
                 new Content("content12",Seresa,-1,"入金",true)
             };
-            return list;            
+            return list;
         }
 
-        public string CallContentConvertText(string id) => null;
+        public string CallContentConvertText(string id) { return null; }
 
         public ObservableCollection<CreditDept> ReferenceCreditDept
             (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
@@ -292,8 +300,6 @@ namespace Infrastructure
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
                 ("accounting_subject11", "815", "冥加読経料", true);
-            //AccountingSubject OtherMiscellaneousIncome =
-            //new AccountingSubject("accounting_subject0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution =
                 new AccountingSubject("accounting_subject2", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome = 
@@ -414,8 +420,6 @@ namespace Infrastructure
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
                 ("accounting_subject11", "815", "冥加読経料", true);
-            //AccountingSubject OtherMiscellaneousIncome =
-            //new AccountingSubject("accounting_subject0", "882", "その他雑収入", true);
             AccountingSubject OtherContribution =
                 new AccountingSubject("accounting_subject2", "822", "その他冥加金", true);
             AccountingSubject OtherTyadokoroIncome =
@@ -493,51 +497,56 @@ namespace Infrastructure
             return list;
         }
 
-        public int Registration(Rep rep) => 1;
+        public int Registration(Rep rep) { return 1; }
 
-        public int Registration(AccountingSubject accountingSubject) => 1;
+        public int Registration(AccountingSubject accountingSubject) { return 1; }
 
-        public int Registration(CreditDept creditDept) => 1;
+        public int Registration(CreditDept creditDept) { return 1; }
 
-        public int Registration(Content content) => 1;
+        public int Registration(Content content) { return 1; }
 
-        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
+        public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure) { return 1; }
 
-        public int Registration(Condolence condolence) => 1;
+        public int Registration(Condolence condolence) { return 1; }
 
-        public int Registration(string id, string contentConvertText) => 1;
+        public int Registration(string id, string contentConvertText) { return 1; }
 
-        public int RegistrationPrecedingYearFinalAccount() => 1;
-        
-        public int Update(Rep rep) => 1;
+        public int RegistrationPrecedingYearFinalAccount() { return 1; }
 
-        public int Update(AccountingSubject accountingSubject) => 1;
+        public int Update(Rep rep) { return 1; }
 
-        public int Update(CreditDept creditDept) => 1;
+        public int Update(AccountingSubject accountingSubject) { return 1; }
 
-        public int Update(Content content) => 1;
+        public int Update(CreditDept creditDept) { return 1; }
 
-        public int Update(ReceiptsAndExpenditure receiptsAndExpenditure) => 1;
+        public int Update(Content content) { return 1; }
 
-        public int Update(Condolence condolence) => 1;
+        public int Update(ReceiptsAndExpenditure receiptsAndExpenditure) { return 1; }
 
-        public int Update(string id, string contentConvertText) => 1;
+        public int Update(Condolence condolence) { return 1; }
 
-        public int Registration(Voucher voucher) => 1;
+        public int Update(string id, string contentConvertText) { return 1; }
 
-        public Voucher CallLatestVoucher() =>
-            new Voucher(0, string.Empty,
+        public int Registration(Voucher voucher) { return 1; }
+
+        public Voucher CallLatestVoucher()
+        {
+            return new Voucher(0, string.Empty,
                 ReferenceReceiptsAndExpenditure(DateTime.Today, DateTime.Today, string.Empty, string.Empty,
-                        string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true, 
-                        DateTime.Today, DateTime.Today,DateTime.Today,DateTime.Today),
+                string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
+                DateTime.Today, DateTime.Today, DateTime.Today, DateTime.Today),
                 DateTime.Today, CallRep(string.Empty), true);
+        }
 
-        public int Registration(int voucherID, int receiptsAndExpenditureID) => 1;
+        public int Registration(int voucherID, int receiptsAndExpenditureID) { return 1; }
 
-        public Content CallLatestContent() => new Content
-                    ("content3", CallAccountingSubject(string.Empty), -1, "管理料", true);
+        public Content CallLatestContent()
+        {
+            return new Content
+                ("content3", CallAccountingSubject(string.Empty), -1, "管理料", true);
+        }
 
-        public int Update(Voucher voucher) => 1;
+        public int Update(Voucher voucher) { return 1; }
 
         public ObservableCollection<Voucher> ReferenceVoucher
             (DateTime outputDateStart, DateTime outputDateEnd, bool isValidityTrueOnly)
@@ -590,6 +599,6 @@ namespace Infrastructure
             return returnList;
         }
 
-        public int DeleteCondolence(int condolenceID) => 1;
+        public int DeleteCondolence(int condolenceID) { return 1; }
     }
 }

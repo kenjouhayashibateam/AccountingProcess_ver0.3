@@ -78,8 +78,10 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
         }
 
-        protected override double[] SetColumnSizes() => new Double[] 
-            { 12.86, 6.88, 14.38, 12.86, 6.75, 6.75, 6.75 };
+        protected override double[] SetColumnSizes()
+        {
+            return new double[] { 12.86, 6.88, 14.38, 12.86, 6.75, 6.75, 6.75 };
+        }
 
         protected override void SetDataStrings()
         {
@@ -91,8 +93,10 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(1, 6).Value = "副住職";
             myWorksheet.Cell(1, 7).Value = "係";
             LoginRep loginRep = LoginRep.GetInstance();
-            if (loginRep.Rep != null) myWorksheet.Cell(2, 7).Value =
-                       TextHelper.GetFirstName(loginRep.Rep.Name);
+            if (loginRep.Rep != null)
+            {
+                myWorksheet.Cell(2, 7).Value = TextHelper.GetFirstName(loginRep.Rep.Name);
+            }
 
             myWorksheet.Cell(3, 1).Value = "金種";
             myWorksheet.Cell(3, 2).Value = "数量";
@@ -173,7 +177,8 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(15, 5).Value = "金額";
 
             for (int i = 0; i < myCashbox.OtherMoneys.Length; i++)
-            if (i < 4)
+            {
+                if (i < 4)
                 {
                     myWorksheet.Cell(16 + i, 1).Value = myCashbox.OtherMoneys[i].Title;
                     myWorksheet.Cell(16 + i, 2).Value =
@@ -185,17 +190,18 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(16 + (i - 4), 5).Value =
                         TextHelper.AmountWithUnit(myCashbox.OtherMoneys[i].Amount);
                 }
-            
+            }
+
             myWorksheet.Cell(21, 1).Value = $"合計　{myCashbox.GetTotalAmountWithUnit()}";
         }
 
-        protected override double SetMaeginsBottom() => ToInch(1.91);
+        protected override double SetMaeginsBottom() { return ToInch(1.91); }
 
-        protected override double SetMaeginsLeft() => ToInch(1.78);
+        protected override double SetMaeginsLeft() { return ToInch(1.78); }
 
-        protected override double SetMaeginsRight() => ToInch(1.78);
+        protected override double SetMaeginsRight() { return ToInch(1.78); }
 
-        protected override double SetMaeginsTop() => ToInch(1.91);
+        protected override double SetMaeginsTop() { return ToInch(1.91); }
 
         protected override void SetMerge()
         {
@@ -222,11 +228,14 @@ namespace Infrastructure.ExcelOutputData
             _ = MySheetCellRange(21, 1, 21, 7).Merge();
         }
 
-        protected override double[] SetRowSizes() =>
-            new double[] { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 
+        protected override double[] SetRowSizes()
+        {
+            return new double[] 
+                { 18.75, 41.25, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75,
                                     18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 18.75, 32.25 };
-        
-        protected override XLPaperSize SheetPaperSize() => XLPaperSize.B5Paper;        
+        }
+
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.B5Paper; }
 
         protected override void SetSheetStyle()
         {
@@ -235,6 +244,6 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(21, 1).Style.Font.FontSize = 20;
         }
 
-        protected override string SetSheetFontName() => "ＭＳ ゴシック";
+        protected override string SetSheetFontName() { return "ＭＳ ゴシック"; }
     }
 }

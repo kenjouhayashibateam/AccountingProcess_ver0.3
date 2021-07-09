@@ -35,11 +35,11 @@
         /// </summary>
         public bool IsValidity { get; set; }
 
-        public override int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode() { return base.GetHashCode(); }
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !GetType().Equals(obj.GetType())) return false;
+            if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
             else
             {
                 Content content = (Content)obj;

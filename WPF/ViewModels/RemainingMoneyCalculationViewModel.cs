@@ -105,7 +105,7 @@ namespace WPF.ViewModels
             {
                 fiveThousandYenCount = value;
                 myCashbox.MoneyCategorys[FiveThousandYen].Count = fiveThousandYenCount;
-                FiveThousandYenAmountWithUnit = 
+                FiveThousandYenAmountWithUnit =
                     myCashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
@@ -350,7 +350,7 @@ namespace WPF.ViewModels
                 fiveHundredYenBundleCount = value;
                 myCashbox.MoneyCategorys[FiveHundredYenBundle].Count =
                     fiveHundredYenBundleCount;
-                FiveHundredYenBundleAmountWithUnit = 
+                FiveHundredYenBundleAmountWithUnit =
                     myCashbox.MoneyCategorys[FiveHundredYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
@@ -379,7 +379,7 @@ namespace WPF.ViewModels
                 oneHundredYenBundleCount = value;
                 myCashbox.MoneyCategorys[OneHundredYenBundle].Count =
                     oneHundredYenBundleCount;
-                OneHundredYenBundleAmountWithUnit = 
+                OneHundredYenBundleAmountWithUnit =
                     myCashbox.MoneyCategorys[OneHundredYenBundle].AmountWithUnit();
                 TotalAmount = myCashbox.GetTotalAmountWithUnit();
                 CallPropertyChanged();
@@ -520,8 +520,8 @@ namespace WPF.ViewModels
         {
             otherMoneyAmountDisplayValue = TextHelper.CommaDelimitedAmount(value);
 
-            myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount = 
-                otherMoneyAmountDisplayValue != string.Empty ? 
+            myCashbox.OtherMoneys[otherMoneyNumber - 1].Amount =
+                otherMoneyAmountDisplayValue != string.Empty ?
                     _ = TextHelper.IntAmount(otherMoneyAmountDisplayValue) : 0;
             TotalAmount = myCashbox.GetTotalAmountWithUnit();
         }
@@ -530,8 +530,11 @@ namespace WPF.ViewModels
         /// </summary>
         /// <param name="value">内容</param>
         /// <param name="otherMoneyNumber">欄のインデックス</param>
-        private void SetOtherMontyTitle(string value, int otherMoneyNumber) => 
-            myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;        
+        private void SetOtherMontyTitle(string value, int otherMoneyNumber)
+        {
+            myCashbox.OtherMoneys[otherMoneyNumber - 1].Title = value;
+        }
+
         /// <summary>
         /// その他金庫等1の内容名
         /// </summary>
@@ -824,36 +827,36 @@ namespace WPF.ViewModels
             FiveHundredYenBundleCount = myCashbox.MoneyCategorys[FiveHundredYenBundle].Count;
 
             OtherMoneyTitle1 = myCashbox.OtherMoneys[0].Title;
-            OtherMoneyAmountDisplayValue1 = 
-                myCashbox.OtherMoneys[0].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue1 =
+                myCashbox.OtherMoneys[0].Amount != 0 ?
                     myCashbox.OtherMoneys[0].Amount.ToString() : string.Empty;
             OtherMoneyTitle2 = myCashbox.OtherMoneys[1].Title;
-            OtherMoneyAmountDisplayValue2 = 
-                myCashbox.OtherMoneys[1].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue2 =
+                myCashbox.OtherMoneys[1].Amount != 0 ?
                     myCashbox.OtherMoneys[1].Amount.ToString() : string.Empty;
             OtherMoneyTitle3 = myCashbox.OtherMoneys[2].Title;
-            OtherMoneyAmountDisplayValue3 = 
-                myCashbox.OtherMoneys[2].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue3 =
+                myCashbox.OtherMoneys[2].Amount != 0 ?
                     myCashbox.OtherMoneys[2].Amount.ToString() : string.Empty;
             OtherMoneyTitle4 = myCashbox.OtherMoneys[3].Title;
-            OtherMoneyAmountDisplayValue4 = 
-                myCashbox.OtherMoneys[3].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue4 =
+                myCashbox.OtherMoneys[3].Amount != 0 ?
                     myCashbox.OtherMoneys[3].Amount.ToString() : string.Empty;
             OtherMoneyTitle5 = myCashbox.OtherMoneys[4].Title;
-            OtherMoneyAmountDisplayValue5 = 
-                myCashbox.OtherMoneys[4].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue5 =
+                myCashbox.OtherMoneys[4].Amount != 0 ?
                     myCashbox.OtherMoneys[4].Amount.ToString() : string.Empty;
             OtherMoneyTitle6 = myCashbox.OtherMoneys[5].Title;
-            OtherMoneyAmountDisplayValue6 = 
-                myCashbox.OtherMoneys[5].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue6 =
+                myCashbox.OtherMoneys[5].Amount != 0 ?
                     myCashbox.OtherMoneys[5].Amount.ToString() : string.Empty;
             OtherMoneyTitle7 = myCashbox.OtherMoneys[6].Title;
-            OtherMoneyAmountDisplayValue7 = 
-                myCashbox.OtherMoneys[6].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue7 =
+                myCashbox.OtherMoneys[6].Amount != 0 ?
                     myCashbox.OtherMoneys[6].Amount.ToString() : string.Empty;
             OtherMoneyTitle8 = myCashbox.OtherMoneys[7].Title;
-            OtherMoneyAmountDisplayValue8 = 
-                myCashbox.OtherMoneys[7].Amount != 0 ? 
+            OtherMoneyAmountDisplayValue8 =
+                myCashbox.OtherMoneys[7].Amount != 0 ?
                     myCashbox.OtherMoneys[7].Amount.ToString() : string.Empty;
         }
         /// <summary>
@@ -907,7 +910,7 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(OtherMoneyTitle1):
                     ErrorsListOperation
@@ -1002,8 +1005,9 @@ namespace WPF.ViewModels
             }
         }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
-
+        }
     }
 }

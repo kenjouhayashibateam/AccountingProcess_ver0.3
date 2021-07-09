@@ -105,7 +105,7 @@ namespace WPF.ViewModels
                     IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     CounterReceiver, MailRepresentative);
             if (DeleteConfirmation() == MessageBoxResult.No) return;
-            DataBaseConnect.DeleteCondolence(ID);
+            _ = DataBaseConnect.DeleteCondolence(ID);
             MessageBox = new MessageBoxInfo()
             {
                 Message = "削除しました。このまま新規登録ができます。",
@@ -221,14 +221,16 @@ namespace WPF.ViewModels
                     IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     IsReceptionBlank ? string.Empty : CounterReceiver,
                     IsReceptionBlank ? string.Empty : MailRepresentative);
-            
-            switch(CurrentOperation)
+
+            switch (CurrentOperation)
             {
                 case DataOperation.更新:
                     DataUpdate();
                     break;
                 case DataOperation.登録:
                     DataRegistration();
+                    break;
+                default:
                     break;
             }
         }
@@ -342,7 +344,7 @@ namespace WPF.ViewModels
             }
 
             DataOperationButtonContent = "登録中";
-            await Task.Run(() => DataBaseConnect.Registration(OperationCondolence));
+            _ = await Task.Run(() => DataBaseConnect.Registration(OperationCondolence));
             CondolenceOperation.GetInstance().SetData(OperationCondolence);
             CondolenceOperation.GetInstance().Notify();
             FieldClear();
@@ -392,7 +394,7 @@ namespace WPF.ViewModels
 
         private void SetAmount()
         {
-            switch(SelectedReceiptsAndExpenditure.Content.Text)
+            switch (SelectedReceiptsAndExpenditure.Content.Text)
             {
                 case "御車代":
                     CarTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
@@ -403,15 +405,17 @@ namespace WPF.ViewModels
                 case "御車代御膳料":
                     CarAndMealTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
                     break;
+                default:
+                    break;
             }
         }
         private void SetReceiptsAndExpenditures(bool isCountReset)
         {
             Pagination.CountReset(isCountReset);
 
-            var(totalRow,list) =
+            (int totalRow, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    ( DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
+                    (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
                         string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
                         DateTime.Today, Pagination.PageCount, "ID", false);
@@ -425,7 +429,7 @@ namespace WPF.ViewModels
         public ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures
         {
             get => receiptsAndExpenditures;
-            set 
+            set
             {
                 receiptsAndExpenditures = value;
                 CallPropertyChanged();
@@ -823,19 +827,21 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(OwnerName):
-                    SetNullOrEmptyError(propertyName, (string)value);
+                    SetNullOrEmptyError(propertyName, value);
                     break;
                 case nameof(SoryoName):
-                    SetNullOrEmptyError(propertyName, (string)value);
+                    SetNullOrEmptyError(propertyName, value);
                     break;
                 case nameof(TotalAmount):
-                    SetNullOrEmptyError(propertyName, (string)value);
+                    SetNullOrEmptyError(propertyName, value);
                     if (GetErrors(propertyName) == null)
                         ErrorsListOperation
                             (IntAmount((string)value) == 0, propertyName, "金額が入力されていません");
+                    break;
+                default:
                     break;
             }
             SetIsOperationButtonEnabled();
