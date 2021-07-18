@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Security.Cryptography;
+using System.Linq;
 using System.Text;
 
 namespace Domain.Entities.Helpers
@@ -64,10 +65,7 @@ namespace Domain.Entities.Helpers
         /// </summary>
         /// <param name="amount">金額</param>
         /// <returns>00,000,000</returns>
-        public static string CommaDelimitedAmount(int amount)
-        {
-            return $"{amount:N0}";
-        }
+        public static string CommaDelimitedAmount(int amount) { return $"{amount:N0}"; }
         /// <summary>
         /// 金額を3桁ごとのカンマ区切りにした文字列を返します。数字と認識できない場合はEmptyを返します
         /// </summary>
@@ -115,20 +113,20 @@ namespace Domain.Entities.Helpers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string GetHashValue(string value)
+        public static string GetHashValue(string value, string soltValue)
         {
-            byte[] soltValue = Encoding.UTF8.GetBytes(value);
-            byte[] valueHash = new SHA256CryptoServiceProvider().ComputeHash(soltValue);
+            if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(soltValue)) { return string.Empty; }
 
-            StringBuilder returnValue = new StringBuilder();
+            byte[] soltHash = Encoding.UTF8.GetBytes(soltValue);
+            byte[] returnValue = KeyDerivation.Pbkdf2(value, soltHash, KeyDerivationPrf.HMACSHA256, 10000, 256 / 8);
 
-            foreach (byte b in valueHash)
-            {
-                _ = returnValue.Append(b.ToString("x2"));
-            }
-
-            return returnValue.ToString();
+            return string.Concat(returnValue.Select(b => $"{b:x2}"));
         }
+        /// <summary>
+        /// 元号のイニシャルを返します
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
         public static string GetEraInitial(DateTime dateTime)
         {
             JapaneseCalendar jc = new JapaneseCalendar();

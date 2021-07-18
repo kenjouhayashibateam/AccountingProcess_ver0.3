@@ -162,10 +162,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(14, 2).Value = WizeCoreAmountWithUnit;
                 myWorksheet.Cell(16, 4).Value = "信行寺　春秋苑";
             }
-            else
-            {
-                myWorksheet.Cell(9, 1).Value = "預り金";
-            }
+            else { myWorksheet.Cell(9, 1).Value = "預り金"; }
         }
 
         protected override double SetMaeginsBottom() { return ToInch(1.2); }

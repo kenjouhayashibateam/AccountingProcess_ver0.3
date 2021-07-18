@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
@@ -13,12 +14,13 @@ namespace WPF.ViewModels
     /// <summary>
     /// 出納帳出力画面ViewModel
     /// </summary>
-    public class CashJournalManagementViewModel : BaseViewModel
+    public class CashJournalManagementViewModel : BaseViewModel, IClosing
     {
         private string yearString;
         private string monthString = DateTime.Today.AddMonths(0).Month.ToString();
         private string outputButtonContent = "出力";
         private bool outputButtonEnabled;
+        private bool isClose = true;
         private readonly IDataOutput DataOutput;
 
         public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect,
@@ -51,6 +53,7 @@ namespace WPF.ViewModels
 
             OutputButtonContent = "出力中";
             OutputButtonEnabled = false;
+            IsClose = false;
             await Task.Run(
                 () => DataOutput.ReceiptsAndExpenditureData
                     (
@@ -62,10 +65,11 @@ namespace WPF.ViewModels
                 );
             OutputButtonContent = "出力";
             OutputButtonEnabled = true;
+            IsClose = true;
 
             void CallOutputBlockingMessage()
             {
-                MessageBox = new Views.Datas.MessageBoxInfo()
+                MessageBox = new MessageBoxInfo()
                 {
                     Message = "2020年度以前の出納帳は、データ不足のため出力できません。",
                     Image = System.Windows.MessageBoxImage.Information,
@@ -126,10 +130,23 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ウィンドウを閉じる許可を統括
+        /// </summary>
+        public bool IsClose
+        {
+            get => isClose;
+            set
+            {
+                isClose = value;
+                CallPropertyChanged();
+            }
+        }
 
-        private void SetOutputButtonEnabled() =>
-            OutputButtonEnabled =
-                !HasErrors && !string.IsNullOrEmpty(YearString) && !string.IsNullOrEmpty(MonthString);
+        private void SetOutputButtonEnabled()
+        {
+            OutputButtonEnabled =!HasErrors && !string.IsNullOrEmpty(YearString) && !string.IsNullOrEmpty(MonthString);
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
@@ -138,13 +155,19 @@ namespace WPF.ViewModels
                 case nameof(YearString):
                     {
                         SetNullOrEmptyError(propertyName, value);
-                        if (GetErrors(propertyName) == null) ErrorsListOperation
-                                (IntAmount((string)value) == 0, propertyName, "年が無効です");
-                        if (GetErrors(propertyName) == null) ErrorsListOperation
+                        if (GetErrors(propertyName) == null)
+                        { ErrorsListOperation(IntAmount((string)value) == 0, propertyName, "年が無効です"); }
+                        if (GetErrors(propertyName) == null)
+                        {
+                            ErrorsListOperation
                                 (IntAmount((string)value) < 2021, propertyName, "2020年度以前は出せません");
-                        if (GetErrors(propertyName) == null) ErrorsListOperation
+                        }
+                        if (GetErrors(propertyName) == null)
+                        {
+                            ErrorsListOperation
                                 (int.Parse((string)value) > DateTime.Now.Year, propertyName,
                                     "未来の出納帳は出せません");
+                        }
                         break;
                     }
                 case nameof(MonthString):
@@ -153,8 +176,11 @@ namespace WPF.ViewModels
                         int y = IntAmount(YearString);
                         int m = IntAmount((string)value);
                         ErrorsListOperation(!Enumerable.Range(1, 12).Contains(m), propertyName, "月が無効です");
-                        if (GetErrors(propertyName) == null && GetErrors(nameof(YearString)) == null) ErrorsListOperation
+                        if (GetErrors(propertyName) == null && GetErrors(nameof(YearString)) == null)
+                        {
+                            ErrorsListOperation
                                    (new DateTime(y, m, 1) > DateTime.Now, propertyName, "未来の出納帳は出せません");
+                        }
                         break;
                     }
                 default:
@@ -168,5 +194,7 @@ namespace WPF.ViewModels
             DefaultWindowTitle =
                 $"出納帳出力{Space}:{Space}{AccountingProcessLocation.Location}";
         }
+
+        public bool OnClosing() { return !IsClose; }
     }
 }

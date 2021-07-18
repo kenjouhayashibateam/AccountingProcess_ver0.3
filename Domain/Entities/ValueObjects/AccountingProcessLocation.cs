@@ -31,5 +31,13 @@ namespace Domain.Entities.ValueObjects
         /// 春秋苑の会計かﾜｲｽﾞｺｱの会計か
         /// </summary>
         public static bool IsAccountingGenreShunjuen { get; set; }
+        /// <summary>
+        /// 金種表を出力したか
+        /// </summary>
+        public static bool IsCashBoxOutputed { get; set; }
+        /// <summary>
+        /// 収支日報を出力したか
+        /// </summary>
+        public static bool IsBalanceAccountOutputed { get; set; }
     }
 }

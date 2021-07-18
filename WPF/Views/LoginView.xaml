@@ -77,7 +77,10 @@
                     <KeyBinding Command="{Binding LoginCommand}" Key="Space"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="CloseButton" Content="閉じる" Grid.Column="2" Margin="3,10">
+            <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="3" Margin="5,10">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="18" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>

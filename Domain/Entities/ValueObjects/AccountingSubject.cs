@@ -39,11 +39,9 @@
         public override bool Equals(object obj)
         {
             if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
-            else
-            {
-                AccountingSubject accountingSubject = (AccountingSubject)obj;
-                return ID == accountingSubject.ID;
-            }
+            
+            AccountingSubject accountingSubject = (AccountingSubject)obj;
+            return ID == accountingSubject.ID;        
         }
     }
 }

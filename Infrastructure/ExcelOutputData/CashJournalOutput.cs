@@ -21,7 +21,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// 1ページあたりの行数
         /// </summary>
-        private readonly int OnePageRowCount = 54;
+        private readonly int OnePageRowCount = 46;
         /// <summary>
         /// 出納データリスト
         /// </summary>
@@ -52,7 +52,7 @@ namespace Infrastructure.ExcelOutputData
             int slipWithdrawal = default;
             bool firstPage = true;
             bool isPageMove = false;
-            bool isTaxRate=false;
+            bool isTaxRate = false;
             string detailString = default;
             string currentSubjectCode = string.Empty;
             string currentDept = string.Empty;
@@ -64,6 +64,7 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.CreditDept.ID)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
+                .ThenBy(r => r.AccountActivityDate)
                 .ThenBy(r => r.IsReducedTaxRate)
                 .ThenBy(r => r.Location)
                 )
@@ -173,7 +174,9 @@ namespace Infrastructure.ExcelOutputData
                 {
                     return currentDept == rae.CreditDept.Dept &&
                         currentSubjectCode == rae.Content.AccountingSubject.SubjectCode &&
-                        ItemIndex < 9 && currentLocation == rae.Location;
+                        currentActivityDate == rae.AccountActivityDate &&
+                        !IndependentContent.Contains(rae.Content.Text) &&
+                        ItemIndex < 9;
                 }
 
                 void SetBalance()
@@ -324,7 +327,7 @@ namespace Infrastructure.ExcelOutputData
         protected override double[] SetColumnSizes()
         {
             return new double[]
-                { 2.64,2.64, 4.71, 16.14, 16.14, 16.14, 11.14,11.14, 11.14 };
+                { 2.14,2.14, 4.71, 12.86, 12.86, 13.57, 9.86,9.86, 9.86 };
         }
 
         protected override double SetMaeginsBottom() { return ToInch(1); }
@@ -358,7 +361,7 @@ namespace Infrastructure.ExcelOutputData
             _ = myWorksheet.PageSetup.Margins.SetFooter(ToInch(0.5));
         }
 
-        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.B5Paper; }
 
         protected override void PageStyle() { SetStyleAndNextIndex(); }
 

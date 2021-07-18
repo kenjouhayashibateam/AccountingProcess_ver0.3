@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
@@ -110,23 +111,52 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="RefleshListButton" Grid.Column="0" Content="リストを再構築" HorizontalAlignment="Center" Margin="5"></Button>
-                        <Button x:Name="PrevPageButton" Grid.Column="1" Content="|&lt;" HorizontalAlignment="Center" Margin="5">
+                        <Border Grid.Column="1" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
+                        <Border Grid.Column="6" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
+                        <Button x:Name="RefleshListButton" Grid.Column="0" ToolTip="リストを再構築します" HorizontalAlignment="Center" Margin="3,5,10,3">
+                            <StackPanel>
+                                <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Reload.svg"/>
+                            </StackPanel>
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding RefreshListCommand}" Key="Space"/>
+                                <KeyBinding Command="{Binding RefreshListCommand}" Key="Return"/>
+                                <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                        <Button x:Name="ShowMinPageButton" Grid.Column="1" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" ToolTip="1ページ目を表示します" Margin="10,5,3,5">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                        <Button x:Name="PrevPageButton" Grid.Column="2" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" HorizontalAlignment="Center" Margin="3,5">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                             </Button.InputBindings>
                         </Button>
-                        <TextBlock Text="{Binding Pagination.ListPageInfo}" Grid.Column="2" VerticalAlignment="Center" Margin="5"/>
-                        <Button x:Name="NextPageButton" Grid.Column="3" Content=">|" HorizontalAlignment="Center" Margin="5">
+                        <TextBlock Text="{Binding Pagination.ListPageInfo}" Grid.Column="3" VerticalAlignment="Center" Margin="3,5"/>
+                        <Button x:Name="NextPageButton" Grid.Column="4" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" HorizontalAlignment="Center" Margin="3,5">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                             </Button.InputBindings>
                         </Button>
-                        <ComboBox Name="SortContentsCommboBox" Grid.Column="4" ItemsSource="{Binding Pagination.SortColumns}" Text="{Binding Pagination.SelectedSortColumn}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="5" VerticalAlignment="Top"/>
-                        <ToggleButton x:Name="SortDirectionToggleButton" Grid.Column="5" IsChecked="{Binding Pagination.SortDirectionIsASC}" Content="{Binding Pagination.SortDirectionContent}" Margin="5"/>
+                        <Button x:Name="ShowMaxPageButton" Grid.Column="5" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" ToolTip="最終ページを表示します" Margin="3,5,10,5">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                        <StackPanel Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,5,3,5">
+                            <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Sort.svg"/>
+                        </StackPanel>
+                        <ComboBox Name="SortContentsCommboBox" Grid.Column="7" ItemsSource="{Binding Pagination.SortColumns}" Text="{Binding Pagination.SelectedSortColumn}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="3,5" VerticalAlignment="Top"/>
+                        <ToggleButton x:Name="SortDirectionToggleButton" Grid.Column="8" IsChecked="{Binding Pagination.SortDirectionIsASC}" Content="{Binding Pagination.SortDirectionContent}" Margin="3,5"/>
                     </Grid>
                 </GroupBox.Header>
                 <Grid>
@@ -258,10 +288,13 @@
             </GroupBox>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="9*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="CloseButton" Content="閉じる" Grid.Column="1" Margin="5">
+                <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="3" Margin="5">
+                    <StackPanel>
+                        <svgc:SvgViewbox Height="45" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                    </StackPanel>
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                         <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

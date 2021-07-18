@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         mc:Ignorable="d"
@@ -12,7 +13,7 @@
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"  
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
-        Title="{Binding WindowTitle}" Height="640" Width="500" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=RepRegistrationButton}">
+        Title="{Binding WindowTitle}" Height="680" Width="530" WindowStartupLocation="CenterOwner" FocusManager.FocusedElement="{Binding ElementName=RepRegistrationButton}">
 
     <Window.DataContext>
         <vm:DataManagementViewModel/>
@@ -27,7 +28,7 @@
                             <Border BorderBrush="DimGray" BorderThickness="1">
                                 <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center"/>
                             </Border>
-                                <TextBlock x:Name="WaterMarkLabel"  Text="{TemplateBinding Tag}" Opacity=".5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Visibility="Collapsed"/>
+                            <TextBlock x:Name="WaterMarkLabel"  Text="{TemplateBinding Tag}" Opacity=".5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Text" Value="">
@@ -52,12 +53,12 @@
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
-    
-     <Grid>
+
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="7*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="データ操作" Grid.Row="0" Margin="5">
             <Grid>
@@ -153,25 +154,25 @@
                                             </Button.Template>
                                         </Button>
                                     </Grid>
-                                <TextBlock Text="再入力" Grid.Row="9" IsEnabled="{Binding IsRepNewPasswordEnabled}" Margin="5" VerticalAlignment="Bottom"/>
-                                <Grid Grid.Row="10" Margin="5"  IsEnabled="{Binding IsRepNewPasswordEnabled}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="8*"/>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Border Grid.ColumnSpan="3" BorderBrush="{Binding NewRepPasswordBorderBrush}" Background="{Binding NewRepPasswordBackground}" BorderThickness="1" CornerRadius="5"></Border>
+                                    <TextBlock Text="再入力" Grid.Row="9" IsEnabled="{Binding IsRepNewPasswordEnabled}" Margin="5" VerticalAlignment="Bottom"/>
+                                    <Grid Grid.Row="10" Margin="5"  IsEnabled="{Binding IsRepNewPasswordEnabled}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="8*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.ColumnSpan="3" BorderBrush="{Binding NewRepPasswordBorderBrush}" Background="{Binding NewRepPasswordBackground}" BorderThickness="1" CornerRadius="5"></Border>
                                         <control:CypherBox x:Name="ConfirmationPasswordCypherBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                                        CypherText="{Binding ConfirmationPassword,Mode=TwoWay}" BorderThickness="0"
                                                        Placeholder="your password" ShowPlainText="{Binding ConfirmationPasswordCharCheck,Mode=OneWay}" />
                                         <Button Grid.Column="1" Command="{Binding ConfirmationPasswordCheckedReversCommand}" HorizontalAlignment="Right">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Image Source="../Resources/eye.png"/>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                    </Button>
-                                </Grid>
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Image Source="../Resources/eye.png"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                                 <Button x:Name="RepRegistrationButton" Grid.Row="1" Margin="5" Content="{Binding RepDataOperationButtonContent}" IsEnabled="{Binding IsRepOperationButtonEnabled}">
                                     <Button.InputBindings>
@@ -394,52 +395,122 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="5*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{Binding ContentIDField}" Grid.Row="0" Margin="5"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsContentValidity}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
-                                <TextBlock Text="科目コード" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <TextBox x:Name="AffiliationAccountingSubjectCodeTextBox" Grid.Row="3" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding AffiliationAccountingSubjectCode}" InputMethod.PreferredImeState="Off" Margin="5,5,150,5"/>
-                                <TextBlock Text="勘定科目" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <ComboBox Name="AccountingSubjectComboBox" IsEnabled="{Binding IsAffiliationAccountingSubjectEnabled}" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Text="{Binding SelectedAccountingSubjectField}" Grid.Row="5" IsEditable="True" ItemsSource="{Binding AffiliationAccountingSubjects}" SelectedItem="{Binding AffiliationAccountingSubject}" DisplayMemberPath="Subject"  SelectedValuePath="ID" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                                <TextBlock Text="伝票内容" Grid.Row="6" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <TextBox x:Name="ContentTextBox" Grid.Row="7" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding ContentField,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
-                                <TextBlock Text="定額" Grid.Row="8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                                <Grid Grid.Row="9" VerticalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="FlatRateTextBox" Grid.Column="0" Text="{Binding FlatRateField,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
-                                    <TextBlock Text="円" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Grid Grid.Row="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="科目コード" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                    <TextBox x:Name="AffiliationAccountingSubjectCodeTextBox" Grid.Row="1" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding AffiliationAccountingSubjectCode}" InputMethod.PreferredImeState="Off" Margin="5,5,150,5"/>
                                 </Grid>
-                                <Grid Grid.Row="10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="受納証表記" VerticalAlignment="Bottom" Grid.Column="0" Margin="5,0"/>
-                                    <Button x:Name="ConvertContentOperationButton" Grid.Column="1" IsEnabled="{Binding IsContentConvertOperationButtonEnabled}" Content="{Binding ContentConvertOperationContent}" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="5,3,5,1">
-                                        <Button.InputBindings>
-                                            <KeyBinding Command="{Binding ContentConvertVoucherOperationCommand}" Key="Space"/>
-                                            <MouseBinding Command="{Binding ContentConvertVoucherOperationCommand}" MouseAction="LeftClick"/>
-                                        </Button.InputBindings>
-                                    </Button>
-                                    <Button x:Name="ConvertContentDeleteButton" Content="削除" Grid.Column="2" IsEnabled="{Binding IsContentConvertOperationButtonEnabled}" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}"  Margin="5,3,5,1">
-                                        
-                                    </Button>
+                                <Grid Grid.Row="3">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="勘定科目" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                    <ComboBox Name="AccountingSubjectComboBox" Grid.Row="1" IsEnabled="{Binding IsAffiliationAccountingSubjectEnabled}" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Text="{Binding SelectedAccountingSubjectField}" IsEditable="True" ItemsSource="{Binding AffiliationAccountingSubjects}" SelectedItem="{Binding AffiliationAccountingSubject}" DisplayMemberPath="Subject"  SelectedValuePath="ID" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
                                 </Grid>
-                                <TextBox x:Name="ConvertContentTextBox" Grid.Row="11" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Text="{Binding ContentConvertText,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource WatermarkTextbox}" Tag="伝票内容と同じ場合は不要です" Margin="5"/>
+                                <Grid Grid.Row="4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="伝票内容" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                    <TextBox x:Name="ContentTextBox" Grid.Row="1" IsEnabled="{Binding IsContentFieldEnabled}" Text="{Binding ContentField,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                                </Grid>
+                                <Grid Grid.Row="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="定額" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                                    <Grid Grid.Row="1" VerticalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox x:Name="FlatRateTextBox" Grid.Column="0" Text="{Binding FlatRateField,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
+                                        <TextBlock Text="円" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Grid>
+                                <GroupBox Grid.Row="6" Header="オプション" Margin="3">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="2*"/>
+                                                <RowDefinition Height="3*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="受納証表記" VerticalAlignment="Bottom" Grid.Column="0" Margin="5,0"/>
+                                                <Button x:Name="ConvertContentOperationButton" Grid.Column="1" IsEnabled="{Binding IsContentConvertOperationButtonEnabled}" Content="{Binding ContentConvertOperationContent}" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="5,1,5,1">
+                                                    <Button.InputBindings>
+                                                        <KeyBinding Command="{Binding ContentConvertVoucherOperationCommand}" Key="Space"/>
+                                                        <MouseBinding Command="{Binding ContentConvertVoucherOperationCommand}" MouseAction="LeftClick"/>
+                                                    </Button.InputBindings>
+                                                </Button>
+                                                <Button x:Name="ConvertContentDeleteButton" Content="削除" Grid.Column="2" IsEnabled="{Binding IsContentConvertOperationButtonEnabled}" Visibility="{Binding IsContentConvertButtonVisibility,Converter={StaticResource VisibilityConverter}}"  Margin="5,1,5,1">
+                                                    <Button.InputBindings>
+                                                        <KeyBinding Command="{Binding DeleteContentConvertVoucherCommand}" Key="Space"/>
+                                                        <MouseBinding Command="{Binding DeleteContentConvertVoucherCommand}" MouseAction="LeftClick"/>
+                                                    </Button.InputBindings>
+                                                </Button>
+                                            </Grid>
+                                            <TextBox x:Name="ConvertContentTextBox" Grid.Row="11" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Text="{Binding ContentConvertText,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource WatermarkTextbox}" Tag="伝票内容と同じ場合は不要です" Margin="5"/>
+                                        </Grid>
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="2*"/>
+                                                <RowDefinition Height="3*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="既定の貸方部門" Grid.Column="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                                                <Button x:Name="DefaultAccountDeptOperationButton" Grid.Column="1" IsEnabled="{Binding IsContentDefaultCreditDeptEnabled}" Content="{Binding ContentDefaultDeptOperationContent}" Visibility="{Binding IsContentDefaultCreditDeptButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="5,1">
+                                                    <Button.InputBindings>
+                                                        <KeyBinding Command="{Binding ContentDefaultCreditDeptOperationCommand}" Key="Space"/>
+                                                        <MouseBinding Command="{Binding ContentDefaultCreditDeptOperationCommand}" MouseAction="LeftClick"/>
+                                                    </Button.InputBindings>
+                                                </Button>
+                                                <Button x:Name="DefaultCreditDeptDeleteButton" Grid.Column="2" Content="削除" IsEnabled="{Binding IsContentDefaultCreditDeptEnabled}" Visibility="{Binding IsContentDefaultCreditDeptButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="5,1">
+                                                    <Button.InputBindings>
+                                                        <KeyBinding Command="{Binding DeleteContentDefaultCreditDeptCommand}" Key="Space"/>
+                                                        <MouseBinding Command="{Binding DeleteContentDefaultCreditDeptCommand}" MouseAction="LeftClick"/>
+                                                    </Button.InputBindings>
+                                                </Button>
+                                            </Grid>
+                                            <Grid Grid.Row="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="3*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <CheckBox Content="設定する" IsChecked="{Binding IsContentDefaultCreditDeptSetting}" VerticalAlignment="Center" Margin="5,8" Grid.ColumnSpan="2"/>
+                                                <ComboBox Name="DefaultCreditDeptComboBox" Grid.Column="2" IsEnabled="{Binding IsContentDefaultCreditDeptSetting}" ItemsSource="{Binding ContentDefaultCreditDepts}" DisplayMemberPath="Dept" Text="{Binding SelectedContentDefaultCreditDept.Dept}" SelectedItem="{Binding SelectedContentDefaultCreditDept,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="5,3"/>
+                                            </Grid>
+                                        </Grid>                                     
+                                    </Grid>
+                                </GroupBox>
                             </Grid>
                             <Button x:Name="ContentDataOperationButton" Grid.Row="1" IsEnabled="{Binding IsContentOperationEnabled}" Content="{Binding ContentDataOperationContent}" Margin="5">
                                 <Button.InputBindings>
@@ -496,11 +567,13 @@
         </TabControl>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="CloseButton" Content="閉じる" Grid.Column="2" Margin="10">
+            <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="1" Margin="5,10">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="35" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

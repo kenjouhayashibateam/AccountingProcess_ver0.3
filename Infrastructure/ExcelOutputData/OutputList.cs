@@ -19,6 +19,10 @@ namespace Infrastructure.ExcelOutputData
         /// データを出力するページの一番上のRow
         /// </summary>
         protected int StartRowPosition;
+        /// <summary>
+        /// 強制的に伝票や出納帳の項目を単独にする文字列配列
+        /// </summary>
+        protected string[] IndependentContent => new string[] { "違算金" };
 
         protected OutputList(IEnumerable outputList)
         {

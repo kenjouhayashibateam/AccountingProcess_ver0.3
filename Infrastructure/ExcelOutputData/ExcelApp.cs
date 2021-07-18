@@ -71,7 +71,7 @@ namespace Infrastructure.ExcelOutputData
             }
             catch (Exception ex)
             {
-                Logger.Log(ILogger.LogInfomation.ERROR, ex.Message);
+                Logger.Log(ILogger.LogInfomation.ERROR, $"ExcelConnect\t{ex.Message}");
             }
         }
         /// <summary>

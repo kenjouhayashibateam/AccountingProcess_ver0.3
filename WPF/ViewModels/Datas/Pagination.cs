@@ -14,7 +14,7 @@ namespace WPF.ViewModels.Datas
     /// </summary>
     public sealed class Pagination : NotifyPropertyChanged
     {
-        public static Pagination GetPagination() => new Pagination();
+        public static Pagination GetPagination() { return new Pagination(); }
         private int totalRowCount;
         private int pageCount;
         private int totalPageCount;
@@ -35,17 +35,38 @@ namespace WPF.ViewModels.Datas
                 (() => PrevPageListExpress(), () => true);
             NextPageListExpressCommand = new DelegateCommand
                 (() => NextPageListExpress(), () => true);
+            MaxPageExpressCommand = new DelegateCommand
+                (() => MaxPageExpress(), () => true);
+            MinPageExpressCommand = new DelegateCommand
+                (() => MinPageExpress(), () => true);
+        }
+        public DelegateCommand MinPageExpressCommand { get; set; }
+        private void MinPageExpress()
+        {
+            if (PageCount == 0) { return; }
+            PageCount = 1;
+            PageNotification();
+        }
+        /// <summary>
+        /// 最終ページを表示するコマンド
+        /// </summary>
+        public DelegateCommand MaxPageExpressCommand { get; set; }
+        private void MaxPageExpress()
+        {
+            if (PageCount == 0) { return; }
+            PageCount = TotalPageCount;
+            PageNotification();
         }
         /// <summary>
         /// 次の10件を表示するコマンド
         /// </summary>
         public DelegateCommand NextPageListExpressCommand { get; set; }
-        private void NextPageListExpress() => PageCountAdd();
+        private void NextPageListExpress() { PageCountAdd(); }
         /// <summary>
         /// 前の10件を表示するコマンド
         /// </summary>
         public DelegateCommand PrevPageListExpressCommand { get; set; }
-        private void PrevPageListExpress() => PageCountSubtract();
+        private void PrevPageListExpress() { PageCountSubtract(); }
         /// <summary>
         /// ソートする方向トグルのContent
         /// </summary>
@@ -81,7 +102,7 @@ namespace WPF.ViewModels.Datas
                 pageCount = value;
                 CallPropertyChanged();
             }
-        }　
+        }
         /// <summary>
         /// トータルのページカウント
         /// </summary>
@@ -91,7 +112,7 @@ namespace WPF.ViewModels.Datas
             set
             {
                 totalPageCount = value;
-                if (value == 0) PageCount = 0;
+                if (value == 0) { PageCount = 0; }
                 CallPropertyChanged();
             }
         }
@@ -100,20 +121,20 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         public string ListPageInfo
         { 
-            get => listPageInfo; 
-            set 
+            get => listPageInfo;
+            set
             {
                 listPageInfo = value;
                 CallPropertyChanged();
-            } 
+            }
         }
         /// <summary>
         /// 前の10件ボタンのEnabled
         /// </summary>
-        public bool IsPrevPageEnabled 
-        { 
-            get => isPrevPageEnabled; 
-            set 
+        public bool IsPrevPageEnabled
+        {
+            get => isPrevPageEnabled;
+            set
             {
                 isPrevPageEnabled = value;
                 CallPropertyChanged();
@@ -122,9 +143,9 @@ namespace WPF.ViewModels.Datas
         /// <summary>
         /// 次の10件ボタンのEnabled
         /// </summary>
-        public bool IsNextPageEnabled 
-        { 
-            get => isNextPageEnabled; set 
+        public bool IsNextPageEnabled
+        {
+            get => isNextPageEnabled; set
             {
                 isNextPageEnabled = value;
                 CallPropertyChanged();
@@ -161,8 +182,8 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         public void PageCountSubtract()
         {
-            if (PageCount == 0) return;
-            if (PageCount > 1) PageCount--;
+            if (PageCount == 0) { return; }
+            if (PageCount > 1) { PageCount--; }
             PageNotification();
         }
         /// <summary>
@@ -171,7 +192,7 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public void PageCountAdd()
         {
-            if (PageCount == 0) return;
+            if (PageCount == 0) { return; }
             PageCount += PageCount == TotalPageCount ? 0 : 1;
             PageNotification();
         }
@@ -179,10 +200,7 @@ namespace WPF.ViewModels.Datas
         /// ページ数をリセットします
         /// </summary>
         /// <param name="isReset">リセットするかのチェック</param>
-        public void CountReset(bool isReset)
-        {
-            if (isReset) PageCount = 1;
-        }
+        public void CountReset(bool isReset) { if (isReset) { PageCount = 1; } }
         /// <summary>
         /// ソート方向トグル　昇順がTrue
         /// </summary>
@@ -214,16 +232,16 @@ namespace WPF.ViewModels.Datas
         public void Add(IPagenationObserver pagenationObserver)
         {
             pagenationObservers.Add(pagenationObserver);
-            foreach (IPagenationObserver po in pagenationObservers) po.SetSortColumns();
+            foreach (IPagenationObserver po in pagenationObservers) { po.SetSortColumns(); }
         }
         private void PageNotification()
         {
-            foreach (IPagenationObserver po in pagenationObservers) po.PageNotify();
+            foreach (IPagenationObserver po in pagenationObservers) { po.PageNotify(); }
         }
 
         private void SortNotification()
         {
-            foreach (IPagenationObserver po in pagenationObservers) po.SortNotify();
+            foreach (IPagenationObserver po in pagenationObservers) { po.SortNotify(); }
         }
     }
 }

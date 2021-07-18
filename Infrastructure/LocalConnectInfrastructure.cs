@@ -600,5 +600,16 @@ namespace Infrastructure
         }
 
         public int DeleteCondolence(int condolenceID) { return 1; }
+
+        public CreditDept CallContentDefaultCreditDept(Content content)
+        {
+            return CallCreditDept(string.Empty);
+        }
+
+        public int Registration(CreditDept creditDept, Content content) { return 1; }
+
+        public int Update(CreditDept creditDept, Content content) { return 1; }
+
+        public int DeleteContentDefaultCreditDept(Content content) { return 1; }
     }
 }

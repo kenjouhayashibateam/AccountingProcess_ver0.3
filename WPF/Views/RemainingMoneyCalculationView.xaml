@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF.Views"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:vm="clr-namespace:WPF.ViewModels"
@@ -16,6 +17,7 @@
     
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
+        <behavior:WindowClosingCancelBehavior/>
     </i:Interaction.Behaviors>
 
     <Grid>
@@ -298,10 +300,10 @@
         </GroupBox>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="合計金額 : " Margin="10" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="18" FontWeight="Bold"/>
             <TextBlock Text="{Binding TotalAmount}" Grid.Column="1" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"/>
@@ -310,7 +312,10 @@
                     <MouseBinding Command="{Binding OutputCommand}" MouseAction="LeftClick"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="CloseButton" Content="閉じる" Grid.Column="3" Margin="5" >
+            <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="3" IsEnabled="{Binding IsClose}" Margin="5">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="20" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
                 </Button.InputBindings>

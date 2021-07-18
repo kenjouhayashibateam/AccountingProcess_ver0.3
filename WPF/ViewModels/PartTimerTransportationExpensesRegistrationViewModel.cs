@@ -137,8 +137,10 @@ namespace WPF.ViewModels
             SetIsRegistrationEnabled();
         }
 
-        private void SetListTitle() =>
+        private void SetListTitle()
+        {
             ListTitle = DataList.Count == 0 ? TITLE : $"{TITLE}{Space}:{Space}{DataList.Count}{Space}件";
+        }
 
         private bool CopyDataErrorCheck(string[] data)
         {
@@ -214,7 +216,7 @@ namespace WPF.ViewModels
             }
         }
 
-        private void SetIsRegistrationEnabled() => IsRegistrationEnabled = !HasErrors & DataList.Count > 0;
+        private void SetIsRegistrationEnabled() { IsRegistrationEnabled = !HasErrors & DataList.Count > 0; }
 
         public override void ValidationProperty(string propertyName, object value)
         {
@@ -228,7 +230,7 @@ namespace WPF.ViewModels
             }
         }
 
-        protected override void SetWindowDefaultTitle() => DefaultWindowTitle = "パート交通費データ登録";
+        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = "パート交通費データ登録"; }
 
         /// <summary>
         /// パートデータクラス
@@ -246,8 +248,7 @@ namespace WPF.ViewModels
             /// <summary>
             /// 表示用交通費
             /// </summary>
-            public string TransportationExpensesDisplayValue 
-            { get => TextHelper.AmountWithUnit(TransportationExpenses); }
+            public string TransportationExpensesDisplayValue => AmountWithUnit(TransportationExpenses);
             /// <summary>
             /// 登録除外チェック
             /// </summary>

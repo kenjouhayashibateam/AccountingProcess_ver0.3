@@ -15,7 +15,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// 受納証管理画面ViewModel
     /// </summary>
-    public class VoucherManagementViewModel : BaseViewModel
+    public class VoucherManagementViewModel : BaseViewModel, IClosing
     {
         private DateTime searchDateStart = DefaultDate;
         private DateTime searchDateEnd = DefaultDate;
@@ -27,6 +27,7 @@ namespace WPF.ViewModels
         private bool isInputReissueText;
         private bool isValidityTrueOnly = true;
         private bool isOutputButtonEnabled;
+        private bool isClose = true;
         private readonly IDataOutput DataOutput;
         private string outputButtonContent = "選択したデータを再発行";
 
@@ -225,6 +226,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ウィンドウを閉じる許可を統括
+        /// </summary>
+        public bool IsClose
+        {
+            get => isClose;
+            set
+            {
+                isClose = value;
+                CallPropertyChanged();
+            }
+        }
 
         private void CreateVoucherList()
         {
@@ -248,5 +261,7 @@ namespace WPF.ViewModels
         {
             DefaultWindowTitle = $"受納証管理 : {AccountingProcessLocation.Location}";
         }
+
+        public bool OnClosing() { return IsClose; }
     }
 }

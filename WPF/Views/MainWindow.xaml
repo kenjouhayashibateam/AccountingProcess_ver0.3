@@ -192,7 +192,7 @@
             </Button>
             <Button x:Name="WindowCloseButton" Grid.Column="4" ToolTip="システムを終了します"  Margin="10,15">
                 <StackPanel>
-                    <svcg:SvgViewbox Height="30" behavior:SvgViewboxAttachment.Source="Exit.svg"/>
+                    <svcg:SvgViewbox Height="35" behavior:SvgViewboxAttachment.Source="Exit.svg"/>
                 </StackPanel>
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

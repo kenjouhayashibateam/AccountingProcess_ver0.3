@@ -50,10 +50,14 @@ namespace WPF.ViewModels
             SearchEndDate = DateTime.Today;
             SearchStartDate = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             InputAllPeriodCommand = new DelegateCommand(() => InputAllPeriod(), () => true);
+            RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
             Pagination.SortDirectionIsASC = false;
         }
         public SearchReceiptsAndExpenditureViewModel() :
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        { }
+        public DelegateCommand RefreshListCommand { get; }
+        private void RefreshList() { CreateReceiptsAndExpenditures(true); }
         /// <summary>
         /// 期間検索欄の日付を一番広い期間に設定するコマンド
         /// </summary>

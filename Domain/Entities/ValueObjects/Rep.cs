@@ -29,8 +29,6 @@ namespace Domain.Entities.ValueObjects
         /// </summary>
         public bool IsAdminPermisson { get; set; }
 
-        public string PasswordHash => GetHashValue(Password);
-
         public Rep(string repID, string name, string password, bool isValidity, bool isAdminPermisson)
         {
             ID = repID;

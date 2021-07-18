@@ -17,7 +17,7 @@ namespace WPF.ViewModels
     /// 受納証作成画面ViewModel
     /// </summary>
     public class CreateVoucherViewModel : BaseViewModel,
-        IReceiptsAndExpenditureOperationObserver, IPagenationObserver
+        IReceiptsAndExpenditureOperationObserver, IPagenationObserver, IClosing
     {
         #region Properties
         #region Strings
@@ -40,6 +40,7 @@ namespace WPF.ViewModels
         private readonly ReceiptsAndExpenditureOperation OperationData;
         private bool isOutputButtonEnabled;
         private bool isPrepaid = false;
+        private bool isClose = true;
         private Pagination pagination;
         #endregion
 
@@ -65,8 +66,11 @@ namespace WPF.ViewModels
         /// 受納証管理画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowVoucherManagementCommand { get; set; }
-        private void ShowVoucherManagement() =>
+        private void ShowVoucherManagement()
+        {
             CreateShowWindowCommand(ScreenTransition.VoucherManagement());
+        }
+
         /// <summary>
         /// 受納証データを使用して御布施一覧を表示してデータ登録するコマンド
         /// </summary>
@@ -104,7 +108,7 @@ namespace WPF.ViewModels
                     addressee = rae.Detail;
                     accountActivityDate = rae.AccountActivityDate;
                 }
-                
+
                 void SetAmount()
                 {
                     switch (rae.Content.Text)
@@ -135,12 +139,15 @@ namespace WPF.ViewModels
         /// <summary>
         /// ソートするカラムリストを設定します
         /// </summary>
-        public void SetSortColumns()=>
+        public void SetSortColumns()
+        {
             Pagination.SortColumns = new Dictionary<int, string>()
             {
                 { 0,"ID"},
                 { 1,"科目コード"}
             };
+        }
+
         /// <summary>
         /// 新規登録画面を表示するコマンド
         /// </summary>
@@ -163,10 +170,14 @@ namespace WPF.ViewModels
                 Image = System.Windows.MessageBoxImage.Question,
                 Title = "操作確認",
                 Button = System.Windows.MessageBoxButton.OKCancel
-            }).Result == System.Windows.MessageBoxResult.Cancel) return;
+            }).Result == System.Windows.MessageBoxResult.Cancel)
+            {
+                return;
+            }
 
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
+            IsClose = false;
             Voucher voucher;
             VoucherRegistration();
             await Task.Run(() => DataOutput.VoucherData(voucher, false, PrepaidDate));
@@ -174,7 +185,8 @@ namespace WPF.ViewModels
             VoucherContents.Clear();
             SetTotalAmount();
             OutputButtonContent = "登録して出力";
-            
+            IsClose = true;
+
             void VoucherRegistration()
             {
                 voucher = new Voucher
@@ -183,7 +195,7 @@ namespace WPF.ViewModels
                 voucher = DataBaseConnect.CallLatestVoucher();
                 voucher.ReceiptsAndExpenditures = VoucherContents;
                 foreach (ReceiptsAndExpenditure rae in VoucherContents)
-                    _ = DataBaseConnect.Registration(voucher.ID, rae.ID);
+                { _ = DataBaseConnect.Registration(voucher.ID, rae.ID); }
             }
         }
         /// <summary>
@@ -193,8 +205,8 @@ namespace WPF.ViewModels
         private async void AddVoucherContent()
         {
             await Task.Delay(1);
-            if (SelectedSeachReceiptsAndExpenditure == null) return;
-            if (VoucherContents.Contains(SelectedSeachReceiptsAndExpenditure)) return;
+            if (SelectedSeachReceiptsAndExpenditure == null) { return; }
+            if (VoucherContents.Contains(SelectedSeachReceiptsAndExpenditure)) { return; }
             if (VoucherContents.Count == 8)
             {
                 MessageBox = new MessageBoxInfo()
@@ -229,7 +241,7 @@ namespace WPF.ViewModels
         {
             int i = default;
 
-            foreach (ReceiptsAndExpenditure rae in VoucherContents) i += rae.Price;
+            foreach (ReceiptsAndExpenditure rae in VoucherContents) { i += rae.Price; }
             VoucherTotalAmountDisplayValue = i.ToString();
         }
         /// <summary>
@@ -247,9 +259,11 @@ namespace WPF.ViewModels
             }
         }
 
-        private void SetOutputEnabled() =>
+        private void SetOutputEnabled()
+        {
             IsOutputButtonEnabled = VoucherContents.Count != 0 & !string.IsNullOrEmpty(VoucherAddressee);
-        
+        }
+
         /// <summary>
         /// 受納証の但し書きに表示するデータリスト
         /// </summary>
@@ -260,7 +274,7 @@ namespace WPF.ViewModels
             {
                 voucherContents = value;
                 int i = default;
-                foreach (ReceiptsAndExpenditure rae in voucherContents) i += rae.Price;
+                foreach (ReceiptsAndExpenditure rae in voucherContents) { i += rae.Price; }
                 VoucherTotalAmountDisplayValue = i.ToString();
                 CallPropertyChanged();
             }
@@ -415,6 +429,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ウィンドウを閉じる許可を統括
+        /// </summary>
+        public bool IsClose
+        {
+            get => isClose;
+            set
+            {
+                isClose = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
@@ -444,8 +470,10 @@ namespace WPF.ViewModels
                 (() => ShowCondolenceOperation(), () => true);
         }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"受納証作成 : {AccountingProcessLocation.Location}";
+        }
 
         public void ReceiptsAndExpenditureOperationNotify()
         {
@@ -455,8 +483,16 @@ namespace WPF.ViewModels
             SetOutputEnabled();
         }
 
-        public void SortNotify() => CreateReceiptsAndExpenditures(true);
+        public void SortNotify()
+        {
+            CreateReceiptsAndExpenditures(true);
+        }
 
-        public void PageNotify() => CreateReceiptsAndExpenditures(false);
+        public void PageNotify()
+        {
+            CreateReceiptsAndExpenditures(false);
+        }
+
+        public bool OnClosing() { return !IsClose; }
     }
 }

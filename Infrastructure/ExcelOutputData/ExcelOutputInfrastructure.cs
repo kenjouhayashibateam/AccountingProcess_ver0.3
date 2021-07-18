@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
 using System.Collections.ObjectModel;

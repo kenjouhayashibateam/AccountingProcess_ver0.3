@@ -242,9 +242,23 @@ namespace WPF.ViewModels
         /// </summary>
         private void ClosingMessage()
         {
+            string NoOutputed = AccountingProcessLocation.IsCashBoxOutputed ? string.Empty : "金種表";
+
+            if (string.IsNullOrEmpty(NoOutputed)) { NoOutputed = "収支日報"; }
+            else
+            {
+                NoOutputed += AccountingProcessLocation.IsBalanceAccountOutputed ?
+                    string.Empty : "、収支日報";
+            }
+
+            if (AccountingProcessLocation.Location != "管理事務所") { NoOutputed = string.Empty; }
+
+            NoOutputed = string.IsNullOrEmpty(NoOutputed) ?
+                string.Empty : $"\r\n\r\n\t※{NoOutputed}が出力されていません";
+
             MessageBox = new MessageBoxInfo()
             {
-                Message = "終了します。よろしいですか？",
+                Message = $"終了します。よろしいですか？{NoOutputed}",
                 Button = MessageBoxButton.YesNo,
                 Title = "経理システムの終了",
                 Image = MessageBoxImage.Question

@@ -12,7 +12,7 @@ namespace WPF.Views.Behaviors
             DependencyProperty.RegisterAttached("SetSource", typeof(string), typeof(SvgViewboxAttachment),
                 new PropertyMetadata(string.Empty, (s, v) =>
                 {
-                    if (!(s is SvgViewbox svg)) return;
+                    if (!(s is SvgViewbox svg)) { return; }
 
                     svg.Source = new Uri($"{ResourceFullPath}/{v.NewValue}");
                 }));

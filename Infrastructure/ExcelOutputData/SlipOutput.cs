@@ -76,7 +76,6 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(clerk)) { clerk = rae.RegistrationRep.FirstName; }
                 contentCount++;
 
-                isGoNext = location != rae.Location;//伝票の作成場所が違えば次の伝票へ移動する
 
                 //codeが同じならisGoNextにsubjectの比較結果を代入する
                 if (code == rae.Content.AccountingSubject.SubjectCode | isGoNext == false) { ValidateGonext(); }
@@ -165,12 +164,14 @@ namespace Infrastructure.ExcelOutputData
                 void ValidateGonext()
                 {
                     isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
+                    if (!isGoNext) { isGoNext = IndependentContent.Contains(rae.Content.Text); }
                     if (!isGoNext) { isGoNext = currentDate != rae.AccountActivityDate; }//入出金日比較
                     if (!isGoNext) { isGoNext = creditDept != rae.CreditDept.Dept; }
                     if (!isGoNext) { isGoNext = isTaxRate != rae.IsReducedTaxRate; }
                     if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault
                         (s => s == rae.Content.AccountingSubject.SubjectCode) != null)
                     { isGoNext = content != rae.Content.Text; }
+                    if (!isGoNext) { isGoNext = location != rae.Location; }//伝票の作成場所が違えば次の伝票へ移動する
                 }
             }
         }

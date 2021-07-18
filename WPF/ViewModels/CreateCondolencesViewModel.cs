@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
@@ -16,7 +17,7 @@ namespace WPF.ViewModels
     /// お布施一覧作成ViewModel
     /// </summary>
     public class CreateCondolencesViewModel : BaseViewModel,ICondolenceObserver,
-        IPagenationObserver
+        IPagenationObserver, IClosing
     {
         #region Properties
         /// <summary>
@@ -27,6 +28,7 @@ namespace WPF.ViewModels
         private string locationLimitingContent;
         private bool isOutputButtonEnabled;
         private bool isLocationLimiting;
+        private bool isClose = true;
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
         private Condolence selectedCondolence;
@@ -47,9 +49,7 @@ namespace WPF.ViewModels
             Pagination.Add(this);
             LocationLimitingContent = $"{AccountingProcessLocation.Location}のデータのみを表示する";
             DayOfWeek dow = DateTime.Today.DayOfWeek;
-            int i = default;
-            if (dow == DayOfWeek.Sunday) i = -7;
-            else i = -(int)dow;
+            int i = dow == DayOfWeek.Sunday ? -7 : -(int)dow;
             SearchStartDate = DateTime.Today.AddDays(i);
             SearchEndDate = DateTime.Today;
             ShowRegistrationViewCommand = new DelegateCommand
@@ -69,10 +69,10 @@ namespace WPF.ViewModels
         private async void Output()
         {
             OutputButtonContent = "出力中";
-            IsOutputButtonEnabled = false;
+            IsOutputButtonEnabled = IsClose = false;
             await Task.Run(() => DataOutput.Condolences(AllList));
             OutputButtonContent = "出力";
-            IsOutputButtonEnabled = true;
+            IsOutputButtonEnabled = IsClose = true;
         }
         /// <summary>
         /// 更新画面を表示するコマンド
@@ -115,7 +115,7 @@ namespace WPF.ViewModels
             set
             {
                 searchStartDate = value;
-                if (value < SearchEndDate) CreateCondolences(true);
+                if (value < SearchEndDate) { CreateCondolences(true); }
                 CreateCondolences(true);
                 CallPropertyChanged();
             }
@@ -129,7 +129,7 @@ namespace WPF.ViewModels
             set
             {
                 searchEndDate = value;
-                if (value > SearchStartDate) CreateCondolences(true);
+                if (value > SearchStartDate) { CreateCondolences(true); }
                 CreateCondolences(true);
                 CallPropertyChanged();
             }
@@ -219,13 +219,29 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ウィンドウを閉じる許可を統括
+        /// </summary>
+        public bool IsClose
+        {
+            get => isClose;
+            set
+            {
+                isClose = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 法事チェックで変換する文字列
         /// </summary>
         /// <param name="isMemorialService"></param>
         /// <returns></returns>
-        public string ConvertContentText(bool isMemorialService) => isMemorialService ? "法事" : "葬儀";
+        public string ConvertContentText(bool isMemorialService)
+        {
+            return isMemorialService ? "法事" : "葬儀";
+        }
+
         /// <summary>
         /// 御布施一覧リストを検索して生成します
         /// </summary>
@@ -245,7 +261,7 @@ namespace WPF.ViewModels
                 DataBaseConnect.ReferenceCondolence
                     (SearchStartDate, SearchEndDate, location);
 
-            if (AllList.Count == 0) Pagination.PageCount = 0;
+            if (AllList.Count == 0) { Pagination.PageCount = 0; }
             ValidationProperty(nameof(Condolences), AllList);
             IsOutputButtonEnabled = AllList.Count > 0;
             Pagination.SetProperty();
@@ -258,19 +274,25 @@ namespace WPF.ViewModels
                     "出力するデータがありません");
         }
 
-        protected override void SetWindowDefaultTitle() => 
+        protected override void SetWindowDefaultTitle()
+        {
             DefaultWindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
+        }
 
-        public void CondolenceNotify() => CreateCondolences(true);
+        public void CondolenceNotify() { CreateCondolences(true); }
 
-        public void SortNotify() => CreateCondolences(true);
+        public void SortNotify() { CreateCondolences(true); }
 
-        public void PageNotify()=>CreateCondolences(false);
+        public void PageNotify() { CreateCondolences(false); }
 
-        public void SetSortColumns()=>
-            Pagination.SortColumns=new Dictionary<int, string>()
+        public void SetSortColumns()
+        {
+            Pagination.SortColumns = new Dictionary<int, string>()
             {
                 {0,"ID" },{1,"日付"},{2,"担当僧侶"}
             };
+        }
+
+        public bool OnClosing() { return IsClose; }
     }
 }

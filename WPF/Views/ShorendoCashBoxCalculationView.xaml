@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:local="clr-namespace:WPF.Views"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
@@ -106,13 +107,16 @@
         </GroupBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="総計 :　" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="20" Grid.Column="0"/>
             <TextBlock Text="{Binding TotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" Grid.Column="1"/>
-            <Button x:Name="CloseButton" Content="閉じる" Grid.Column="2" Margin="5,8">
+            <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="3" Margin="5,8">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="35" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

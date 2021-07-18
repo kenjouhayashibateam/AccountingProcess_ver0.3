@@ -69,13 +69,15 @@ namespace WPF.ViewModels
         private int ID { get; set; } = 0;
         private Pagination pagination = Pagination.GetPagination();
         public Dictionary<int, string> NoteStrings => new Dictionary<int, string>() { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } };
-        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" } };
+        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" }, { 3, "彼岸読経" }, { 4, "盆読経" } };
         private readonly LoginRep GetLoginRep = LoginRep.GetInstance();
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            if (GetLoginRep.Rep == null) GetLoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, true, true));
+            if (GetLoginRep.Rep == null)
+            { GetLoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, true, true)); }
+
             CondolenceOperation.GetInstance().Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
@@ -104,7 +106,7 @@ namespace WPF.ViewModels
                 (ID, Location, OwnerName, SoryoName, ContentText, IntAmount(Almsgiving), IntAmount(CarTip), 
                     IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     CounterReceiver, MailRepresentative);
-            if (DeleteConfirmation() == MessageBoxResult.No) return;
+            if (DeleteConfirmation() == MessageBoxResult.No) { return; }
             _ = DataBaseConnect.DeleteCondolence(ID);
             MessageBox = new MessageBoxInfo()
             {
@@ -244,58 +246,78 @@ namespace WPF.ViewModels
             Condolence condolence = CondolenceOperation.GetInstance().GetData();
 
             if (OperationCondolence.AccountActivityDate != condolence.AccountActivityDate)
+            {
                 updateContent +=
                     $"入金日{Space}:{Space}{condolence.AccountActivityDate.ToShortDateString()}" +
                     $"{Space}→{Space}{OperationCondolence.AccountActivityDate.ToShortDateString()}\r\n";
+            }
 
             if (OperationCondolence.OwnerName != condolence.OwnerName)
+            {
                 updateContent +=
                     $"施主名{Space}:{Space}{condolence.OwnerName}{Space}→{Space}" +
                     $"{OperationCondolence.OwnerName}\r\n";
+            }
 
             if (condolence.SoryoName != OperationCondolence.SoryoName)
+            {
                 updateContent +=
                     $"担当僧侶{Space}:{Space}{condolence.SoryoName}{Space}→{Space}" +
                     $"{OperationCondolence.SoryoName}\r\n";
+            }
 
             if (condolence.Content != OperationCondolence.Content)
-                updateContent +=
-                    $"内容{Space}:{Space}{condolence.Content}{Space}→{Space}" +
+            {
+                updateContent += $"内容{Space}:{Space}{condolence.Content}{Space}→{Space}" +
                     $"{OperationCondolence.Content}\r\n";
+            }
 
             if (condolence.CarTip != OperationCondolence.CarTip)
-                updateContent +=
-                    $"御車代{Space}:{Space}{AmountWithUnit(condolence.CarTip)}{Space}→{Space}" +
-                    $"{AmountWithUnit(OperationCondolence.CarTip)}\r\n";
+            {
+                updateContent += $"御車代{Space}:{Space}{AmountWithUnit(condolence.CarTip)}" +
+                    $"{Space}→{Space}{AmountWithUnit(OperationCondolence.CarTip)}\r\n";
+            }
 
             if (condolence.MealTip != OperationCondolence.MealTip)
+            {
                 updateContent +=
                     $"御膳料{Space}:{Space}{AmountWithUnit(condolence.MealTip)}{Space}→{Space}" +
                     $"{AmountWithUnit(OperationCondolence.MealTip)}\r\n";
+            }
 
             if (condolence.CarAndMealTip != OperationCondolence.CarAndMealTip)
+            {
                 updateContent +=
-                    $"御車代御膳料{Space}:{Space}{AmountWithUnit(condolence.CarAndMealTip)}{Space}→" +
+                    $"御車代御膳料{Space}:{Space}{AmountWithUnit(condolence.CarAndMealTip)}{Space}→" + 
                     $"{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\r\n";
+            }
 
             if (condolence.SocialGathering != OperationCondolence.SocialGathering)
+            {
                 updateContent +=
                     $"懇志{Space}:{Space}{AmountWithUnit(condolence.SocialGathering)}{Space}→" +
                     $"{Space}{AmountWithUnit(OperationCondolence.SocialGathering)}\r\n";
+            }
 
             if (condolence.Note != OperationCondolence.Note)
+            {
                 updateContent +=
                     $"備考{Space}:{Space}{condolence.Note}{Space}→{Space}{OperationCondolence.Note}\r\n";
+            }
 
             if (condolence.CounterReceiver != OperationCondolence.CounterReceiver)
+            {
                 updateContent +=
                     $"窓口受付者{Space}:{Space}{condolence.CounterReceiver}{Space}→" +
                     $"{Space}{OperationCondolence.CounterReceiver}\r\n";
+            }
 
             if (condolence.MailRepresentative != OperationCondolence.MailRepresentative)
+            {
                 updateContent +=
                     $"郵送担当者{Space}:{Space}{condolence.MailRepresentative}{Space}→" +
                     $"{Space}{OperationCondolence.MailRepresentative}\r\n";
+            }
 
             if (string.IsNullOrEmpty(updateContent))
             {
@@ -313,7 +335,7 @@ namespace WPF.ViewModels
             }
 
             DataOperationButtonContent = "更新中";
-            await Task.Run(() => DataBaseConnect.Update(OperationCondolence));
+            _ = await Task.Run(() => DataBaseConnect.Update(OperationCondolence));
             CondolenceOperation.GetInstance().SetData(OperationCondolence);
             CondolenceOperation.GetInstance().Notify();
             CallCompletedUpdate();
@@ -327,10 +349,9 @@ namespace WPF.ViewModels
         private async void DataRegistration()
         {
             IsOperationButtonEnabled = false;
-            
+
             MessageBox = new MessageBoxInfo()
             {
-
                 Message = $"{PropertyContentsMessage()}\r\n\r\n登録しますか？",
                 Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
@@ -377,8 +398,8 @@ namespace WPF.ViewModels
             await Task.Delay(1);
             AccountActivityDate = SelectedReceiptsAndExpenditure.AccountActivityDate;
             OwnerName = SelectedReceiptsAndExpenditure.Detail;
-            
-            switch(SearchAccountingSubjectCode)
+
+            switch (SearchAccountingSubjectCode)
             {
                 case "815":
                     Almsgiving = SelectedReceiptsAndExpenditure.PriceWithUnit;
@@ -388,6 +409,8 @@ namespace WPF.ViewModels
                     break;
                 case "831":
                     SocialGathering = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    break;
+                default:
                     break;
             }
         }
@@ -416,7 +439,7 @@ namespace WPF.ViewModels
             (int totalRow, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
-                        string.Empty, SearchAccountingSubjectCode, true, true, true, true, 
+                        string.Empty, SearchAccountingSubjectCode, true, true, true, true,
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
                         DateTime.Today, Pagination.PageCount, "ID", false);
             ReceiptsAndExpenditures = list;
@@ -494,16 +517,16 @@ namespace WPF.ViewModels
             get => ownerName;
             set
             {
-                if (ConfirmationOwnerName(ownerName, value) == MessageBoxResult.Yes) ownerName = value;
+                if (ConfirmationOwnerName(ownerName, value) == MessageBoxResult.Yes) { ownerName = value; }
                 ValidationProperty(nameof(OwnerName), value);
                 CallPropertyChanged();
             }
         }
         private MessageBoxResult ConfirmationOwnerName(string oldValue,string newValue)
         {
-            if (oldValue == newValue) return MessageBoxResult.Yes;
-            if (string.IsNullOrEmpty(newValue)) return MessageBoxResult.Yes;
-            if (string.IsNullOrEmpty(oldValue)) return MessageBoxResult.Yes;
+            if (oldValue == newValue) { return MessageBoxResult.Yes; }
+            if (string.IsNullOrEmpty(newValue)) { return MessageBoxResult.Yes; }
+            if (string.IsNullOrEmpty(oldValue)) { return MessageBoxResult.Yes; }
 
             MessageBox = new MessageBoxInfo()
             {
@@ -657,7 +680,7 @@ namespace WPF.ViewModels
             set
             {
                 isAlmsgivingSearch = value;
-                if(value) SearchAccountingSubjectCode = "815";
+                if (value) { SearchAccountingSubjectCode = "815"; }
                 CallPropertyChanged();
             }
         }
@@ -730,6 +753,7 @@ namespace WPF.ViewModels
             set
             {
                 socialGathering = value;
+                SetTotalAmount();
                 CallPropertyChanged();
             }
         }
@@ -742,7 +766,7 @@ namespace WPF.ViewModels
             set
             {
                 isTipSearch = value;
-                if (value) SearchAccountingSubjectCode = "832";
+                if (value) { SearchAccountingSubjectCode = "832"; }
                 CallPropertyChanged();
             }
         }
@@ -755,7 +779,7 @@ namespace WPF.ViewModels
             set
             {
                 isSocalGatheringSearch = value;
-                if (value) SearchAccountingSubjectCode = "831";
+                if (value) { SearchAccountingSubjectCode = "831"; }
                 CallPropertyChanged();
             }
         }
@@ -769,7 +793,7 @@ namespace WPF.ViewModels
             {
                 isReceptionBlank = value;
                 IsFixToggleEnabled = !value;
-                if (value) FixToggle = true;
+                if (value) { FixToggle = true; }
                 CallPropertyChanged();
             }
         }
@@ -838,8 +862,10 @@ namespace WPF.ViewModels
                 case nameof(TotalAmount):
                     SetNullOrEmptyError(propertyName, value);
                     if (GetErrors(propertyName) == null)
+                    {
                         ErrorsListOperation
                             (IntAmount((string)value) == 0, propertyName, "金額が入力されていません");
+                    }
                     break;
                 default:
                     break;
@@ -857,8 +883,10 @@ namespace WPF.ViewModels
             SoryoList = DataBaseConnect.GetSoryoList();
         }
 
-        protected override void SetDataOperationButtonContent(DataOperation operation) =>
+        protected override void SetDataOperationButtonContent(DataOperation operation)
+        {
             DataOperationButtonContent = operation.ToString();
+        }
 
         protected override void SetDelegateCommand()
         {
@@ -873,19 +901,23 @@ namespace WPF.ViewModels
 
         protected override void SetDetailLocked() { }
 
-        protected override void SetWindowDefaultTitle() =>
+        protected override void SetWindowDefaultTitle()
+        {
             WindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
+        }
 
-        public void CondolenceNotify() => FieldClear();
+        public void CondolenceNotify() { FieldClear(); }
 
-        public void SortNotify() => SetReceiptsAndExpenditures(true);
+        public void SortNotify() { SetReceiptsAndExpenditures(true); }
 
-        public void PageNotify() => SetReceiptsAndExpenditures(false);
+        public void PageNotify() { SetReceiptsAndExpenditures(false); }
 
-        public void SetSortColumns() =>
+        public void SetSortColumns()
+        {
             Pagination.SortColumns = new Dictionary<int, string>()
             {
                 {0,"ID" },{1,"入金日"}
             };
+        }
     }
 }

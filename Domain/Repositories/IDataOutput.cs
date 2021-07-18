@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.ValueObjects;
 using System;
 using System.Collections.ObjectModel;
 
@@ -27,16 +26,16 @@ namespace Domain.Repositories
         /// <param name="wizeCoreAmountWithUnit">ワイズコア仮受金</param>
         void BalanceFinalAccount
             (string previousDayFinalAccountWithUnit, string paymentWithUnit, string withdrawalWithUnit,
-            string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
-            string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
-            string wizeCoreAmountWithUnit, bool yokohamaBankCheck, bool ceresaCheck);
+                string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
+                string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
+                string wizeCoreAmountWithUnit, bool yokohamaBankCheck, bool ceresaCheck);
         /// <summary>
         /// 出納データを出力します
         /// </summary>
         /// <param name="receiptsAndExpenditures">出力する出納データ</param>
         /// <param name="previousDayBalance">出力する出納データの前日残高</param>
-        void ReceiptsAndExpenditureData(ObservableCollection<ReceiptsAndExpenditure>
-            receiptsAndExpenditures);
+        void ReceiptsAndExpenditureData
+            (ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures);
         /// <summary>
         /// 入出金伝票を出力します
         /// </summary>

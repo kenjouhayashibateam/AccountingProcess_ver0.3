@@ -98,7 +98,9 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\SharpVectors.Re
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\SharpVectors.Rendering.Wpf.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\SharpVectors.Runtime.Wpf.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\ClosedXML.dll
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\DocumentFormat.OpenXml.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\ExcelNumberFormat.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\Domain.pdb
@@ -116,8 +118,10 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\SharpVectors.Re
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\SharpVectors.Rendering.Wpf.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\SharpVectors.Runtime.Wpf.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\System.Windows.Interactivity.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.KeyDerivation.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\ClosedXML.pdb
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\ClosedXML.xml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\DocumentFormat.OpenXml.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\bin\Debug\ExcelNumberFormat.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.AssemblyReference.cache

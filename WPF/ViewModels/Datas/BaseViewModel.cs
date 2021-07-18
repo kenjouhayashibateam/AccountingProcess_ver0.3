@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels.Datas
 {
@@ -24,7 +25,7 @@ namespace WPF.ViewModels.Datas
         private bool callShowWindow;
         private bool callShowMessageBox;
         #endregion
-        
+
         public IDataBaseConnect DataBaseConnect;
 
         /// <summary>
@@ -121,7 +122,7 @@ namespace WPF.ViewModels.Datas
                         (
                             (Window) => DoCloseWindow(Window),
                             (Window) => true
-                        ); 
+                        );
                 }
                 return windowCloseCommand;
             }
@@ -260,7 +261,7 @@ namespace WPF.ViewModels.Datas
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
                 WindowTitle =
-                    $"{DefaultWindowTitle}（ログイン : {rep.FirstName}）";
+                    $"{DefaultWindowTitle}（ログイン{Space}:{Space}{rep.FirstName}）";
             }
         }
 

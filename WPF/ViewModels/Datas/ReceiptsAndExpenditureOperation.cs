@@ -34,28 +34,34 @@ namespace WPF.ViewModels.Datas
 
         private static ReceiptsAndExpenditure OperationData;
 
-        private readonly static ReceiptsAndExpenditureOperation _receiptsAndExpenditureOperation
+        private static readonly ReceiptsAndExpenditureOperation _receiptsAndExpenditureOperation
             = new ReceiptsAndExpenditureOperation();
 
-        public OperationType GetOperationType() => operationType;
+        public OperationType GetOperationType() { return operationType; }
 
-        public static ReceiptsAndExpenditureOperation GetInstance() => _receiptsAndExpenditureOperation;
+        public static ReceiptsAndExpenditureOperation GetInstance() { return _receiptsAndExpenditureOperation; }
 
-        public void SetOperationType(OperationType type) => operationType = type;       
+        public void SetOperationType(OperationType type) { operationType = type; }
 
-        public void SetData(ReceiptsAndExpenditure receiptsAndExpenditure) =>
+        public void SetData(ReceiptsAndExpenditure receiptsAndExpenditure)
+        {
             OperationData = receiptsAndExpenditure;
+        }
 
         public ReceiptsAndExpenditure Data => OperationData;
 
         public void Notify()
         {
             foreach (IReceiptsAndExpenditureOperationObserver raeo in observers)
-                raeo.ReceiptsAndExpenditureOperationNotify();
+            { raeo.ReceiptsAndExpenditureOperationNotify(); }
         }
-        public void Add(IReceiptsAndExpenditureOperationObserver operationObserver) =>
+        public void Add(IReceiptsAndExpenditureOperationObserver operationObserver)
+        {
             observers.Add(operationObserver);
-        public void Remove(IReceiptsAndExpenditureOperationObserver operationObserver) =>
-            observers.Remove(operationObserver);
+        }
+        public void Remove(IReceiptsAndExpenditureOperationObserver operationObserver)
+        {
+            _ = observers.Remove(operationObserver);
+        }
     }
 }

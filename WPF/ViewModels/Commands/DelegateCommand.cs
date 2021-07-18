@@ -47,7 +47,7 @@ namespace WPF.ViewModels.Commands
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
 
         private readonly Action<T> _Execute;

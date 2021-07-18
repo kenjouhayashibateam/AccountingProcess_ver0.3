@@ -329,5 +329,31 @@ namespace Domain.Repositories
         /// <param name="id"></param>
         /// <returns></returns>
         public int DeleteCondolence(int condolenceID);
+        /// <summary>
+        /// 伝票内容に設定された既定の貸方部門を呼び出します
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public CreditDept CallContentDefaultCreditDept(Content content);
+        /// <summary>
+        /// 伝票内容規定の貸方部門を登録します
+        /// </summary>
+        /// <param name="creditDept"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public int Registration(CreditDept creditDept, Content content);
+        /// <summary>
+        /// 伝票内容規定の貸方部門を更新します
+        /// </summary>
+        /// <param name="creditDept"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public int Update(CreditDept creditDept, Content content);
+        /// <summary>
+        /// 伝票内容規定の貸方部門を削除します
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public int DeleteContentDefaultCreditDept(Content content);
     }
 }

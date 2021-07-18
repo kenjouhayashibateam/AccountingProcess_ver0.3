@@ -19,7 +19,7 @@ namespace WPF.ViewModels
     /// 出納管理ウィンドウViewModel
     /// </summary>
     public class ReceiptsAndExpenditureMangementViewModel : BaseViewModel,
-        IReceiptsAndExpenditureOperationObserver, IPagenationObserver
+        IReceiptsAndExpenditureOperationObserver, IPagenationObserver, IClosing
     {
         #region Properties
         #region int
@@ -81,6 +81,7 @@ namespace WPF.ViewModels
         private bool passwordCharCheck = false;
         private bool isYokohamaBankCheck = false;
         private bool isCeresaCheck = false;
+        private bool isClose = true;
         #endregion
         #region DateTime
         private DateTime searchEndDate = DateTime.Today;
@@ -220,9 +221,11 @@ namespace WPF.ViewModels
         {
             WithdrawalSlipsOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
+            IsClose = false;
             await Task.Run(() => SlipsOutputProcess(false));
             SetOutputGroupEnabled();
             WithdrawalSlipsOutputButtonContent = "出金伝票";
+            IsClose = true;
         }
 
         /// <summary>
@@ -233,9 +236,11 @@ namespace WPF.ViewModels
         {
             PaymentSlipsOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
+            IsClose = false;
             await Task.Run(() => SlipsOutputProcess(true));
             SetOutputGroupEnabled();
             PaymentSlipsOutputButtonContent = "入金伝票";
+            IsClose = true;
         }
         /// <summary>
         /// 伝票を出力します
@@ -247,11 +252,13 @@ namespace WPF.ViewModels
                 (AllDataList, isPayment, IsPreviousDayOutput);
             foreach (ReceiptsAndExpenditure rae in AllDataList)
             {
-                if (rae.IsPayment != isPayment) continue;
+                if (rae.IsPayment != isPayment) { continue; }
                 rae.IsUnprinted = false;
                 _ = DataBaseConnect.Update(rae);
                 if (IsPreviousDayOutput)
+                {
                     _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
+                }
             }
         }
         /// <summary>
@@ -309,7 +316,7 @@ namespace WPF.ViewModels
 
         private void SetTodayWroteList()
         {
-            if (AccountingProcessLocation.Location == "青蓮堂") return;
+            if (AccountingProcessLocation.Location == "青蓮堂") { return; }
             TodayWroteList = DataBaseConnect.ReferenceReceiptsAndExpenditure
                    (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
                         string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
@@ -323,11 +330,9 @@ namespace WPF.ViewModels
         {
             bool b = Cashbox.GetTotalAmount() == ListAmount;
             IsOutputGroupEnabled = b;
-            if (AccountingProcessLocation.Location == "管理事務所")
-                IsPaymentSlipsOutputEnabled = IsPasswordEnabled =
-                IsWithdrawalSlipsOutputEnabled = b;
-            else IsPaymentSlipsOutputEnabled = IsPasswordEnabled =
-                    IsWithdrawalSlipsOutputEnabled = false;
+            IsPaymentSlipsOutputEnabled = AccountingProcessLocation.Location == "管理事務所"
+                ? (IsPasswordEnabled = IsWithdrawalSlipsOutputEnabled = b) :
+                    (IsPasswordEnabled = IsWithdrawalSlipsOutputEnabled = false);
             IsBalanceFinalAccountOutputEnabled = b;
         }
         /// <summary>
@@ -343,12 +348,14 @@ namespace WPF.ViewModels
                 "金庫の金額を計上して下さい" : $"金庫の金額 : {AmountWithUnit(todayTotalAmount)}";
 
             if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum)
+            {
                 TodaysFinalAccount = AmountWithUnit(todayTotalAmount);
+            }
             else
             {
-                int difference = PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum - 
+                int difference = PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum -
                     Cashbox.GetTotalAmount();
-                TodaysFinalAccount = 
+                TodaysFinalAccount =
                     $"リストの収支に対して現金が\r\n{AmountWithUnit(Math.Abs(difference))}" +
                     $"{(difference < 0 ? "超過" : "不足")}しています";
             }
@@ -358,8 +365,11 @@ namespace WPF.ViewModels
         /// 出納帳管理画面呼び出しコマンド
         /// </summary>
         public DelegateCommand ShowCashJournalManagementCommand { get; set; }
-        private void ShowCashJournalManagement() =>
+        private void ShowCashJournalManagement()
+        {
             CreateShowWindowCommand(ScreenTransition.CashJournalManagement());
+        }
+
         /// <summary>
         /// 収支日報出力コマンド
         /// </summary>
@@ -371,6 +381,7 @@ namespace WPF.ViewModels
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
+            IsClose = false;
             await Task.Run(() =>
             DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
                 PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
@@ -379,6 +390,8 @@ namespace WPF.ViewModels
                 IsYokohamaBankCheck, IsCeresaCheck));
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
+            IsClose = true;
+            AccountingProcessLocation.IsBalanceAccountOutputed = true;
         }
 
         protected void SetDelegateCommand()
@@ -410,8 +423,11 @@ namespace WPF.ViewModels
         /// 本日の決算額を返します
         /// </summary>
         /// <returns></returns>
-        private int ReturnTodaysFinalAccount() =>
-            PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
+        private int ReturnTodaysFinalAccount()
+        {
+            return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
+        }
+
         /// <summary>
         /// 出納データから出金データを取り出し、出金、振替に振り分けて合計を算出します
         /// </summary>
@@ -420,15 +436,21 @@ namespace WPF.ViewModels
             WithdrawalSum = 0;
             TransferSum = 0;
             if (AccountingProcessLocation.Location == "管理事務所")
+            {
                 foreach (ReceiptsAndExpenditure rae in TodayWroteList)
+                {
                     ContainTodayWroteWithdrawal(rae);
+                }
+            }
 
             foreach (ReceiptsAndExpenditure rae in AllDataList)
-                if (!rae.IsPayment) WithdrawalAllocation(rae);
+            {
+                if (!rae.IsPayment) { WithdrawalAllocation(rae); }
+            }
 
             void ContainTodayWroteWithdrawal(ReceiptsAndExpenditure rae)
             {
-                if (!rae.IsPayment) WithdrawalAllocation(rae);
+                if (!rae.IsPayment) { WithdrawalAllocation(rae); }
             }
         }
         /// <summary>
@@ -438,9 +460,13 @@ namespace WPF.ViewModels
         private void WithdrawalAllocation(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
             if (receiptsAndExpenditure.Content.Text == "口座入金")
+            {
                 TransferSum += receiptsAndExpenditure.Price;
+            }
             else
+            {
                 WithdrawalSum += receiptsAndExpenditure.Price;
+            }
         }
         /// <summary>
         /// 本日の入金合計を算出します
@@ -449,13 +475,20 @@ namespace WPF.ViewModels
         {
             int i = 0;
             if (AccountingProcessLocation.Location == "管理事務所")
+            {
                 foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-                    ContainTodayWrotePayment(rae);
+                { ContainTodayWrotePayment(rae); }
+            }
             foreach (ReceiptsAndExpenditure rae in AllDataList)
-                if (rae.IsPayment) i += rae.Price;
+            {
+                if (rae.IsPayment) { i += rae.Price; }
+            }
             PaymentSum = i;
 
-            void ContainTodayWrotePayment(ReceiptsAndExpenditure rae) => i += rae.IsPayment ? rae.Price : 0;
+            void ContainTodayWrotePayment(ReceiptsAndExpenditure rae)
+            {
+                i += rae.IsPayment ? rae.Price : 0;
+            }
         }
         /// <summary>
         /// 金庫の総計金額
@@ -900,7 +933,7 @@ namespace WPF.ViewModels
             set
             {
                 isContainOutputted = value;
-                if (value) SearchOutputDateEnd = DateTime.Today;
+                if (value) { SearchOutputDateEnd = DateTime.Today; }
                 else
                 {
                     SearchOutputDateEnd = DefaultDate;
@@ -944,8 +977,8 @@ namespace WPF.ViewModels
             get => searchOutputDateStart;
             set
             {
-                if (SearchOutputDateEnd < value) searchStartDate = SearchOutputDateEnd;
-                else searchOutputDateStart = value;
+                if (SearchOutputDateEnd < value) { searchStartDate = SearchOutputDateEnd; }
+                else { searchOutputDateStart = value; }
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
@@ -958,8 +991,7 @@ namespace WPF.ViewModels
             get => searchOutputDateEnd;
             set
             {
-                if (SearchOutputDateStart > value) searchOutputDateEnd = SearchOutputDateStart;
-                else searchOutputDateEnd = value;
+                searchOutputDateEnd = SearchOutputDateStart > value ? SearchOutputDateStart : value;
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
@@ -999,8 +1031,7 @@ namespace WPF.ViewModels
 
                 MessageBoxResult result = MessageBox.Result;
 
-                if (result == MessageBoxResult.Yes) isPreviousDayOutput = true;
-                else isPreviousDayOutput = false;
+                isPreviousDayOutput = result == MessageBoxResult.Yes;
 
                 CallPropertyChanged();
             }
@@ -1092,6 +1123,19 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// ウィンドウを閉じる許可を統括
+        /// </summary>
+        public bool IsClose
+        {
+            get => isClose;
+            set
+            {
+                isClose = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
         private void SetBalanceFinalAccount()
@@ -1100,8 +1144,8 @@ namespace WPF.ViewModels
 
             foreach (ReceiptsAndExpenditure receiptsAndExpenditure in AllDataList)
             {
-                if (receiptsAndExpenditure.IsPayment) ListAmount += receiptsAndExpenditure.Price;
-                else ListAmount -= receiptsAndExpenditure.Price;
+                if (receiptsAndExpenditure.IsPayment) { ListAmount += receiptsAndExpenditure.Price; }
+                else { ListAmount -= receiptsAndExpenditure.Price; }
             }
 
             if (AccountingProcessLocation.Location == "青蓮堂")
@@ -1116,8 +1160,8 @@ namespace WPF.ViewModels
             {
                 foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
                 {
-                    if (receiptsAndExpenditure.IsPayment) todayPayment += receiptsAndExpenditure.Price;
-                    else todayWithdrawal += receiptsAndExpenditure.Price;
+                    if (receiptsAndExpenditure.IsPayment) { todayPayment += receiptsAndExpenditure.Price; }
+                    else { todayWithdrawal += receiptsAndExpenditure.Price; }
                 }
                 ListAmount += todayPayment - todayWithdrawal;
                 BalanceFinalAccount =
@@ -1127,8 +1171,11 @@ namespace WPF.ViewModels
                     $"（本日出力済み伝票{Space}入金{Space}:{AmountWithUnit(todayPayment)}、" +
                     $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
             }
-            else BalanceFinalAccount =
-                    $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
+            else
+            {
+                BalanceFinalAccount =
+                      $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
+            }
             SetCashboxTotalAmount();
             SetOutputButtonEnabled(ListAmount);
         }
@@ -1146,14 +1193,17 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            switch(propertyName)
+            switch (propertyName)
             {
                 case nameof(Password):
                     ErrorsListOperation
                         (string.IsNullOrEmpty(Password), propertyName, Properties.Resources.NullErrorInfo);
                     ErrorsListOperation
-                        (password != LoginRep.GetInstance().Rep.Password, propertyName, 
+                        (GetHashValue(password, LoginRep.GetInstance().Rep.ID) !=
+                            LoginRep.GetInstance().Rep.Password, propertyName,
                         Properties.Resources.PasswordErrorInfo);
+                    break;
+                default:
                     break;
             }
         }
@@ -1244,5 +1294,7 @@ namespace WPF.ViewModels
         public void SortNotify() { ReferenceReceiptsAndExpenditures(true); }
 
         public void PageNotify() { ReferenceReceiptsAndExpenditures(false); }
+
+        public bool OnClosing() { return !IsClose; }
     }
 }

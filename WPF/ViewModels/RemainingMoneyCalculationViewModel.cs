@@ -6,6 +6,7 @@ using Infrastructure;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
 using static Domain.Entities.ValueObjects.MoneyCategory.Denomination;
 
 namespace WPF.ViewModels
@@ -13,12 +14,13 @@ namespace WPF.ViewModels
     /// <summary>
     /// 金庫金額計算ビューモデル
     /// </summary>
-    public class RemainingMoneyCalculationViewModel : BaseViewModel
+    public class RemainingMoneyCalculationViewModel : BaseViewModel, IClosing
     {
         #region Properties
         private readonly Cashbox myCashbox = Cashbox.GetInstance();
         private readonly IDataOutput DataOutput;
         private bool outputButtonEnabled;
+        private bool isClose = true;
         private string outputButtonText = "出力";
         #region AmountAndCount
         //表示用金額
@@ -784,6 +786,19 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand SetOtherMoneyDefaultTitleCommand { get; }
         /// <summary>
+        /// ウィンドウを閉じる許可を統括
+        /// </summary>
+        public bool IsClose
+        {
+            get => isClose;
+            set
+            {
+                isClose = value;
+                CallPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// コンストラクタ　DataOutput、各プロパティを設定、DelegateCommandのインスタンスを生成します
         /// </summary>
         /// <param name="dataOutput"></param>
@@ -800,7 +815,7 @@ namespace WPF.ViewModels
             DefaultWindowTitle = "金庫金額計算";
             OutputButtonEnabled = true;
             if (AccountingProcessLocation.Location == MainWindowViewModel.Locations.管理事務所.ToString())
-                SetOtherMoneyTitleDefault();
+            { SetOtherMoneyTitleDefault(); }
         }
         public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
@@ -808,7 +823,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
-            if (myCashbox.GetTotalAmount() == 0) return;
+            if (myCashbox.GetTotalAmount() == 0) { return; }
+
             OneYenCount = myCashbox.MoneyCategorys[OneYen].Count;
             FiveYenCount = myCashbox.MoneyCategorys[FiveYen].Count;
             TenYenCount = myCashbox.MoneyCategorys[TenYen].Count;
@@ -906,6 +922,7 @@ namespace WPF.ViewModels
             await Task.Run(() => DataOutput.CashboxData());
             OutputButtonEnabled = true;
             OutputButtonText = "出力";
+            AccountingProcessLocation.IsCashBoxOutputed = true;
         }
 
         public override void ValidationProperty(string propertyName, object value)
@@ -1009,5 +1026,7 @@ namespace WPF.ViewModels
         {
             DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
         }
+
+        public bool OnClosing() { return !IsClose; }
     }
 }

@@ -8,6 +8,7 @@
         xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="200" Width="350">
@@ -18,6 +19,7 @@
     
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
+        <behavior:WindowClosingCancelBehavior/>
     </i:Interaction.Behaviors>
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
@@ -67,10 +69,13 @@
         </GroupBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="CloseButton" Content="閉じる" Grid.Column="1" Margin="5">
+            <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" IsEnabled="{Binding IsClose}" Grid.Column="3" Margin="5">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="40" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
                     <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>

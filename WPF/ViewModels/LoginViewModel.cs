@@ -8,6 +8,7 @@ using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
@@ -28,9 +29,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void Login()
         {
-
-            string s = currentRep.PasswordHash;
-            if (Password == CurrentRep.Password)
+            if (GetHashValue(Password, CurrentRep.ID) == CurrentRep.Password)
             {
                 MessageBox = new MessageBoxInfo()
                 {
@@ -170,9 +169,16 @@ namespace WPF.ViewModels
             {
                 case nameof(Password):
                     ErrorsListOperation
-                        (string.IsNullOrEmpty(Password), propertyName, Properties.Resources.NullErrorInfo);
+                        (string.IsNullOrEmpty((string)value), propertyName, Properties.Resources.NullErrorInfo);
+                    if (string.IsNullOrEmpty((string)value)) { break; }
                     ErrorsListOperation
                         (password != CurrentRep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
+                    if (GetErrors(propertyName) != null)
+                    {
+                        ErrorsListOperation
+                            (GetHashValue((string)value, CurrentRep.ID) != CurrentRep.Password,
+                                propertyName, Properties.Resources.PasswordErrorInfo);
+                    }
                     break;
                 default:
                     break;
