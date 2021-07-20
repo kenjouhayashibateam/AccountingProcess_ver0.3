@@ -20,7 +20,6 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Buffe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Memory.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.Properties.Resources.resources
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.GenerateResource.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache

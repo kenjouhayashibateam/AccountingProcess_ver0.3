@@ -21,6 +21,8 @@ namespace WPF.ViewModels
         private string paymentTotalAmountWithUnit;
         private string withdwaralTotalAmountWithUnit;
         private string listTotalAmountWithUnit;
+        private string searchContentText = string.Empty;
+        private string searchDetail = string.Empty;
         #region Bools
         private bool isAllData = true;
         private bool isPaymentOnly;
@@ -307,6 +309,32 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 検索する伝票内容
+        /// </summary>
+        public string SearchContentText
+        {
+            get => searchContentText;
+            set
+            {
+                searchContentText = value;
+                CreateReceiptsAndExpenditures(true);
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 検索する伝票詳細
+        /// </summary>
+        public string SearchDetail
+        {
+            get => searchDetail;
+            set
+            {
+                searchDetail = value;
+                CreateReceiptsAndExpenditures(true);
+                CallPropertyChanged();
+            }
+        }
 
         private void CreateReceiptsAndExpenditures(bool isPageReset)
         {
@@ -314,10 +342,10 @@ namespace WPF.ViewModels
             string creditDept = IsIndiscriminateDept ? string.Empty : SelectedCreditDept.Dept;
             string subject = IsIndiscriminateAccountingSubject ? string.Empty : SearchAccountingSubject;
 
-            (int count, ObservableCollection<ReceiptsAndExpenditure> list) = 
+            (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (DefaultDate, DateTime.Today, string.Empty, creditDept, string.Empty, string.Empty, subject,
-                    string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, 
+                (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail, subject,
+                    string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate,
                     DefaultDate.AddDays(1), DateTime.Today, Pagination.PageCount,
                     Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
             Pagination.TotalRowCount = count;
@@ -328,8 +356,8 @@ namespace WPF.ViewModels
             int payment = 0;
             int withdrawal = 0;
 
-            foreach(ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (DefaultDate, DateTime.Today, string.Empty, creditDept, string.Empty, string.Empty,
+            foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail,
                     subject, string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate,
                     SearchEndDate, DefaultDate.AddDays(1), DateTime.Today))
             {

@@ -20,12 +20,13 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <GroupBox Header="検索メニュー" Grid.Column="0" Margin="5">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -92,6 +93,20 @@
                         <TextBlock Text="勘定科目" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
                         <CheckBox Content="勘定科目を限定しない" IsChecked="{Binding IsIndiscriminateAccountingSubject}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                         <ComboBox Name="AccountingSubjectCommboBox" Grid.Row="1" Text="{Binding SearchAccountingSubject}" ItemsSource="{Binding AccountingSubjects}" DisplayMemberPath="Subject" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsAccountingSubjectsEnabled}" Margin="5"/>
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="内容" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBox x:Name="SearchContentTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding SearchContentText,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                        <TextBlock Text="詳細" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBox x:Name="SearchDetailTextBox" Grid.Column="1" Grid.Row="1" Text="{Binding SearchDetail,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
                     </Grid>
                 </Grid>
             </GroupBox>

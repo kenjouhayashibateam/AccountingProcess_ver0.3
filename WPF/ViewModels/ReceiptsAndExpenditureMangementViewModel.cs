@@ -1165,10 +1165,11 @@ namespace WPF.ViewModels
                 }
                 ListAmount += todayPayment - todayWithdrawal;
                 BalanceFinalAccount =
-                    $"{FinalAccountCategory} + 入金伝票 - 出金伝票\r\n" +
-                    $"{PreviousDayFinalAccountDisplayValue}+{AmountWithUnit(PaymentSum)}-" +
-                    $"{AmountWithUnit(WithdrawalSum + TransferSum)}={AmountWithUnit(ListAmount)}\r\n" +
-                    $"（本日出力済み伝票{Space}入金{Space}:{AmountWithUnit(todayPayment)}、" +
+                    $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
+                    $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
+                    $"{AmountWithUnit(PaymentSum)}-{Space}{AmountWithUnit(WithdrawalSum + TransferSum)}" +
+                    $"{Space}={Space}{AmountWithUnit(ListAmount)}\r\n" +
+                    $"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
                     $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
             }
             else

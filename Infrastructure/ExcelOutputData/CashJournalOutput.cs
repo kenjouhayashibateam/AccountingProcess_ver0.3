@@ -176,7 +176,7 @@ namespace Infrastructure.ExcelOutputData
                         currentSubjectCode == rae.Content.AccountingSubject.SubjectCode &&
                         currentActivityDate == rae.AccountActivityDate &&
                         !IndependentContent.Contains(rae.Content.Text) &&
-                        ItemIndex < 9;
+                        ItemIndex < 10 && currentLocation == rae.Location;
                 }
 
                 void SetBalance()
