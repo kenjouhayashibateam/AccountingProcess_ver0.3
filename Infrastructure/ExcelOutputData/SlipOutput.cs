@@ -46,7 +46,6 @@ namespace Infrastructure.ExcelOutputData
             string creditDept = default;
             string clerk = default;
             bool isTaxRate = false;
-            bool isGoNext = false;
             int contentCount = 0;
             int inputRow = 0;
             int inputContentColumn = 0;
@@ -76,16 +75,11 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(clerk)) { clerk = rae.RegistrationRep.FirstName; }
                 contentCount++;
 
-
-                //codeが同じならisGoNextにsubjectの比較結果を代入する
-                if (code == rae.Content.AccountingSubject.SubjectCode | isGoNext == false) { ValidateGonext(); }
-                else { isGoNext = true; }
-
-                currentDate = rae.AccountActivityDate;//入出金日を代入
-                if (!isGoNext) { isGoNext = contentCount > 10; }//11件以上は次のページに出力
-                //頁移動の有無による動作
-                if (isGoNext)
+                if (IsSameData(rae, currentDate, creditDept, code, subject, content, location, isTaxRate))
+                { TotalPrice += rae.Price; }
+                else
                 {
+                    currentDate = rae.AccountActivityDate;//入出金日を代入
                     code = rae.Content.AccountingSubject.SubjectCode;
                     subject = rae.Content.AccountingSubject.Subject;
                     content = rae.Content.Text;
@@ -98,7 +92,7 @@ namespace Infrastructure.ExcelOutputData
                     NextPage();//次のページへ
                     PageStyle();
                 }
-                else { TotalPrice += rae.Price; }//ページ移動がなければ、総額に現在のデータのPriceを加算
+
                 //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、
                 //セルの場所を設定する
                 if (contentCount <= 5)
@@ -126,8 +120,9 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =
                         TotalPrice.ToString().Substring(TotalPrice.ToString().Length - 1 - i, 1);
                 }
-
+                //前日の日付にする場合の対応
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
+                //前日の青蓮堂の担当者と当日の伝票出力者（管理事務所の経理）が違う場合の対応
                 if (OutputRep.FirstName == clerk)
                 {
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value = OutputRep.FirstName;
@@ -138,10 +133,11 @@ namespace Infrastructure.ExcelOutputData
                     myWorksheet.Cell(StartRowPosition + 6, 18).Value =
                         OutputRep.FirstName;
                 }
+                //出力日
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = OutputDate.Day;
-               
+               //勘定科目
                 string ass =
                     $"{rae.Content.AccountingSubject.Subject} : " +
                     $"{rae.Content.AccountingSubject.SubjectCode}";
@@ -160,32 +156,8 @@ namespace Infrastructure.ExcelOutputData
                 };
                 s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
-
-                void ValidateGonext()
-                {
-                    isGoNext = IsStringEqualsReverse(subject, rae.Content.AccountingSubject.Subject);
-                    if (!isGoNext) { isGoNext = IndependentContent.Contains(rae.Content.Text); }
-                    if (!isGoNext) { isGoNext = currentDate != rae.AccountActivityDate; }//入出金日比較
-                    if (!isGoNext) { isGoNext = creditDept != rae.CreditDept.Dept; }
-                    if (!isGoNext) { isGoNext = isTaxRate != rae.IsReducedTaxRate; }
-                    if (!isGoNext & CompareContentsSubjectCode.FirstOrDefault
-                        (s => s == rae.Content.AccountingSubject.SubjectCode) != null)
-                    { isGoNext = content != rae.Content.Text; }
-                    if (!isGoNext) { isGoNext = location != rae.Location; }//伝票の作成場所が違えば次の伝票へ移動する
-                }
             }
         }
-        /// <summary>
-        /// ContentによってNextPageを検証する勘定科目コードの配列
-        /// </summary>
-        private readonly string[] CompareContentsSubjectCode = new string[] { };
-        /// <summary>
-        /// 文字列を比較して、同じならFalse、違えばTrueを返します
-        /// </summary>
-        /// <param name="Value1">文字列1</param>
-        /// <param name="Value2">文字列2</param>
-        /// <returns></returns>
-        private bool IsStringEqualsReverse(string Value1, string Value2) { return Value1 != Value2; }
 
         public override void Output()
         {
@@ -229,7 +201,6 @@ namespace Infrastructure.ExcelOutputData
                 _ = myWorksheet.Cell(i, 11).Style.Alignment.SetShrinkToFit(true);
             }
             _ = MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 6, 20).Style
-                //.Alignment.SetTopToBottom(true)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             _ = MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 16).Style

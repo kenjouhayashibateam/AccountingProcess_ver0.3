@@ -4,6 +4,9 @@ using System.Windows;
 
 namespace WPF.Views.Behaviors
 {
+    /// <summary>
+    /// svgファイルを表示するために、SvgViewboxのSourceを読み込ませるクラス
+    /// </summary>
     public class SvgViewboxAttachment
     {
         private static readonly string ResourceFullPath = System.IO.Path.GetFullPath("./SvgFiles");

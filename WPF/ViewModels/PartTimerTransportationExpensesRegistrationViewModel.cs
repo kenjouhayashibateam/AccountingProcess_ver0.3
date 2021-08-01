@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
@@ -32,7 +31,8 @@ namespace WPF.ViewModels
             RegistrationCommand = new DelegateCommand(() => Registration(), () => true);
         }
         public PartTimerTransportationExpensesRegistrationViewModel() :
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        { }
         /// <summary>
         /// 出納データ登録コマンド
         /// </summary>

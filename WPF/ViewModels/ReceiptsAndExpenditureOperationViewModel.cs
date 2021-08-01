@@ -97,7 +97,8 @@ namespace WPF.ViewModels
             }
         }
         public ReceiptsAndExpenditureOperationViewModel() :
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        { }
         public DelegateCommand ShowWizardCommand { get; set; }
         private void ShowWizard()
         {
@@ -250,7 +251,7 @@ namespace WPF.ViewModels
                 new ReceiptsAndExpenditure
                 (ReceiptsAndExpenditureIDField, RegistrationDate, OperationRep,
                 OperationData.Data.Location, SelectedCreditDept, SelectedContent,
-                JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity, 
+                JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity,
                 AccountActivityDate, SlipOutputDate, IsReducedTaxRate);
 
             DataOperationButtonContent = "更新中";
@@ -294,7 +295,7 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditure rae =
                 new ReceiptsAndExpenditure
                 (0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location,
-                SelectedCreditDept, SelectedContent,JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity,
+                SelectedCreditDept, SelectedContent, JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity,
                 AccountActivityDate, DefaultDate, IsReducedTaxRate);
 
             string depositAndWithdrawalText = IsPaymentCheck ? "入金" : "出金";
@@ -750,7 +751,8 @@ namespace WPF.ViewModels
             get => comboContentText;
             set
             {
-                SelectedContent = ComboContents.FirstOrDefault(c => c.Text == value);
+                if (SelectedContent != ComboContents.FirstOrDefault(c => c.Text == value))
+                { SelectedContent = ComboContents.FirstOrDefault(c => c.Text == value); }
                 if (SelectedContent == null)
                 {
                     comboContentText = string.Empty;
@@ -793,6 +795,9 @@ namespace WPF.ViewModels
             {
                 selectedContent = value;
                 CallPropertyChanged();
+                if (value == null) { return; }
+                if (value.Text != ComboContentText)
+                { ComboContentText = value.Text; }
             }
         }
         /// <summary>
@@ -1129,6 +1134,7 @@ namespace WPF.ViewModels
         /// <returns>判定結果</returns>
         private bool CanOperation()
         {
+            //必要なフィールドに値が入っているか
             bool b = !HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
                 !string.IsNullOrEmpty(ComboContentText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectText) &
@@ -1136,21 +1142,23 @@ namespace WPF.ViewModels
                 !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
 
             if (!b) { return false; }
-
+            //OperationData.Dataがnullの時は登録なのでtrueを返す
             if (OperationData.Data == null) { return true; }
-
+            //ここまでの条件で伝票出力されていなければtrueを返す
             if (OperationData.Data.OutputDate == DefaultDate) { return true; }
-
-            b = CurrentFiscalYearFirstDate < OperationData.Data.OutputDate;
-
+            //伝票出力されたのが今月中ならtrueを返す
+            if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) { return true; }
+            //伝票出力日が今年度中かをbに代入
+            b = IsInCorrectionDeadline();
+            //今年度以前ならfalseを返す
             if (!b)
             {
                 DataOperationButtonContent =
                     "更新は管理者権限所有者が、今年度中の出力データでのみ許可されます";
                 return false;
             }
-            else { b = IsExceptMonthUpdate(); }
 
+            b = IsExceptMonthUpdate();
 
             if (b) { b = LoginRep.GetInstance().Rep.IsAdminPermisson; }
             else { DataOperationButtonContent = "訂正期限が過ぎています。"; }
@@ -1166,10 +1174,6 @@ namespace WPF.ViewModels
 
             bool IsExceptMonthUpdate()
             {
-                bool b = DateTime.Today.Month == OperationData.Data.OutputDate.Month;
-
-                if (b) { return true; }
-
                 if (IsInCorrectionDeadline()) { CreateConfirmationMessage(); }
 
                 return IsInCorrectionDeadline();
@@ -1257,9 +1261,6 @@ namespace WPF.ViewModels
         {
             IsValidityEnabled = CurrentOperation == DataOperation.更新;
             IsInputWizardEnabled = CurrentOperation == DataOperation.登録;
-
-            //ComboCreditDeptText =
-            //    IsValidityEnabled ? OperationData.Data.CreditDept.Dept : ComboCreditDepts[0].Dept;
         }
 
         protected override void SetDataOperationButtonContent(DataOperation operation)

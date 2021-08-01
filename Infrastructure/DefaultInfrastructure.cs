@@ -12,17 +12,17 @@ namespace Infrastructure
         /// DataOutputインフラストラクチャのデフォルト
         /// </summary>
         /// <returns>エクセル出力</returns>
-        public static IDataOutput GetDefaultDataOutput() => new ExcelOutputInfrastructure();
+        public static IDataOutput GetDefaultDataOutput() { return new ExcelOutputInfrastructure(); }
         /// <summary>
         /// ロガーインフラストラクチャのデフォルト
         /// </summary>
         /// <returns></returns>
-        public static ILogger GetLogger() => new LogFileInfrastructure();
+        public static ILogger GetLogger() { return new LogFileInfrastructure(); }
         /// <summary>
         /// DataBaseConnectインフラストラクチャのデフォルト
         /// </summary>
         /// <returns>データベース接続</returns>
-        public static IDataBaseConnect GetDefaultDataBaseConnect() =>
-            new SQLServerConnectInfrastructure();
+        public static IDataBaseConnect GetDefaultDataBaseConnect()
+        { return new SQLServerConnectInfrastructure(); }
     }
 }

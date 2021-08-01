@@ -13,7 +13,6 @@
             Text = text;
             IsValidity = isValidity;
         }
-
         /// <summary>
         /// ID
         /// </summary>
@@ -40,10 +39,9 @@
         public override bool Equals(object obj)
         {
             if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
-            
-            Content content = (Content)obj;
-            return ID == content.ID;   
-        }
 
+            Content content = (Content)obj;
+            return ID == content.ID;
+        }
     }
 }

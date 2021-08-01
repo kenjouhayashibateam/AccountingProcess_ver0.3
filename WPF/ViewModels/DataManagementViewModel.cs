@@ -674,8 +674,8 @@ namespace WPF.ViewModels
             set
             {
                 _currentRep = value;
-                if (_currentRep != null) SetRepDetailProperty();
-                else _currentRep = new Rep(string.Empty, string.Empty, string.Empty, true, false);
+                if (_currentRep != null) { SetRepDetailProperty(); }
+                else { _currentRep = new Rep(string.Empty, string.Empty, string.Empty, true, false); }
                 CallPropertyChanged();
             }
         }

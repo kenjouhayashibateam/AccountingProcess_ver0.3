@@ -135,11 +135,11 @@ namespace Infrastructure.ExcelOutputData
 
             myWorksheet.Cell(4, 3).Value =
                 myCashbox.MoneyCategorys[TenThousandYen].AmountWithUnit();
-            myWorksheet.Cell(5, 3).Value = 
+            myWorksheet.Cell(5, 3).Value =
                 myCashbox.MoneyCategorys[FiveThousandYen].AmountWithUnit();
-            myWorksheet.Cell(6, 3).Value = 
+            myWorksheet.Cell(6, 3).Value =
                 myCashbox.MoneyCategorys[OneThousandYen].AmountWithUnit();
-            myWorksheet.Cell(7, 3).Value = 
+            myWorksheet.Cell(7, 3).Value =
                 myCashbox.MoneyCategorys[FiveHundredYen].AmountWithUnit();
             myWorksheet.Cell(8, 3).Value =
                 myCashbox.MoneyCategorys[OneHundredYen].AmountWithUnit();
@@ -147,14 +147,14 @@ namespace Infrastructure.ExcelOutputData
                 myCashbox.MoneyCategorys[FiftyYen].AmountWithUnit();
             myWorksheet.Cell(10, 3).Value =
                 myCashbox.MoneyCategorys[TenYen].AmountWithUnit();
-            myWorksheet.Cell(11, 3).Value = 
+            myWorksheet.Cell(11, 3).Value =
                 myCashbox.MoneyCategorys[FiveYen].AmountWithUnit();
             myWorksheet.Cell(12, 3).Value =
                 myCashbox.MoneyCategorys[OneYen].AmountWithUnit();
 
             myWorksheet.Cell(7, 5).Value =
                 myCashbox.MoneyCategorys[FiveHundredYenBundle].Count;
-            myWorksheet.Cell(8, 5).Value = 
+            myWorksheet.Cell(8, 5).Value =
                 myCashbox.MoneyCategorys[OneHundredYenBundle].Count;
             myWorksheet.Cell(9, 5).Value = myCashbox.MoneyCategorys[FiftyYenBundle].Count;
             myWorksheet.Cell(10, 5).Value = myCashbox.MoneyCategorys[TenYenBundle].Count;

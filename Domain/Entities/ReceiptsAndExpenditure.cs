@@ -44,7 +44,7 @@ namespace Domain.Entities
         /// <summary>
         /// 単位付き金額
         /// </summary>
-        public string PriceWithUnit { get => TextHelper.AmountWithUnit(Price); }
+        public string PriceWithUnit => TextHelper.AmountWithUnit(Price);
         /// <summary>
         /// 出入金　入金はTrue、出金はFalse
         /// </summary>
@@ -90,7 +90,7 @@ namespace Domain.Entities
                 Content content, string detail, int price, bool isPayment, bool isValidity,
                 DateTime accountActivityDate, DateTime outputDate, bool isRedicedTaxRate)
         {
-            ID =id;
+            ID = id;
             RegistrationDate = registrationDate;
             RegistrationRep = registrationRep;
             Location = location;

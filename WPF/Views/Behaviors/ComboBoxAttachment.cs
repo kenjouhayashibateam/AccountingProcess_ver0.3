@@ -21,21 +21,20 @@ namespace WPF.Views.Behaviors
 
         public static DependencyProperty SetIsIMEModeOnProperty =
             DependencyProperty.RegisterAttached
-                ("SetIsIMEModeOnProperty", typeof(bool), typeof(ComboBoxAttachment), 
+                ("SetIsIMEModeOnProperty", typeof(bool), typeof(ComboBoxAttachment),
                     new PropertyMetadata(false, (d, e) =>
-            {
-                if (!(d is ComboBox cb)) { return; }
+                    {
+                        if (!(d is ComboBox cb)) { return; }
 
-                if (!(e.NewValue is bool isIMEMode)) { return; }
-                cb.GotFocus -= OnComboBoxGotFocus;
-                cb.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
-                if (isIMEMode)
-                {
-                    cb.GotFocus += OnComboBoxGotFocus;
-                    cb.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
-                }
-            }
-            ));
+                        if (!(e.NewValue is bool isIMEMode)) { return; }
+                        cb.GotFocus -= OnComboBoxGotFocus;
+                        cb.PreviewMouseLeftButtonDown -= OnMouseLeftButtonDown;
+                        if (isIMEMode)
+                        {
+                            cb.GotFocus += OnComboBoxGotFocus;
+                            cb.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
+                        }
+                    }));
 
         public static bool GetIsIMEModeTrueOnGotFocus(DependencyObject obj)
         {
@@ -78,21 +77,20 @@ namespace WPF.Views.Behaviors
         }
 
         public static DependencyProperty SetIsIMEModeOffProperty =
-            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), 
+            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool),
                 typeof(ComboBoxAttachment), new PropertyMetadata(false, (d, e) =>
-            {
-                if (!(d is ComboBox cb)) { return; }
-
-                if (!(e.NewValue is bool isIMEMode)) { return; }
-                cb.GotFocus -= OffComboBoxGotFocus;
-                cb.PreviewMouseLeftButtonDown -= OffMouseLeftButtonDown;
-                if (isIMEMode)
                 {
-                    cb.GotFocus += OffComboBoxGotFocus;
-                    cb.PreviewMouseLeftButtonDown += OffMouseLeftButtonDown;
-                }
-            }
-            ));
+                    if (!(d is ComboBox cb)) { return; }
+
+                    if (!(e.NewValue is bool isIMEMode)) { return; }
+                    cb.GotFocus -= OffComboBoxGotFocus;
+                    cb.PreviewMouseLeftButtonDown -= OffMouseLeftButtonDown;
+                    if (isIMEMode)
+                    {
+                        cb.GotFocus += OffComboBoxGotFocus;
+                        cb.PreviewMouseLeftButtonDown += OffMouseLeftButtonDown;
+                    }
+                }));
 
         public static bool GetIsIMEModeTrueOffGotFocus(DependencyObject obj)
         {

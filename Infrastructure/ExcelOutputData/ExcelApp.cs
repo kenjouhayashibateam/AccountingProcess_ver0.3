@@ -43,9 +43,16 @@ namespace Infrastructure.ExcelOutputData
         public ExcelApp(ILogger logger)
         {
             Logger = logger;
-            ExcelClose();
-            myWorkbook = new XLWorkbook();
-            myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
+            try
+            {
+                ExcelClose();
+                myWorkbook = new XLWorkbook();
+                myWorksheet = myWorkbook.AddWorksheet(Properties.Resources.SheetName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ILogger.LogInfomation.ERROR, $"ExcelConnect\t{ex.Message}");
+            }
         }
         public ExcelApp() : this(DefaultInfrastructure.GetLogger()) { }
 

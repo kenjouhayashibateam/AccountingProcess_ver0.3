@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Entities.ValueObjects
+﻿namespace Domain.Entities.ValueObjects
 {
     /// <summary>
     /// 貸方部門クラス

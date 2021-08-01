@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
-using Domain.Entities.Helpers;
 using static Domain.Entities.Helpers.TextHelper;
 using Domain.Repositories;
 using System;

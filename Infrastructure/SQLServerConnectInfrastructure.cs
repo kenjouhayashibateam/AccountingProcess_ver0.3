@@ -103,7 +103,6 @@ namespace Infrastructure
                 { "@validity", rep.IsValidity},
                 {"@is_permission", rep.IsAdminPermisson }
             };
-
             return ReturnGeneretedParameterCommand("registration_staff").ExecuteNonQuery();
         }
 

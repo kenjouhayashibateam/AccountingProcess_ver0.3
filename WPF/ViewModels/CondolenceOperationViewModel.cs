@@ -62,14 +62,18 @@ namespace WPF.ViewModels
         private ReceiptsAndExpenditure selectedReceiptsAndExpenditure =
             new ReceiptsAndExpenditure(0, DefaultDate, LoginRep.GetInstance().Rep, string.Empty,
                 new CreditDept(string.Empty, string.Empty, true, true),
-                    new Content(string.Empty, new AccountingSubject(string.Empty, string.Empty, string.Empty, true), 0, string.Empty, true),
-                        string.Empty, 0, true, true, DefaultDate, DefaultDate, false);
-        private Condolence OperationCondolence = new Condolence(0, string.Empty, string.Empty, string.Empty, string.Empty,
-            0, 0, 0, 0, 0, string.Empty, DefaultDate, string.Empty, string.Empty);
+                    new Content(string.Empty,
+                        new AccountingSubject(string.Empty, string.Empty, string.Empty, true), 0, string.Empty, true),
+                            string.Empty, 0, true, true, DefaultDate, DefaultDate, false);
+        private Condolence OperationCondolence = new Condolence
+            (0, string.Empty, string.Empty, string.Empty, string.Empty,
+                0, 0, 0, 0, 0, string.Empty, DefaultDate, string.Empty, string.Empty);
         private int ID { get; set; } = 0;
         private Pagination pagination = Pagination.GetPagination();
-        public Dictionary<int, string> NoteStrings => new Dictionary<int, string>() { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } };
-        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" }, { 3, "彼岸読経" }, { 4, "盆読経" } };
+        public Dictionary<int, string> NoteStrings => new Dictionary<int, string>()
+        { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } };
+        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() 
+        { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" }, { 3, "彼岸読経" }, { 4, "盆読経" } };
         private readonly LoginRep GetLoginRep = LoginRep.GetInstance();
         #endregion
 
@@ -103,9 +107,9 @@ namespace WPF.ViewModels
         private void DeleteCondolence()
         {
             OperationCondolence = new Condolence
-                (ID, Location, OwnerName, SoryoName, ContentText, IntAmount(Almsgiving), IntAmount(CarTip), 
-                    IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
-                    CounterReceiver, MailRepresentative);
+                (ID, Location, OwnerName, SoryoName, ContentText, IntAmount(Almsgiving), IntAmount(CarTip),
+                    IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note,
+                    AccountActivityDate, CounterReceiver, MailRepresentative);
             if (DeleteConfirmation() == MessageBoxResult.No) { return; }
             _ = DataBaseConnect.DeleteCondolence(ID);
             MessageBox = new MessageBoxInfo()

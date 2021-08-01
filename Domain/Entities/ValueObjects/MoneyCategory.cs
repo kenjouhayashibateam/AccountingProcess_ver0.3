@@ -83,7 +83,6 @@ namespace Domain.Entities.ValueObjects
         /// </summary>
         /// <param name="category">金種</param>
         public MoneyCategory(int category) { Category = category; }
-
         /// <summary>
         /// 金銭の枚数
         /// </summary>
@@ -92,7 +91,6 @@ namespace Domain.Entities.ValueObjects
         /// 金額
         /// </summary>
         public int Amount => Category * Count;
-
         /// <summary>
         /// 表示用金額の文字列を返します。
         /// </summary>

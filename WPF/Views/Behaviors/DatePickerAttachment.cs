@@ -17,21 +17,20 @@ namespace WPF.Views.Behaviors
         }
 
         public static DependencyProperty SetIsIMEModeOffProperty =
-            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool), 
+            DependencyProperty.RegisterAttached("SetIsIMEModeOffProperty", typeof(bool),
                 typeof(DatePickerAttachment), new PropertyMetadata(false, (d, e) =>
-            {
-                if (!(d is DatePicker dp)) return;
-
-                if (!(e.NewValue is bool isIMEMode)) { return; }
-                dp.GotFocus -= OffDatePickerGotFocus;
-                dp.PreviewMouseLeftButtonDown -= OffMouseLeftButtonDown;
-                if (isIMEMode)
                 {
-                    dp.GotFocus += OffDatePickerGotFocus;
-                    dp.PreviewMouseLeftButtonDown += OffMouseLeftButtonDown;
-                }
-            }
-            ));
+                    if (!(d is DatePicker dp)) { return; }
+
+                    if (!(e.NewValue is bool isIMEMode)) { return; }
+                    dp.GotFocus -= OffDatePickerGotFocus;
+                    dp.PreviewMouseLeftButtonDown -= OffMouseLeftButtonDown;
+                    if (isIMEMode)
+                    {
+                        dp.GotFocus += OffDatePickerGotFocus;
+                        dp.PreviewMouseLeftButtonDown += OffMouseLeftButtonDown;
+                    }
+                }));
 
         public static bool GetIsIMEModeTrueOffGotFocus(DependencyObject obj)
         {

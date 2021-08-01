@@ -61,7 +61,7 @@ namespace WPF.ViewModels
         }
         public CreateVoucherViewModel() : this
             (DefaultInfrastructure.GetDefaultDataBaseConnect(),
-            DefaultInfrastructure.GetDefaultDataOutput()) { }
+                DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
         /// 受納証管理画面を表示するコマンド
         /// </summary>
@@ -130,7 +130,8 @@ namespace WPF.ViewModels
 
             Condolence condolence = new Condolence
                 (0, AccountingProcessLocation.Location, addressee, string.Empty, "法事", almsgiving, carTip, mealTip, 
-                    carAndMealTip, socialGethering, string.Empty, accountActivityDate, LoginRep.GetInstance().Rep.Name, string.Empty);
+                    carAndMealTip, socialGethering, string.Empty, accountActivityDate, LoginRep.GetInstance().Rep.Name,
+                    string.Empty);
             CondolenceOperation co = CondolenceOperation.GetInstance();
             co.SetData(condolence);
 

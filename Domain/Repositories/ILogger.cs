@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Repositories
+﻿namespace Domain.Repositories
 {
     /// <summary>
     /// ログ保存

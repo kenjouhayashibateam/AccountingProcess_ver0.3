@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Entities.ValueObjects;
 using System;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -162,7 +163,18 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(14, 2).Value = WizeCoreAmountWithUnit;
                 myWorksheet.Cell(16, 4).Value = "信行寺　春秋苑";
             }
-            else { myWorksheet.Cell(9, 1).Value = "預り金"; }
+            else
+            {
+                myWorksheet.Cell(9, 1).Value = "預り金";
+                SetTranceferValue();
+            }
+
+            void SetTranceferValue()
+            {
+                if (IntAmount(TranceferAmountWithUnit) == 0) { return; }
+                myWorksheet.Cell(9, 4).Value = "社内振替";
+                myWorksheet.Cell(10, 4).Value = TranceferAmountWithUnit;
+            }
         }
 
         protected override double SetMaeginsBottom() { return ToInch(1.2); }

@@ -155,7 +155,7 @@ namespace WPF.ViewModels
         /// データ更新を行う画面を表示するコマンド
         /// </summary>
         public DelegateCommand ShowUpdateCommand { get; set; }
-        private async  void ShowUpdate()
+        private async void ShowUpdate()
         {
             await Task.Delay(1);
             ReceiptsAndExpenditureOperation.SetData(SelectedReceiptsAndExpenditure);
@@ -297,7 +297,8 @@ namespace WPF.ViewModels
             ReferenceLocationCheckBoxContent = $"経理担当場所{Space}:{Space}" +
                                                                         $"{AccountingProcessLocation.Location}の伝票のみを表示";
             IsPreviousDayOutputEnabled =
-                LoginRep.GetInstance().Rep != null && LoginRep.GetInstance().Rep.IsAdminPermisson;
+                LoginRep.GetInstance().Rep != null && LoginRep.GetInstance().Rep.IsAdminPermisson &&
+                GetErrors(nameof(Password)) == null;
             SetListTitle();
         }
         /// <summary>
@@ -402,15 +403,14 @@ namespace WPF.ViewModels
             ShowCashJournalManagementCommand =
                 new DelegateCommand(() => ShowCashJournalManagement(),
                 () => IsReceiptsAndExpenditureOutputButtonEnabled);
-            ShowRemainingCalculationViewCommand = 
+            ShowRemainingCalculationViewCommand =
                 new DelegateCommand(() => ShowRemainingCalculationView(), () => true);
-            SetCashboxTotalAmountCommand = 
+            SetCashboxTotalAmountCommand =
                 new DelegateCommand(() => SetCashboxTotalAmount(), () => true);
-            PaymentSlipsOutputCommand = 
+            PaymentSlipsOutputCommand =
                 new DelegateCommand(() => PaymentSlipsOutput(), () => IsPaymentSlipsOutputEnabled);
             WithdrawalSlipsOutputCommand =
-                new DelegateCommand(() => WithdrawalSlipsOutput(), 
-                () => IsWithdrawalSlipsOutputEnabled);
+                new DelegateCommand(() => WithdrawalSlipsOutput(), () => IsWithdrawalSlipsOutputEnabled);
             DefaultListExpressCommand = new DelegateCommand(() => DefaultListExpress(), () => true);
             RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
             ShowRegistrationCommand = new DelegateCommand(() => ShowRegistration(), () => true);
@@ -1016,7 +1016,10 @@ namespace WPF.ViewModels
             get => isPreviousDayOutput;
             set
             {
-                if (value == isPreviousDayOutput) return;
+                if (value == isPreviousDayOutput) { return; }
+
+                isPreviousDayOutput = value;
+                CallPropertyChanged();
 
                 MessageBox = new MessageBoxInfo()
                 {
@@ -1033,7 +1036,6 @@ namespace WPF.ViewModels
 
                 isPreviousDayOutput = result == MessageBoxResult.Yes;
 
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1187,9 +1189,11 @@ namespace WPF.ViewModels
         private void SetOutputButtonEnabled(int amount)
         {
             IsBalanceFinalAccountOutputEnabled =
-                IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled = 
+                IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled =
                 IsWithdrawalSlipsOutputEnabled = isPasswordEnabled =
-                IsPreviousDayOutputEnabled = IsOutputGroupEnabled= Cashbox.GetTotalAmount() == amount;
+                IsOutputGroupEnabled = Cashbox.GetTotalAmount() == amount;
+
+            IsPreviousDayOutputEnabled = false;
         }
 
         public override void ValidationProperty(string propertyName, object value)
@@ -1226,7 +1230,7 @@ namespace WPF.ViewModels
             {
                 AccountActivityDateStart = SearchStartDate;
                 OutputDateStart = SearchOutputDateStart;
-                AccountActivityDateEnd = 
+                AccountActivityDateEnd =
                     SearchEndDate == null ? new DateTime(9999, 1, 1) : SearchEndDate;
                 OutputDateEnd =
                     SearchOutputDateEnd == null ? new DateTime(9999, 1, 1) : SearchOutputDateEnd;

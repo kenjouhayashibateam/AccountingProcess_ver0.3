@@ -497,10 +497,7 @@ namespace WPF.ViewModels
             DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
             if (AccountingProcessLocation.OriginalTotalAmount == 0)
-            {
-                ShowSlipManagementContent =
-                    "預かり金額を設定して下さい";
-            }
+            { ShowSlipManagementContent = "預かり金額を設定して下さい"; }
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック

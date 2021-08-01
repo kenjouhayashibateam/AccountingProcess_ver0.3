@@ -55,7 +55,9 @@ namespace Infrastructure.ExcelOutputData
             bool isTaxRate = false;
             string detailString = default;
             string currentSubjectCode = string.Empty;
+            string currentSubject = string.Empty;
             string currentDept = string.Empty;
+            string currentContent = string.Empty;
             DateTime currentActivityDate = DefaultDate;
             string currentLocation = string.Empty;
 
@@ -94,7 +96,7 @@ namespace Infrastructure.ExcelOutputData
 
                 void PageMove()
                 {
-                    if (IsSameSlip()) { return; }
+                    if (ReturnIsSameData()) { return; }
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
                     myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
@@ -137,9 +139,17 @@ namespace Infrastructure.ExcelOutputData
                     }
                 }
 
+                bool ReturnIsSameData()
+                {
+                    return IsSameData(rae, currentActivityDate, currentDept, currentSubjectCode, currentSubject,
+                    currentContent, currentLocation, isTaxRate);
+                }
+
+
                 void SetItem()
                 {
-                    if (IsSameSlip())
+                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubjectCode, currentSubject,
+                       currentContent, currentLocation, isTaxRate))
                     {
                         slipPayment += rae.IsPayment ? rae.Price : 0;
                         slipWithdrawal += rae.IsPayment ? 0 : rae.Price;
@@ -154,7 +164,9 @@ namespace Infrastructure.ExcelOutputData
                         slipWithdrawal = rae.IsPayment ? 0 : rae.Price;
                         currentLocation = rae.Location;
                         currentSubjectCode = rae.Content.AccountingSubject.SubjectCode;
+                        currentSubject = rae.Content.AccountingSubject.Subject;
                         currentDept = rae.CreditDept.Dept;
+                        currentContent = rae.Content.Text;
                         isTaxRate = rae.IsReducedTaxRate;
                         if (rae.IsPayment) { slipPayment = rae.Price; }
                         else { slipWithdrawal = rae.Price; }
@@ -168,15 +180,6 @@ namespace Infrastructure.ExcelOutputData
                         SetStyleAndNextIndex();
                         pageRowCount++;
                     }
-                }
-
-                bool IsSameSlip()
-                {
-                    return currentDept == rae.CreditDept.Dept &&
-                        currentSubjectCode == rae.Content.AccountingSubject.SubjectCode &&
-                        currentActivityDate == rae.AccountActivityDate &&
-                        !IndependentContent.Contains(rae.Content.Text) &&
-                        ItemIndex < 10 && currentLocation == rae.Location;
                 }
 
                 void SetBalance()

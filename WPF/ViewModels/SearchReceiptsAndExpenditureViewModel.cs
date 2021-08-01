@@ -352,7 +352,7 @@ namespace WPF.ViewModels
             ListTotalCountInfo = $"{count}{Space}件";
             ReceiptsAndExpenditures = list;
             Pagination.SetProperty();
-            
+
             int payment = 0;
             int withdrawal = 0;
 

@@ -119,8 +119,7 @@ namespace WPF.ViewModels
         }
 
         public override void ValidationProperty(string propertyName, object value)
-        {
-        }
+        { }
 
         protected override void SetWindowDefaultTitle()
         {

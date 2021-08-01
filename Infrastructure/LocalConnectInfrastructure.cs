@@ -11,25 +11,19 @@ namespace Infrastructure
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
         public AccountingSubject CallAccountingSubject(string id)
-        {
-            return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true);
-        }
+        { return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true); }
 
         public Content CallContent(string id)
-        {
-            return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true);
-        }
+        { return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true); }
 
         public CreditDept CallCreditDept(string id)
-        {
-            return new CreditDept("credit_dept0", "春秋苑", true, true);
-        }
+        { return new CreditDept("credit_dept0", "春秋苑", true, true); }
 
         public int CallFinalAccountPerMonth() { return 0; }
 
         public int CallFinalAccountPerMonth(DateTime monthEnd) { return 10000; }
 
-        public Rep CallRep(string id) { return new Rep("rep0", "林飛 顕誠", "aaa", true, true); }
+        public Rep CallRep(string id) { return new Rep("rep0", "林飛 顕誠", GetHashValue("aaa", "rep0"), true, true); }
 
         public int DeleteContentConvertText(string id) { return 1; }
 
@@ -490,7 +484,7 @@ namespace Infrastructure
         {
             ObservableCollection<Rep> list = new ObservableCollection<Rep>
             {
-                new Rep("rep1", "林飛 顕誠", "aaa", true,true),
+                new Rep("rep1", "林飛 顕誠", GetHashValue("aaa","rep1"), true,true),
                 new Rep("rep2", "秋間 大樹", "bbb", false,false)
             };
 
