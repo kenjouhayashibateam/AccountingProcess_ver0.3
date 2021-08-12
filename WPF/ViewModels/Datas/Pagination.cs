@@ -40,6 +40,9 @@ namespace WPF.ViewModels.Datas
             MinPageExpressCommand = new DelegateCommand
                 (() => MinPageExpress(), () => true);
         }
+        /// <summary>
+        /// 最初のページを表示するコマンド
+        /// </summary>
         public DelegateCommand MinPageExpressCommand { get; set; }
         private void MinPageExpress()
         {

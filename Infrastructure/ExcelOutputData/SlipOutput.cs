@@ -76,7 +76,10 @@ namespace Infrastructure.ExcelOutputData
                 contentCount++;
 
                 if (IsSameData(rae, currentDate, creditDept, code, subject, content, location, isTaxRate))
-                { TotalPrice += rae.Price; }
+                {
+                    ItemIndex++;
+                    TotalPrice += rae.Price; 
+                }
                 else
                 {
                     currentDate = rae.AccountActivityDate;//入出金日を代入
@@ -89,6 +92,7 @@ namespace Infrastructure.ExcelOutputData
                     clerk = rae.RegistrationRep.FirstName;
                     isTaxRate = rae.IsReducedTaxRate;
                     contentCount = 1;
+                    ItemIndex = 0;
                     NextPage();//次のページへ
                     PageStyle();
                 }

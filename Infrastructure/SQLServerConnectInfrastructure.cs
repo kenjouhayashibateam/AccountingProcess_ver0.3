@@ -340,37 +340,11 @@ namespace Infrastructure
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
-            Rep paramRep;
-            CreditDept paramCreditDept;
-            AccountingSubject paramAccountingSubject;
-            Content paramContent;
 
             using SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_receipts_and_expenditure_all_data").ExecuteReader();
 
-            while (dataReader.Read())
-            {
-                paramRep =
-                    new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
-                        (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
-                paramCreditDept =
-                    new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
-                    (bool)dataReader["is_shunjuen_dept"]);
-                paramAccountingSubject =
-                    new AccountingSubject((string)dataReader["accounting_subject_id"],
-                    (string)dataReader["subject_code"], (string)dataReader["subject"], true);
-                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
-                    (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-
-                {
-                    list.Add(new ReceiptsAndExpenditure((int)dataReader["receipts_and_expenditure_id"],
-                        (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"],
-                        paramCreditDept, paramContent, (string)dataReader["detail"], (int)dataReader["price"],
-                        (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
-                        (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"],
-                        (bool)dataReader["is_reduced_tax_rate"]));
-                }
-            }
+            while (dataReader.Read()) { list.Add(CreateReceiptsAndExpenditure(dataReader)); }
             return list;
         }
 
@@ -561,37 +535,12 @@ namespace Infrastructure
                 {"@column",sortColumn}, { "@is_order_asc",sortDirection}
             };
 
-            Rep paramRep;
-            CreditDept paramCreditDept;
-            AccountingSubject paramAccountingSubject;
-            Content paramContent;
             SqlDataReader dataReader =
                 ReturnGeneretedParameterCommand
                     ("reference_receipts_and_expenditure").ExecuteReader();
 
-            while (dataReader.Read())
-            {
-                paramRep =
-                    new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
-                    (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
-                paramCreditDept =
-                    new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
-                    (bool)dataReader["is_shunjuen_dept"]);
-                paramAccountingSubject =
-                    new AccountingSubject((string)dataReader["accounting_subject_id"],
-                    (string)dataReader["subject_code"], (string)dataReader["subject"], true);
-                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
-                    (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-                list.Add(new ReceiptsAndExpenditure
-                    (
-                        (int)dataReader["receipts_and_expenditure_id"],
-                        (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"],
-                        paramCreditDept, paramContent, (string)dataReader["detail"], (int)dataReader["price"],
-                        (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
-                        (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"],
-                        (bool)dataReader["is_reduced_tax_rate"])
-                    );
-            }
+            while (dataReader.Read()) { list.Add(CreateReceiptsAndExpenditure(dataReader)); }
+
             _ = Parameters.Remove("@page");
             _ = Parameters.Remove("@column");
             _ = Parameters.Remove("@is_order_asc");
@@ -599,12 +548,43 @@ namespace Infrastructure
             return (ReferenceReceiptsAndExpenditure().Count, list);
         }
 
+        private ReceiptsAndExpenditure CreateReceiptsAndExpenditure(SqlDataReader dataReader)
+        {
+            Rep paramRep;
+            CreditDept paramCreditDept;
+            AccountingSubject paramAccountingSubject;
+            Content paramContent;
+
+            paramRep =
+                new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                    (string)dataReader["password"], true, (bool)dataReader["is_permission"]);
+            paramCreditDept =
+                new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"], true,
+                (bool)dataReader["is_shunjuen_dept"]);
+            paramAccountingSubject =
+                new AccountingSubject((string)dataReader["accounting_subject_id"],
+                (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+            paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
+                (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+            
+            return new ReceiptsAndExpenditure
+                (
+                    (int)dataReader["receipts_and_expenditure_id"],
+                    (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"],
+                    paramCreditDept, paramContent, (string)dataReader["detail"], (int)dataReader["price"],
+                    (bool)dataReader["is_payment"], (bool)dataReader["is_validity"],
+                    (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"],
+                    (bool)dataReader["is_reduced_tax_rate"]
+                );
+
+        }
+
         public Dictionary<int, string> GetSoryoList()
         {
             Cn = new SqlConnection
             {
                 ConnectionString =
-                @"Data Source=192.168.44.163\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;" +
+                @"Data Source=192.168.44.151\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;" +
                     "User ID=sa;Password=sqlserver"
             };
 
@@ -684,16 +664,21 @@ namespace Infrastructure
 
             while (dataReader.Read())
             {
-                list.Add(new Condolence((int)dataReader["condolence_id"],
+                list.Add(CreateCondolence(dataReader));
+            }
+
+            return (ReferenceCondolence(startDate, endDate, location).Count, list);
+        }
+
+        private Condolence CreateCondolence(SqlDataReader dataReader)
+        {
+            return new Condolence((int)dataReader["condolence_id"],
                     (string)dataReader["location"], (string)dataReader["owner_name"],
                     (string)dataReader["soryo_name"], (string)dataReader["content"],
                     (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
                     (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
                     (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
-                    (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
-            }
-
-            return (ReferenceCondolence(startDate, endDate, location).Count, list);
+                    (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]);
         }
 
         public ObservableCollection<Condolence>
@@ -708,13 +693,7 @@ namespace Infrastructure
 
             while (dataReader.Read())
             {
-                list.Add(new Condolence((int)dataReader["condolence_id"],
-                    (string)dataReader["location"], (string)dataReader["owner_name"],
-                    (string)dataReader["soryo_name"], (string)dataReader["content"],
-                    (int)dataReader["almsgiving"], (int)dataReader["car_tip"], (int)dataReader["meal_tip"],
-                    (int)dataReader["car_and_meal_tip"], (int)dataReader["social_gathering"],
-                    (string)dataReader["note"], (DateTime)dataReader["account_activity_date"],
-                    (string)dataReader["counter_receiver"], (string)dataReader["mail_representative"]));
+                list.Add(CreateCondolence(dataReader));
             }
 
             return list;
