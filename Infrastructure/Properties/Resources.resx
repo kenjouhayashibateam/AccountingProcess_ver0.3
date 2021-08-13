@@ -118,8 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DATABASECONNECTIONSTRING" xml:space="preserve">
-    <value>"PROVIDER=SQLOLEDB;SERVER=192.168.44.151\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlserver"</value>
-    <!--<value>"PROVIDER=SQLOLEDB;SERVER=192.168.44.163\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlserver"</value>-->
+    <value>&lt;value&gt;"PROVIDER=SQLOLEDB;SERVER=192.168.44.163\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlserver"&lt;/value&gt;</value>
+  </data>
+  <data name="ExcelWorkbookPassword" xml:space="preserve">
+    <value>excel</value>
   </data>
   <data name="LogFilePath" xml:space="preserve">
     <value>.\logs\ExceptionLogs.txt</value>

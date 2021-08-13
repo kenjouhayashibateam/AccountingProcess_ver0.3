@@ -71,7 +71,7 @@ namespace Infrastructure.ExcelOutputData
         {
             try
             {
-                _ = myWorksheet.Protect("excel");
+                _ = myWorksheet.Protect(Properties.Resources.ExcelWorkbookPassword);
                 myWorkbook.SaveAs(openPath);
                 _ = myWorkbooks.Open(Filename: openPath, ReadOnly: true);
                 App.Visible = true;

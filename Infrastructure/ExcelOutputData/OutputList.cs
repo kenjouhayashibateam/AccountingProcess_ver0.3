@@ -71,11 +71,8 @@ namespace Infrastructure.ExcelOutputData
             (ReceiptsAndExpenditure validateReceiotsAndExpenditure, DateTime currentActivityDate, string currentDept,
                 string currentSubjectCode, string currentSubject, string currentContent, string currentLocation, bool isTaxRate)
         {
-            if(IndependentContent.Contains(currentContent))
-            {
-                return false;
-            }
-            return currentDept == validateReceiotsAndExpenditure.CreditDept.Dept &&
+            return !IndependentContent.Contains(currentContent)
+                && currentDept == validateReceiotsAndExpenditure.CreditDept.Dept &&
                 currentSubjectCode == validateReceiotsAndExpenditure.Content.AccountingSubject.SubjectCode &&
                 currentSubject == validateReceiotsAndExpenditure.Content.AccountingSubject.Subject &&
                 currentActivityDate == validateReceiotsAndExpenditure.AccountActivityDate &&

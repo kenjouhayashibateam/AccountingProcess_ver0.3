@@ -70,13 +70,13 @@ namespace Domain.Entities
         /// <returns>総金額</returns>
         public int GetTotalAmount()
         {
-            int I = 0;//総金額変数
+            int i = 0;//総金額変数
 
-            foreach (OtherMoney om in OtherMoneys) { I += om.Amount; }//OtherMoneysの金額をすべて加算する
+            foreach (OtherMoney om in OtherMoneys) { i += om.Amount; }//OtherMoneysの金額をすべて加算する
             //MoneyCategorysの金額をすべて加算する
             foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys)
-            { I += mc.Value.Amount; }
-            return I;
+            { i += mc.Value.Amount; }
+            return i;
         }
         /// <summary>
         /// 総金額をカンマ区切り、単位をつけて返します

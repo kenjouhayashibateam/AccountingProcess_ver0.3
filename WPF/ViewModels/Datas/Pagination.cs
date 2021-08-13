@@ -123,7 +123,7 @@ namespace WPF.ViewModels.Datas
         /// 表示されているページ数と総ページ数のText
         /// </summary>
         public string ListPageInfo
-        { 
+        {
             get => listPageInfo;
             set
             {
@@ -167,7 +167,6 @@ namespace WPF.ViewModels.Datas
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 総レコード数から総ページ数を算出して、各プロパティに値を入力します
         /// </summary>
@@ -232,11 +231,13 @@ namespace WPF.ViewModels.Datas
                 CallPropertyChanged();
             }
         }
+
         public void Add(IPagenationObserver pagenationObserver)
         {
             pagenationObservers.Add(pagenationObserver);
             foreach (IPagenationObserver po in pagenationObservers) { po.SetSortColumns(); }
         }
+
         private void PageNotification()
         {
             foreach (IPagenationObserver po in pagenationObservers) { po.PageNotify(); }

@@ -180,7 +180,11 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetBorderStyle()
         {
-            _ = myWorksheet.Style.Border.SetLeftBorder(XLBorderStyleValues.None).Border.SetTopBorder(XLBorderStyleValues.None).Border.SetRightBorder(XLBorderStyleValues.None).Border.SetBottomBorder(XLBorderStyleValues.None);
+            _ = myWorksheet.Style
+                .Border.SetLeftBorder(XLBorderStyleValues.None)
+                .Border.SetTopBorder(XLBorderStyleValues.None)
+                .Border.SetRightBorder(XLBorderStyleValues.None)
+                .Border.SetBottomBorder(XLBorderStyleValues.None);
         }
 
         protected override void SetCellsStyle()

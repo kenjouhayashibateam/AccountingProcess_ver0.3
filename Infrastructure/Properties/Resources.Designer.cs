@@ -70,6 +70,15 @@ namespace Infrastructure.Properties {
         }
         
         /// <summary>
+        ///   excel に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ExcelWorkbookPassword {
+            get {
+                return ResourceManager.GetString("ExcelWorkbookPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   .\logs\ExceptionLogs.txt に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string LogFilePath {

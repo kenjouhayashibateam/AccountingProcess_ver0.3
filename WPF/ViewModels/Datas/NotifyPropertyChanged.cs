@@ -26,7 +26,9 @@ namespace WPF.ViewModels.Datas
         /// 引数のプロパティの変更を通知します
         /// </summary>
         /// <param name="propertyName">プロパティ名</param>
-        protected void CallPropertyChanged(string propertyName) =>
+        protected void CallPropertyChanged(string propertyName)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

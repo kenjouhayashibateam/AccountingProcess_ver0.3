@@ -450,14 +450,14 @@ namespace WPF.ViewModels
             set
             {
                 isShunjuen = value;
-                AccountingGenreContent = value ? "春秋苑会計（工事中)" : "ワイズコア（工事中）";                            
+                AccountingGenreContent = value ? "春秋苑会計（工事中)" : "ワイズコア（工事中）";
                 CallPropertyChanged();
             }
         }
         /// <summary>
         /// 春秋苑会計トグルボタンのコンテント
         /// </summary>
-         public string AccountingGenreContent
+        public string AccountingGenreContent
         {
             get => accountingGenreContent;
             set

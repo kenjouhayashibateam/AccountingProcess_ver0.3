@@ -576,7 +576,6 @@ namespace Infrastructure
                     (DateTime)dataReader["account_activity_date"], (DateTime)dataReader["output_date"],
                     (bool)dataReader["is_reduced_tax_rate"]
                 );
-
         }
 
         public Dictionary<int, string> GetSoryoList()

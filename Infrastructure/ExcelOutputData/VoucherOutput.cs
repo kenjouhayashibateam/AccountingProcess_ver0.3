@@ -161,7 +161,7 @@ namespace Infrastructure.ExcelOutputData
                     .Alignment.SetVertical(vertical)
                     .Font.SetFontSize(fontSize);
             }
-
+            
             void SetAlignmentAndFontSize(int row, int column)
             {
                 _ = myWorksheet.Cell(row, column).Style
@@ -200,7 +200,7 @@ namespace Infrastructure.ExcelOutputData
             SetStringOriginalAndCopy(3, 5, "様");
             //総額
             SetStringOriginalAndCopy(4, 2, "冥加金");
-            SetStringOriginalAndCopy(5, 3, 
+            SetStringOriginalAndCopy(5, 3,
                 $"{CommaDelimitedAmount(VoucherData.TotalAmount)}-");
             SetStringOriginalAndCopy(5, 8, "円也");
             SetStringOriginalAndCopy(6, 2, "但し");
@@ -288,7 +288,7 @@ namespace Infrastructure.ExcelOutputData
                 foreach(ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
                 {
                     if (prevText == ReturnProvisoContent(rae))
-                        provisoAmount += rae.Price;
+                    { provisoAmount += rae.Price; }
                     else
                     {
                         provisoAmount = rae.Price;

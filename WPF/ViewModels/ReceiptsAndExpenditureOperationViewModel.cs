@@ -402,7 +402,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void ManagementFeeTextAllocation()
         {
-            string s = OperationData.Data.Detail.Replace(SpaceF,Space);
+            string s = OperationData.Data.Detail.Replace(SpaceF, Space);
             string[] detailArray = s.Split(' ');
             DetailText = string.Empty;
             Supplement = string.Empty;

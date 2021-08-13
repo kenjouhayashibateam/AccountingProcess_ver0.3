@@ -157,7 +157,6 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         /// <param name="window"></param>
         protected void DoCloseWindow(Window window) { window.Close(); }
-
         /// <summary>
         /// ウィンドウ表示コマンドを設定します
         /// </summary>
@@ -206,7 +205,6 @@ namespace WPF.ViewModels.Datas
             ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName,
                 Properties.Resources.NullErrorInfo);
         }
-
         /// <summary>
         /// エラーを追加します
         /// </summary>
@@ -264,7 +262,6 @@ namespace WPF.ViewModels.Datas
                     $"{DefaultWindowTitle}（ログイン{Space}:{Space}{rep.FirstName}）";
             }
         }
-
         /// <summary>
         /// 画面タイトルのみをセットします
         /// </summary>

@@ -524,7 +524,7 @@ namespace WPF.ViewModels
             {
                 isPeriodSearch = value;
                 IsSearchInfoVisibility = value;
-                if (!value) SearchEndDate = SearchStartDate;
+                if (!value) { SearchEndDate = SearchStartDate; }
                 CallPropertyChanged();
             }
         }
@@ -536,9 +536,9 @@ namespace WPF.ViewModels
             get => searchStartDate;
             set
             {
-                if (SearchEndDate < value) SearchEndDate = value;
+                if (SearchEndDate < value) { SearchEndDate = value; }
                 searchStartDate = value;
-                if (!IsPeriodSearch) SearchEndDate = value;
+                if (!IsPeriodSearch) { SearchEndDate = value; }
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
@@ -551,8 +551,7 @@ namespace WPF.ViewModels
             get => searchEndDate;
             set
             {
-                if (SearchStartDate > value) searchEndDate = SearchStartDate;
-                else searchEndDate = value;
+                searchEndDate = SearchStartDate > value ? SearchStartDate : value;
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
             }
