@@ -254,9 +254,9 @@ namespace WPF.ViewModels
             set
             {
                 voucherAddressee = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(VoucherAddressee), value);
                 SetOutputEnabled();
-                CallPropertyChanged();
             }
         }
 
@@ -274,10 +274,10 @@ namespace WPF.ViewModels
             set
             {
                 voucherContents = value;
+                CallPropertyChanged();
                 int i = default;
                 foreach (ReceiptsAndExpenditure rae in voucherContents) { i += rae.Price; }
                 VoucherTotalAmountDisplayValue = i.ToString();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -301,8 +301,8 @@ namespace WPF.ViewModels
             set
             {
                 searchDate = value;
-                CreateReceiptsAndExpenditures( true);
                 CallPropertyChanged();
+                CreateReceiptsAndExpenditures( true);
             }
         }
         private void CreateReceiptsAndExpenditures(bool isPageReset)
@@ -426,8 +426,8 @@ namespace WPF.ViewModels
             set
             {
                 isPrepaid = value;
-                PrepaidDate = value ? DateTime.Today : DefaultDate;
                 CallPropertyChanged();
+                PrepaidDate = value ? DateTime.Today : DefaultDate;
             }
         }
         /// <summary>

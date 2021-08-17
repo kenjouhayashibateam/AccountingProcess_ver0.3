@@ -41,7 +41,7 @@
             if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
             
             AccountingSubject accountingSubject = (AccountingSubject)obj;
-            return ID == accountingSubject.ID;        
+            return ID == accountingSubject.ID;
         }
     }
 }

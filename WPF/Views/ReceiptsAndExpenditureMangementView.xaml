@@ -149,7 +149,7 @@
                             <Border Grid.Column="3" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                             <Border Grid.Column="8" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                             <TextBlock Grid.Column="0" Text="{Binding ListTitle}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <Button x:Name="RefreshListButton" ToolTip="リストを再構築します" Grid.Column="1" Margin="10,1,1,3">
+                            <Button x:Name="RefreshListButton" Padding="3,0,3,3" ToolTip="リストを再構築します" Grid.Column="1" Margin="10,1,1,3">
                                 <StackPanel>
                                     <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Reload.svg"/>
                                 </StackPanel>
@@ -159,7 +159,7 @@
                                     <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="2" Margin="5,1,10,3" ToolTip="新規登録します">
+                            <Button x:Name="ShowRegistrationViewButton" Grid.Column="2" Padding="3,0,3,3" Margin="5,1,10,3" ToolTip="新規登録します">
                                 <StackPanel>
                                     <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Register.svg"/>
                                 </StackPanel>
@@ -168,26 +168,26 @@
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowMinPageButton" Grid.Column="3" Content="|&lt;&lt;" ToolTip="1ページ目を表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
+                            <Button x:Name="ShowMinPageButton" Grid.Column="3" Padding="3,0,3,3" Content="|&lt;&lt;" ToolTip="1ページ目を表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="PrevButton" Grid.Column="4" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="3,1,5,3">
+                            <Button x:Name="PrevButton" Grid.Column="4" Padding="3,0,3,3" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="3,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <TextBlock Grid.Column="5" Text="{Binding Pagination.ListPageInfo}" VerticalAlignment="Center"/>
-                            <Button x:Name="NextButton" Grid.Column="6" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="3,1,5,3">
+                            <Button x:Name="NextButton" Grid.Column="6" Padding="3,0,3,3" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="3,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowMaxPageButton" Grid.Column="7" Content=">>|" ToolTip="最終ページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="3,1,10,3">
+                            <Button x:Name="ShowMaxPageButton" Grid.Column="7" Padding="3,0,3,3" Content=">>|" ToolTip="最終ページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="3,1,10,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
@@ -197,7 +197,7 @@
                                 <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Sort.svg"/>
                             </StackPanel>
                             <ComboBox Name="SortGanreComboBox" Grid.Column="9" ItemsSource="{Binding Pagination.SortColumns}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalContentAlignment="Center" Margin="3,1,5,3"/>
-                            <ToggleButton Content="{Binding Pagination.SortDirectionContent}" Grid.Column="10" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="3,1,5,3"/>
+                            <ToggleButton Content="{Binding Pagination.SortDirectionContent}" Grid.Column="10" Padding="3,0" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="3,1,5,3"/>
                         </Grid>
                     </GroupBox.Header>
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" EnableColumnVirtualization="True" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False" Margin="0,3,0,0">

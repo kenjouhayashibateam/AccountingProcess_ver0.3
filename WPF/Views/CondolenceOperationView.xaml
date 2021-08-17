@@ -95,26 +95,26 @@
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="1" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                     <TextBlock Text="出納データ一覧" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <Button x:Name="ShowMinPageButton" Grid.Column="1" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,1">
+                    <Button x:Name="ShowMinPageButton" Grid.Column="1" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="PrevButton" Grid.Column="2" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1">
+                    <Button x:Name="PrevButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
                     <TextBlock Grid.Column="3" Text="{Binding Pagination.ListPageInfo}" Margin="5"/>
-                    <Button x:Name="NextButton" Grid.Column="4" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1">
+                    <Button x:Name="NextButton" Grid.Column="4" Padding="3,0,3,3" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="ShowMaxPageButton" Grid.Column="5" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1">
+                    <Button x:Name="ShowMaxPageButton" Grid.Column="5" Padding="3,0,3,3" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
@@ -203,7 +203,19 @@
                     <TextBlock Text="御膳料" Grid.Row="0" Grid.Column="4" VerticalAlignment="Bottom" Margin="5,0"/>
                     <TextBlock Text="御車代御膳料" Grid.Row="0" Grid.Column="5" VerticalAlignment="Bottom" Margin="5,0"/>
                     <TextBlock Text="懇志" Grid.Row="0" Grid.Column="6" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <TextBlock Text="合計金額" Grid.Row="0" Grid.Column="7" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <Grid Grid.Row="0" Grid.Column="7">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="AmountClearButton" Content="金額リセット" Margin="5,0">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding AmountClearCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding AmountClearCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                        <TextBlock Text="合計金額" Grid.Row="1" VerticalAlignment="Bottom" Margin="5,0"/>
+                    </Grid>
                     <DatePicker Grid.Row="1" Grid.Column="0" SelectedDate="{Binding AccountActivityDate}" VerticalContentAlignment="Center" Margin="5,3"/>
                     <TextBox x:Name="OwnerNameTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding OwnerName}" VerticalContentAlignment="Center" Margin="5"/>
                     <TextBox x:Name="AlmsgivingTextBox" Grid.Row="1" Grid.Column="2" Text="{Binding Almsgiving}" VerticalContentAlignment="Center" IsReadOnly="True" Margin="5"/>

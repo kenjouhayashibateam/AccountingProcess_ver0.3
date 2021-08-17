@@ -48,14 +48,14 @@ namespace WPF.ViewModels.Datas
         /// 出納データ操作画面を呼び出します
         /// </summary>
         /// <returns>出納データ操作ウィンドウインスタンス</returns>
-        public static Window ReceiptsAndExpenditureOperation() 
+        public static Window ReceiptsAndExpenditureOperation()
         { return new ReceiptsAndExpenditureOperationView(); }
 
         /// <summary>
         /// パート交通費データ登録画面を呼び出します
         /// </summary>
         /// <returns>パート交通費データ登録ウィンドウインスタンス</returns>
-        public static Window PartTimerTransportRegistration() 
+        public static Window PartTimerTransportRegistration()
         { return new PartTimerTransportationExpensesRegistrationView(); }
 
         /// <summary>

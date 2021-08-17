@@ -83,7 +83,7 @@ namespace Domain.Repositories
         /// <param name="repName">担当者名</param>
         /// <param name="isValidityTrueOnly">有効なデータのみ検索</param>
         /// <returns>担当者リスト</returns>
-        public ObservableCollection<Rep> ReferenceRep(string repName,bool isValidityTrueOnly);
+        public ObservableCollection<Rep> ReferenceRep(string repName, bool isValidityTrueOnly);
         /// <summary>
         /// 勘定科目検索
         /// </summary>
@@ -101,7 +101,7 @@ namespace Domain.Repositories
         /// <param name="isShunjuenAccountOnly">春秋苑会計に掲載されるデータのみ表示</param>
         /// <returns>貸方勘定リスト</returns>
         public ObservableCollection<CreditDept> ReferenceCreditDept
-            (string account, bool isValidityTrueOnly,bool isShunjuenAccountOnly);
+            (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly);
         /// <summary>
         /// 伝票内容検索
         /// </summary>

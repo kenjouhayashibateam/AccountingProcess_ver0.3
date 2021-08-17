@@ -101,12 +101,12 @@ namespace Infrastructure.ExcelOutputData
                 //セルの場所を設定する
                 if (contentCount <= 5)
                 {
-                    inputRow = StartRowPosition  + contentCount;
+                    inputRow = StartRowPosition + contentCount;
                     inputContentColumn = 1;
                 }
                 else
                 {
-                    inputRow = StartRowPosition  + contentCount - 5;
+                    inputRow = StartRowPosition + contentCount - 5;
                     inputContentColumn = 11;
                 }
                 //伝票の詳細を設定したセルに出力する

@@ -61,6 +61,7 @@ namespace WPF.ViewModels
             }).Result == System.Windows.MessageBoxResult.Cancel) { return; }
 
             OutputButtonContent = "出力中";
+            IsClose = false;
             IsOutputButtonEnabled = false;
             VoucherUpdate();
             try
@@ -73,6 +74,7 @@ namespace WPF.ViewModels
                 DefaultInfrastructure.GetLogger().Log(ILogger.LogInfomation.ERROR, ex.Message);
             }
             OutputButtonContent = "選択したデータを再発行";
+            IsClose = true;
 
             void VoucherUpdate()
             {

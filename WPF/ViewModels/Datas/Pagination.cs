@@ -21,8 +21,8 @@ namespace WPF.ViewModels.Datas
         private string listPageInfo = "0/0";
         private string sortDirectionContent = string.Empty;
         private string selectedSortColumn = string.Empty;
-        private const string ASCCONTENT = "降順で検索（現在昇順）";
-        private const string DESCCONTENT = "昇順で検索（現在降順）";
+        private const string ASCCONTENT = "降順で検索（現在昇順)";
+        private const string DESCCONTENT = "昇順で検索（現在降順)";
         private bool isPrevPageEnabled = true;
         private bool isNextPageEnabled = true;
         private bool sortDirectionIsASC = true;

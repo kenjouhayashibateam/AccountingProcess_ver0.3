@@ -80,7 +80,7 @@
                             <Border Grid.Column="2" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                             <Border Grid.Column="7" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                             <TextBlock Text="出納データ一覧 " Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <Button x:Name="DeleteDataButton" Grid.Column="1" ToolTip="新規登録を呼び出します" Margin="10,2,10,2">
+                            <Button x:Name="DeleteDataButton" Grid.Column="1" Padding="3,0,3,3" ToolTip="新規登録を呼び出します" Margin="10,2,10,2">
                                 <StackPanel>
                                     <svcg:SvgViewbox Height="20" behavior:SvgViewboxAttachment.Source="Register.svg"/>
                                 </StackPanel>
@@ -88,26 +88,26 @@
                                     <MouseBinding Command="{Binding ShowRegistrationCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowMinPageButton" Grid.Column="2" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
+                            <Button x:Name="ShowMinPageButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="PrevButton" Grid.Column="3" Content=" |&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
+                            <Button x:Name="PrevButton" Grid.Column="3" Padding="3,0,3,3" Content=" |&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <TextBlock Grid.Column="4" Text="{Binding Pagination.ListPageInfo}" VerticalAlignment="Center"/>
-                            <Button x:Name="NextButton" Grid.Column="5" Content=">| " IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
+                            <Button x:Name="NextButton" Grid.Column="5" Padding="3,0,3,3" Content=">| " IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="ShowMaxPageButton" Grid.Column="6" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,10,3">
+                            <Button x:Name="ShowMaxPageButton" Grid.Column="6" Padding="3,0,3,3" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,10,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
@@ -117,7 +117,7 @@
                                 <svcg:SvgViewbox Height="20" behavior:SvgViewboxAttachment.Source="Sort.svg"/>
                             </StackPanel>
                             <ComboBox Name="SortContentComboBox" Grid.Column="8" ItemsSource="{Binding Pagination.SortColumns}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalContentAlignment="Center" Margin="5,1,5,3"/>
-                            <ToggleButton Grid.Column="9" Content="{Binding Pagination.SortDirectionContent}" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="5,1,5,3"/>
+                            <ToggleButton Grid.Column="9" Padding="3,0" Content="{Binding Pagination.SortDirectionContent}" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="5,1,5,3"/>
                         </Grid>
                     </GroupBox.Header>
                     <DataGrid AutoGenerateColumns="False" x:Name="SearchReceiptsAndExpenditureDataGrid" ItemsSource="{Binding SearchReceiptsAndExpenditures}" SelectedValue="{Binding SelectedSeachReceiptsAndExpenditure}" Margin="5">

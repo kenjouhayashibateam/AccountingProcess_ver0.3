@@ -100,6 +100,15 @@ namespace WPF.ViewModels
             }
         }
         public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public DelegateCommand AmountClearCommand { get; set; }
+        private void AmountClear()
+        {
+            Almsgiving = AmountWithUnit(0);
+            CarTip = AmountWithUnit(0);
+            MealTip = AmountWithUnit(0);
+            CarAndMealTip = AmountWithUnit(0);
+            SocialGathering = AmountWithUnit(0);
+        }
         /// <summary>
         /// お布施一覧データ削除コマンド
         /// </summary>
@@ -526,7 +535,7 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-        private MessageBoxResult ConfirmationOwnerName(string oldValue,string newValue)
+        private MessageBoxResult ConfirmationOwnerName(string oldValue, string newValue)
         {
             if (oldValue == newValue) { return MessageBoxResult.Yes; }
             if (string.IsNullOrEmpty(newValue)) { return MessageBoxResult.Yes; }
@@ -877,10 +886,12 @@ namespace WPF.ViewModels
             SetIsOperationButtonEnabled();
         }
 
-        private void SetIsOperationButtonEnabled() =>
+        private void SetIsOperationButtonEnabled()
+        {
             IsOperationButtonEnabled = !string.IsNullOrEmpty(OwnerName) &&
-                !string.IsNullOrEmpty(SoryoName) && !string.IsNullOrEmpty(TotalAmount) && 
+                !string.IsNullOrEmpty(SoryoName) && !string.IsNullOrEmpty(TotalAmount) &&
                 IntAmount(TotalAmount) != 0;
+        }
 
         protected override void SetDataList()
         {
@@ -901,6 +912,7 @@ namespace WPF.ViewModels
             SocialGatheringSearchCommand = new DelegateCommand
                 (() => SocialGatheringSearch(), () => true);
             DeleteCondolenceCommand = new DelegateCommand(() => DeleteCondolence(), () => true);
+            AmountClearCommand = new DelegateCommand(() => AmountClear(), () => true);
         }
 
         protected override void SetDetailLocked() { }

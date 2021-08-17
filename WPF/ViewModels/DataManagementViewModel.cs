@@ -438,9 +438,9 @@ namespace WPF.ViewModels
             {
                 if (value == null) { return; }
                 _repName = value.Replace('　', ' ');
+                CallPropertyChanged();
                 ValidationProperty(nameof(RepName), value);
                 SetRepOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -452,13 +452,13 @@ namespace WPF.ViewModels
             set
             {
                 _repCurrentPassword = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(RepCurrentPassword), value);
                 if (CurrentOperation == DataOperation.更新)
                 {
                     IsRepNewPasswordEnabled = GetHashValue(value, CurrentRep.ID) == CurrentRep.Password;
                     SetRepOperationButtonEnabled();
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -470,9 +470,9 @@ namespace WPF.ViewModels
             set
             {
                 _repNewPassword = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(RepNewPassword), value);
                 SetRepOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -508,6 +508,7 @@ namespace WPF.ViewModels
             set
             {
                 _isRepPasswordEnabled = value;
+                CallPropertyChanged();
                 if (value)
                 {
                     CurrentRepPasswordBorderBrush = TrueControlBorderBrush;
@@ -518,7 +519,6 @@ namespace WPF.ViewModels
                     CurrentRepPasswordBorderBrush = FalseControlBorderBrush;
                     CurrentRepPasswordBackground = FalseControlBackground;
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -542,8 +542,8 @@ namespace WPF.ViewModels
             set
             {
                 _referenceRepName = value;
-                RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
                 CallPropertyChanged();
+                RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, RepValidityTrueOnly);
             }
         }
         /// <summary>
@@ -555,8 +555,8 @@ namespace WPF.ViewModels
             set
             {
                 _repValidityTrueOnly = value;
-                RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, value);
                 CallPropertyChanged();
+                RepList = DataBaseConnect.ReferenceRep(ReferenceRepName, value);
             }
         }
         /// <summary>
@@ -592,6 +592,7 @@ namespace WPF.ViewModels
             set
             {
                 _isRepNewPasswordEnabled = value;
+                CallPropertyChanged();
                 if (value)
                 {
                     NewRepPasswordBorderBrush = TrueControlBorderBrush;
@@ -602,7 +603,6 @@ namespace WPF.ViewModels
                     NewRepPasswordBorderBrush = FalseControlBorderBrush;
                     NewRepPasswordBackground = FalseControlBackground;
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -674,9 +674,9 @@ namespace WPF.ViewModels
             set
             {
                 _currentRep = value;
+                CallPropertyChanged();
                 if (_currentRep != null) { SetRepDetailProperty(); }
                 else { _currentRep = new Rep(string.Empty, string.Empty, string.Empty, true, false); }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -724,9 +724,9 @@ namespace WPF.ViewModels
             set
             {
                 _confirmationPassword = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(ConfirmationPassword), value);
                 SetRepOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -834,10 +834,10 @@ namespace WPF.ViewModels
             set
             {
                 accountingSubjectCodeField = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
+                CallPropertyChanged();
                 ValidationProperty(nameof(AccountingSubjectCodeField), value);
                 ReferenceAccountingSubjectCode = value;
                 SetAccountingSubjectOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -849,9 +849,9 @@ namespace WPF.ViewModels
             set
             {
                 accountingSubjectField = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(AccountingSubjectField), value);
                 SetAccountingSubjectOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -887,6 +887,7 @@ namespace WPF.ViewModels
             set
             {
                 currentAccountingSubject = value;
+                CallPropertyChanged();
                 if (value == null) { AccountingSubjectDetailFieldClear(); }
                 else
                 {
@@ -896,7 +897,6 @@ namespace WPF.ViewModels
                     IsAccountingSubjectValidity = currentAccountingSubject.IsValidity;
                     SetAccountingSubjectOperationButtonEnabled();
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -938,8 +938,8 @@ namespace WPF.ViewModels
             set
             {
                 isAccountingSubjectValidityTrueOnly = value;
-                CreateAccountSubjects();
                 CallPropertyChanged();
+                CreateAccountSubjects();
             }
         }
         /// <summary>
@@ -952,8 +952,8 @@ namespace WPF.ViewModels
             {
                 if (referenceAccountingSubject == value) { return; }
                 referenceAccountingSubjectCode = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
-                CreateAccountSubjects();
                 CallPropertyChanged();
+                CreateAccountSubjects();
             }
         }
         private void CreateAccountSubjects()
@@ -973,8 +973,8 @@ namespace WPF.ViewModels
             set
             {
                 referenceAccountingSubject = value;
-                CreateAccountSubjects();
                 CallPropertyChanged();
+                CreateAccountSubjects();
             }
         }
         /// <summary>
@@ -1140,9 +1140,9 @@ namespace WPF.ViewModels
             set
             {
                 creditDeptField = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(CreditDeptField), value);
                 IsCreditDeptOperationButtonEnabled = !string.IsNullOrEmpty(value);
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1215,6 +1215,7 @@ namespace WPF.ViewModels
             set
             {
                 currentCreditDept = value;
+                CallPropertyChanged();
                 if (value != null)
                 {
                     CreditDeptIDField = value.ID;
@@ -1222,7 +1223,6 @@ namespace WPF.ViewModels
                     IsCreditDeptValidity = value.IsValidity;
                     IsShunjuenDept = value.IsShunjuenDept;
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1479,13 +1479,13 @@ namespace WPF.ViewModels
             set
             {
                 affiliationAccountingSubject = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(AffiliationAccountingSubject), value);
                 if (affiliationAccountingSubject != null)
                 {
                     SelectedAccountingSubjectField = affiliationAccountingSubject.Subject;
                     SetContentOperationButtonEnabled();
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1497,9 +1497,9 @@ namespace WPF.ViewModels
             set
             {
                 contentField = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(ContentField), value);
                 SetContentOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1525,9 +1525,9 @@ namespace WPF.ViewModels
             set
             {
                 selectedAccountingSubjectField = value;
+                CallPropertyChanged();
                 ValidationProperty(nameof(SelectedAccountingSubjectField), selectedAccountingSubjectField);
                 SetContentOperationButtonEnabled();
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1630,6 +1630,7 @@ namespace WPF.ViewModels
             set
             {
                 currentContent = value;
+                CallPropertyChanged();
                 if (currentContent == null) { ContentDetailFieldClear(); }
                 else
                 {
@@ -1646,7 +1647,6 @@ namespace WPF.ViewModels
                         DataBaseConnect.CallContentDefaultCreditDept(CurrentContent);
                     IsContentDefaultCreditDeptRegistration = SelectedContentDefaultCreditDept == null;
                 }
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1670,8 +1670,8 @@ namespace WPF.ViewModels
             set
             {
                 isContentValidityTrueOnly = value;
-                CreateContents();
                 CallPropertyChanged();
+                CreateContents();
             }
         }
         /// <summary>
@@ -1683,8 +1683,8 @@ namespace WPF.ViewModels
             set
             {
                 referenceContent = value;
-                CreateContents();
                 CallPropertyChanged();
+                CreateContents();
             }
         }
 
@@ -1728,6 +1728,7 @@ namespace WPF.ViewModels
             {
                 if (affiliationAccountingSubjectCode == value) { return; }
                 affiliationAccountingSubjectCode = value;
+                CallPropertyChanged();
                 if (value != null)
                 {
                     AffiliationAccountingSubjects =
@@ -1736,7 +1737,6 @@ namespace WPF.ViewModels
                 if (AffiliationAccountingSubjects.Count > 0)
                 { AffiliationAccountingSubject = AffiliationAccountingSubjects[0]; }
                 ReferenceAccountingSubjectCodeBelognsContent = value;
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1748,8 +1748,8 @@ namespace WPF.ViewModels
             set
             {
                 referenceAccountingSubjectCodeBelognsContent = value;
-                CreateContents();
                 CallPropertyChanged();
+                CreateContents();
             }
         }
         /// <summary>
@@ -1761,8 +1761,8 @@ namespace WPF.ViewModels
             set
             {
                 referenceAccountingSubjectBelognsContent = value;
-                CreateContents();
                 CallPropertyChanged();
+                CreateContents();
             }
         }
         /// <summary>
@@ -1786,8 +1786,8 @@ namespace WPF.ViewModels
             set
             {
                 contentConvertText = value;
-                IsContentConvertOperationButtonEnabled = !string.IsNullOrEmpty(value);
                 CallPropertyChanged();
+                IsContentConvertOperationButtonEnabled = !string.IsNullOrEmpty(value);
             }
         }
         /// <summary>

@@ -115,9 +115,8 @@ namespace WPF.ViewModels
             set
             {
                 searchStartDate = value;
-                if (value < SearchEndDate) { CreateCondolences(true); }
-                CreateCondolences(true);
                 CallPropertyChanged();
+                if (value < SearchEndDate) { CreateCondolences(true); }
             }
         }
         /// <summary>
@@ -129,9 +128,8 @@ namespace WPF.ViewModels
             set
             {
                 searchEndDate = value;
-                if (value > SearchStartDate) { CreateCondolences(true); }
-                CreateCondolences(true);
                 CallPropertyChanged();
+                if (value > SearchStartDate) { CreateCondolences(true); }
             }
         }
         /// <summary>
@@ -203,8 +201,8 @@ namespace WPF.ViewModels
             set
             {
                 isLocationLimiting = value;
-                CreateCondolences(true);
                 CallPropertyChanged();
+                CreateCondolences(true);
             }
         }
         /// <summary>

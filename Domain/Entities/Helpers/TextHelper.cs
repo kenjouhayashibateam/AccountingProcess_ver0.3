@@ -97,7 +97,6 @@ namespace Domain.Entities.Helpers
         {
             //空白でSplitして、最初の要素を返す
             string[] nameArray = name.Split(' ');
-
             return nameArray[0];
         }
         /// <summary>

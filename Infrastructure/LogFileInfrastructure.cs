@@ -16,7 +16,6 @@ namespace Infrastructure
         /// <param name="message">ログ内容</param>
         public void Log(ILogger.LogInfomation info, string message)
         {
-
             StreamWriter streamWriter = new StreamWriter(Properties.Resources.LogFilePath, true);
 
             streamWriter.WriteLine($"{info}\t{DateTime.Now}\t{message}");

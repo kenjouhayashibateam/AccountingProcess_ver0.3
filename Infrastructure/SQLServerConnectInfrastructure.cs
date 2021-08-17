@@ -33,9 +33,6 @@ namespace Infrastructure
             Cn = new SqlConnection
             {
                 ConnectionString = Properties.Settings.Default.SystemAdminConnection
-                //ConnectionString = LoginRep.Rep.IsAdminPermisson
-                //? Properties.Settings.Default.SystemAdminConnection
-                //: Properties.Settings.Default.AccountingProcessConnection
             };
         }
         /// <summary>
@@ -582,9 +579,7 @@ namespace Infrastructure
         {
             Cn = new SqlConnection
             {
-                ConnectionString =
-                @"Data Source=192.168.44.151\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;" +
-                    "User ID=sa;Password=sqlserver"
+                ConnectionString = Properties.Settings.Default.SingyoujiDataBaseConnection
             };
 
             Cn.Open();
