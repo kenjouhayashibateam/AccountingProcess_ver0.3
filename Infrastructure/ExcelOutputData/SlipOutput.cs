@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -111,7 +112,8 @@ namespace Infrastructure.ExcelOutputData
                 }
                 //伝票の詳細を設定したセルに出力する
                 myWorksheet.Cell(inputRow, inputContentColumn).Value =
-                    $@"{rae.Content.Text} {rae.Detail} \{TextHelper.CommaDelimitedAmount(rae.Price)}-";
+                    $@"{ReturnProvisoContent(rae)} {rae.Detail} " +
+                    $@"\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
                 //{rae.Content.Text}伝票の一番上の右の欄に入金日を出力                
                 myWorksheet.Cell(StartRowPosition + 1, 16).Value =
                     $"{rae.AccountActivityDate:M/d}";
@@ -161,6 +163,14 @@ namespace Infrastructure.ExcelOutputData
                 s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
             }
+
+            string ReturnProvisoContent(ReceiptsAndExpenditure rae)
+            {
+                IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
+
+                return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
+            }
+
         }
 
         public override void Output()
