@@ -174,12 +174,19 @@ namespace Infrastructure.ExcelOutputData
                         detailString = rae.Detail;
                         myWorksheet.Cell(StartRowPosition, 3).Value = rae.Content.AccountingSubject.SubjectCode;
                         myWorksheet.Cell(StartRowPosition, 4).Value = rae.Content.AccountingSubject.Subject;
-                        myWorksheet.Cell(StartRowPosition, 5).Value = rae.Content.Text;
+                        myWorksheet.Cell(StartRowPosition, 5).Value = ReturnProvisoContent(rae);
                         myWorksheet.Cell(StartRowPosition, 6).Value = detailString;
                         SetPrice(StartRowPosition);
                         SetStyleAndNextIndex();
                         pageRowCount++;
                     }
+                }
+
+                string ReturnProvisoContent(ReceiptsAndExpenditure rae)
+                {
+                    IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
+
+                    return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
                 }
 
                 void SetBalance()

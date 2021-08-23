@@ -164,7 +164,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
             }
 
-            string ReturnProvisoContent(ReceiptsAndExpenditure rae)
+            static string ReturnProvisoContent(ReceiptsAndExpenditure rae)
             {
                 IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
 

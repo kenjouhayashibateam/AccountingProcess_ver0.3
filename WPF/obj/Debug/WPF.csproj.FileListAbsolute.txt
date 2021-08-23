@@ -168,3 +168,7 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.Core
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.KeyDerivation.xml
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.xml
