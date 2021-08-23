@@ -79,7 +79,7 @@ namespace Infrastructure.ExcelOutputData
                 if (IsSameData(rae, currentDate, creditDept, code, subject, content, location, isTaxRate))
                 {
                     ItemIndex++;
-                    TotalPrice += rae.Price; 
+                    TotalPrice += rae.Price;
                 }
                 else
                 {
@@ -93,7 +93,7 @@ namespace Infrastructure.ExcelOutputData
                     clerk = rae.RegistrationRep.FirstName;
                     isTaxRate = rae.IsReducedTaxRate;
                     contentCount = 1;
-                    ItemIndex = 0;
+                    ItemIndex = 1;
                     NextPage();//次のページへ
                     PageStyle();
                 }
@@ -110,6 +110,8 @@ namespace Infrastructure.ExcelOutputData
                     inputRow = StartRowPosition + contentCount - 5;
                     inputContentColumn = 11;
                 }
+                if (inputRow == 18)
+                { return; }
                 //伝票の詳細を設定したセルに出力する
                 myWorksheet.Cell(inputRow, inputContentColumn).Value =
                     $@"{ReturnProvisoContent(rae)} {rae.Detail} " +
@@ -136,14 +138,13 @@ namespace Infrastructure.ExcelOutputData
                 else
                 {
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value = clerk;
-                    myWorksheet.Cell(StartRowPosition + 6, 18).Value =
-                        OutputRep.FirstName;
+                    myWorksheet.Cell(StartRowPosition + 6, 18).Value = OutputRep.FirstName;
                 }
                 //出力日
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = OutputDate.Day;
-               //勘定科目
+                //勘定科目
                 string ass =
                     $"{rae.Content.AccountingSubject.Subject} : " +
                     $"{rae.Content.AccountingSubject.SubjectCode}";
@@ -170,7 +171,6 @@ namespace Infrastructure.ExcelOutputData
 
                 return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
             }
-
         }
 
         public override void Output()

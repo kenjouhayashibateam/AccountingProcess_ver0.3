@@ -158,7 +158,7 @@ namespace Infrastructure
         }
 
         public ObservableCollection<Condolence> ReferenceCondolence
-            (DateTime startDate, DateTime endDate,string location)
+            (DateTime startDate, DateTime endDate, string location)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
@@ -282,64 +282,113 @@ namespace Infrastructure
         }
 
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
-            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept, 
-                string content, string detail, string accountingSubject, string accountingSubjectCode, 
-                bool whichDepositAndWithdrawalOnly, bool isPayment,bool isContainOutputted, 
+            (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
+                string content, string detail, string accountingSubject, string accountingSubjectCode,
+                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                 bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
-                DateTime outputDateStart,DateTime OutputDateEnd)
+                DateTime outputDateStart, DateTime OutputDateEnd)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
                 ("accounting_subject2", "822", "冥加読経料", true);
+            AccountingSubject Kanri = new AccountingSubject
+                ("accounting_subject2", "832", "懇志読経料", true);
 
-            ObservableCollection<ReceiptsAndExpenditure> returnList = 
+            ObservableCollection<ReceiptsAndExpenditure> returnList =
                 new ObservableCollection<ReceiptsAndExpenditure>
             {
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家1 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家2 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Kanri,-1,"管理料",true),"山口家3 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家4 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家5 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家6 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Kanri,-1,"管理料",true),"山口家7 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家8 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家9 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家10 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content3",Ofuse,-1,"管理料",true),"山口家 2021年度分",30000,true,true,
+                    ("content3",Ofuse,-1,"管理料",true),"山口家11 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家12 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家13 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家14 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家15 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家16 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家17 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家18 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家19 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家20 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家21 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content3",Ofuse,-1,"管理料",true),"山口家22 2021年度分",30000,true,true,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    new Content
+                    ("content4",Ofuse,-1,"管理料",true),"山口家23 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false)//,
                 };
             return returnList;
