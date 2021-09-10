@@ -356,7 +356,7 @@
                             </Grid>
                         </GroupBox>
                         <GroupBox Header="一覧" Grid.Row="1" Margin="5">
-                            <DataGrid x:Name="AccountingSubjectDataGrid" ItemsSource="{Binding AccountingSubjects}" SelectedItem="{Binding CurrentAccountingSubject}" AutoGenerateColumns="False" Margin="1">
+                            <DataGrid x:Name="AccountingSubjectDataGrid" ItemsSource="{Binding AccountingSubjects}" SelectedItem="{Binding CurrentAccountingSubject}" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Header="有効性" Width="2*">
                                         <DataGridTemplateColumn.CellTemplate>

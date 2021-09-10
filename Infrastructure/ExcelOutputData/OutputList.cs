@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Linq;
@@ -79,6 +80,17 @@ namespace Infrastructure.ExcelOutputData
                 !IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) &&
                 ItemIndex < 10 && currentLocation == validateReceiotsAndExpenditure.Location &&
                 isTaxRate == validateReceiotsAndExpenditure.IsReducedTaxRate;
+        }
+        /// <summary>
+        /// 提出書類に表記する内容を返します
+        /// </summary>
+        /// <param name="rae"></param>
+        /// <returns></returns>
+        protected static string ReturnProvisoContent(ReceiptsAndExpenditure rae)
+        {
+            IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
+
+            return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
         }
     }
 }

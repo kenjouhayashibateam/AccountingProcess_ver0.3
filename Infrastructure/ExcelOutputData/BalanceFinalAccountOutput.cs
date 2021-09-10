@@ -85,24 +85,24 @@ namespace Infrastructure.ExcelOutputData
             //管理事務所と青蓮堂でボーダースタイルを変える
             if (AccountingProcessLocation.Location == "管理事務所")
             {
-                _ = MySheetCellRange(5, 3, 6, 5).Style
+                MySheetCellRange(5, 3, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-                _ = MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+                MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             }
             else
             {
-                _ = MySheetCellRange(5, 5, 6, 5).Style
+                MySheetCellRange(5, 5, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin);
             }
-
-            _ = MySheetCellRange(9, 1, 10, 5).Style
+            
+            MySheetCellRange(9, 1, 10, 5).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)

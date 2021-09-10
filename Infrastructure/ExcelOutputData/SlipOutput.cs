@@ -164,13 +164,6 @@ namespace Infrastructure.ExcelOutputData
                 s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
             }
-
-            static string ReturnProvisoContent(ReceiptsAndExpenditure rae)
-            {
-                IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
-
-                return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
-            }
         }
 
         public override void Output()

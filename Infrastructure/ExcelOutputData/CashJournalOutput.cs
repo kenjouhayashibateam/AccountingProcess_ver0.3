@@ -182,13 +182,6 @@ namespace Infrastructure.ExcelOutputData
                     }
                 }
 
-                string ReturnProvisoContent(ReceiptsAndExpenditure rae)
-                {
-                    IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
-
-                    return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
-                }
-
                 void SetBalance()
                 {
                     if (CurrentDate != rae.OutputDate)

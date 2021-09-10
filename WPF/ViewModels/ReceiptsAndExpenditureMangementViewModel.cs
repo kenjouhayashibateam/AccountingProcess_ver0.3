@@ -217,47 +217,40 @@ namespace WPF.ViewModels
         /// 出金伝票出力コマンド
         /// </summary>
         public DelegateCommand WithdrawalSlipsOutputCommand { get; set; }
-        private async void WithdrawalSlipsOutput()
-        {
-            WithdrawalSlipsOutputButtonContent = "出力中";
-            IsOutputGroupEnabled = false;
-            IsClose = false;
-            await Task.Run(() => SlipsOutputProcess(false));
-            SetOutputGroupEnabled();
-            WithdrawalSlipsOutputButtonContent = "出金伝票";
-            IsClose = true;
-        }
-
+        private void WithdrawalSlipsOutput() { SlipsOutput(false); }
         /// <summary>
         /// 入金伝票出力コマンド
         /// </summary>
         public DelegateCommand PaymentSlipsOutputCommand { get; set; }
-        private async void PaymentSlipsOutput()
-        {
-            PaymentSlipsOutputButtonContent = "出力中";
-            IsOutputGroupEnabled = false;
-            IsClose = false;
-            await Task.Run(() => SlipsOutputProcess(true));
-            SetOutputGroupEnabled();
-            PaymentSlipsOutputButtonContent = "入金伝票";
-            IsClose = true;
-        }
+        private void PaymentSlipsOutput() { SlipsOutput(true); }
+
         /// <summary>
         /// 伝票を出力します
         /// </summary>
         /// <param name="isPayment">入出金チェック</param>
-        private void SlipsOutputProcess(bool isPayment)
+        private async void SlipsOutput(bool isPayment)
         {
-            DataOutput.PaymentAndWithdrawalSlips
-                (AllDataList, isPayment, IsPreviousDayOutput);
-            foreach (ReceiptsAndExpenditure rae in AllDataList)
+            PaymentSlipsOutputButtonContent = "出力中";
+            IsOutputGroupEnabled = false;
+            IsClose = false;
+            await Task.Run(() => SlipsOutputProcess());
+            SetOutputGroupEnabled();
+            IsClose = true;
+            PaymentSlipsOutputButtonContent = isPayment ? "入金伝票" : "出金伝票";
+
+            void SlipsOutputProcess()
             {
-                if (rae.IsPayment != isPayment) { continue; }
-                rae.IsUnprinted = false;
-                _ = DataBaseConnect.Update(rae);
-                if (IsPreviousDayOutput)
+                DataOutput.PaymentAndWithdrawalSlips
+                    (AllDataList, isPayment, IsPreviousDayOutput);
+                foreach (ReceiptsAndExpenditure rae in AllDataList)
                 {
-                    _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
+                    if (rae.IsPayment != isPayment) { continue; }
+                    rae.IsUnprinted = false;
+                    _ = DataBaseConnect.Update(rae);
+                    if (IsPreviousDayOutput)
+                    {
+                        _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
+                    }
                 }
             }
         }
@@ -314,7 +307,9 @@ namespace WPF.ViewModels
 
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
         }
-
+        /// <summary>
+        /// 今日付けで伝票出力したデータリストを保持します
+        /// </summary>
         private void SetTodayWroteList()
         {
             if (AccountingProcessLocation.Location == "青蓮堂") { return; }
@@ -1135,6 +1130,11 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 管理事務所なら「前日残高」、青蓮堂なら「預り金」
+        /// </summary>
+        public string PreviousDayBalanceText
+        { get => AccountingProcessLocation.Location == "管理事務所" ? "前日残高" : "預り金"; }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1149,10 +1149,7 @@ namespace WPF.ViewModels
                 else { ListAmount -= receiptsAndExpenditure.Price; }
             }
 
-            if (AccountingProcessLocation.Location == "青蓮堂")
-            {
-                TodayWroteList.Clear();
-            }
+            if (AccountingProcessLocation.Location == "青蓮堂") { TodayWroteList.Clear(); }
 
             int todayPayment = 0;
             int todayWithdrawal = default;

@@ -834,9 +834,9 @@ namespace WPF.ViewModels
             set
             {
                 accountingSubjectCodeField = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
+                ReferenceAccountingSubjectCode = value;
                 CallPropertyChanged();
                 ValidationProperty(nameof(AccountingSubjectCodeField), value);
-                ReferenceAccountingSubjectCode = value;
                 SetAccountingSubjectOperationButtonEnabled();
             }
         }
@@ -891,10 +891,10 @@ namespace WPF.ViewModels
                 if (value == null) { AccountingSubjectDetailFieldClear(); }
                 else
                 {
-                    AccountingSubjectIDField = currentAccountingSubject.ID;
-                    AccountingSubjectCodeField = currentAccountingSubject.SubjectCode;
-                    AccountingSubjectField = currentAccountingSubject.Subject;
-                    IsAccountingSubjectValidity = currentAccountingSubject.IsValidity;
+                    AccountingSubjectIDField = value.ID;
+                    AccountingSubjectCodeField = value.SubjectCode;
+                    AccountingSubjectField = value.Subject;
+                    IsAccountingSubjectValidity = value.IsValidity;
                     SetAccountingSubjectOperationButtonEnabled();
                 }
             }

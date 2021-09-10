@@ -358,7 +358,7 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="前日収支" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding PreviousDayBalanceText}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="2" Grid.Row="0" Text="出金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                 <TextBlock Grid.Column="3" Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>

@@ -71,7 +71,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="LoginButton" Grid.Column="1" Content="ログイン" IsEnabled="{Binding IsLoginButtonEnabled}" Margin="3,10">
+            <Button x:Name="LoginButton" Grid.Column="1" Content="ログイン" Command="{Binding LoginCommand}" IsDefault="True" IsEnabled="{Binding IsLoginButtonEnabled}" Margin="3,10">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding LoginCommand}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding LoginCommand}" Key="Space"/>
