@@ -19,7 +19,7 @@ namespace WPF.ViewModels.Datas
             string[] methodNames = caller.GetMethod().Name.Split('_');
             int i = methodNames.Length - 1;
             string propertyName = methodNames[i];
-            
+
             CallPropertyChanged(propertyName);
         }
         /// <summary>

@@ -89,8 +89,8 @@ namespace Infrastructure.ExcelOutputData
         protected static string ReturnProvisoContent(ReceiptsAndExpenditure rae)
         {
             IDataBaseConnect dbc = DefaultInfrastructure.GetDefaultDataBaseConnect();
-
-            return dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
+            string s = dbc.CallContentConvertText(rae.Content.ID) ?? rae.Content.Text;
+            return s == rae.Content.AccountingSubject.Subject ? string.Empty : s;
         }
     }
 }

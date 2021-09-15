@@ -53,6 +53,8 @@ namespace WPF.ViewModels
         private bool isReducedTaxRateVisiblity;
         private bool isPaymentCheckEnabled;
         private bool isInputWizardEnabled;
+        private bool isAccountingSubjectEnabled;
+        private bool isContentEnabled;
         #endregion
         #region ObservableCollections
         private ObservableCollection<CreditDept> comboCreditDepts;
@@ -264,7 +266,7 @@ namespace WPF.ViewModels
             if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) { return; }
 
             if (OperationData.Data.OutputDate == DefaultDate) { return; }
-            
+
             CreateResubmitInfo();
 
             void CreateResubmitInfo()
@@ -350,6 +352,8 @@ namespace WPF.ViewModels
             SlipOutputDate = DefaultDate;
             IsOutput = false;
             IsOutputCheckEnabled = false;
+            IsAccountingSubjectEnabled = false;
+            IsContentEnabled = false;
             HoldingPrice = -1;
             SetDetailFieldProperty();
         }
@@ -545,7 +549,7 @@ namespace WPF.ViewModels
         /// 選択された貸方部門
         /// </summary>
         public CreditDept SelectedCreditDept
-        { 
+        {
             get => selectedCreditDept;
             set
             {
@@ -691,9 +695,13 @@ namespace WPF.ViewModels
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
 
-                ComboContents =
-                    DataBaseConnect.ReferenceContent(string.Empty, string.Empty, value, OperationData.Data == null);
-                ComboContentText = ComboContents.Count > 0 ? ComboContents[0].Text : string.Empty;
+                if (!ComboContents.Equals(DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, OperationData.Data == null)))
+                {
+                    ComboContents =
+                        DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, OperationData.Data == null);
+                    SelectedContent = ComboContents.Count > 0 ? ComboContents[0] : null;
+                    ComboContentText = SelectedContent.Text ?? string.Empty;
+                }
 
                 void PropertyClear()
                 {
@@ -718,6 +726,7 @@ namespace WPF.ViewModels
             {
                 comboAccountingSubjects = value;
                 CallPropertyChanged();
+                IsAccountingSubjectEnabled = value.Count > 0;
             }
         }
         /// <summary>
@@ -783,6 +792,7 @@ namespace WPF.ViewModels
             {
                 comboContents = value;
                 CallPropertyChanged();
+                IsContentEnabled = value.Count > 0;
             }
         }
         /// <summary>
@@ -795,7 +805,11 @@ namespace WPF.ViewModels
             {
                 selectedContent = value;
                 CallPropertyChanged();
-                if (value == null) { return; }
+                if (value == null) 
+                {
+                    ComboContentText = string.Empty;
+                    return;
+                }
                 if (value.Text != ComboContentText)
                 { ComboContentText = value.Text; }
             }
@@ -1116,6 +1130,30 @@ namespace WPF.ViewModels
             set
             {
                 isInputWizardEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 勘定科目のEnabled
+        /// </summary>
+        public bool IsAccountingSubjectEnabled
+        {
+            get => isAccountingSubjectEnabled;
+            set
+            {
+                isAccountingSubjectEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 伝票内容のEnabled
+        /// </summary>
+        public bool IsContentEnabled
+        {
+            get => isContentEnabled;
+            set
+            {
+                isContentEnabled = value;
                 CallPropertyChanged();
             }
         }
