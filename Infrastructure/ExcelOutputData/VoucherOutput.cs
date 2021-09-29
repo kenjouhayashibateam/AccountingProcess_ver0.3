@@ -21,9 +21,13 @@ namespace Infrastructure.ExcelOutputData
             IsReissue = isReissue;
             PrepaidDate = prepaidDate;
         }
-
+        /// <summary>
+        /// 受納証の複製部分のColumnを設定します
+        /// </summary>
+        /// <param name="originalColumn"></param>
+        /// <returns></returns>
         private int CopyColumnPosition(int originalColumn)
-        { return originalColumn + SetColumnSizes().Length / 2 + 1; }
+        { return originalColumn + (SetColumnSizes().Length / 2) + 1; }
 
         protected override void SetBorderStyle()
         {
@@ -173,6 +177,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override double[] SetColumnSizes()
         {
+            //受納証左側のColumn＋左右の間のColumn＋受納証右側のColumn
             return new double[]
             { 3.13, 6.88, 3.13, 1.38, 6.88, 4,7.86, 3.13, 3.13, 3.5, 14.86,
                 3.13, 6.88, 3.13, 1.38, 6.88,  4,7.86, 3.13, 3.13, 3.5 };
@@ -183,7 +188,7 @@ namespace Infrastructure.ExcelOutputData
             string prevText = default;
             string addresseeText;
             int provisoAmount = default;
-           
+
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
             if (IsReissue) { SetStringOriginalAndCopy(2, 2, "※再発行"); }
@@ -280,7 +285,7 @@ namespace Infrastructure.ExcelOutputData
                 s += rae.IsReducedTaxRate ? $"{Space}※軽減税率" : string.Empty;
                 return s;
             }
-             
+
             void MultipleLineOutput()
             {
                 int i = 8;

@@ -69,8 +69,8 @@ namespace WPF.ViewModels
             LoginCommand = new DelegateCommand(() => Login(), () => IsLoginButtonEnabled);
             CurrentRep = Reps[0];
         }
-
         public LoginViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+
         public DelegateCommand PasswordCheckReversCommand { get; }
         /// <summary>
         /// 選択された担当者

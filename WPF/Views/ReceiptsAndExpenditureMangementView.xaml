@@ -174,14 +174,14 @@
                                     <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                            <Button x:Name="PrevButton" Grid.Column="4" Padding="3,0,3,3" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="3,1,5,3">
+                            <Button x:Name="PrevButton" Grid.Column="4" Padding="3,0,3,3" Content="|&lt;" ToolTip="前のページを表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="3,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
                             <TextBlock Grid.Column="5" Text="{Binding Pagination.ListPageInfo}" VerticalAlignment="Center"/>
-                            <Button x:Name="NextButton" Grid.Column="6" Padding="3,0,3,3" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="3,1,5,3">
+                            <Button x:Name="NextButton" Grid.Column="6" Padding="3,0,3,3" Content=">|" ToolTip="次のページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="3,1,5,3">
                                 <Button.InputBindings>
                                     <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                                     <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
@@ -411,7 +411,7 @@
                 </Grid>
             </Grid>
         </GroupBox>
-        <GroupBox Header="各種出力" Grid.Row="2" IsEnabled="{Binding IsOutputGroupEnabled}" Margin="5,3" >
+        <GroupBox Header="{Binding OutputMenuHeader}" Grid.Row="2" IsEnabled="{Binding IsOutputGroupEnabled}" Margin="5,3" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>

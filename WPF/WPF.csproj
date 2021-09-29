@@ -122,6 +122,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\CashJournalManagementViewModel.cs" />
+    <Compile Include="ViewModels\Commands\WavSoundPlayCommand.cs" />
     <Compile Include="ViewModels\Datas\CondolenceOperation.cs" />
     <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />

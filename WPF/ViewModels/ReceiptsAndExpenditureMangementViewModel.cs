@@ -55,6 +55,7 @@ namespace WPF.ViewModels
         private string withdrawalSlipsOutputButtonContent;
         private string referenceLocationCheckBoxContent;
         private string password;
+        private string outputMenuHeader;
         /// <summary>
         /// 当日決算の基準になる金額の種類。管理事務所なら前日決算、青蓮堂なら預り金額
         /// </summary>
@@ -230,13 +231,14 @@ namespace WPF.ViewModels
         /// <param name="isPayment">入出金チェック</param>
         private async void SlipsOutput(bool isPayment)
         {
+            string s = PaymentSlipsOutputButtonContent;
             PaymentSlipsOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             IsClose = false;
             await Task.Run(() => SlipsOutputProcess());
             SetOutputGroupEnabled();
             IsClose = true;
-            PaymentSlipsOutputButtonContent = isPayment ? "入金伝票" : "出金伝票";
+            PaymentSlipsOutputButtonContent = s;
 
             void SlipsOutputProcess()
             {
@@ -326,6 +328,7 @@ namespace WPF.ViewModels
         {
             bool b = Cashbox.GetTotalAmount() == ListAmount;
             IsOutputGroupEnabled = b;
+            if (b) { b = !IsContainOutputted; }
             IsPaymentSlipsOutputEnabled = AccountingProcessLocation.Location == "管理事務所"
                 ? (IsPasswordEnabled = IsWithdrawalSlipsOutputEnabled = b) :
                     (IsPasswordEnabled = IsWithdrawalSlipsOutputEnabled = false);
@@ -927,11 +930,16 @@ namespace WPF.ViewModels
             set
             {
                 isContainOutputted = value;
-                if (value) { SearchOutputDateEnd = DateTime.Today; }
+                if (value)
+                {
+                    SearchOutputDateEnd = DateTime.Today;
+                    OutputMenuHeader = "各種出力（出力済みのデータがリストに表示されているため、操作出来ません。）";
+                }
                 else
                 {
                     SearchOutputDateEnd = DefaultDate;
                     SearchOutputDateStart = DefaultDate;
+                    OutputMenuHeader = "各種出力";
                 }
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
@@ -1133,8 +1141,20 @@ namespace WPF.ViewModels
         /// <summary>
         /// 管理事務所なら「前日残高」、青蓮堂なら「預り金」
         /// </summary>
-        public string PreviousDayBalanceText
-        { get => AccountingProcessLocation.Location == "管理事務所" ? "前日残高" : "預り金"; }
+        public string PreviousDayBalanceText =>
+            AccountingProcessLocation.Location == "管理事務所" ? "前日残高" : "預り金";
+        /// <summary>
+        /// 出力メニューグループボックスのHeader 
+        /// </summary>
+        public string OutputMenuHeader
+        {
+            get => outputMenuHeader;
+            set
+            {
+                outputMenuHeader = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// リストの収支決算を表示します
@@ -1189,6 +1209,12 @@ namespace WPF.ViewModels
                 IsWithdrawalSlipsOutputEnabled = isPasswordEnabled =
                 IsOutputGroupEnabled = Cashbox.GetTotalAmount() == amount;
 
+            if (IsBalanceFinalAccountOutputEnabled)
+            {
+                IsReceiptsAndExpenditureOutputButtonEnabled = IsPaymentSlipsOutputEnabled =
+                    IsWithdrawalSlipsOutputEnabled = isPasswordEnabled =
+                    IsOutputGroupEnabled = !IsContainOutputted;
+            }
             IsPreviousDayOutputEnabled = false;
         }
 

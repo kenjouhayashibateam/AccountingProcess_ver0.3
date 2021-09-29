@@ -95,26 +95,26 @@
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="1" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                     <TextBlock Text="出納データ一覧" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <Button x:Name="ShowMinPageButton" Grid.Column="1" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
+                    <Button x:Name="ShowMinPageButton" Grid.Column="1" Padding="3,0,3,3" Content="|&lt;&lt;" ToolTip="1ページ目を表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="PrevButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
+                    <Button x:Name="PrevButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;" ToolTip="前のページを表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
                     <TextBlock Grid.Column="3" Text="{Binding Pagination.ListPageInfo}" Margin="5"/>
-                    <Button x:Name="NextButton" Grid.Column="4" Padding="3,0,3,3" Content=">|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
+                    <Button x:Name="NextButton" Grid.Column="4" Padding="3,0,3,3" Content=">|" ToolTip="次のページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="ShowMaxPageButton" Grid.Column="5" Padding="3,0,3,3" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
+                    <Button x:Name="ShowMaxPageButton" Grid.Column="5" Padding="3,0,3,3" Content=">>|" ToolTip="最終ページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>

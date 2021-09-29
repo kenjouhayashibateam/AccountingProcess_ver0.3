@@ -26,15 +26,16 @@ namespace WPF.ViewModels.Datas
         private bool callShowMessageBox;
         #endregion
 
+        /// <summary>
+        /// データベース接続
+        /// </summary>
         public IDataBaseConnect DataBaseConnect;
-
         /// <summary>
         /// 画面タイトル
         /// </summary>
         protected string DefaultWindowTitle { get; set; }
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
         /// <summary>
         /// ウィンドウ表示コマンド
         /// </summary>
@@ -242,7 +243,7 @@ namespace WPF.ViewModels.Datas
         /// <param name="hasError">プロパティがエラーかの判断</param>
         /// <param name="propertyName">リストに追加、削除するプロパティ名</param>
         /// <param name="exeption">エラー内容</param>
-        protected void ErrorsListOperation(bool hasError, string propertyName,string exeption)
+        protected void ErrorsListOperation(bool hasError, string propertyName, string exeption)
         {
             if (hasError) { AddError(propertyName, exeption); }
             else { RemoveError(propertyName); }

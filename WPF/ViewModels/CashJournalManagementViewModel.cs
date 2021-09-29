@@ -40,7 +40,9 @@ namespace WPF.ViewModels
         public DelegateCommand OutputCommand { get; }
         private async void Output()
         {
+            //選択年月の1日を検索スタートにする
             DateTime searchDateStart = new DateTime(IntAmount(YearString), IntAmount(MonthString), 1);
+            //今日が1日の場合のみ最終日をスタートを先月末日に設定する
             DateTime searchDateEnd =
                 searchDateStart == DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)) ? DateTime.Today :
                                                 searchDateStart.AddMonths(1).AddDays(-1);

@@ -15,6 +15,9 @@ namespace Domain.Entities.ValueObjects
         /// 担当者名
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 担当者苗字のみ
+        /// </summary>
         public string FirstName => GetFirstName(Name);
         /// <summary>
         /// パスワード

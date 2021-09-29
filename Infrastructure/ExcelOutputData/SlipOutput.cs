@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
-using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -20,11 +19,22 @@ namespace Infrastructure.ExcelOutputData
         private readonly SlipType mySlipType;
         private readonly bool IsPayment;
         private readonly bool IsPreviousDay;
-
+        /// <summary>
+        /// 伝票の種類
+        /// </summary>
         public enum SlipType
         {
+            /// <summary>
+            /// 入金伝票
+            /// </summary>
             Payment,
+            /// <summary>
+            /// 出金伝票
+            /// </summary>
             Withdrawal,
+            /// <summary>
+            /// 社内振替伝票
+            /// </summary>
             Transter
         }
 
@@ -51,7 +61,6 @@ namespace Infrastructure.ExcelOutputData
             int inputRow = 0;
             int inputContentColumn = 0;
             int TotalPrice = 0;
-            DateTime currentDate = TextHelper.DefaultDate;
 
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending
@@ -68,6 +77,7 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(code)) { code = rae.Content.AccountingSubject.SubjectCode; }
                 //subjectの初期値を設定する
                 if (string.IsNullOrEmpty(subject)) { subject = rae.Content.AccountingSubject.Subject; }
+                DateTime currentDate = TextHelper.DefaultDate;
                 //currentDateの初期値を設定する
                 if (currentDate == TextHelper.DefaultDate) { currentDate = rae.AccountActivityDate; }
                 if (string.IsNullOrEmpty(content)) { content = rae.Content.Text; }//contentの初期値を設定する}
@@ -120,7 +130,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition + 1, 16).Value =
                     $"{rae.AccountActivityDate:M/d}";
                 //経理担当場所、伝票の総額、担当者、伝票作成日、勘定科目、コード、貸方部門を出力
-                myWorksheet.Cell(StartRowPosition + 2, 16).Value = rae.Location; 
+                myWorksheet.Cell(StartRowPosition + 2, 16).Value = rae.Location;
                 string s = rae.IsReducedTaxRate ? "※軽減税率" : string.Empty;
                 myWorksheet.Cell(StartRowPosition + 3, 16).Value = s;
                 for (int i = 0; i < TotalPrice.ToString().Length; i++)
@@ -271,9 +281,7 @@ namespace Infrastructure.ExcelOutputData
         protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
 
         protected override void SetList(IEnumerable outputList)
-        {
-            ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
-        }
+        { ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList; }
 
         protected override string SetSheetFontName() { return "ＭＳ 明朝"; }
     }

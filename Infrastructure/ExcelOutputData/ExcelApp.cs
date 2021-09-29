@@ -180,7 +180,6 @@ namespace Infrastructure.ExcelOutputData
         /// <param name="x">メートル法での長さ</param>
         /// <returns>インチ法での長さ</returns>
         protected double ToInch(double x) { return x * 0.39370; }
-
         /// <summary>
         /// エクセルシートのCellの範囲を指定します
         /// </summary>

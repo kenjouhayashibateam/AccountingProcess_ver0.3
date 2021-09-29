@@ -30,6 +30,7 @@ namespace Infrastructure.ExcelOutputData
         /// 前日残高
         /// </summary>
         private int PreviousDayBalance;
+
         private readonly IDataBaseConnect DataBaseConnect;
 
         public CashJournalOutput

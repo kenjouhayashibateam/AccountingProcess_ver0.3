@@ -3,10 +3,22 @@ using WPF.ViewModels.Commands;
 
 namespace WPF.ViewModels.Datas
 {
+    /// <summary>
+    /// ページネーション観察者のインターフェイス
+    /// </summary>
     public interface IPagenationObserver
     {
+        /// <summary>
+        /// ソート通知を受信したときに処理します
+        /// </summary>
         void SortNotify();
+        /// <summary>
+        /// ページ遷移を受信したときに処理します
+        /// </summary>
         void PageNotify();
+        /// <summary>
+        /// ソートするカラム名を格納するリストを生成します
+        /// </summary>
         void SetSortColumns();
     }
     /// <summary>

@@ -72,14 +72,21 @@ namespace Infrastructure.ExcelOutputData
             (ReceiptsAndExpenditure validateReceiotsAndExpenditure, DateTime currentActivityDate, string currentDept,
                 string currentSubjectCode, string currentSubject, string currentContent, string currentLocation, bool isTaxRate)
         {
-            return !IndependentContent.Contains(currentContent)
-                && currentDept == validateReceiotsAndExpenditure.CreditDept.Dept &&
+            //出力ページの出納データが強制的に単独にする内容文字列配列に入っているものでPageCountが1ならTrue
+            //あるいは、出力ページの出納データが強制的に単独にする内容文字列配列に入っていない、
+            //出力ページが比較するデータと、貸方部門が同じ、勘定科目コードが同じ、勘定科目が同じ、入出金日が同じ、
+            //比較する出納データが強制的に単独にする内容文字列配列に含まれていない、出力ページが10を超えていない、
+            //経理担当場所が同じ、出力ページの軽減税率チェックが比較する出納データと同じ場合にTrueを返す
+            return (IndependentContent.Contains(currentContent) &&
+                IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) && PageCount == 1)
+                || (!IndependentContent.Contains(currentContent) &&
+                currentDept == validateReceiotsAndExpenditure.CreditDept.Dept &&
                 currentSubjectCode == validateReceiotsAndExpenditure.Content.AccountingSubject.SubjectCode &&
                 currentSubject == validateReceiotsAndExpenditure.Content.AccountingSubject.Subject &&
                 currentActivityDate == validateReceiotsAndExpenditure.AccountActivityDate &&
                 !IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) &&
                 ItemIndex < 10 && currentLocation == validateReceiotsAndExpenditure.Location &&
-                isTaxRate == validateReceiotsAndExpenditure.IsReducedTaxRate;
+                isTaxRate == validateReceiotsAndExpenditure.IsReducedTaxRate);
         }
         /// <summary>
         /// 提出書類に表記する内容を返します

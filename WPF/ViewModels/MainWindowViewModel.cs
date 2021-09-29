@@ -4,6 +4,7 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
+using System.Threading;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
@@ -11,7 +12,7 @@ using WPF.Views.Datas;
 
 namespace WPF.ViewModels
 {
-    /// <summary>
+    /// <summary>gds
     /// メインウィンドウ
     /// </summary>
     public class MainWindowViewModel : BaseViewModel, IClosing
@@ -40,43 +41,6 @@ namespace WPF.ViewModels
             管理事務所,
             青蓮堂
         }
-        public DelegateCommand ShowSearchReceiptsAndExpenditureCommand { get; }
-        /// <summary>
-        /// 経理担当場所を管理事務所に設定するコマンド
-        /// </summary>
-        public DelegateCommand SetLocationKanriJimushoCommand { get; }
-        /// <summary>
-        /// 経理担当場所を青蓮堂に設定するコマンド
-        /// </summary>
-        public DelegateCommand SetLodationShorendoCommand { get; }
-        /// <summary>
-        /// 金庫金額計算画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowRemainingMoneyCalculationCommand { get; }
-        /// <summary>
-        /// データ管理画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowDataManagementCommand { get; }
-        /// <summary>
-        /// ログイン画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowLoginCommand { get; }
-        /// <summary>
-        /// 伝票管理画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowReceiptsAndExpenditureManagementCommand { get; }
-        /// <summary>
-        /// 受納証発行画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowCreateVoucherCommand { get; }
-        /// <summary>
-        /// パート交通費データ登録画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowPartTimerTransPortCommand { get; }
-        /// <summary>
-        /// お布施一覧管理画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowCreateCondolencesCommand { get; }
         /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
@@ -117,6 +81,45 @@ namespace WPF.ViewModels
                     (ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+
+        public DelegateCommand ShowSearchReceiptsAndExpenditureCommand { get; }
+        /// <summary>
+        /// 経理担当場所を管理事務所に設定するコマンド
+        /// </summary>
+        public DelegateCommand SetLocationKanriJimushoCommand { get; }
+        /// <summary>
+        /// 経理担当場所を青蓮堂に設定するコマンド
+        /// </summary>
+        public DelegateCommand SetLodationShorendoCommand { get; }
+        /// <summary>
+        /// 金庫金額計算画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowRemainingMoneyCalculationCommand { get; }
+        /// <summary>
+        /// データ管理画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowDataManagementCommand { get; }
+        /// <summary>
+        /// ログイン画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowLoginCommand { get; }
+        /// <summary>
+        /// 伝票管理画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowReceiptsAndExpenditureManagementCommand { get; }
+        /// <summary>
+        /// 受納証発行画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowCreateVoucherCommand { get; }
+        /// <summary>
+        /// パート交通費データ登録画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowPartTimerTransPortCommand { get; }
+        /// <summary>
+        /// お布施一覧管理画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowCreateCondolencesCommand { get; }
+
         /// <summary>
         /// ログアウトコマンド
         /// </summary>
@@ -254,7 +257,7 @@ namespace WPF.ViewModels
 
             NoOutputed = string.IsNullOrEmpty(NoOutputed) ?
                 string.Empty : $"\r\n\r\n\t※{NoOutputed}が出力されていません";
-
+           
             MessageBox = new MessageBoxInfo()
             {
                 Message = $"終了します。よろしいですか？{NoOutputed}",
@@ -262,8 +265,6 @@ namespace WPF.ViewModels
                 Title = "経理システムの終了",
                 Image = MessageBoxImage.Question
             };
-
-            CallPropertyChanged(nameof(MessageBox));
         }
         /// <summary>
         /// 経理システムの終了確認メッセージボックスを呼び出します
@@ -465,7 +466,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
         /// </summary>
@@ -505,7 +505,13 @@ namespace WPF.ViewModels
         public bool OnClosing()
         {
             CallClosingMessage = true;
-            return MessageBox.Result != MessageBoxResult.Yes;
+            bool b = MessageBox.Result != MessageBoxResult.Yes;
+            if (!b)
+            {
+                WavSoundPlayCommand.Play("Shutdown.wav");
+                Thread.Sleep(2800);//wav再生時間の取得方法を模索すること。21.9.19時点でいいのがなかった
+            }
+            return b;
         }
 
         public override void ValidationProperty(string propertyName, object value)

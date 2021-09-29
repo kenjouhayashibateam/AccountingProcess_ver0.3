@@ -13,8 +13,13 @@ namespace Infrastructure.ExcelOutputData
     internal class CondolencesOutput : OutputSingleSheetData
     {
         private readonly ObservableCollection<Condolence> Condolences;
+        /// <summary>
+        /// 現在のページ数
+        /// </summary>
         private int pageNumber = 1;
-        //Rowのスタート位置インデックス
+        /// <summary>
+        /// Rowのスタート位置インデックス
+        /// </summary>
         private int StartRowIndex => (pageNumber - 1) * SetRowSizes().Length;
 
         public CondolencesOutput(ObservableCollection<Condolence> condolences)

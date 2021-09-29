@@ -473,7 +473,7 @@
                                                     </Button.InputBindings>
                                                 </Button>
                                             </Grid>
-                                            <TextBox x:Name="ConvertContentTextBox" Grid.Row="11" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Text="{Binding ContentConvertText,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource WatermarkTextbox}" Tag="内容と同じ場合は不要です" Margin="5"/>
+                                            <TextBox x:Name="ConvertContentTextBox" Grid.Row="11" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Text="{Binding ContentConvertText,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource WatermarkTextbox}" Tag="内容と違う場合に入力して下さい" Margin="5"/>
                                         </Grid>
                                         <Grid Grid.Row="1">
                                             <Grid.RowDefinitions>

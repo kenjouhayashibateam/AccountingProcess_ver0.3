@@ -1,6 +1,4 @@
-﻿using Domain.Entities.Helpers;
-
-namespace Domain.Entities.ValueObjects
+﻿namespace Domain.Entities.ValueObjects
 {
     /// <summary>
     /// その他の金銭クラス

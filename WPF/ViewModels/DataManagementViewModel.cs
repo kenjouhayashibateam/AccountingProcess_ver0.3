@@ -1468,6 +1468,7 @@ namespace WPF.ViewModels
             {
                 affiliationAccountingSubjects = value;
                 CallPropertyChanged();
+                IsAffiliationAccountingSubjectEnabled = value.Count != 0;
             }
         }
         /// <summary>
@@ -1484,6 +1485,7 @@ namespace WPF.ViewModels
                 if (affiliationAccountingSubject != null)
                 {
                     SelectedAccountingSubjectField = affiliationAccountingSubject.Subject;
+                    AffiliationAccountingSubjectCode = value.SubjectCode;
                     SetContentOperationButtonEnabled();
                 }
             }
@@ -1729,13 +1731,19 @@ namespace WPF.ViewModels
                 if (affiliationAccountingSubjectCode == value) { return; }
                 affiliationAccountingSubjectCode = value;
                 CallPropertyChanged();
-                if (value != null)
+                if (!string.IsNullOrEmpty(value))
                 {
                     AffiliationAccountingSubjects =
                         DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                    AffiliationAccountingSubject = AffiliationAccountingSubjects.Count == 0 ?
+                        null : AffiliationAccountingSubjects[0];
                 }
-                if (AffiliationAccountingSubjects.Count > 0)
-                { AffiliationAccountingSubject = AffiliationAccountingSubjects[0]; }
+                else
+                {
+                    AffiliationAccountingSubjects =
+                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                    AffiliationAccountingSubject = null;
+                }
                 ReferenceAccountingSubjectCodeBelognsContent = value;
             }
         }

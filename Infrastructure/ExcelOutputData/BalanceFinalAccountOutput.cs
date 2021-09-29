@@ -11,7 +11,6 @@ namespace Infrastructure.ExcelOutputData
     /// </summary>
     internal class BalanceFinalAccountOutput : OutputSingleSheetData
     {
-        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         /// <summary>
         /// 前日決算額
         /// </summary>
@@ -85,24 +84,24 @@ namespace Infrastructure.ExcelOutputData
             //管理事務所と青蓮堂でボーダースタイルを変える
             if (AccountingProcessLocation.Location == "管理事務所")
             {
-                MySheetCellRange(5, 3, 6, 5).Style
+                _ = MySheetCellRange(5, 3, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin);
 
-                MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+                _ = MySheetCellRange(12, 2, 14, 3).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             }
             else
             {
-                MySheetCellRange(5, 5, 6, 5).Style
+                _ = MySheetCellRange(5, 5, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                     .Border.SetTopBorder(XLBorderStyleValues.Thin)
                     .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                     .Border.SetRightBorder(XLBorderStyleValues.Thin);
             }
-            
-            MySheetCellRange(9, 1, 10, 5).Style
+
+            _ = MySheetCellRange(9, 1, 10, 5).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
@@ -136,7 +135,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(2, 4).Value = DateTime.Today.ToString("yyyy年MM月dd日（ddd）");
             myWorksheet.Cell(3, 1).Value = "証憑綴り";
             myWorksheet.Cell(5, 5).Value = "係";
-            myWorksheet.Cell(6, 5).Value = LoginRep.Rep.FirstName;
+            myWorksheet.Cell(6, 5).Value = LoginRep.GetInstance().Rep.FirstName;
             myWorksheet.Cell(8, 1).Value = "収支";
             myWorksheet.Cell(9, 2).Value = "入金";
             myWorksheet.Cell(9, 3).Value = "出金";
