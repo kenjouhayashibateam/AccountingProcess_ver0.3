@@ -39,7 +39,7 @@ namespace WPF.Views.Behaviors
                 case MessageBoxImage.Hand:
                     break;
                 case MessageBoxImage.Question:
-                    WavSoundPlayCommand.Play("button79 .wav");
+                    WavSoundPlayCommand.Play("Notify.wav");
                     break;
                 case MessageBoxImage.Exclamation:
                     WavSoundPlayCommand.Play("CriticalStop.wav");

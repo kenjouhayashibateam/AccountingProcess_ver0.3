@@ -61,7 +61,7 @@ namespace Infrastructure.Properties {
         }
         
         /// <summary>
-        ///   &lt;value&gt;&quot;PROVIDER=SQLOLEDB;SERVER=192.168.44.163\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlserver&quot;&lt;/value&gt; に類似しているローカライズされた文字列を検索します。
+        ///   &lt;value&gt;&quot;PROVIDER=SQLOLEDB;SERVER=192.168.44.163\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlsever&quot;&lt;/value&gt; に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string DATABASECONNECTIONSTRING {
             get {

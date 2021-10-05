@@ -21,6 +21,13 @@ namespace WPF.ViewModels
         IPagenationObserver
     {
         #region Properties
+        #region ints
+        private int CarTipAmount = default;
+        private int AlmsgivingAmount = default;
+        private int MealTipAmount = default;
+        private int CarAndMealTipAmount = default;
+        private int SocialGatheringAmount = default;
+        #endregion
         #region Strings
         private string carTip = string.Empty;
         private string ownerName = string.Empty;
@@ -54,6 +61,7 @@ namespace WPF.ViewModels
         private bool isFixToggleEnabled = false;
         private bool isDeleteButtonVisibility = true;
         #endregion
+        #region Others
         private Dictionary<int, string> soryoList = new Dictionary<int, string>();
         private ObservableCollection<ReceiptsAndExpenditure> receiptsAndExpenditures =
             new ObservableCollection<ReceiptsAndExpenditure>();
@@ -75,6 +83,7 @@ namespace WPF.ViewModels
         public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() 
         { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" }, { 3, "彼岸読経" }, { 4, "盆読経" } };
         private readonly LoginRep GetLoginRep = LoginRep.GetInstance();
+        #endregion
         #endregion
 
         public CondolenceOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
@@ -415,13 +424,15 @@ namespace WPF.ViewModels
             switch (SearchAccountingSubjectCode)
             {
                 case "815":
-                    Almsgiving = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    AlmsgivingAmount += SelectedReceiptsAndExpenditure.Price;
+                    Almsgiving = AmountWithUnit(AlmsgivingAmount);
                     break;
                 case "832":
                     SetAmount();
                     break;
                 case "831":
-                    SocialGathering = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    SocialGatheringAmount += SelectedReceiptsAndExpenditure.Price;
+                    SocialGathering = AmountWithUnit(SocialGatheringAmount);
                     break;
                 default:
                     break;
@@ -433,13 +444,16 @@ namespace WPF.ViewModels
             switch (SelectedReceiptsAndExpenditure.Content.Text)
             {
                 case "御車代":
-                    CarTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    CarTipAmount += SelectedReceiptsAndExpenditure.Price;
+                    CarTip = AmountWithUnit(CarTipAmount);
                     break;
                 case "御膳料":
-                    MealTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    MealTipAmount += SelectedReceiptsAndExpenditure.Price;
+                    MealTip = AmountWithUnit(MealTipAmount);
                     break;
                 case "御車代御膳料":
-                    CarAndMealTip = SelectedReceiptsAndExpenditure.PriceWithUnit;
+                    CarAndMealTipAmount += SelectedReceiptsAndExpenditure.Price;
+                    CarAndMealTip = AmountWithUnit(CarAndMealTipAmount);
                     break;
                 default:
                     break;

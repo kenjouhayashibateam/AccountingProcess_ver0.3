@@ -188,6 +188,7 @@ namespace Infrastructure.ExcelOutputData
             string prevText = default;
             string addresseeText;
             int provisoAmount = default;
+            int contentCount = default;
 
             //タイトル
             SetStringOriginalAndCopy(1, 1, "受　納　証");
@@ -212,7 +213,16 @@ namespace Infrastructure.ExcelOutputData
             //事前領収の日付
             if (PrepaidDate != DefaultDate) { SetStringOriginalAndCopy(6, 7, $"※{PrepaidDate:M/d}ご法事"); }
             //但し書き
-            if (VoucherData.ReceiptsAndExpenditures.Count < 5) { SingleLineOutput(); }
+            foreach (ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
+            {
+                if (prevText != ReturnProvisoContent(rae))
+                {
+                    prevText = ReturnProvisoContent(rae);
+                    contentCount++;
+                }
+            }
+            prevText = string.Empty;
+            if (contentCount < 5) { SingleLineOutput(); }
             else { MultipleLineOutput(); }
             SetStringOriginalAndCopy(11, 2, "上記有難くお受けいたしました");
             //団体名、電話番号  
@@ -250,19 +260,21 @@ namespace Infrastructure.ExcelOutputData
 
             void SingleLineOutput()
             {
-                int i = VoucherData.ReceiptsAndExpenditures.Count - 1;
+                int i = contentCount - 1;
+
                 foreach (ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
                 {
                     if (prevText == ReturnProvisoContent(rae))
                     {
                         provisoAmount += rae.Price;
-                        SetStringOriginalAndCopy(10 - (i + 1), 2, string.Empty);
+                        SetStringOriginalAndCopy(10 - (++i), 2, string.Empty);
                     }
                     else
                     {
                         provisoAmount = rae.Price;
                         prevText = ReturnProvisoContent(rae);
                     }
+
                     SetStringOriginalAndCopy(10 - i, 2, ProvisoString(rae));
 
                     i--;
@@ -278,7 +290,7 @@ namespace Infrastructure.ExcelOutputData
 
             string ProvisoString(ReceiptsAndExpenditure rae)
             {
-                string s = VoucherData.ReceiptsAndExpenditures.Count == 1 ?
+                string s = contentCount == 1 ?
                     $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}" :
                     $"{ReturnProvisoContent(rae)}{AppendSupplement(rae)}{Space}:{Space}" +
                     $"{AmountWithUnit(provisoAmount)}";
@@ -297,6 +309,7 @@ namespace Infrastructure.ExcelOutputData
                     else
                     {
                         provisoAmount = rae.Price;
+                        prevText = ReturnProvisoContent(rae);
                         j--;
                         i--;
                     }

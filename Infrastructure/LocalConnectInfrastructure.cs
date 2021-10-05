@@ -436,7 +436,7 @@ namespace Infrastructure
                     DateTime.Today,DateTime.Today.AddDays(-1),true),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
-                    ("content4",OtherContribution,-1,"骨壺",true),"坂村家",2000,true,true,DateTime.Today,
+                    ("content4",OtherContribution,-1,"管理料",true),"坂村家",2000,true,true,DateTime.Today,
                         DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today.AddDays(2),repAkima,"管理事務所",shunjuen,
                     new Content
@@ -519,7 +519,7 @@ namespace Infrastructure
 
         public Voucher CallLatestVoucher()
         {
-            return new Voucher(0, string.Empty,
+            return new Voucher(0, "ろーかる",
                 ReferenceReceiptsAndExpenditure(DateTime.Today, DateTime.Today, string.Empty, string.Empty,
                 string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
                 DateTime.Today, DateTime.Today, DateTime.Today, DateTime.Today),

@@ -16,10 +16,24 @@ namespace Infrastructure
         /// <param name="message">ログ内容</param>
         public void Log(ILogger.LogInfomation info, string message)
         {
-            StreamWriter streamWriter = new StreamWriter(Properties.Resources.LogFilePath, true);
+            string[] textArray;
+            using (StreamReader streamReader = new StreamReader(Properties.Resources.LogFilePath))
+            {
+                textArray = streamReader.ReadToEnd().Split('\n');
+            }
 
-            streamWriter.WriteLine($"{info}\t{DateTime.Now}\t{message}");
-            streamWriter.Flush();
+            string newText = $"{info}\t{ DateTime.Now}\t{message}\n";
+
+            for (int i = 0; i < textArray.Length; i++)
+            {
+                newText += $"{textArray[i]}\n";
+            }
+
+            using (StreamWriter streamWriter = new StreamWriter(Properties.Resources.LogFilePath))
+            {
+                streamWriter.WriteLine(newText);
+                streamWriter.Flush();
+            }
             _ = System.Diagnostics.Process.Start(Properties.Resources.LogFilePath);
         }
     }
