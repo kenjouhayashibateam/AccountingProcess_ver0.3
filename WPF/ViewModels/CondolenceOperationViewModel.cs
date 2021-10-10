@@ -71,7 +71,7 @@ namespace WPF.ViewModels
             new ReceiptsAndExpenditure(0, DefaultDate, LoginRep.GetInstance().Rep, string.Empty,
                 new CreditDept(string.Empty, string.Empty, true, true),
                     new Content(string.Empty,
-                        new AccountingSubject(string.Empty, string.Empty, string.Empty, true), 0, string.Empty, true),
+                        new AccountingSubject(string.Empty, string.Empty, string.Empty, true, true), 0, string.Empty, true),
                             string.Empty, 0, true, true, DefaultDate, DefaultDate, false);
         private Condolence OperationCondolence = new Condolence
             (0, string.Empty, string.Empty, string.Empty, string.Empty,
@@ -294,6 +294,12 @@ namespace WPF.ViewModels
                     $"{OperationCondolence.Content}\r\n";
             }
 
+            if (condolence.Almsgiving != OperationCondolence.Almsgiving)
+            {
+                updateContent += $"御布施{Space}:{Space}{AmountWithUnit(condolence.Almsgiving)}" +
+                    $"{Space}→{Space}{AmountWithUnit(OperationCondolence.Almsgiving)}\r\n";
+            }
+
             if (condolence.CarTip != OperationCondolence.CarTip)
             {
                 updateContent += $"御車代{Space}:{Space}{AmountWithUnit(condolence.CarTip)}" +
@@ -466,7 +472,7 @@ namespace WPF.ViewModels
             (int totalRow, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
-                        string.Empty, SearchAccountingSubjectCode, true, true, true, true,
+                        string.Empty, SearchAccountingSubjectCode, true, true, true, true, true,
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
                         DateTime.Today, Pagination.PageCount, "ID", false);
             ReceiptsAndExpenditures = list;

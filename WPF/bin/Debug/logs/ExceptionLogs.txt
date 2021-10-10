@@ -1,4 +1,10 @@
+ERROR	2021/10/10 15:22:48	ExcelConnect	プロセス 'Excel.EXE' が見つかりませんでした。
+ERROR	2021/10/10 15:21:21	ExcelConnect	プロセス '{0}' が見つかりませんでした。
 
+
+
+
+
 
 
 

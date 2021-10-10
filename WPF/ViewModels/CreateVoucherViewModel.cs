@@ -313,7 +313,7 @@ namespace WPF.ViewModels
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today,
                 AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
-                string.Empty, true, true, true, true, SearchDate, SearchDate, DefaultDate,
+                string.Empty, true, true, true, true, true, SearchDate, SearchDate, DefaultDate,
                 DateTime.Today, Pagination.PageCount, Pagination.SelectedSortColumn,
                 Pagination.SortDirectionIsASC);
 

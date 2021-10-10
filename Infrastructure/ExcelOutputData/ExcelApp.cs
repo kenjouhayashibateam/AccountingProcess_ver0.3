@@ -3,6 +3,8 @@ using Domain.Repositories;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.VisualBasic;
 using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -73,6 +75,15 @@ namespace Infrastructure.ExcelOutputData
             {
                 _ = myWorksheet.Protect(Properties.Resources.ExcelWorkbookPassword);
                 myWorkbook.SaveAs(openPath);
+                //エクセルを前面に出す
+                foreach(Process p in Process.GetProcesses())
+                {
+
+                }
+                Process current = Process.GetCurrentProcess();
+                Process.GetProcessesByName(current.ProcessName)
+                    .ToList()
+                    .ForEach(p => Interaction.AppActivate(p.Id));
                 _ = myWorkbooks.Open(Filename: openPath, ReadOnly: true);
                 App.Visible = true;
             }

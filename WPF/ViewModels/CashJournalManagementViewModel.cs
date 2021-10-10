@@ -61,8 +61,8 @@ namespace WPF.ViewModels
                     (
                         DataBaseConnect.ReferenceReceiptsAndExpenditure
                             (DefaultDate, DateTime.Now, string.Empty, string.Empty, string.Empty, string.Empty,
-                                string.Empty, string.Empty, false, true, true, true, DefaultDate, DateTime.Now,
-                                searchDateStart, searchDateEnd)
+                                string.Empty, string.Empty, false,AccountingProcessLocation.IsAccountingGenreShunjuen,
+                                true, true, true, DefaultDate, DateTime.Now, searchDateStart, searchDateEnd)
                     )
                 );
             OutputButtonContent = "出力";

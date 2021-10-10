@@ -92,7 +92,7 @@ namespace Domain.Repositories
         /// <param name="isTrueOnly">有効な物のみ表示する</param>
         /// <returns>勘定科目リスト</returns>
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
-            (string subjectCode, string subject, bool isValidityTrueOnly);
+            (string subjectCode, string subject, bool isShunjuen, bool isValidityTrueOnly);
         /// <summary>
         /// 貸方勘定検索
         /// </summary>
@@ -110,7 +110,8 @@ namespace Domain.Repositories
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <returns>伝票内容リスト</returns>
         public ObservableCollection<Content> ReferenceContent
-            (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly);
+            (string contentText, string accountingSubjectCode, string accountingSubject,bool isShunjuen,
+                bool isValidityTrueOnly);
         /// <summary>
         /// IDを基に勘定科目を呼び出します
         /// </summary>
@@ -170,7 +171,7 @@ namespace Domain.Repositories
         /// <returns></returns>
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                string content, string detail, string accountingSubject, string accountingSubjectCode,
+                string content, string detail, string accountingSubject, string accountingSubjectCode, bool isShunjuen,
                 bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
                 DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
                 DateTime outputDateEnd);
@@ -200,7 +201,7 @@ namespace Domain.Repositories
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
             ReferenceReceiptsAndExpenditure
                 (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                    string content, string detail, string accountingSubject, string accountingSubjectCode,
+                    string content, string detail, string accountingSubject, string accountingSubjectCode, bool isShunjuen,
                     bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                     bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                     DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,

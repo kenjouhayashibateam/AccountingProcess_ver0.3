@@ -149,13 +149,16 @@ namespace Infrastructure
         }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
-            (string subjectCode, string subject, bool isTrueOnly)
+            (string subjectCode, string subject, bool isShunjuen, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> accountingSubjects =
                 new ObservableCollection<AccountingSubject>();
 
             Parameters = new Dictionary<string, object>()
-            { {"@subject_code", subjectCode},{"@subject", subject},{"@true_only", isTrueOnly} };
+            {
+                {"@subject_code", subjectCode},{"@subject", subject},{ "@is_shunjuen",isShunjuen},
+                {"@true_only", isTrueOnly}
+            };
 
             SqlDataReader DataReader = ReturnGeneretedParameterCommand
                     ("reference_accounting_subject").ExecuteReader();
@@ -165,7 +168,7 @@ namespace Infrastructure
                 accountingSubjects.Add
                     (new AccountingSubject((string)DataReader["accounting_subject_id"],
                         (string)DataReader["subject_code"], (string)DataReader["subject"],
-                        (bool)DataReader["is_validity"]));
+                        (bool)DataReader["is_shunjuen"], (bool)DataReader["is_validity"]));
             }
 
             return accountingSubjects;
@@ -176,8 +179,8 @@ namespace Infrastructure
             Parameters = new Dictionary<string, object>()
             {
                 {"@accounting_subject_id", accountingSubject.ID},{ "@subject_code",accountingSubject.SubjectCode},
-                { "@subject",accountingSubject.Subject},{"@is_validity", accountingSubject.IsValidity},
-                { "@operation_staff_id", LoginRep.Rep.ID}
+                { "@subject",accountingSubject.Subject},{ "@is_shunjuen",accountingSubject.IsShunjuen},
+                {"@is_validity", accountingSubject.IsValidity},                { "@operation_staff_id", LoginRep.Rep.ID}
             };
 
             return ReturnGeneretedParameterCommand
@@ -256,14 +259,14 @@ namespace Infrastructure
         }
 
         public ObservableCollection<Content> ReferenceContent
-            (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
+            (string contentText, string accountingSubjectCode, string accountingSubject, bool isShunjuen, bool isValidityTrueOnly)
         {
             ObservableCollection<Content> contents = new ObservableCollection<Content>();
 
             Parameters = new Dictionary<string, object>()
             {
                 { "@content", contentText},{"@subject_code", accountingSubjectCode},
-                {"@subject", accountingSubject},{ "@true_only", isValidityTrueOnly}
+                {"@subject", accountingSubject},{ "@is_shunjuen",isShunjuen},{ "@true_only", isValidityTrueOnly}
             };
 
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
@@ -275,7 +278,8 @@ namespace Infrastructure
                     (
                         new Content((string)dataReader["content_id"],
                         new AccountingSubject((string)dataReader["accounting_subject_id"],
-                            (string)dataReader["subject_code"], (string)dataReader["subject"], true),
+                            (string)dataReader["subject_code"], (string)dataReader["subject"],
+                            (bool)dataReader["is_shunjuen"], true),
                         (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"])
                     );
             }
@@ -294,7 +298,7 @@ namespace Infrastructure
                 return new AccountingSubject
                     ((string)DataReader["accounting_subject_id"],
                     (string)DataReader["subject_code"], (string)DataReader["subject"],
-                    (bool)DataReader["is_validity"]);
+                    (bool)DataReader["is_shunjuen"], (bool)DataReader["is_validity"]);
             }
 
             return null;
@@ -349,8 +353,8 @@ namespace Infrastructure
             (
                 DateTime registrationDateStart, DateTime registrationDateEnd, string location,
                 string creditDept, string content, string detail, string accountingSubject,
-                string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment,
-                bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
+                string accountingSubjectCode, bool isShunjuen, bool whichDepositAndWithdrawalOnly,
+                bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
                 DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd
             )
         {
@@ -416,7 +420,8 @@ namespace Infrastructure
                     (
                         (string)dataReader["content_id"],
                         new AccountingSubject((string)dataReader["accounting_subject_id"],
-                        (string)dataReader["subject_code"], (string)dataReader["subject"], true),
+                        (string)dataReader["subject_code"], (string)dataReader["subject"],
+                        (bool)dataReader["is_shunjuen"], true),
                         (int)dataReader["flat_rate"], (string)dataReader["content"],
                         (bool)dataReader["is_validity"]
                     );
@@ -511,10 +516,10 @@ namespace Infrastructure
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
             ReferenceReceiptsAndExpenditure(DateTime registrationDateStart,
                 DateTime registrationDateEnd, string location, string creditDept, string content, string detail,
-                string accountingSubject, string accountingSubjectCode, bool whichDepositAndWithdrawalOnly,
-                bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
-                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd,
-                int pageCount, string sortColumn, bool sortDirection)
+                string accountingSubject, string accountingSubjectCode, bool isShunjuen,
+                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
+                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
+                DateTime outputDateEnd, int pageCount, string sortColumn, bool sortDirection)
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
@@ -560,7 +565,8 @@ namespace Infrastructure
                 (bool)dataReader["is_shunjuen_dept"]);
             paramAccountingSubject =
                 new AccountingSubject((string)dataReader["accounting_subject_id"],
-                (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                (string)dataReader["subject_code"], (string)dataReader["subject"], (bool)dataReader["is_shunjuen"],
+                true);
             paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
                 (int)dataReader["flat_rate"], (string)dataReader["content"], true);
             
@@ -840,7 +846,8 @@ namespace Infrastructure
                 paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"],
                     (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
                 paramAccountingSubject = new AccountingSubject((string)dataReader["account_subject_id"],
-                    (string)dataReader["subject_code"], (string)dataReader["subject"], true);
+                    (string)dataReader["subject_code"], (string)dataReader["subject"],
+                    (bool)dataReader["is_shunjuen"], true);
                 paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
                     (int)dataReader["flat_rate"], (string)dataReader["content"], true);
                 list.Add(new ReceiptsAndExpenditure

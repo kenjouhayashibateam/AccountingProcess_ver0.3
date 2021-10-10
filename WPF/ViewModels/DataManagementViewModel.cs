@@ -121,7 +121,8 @@ namespace WPF.ViewModels
         public DataManagementViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
-                                                                (string.Empty, string.Empty, true);
+                                                                (string.Empty, string.Empty,
+                                                                    AccountingProcessLocation.IsAccountingGenreShunjuen, true);
             ContentDefaultCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
 
             SetDataRegistrationCommand.Execute();
@@ -159,7 +160,8 @@ namespace WPF.ViewModels
             IsAccountingSubjectValidityTrueOnly = true;
             CreateAccountSubjects();
             CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, false, false);
-            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty, false);
+            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty,
+                AccountingProcessLocation.IsAccountingGenreShunjuen, false);
         }
 
         protected override void SetDataOperationButtonContent(DataOperation operation)
@@ -961,7 +963,7 @@ namespace WPF.ViewModels
             AccountingSubjects =
                 DataBaseConnect.ReferenceAccountingSubject
                 (ReferenceAccountingSubjectCode, ReferenceAccountingSubject,
-                IsAccountingSubjectValidityTrueOnly);
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, IsAccountingSubjectValidityTrueOnly);
         }
 
         /// <summary>
@@ -1037,11 +1039,13 @@ namespace WPF.ViewModels
         {
             CurrentAccountingSubject =
                 new AccountingSubject(null, AccountingSubjectCodeField, AccountingSubjectField,
-                    IsAccountingSubjectValidity);
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, IsAccountingSubjectValidity);
             if (CallConfirmationDataOperation
                 ($"勘定科目コード : {CurrentAccountingSubject.SubjectCode}\r\n" +
                 $"勘定科目 : {CurrentAccountingSubject.Subject}" +
-                $"\r\n有効性 : {CurrentAccountingSubject.IsValidity}\r\n\r\n登録しますか？", "勘定科目") ==
+                $"\r\n有効性 : {CurrentAccountingSubject.IsValidity}" +
+                $"\r\n会計：{(CurrentAccountingSubject.IsShunjuen ? "春秋苑" : "ワイズコア")}" +
+                $"\r\n\r\n登録しますか？", "勘定科目") ==
                 MessageBoxResult.Cancel) { return; }
 
             IsAccountingSubjectOperationButtonEnabled = false;
@@ -1049,7 +1053,8 @@ namespace WPF.ViewModels
             _ = await Task.Run(() => DataBaseConnect.Registration(CurrentAccountingSubject));
             AccountingSubjectDetailFieldClear();
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
-                (string.Empty, string.Empty, IsAccountingSubjectValidityTrueOnly);
+                (string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                    IsAccountingSubjectValidityTrueOnly);
             AffiliationAccountingSubjects = AccountingSubjects;
             CallCompletedRegistration();
             IsAccountingSubjectOperationButtonEnabled = true;
@@ -1694,7 +1699,7 @@ namespace WPF.ViewModels
         {
             Contents = DataBaseConnect.ReferenceContent(ReferenceContent,
                 ReferenceAccountingSubjectCodeBelognsContent, ReferenceAccountingSubjectBelognsContent,
-                IsContentValidityTrueOnly);
+                AccountingProcessLocation.IsAccountingGenreShunjuen, IsContentValidityTrueOnly);
         }
         /// <summary>
         /// 検索メニューのEnable
@@ -1734,14 +1739,16 @@ namespace WPF.ViewModels
                 if (!string.IsNullOrEmpty(value))
                 {
                     AffiliationAccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty,
+                            AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                     AffiliationAccountingSubject = AffiliationAccountingSubjects.Count == 0 ?
                         null : AffiliationAccountingSubjects[0];
                 }
                 else
                 {
                     AffiliationAccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
+                            AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                     AffiliationAccountingSubject = null;
                 }
                 ReferenceAccountingSubjectCodeBelognsContent = value;
@@ -1992,7 +1999,8 @@ namespace WPF.ViewModels
             await Task.Run(() => RegistrationContentAndOptionPropety());
 
             Contents = DataBaseConnect.ReferenceContent
-                (string.Empty, string.Empty, string.Empty, IsContentValidityTrueOnly);
+                (string.Empty, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                    IsContentValidityTrueOnly);
             ContentDetailFieldClear();
             CallCompletedRegistration();
             IsContentOperationEnabled = true;
@@ -2003,7 +2011,8 @@ namespace WPF.ViewModels
                 _ = DataBaseConnect.Registration(CurrentContent);
                 ObservableCollection<Content> contents = DataBaseConnect.ReferenceContent
                     (CurrentContent.Text, CurrentContent.AccountingSubject.SubjectCode, 
-                        CurrentContent.AccountingSubject.Subject, true);
+                        CurrentContent.AccountingSubject.Subject,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, true);
 
                 if (!string.IsNullOrEmpty(ContentConvertText)) { RegistrationContentConvertText(); }
 
@@ -2090,7 +2099,8 @@ namespace WPF.ViewModels
             _ = await Task.Run(() => DataBaseConnect.Update(CurrentContent));
             ContentDetailFieldClear();
             Contents = DataBaseConnect.ReferenceContent
-                (string.Empty, string.Empty, string.Empty, IsContentValidityTrueOnly);
+                (string.Empty, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                    IsContentValidityTrueOnly);
             CallCompletedUpdate();
             ContentDataOperationContent = "更新";
             IsContentOperationEnabled = true;

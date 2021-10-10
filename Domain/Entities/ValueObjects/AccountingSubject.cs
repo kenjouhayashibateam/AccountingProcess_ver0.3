@@ -25,12 +25,17 @@
         /// IDの数字
         /// </summary>
         public int Number => string.IsNullOrEmpty(ID) ? 0 : int.Parse(ID.Replace("accounting_subject", string.Empty));
+        /// <summary>
+        /// 春秋苑の勘定科目かどうか
+        /// </summary>
+        public bool IsShunjuen { get; set; }
 
-        public AccountingSubject(string id, string subjectCode, string subject, bool isValidity)
+        public AccountingSubject(string id, string subjectCode, string subject, bool isShunjuen, bool isValidity)
         {
             ID = id;
             SubjectCode = subjectCode;
             Subject = subject;
+            IsShunjuen = isShunjuen;
             IsValidity = isValidity;
         }
 

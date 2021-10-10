@@ -22,12 +22,12 @@
         /// </summary>
         public bool IsShunjuenDept { get; set; }
 
-        public CreditDept(string iD, string dept, bool isValidity, bool isShunjuenAccount)
+        public CreditDept(string iD, string dept, bool isValidity, bool isShunjuenDept)
         {
             ID = iD;
             Dept = dept;
             IsValidity = isValidity;
-            IsShunjuenDept = isShunjuenAccount;
+            IsShunjuenDept = isShunjuenDept;
         }
     }
 }

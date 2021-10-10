@@ -582,7 +582,8 @@ namespace WPF.ViewModels
                 if (comboAccountingSubjectCode.Length == 3)
                 {
                     ComboAccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty, true);
+                        DataBaseConnect.ReferenceAccountingSubject(value, string.Empty,
+                            AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                 }
                 else
                 {
@@ -695,10 +696,13 @@ namespace WPF.ViewModels
                 ValidationProperty(nameof(ComboAccountingSubjectText), value);
                 CallPropertyChanged();
 
-                if (!ComboContents.Equals(DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, OperationData.Data == null)))
+                if (!ComboContents.Equals(DataBaseConnect.ReferenceContent
+                    (string.Empty, ComboAccountingSubjectCode, value, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                        OperationData.Data == null)))
                 {
                     ComboContents =
-                        DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, OperationData.Data == null);
+                        DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, 
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
                     SelectedContent = ComboContents.Count > 0 ? ComboContents[0] : null;
                     ComboContentText = SelectedContent.Text ?? string.Empty;
                 }
@@ -709,7 +713,8 @@ namespace WPF.ViewModels
 
                     comboAccountingSubjectText = string.Empty;
                     ComboAccountingSubjects =
-                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, true);
+                        DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
+                            AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                     ComboAccountingSubjectCode = string.Empty;
                     ComboContents.Clear();
                     ValidationProperty(nameof(ComboAccountingSubjectText), value);
@@ -741,7 +746,8 @@ namespace WPF.ViewModels
                 //SelectedAccountingSubjectCode = value;
                 ComboContents = DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode,
-                        ComboAccountingSubjectText ?? string.Empty, OperationData.Data == null);
+                        ComboAccountingSubjectText ?? string.Empty,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
 
                 ComboContentText =
                     ComboContents.Count > 0 ? ComboContents.Count != 0 ?
@@ -1310,9 +1316,11 @@ namespace WPF.ViewModels
         {
             ComboContents = new ObservableCollection<Content>();
             ComboAccountingSubjectCodes =
-                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, OperationData.Data == null);
+                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
             ComboAccountingSubjects =
-                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty, OperationData.Data == null);
+                DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
             ComboCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, OperationData.Data == null, false);
         }
 

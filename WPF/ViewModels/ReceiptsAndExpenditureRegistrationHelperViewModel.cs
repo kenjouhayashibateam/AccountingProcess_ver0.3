@@ -26,7 +26,8 @@ namespace WPF.ViewModels
             OperationData = ReceiptsAndExpenditureOperation.GetInstance();
 
             CreditDept cd = new CreditDept(string.Empty, string.Empty, true, true);
-            AccountingSubject subject = new AccountingSubject(string.Empty, string.Empty, string.Empty, true);
+            AccountingSubject subject = new AccountingSubject(string.Empty, string.Empty, string.Empty,
+                AccountingProcessLocation.IsAccountingGenreShunjuen, true);
             Content c = new Content(string.Empty, subject, -1, string.Empty, true);
 
             OperationData.SetData
@@ -65,7 +66,8 @@ namespace WPF.ViewModels
         private void SetList()
         {
             Contents = DataBaseConnect.ReferenceContent
-                    (SearchContentText, string.Empty, SearchAccountingSubject, true);
+                    (SearchContentText, string.Empty, SearchAccountingSubject, 
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, true);
         }
         /// <summary>
         /// 伝票内容リスト

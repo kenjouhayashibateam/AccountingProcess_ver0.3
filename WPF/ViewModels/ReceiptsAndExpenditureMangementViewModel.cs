@@ -317,7 +317,8 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.Location == "青蓮堂") { return; }
             TodayWroteList = DataBaseConnect.ReferenceReceiptsAndExpenditure
                    (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                        string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
+                        string.Empty, string.Empty, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                        false, true, true, true,
                         new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), DateTime.Today, DateTime.Today);
         }
 
@@ -1293,7 +1294,8 @@ namespace WPF.ViewModels
 
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
+                location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
+                AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount,
                 Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
@@ -1302,7 +1304,8 @@ namespace WPF.ViewModels
 
             AllDataList =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure(DefaultDate, new DateTime(9999, 1, 1),
-                location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, !IsAllShowItem,
+                location, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,
+                AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd);
 

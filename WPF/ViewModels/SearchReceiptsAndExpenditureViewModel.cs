@@ -48,7 +48,7 @@ namespace WPF.ViewModels
             CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
             SelectedCreditDept = CreditDepts[0];
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
-                (string.Empty, string.Empty, true);
+                (string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, true);
             SearchEndDate = DateTime.Today;
             SearchStartDate = DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1));
             InputAllPeriodCommand = new DelegateCommand(() => InputAllPeriod(), () => true);
@@ -345,9 +345,9 @@ namespace WPF.ViewModels
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail, subject,
-                    string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate,
-                    DefaultDate.AddDays(1), DateTime.Today, Pagination.PageCount,
-                    Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
+                    string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllData, IsPaymentOnly,
+                    true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), DateTime.Today,
+                    Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
             Pagination.TotalRowCount = count;
             ListTotalCountInfo = $"{count}{Space}件";
             ReceiptsAndExpenditures = list;
@@ -358,8 +358,9 @@ namespace WPF.ViewModels
 
             foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail,
-                    subject, string.Empty, !IsAllData, IsPaymentOnly, true, true, SearchStartDate,
-                    SearchEndDate, DefaultDate.AddDays(1), DateTime.Today))
+                    subject, string.Empty,AccountingProcessLocation.IsAccountingGenreShunjuen,
+                    !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1),
+                    DateTime.Today))
             {
                 if (rae.IsPayment) { payment += rae.Price; }
                 else { withdrawal += rae.Price; }

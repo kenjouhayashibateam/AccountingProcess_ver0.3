@@ -76,9 +76,10 @@
         <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理をする種類、場所を選んでください" Grid.Row="2" Margin="5">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton Content="管理事務所" Grid.Column="0" IsChecked="{Binding KanriJimushoChecked}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">
                     <RadioButton.InputBindings>
@@ -101,25 +102,27 @@
                         <TextBlock Text="{Binding DepositAmountInfo}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <TextBox x:Name="DepositTextBox" Grid.Column="0" Text="{Binding DepositAmount,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" b:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" Margin="5,3"/>
                             <TextBlock Text="円" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </Grid>
                 </Grid>
+                <ToggleButton Grid.Column="3" Content="{Binding AccountingGenreContent}" IsChecked="{Binding IsShunjuen}" Margin="10,5"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="PracticalOperationsItemsGroupBox" Header="実務項目" Grid.Row="3" Margin="5">
             <Grid IsEnabled="{Binding ProcessFeatureEnabled}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
-                    <Button x:Name="ShowRemainingMoneyCalculationViewButton" Grid.Row="0" Grid.Column="0" Content="金庫金額計算" Margin="80,50" >
+                    <Button x:Name="ShowRemainingMoneyCalculationViewButton" Grid.Row="0" Grid.Column="0" Content="金庫金額計算" Margin="50,50" >
                         <Button.InputBindings>
                             <MouseBinding Command="{Binding ShowRemainingMoneyCalculationCommand}" MouseAction="LeftClick"/>
                             <KeyBinding Command="{Binding ShowRemainingMoneyCalculationCommand}" Key="Space"/>
@@ -131,37 +134,42 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="ShowSlipManagementButton" Content="{Binding ShowSlipManagementContent}" Grid.Row="0" IsEnabled="{Binding IsSlipManagementEnabled}" Grid.Column="1" Margin="80,10">
+                    <Button x:Name="ShowSlipManagementButton" Content="{Binding ShowSlipManagementContent}" Grid.Row="0" IsEnabled="{Binding IsSlipManagementEnabled}" Grid.Column="1" Margin="50,10">
                         <Button.InputBindings>
                             <MouseBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" MouseAction="LeftClick"/>
                             <KeyBinding Command="{Binding ShowReceiptsAndExpenditureManagementCommand}" Key="Space"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="ShowVoucherOutputButton" Grid.Row="1" Content="受納証発行" IsEnabled="{Binding IsCreateVoucherEnabled}" Margin="80,10">
+                    <Button x:Name="ShowVoucherOutputButton" Grid.Row="1" Content="受納証発行" IsEnabled="{Binding IsCreateVoucherEnabled}" Margin="50,10">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowCreateVoucherCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowCreateVoucherCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
                 </Grid>
-                <Grid Grid.Column="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsCreateVoucherEnabled}" Margin="5,20">
-                        <Button.InputBindings>
-                            <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
-                            <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
-                        </Button.InputBindings>
-                    </Button>
-                    <Button Content="パート交通費登録" Grid.Row="1" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,20">
-                        <Button.InputBindings>
-                            <KeyBinding Command="{Binding ShowPartTimerTransPortCommand}" Key="Space"/>
-                            <MouseBinding Command="{Binding ShowPartTimerTransPortCommand}" MouseAction="LeftClick"/>
-                        </Button.InputBindings>
-                    </Button>
-                </Grid>
+                <GroupBox Grid.Column="2" Header="春秋苑" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsCreateVoucherEnabled}" Margin="5,20">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                        <Button Content="パート交通費登録" Grid.Row="1" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,20">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding ShowPartTimerTransPortCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding ShowPartTimerTransPortCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                    </Grid>                    
+                </GroupBox>
+                <GroupBox Grid.Column="3" Header="ワイズコア(工事中) " Margin="5">
+                    
+                </GroupBox>
             </Grid>
         </GroupBox>
         <Grid Grid.Row="4">

@@ -11,7 +11,7 @@ namespace Infrastructure
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
         public AccountingSubject CallAccountingSubject(string id)
-        { return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true); }
+        { return new AccountingSubject("accounitng_subject1", "000", "法事冥加",true, true); }
 
         public Content CallContent(string id)
         { return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true); }
@@ -50,20 +50,20 @@ namespace Infrastructure
         { return 0; }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
-            (string subjectCode, string subject, bool isTrueOnly)
+            (string subjectCode, string subject, bool isShunjuen, bool isTrueOnly)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true),
-                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true),
-                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true),
-                new AccountingSubject("accounting_subject3", "416", "仮受金", true),
-                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true),
-                new AccountingSubject("accounting_subject5", "616", "消耗品費", true),
-                new AccountingSubject("accounting_subject6", "621", "車両費", true),
-                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true),
-                new AccountingSubject("accounting_subject8", "168", "仮払金", true),
-                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true)
+                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true, true),
+                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true, true),
+                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true, true),
+                new AccountingSubject("accounting_subject3", "416", "仮受金", true, true),
+                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true, true),
+                new AccountingSubject("accounting_subject5", "616", "消耗品費", true, true),
+                new AccountingSubject("accounting_subject6", "621", "車両費", true, true),
+                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true, true),
+                new AccountingSubject("accounting_subject8", "168", "仮払金", true, true),
+                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true, true)
             };
             return list;
         }
@@ -73,22 +73,22 @@ namespace Infrastructure
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
             {
-                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true),
-                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true),
-                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true),
-                new AccountingSubject("accounting_subject3", "416", "仮受金", true),
-                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true),
-                new AccountingSubject("accounting_subject5", "616", "消耗品費", true),
-                new AccountingSubject("accounting_subject6", "621", "車両費", true),
-                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true),
-                new AccountingSubject("accounting_subject8", "168", "仮払金", true),
-                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true)
+                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true, true),
+                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true, true),
+                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true, true),
+                new AccountingSubject("accounting_subject3", "416", "仮受金", true, true),
+                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true, true),
+                new AccountingSubject("accounting_subject5", "616", "消耗品費", true, true),
+                new AccountingSubject("accounting_subject6", "621", "車両費", true, true),
+                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true, true),
+                new AccountingSubject("accounting_subject8", "168", "仮払金", true, true),
+                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true, true)
             };
             return list;
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate,string location, int pageCount)
+            (DateTime startDate, DateTime endDate, string location, int pageCount)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
@@ -228,28 +228,29 @@ namespace Infrastructure
         }
 
         public ObservableCollection<Content> ReferenceContent
-            (string contentText, string accountingSubjectCode, string accountingSubject, bool isValidityTrueOnly)
+            (string contentText, string accountingSubjectCode, string accountingSubject, bool isShunjuen,
+                bool isValidityTrueOnly)
         {
             AccountingSubject OtherMiscellaneousIncome = 
-                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true);
+                new AccountingSubject("accounting_subject0", "882", "その他雑収入", true, true);
             AccountingSubject OtherContribution = 
-                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true);
+                new AccountingSubject("accounting_subject1", "822", "その他冥加金", true, true);
             AccountingSubject OtherTyadokoroIncome = 
-                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true);
+                new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true, true);
             AccountingSubject SuspenseReceiptMoney =
-                new AccountingSubject("accounting_subject3", "416", "仮受金", true);
+                new AccountingSubject("accounting_subject3", "416", "仮受金", true, true);
             AccountingSubject TravelExpense = 
-                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true);
+                new AccountingSubject("accounting_subject4", "611", "旅費交通費", true, true);
             AccountingSubject SuppliesExpense =
-                new AccountingSubject("accounting_subject5", "616", "消耗品費", true);
+                new AccountingSubject("accounting_subject5", "616", "消耗品費", true, true);
             AccountingSubject VehicleFee = new AccountingSubject
-                ("accounting_subject6", "621", "車両費", true);
+                ("accounting_subject6", "621", "車両費", true, true);
             AccountingSubject InternalMaintenanceExpenses = 
-                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true);
+                new AccountingSubject("accounting_subject7", "735", "苑内整備費", true, true);
             AccountingSubject SuspensePayment = 
-                new AccountingSubject("accounting_subject8", "168", "仮払金", true);
+                new AccountingSubject("accounting_subject8", "168", "仮払金", true, true);
             AccountingSubject Seresa =
-                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true);
+                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true, true);
 
             ObservableCollection<Content> list = new ObservableCollection<Content>
             {
@@ -283,7 +284,7 @@ namespace Infrastructure
 
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                string content, string detail, string accountingSubject, string accountingSubjectCode,
+                string content, string detail, string accountingSubject, string accountingSubjectCode, bool isShunjuen,
                 bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                 bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                 DateTime outputDateStart, DateTime OutputDateEnd)
@@ -292,9 +293,9 @@ namespace Infrastructure
 
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
-                ("accounting_subject2", "822", "冥加読経料", true);
+                ("accounting_subject2", "822", "冥加読経料", true, true);
             AccountingSubject Kanri = new AccountingSubject
-                ("accounting_subject2", "832", "懇志読経料", true);
+                ("accounting_subject2", "832", "懇志読経料", true, true);
 
             ObservableCollection<ReceiptsAndExpenditure> returnList =
                 new ObservableCollection<ReceiptsAndExpenditure>
@@ -342,7 +343,8 @@ namespace Infrastructure
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
                     ("content3",Ofuse,-1,"管理料",true),"山口家11 2021年度分",30000,true,true,
-                    DateTime.Today,DateTime.Today.AddDays(-1),false),                new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
+                    DateTime.Today,DateTime.Today.AddDays(-1),false),
+                    new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
                     ("content3",Ofuse,-1,"管理料",true),"山口家12 2021年度分",30000,true,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
@@ -394,38 +396,38 @@ namespace Infrastructure
             return returnList;
         }
 
-        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List) 
-            ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd, 
-                string location, string creditDept, string content, string detail, string accountingSubject, 
-                string accountingSubjectCode, bool whichDepositAndWithdrawalOnly, bool isPayment, 
-                bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, 
-                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, 
-                int pageCount, string sortColumn, bool sortDirection)
+        public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
+            ReferenceReceiptsAndExpenditure(DateTime registrationDateStart, DateTime registrationDateEnd,
+                string location, string creditDept, string content, string detail, string accountingSubject,
+                string accountingSubjectCode, bool isShunjuen, bool whichDepositAndWithdrawalOnly,
+                bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
+                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, int pageCount,
+                string sortColumn, bool sortDirection)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
             CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true, true);
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
-                ("accounting_subject11", "815", "冥加読経料", true);
+                ("accounting_subject11", "815", "冥加読経料", true, true);
             AccountingSubject OtherContribution =
-                new AccountingSubject("accounting_subject2", "822", "その他冥加金", true);
+                new AccountingSubject("accounting_subject2", "822", "その他冥加金", true, true);
             AccountingSubject OtherTyadokoroIncome =
-                new AccountingSubject("accounting_subject3", "874", "その他茶所収入", true);
+                new AccountingSubject("accounting_subject3", "874", "その他茶所収入", true, true);
             AccountingSubject SuspenseReceiptMoney =
-                new AccountingSubject("accounting_subject4", "416", "仮受金", true);
+                new AccountingSubject("accounting_subject4", "416", "仮受金", true, true);
             AccountingSubject TravelExpense =
-                new AccountingSubject("accounting_subject5", "611", "旅費交通費", true);
+                new AccountingSubject("accounting_subject5", "611", "旅費交通費", true, true);
             AccountingSubject SuppliesExpense =
-                new AccountingSubject("accounting_subject6", "616", "消耗品費", true);
+                new AccountingSubject("accounting_subject6", "616", "消耗品費", true, true);
             AccountingSubject VehicleFee = new AccountingSubject
-                ("accounting_subject7", "621", "車両費", true);
+                ("accounting_subject7", "621", "車両費", true, true);
             AccountingSubject InternalMaintenanceExpenses =
-                new AccountingSubject("accounting_subject8", "735", "苑内整備費", true);
+                new AccountingSubject("accounting_subject8", "735", "苑内整備費", true, true);
             AccountingSubject SuspensePayment =
-                new AccountingSubject("accounting_subject9", "168", "仮払金", true);
+                new AccountingSubject("accounting_subject9", "168", "仮払金", true, true);
             AccountingSubject Seresa =
-                new AccountingSubject("accounting_subject10", "133", "セレサ川崎普通貯金", true);
+                new AccountingSubject("accounting_subject10", "133", "セレサ川崎普通貯金", true, true);
 
             ObservableCollection<ReceiptsAndExpenditure> returnList =
                 new ObservableCollection<ReceiptsAndExpenditure>
@@ -521,7 +523,7 @@ namespace Infrastructure
         {
             return new Voucher(0, "ろーかる",
                 ReferenceReceiptsAndExpenditure(DateTime.Today, DateTime.Today, string.Empty, string.Empty,
-                string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true,
+                string.Empty, string.Empty, string.Empty, string.Empty, false, true, true, true, true,
                 DateTime.Today, DateTime.Today, DateTime.Today, DateTime.Today),
                 DateTime.Today, CallRep(string.Empty), true);
         }
@@ -555,13 +557,13 @@ namespace Infrastructure
             CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true, true);
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
-                ("accounting_subject11", "815", "冥加読経料", true);
+                ("accounting_subject11", "815", "冥加読経料", true, true);
             AccountingSubject OtherContribution =
-                new AccountingSubject("accounting_subject2", "822", "その他冥加金", true);
+                new AccountingSubject("accounting_subject2", "822", "その他冥加金", true, true);
             AccountingSubject OtherTyadokoroIncome =
-                new AccountingSubject("accounting_subject3", "874", "その他茶所収入", true);
+                new AccountingSubject("accounting_subject3", "874", "その他茶所収入", true, true);
             AccountingSubject SuspenseReceiptMoney =
-                new AccountingSubject("accounting_subject4", "416", "仮受金", true);
+                new AccountingSubject("accounting_subject4", "416", "仮受金", true, true);
 
             ObservableCollection<ReceiptsAndExpenditure> returnList =
                 new ObservableCollection<ReceiptsAndExpenditure>

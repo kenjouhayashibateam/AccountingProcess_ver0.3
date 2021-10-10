@@ -307,14 +307,15 @@
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="5*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="4*"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{Binding AccountingSubjectIDField}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsAccountingSubjectValidity}" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="勘定科目コード" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                                <TextBox x:Name="AccountingSubjectCodeTextBox" Grid.Row="3" Text="{Binding AccountingSubjectCodeField}" IsEnabled="{Binding IsAccountingSubjectCodeFieldEnabled}" MaxLength="3" InputMethod.PreferredImeState="Off" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,180,5"/>
+                                <TextBox x:Name="AccountingSubjectCodeTextBox" Grid.Row="3" Text="{Binding AccountingSubjectCodeField}" IsEnabled="{Binding IsAccountingSubjectCodeFieldEnabled}" MaxLength="3" InputMethod.PreferredImeState="Off" Margin="5,5,180,5"/>
                                 <TextBlock Text="勘定科目" Grid.Row="4"  VerticalAlignment="Bottom" Margin="5,0"/>
-                                <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="5" Text="{Binding AccountingSubjectField,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsAccountingSubjectFieldEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+                                <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="5" Text="{Binding AccountingSubjectField,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsAccountingSubjectFieldEnabled}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
                             </Grid>
                             <Button x:Name="AccountingSubjectOperationButton" Grid.Row="1" Content="{Binding AccountingSubnectOperationButtonContent}" IsEnabled="{Binding IsAccountingSubjectOperationButtonEnabled}" Margin="5">
                                 <Button.InputBindings>
