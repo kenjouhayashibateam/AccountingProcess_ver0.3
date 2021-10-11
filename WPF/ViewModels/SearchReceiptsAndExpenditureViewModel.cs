@@ -358,7 +358,7 @@ namespace WPF.ViewModels
 
             foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail,
-                    subject, string.Empty,AccountingProcessLocation.IsAccountingGenreShunjuen,
+                    subject, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
                     !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1),
                     DateTime.Today))
             {

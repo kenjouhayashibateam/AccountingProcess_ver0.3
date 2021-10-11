@@ -19,7 +19,6 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\De
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.Properties.Resources.resources
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.GenerateResource.cache
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.dll
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.pdb
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\bin\Debug\Infrastructure.dll.config

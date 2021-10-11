@@ -106,11 +106,13 @@ namespace Domain.Repositories
         /// 伝票内容検索
         /// </summary>
         /// <param name="contentText">伝票内容</param>
+        /// <param name="accountingSubjectCode">勘定科目コード</param>
         /// <param name="accountingSubject">勘定科目</param>
+        /// <param name="isShunjuen">春秋苑会計か</param>
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
         /// <returns>伝票内容リスト</returns>
         public ObservableCollection<Content> ReferenceContent
-            (string contentText, string accountingSubjectCode, string accountingSubject,bool isShunjuen,
+            (string contentText, string accountingSubjectCode, string accountingSubject, bool isShunjuen,
                 bool isValidityTrueOnly);
         /// <summary>
         /// IDを基に勘定科目を呼び出します
@@ -160,6 +162,7 @@ namespace Domain.Repositories
         /// <param name="detail">詳細</param>
         /// <param name="accountingSubject">勘定科目</param>
         /// <param name="accountingSubjectCode">勘定科目コード</param>
+        /// <param name="isShunjuen">春秋苑会計か</param>
         /// <param name="whichDepositAndWithdrawalOnly">入出金のどちらかのみを検索するか</param>
         /// <param name="isPayment">入金チェック</param>
         /// <param name="isContainOutputted">出力済みのものも含むか</param>
@@ -186,6 +189,7 @@ namespace Domain.Repositories
         /// <param name="detail">詳細</param>
         /// <param name="accountingSubject">勘定科目</param>
         /// <param name="accountingSubjectCode">勘定科目コード</param>
+        /// <param name="isShunjuen">春秋苑会計か</param>
         /// <param name="whichDepositAndWithdrawalOnly">入出金のどちらかのみを検索するか</param>
         /// <param name="isPayment">入金チェック</param>
         /// <param name="isContainOutputted">出力済みのものも含むか</param>

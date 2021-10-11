@@ -390,7 +390,7 @@ namespace Infrastructure
                     DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",singyouji,
                     new Content
-                    ("content4",Ofuse,-1,"管理料",true),"山口家23 2021年度分",30000,true,true,
+                    ("content4",Ofuse,-1,"管理料",true),"山口家23 2021年度分",30000,false,true,
                     DateTime.Today,DateTime.Today.AddDays(-1),false)//,
                 };
             return returnList;

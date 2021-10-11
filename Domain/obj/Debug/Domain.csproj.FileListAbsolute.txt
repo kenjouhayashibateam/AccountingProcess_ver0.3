@@ -37,5 +37,4 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\Syst
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Memory.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CopyComplete
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CopyComplete
