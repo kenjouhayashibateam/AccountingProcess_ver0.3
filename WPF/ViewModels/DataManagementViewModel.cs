@@ -55,12 +55,17 @@ namespace WPF.ViewModels
         private string accountingSubnectOperationButtonContent;
         private string referenceAccountingSubjectCode = string.Empty;
         private string referenceAccountingSubject = string.Empty;
+        private string branchNumber = string.Empty;
+        private string branchNumberOperationContent;
         private bool isAccountingSubjectOperationButtonEnabled;
         private bool isAccountingSubjectValidity;
         private bool isAccountingSubjectValidityTrueOnly;
         private bool isAccountingSubjectReferenceMenuEnabled;
         private bool isAccountingSubjectCodeFieldEnabled;
         private bool isAccountingSubjectFieldEnabled;
+        private bool isBranchNumberVisibility;
+        private bool isShunjuen;
+        private bool isBranchNumberOperationVisibility;
         private AccountingSubject currentAccountingSubject;
         private ObservableCollection<AccountingSubject> accountingSubjects;
         #endregion
@@ -124,10 +129,10 @@ namespace WPF.ViewModels
                                                                 (string.Empty, string.Empty,
                                                                     AccountingProcessLocation.IsAccountingGenreShunjuen, true);
             ContentDefaultCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
-
             SetDataRegistrationCommand.Execute();
-
             IsContentDefaultCreditDeptRegistration = true;
+            IsBranchNumberVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
+            IsShunjuen = AccountingProcessLocation.IsAccountingGenreShunjuen;
         }
         public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
 
@@ -843,6 +848,55 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 勘定科目コード枝番
+        /// </summary>
+        public string BranchNumber
+        {
+            get => branchNumber;
+            set
+            {
+                branchNumber = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
+                CallPropertyChanged();
+                ValidationProperty(nameof(BranchNumber), value);
+            }
+        }
+        /// <summary>
+        /// 枝番のVisiblity
+        /// </summary>
+        public bool IsBranchNumberVisibility
+        {
+            get => isBranchNumberVisibility;
+            set
+            {
+                isBranchNumberVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 枝番の操作ボタンのContent
+        /// </summary>
+        public string BranchNumberOperationContent
+        {
+            get => branchNumberOperationContent;
+            set
+            {
+                branchNumberOperationContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 枝番の操作ボタンのVisibility
+        /// </summary>
+        public bool IsBranchNumberOperationVisibility
+        {
+            get => isBranchNumberOperationVisibility;
+            set
+            {
+                isBranchNumberOperationVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
         /// 勘定科目
         /// </summary>
         public string AccountingSubjectField
@@ -854,6 +908,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
                 ValidationProperty(nameof(AccountingSubjectField), value);
                 SetAccountingSubjectOperationButtonEnabled();
+            }
+        }
+        /// <summary>
+        /// 春秋苑会計の勘定科目か
+        /// </summary>
+        public bool IsShunjuen
+        {
+            get => isShunjuen;
+            set
+            {
+                isShunjuen = value;
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -881,7 +947,7 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 選択された勘定科目を詳細欄に表示します
+        /// 選択された勘定科目
         /// </summary>
         public AccountingSubject CurrentAccountingSubject
         {
@@ -897,10 +963,14 @@ namespace WPF.ViewModels
                     AccountingSubjectCodeField = value.SubjectCode;
                     AccountingSubjectField = value.Subject;
                     IsAccountingSubjectValidity = value.IsValidity;
+                    BranchNumber = DataBaseConnect.GetBranchNumber(value);
+                    BranchNumberOperationContent = string.IsNullOrEmpty(BranchNumber) ? "登録" : "更新";
+                    IsBranchNumberOperationVisibility = true;
                     SetAccountingSubjectOperationButtonEnabled();
                 }
             }
         }
+
         /// <summary>
         /// 勘定科目データ操作ボタンのEnabledを設定します
         /// </summary>
@@ -1039,12 +1109,14 @@ namespace WPF.ViewModels
         {
             CurrentAccountingSubject =
                 new AccountingSubject(null, AccountingSubjectCodeField, AccountingSubjectField,
-                    AccountingProcessLocation.IsAccountingGenreShunjuen, IsAccountingSubjectValidity);
+                    IsShunjuen, IsAccountingSubjectValidity);
+            string branchNo = BranchNumber ?? $"枝番：{BranchNumber}\r\n";
             if (CallConfirmationDataOperation
                 ($"勘定科目コード : {CurrentAccountingSubject.SubjectCode}\r\n" +
+                $"{branchNo}" +
                 $"勘定科目 : {CurrentAccountingSubject.Subject}" +
                 $"\r\n有効性 : {CurrentAccountingSubject.IsValidity}" +
-                $"\r\n会計：{(CurrentAccountingSubject.IsShunjuen ? "春秋苑" : "ワイズコア")}" +
+                $"\r\n会計：{(IsShunjuen ? "春秋苑" : "ワイズコア")}" +
                 $"\r\n\r\n登録しますか？", "勘定科目") ==
                 MessageBoxResult.Cancel) { return; }
 
@@ -1068,6 +1140,7 @@ namespace WPF.ViewModels
             AccountingSubjectCodeField = string.Empty;
             AccountingSubjectField = string.Empty;
             IsAccountingSubjectValidity = true;
+            IsBranchNumberOperationVisibility = false;
         }
         /// <summary>
         /// 勘定科目登録のためのコントロールのEnableを設定します
@@ -1350,7 +1423,8 @@ namespace WPF.ViewModels
         {
             MessageBox = new MessageBoxInfo()
             {
-                Message = $"{CurrentContent.Text}{Space}の規定貸方部門{Space}{SelectedContentDefaultCreditDept.Dept}" +
+                Message = $"{CurrentContent.Text}{Space}の規定貸方部門{Space}" +
+                    $"{SelectedContentDefaultCreditDept.Dept}" +
                     $"\r\n\r\n削除しますか？",
                 Image = MessageBoxImage.Question,
                 Button = MessageBoxButton.OKCancel,
@@ -1361,7 +1435,8 @@ namespace WPF.ViewModels
             if (MessageBox.Result != MessageBoxResult.OK) { return; }
 
             IsContentDefaultCreditDeptEnabled = false;
-            _ = await Task.Run(() => DataBaseConnect.DeleteContentDefaultCreditDept(CurrentContent));
+            _ = await Task.Run
+                (() => DataBaseConnect.DeleteContentDefaultCreditDept(CurrentContent));
             SelectedContentDefaultCreditDept = null;
         }
         /// <summary>
@@ -1392,7 +1467,8 @@ namespace WPF.ViewModels
         {
             string updateContent = string.Empty;
 
-            if (DataBaseConnect.CallContentDefaultCreditDept(CurrentContent) != SelectedContentDefaultCreditDept)
+            if (DataBaseConnect.CallContentDefaultCreditDept(CurrentContent) !=
+                SelectedContentDefaultCreditDept)
             {
                 updateContent = $"規定の貸方部門{Space}:{Space}" +
                       $"{DataBaseConnect.CallContentDefaultCreditDept(CurrentContent).Dept}{Space}→{Space}" +
@@ -1436,7 +1512,7 @@ namespace WPF.ViewModels
 
             if (MessageBox.Result != MessageBoxResult.Yes) { return; }
             IsContentConvertOperationButtonEnabled = false;
-            _ = await Task.Run(() => DataBaseConnect.DeleteContentConvertText(CurrentContent.ID));
+            _ = await Task.Run(() => DataBaseConnect.DeleteConvertContent(CurrentContent));
             ContentConvertText = string.Empty;
         }
         /// <summary>
@@ -2156,6 +2232,13 @@ namespace WPF.ViewModels
                 case nameof(ReferenceAccountingSubjectCode):
                     SetNullOrEmptyError(propertyName, value);
                     if (GetErrors(propertyName) == null)
+                    {
+                        ErrorsListOperation(ReferenceAccountingSubjectCode.Length != 3, propertyName,
+                            "コードの桁数が不正です");
+                    }
+                    break;
+                case nameof(BranchNumber):
+                    if (!string.IsNullOrEmpty((string)value))
                     {
                         ErrorsListOperation(ReferenceAccountingSubjectCode.Length != 3, propertyName,
                             "コードの桁数が不正です");

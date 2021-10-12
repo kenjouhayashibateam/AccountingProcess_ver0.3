@@ -732,9 +732,9 @@ namespace Infrastructure
             return s;
         }
 
-        public int DeleteContentConvertText(string id)
+        public int DeleteConvertContent(Content convertContent)
         {
-            Parameters = new Dictionary<string, object>() { { "@content_id", id } };
+            Parameters = new Dictionary<string, object>() { { "@content_id", convertContent.ID } };
             return ReturnGeneretedParameterCommand("delete_content_convert_voucher").ExecuteNonQuery();
         }
 
@@ -860,9 +860,9 @@ namespace Infrastructure
             return list;
         }
 
-        public int DeleteCondolence(int condolenceID)
+        public int Delete(Condolence condolence)
         {
-            Parameters = new Dictionary<string, object> { { "@id", condolenceID } };
+            Parameters = new Dictionary<string, object> { { "@id", condolence.ID } };
             return ReturnGeneretedParameterCommand("delete_condolence").ExecuteNonQuery();
         }
 
@@ -917,6 +917,21 @@ namespace Infrastructure
 
             return ReturnGeneretedParameterCommand
                 ("delete_content_default_credit_dept").ExecuteNonQuery();
+        }
+
+        public string GetBranchNumber(AccountingSubject accountingSubject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Update(AccountingSubject accountingSubject, string branchNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteBranchNumber(AccountingSubject accountingSubject)
+        {
+            throw new NotImplementedException();
         }
     }
 }

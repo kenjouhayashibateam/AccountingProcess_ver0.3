@@ -129,7 +129,7 @@ namespace WPF.ViewModels
                     IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note,
                     AccountActivityDate, CounterReceiver, MailRepresentative);
             if (DeleteConfirmation() == MessageBoxResult.No) { return; }
-            _ = DataBaseConnect.DeleteCondolence(ID);
+            _ = DataBaseConnect.Delete(OperationCondolence);
             MessageBox = new MessageBoxInfo()
             {
                 Message = "削除しました。このまま新規登録ができます。",
@@ -143,12 +143,12 @@ namespace WPF.ViewModels
             FieldClear();
             InputProperty();
         }
-        private  MessageBoxResult DeleteConfirmation()
+        private MessageBoxResult DeleteConfirmation()
         {
             MessageBox = new MessageBoxInfo()
             {
                 Message = $"ID{Space}:{Space}{ID}\r\n{PropertyContentsMessage()}" +
-                    $"\r\n\r\nデータを削除します。元に戻せませんがよろしいですか？",
+                    $"\r\n\r\nデータを削除します。よろしいですか？",
                 Image = MessageBoxImage.Question,
                 Button = MessageBoxButton.YesNo,
                 Title = "削除確認"

@@ -25,7 +25,7 @@ namespace Infrastructure
 
         public Rep CallRep(string id) { return new Rep("rep0", "林飛 顕誠", GetHashValue("aaa", "rep0"), true, true); }
 
-        public int DeleteContentConvertText(string id) { return 1; }
+        public int DeleteConvertContent(Content convertContent) { return 1; }
 
         public Dictionary<int, string> GetSoryoList()
         {
@@ -589,7 +589,7 @@ namespace Infrastructure
             return returnList;
         }
 
-        public int DeleteCondolence(int condolenceID) { return 1; }
+        public int Delete(Condolence condolence) { return 1; }
 
         public CreditDept CallContentDefaultCreditDept(Content content)
         {
@@ -601,5 +601,14 @@ namespace Infrastructure
         public int Update(CreditDept creditDept, Content content) { return 1; }
 
         public int DeleteContentDefaultCreditDept(Content content) { return 1; }
+
+        public string GetBranchNumber(AccountingSubject accountingSubject)
+        { return "001"; }
+
+        public int Update(AccountingSubject accountingSubject, string branchNumber)
+        { return 1; }
+
+        public int DeleteBranchNumber(AccountingSubject accountingSubject)
+        { return 1; }
     }
 }

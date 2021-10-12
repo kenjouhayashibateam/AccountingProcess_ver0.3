@@ -285,9 +285,9 @@ namespace Domain.Repositories
         /// <summary>
         /// 受納証に異なった文字列を表示する伝票内容データを削除します
         /// </summary>
-        /// <param name="id">削除する伝票内容ID</param>
+        /// <param name="convertContent">削除する伝票内容</param>
         /// <returns></returns>
-        public int DeleteContentConvertText(string id);
+        public int DeleteConvertContent(Content convertContent);
         /// <summary>
         /// 受納証を登録します
         /// </summary>
@@ -333,7 +333,7 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public int DeleteCondolence(int condolenceID);
+        public int Delete(Condolence condolence);
         /// <summary>
         /// 伝票内容に設定された既定の貸方部門を呼び出します
         /// </summary>
@@ -360,5 +360,24 @@ namespace Domain.Repositories
         /// <param name="content"></param>
         /// <returns></returns>
         public int DeleteContentDefaultCreditDept(Content content);
+        /// <summary>
+        /// 勘定科目コードの枝番を取得します
+        /// </summary>
+        /// <param name="accountingSubject"></param>
+        /// <returns></returns>
+        public string GetBranchNumber(AccountingSubject accountingSubject);
+        /// <summary>
+        /// 勘定科目コードの枝番を更新します
+        /// </summary>
+        /// <param name="accountingSubject"></param>
+        /// <param name="branchNumber"></param>
+        /// <returns></returns>
+        public int Update(AccountingSubject accountingSubject, string branchNumber);
+        /// <summary>
+        /// 勘定科目コードの枝番を削除します
+        /// </summary>
+        /// <param name="accountingSubject"></param>
+        /// <returns></returns>
+        public int DeleteBranchNumber(AccountingSubject accountingSubject);
     }
 }
