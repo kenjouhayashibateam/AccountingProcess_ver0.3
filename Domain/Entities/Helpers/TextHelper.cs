@@ -74,6 +74,7 @@ namespace Domain.Entities.Helpers
         public static string CommaDelimitedAmount(string amount)
         {
             string s = amount.Replace(",", string.Empty);
+            s = s.Replace(Properties.Resources.Unit, string.Empty);
             return int.TryParse(s, out int i) ? CommaDelimitedAmount(i) : string.Empty;
         }
         /// <summary>

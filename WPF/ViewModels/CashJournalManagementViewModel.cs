@@ -194,7 +194,8 @@ namespace WPF.ViewModels
         protected override void SetWindowDefaultTitle()
         {
             DefaultWindowTitle =
-                $"出納帳出力{Space}:{Space}{AccountingProcessLocation.Location}";
+                $"出納帳出力{Space}:{Space}{AccountingProcessLocation.Location}{Space}" +
+                $"{AccountingProcessLocation.GetAccountingGenreString}";
         }
 
         public bool OnClosing() { return !IsClose; }

@@ -14,7 +14,7 @@ namespace Domain.Repositories
         /// </summary>
         void CashboxData();
         /// <summary>
-        /// 収支日報を出力します
+        /// 春秋苑収支日報を出力します
         /// </summary>
         /// <param name="previousDayFinalAccountWithUnit">前日決算</param>
         /// <param name="paymentWithUnit">入金</param>
@@ -29,6 +29,31 @@ namespace Domain.Repositories
                 string tranceferAmountWithUnit, string todayFinalAccountWithUnit,
                 string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
                 string wizeCoreAmountWithUnit, bool yokohamaBankCheck, bool ceresaCheck);
+        /// <summary>
+        /// ワイズコア収支日報を出力します
+        /// </summary>
+        /// <param name="rengeanPreviousDayFinalAccountWithUnit">蓮華庵前日繰越</param>
+        /// <param name="rengeanPaymentWithUnit">蓮華庵入金</param>
+        /// <param name="rengeanWithdrawalWithUnit">蓮華庵出金</param>
+        /// <param name="rengeanTranceferAmountWithUnit">蓮華庵銀行振替</param>
+        /// <param name="shunjuanPreviousDayFinalAccountWithUnit">春秋庵前日繰越</param>
+        /// <param name="shunjuanPaymentWithUnit">春秋庵入金</param>
+        /// <param name="shunjuanWithdrawalWithUnit">春秋庵出金</param>
+        /// <param name="shunjuanTranceferAmountWithUnit">春秋庵銀行振替</param>
+        /// <param name="kougePreviousDayFinalAccountWithUnit">香華前日繰越</param>
+        /// <param name="kougePaymentWithUnit">香華入金</param>
+        /// <param name="kougeWithdrawalWithUnit">香華出金</param>
+        /// <param name="kougeTranceferAmountWithUnit">香華銀行振替</param>
+        /// <param name="yokohamaBankAmountWithUnit">横浜銀行残高</param>
+        /// <param name="shunjuenAmountWithUnit">春秋苑仮払金</param>
+        void BalanceFinalAccount
+            (string rengeanPreviousDayFinalAccountWithUnit, string rengeanPaymentWithUnit,
+                string rengeanWithdrawalWithUnit, string rengeanTranceferAmountWithUnit,
+                string shunjuanPreviousDayFinalAccountWithUnit, string shunjuanPaymentWithUnit,
+                string shunjuanWithdrawalWithUnit, string shunjuanTranceferAmountWithUnit,
+                string kougePreviousDayFinalAccountWithUnit, string kougePaymentWithUnit,
+                string kougeWithdrawalWithUnit, string kougeTranceferAmountWithUnit,
+                string yokohamaBankAmountWithUnit, string shunjuenAmountWithUnit);
         /// <summary>
         /// 出納データを出力します
         /// </summary>

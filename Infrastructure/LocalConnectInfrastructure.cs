@@ -43,7 +43,7 @@ namespace Infrastructure
             return list;
         }
 
-        public int PreviousDayFinalAmount() { return 0; }
+        public int PreviousDayFinalAmount(bool isShunjuen) { return 0; }
 
         public int ReceiptsAndExpenditurePreviousDayChange
             (ReceiptsAndExpenditure receiptsAndExpenditure)
@@ -610,5 +610,57 @@ namespace Infrastructure
 
         public int DeleteBranchNumber(AccountingSubject accountingSubject)
         { return 1; }
+
+        public int Registration(AccountingSubject accountingSubject, string branchNumber)
+        { return 1; }
+
+        public int ReturnWizeCoreDayBalance(DateTime referenceDate, WizeCoreDept wizeCoreDept, WizeCoreAmountCategory wizeCoreAmountCategory)
+        {
+            string s = wizeCoreDept.ToString() + wizeCoreAmountCategory.ToString();
+            int i = default;
+            switch (s)
+            {
+                case "蓮華庵繰越":
+                    i = 233568;
+                    break;
+                case "蓮華庵入金":
+                    i = 0;
+                    break;
+                case "蓮華庵出金":
+                    i = 61936;
+                    break;
+                case "蓮華庵銀行振替":
+                    i = 0;
+                    break;
+                case "春秋庵繰越":
+                    i = 257126;
+                    break;
+                case "春秋庵入金":
+                    i = 0;
+                    break;
+                case "春秋庵出金":
+                    i = 88596;
+                    break;
+                case "春秋庵銀行振替":
+                    i = 0;
+                    break;
+                case "香華繰越":
+                    i = 200956;
+                    break;
+                case "香華入金":
+                    i = 42700;
+                    break;
+                case "香華出金":
+                    i = 0;
+                    break;
+                case "香華銀行振替":
+                    i = 120000;
+                    break;
+                default:
+                    break;
+            }
+
+            return i;
+        }
     }
 }

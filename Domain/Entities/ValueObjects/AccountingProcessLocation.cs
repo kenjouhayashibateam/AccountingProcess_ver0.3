@@ -1,7 +1,12 @@
 ﻿using Domain.Entities.Helpers;
+using System.Collections.Generic;
 
 namespace Domain.Entities.ValueObjects
 {
+    public interface IOriginalTotalAmountObserver
+    {
+        void OriginalTotalAmoutNotify();
+    }
     /// <summary>
     /// 経理担当場所（シングルトン）
     /// </summary>
@@ -9,6 +14,17 @@ namespace Domain.Entities.ValueObjects
     {
         private static readonly AccountingProcessLocation accountingLocation =
             new AccountingProcessLocation();
+        private readonly List<IOriginalTotalAmountObserver> Observers = new List<IOriginalTotalAmountObserver>();
+        private static int originalTotalAmount;
+
+        public void Add(IOriginalTotalAmountObserver originalTotalAmountObserver)
+        { Observers.Add(originalTotalAmountObserver); }
+        public void Remove(IOriginalTotalAmountObserver originalTotalAmountObserver)
+        { Observers.Remove(originalTotalAmountObserver); }
+        private void Notify()
+        {
+            foreach (IOriginalTotalAmountObserver ota in Observers) { ota.OriginalTotalAmoutNotify(); }
+        }
         /// <summary>
         /// 担当場所
         /// </summary>
@@ -16,7 +32,16 @@ namespace Domain.Entities.ValueObjects
         /// <summary>
         /// 金庫計算、出納登録前の金額
         /// </summary>
-        public static int OriginalTotalAmount { get; set; }
+        public static int OriginalTotalAmount
+        {
+            get => originalTotalAmount;
+            set
+            {
+                if (originalTotalAmount == value) { return; }
+                originalTotalAmount = value;
+                accountingLocation.Notify();
+            }
+        }
         /// <summary>
         /// 担当場所インスタンス
         /// </summary>
@@ -31,6 +56,11 @@ namespace Domain.Entities.ValueObjects
         /// 春秋苑の会計かﾜｲｽﾞｺｱの会計か
         /// </summary>
         public static bool IsAccountingGenreShunjuen { get; set; }
+        /// <summary>
+        /// 会計のジャンル文字列を返す
+        /// </summary>
+        public static string GetAccountingGenreString =>
+            IsAccountingGenreShunjuen ? "春秋苑会計" : "ワイズコア会計";
         /// <summary>
         /// 金種表を出力したか
         /// </summary>

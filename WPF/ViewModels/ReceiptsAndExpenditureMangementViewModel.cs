@@ -49,13 +49,14 @@ namespace WPF.ViewModels
         private string balanceFinalAccountOutputButtonContent;
         private string yokohamaBankAmount;
         private string ceresaAmount;
-        private string wizeCoreAmount;
+        private string pairAmount;
         private string receiptsAndExpenditureOutputButtonContent;
         private string paymentSlipsOutputButtonContent;
         private string withdrawalSlipsOutputButtonContent;
         private string referenceLocationCheckBoxContent;
         private string password;
         private string outputMenuHeader;
+        private string pairAmountTitle;
         /// <summary>
         /// 当日決算の基準になる金額の種類。管理事務所なら前日決算、青蓮堂なら預り金額
         /// </summary>
@@ -83,6 +84,7 @@ namespace WPF.ViewModels
         private bool isYokohamaBankCheck = false;
         private bool isCeresaCheck = false;
         private bool isClose = true;
+        private bool isCeresaAmountVisibility;
         #endregion
         #region DateTime
         private DateTime searchEndDate = DateTime.Today;
@@ -127,6 +129,9 @@ namespace WPF.ViewModels
             DefaultListExpress();
             SetBalanceFinalAccount();
             RefreshList();
+            PairAmountTitle = AccountingProcessLocation.IsAccountingGenreShunjuen ?
+                "ワイズコア仮受金" : "春秋苑仮払金";
+            IsCeresaAmountVisibility = AccountingProcessLocation.IsAccountingGenreShunjuen;
         }
         public ReceiptsAndExpenditureMangementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataOutput(),
@@ -136,10 +141,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
         /// </summary>
-        private void CheckRevers()
-        {
-            PasswordCharCheck = !PasswordCharCheck;
-        }
+        private void CheckRevers() { PasswordCharCheck = !PasswordCharCheck; }
 
         public void SetSortColumns()
         {
@@ -185,6 +187,9 @@ namespace WPF.ViewModels
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
             SetBalanceFinalAccount();
+            AccountingProcessLocation.OriginalTotalAmount =
+                DataBaseConnect.PreviousDayFinalAmount
+                    (AccountingProcessLocation.IsAccountingGenreShunjuen);
         }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
@@ -382,12 +387,19 @@ namespace WPF.ViewModels
             BalanceFinalAccountOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             IsClose = false;
-            await Task.Run(() =>
-            DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
-                PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
-                TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
-                AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(WizeCoreAmount)),
-                IsYokohamaBankCheck, IsCeresaCheck));
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen)
+            {
+                await Task.Run(() =>
+                DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
+                    PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
+                    TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
+                    AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
+                    IsYokohamaBankCheck, IsCeresaCheck));
+            }
+            else
+            {
+                await Task.Run(()=>)
+            }
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
             IsClose = true;
@@ -755,14 +767,14 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// ワイズコア仮受金
+        /// 春秋苑、ワイズコアの金銭のやり取りの額
         /// </summary>
-        public string WizeCoreAmount
+        public string PairAmount
         {
-            get => wizeCoreAmount;
+            get => pairAmount;
             set
             {
-                wizeCoreAmount = CommaDelimitedAmount(value);
+                pairAmount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
@@ -1153,6 +1165,30 @@ namespace WPF.ViewModels
             set
             {
                 outputMenuHeader = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 春秋苑、ワイズコアが金銭のやり取りをする表題
+        /// </summary>
+        public string PairAmountTitle
+        {
+            get => pairAmountTitle;
+            set
+            {
+                pairAmountTitle = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// セレサ川崎の金額欄のvisibility
+        /// </summary>
+        public bool IsCeresaAmountVisibility
+        {
+            get => isCeresaAmountVisibility;
+            set
+            {
+                isCeresaAmountVisibility = value;
                 CallPropertyChanged();
             }
         }

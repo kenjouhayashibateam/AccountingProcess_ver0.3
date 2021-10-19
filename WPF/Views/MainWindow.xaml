@@ -148,12 +148,12 @@
                     </Button>
                 </Grid>
                 <GroupBox Grid.Column="2" Header="春秋苑" Margin="5">
-                    <Grid>
+                    <Grid IsEnabled="{Binding IsShunjuenMenuEnabled}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsCreateVoucherEnabled}" Margin="5,20">
+                        <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsCondolenceEnabled}" Margin="5,20">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
@@ -168,7 +168,9 @@
                     </Grid>                    
                 </GroupBox>
                 <GroupBox Grid.Column="3" Header="ワイズコア(工事中) " Margin="5">
-                    
+                    <Grid IsEnabled="{Binding IsWizeCoreMenuEnabled}">
+                        
+                    </Grid>
                 </GroupBox>
             </Grid>
         </GroupBox>

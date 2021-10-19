@@ -366,8 +366,9 @@ namespace Infrastructure
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
                 { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
                 {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
-                {"@contain_outputted", isContainOutputted}, {"@validity_true_only", isValidityOnly},
-                {"@output_date_start", outputDateStart}, { "@output_date_end", outputDateEnd}
+                {"@is_shunjuen",isShunjuen},{"@contain_outputted", isContainOutputted}, 
+                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart}, 
+                { "@output_date_end", outputDateEnd}
             };
 
             return ReferenceReceiptsAndExpenditure();
@@ -451,10 +452,10 @@ namespace Infrastructure
                 ("update_receipts_and_expenditure").ExecuteNonQuery();
         }
 
-        public int PreviousDayFinalAmount()
+        public int PreviousDayFinalAmount(bool isShunjuen)
         {
             SettingConectionString();
-            SqlCommand Cmd = new SqlCommand("select dbo.return_previous_day_final_amount()", Cn);
+            SqlCommand Cmd = new SqlCommand($"select dbo.return_previous_day_final_amount('{isShunjuen}')", Cn);
             Cn.Open();
             object obj;
             using (Cn) { obj = Cmd.ExecuteScalar(); }
@@ -532,9 +533,10 @@ namespace Infrastructure
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
                 { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
                 {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
-                {"@contain_outputted", isContainOutputted}, {"@validity_true_only", isValidityOnly},
-                {"@output_date_start", outputDateStart}, { "@output_date_end", outputDateEnd},{"@page", pageCount},
-                {"@column",sortColumn}, { "@is_order_asc",sortDirection}
+                {"@is_shunjuen",isShunjuen },{"@contain_outputted", isContainOutputted}, 
+                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart}, 
+                { "@output_date_end", outputDateEnd},{"@page", pageCount},{"@column",sortColumn}, 
+                { "@is_order_asc",sortDirection}
             };
 
             SqlDataReader dataReader =
@@ -921,15 +923,46 @@ namespace Infrastructure
 
         public string GetBranchNumber(AccountingSubject accountingSubject)
         {
-            throw new NotImplementedException();
+            Parameters = new Dictionary<string, object>()
+            { { "@accounting_subject_id", accountingSubject.ID } };
+
+            SqlDataReader sqlDataReader = ReturnGeneretedParameterCommand
+                ("get_branch_number").ExecuteReader();
+
+            string s = string.Empty;
+            while (sqlDataReader.Read()) { s = (string)sqlDataReader["branch_number"]; }
+
+            return s;
         }
 
         public int Update(AccountingSubject accountingSubject, string branchNumber)
         {
-            throw new NotImplementedException();
+            Parameters = new Dictionary<string, object>()
+            { {"@accounting_subject_id",accountingSubject.ID},{"@branch_number",branchNumber}};
+
+            return ReturnGeneretedParameterCommand
+                ("update_branch_number").ExecuteNonQuery();
         }
 
         public int DeleteBranchNumber(AccountingSubject accountingSubject)
+        {
+            Parameters = new Dictionary<string, object>()
+            { { "@accounting_subject_id", accountingSubject.ID } };
+
+            return ReturnGeneretedParameterCommand
+                ("delete_branch_number").ExecuteNonQuery();
+        }
+
+        public int Registration(AccountingSubject accountingSubject, string branchNumber)
+        {
+            Parameters = new Dictionary<string, object>()
+            {{"@accounting_subject_id",accountingSubject.ID },{"@branch_number",branchNumber } };
+
+            return ReturnGeneretedParameterCommand
+                ("registration_branch_number").ExecuteNonQuery();
+        }
+
+        public int ReturnWizeCoreDayBalance(DateTime referenceDate, WizeCoreDept wizeCoreDept, WizeCoreAmountCategory wizeCoreAmountCategory)
         {
             throw new NotImplementedException();
         }

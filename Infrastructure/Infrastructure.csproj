@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultInfrastructure.cs" />
-    <Compile Include="ExcelOutputData\BalanceFinalAccountOutput.cs" />
+    <Compile Include="ExcelOutputData\ShunjuenBalanceFinalAccountOutput.cs" />
     <Compile Include="ExcelOutputData\CashBoxOutput.cs" />
     <Compile Include="ExcelOutputData\CondolencesOutput.cs" />
     <Compile Include="ExcelOutputData\ExcelApp.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="ExcelOutputData\CashJournalOutput.cs" />
     <Compile Include="ExcelOutputData\SlipOutput.cs" />
     <Compile Include="ExcelOutputData\VoucherOutput.cs" />
+    <Compile Include="ExcelOutputData\WizeCoreBalanceFinalAccountOutput.cs" />
     <Compile Include="LocalConnectInfrastructure.cs" />
     <Compile Include="LogFileInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

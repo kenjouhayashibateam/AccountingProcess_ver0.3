@@ -17,12 +17,31 @@ namespace Infrastructure.ExcelOutputData
                 string yokohamaBankAmountWithUnit, string ceresaAmountWithUnit,
                 string wizeCoreAmountWithUnit, bool yokohamaBankCheck, bool ceresaCheck)
         {
-            BalanceFinalAccountOutput bfao =
-                new BalanceFinalAccountOutput
+            ShunjuenBalanceFinalAccountOutput bfao =
+                new ShunjuenBalanceFinalAccountOutput
                     (previousDayFinalAccountWithUnit, paymentWithUnit, withdrawalWithUnit,
                         tranceferAmountWithUnit, todayFinalAccountWithUnit, yokohamaBankAmountWithUnit,
                         ceresaAmountWithUnit, wizeCoreAmountWithUnit, yokohamaBankCheck, ceresaCheck);
             bfao.DataOutput();
+        }
+
+        public void BalanceFinalAccount
+            (string rengeanPreviousDayFinalAccountWithUnit, string rengeanPaymentWithUnit,
+                string rengeanWithdrawalWithUnit, string rengeanTranceferAmountWithUnit,
+                string shunjuanPreviousDayFinalAccountWithUnit, string shunjuanPaymentWithUnit,
+                string shunjuanWithdrawalWithUnit, string shunjuanTranceferAmountWithUnit,
+                string kougePreviousDayFinalAccountWithUnit, string kougePaymentWithUnit,
+                string kougeWithdrawalWithUnit, string kougeTranceferAmountWithUnit,
+                string yokohamaBankAmountWithUnit, string shunjuenAmountWithUnit)
+        {
+            WizeCoreBalanceFinalAccountOutput wcbfa =
+                new WizeCoreBalanceFinalAccountOutput
+                    (rengeanPreviousDayFinalAccountWithUnit, rengeanPaymentWithUnit, rengeanWithdrawalWithUnit,
+                        rengeanTranceferAmountWithUnit, shunjuanPreviousDayFinalAccountWithUnit,
+                        shunjuanPaymentWithUnit, shunjuanWithdrawalWithUnit, shunjuanTranceferAmountWithUnit,
+                        kougePreviousDayFinalAccountWithUnit, kougePaymentWithUnit, kougeWithdrawalWithUnit,
+                        kougeTranceferAmountWithUnit, yokohamaBankAmountWithUnit, shunjuenAmountWithUnit);
+            wcbfa.DataOutput();
         }
 
         public void CashboxData()

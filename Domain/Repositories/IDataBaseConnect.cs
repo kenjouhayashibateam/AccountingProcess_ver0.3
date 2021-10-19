@@ -6,6 +6,19 @@ using System.Collections.ObjectModel;
 
 namespace Domain.Repositories
 {
+    public enum WizeCoreDept
+    {
+        蓮華庵,
+        春秋庵,
+        香華
+    }
+    public enum WizeCoreAmountCategory
+    {
+        繰越,
+        入金,
+        出金,
+        銀行振替
+    }
     /// <summary>
     /// データベース接続
     /// </summary>
@@ -214,7 +227,7 @@ namespace Domain.Repositories
         /// 前日決算額を返します
         /// </summary>
         /// <returns>決算額</returns>
-        public int PreviousDayFinalAmount();
+        public int PreviousDayFinalAmount(bool isShunjuen);
         /// <summary>
         /// 前年度決算を登録します
         /// </summary>
@@ -367,6 +380,13 @@ namespace Domain.Repositories
         /// <returns></returns>
         public string GetBranchNumber(AccountingSubject accountingSubject);
         /// <summary>
+        /// 勘定科目コードの枝番を登録します
+        /// </summary>
+        /// <param name="accountingSubject"></param>
+        /// <param name="branchNumber"></param>
+        /// <returns></returns>
+        public int Registration(AccountingSubject accountingSubject, string branchNumber);
+        /// <summary>
         /// 勘定科目コードの枝番を更新します
         /// </summary>
         /// <param name="accountingSubject"></param>
@@ -379,5 +399,14 @@ namespace Domain.Repositories
         /// <param name="accountingSubject"></param>
         /// <returns></returns>
         public int DeleteBranchNumber(AccountingSubject accountingSubject);
+        /// <summary>
+        /// ワイズコアの各収支金額を返します
+        /// </summary>
+        /// <param name="referenceDate"></param>
+        /// <param name="wizeCoreDept"></param>
+        /// <returns></returns>
+        public int ReturnWizeCoreDayBalance
+            (DateTime referenceDate, WizeCoreDept wizeCoreDept,
+                WizeCoreAmountCategory wizeCoreAmountCategory);
     }
 }
