@@ -452,10 +452,10 @@ namespace Infrastructure
                 ("update_receipts_and_expenditure").ExecuteNonQuery();
         }
 
-        public int PreviousDayFinalAmount(bool isShunjuen)
+        public int PreviousDayFinalAmount()
         {
             SettingConectionString();
-            SqlCommand Cmd = new SqlCommand($"select dbo.return_previous_day_final_amount('{isShunjuen}')", Cn);
+            SqlCommand Cmd = new SqlCommand($"select dbo.return_previous_day_final_amount('true')", Cn);
             Cn.Open();
             object obj;
             using (Cn) { obj = Cmd.ExecuteScalar(); }

@@ -25,22 +25,15 @@ namespace Infrastructure.ExcelOutputData
             bfao.DataOutput();
         }
 
-        public void BalanceFinalAccount
-            (string rengeanPreviousDayFinalAccountWithUnit, string rengeanPaymentWithUnit,
-                string rengeanWithdrawalWithUnit, string rengeanTranceferAmountWithUnit,
-                string shunjuanPreviousDayFinalAccountWithUnit, string shunjuanPaymentWithUnit,
-                string shunjuanWithdrawalWithUnit, string shunjuanTranceferAmountWithUnit,
-                string kougePreviousDayFinalAccountWithUnit, string kougePaymentWithUnit,
-                string kougeWithdrawalWithUnit, string kougeTranceferAmountWithUnit,
-                string yokohamaBankAmountWithUnit, string shunjuenAmountWithUnit)
+        public void BalanceFinalAccount(int rengeanPreviousDayFinalAccount, int rengeanPayment, int rengeanWithdrawal, int rengeanTranceferAmount, int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal, int shunjuanTranceferAmount, int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal, int kougeTranceferAmount, int yokohamaBankAmount, int shunjuenAmount)
         {
             WizeCoreBalanceFinalAccountOutput wcbfa =
                 new WizeCoreBalanceFinalAccountOutput
-                    (rengeanPreviousDayFinalAccountWithUnit, rengeanPaymentWithUnit, rengeanWithdrawalWithUnit,
-                        rengeanTranceferAmountWithUnit, shunjuanPreviousDayFinalAccountWithUnit,
-                        shunjuanPaymentWithUnit, shunjuanWithdrawalWithUnit, shunjuanTranceferAmountWithUnit,
-                        kougePreviousDayFinalAccountWithUnit, kougePaymentWithUnit, kougeWithdrawalWithUnit,
-                        kougeTranceferAmountWithUnit, yokohamaBankAmountWithUnit, shunjuenAmountWithUnit);
+                    (rengeanPreviousDayFinalAccount, rengeanPayment, rengeanWithdrawal,
+                        rengeanTranceferAmount, shunjuanPreviousDayFinalAccount,
+                        shunjuanPayment, shunjuanWithdrawal, shunjuanTranceferAmount,
+                        kougePreviousDayFinalAccount, kougePayment, kougeWithdrawal,
+                        kougeTranceferAmount, yokohamaBankAmount, shunjuenAmount);
             wcbfa.DataOutput();
         }
 

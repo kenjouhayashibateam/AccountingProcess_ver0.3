@@ -16,96 +16,94 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// 蓮華庵前日繰越
         /// </summary>
-        private readonly string RengeanPreviousDayFinalAccountWithUnit;
+        private readonly int RengeanPreviousDayFinalAccount;
         /// <summary>
         /// 蓮華庵入金
         /// </summary>
-        private readonly string RengeanPaymentWithUnit;
+        private readonly int RengeanPayment;
         /// <summary>
         /// 蓮華庵出金
         /// </summary>
-        private readonly string RengeanWithdrawalWithUnit;
+        private readonly int RengeanWithdrawal;
         /// <summary>
         /// 蓮華庵銀行振替
         /// </summary>
-        private readonly string RengeanTranceferWithUnit;
+        private readonly int RengeanTrancefer;
         /// <summary>
         /// 春秋庵前日繰越
         /// </summary>
-        private readonly string ShunjuanPreviousDayFinalAccountWithUnit;
+        private readonly int ShunjuanPreviousDayFinalAccount;
         /// <summary>
         /// 春秋庵入金
         /// </summary>
-        private readonly string ShunjuanPaymentWithUnit;
+        private readonly int ShunjuanPayment;
         /// <summary>
         /// 春秋庵出金
         /// </summary>
-        private readonly string ShunjuanWithdrawalWithUnit;
+        private readonly int ShunjuanWithdrawal;
         /// <summary>
         /// 春秋庵銀行振替
         /// </summary>
-        private readonly string ShunjuanTranceferWithUnit;
+        private readonly int ShunjuanTrancefer;
         /// <summary>
         /// 香華前日繰越
         /// </summary>
-        private readonly string KougePreviousDayFinalAccountWithUnit;
+        private readonly int KougePreviousDayFinalAccount;
         /// <summary>
         /// 香華入金
         /// </summary>
-        private readonly string KougePaymentWithUnit;
+        private readonly int KougePayment;
         /// <summary>
         /// 香華出金
         /// </summary>
-        private readonly string KougeWithdrawalWithUnit;
+        private readonly int KougeWithdrawal;
         /// <summary>
         /// 香華銀行振替
         /// </summary>
-        private readonly string KougeTranceferWithUnit;
+        private readonly int KougeTrancefer;
         /// <summary>
         /// 横浜銀行残高
         /// </summary>
-        private readonly string YokohamaBankAmountWithUnit;
+        private readonly int YokohamaBankAmount;
         /// <summary>
         /// 春秋苑仮払金
         /// </summary>
-        private readonly string ShunjuenAmountWithUnit;
-        /// <param name="rengeanPreviousDayFinalAccountWithUnit">蓮華庵前日繰越</param>
-        /// <param name="rengeanPaymentWithUnit">蓮華庵入金</param>
-        /// <param name="rengeanWithdrawalWithUnit">蓮華庵出金</param>
-        /// <param name="rengeanTranceferWithUnit">蓮華庵銀行振替</param>
-        /// <param name="shunjuanPreviousDayFinalAccountWithUnit">春秋庵前日繰越</param>
-        /// <param name="shunjuanPaymentWithUnit">春秋庵入金</param>
-        /// <param name="shunjuanWithdrawalWithUnit">春秋庵出金</param>
-        /// <param name="shunjuanTranceferWithUnit">春秋庵銀行振替</param>
-        /// <param name="kougePreviousDayFinalAccountWithUnit">香華前日繰越</param>
-        /// <param name="kougePaymentWithUnit">香華入金</param>
-        /// <param name="kougeWithdrawalWithUnit">香華出金</param>
-        /// <param name="kougeTranceferWithUnit">香華銀行振替</param>
-        /// <param name="yokohamaBankAmountWithUnit">横浜銀行残高</param>
-        /// <param name="shunjuenAmountWithUnit">春秋苑仮払金</param>
+        private readonly int ShunjuenAmount;
+        /// <param name="rengeanPreviousDayFinalAccount">蓮華庵前日繰越</param>
+        /// <param name="rengeanPayment">蓮華庵入金</param>
+        /// <param name="rengeanWithdrawal">蓮華庵出金</param>
+        /// <param name="rengeanTrancefer">蓮華庵銀行振替</param>
+        /// <param name="shunjuanPreviousDayFinalAccount">春秋庵前日繰越</param>
+        /// <param name="shunjuanPayment">春秋庵入金</param>
+        /// <param name="shunjuanWithdrawal">春秋庵出金</param>
+        /// <param name="shunjuanTrancefer">春秋庵銀行振替</param>
+        /// <param name="kougePreviousDayFinalAccount">香華前日繰越</param>
+        /// <param name="kougePayment">香華入金</param>
+        /// <param name="kougeWithdrawal">香華出金</param>
+        /// <param name="kougeTrancefer">香華銀行振替</param>
+        /// <param name="yokohamaBankAmount">横浜銀行残高</param>
+        /// <param name="shunjuenAmount">春秋苑仮払金</param>
         public WizeCoreBalanceFinalAccountOutput
-            (string rengeanPreviousDayFinalAccountWithUnit, string rengeanPaymentWithUnit,
-                string rengeanWithdrawalWithUnit, string rengeanTranceferWithUnit,
-                string shunjuanPreviousDayFinalAccountWithUnit, string shunjuanPaymentWithUnit,
-                string shunjuanWithdrawalWithUnit, string shunjuanTranceferWithUnit,
-                string kougePreviousDayFinalAccountWithUnit, string kougePaymentWithUnit,
-                string kougeWithdrawalWithUnit, string kougeTranceferWithUnit,
-                string yokohamaBankAmountWithUnit, string shunjuenAmountWithUnit)
+            (int rengeanPreviousDayFinalAccount, int rengeanPayment,int rengeanWithdrawal,
+                int rengeanTrancefer,int shunjuanPreviousDayFinalAccount, int shunjuanPayment,
+                int shunjuanWithdrawal, int shunjuanTrancefer,int kougePreviousDayFinalAccount,
+                int kougePayment,int kougeWithdrawal, int kougeTrancefer,int yokohamaBankAmount,
+                int shunjuenAmount)
         {
-            RengeanPreviousDayFinalAccountWithUnit = rengeanPreviousDayFinalAccountWithUnit;
-            RengeanPaymentWithUnit = rengeanPaymentWithUnit;
-            RengeanWithdrawalWithUnit = rengeanWithdrawalWithUnit;
-            RengeanTranceferWithUnit = rengeanTranceferWithUnit;
-            ShunjuanPreviousDayFinalAccountWithUnit = shunjuanPreviousDayFinalAccountWithUnit;
-            ShunjuanPaymentWithUnit = shunjuanPaymentWithUnit;
-            ShunjuanWithdrawalWithUnit = shunjuanWithdrawalWithUnit;
-            ShunjuanTranceferWithUnit = shunjuanTranceferWithUnit;
-            KougePreviousDayFinalAccountWithUnit = kougePreviousDayFinalAccountWithUnit;
-            KougePaymentWithUnit = kougePaymentWithUnit;
-            KougeWithdrawalWithUnit = kougeWithdrawalWithUnit;
-            KougeTranceferWithUnit = kougeTranceferWithUnit;
-            YokohamaBankAmountWithUnit = yokohamaBankAmountWithUnit;
-            ShunjuenAmountWithUnit = shunjuenAmountWithUnit;
+            RengeanPreviousDayFinalAccount = rengeanPreviousDayFinalAccount;
+            RengeanPayment = rengeanPayment;
+            RengeanWithdrawal = rengeanWithdrawal;
+            RengeanTrancefer = rengeanTrancefer;
+            ShunjuanPreviousDayFinalAccount = shunjuanPreviousDayFinalAccount;
+            ShunjuanPayment = shunjuanPayment;
+            ShunjuanWithdrawal = shunjuanWithdrawal;
+            ShunjuanTrancefer = shunjuanTrancefer;
+            KougePreviousDayFinalAccount = kougePreviousDayFinalAccount;
+            KougePayment = kougePayment;
+            KougeWithdrawal = kougeWithdrawal;
+            KougeTrancefer = kougeTrancefer;
+            YokohamaBankAmount = yokohamaBankAmount;
+            ShunjuenAmount = shunjuenAmount;
         }
 
         protected override void SetBorderStyle()
@@ -117,7 +115,7 @@ namespace Infrastructure.ExcelOutputData
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
             //残高、仮払金
-            MySheetCellRange(5, 1, 6, 3).Style
+            MySheetCellRange(5, 1, 6, 4).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
             //金額表
             MySheetCellRange(8, 1, 12, 8).Style
@@ -142,6 +140,10 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(2, 7, 3, 7).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+            //係印
+            MySheetCellRange(4, 6, 4, 8).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //横浜銀行残高の縦位置
             MySheetCellRange(5, 1, 5, 3).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
@@ -155,7 +157,7 @@ namespace Infrastructure.ExcelOutputData
             MySheetCellRange(6, 1, 6, 3).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //表タイトルの位置設定
-            MySheetCellRange(8, 1, 8, 1).Style
+            MySheetCellRange(8, 1, 8, 8).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //内訳タイトルの位置設定
@@ -169,7 +171,7 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override double[] SetColumnSizes()
-        { return new double[] { 8.38, 2.75, 9.75, 6.5, 7.25, 14.38, 14.38, 14.38 }; }
+        { return new double[] { 8.42, 2.75, 8.58, 6.08, 5.25, 11.92, 11.92, 11.92 }; }
 
         protected override void SetDataStrings()
         {
@@ -177,7 +179,8 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(1, 1).Value = "収支日報";
             //日付
             DateTime d = DateTime.Today;
-            myWorksheet.Cell(2, 7).Value = $"{d.ToString("ggy", JapanCulture)}年{d.Month}月{d.Day}日（{d:ddd}）";
+            myWorksheet.Cell(2, 7).Value = 
+                $"{d.ToString("ggy", JapanCulture)}年{d.Month}月{d.Day}日（{d:ddd}）";
             //社名
             myWorksheet.Cell(3, 7).Value = "(株)ワイズ・コア";
             //印欄
@@ -186,10 +189,10 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(4, 8).Value = "係印";
             //残高
             myWorksheet.Cell(5, 1).Value = "横浜銀行残高";
-            myWorksheet.Cell(5, 3).Value = YokohamaBankAmountWithUnit;
+            myWorksheet.Cell(5, 3).Value = AmountWithUnit(YokohamaBankAmount);
             //仮払金
             myWorksheet.Cell(6, 1).Value = "春秋苑仮払金";
-            myWorksheet.Cell(6, 3).Value = ShunjuenAmountWithUnit;
+            myWorksheet.Cell(6, 3).Value = AmountWithUnit(ShunjuenAmount);
             //表タイトル
             myWorksheet.Cell(8, 1).Value = "内訳";
             myWorksheet.Cell(8, 2).Value = $"前日より\r\n繰越";
@@ -202,45 +205,38 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(11, 1).Value = "香華";
             myWorksheet.Cell(12, 1).Value = "現金合計";
             //蓮華庵金額
-            myWorksheet.Cell(9, 2).Value = RengeanPreviousDayFinalAccountWithUnit;
-            myWorksheet.Cell(9, 4).Value = RengeanPaymentWithUnit;
-            myWorksheet.Cell(9, 6).Value = RengeanWithdrawalWithUnit;
-            myWorksheet.Cell(9, 7).Value = RengeanTranceferWithUnit;
-            int renPre = IntAmount(RengeanPreviousDayFinalAccountWithUnit);
-            int renPay = IntAmount(RengeanPaymentWithUnit);
-            int renWith = IntAmount(RengeanWithdrawalWithUnit);
-            int renTra = IntAmount(RengeanTranceferWithUnit);
-            myWorksheet.Cell(9, 8).Value = AmountWithUnit(renPre + renPay - renWith - renTra);
+            myWorksheet.Cell(9, 2).Value = AmountWithUnit(RengeanPreviousDayFinalAccount);
+            myWorksheet.Cell(9, 4).Value = AmountWithUnit(RengeanPayment);
+            myWorksheet.Cell(9, 6).Value = AmountWithUnit(RengeanWithdrawal);
+            myWorksheet.Cell(9, 7).Value = AmountWithUnit(RengeanTrancefer);
+            myWorksheet.Cell(9, 8).Value = AmountWithUnit(RengeanPreviousDayFinalAccount + 
+                RengeanPayment - RengeanWithdrawal - RengeanTrancefer);
             //春秋庵金額
-            myWorksheet.Cell(10, 2).Value = ShunjuanPreviousDayFinalAccountWithUnit;
-            myWorksheet.Cell(10, 4).Value = ShunjuanPaymentWithUnit;
-            myWorksheet.Cell(10, 6).Value = ShunjuanWithdrawalWithUnit;
-            myWorksheet.Cell(10, 7).Value = ShunjuanTranceferWithUnit;
-            int shuPre = IntAmount(ShunjuanPreviousDayFinalAccountWithUnit);
-            int shuPay = IntAmount(ShunjuanPaymentWithUnit);
-            int shuWith = IntAmount(ShunjuanWithdrawalWithUnit);
-            int shuTra = IntAmount(ShunjuanTranceferWithUnit);
-            myWorksheet.Cell(10, 8).Value = AmountWithUnit(shuPre + shuPay - shuWith - shuTra);
+            myWorksheet.Cell(10, 2).Value = AmountWithUnit(ShunjuanPreviousDayFinalAccount);
+            myWorksheet.Cell(10, 4).Value = AmountWithUnit(ShunjuanPayment);
+            myWorksheet.Cell(10, 6).Value = AmountWithUnit(ShunjuanWithdrawal);
+            myWorksheet.Cell(10, 7).Value = AmountWithUnit(ShunjuanTrancefer);
+            myWorksheet.Cell(10, 8).Value = AmountWithUnit(ShunjuanPreviousDayFinalAccount +
+                ShunjuanPayment - ShunjuanWithdrawal - ShunjuanTrancefer);
             //香華金額
-            myWorksheet.Cell(11, 2).Value = KougePreviousDayFinalAccountWithUnit;
-            myWorksheet.Cell(11, 4).Value = KougePaymentWithUnit;
-            myWorksheet.Cell(11, 6).Value = KougeWithdrawalWithUnit;
-            myWorksheet.Cell(11, 7).Value = KougeTranceferWithUnit;
-            int kouPre = IntAmount(KougePreviousDayFinalAccountWithUnit);
-            int kouPay = IntAmount(KougePaymentWithUnit);
-            int kouWith = IntAmount(KougeWithdrawalWithUnit);
-            int kouTra = IntAmount(KougeTranceferWithUnit);
-            myWorksheet.Cell(11, 8).Value = AmountWithUnit(kouPre + kouPay - kouWith - kouTra);
+            myWorksheet.Cell(11, 2).Value = AmountWithUnit(KougePreviousDayFinalAccount);
+            myWorksheet.Cell(11, 4).Value = AmountWithUnit(KougePayment);
+            myWorksheet.Cell(11, 6).Value = AmountWithUnit(KougeWithdrawal);
+            myWorksheet.Cell(11, 7).Value = AmountWithUnit(KougeTrancefer);
+            myWorksheet.Cell(11, 8).Value = AmountWithUnit(KougePreviousDayFinalAccount +
+                KougePayment - KougeWithdrawal - KougeTrancefer);
             //合計金額
-            int totalPre = renPre + shuPre + kouPre;
-            int totalPay = renPay + shuPay + kouPay;
-            int totalWith = renWith + shuWith + kouWith;
-            int totalTra = renTra + shuTra + kouTra;
+            int totalPre = RengeanPreviousDayFinalAccount + ShunjuanPreviousDayFinalAccount +
+                KougePreviousDayFinalAccount;
+            int totalPay = RengeanPayment + ShunjuanPayment + KougePayment;
+            int totalWith = RengeanWithdrawal + ShunjuanWithdrawal + KougeWithdrawal;
+            int totalTra = RengeanTrancefer + ShunjuanTrancefer + KougeTrancefer;
             myWorksheet.Cell(12, 2).Value = AmountWithUnit(totalPre);
             myWorksheet.Cell(12, 4).Value = AmountWithUnit(totalPay);
             myWorksheet.Cell(12, 6).Value = AmountWithUnit(totalWith);
             myWorksheet.Cell(12, 7).Value = AmountWithUnit(totalTra);
-            myWorksheet.Cell(12, 8).Value = AmountWithUnit(totalPre + totalPay - totalWith - totalTra);
+            myWorksheet.Cell(12, 8).Value = 
+                AmountWithUnit(totalPre + totalPay - totalWith - totalTra);
         }
 
         protected override double SetMaeginsBottom() { return ToInch(1.9); }
@@ -280,6 +276,6 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetSheetStyle()
         { myWorksheet.Style.NumberFormat.Format = "@"; }
 
-        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
+        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.B5Paper; }
     }
 }

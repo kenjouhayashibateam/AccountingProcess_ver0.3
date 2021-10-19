@@ -43,7 +43,7 @@ namespace Infrastructure
             return list;
         }
 
-        public int PreviousDayFinalAmount(bool isShunjuen) { return 0; }
+        public int PreviousDayFinalAmount() { return 0; }
 
         public int ReceiptsAndExpenditurePreviousDayChange
             (ReceiptsAndExpenditure receiptsAndExpenditure)

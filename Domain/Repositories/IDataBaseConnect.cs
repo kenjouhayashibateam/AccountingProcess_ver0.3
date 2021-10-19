@@ -224,10 +224,10 @@ namespace Domain.Repositories
                     DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
                     bool sortDirection);
         /// <summary>
-        /// 前日決算額を返します
+        /// 春秋苑会計の前日決算額を返します
         /// </summary>
         /// <returns>決算額</returns>
-        public int PreviousDayFinalAmount(bool isShunjuen);
+        public int PreviousDayFinalAmount();
         /// <summary>
         /// 前年度決算を登録します
         /// </summary>

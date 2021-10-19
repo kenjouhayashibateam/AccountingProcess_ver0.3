@@ -188,8 +188,7 @@ namespace WPF.ViewModels
             SetWithdrawalSumAndTransferSum();
             SetBalanceFinalAccount();
             AccountingProcessLocation.OriginalTotalAmount =
-                DataBaseConnect.PreviousDayFinalAmount
-                    (AccountingProcessLocation.IsAccountingGenreShunjuen);
+                DataBaseConnect.PreviousDayFinalAmount();
         }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
@@ -310,7 +309,8 @@ namespace WPF.ViewModels
             
             previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
 
-            FinalAccountCategory = AccountingProcessLocation.Location == "管理事務所" ? "前日決算" : "預かり金額";
+            FinalAccountCategory =
+                AccountingProcessLocation.Location == "管理事務所" ? "前日決算" : "預かり金額";
 
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
         }
@@ -322,7 +322,8 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.Location == "青蓮堂") { return; }
             TodayWroteList = DataBaseConnect.ReferenceReceiptsAndExpenditure
                    (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
-                        string.Empty, string.Empty, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                        string.Empty, string.Empty, string.Empty, string.Empty,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen,
                         false, true, true, true,
                         new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), DateTime.Today, DateTime.Today);
         }
@@ -390,15 +391,43 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.IsAccountingGenreShunjuen)
             {
                 await Task.Run(() =>
-                DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
-                    PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
-                    TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
-                    AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
-                    IsYokohamaBankCheck, IsCeresaCheck));
+                    DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
+                        PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
+                        TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
+                        AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
+                        IsYokohamaBankCheck, IsCeresaCheck));
             }
             else
             {
-                await Task.Run(()=>)
+                int rengeanPDFA = DataBaseConnect.ReturnWizeCoreDayBalance
+                        ( DateTime.Now, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.繰越);
+                int rengeanPay = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.入金);
+                int rengeanWith = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.出金);
+                int rengeanBank = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.銀行振替);
+                int shunjuanPDFA = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.繰越);
+                int shunjuanPay = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.入金);
+                int shunjuanWith = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.出金);
+                int shunjuanBank = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.銀行振替);
+                int kougePDFA = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.繰越);
+                int kougePay = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.入金);
+                int kougeWith = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.出金);
+                int kougeBank = DataBaseConnect.ReturnWizeCoreDayBalance
+                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.銀行振替);
+
+                await Task.Run(() =>
+                    DataOutput.BalanceFinalAccount(rengeanPDFA, rengeanPay, rengeanWith, rengeanBank,
+                        shunjuanPDFA, shunjuanPay, shunjuanWith, shunjuanBank, kougePDFA, kougePay,
+                        kougeWith, kougeBank, IntAmount(YokohamaBankAmount), IntAmount(PairAmount)));
             }
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
@@ -946,7 +975,8 @@ namespace WPF.ViewModels
                 if (value)
                 {
                     SearchOutputDateEnd = DateTime.Today;
-                    OutputMenuHeader = "各種出力（出力済みのデータがリストに表示されているため、操作出来ません。）";
+                    OutputMenuHeader =
+                        "各種出力（出力済みのデータがリストに表示されているため、操作出来ません。）";
                 }
                 else
                 {
@@ -1222,7 +1252,8 @@ namespace WPF.ViewModels
                 BalanceFinalAccount =
                     $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
                     $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-                    $"{AmountWithUnit(PaymentSum)}-{Space}{AmountWithUnit(WithdrawalSum + TransferSum)}" +
+                    $"{AmountWithUnit(PaymentSum)}-{Space}" +
+                    $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
                     $"{Space}={Space}{AmountWithUnit(ListAmount)}\r\n" +
                     $"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
                     $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";

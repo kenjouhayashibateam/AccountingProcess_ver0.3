@@ -161,11 +161,10 @@ namespace WPF.ViewModels
         }
         private MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo()
         {
-            bool b = AccountingProcessLocation.IsAccountingGenreShunjuen;
             MessageBox = new MessageBoxInfo()
             {
                 Message =
-                    $"前年度決算額 {AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(b))} " +
+                    $"前年度決算額 {AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount())} " +
                     $"を登録します。\r\n\r\nよろしいですか？",
                 Image = MessageBoxImage.Question,
                 Title = "登録確認",
@@ -459,7 +458,7 @@ namespace WPF.ViewModels
                 if (KanriJimushoChecked)
                 {
                     AccountingProcessLocation.OriginalTotalAmount =
-                        DataBaseConnect.PreviousDayFinalAmount(value);
+                        DataBaseConnect.PreviousDayFinalAmount();
                     SetLocationKanriJimusho();
                 }
                 else if(ShorendoChecked)
@@ -539,7 +538,7 @@ namespace WPF.ViewModels
             }
             ConfirmationPerMonthFinalAccount();
             AccountingProcessLocation.OriginalTotalAmount = 
-                DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
+                DataBaseConnect.PreviousDayFinalAmount();
             DepositAmountInfo = "前日決算金額";
             DepositAmount = CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = IsCreateVoucherEnabled =
