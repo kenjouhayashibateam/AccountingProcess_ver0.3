@@ -152,12 +152,16 @@ namespace WPF.ViewModels
                 return;
             }
             //前月決算が登録されていれば登録ボタンを隠す
-            if (IsRegistrationPerMonthFinalAccountVisiblity)
-            { IsRegistrationPerMonthFinalAccountVisiblity = DataBaseConnect.CallFinalAccountPerMonth() == 0; }
+            if (IsShunjuen) { SetButtonVsisbility(); }
             //登録ボタンが可視化されていなければ処理を終了する
             if (!IsRegistrationPerMonthFinalAccountVisiblity) { return; }
 
             RegistrationPrecedingYearFinalAccount();
+            void SetButtonVsisbility()
+            {
+                if (IsRegistrationPerMonthFinalAccountVisiblity)
+                { IsRegistrationPerMonthFinalAccountVisiblity = DataBaseConnect.CallFinalAccountPerMonth() == 0; }
+            }
         }
         private MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo()
         {
@@ -181,7 +185,8 @@ namespace WPF.ViewModels
         private void RegistrationPrecedingYearFinalAccount()
         {
             if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) { return; }
-            _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
+            if (IsShunjuen) { _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount(); }
+
             IsRegistrationPerMonthFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
         }
         /// <summary>
@@ -537,8 +542,11 @@ namespace WPF.ViewModels
                 IsWizeCoreMenuEnabled = true;
             }
             ConfirmationPerMonthFinalAccount();
-            AccountingProcessLocation.OriginalTotalAmount = 
-                DataBaseConnect.PreviousDayFinalAmount();
+            if (IsShunjuen)
+            {
+                AccountingProcessLocation.OriginalTotalAmount =
+                    DataBaseConnect.PreviousDayFinalAmount();
+            }
             DepositAmountInfo = "前日決算金額";
             DepositAmount = CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = IsCreateVoucherEnabled =

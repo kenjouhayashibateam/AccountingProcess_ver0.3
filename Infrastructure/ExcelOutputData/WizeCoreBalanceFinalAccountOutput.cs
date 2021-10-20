@@ -109,16 +109,16 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetBorderStyle()
         {
             //印欄
-            MySheetCellRange(4, 6, 5, 8).Style
+            _ = MySheetCellRange(4, 6, 5, 8).Style
                 .Border.SetRightBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
             //残高、仮払金
-            MySheetCellRange(5, 1, 6, 4).Style
+            _ = MySheetCellRange(5, 1, 6, 4).Style
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
             //金額表
-            MySheetCellRange(8, 1, 12, 8).Style
+            _ = MySheetCellRange(8, 1, 12, 8).Style
                 .Border.SetRightBorder(XLBorderStyleValues.Thin)
                 .Border.SetLeftBorder(XLBorderStyleValues.Thin)
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
@@ -128,50 +128,50 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetCellsStyle()
         {
             //タイトル
-            myWorksheet.Cell(1, 1).Style
+            _ = myWorksheet.Cell(1, 1).Style
                 .Font.SetFontSize(22)
                 .Font.SetUnderline()
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //タイトル以下のフォントサイズ
-            MySheetCellRange(2, 1, 12, 8).Style
+            _ = MySheetCellRange(2, 1, 12, 8).Style
                 .Font.SetFontSize(11);
             //日付、社名
-            MySheetCellRange(2, 7, 3, 7).Style
+            _ = MySheetCellRange(2, 7, 3, 7).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             //係印
-            MySheetCellRange(4, 6, 4, 8).Style
+            _ = MySheetCellRange(4, 6, 4, 8).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //横浜銀行残高の縦位置
-            MySheetCellRange(5, 1, 5, 3).Style
+            _ = MySheetCellRange(5, 1, 5, 3).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
             //残高、仮払金文字列の横位置
-            MySheetCellRange(5, 1, 6, 1).Style
+            _ = MySheetCellRange(5, 1, 6, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
             //残高、仮払金の金額横位置
-            MySheetCellRange(5, 3, 6, 3).Style
+            _ = MySheetCellRange(5, 3, 6, 3).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             //仮払金文字列、金額の縦位置
-            MySheetCellRange(6, 1, 6, 3).Style
+            _ = MySheetCellRange(6, 1, 6, 3).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //表タイトルの位置設定
-            MySheetCellRange(8, 1, 8, 8).Style
+            _ = MySheetCellRange(8, 1, 8, 8).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //内訳タイトルの位置設定
-            MySheetCellRange(9, 1, 12, 1).Style
+            _ = MySheetCellRange(9, 1, 12, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //表の値欄の位置設定
-            MySheetCellRange(9, 2, 12, 8).Style
+            _ = MySheetCellRange(9, 2, 12, 8).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
         }
 
         protected override double[] SetColumnSizes()
-        { return new double[] { 8.42, 2.75, 8.58, 6.08, 5.25, 11.92, 11.92, 11.92 }; }
+        { return new double[] { 8.43, 4.14, 7.86, 6.14, 6.14, 12.71, 12.71, 12.71 }; }
 
         protected override void SetDataStrings()
         {
@@ -249,23 +249,23 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            MySheetCellRange(1, 1, 1, SetColumnSizes().Length).Merge();//タイトル
-            MySheetCellRange(2, 7, 2, 8).Merge();//日付
-            MySheetCellRange(3, 7, 3, 8).Merge();//社名
-            MySheetCellRange(5, 1, 5, 2).Merge();//残高文字列
-            MySheetCellRange(5, 3, 5, 4).Merge();//残高金額
-            MySheetCellRange(6, 1, 6, 2).Merge();//仮払金文字列
-            MySheetCellRange(6, 3, 6, 4).Merge();//仮払金額
-            MySheetCellRange(8, 2, 8, 3).Merge();//表タイトル繰越
-            MySheetCellRange(8, 4, 8, 5).Merge();//表タイトル入金
-            MySheetCellRange(9, 2, 9, 3).Merge();//蓮華庵繰越
-            MySheetCellRange(9, 4, 9, 5).Merge();//蓮華庵入金
-            MySheetCellRange(10, 2, 10, 3).Merge();//春秋庵繰越
-            MySheetCellRange(10, 4, 10, 5).Merge();//春秋庵入金
-            MySheetCellRange(11, 2, 11, 3).Merge();//香華繰越
-            MySheetCellRange(11, 4, 11, 5).Merge();//香華入金
-            MySheetCellRange(12, 2, 12, 3).Merge();//合計繰越
-            MySheetCellRange(12, 4, 12, 5).Merge();//合計入金
+            _ = MySheetCellRange(1, 1, 1, SetColumnSizes().Length).Merge();//タイトル
+            _ = MySheetCellRange(2, 7, 2, 8).Merge();//日付
+            _ = MySheetCellRange(3, 7, 3, 8).Merge();//社名
+            _ = MySheetCellRange(5, 1, 5, 2).Merge();//残高文字列
+            _ = MySheetCellRange(5, 3, 5, 4).Merge();//残高金額
+            _ = MySheetCellRange(6, 1, 6, 2).Merge();//仮払金文字列
+            _ = MySheetCellRange(6, 3, 6, 4).Merge();//仮払金額
+            _ = MySheetCellRange(8, 2, 8, 3).Merge();//表タイトル繰越
+            _ = MySheetCellRange(8, 4, 8, 5).Merge();//表タイトル入金
+            _ = MySheetCellRange(9, 2, 9, 3).Merge();//蓮華庵繰越
+            _ = MySheetCellRange(9, 4, 9, 5).Merge();//蓮華庵入金
+            _ = MySheetCellRange(10, 2, 10, 3).Merge();//春秋庵繰越
+            _ = MySheetCellRange(10, 4, 10, 5).Merge();//春秋庵入金
+            _ = MySheetCellRange(11, 2, 11, 3).Merge();//香華繰越
+            _ = MySheetCellRange(11, 4, 11, 5).Merge();//香華入金
+            _ = MySheetCellRange(12, 2, 12, 3).Merge();//合計繰越
+            _ = MySheetCellRange(12, 4, 12, 5).Merge();//合計入金
         }
 
         protected override double[] SetRowSizes()
