@@ -111,10 +111,10 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="account">貸方勘定</param>
         /// <param name="isValidityTrueOnly">有効な物のみ表示</param>
-        /// <param name="isShunjuenAccountOnly">春秋苑会計に掲載されるデータのみ表示</param>
+        /// <param name="isShunjuenAccount">春秋苑会計か</param>
         /// <returns>貸方勘定リスト</returns>
         public ObservableCollection<CreditDept> ReferenceCreditDept
-            (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly);
+            (string account, bool isValidityTrueOnly, bool isShunjuenAccount);
         /// <summary>
         /// 伝票内容検索
         /// </summary>
@@ -224,25 +224,38 @@ namespace Domain.Repositories
                     DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
                     bool sortDirection);
         /// <summary>
-        /// 春秋苑会計の前日決算額を返します
+        /// 前日決算額を返します
         /// </summary>
         /// <returns>決算額</returns>
-        public int PreviousDayFinalAmount();
+        public int PreviousDayFinalAmount(bool isShunjuen);
         /// <summary>
-        /// 前年度決算を登録します
+        /// 貸方部門の前日決算額を返します
+        /// </summary>
+        /// <param name="creditDept"></param>
+        /// <returns></returns>
+        public int PreviousDayFinalAmount(CreditDept creditDept);
+        /// <summary>
+        /// 春秋苑前年度決算を登録します
         /// </summary>
         public int RegistrationPrecedingYearFinalAccount();
         /// <summary>
-        /// 前月決算額を返します
+        /// ワイズコア前年度決算を登録します
         /// </summary>
+        /// <param name="creditDept"></param>
         /// <returns></returns>
-        public int CallFinalAccountPerMonth();
+        public int RegistrationPrecedingYearFinalAccount(CreditDept creditDept);
         /// <summary>
-        /// 引数の前月決算額を返します
+        /// ワイズコアの前年度決算額を返します
+        /// </summary>
+        /// <param name="creditDept"></param>
+        /// <returns></returns>
+        public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept);
+        /// <summary>
+        /// 春秋苑の前年度決算額を返します
         /// </summary>
         /// <param name="date">基準の日付</param>
         /// <returns></returns>
-        public int CallFinalAccountPerMonth(DateTime date);
+        public int CallPrecedingYearFinalAccount(DateTime date);
         /// <summary>
         /// 伝票の出力日を前日に変更します
         /// </summary>

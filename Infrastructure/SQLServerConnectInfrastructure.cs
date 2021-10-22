@@ -200,13 +200,13 @@ namespace Infrastructure
         }
 
         public ObservableCollection<CreditDept> ReferenceCreditDept
-            (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
+            (string account, bool isValidityTrueOnly, bool isShunjuenAccount)
         {
             ObservableCollection<CreditDept> creditDepts = new ObservableCollection<CreditDept>();
             Parameters = new Dictionary<string, object>()
             {
                 {"@dept", account },{ "@true_only", isValidityTrueOnly},
-                {"@shunjuen_account_only", isShunjuenAccountOnly }
+                {"@shunjuen_account", isShunjuenAccount }
             };
 
             SqlDataReader DataReader = ReturnGeneretedParameterCommand
@@ -216,7 +216,7 @@ namespace Infrastructure
             {
                 creditDepts.Add
                     (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"],
-                    (bool)DataReader["is_validity"], isShunjuenAccountOnly));
+                    (bool)DataReader["is_validity"], isShunjuenAccount));
             }
 
             return creditDepts;
@@ -452,55 +452,71 @@ namespace Infrastructure
                 ("update_receipts_and_expenditure").ExecuteNonQuery();
         }
 
-        public int PreviousDayFinalAmount()
+        public int PreviousDayFinalAmount(bool isShunjuen)
         {
             SettingConectionString();
-            SqlCommand Cmd = new SqlCommand($"select dbo.return_previous_day_final_amount('true')", Cn);
+            SqlCommand Cmd = new SqlCommand
+                ($"select dbo.return_previous_day_final_amount('" +
+                    $"{AccountingProcessLocation.IsAccountingGenreShunjuen}')", Cn);
             Cn.Open();
-            object obj;
-            using (Cn) { obj = Cmd.ExecuteScalar(); }
+            int amount = default;
+            using (Cn) { amount = (int)Cmd.ExecuteScalar(); }
 
-            return (int)obj;
+            return amount;
+        }
+
+        public int PreviousDayFinalAmount(CreditDept creditDept) 
+        {
+            SettingConectionString();
+            SqlCommand cmd = new SqlCommand
+                ($"return_previous_day_final_credit_dept_amount({creditDept.ID})", Cn);
+
+            int amount = default;
+            using (Cn) { amount = (int)cmd.ExecuteScalar(); }
+
+            return amount;
         }
 
         public int RegistrationPrecedingYearFinalAccount()
         {
-            SqlCommand Cmd;
-
-            using (Cn)
-            {
-                Cmd = NewCommand(CommandType.Text, "registration_preceding_year_final_account_table");
-                return Cmd.ExecuteNonQuery();
-            }
+            return ReturnGeneretedParameterCommand
+                ("registration_preceding_year_final_account_table").ExecuteNonQuery();
         }
 
-        public int CallFinalAccountPerMonth()
+        public int RegistrationPrecedingYearFinalAccount(CreditDept creditDept)
         {
-            int i = default;
-            DateTime previousMonthLastDay =
-                DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)).AddDays(-1);
+            Parameters = new Dictionary<string, object>() { { "@credit_dept_id", creditDept.ID } };
 
-            Parameters = new Dictionary<string, object>() { { "@date", previousMonthLastDay } };
-
-            SqlDataReader sdr = ReturnGeneretedParameterCommand
-                ("call_final_account_per_month").ExecuteReader();
-
-            while (sdr.Read()) { i = (int)sdr["amount"]; }
-
-            return i;
+            return ReturnGeneretedParameterCommand
+                ("registration_wizecore_preceding_year_final_account_table").ExecuteNonQuery();
         }
 
-        public int CallFinalAccountPerMonth(DateTime date)
+        public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept)
+        {
+            SqlCommand cmd =
+                new SqlCommand("select dbo.call_previous_month_final_account(@date,@credit_dept", Cn);
+            _ = cmd.Parameters.AddWithValue("@date", date);
+            _ = cmd.Parameters.AddWithValue("@credit_dept", creditDept);
+            Cn.Open();
+
+            int amount = default;
+            using (Cn) { amount = (int)cmd.ExecuteScalar(); }
+
+            return amount;
+        }
+
+        public int CallPrecedingYearFinalAccount(DateTime date)
         {
             SettingConectionString();
-            SqlCommand Cmd = new SqlCommand("select dbo.call_previous_month_final_account(@date)", Cn);
+            SqlCommand Cmd =
+                new SqlCommand("select dbo.call_shunjuen_preceding_year_final_account(@date)", Cn);
             _ = Cmd.Parameters.AddWithValue("@date", date);
             Cn.Open();
 
-            object obj;
-            using (Cn) { obj = Cmd.ExecuteScalar(); }
+            int amount = default;
+            using (Cn) { amount = (int)Cmd.ExecuteScalar(); }
 
-            return (int)obj;
+            return amount;
         }
 
         public int ReceiptsAndExpenditurePreviousDayChange

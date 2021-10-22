@@ -3,6 +3,7 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using WPF.ViewModels.Commands;
@@ -24,7 +25,7 @@ namespace WPF.ViewModels
         private bool kanriJimushoChecked;
         private bool isSlipManagementEnabled;
         private bool isDepositMenuEnabled;
-        private bool isRegistrationPerMonthFinalAccountVisiblity;
+        private bool isRegistrationPrecedingYearFinalAccountVisiblity;
         private bool isLogoutEnabled;
         private bool isCreateVoucherEnabled;
         private bool isPartTransportRegistrationEnabled;
@@ -32,6 +33,7 @@ namespace WPF.ViewModels
         private bool isShunjuenMenuEnabled;
         private bool isWizeCoreMenuEnabled;
         private bool isCondolenceEnabled;
+        private bool isUpdatePrecedingYearfinalAccountVisibility;
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private string depositAmount;
         private string depositAmountInfo;
@@ -70,7 +72,7 @@ namespace WPF.ViewModels
                     () => SetOperationButtonEnabled());
             ShowCreateVoucherCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateVoucher()), () => true);
-            RegistrationPerMonthFinalAccountCommand =
+            RegistrationPrecedingYearFinalAccountCommand =
                 new DelegateCommand(() => RegistrationPrecedingYearFinalAccount(), () => true);
             LogoutCommand =
                 new DelegateCommand(() => Logout(), () => true);
@@ -139,11 +141,14 @@ namespace WPF.ViewModels
         /// <summary>
         /// 前月決算額を確認したうえで登録します
         /// </summary>
-        private void ConfirmationPerMonthFinalAccount()
+        private void ConfirmationPrecedingYearFinalAccount()
         {
-            //今日の日付が4月1日なら登録ボタンを可視化する
-            IsRegistrationPerMonthFinalAccountVisiblity =
-                DateTime.Today == CurrentFiscalYearFirstDate;
+            //今日の日付が4月1日~4月20日なら登録ボタンを可視化する
+            IsRegistrationPrecedingYearFinalAccountVisiblity =
+                IsUpdatePrecedingYearfinalAccountVisibility =
+                DateTime.Today > CurrentFiscalYearFirstDate &&
+                DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
+
             if (string.IsNullOrEmpty(LoginRep.Rep.Name))
             {
                 CallNoLoginMessage();
@@ -152,42 +157,84 @@ namespace WPF.ViewModels
                 return;
             }
             //前月決算が登録されていれば登録ボタンを隠す
-            if (IsShunjuen) { SetButtonVsisbility(); }
+            if (IsRegistrationPrecedingYearFinalAccountVisiblity) { SetButtonVsisbility(); }
             //登録ボタンが可視化されていなければ処理を終了する
-            if (!IsRegistrationPerMonthFinalAccountVisiblity) { return; }
+            if (!IsRegistrationPrecedingYearFinalAccountVisiblity) { return; }
 
             RegistrationPrecedingYearFinalAccount();
+
             void SetButtonVsisbility()
             {
-                if (IsRegistrationPerMonthFinalAccountVisiblity)
-                { IsRegistrationPerMonthFinalAccountVisiblity = DataBaseConnect.CallFinalAccountPerMonth() == 0; }
+                if (IsShunjuen)
+                {
+                    IsRegistrationPrecedingYearFinalAccountVisiblity =
+                        DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today) == 0;
+                }
+                else
+                {
+                    ObservableCollection<CreditDept> list = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+                    int amount = default;
+
+                    foreach (CreditDept cd in list)
+                    { amount += DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, cd); }
+                    IsRegistrationPrecedingYearFinalAccountVisiblity = amount == 0;
+                }
             }
         }
-        private MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo()
-        {
-            MessageBox = new MessageBoxInfo()
-            {
-                Message =
-                    $"前年度決算額 {AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount())} " +
-                    $"を登録します。\r\n\r\nよろしいですか？",
-                Image = MessageBoxImage.Question,
-                Title = "登録確認",
-                Button = MessageBoxButton.YesNo
-            };
-            CallPropertyChanged(nameof(MessageBox));
-            return MessageBox.Result;
-        }
-
         /// <summary>
-        /// 前月決算を登録します
+        /// 前年度決算を登録します
         /// </summary>
-        public DelegateCommand RegistrationPerMonthFinalAccountCommand { get; set; }
+        public DelegateCommand RegistrationPrecedingYearFinalAccountCommand { get; set; }
         private void RegistrationPrecedingYearFinalAccount()
         {
-            if (CallPreviousPerMonthFinalAccountRegisterInfo() == MessageBoxResult.No) { return; }
-            if (IsShunjuen) { _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount(); }
+            CreditDept creditDept = null;
 
-            IsRegistrationPerMonthFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
+            if (IsShunjuen) { ShunjuenRegistration(); }
+            else { WizeCoreOperation(); }
+
+            void WizeCoreOperation()
+            {
+                bool IsNotExistsData = false;
+                foreach (CreditDept cd in DataBaseConnect.ReferenceCreditDept(string.Empty, true, false))
+                {
+                    if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, cd) != 0) { continue; }
+
+                    creditDept = cd;
+                    if (CallPreviousPerMonthFinalAccountRegisterInfo(cd.Dept) == MessageBoxResult.Yes)
+                    { Registration(cd); }
+                    else { IsNotExistsData = true; }
+                }
+                IsRegistrationPrecedingYearFinalAccountVisiblity = IsNotExistsData;
+            }
+
+            void ShunjuenRegistration()
+            {
+                if (CallPreviousPerMonthFinalAccountRegisterInfo("春秋苑") == MessageBoxResult.Yes)
+                {
+                    _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
+                    IsRegistrationPrecedingYearFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
+                }
+            }
+
+            void Registration(CreditDept creditDept)
+            { _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount(creditDept); }
+
+            MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo(string accountingDept)
+            {
+                string amount = IsShunjuen ? AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(true)) :
+                    AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(creditDept));
+
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message =
+                    $"{accountingDept}前年度決算額{Space}{amount}を登録します。\r\n\r\nよろしいですか？",
+                    Image = MessageBoxImage.Question,
+                    Title = "登録確認",
+                    Button = MessageBoxButton.YesNo
+                };
+                CallPropertyChanged(nameof(MessageBox));
+                return MessageBox.Result;
+            }
         }
         /// <summary>
         /// ログインしていないことを案内します
@@ -392,12 +439,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 前月決算登録ボタンのVisiblity
         /// </summary>
-        public bool IsRegistrationPerMonthFinalAccountVisiblity
+        public bool IsRegistrationPrecedingYearFinalAccountVisiblity
         {
-            get => isRegistrationPerMonthFinalAccountVisiblity;
+            get => isRegistrationPrecedingYearFinalAccountVisiblity;
             set
             {
-                isRegistrationPerMonthFinalAccountVisiblity = value;
+                isRegistrationPrecedingYearFinalAccountVisiblity = value;
                 CallPropertyChanged();
             }
         }
@@ -463,7 +510,7 @@ namespace WPF.ViewModels
                 if (KanriJimushoChecked)
                 {
                     AccountingProcessLocation.OriginalTotalAmount =
-                        DataBaseConnect.PreviousDayFinalAmount();
+                        DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
                     SetLocationKanriJimusho();
                 }
                 else if(ShorendoChecked)
@@ -521,6 +568,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 前年度決算更新ボタンのvisibility
+        /// </summary>
+        public bool IsUpdatePrecedingYearfinalAccountVisibility
+        {
+            get => isUpdatePrecedingYearfinalAccountVisibility;
+            set
+            {
+                isUpdatePrecedingYearfinalAccountVisibility = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -541,12 +600,11 @@ namespace WPF.ViewModels
                 IsShunjuenMenuEnabled = false;
                 IsWizeCoreMenuEnabled = true;
             }
-            ConfirmationPerMonthFinalAccount();
-            if (IsShunjuen)
-            {
-                AccountingProcessLocation.OriginalTotalAmount =
-                    DataBaseConnect.PreviousDayFinalAmount();
-            }
+            ConfirmationPrecedingYearFinalAccount();
+
+            AccountingProcessLocation.OriginalTotalAmount =
+                DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
+
             DepositAmountInfo = "前日決算金額";
             DepositAmount = CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = IsCreateVoucherEnabled =
@@ -590,7 +648,7 @@ namespace WPF.ViewModels
             if (!b)
             {
                 WavSoundPlayCommand.Play("Shutdown.wav");
-                Thread.Sleep(2800);//wav再生時間の取得方法を模索すること。21.9.19時点でいいのがなかった
+                Thread.Sleep(2700);//wav再生時間の取得方法を模索すること。21.9.19時点でいいのがなかった
             }
             return b;
         }

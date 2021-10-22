@@ -112,9 +112,7 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowAccountTitleListPDFFileCommand { get; set; }
         private void ShowAccountTitleListPDFFile()
-        {
-            _ = System.Diagnostics.Process.Start(@".\files\AccountTitleList.pdf");
-        }
+        { _ = System.Diagnostics.Process.Start(@".\files\AccountTitleList.pdf"); }
         /// <summary>
         /// 詳細メニューのプロパティをセットします
         /// </summary>
@@ -201,14 +199,10 @@ namespace WPF.ViewModels
             }
 
             if (OperationData.Data.Content.Text != ComboContentText)
-            {
-                UpdateCotent += $"内容 : {OperationData.Data.Content.Text} → {ComboContentText}\r\n";
-            }
+            { UpdateCotent += $"内容 : {OperationData.Data.Content.Text} → {ComboContentText}\r\n"; }
 
             if (OperationData.Data.Detail != JoinDetail())
-            {
-                UpdateCotent += $"詳細 : {OperationData.Data.Detail} → {JoinDetail()}\r\n";
-            }
+            { UpdateCotent += $"詳細 : {OperationData.Data.Detail} → {JoinDetail()}\r\n"; }
 
             if (OperationData.Data.Price != IntAmount(price))
             {
@@ -217,9 +211,7 @@ namespace WPF.ViewModels
             }
 
             if (OperationData.Data.IsValidity != IsValidity)
-            {
-                UpdateCotent += $"有効性 : {OperationData.Data.IsValidity} → {IsValidity}\r\n";
-            }
+            { UpdateCotent += $"有効性 : {OperationData.Data.IsValidity} → {IsValidity}\r\n"; }
 
             if (OperationData.Data.OutputDate != SlipOutputDate)
             {
@@ -1321,7 +1313,8 @@ namespace WPF.ViewModels
             ComboAccountingSubjects =
                 DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
                     AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
-            ComboCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, OperationData.Data == null, false);
+            ComboCreditDepts = DataBaseConnect.ReferenceCreditDept
+                (string.Empty, OperationData.Data == null, AccountingProcessLocation.IsAccountingGenreShunjuen);
         }
 
         protected override void SetDelegateCommand()

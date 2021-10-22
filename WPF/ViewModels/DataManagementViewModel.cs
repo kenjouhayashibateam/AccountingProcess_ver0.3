@@ -128,7 +128,8 @@ namespace WPF.ViewModels
             AffiliationAccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
                                                                 (string.Empty, string.Empty,
                                                                     AccountingProcessLocation.IsAccountingGenreShunjuen, true);
-            ContentDefaultCreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+            ContentDefaultCreditDepts = DataBaseConnect.ReferenceCreditDept
+                (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
             SetDataRegistrationCommand.Execute();
             IsContentDefaultCreditDeptRegistration = true;
             IsBranchNumberVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
@@ -166,7 +167,8 @@ namespace WPF.ViewModels
             ReferenceAccountingSubjectCode = string.Empty;
             IsAccountingSubjectValidityTrueOnly = true;
             CreateAccountSubjects();
-            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, false, false);
+            CreditDepts = DataBaseConnect.ReferenceCreditDept
+                (string.Empty, false, AccountingProcessLocation.IsAccountingGenreShunjuen);
             Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty,
                 AccountingProcessLocation.IsAccountingGenreShunjuen, false);
         }
@@ -1445,7 +1447,8 @@ namespace WPF.ViewModels
             CreditDeptOperationButtonContent = "登録中";
             IsCreditDeptOperationButtonEnabled = false;
             _ = await Task.Run(() => _ = DataBaseConnect.Registration(CurrentCreditDept));
-            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, IsCreditDeptValidityTrueOnly, false);
+            CreditDepts = DataBaseConnect.ReferenceCreditDept
+                (string.Empty, IsCreditDeptValidityTrueOnly, AccountingProcessLocation.IsAccountingGenreShunjuen);
             CreditDeptFieldClear();
             CallCompletedRegistration();
             CreditDeptOperationButtonContent = "登録";

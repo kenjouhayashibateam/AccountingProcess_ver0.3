@@ -19,9 +19,9 @@ namespace Infrastructure
         public CreditDept CallCreditDept(string id)
         { return new CreditDept("credit_dept0", "春秋苑", true, true); }
 
-        public int CallFinalAccountPerMonth() { return 0; }
+        public int CallPrecedingYearFinalAccount(DateTime monthEnd) { return 10000; }
 
-        public int CallFinalAccountPerMonth(DateTime monthEnd) { return 10000; }
+        public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept) { return 5000; }
 
         public Rep CallRep(string id) { return new Rep("rep0", "林飛 顕誠", GetHashValue("aaa", "rep0"), true, true); }
 
@@ -43,7 +43,9 @@ namespace Infrastructure
             return list;
         }
 
-        public int PreviousDayFinalAmount() { return 0; }
+        public int PreviousDayFinalAmount(bool isShunjuen) { return 0; }
+
+        public int PreviousDayFinalAmount(CreditDept creditDept) { return 0; }
 
         public int ReceiptsAndExpenditurePreviousDayChange
             (ReceiptsAndExpenditure receiptsAndExpenditure)
@@ -271,7 +273,7 @@ namespace Infrastructure
         public string CallContentConvertText(string id) { return null; }
 
         public ObservableCollection<CreditDept> ReferenceCreditDept
-            (string account, bool isValidityTrueOnly, bool isShunjuenAccountOnly)
+            (string account, bool isValidityTrueOnly, bool isShunjuenAccount)
         {
             ObservableCollection<CreditDept> list = new ObservableCollection<CreditDept>
             {
@@ -502,6 +504,8 @@ namespace Infrastructure
         public int Registration(string id, string contentConvertText) { return 1; }
 
         public int RegistrationPrecedingYearFinalAccount() { return 1; }
+
+        public int RegistrationPrecedingYearFinalAccount(CreditDept creditDept) { return 1; }
 
         public int Update(Rep rep) { return 1; }
 

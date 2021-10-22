@@ -45,7 +45,8 @@ namespace WPF.ViewModels
             (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
             Pagination.Add(this);
-            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+            CreditDepts = DataBaseConnect.ReferenceCreditDept
+                (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
             SelectedCreditDept = CreditDepts[0];
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
                 (string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, true);

@@ -914,14 +914,10 @@ namespace WPF.ViewModels
         }
 
         protected override void SetDataList()
-        {
-            SoryoList = DataBaseConnect.GetSoryoList();
-        }
+        { SoryoList = DataBaseConnect.GetSoryoList(); }
 
         protected override void SetDataOperationButtonContent(DataOperation operation)
-        {
-            DataOperationButtonContent = operation.ToString();
-        }
+        { DataOperationButtonContent = operation.ToString(); }
 
         protected override void SetDelegateCommand()
         {
@@ -929,8 +925,7 @@ namespace WPF.ViewModels
             OperationDataCommand = new DelegateCommand(() => OperationData(), () => true);
             AlmsgivingSearchCommand = new DelegateCommand(() => AlmsgivingSearch(), () => true);
             TipSearchCommand = new DelegateCommand(() => TipSearch(), () => true);
-            SocialGatheringSearchCommand = new DelegateCommand
-                (() => SocialGatheringSearch(), () => true);
+            SocialGatheringSearchCommand = new DelegateCommand(() => SocialGatheringSearch(), () => true);
             DeleteCondolenceCommand = new DelegateCommand(() => DeleteCondolence(), () => true);
             AmountClearCommand = new DelegateCommand(() => AmountClear(), () => true);
         }
@@ -938,9 +933,7 @@ namespace WPF.ViewModels
         protected override void SetDetailLocked() { }
 
         protected override void SetWindowDefaultTitle()
-        {
-            WindowTitle = $"お布施一覧データ出力 : {AccountingProcessLocation.Location}";
-        }
+        { DefaultWindowTitle = $"お布施一覧データ作成：{AccountingProcessLocation.Location}"; }
 
         public void CondolenceNotify() { FieldClear(); }
 
@@ -951,9 +944,7 @@ namespace WPF.ViewModels
         public void SetSortColumns()
         {
             Pagination.SortColumns = new Dictionary<int, string>()
-            {
-                {0,"ID" },{1,"入金日"}
-            };
+            {{0,"ID" },{1,"入金日"}};
         }
     }
 }

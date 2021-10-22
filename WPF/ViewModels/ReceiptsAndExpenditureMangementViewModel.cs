@@ -188,7 +188,7 @@ namespace WPF.ViewModels
             SetWithdrawalSumAndTransferSum();
             SetBalanceFinalAccount();
             AccountingProcessLocation.OriginalTotalAmount =
-                DataBaseConnect.PreviousDayFinalAmount();
+                DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
         }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド
@@ -354,9 +354,7 @@ namespace WPF.ViewModels
                 "金庫の金額を計上して下さい" : $"金庫の金額 : {AmountWithUnit(todayTotalAmount)}";
 
             if (todayTotalAmount == PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum)
-            {
-                TodaysFinalAccount = AmountWithUnit(todayTotalAmount);
-            }
+            { TodaysFinalAccount = AmountWithUnit(todayTotalAmount); }
             else
             {
                 int difference = PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum -
@@ -365,6 +363,7 @@ namespace WPF.ViewModels
                     $"リストの収支に対して現金が\r\n{AmountWithUnit(Math.Abs(difference))}" +
                     $"{(difference < 0 ? "超過" : "不足")}しています";
             }
+
             SetOutputGroupEnabled();
         }
         /// <summary>
@@ -372,9 +371,7 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowCashJournalManagementCommand { get; set; }
         private void ShowCashJournalManagement()
-        {
-            CreateShowWindowCommand(ScreenTransition.CashJournalManagement());
-        }
+        { CreateShowWindowCommand(ScreenTransition.CashJournalManagement()); }
 
         /// <summary>
         /// 収支日報出力コマンド
@@ -464,9 +461,7 @@ namespace WPF.ViewModels
         /// </summary>
         /// <returns></returns>
         private int ReturnTodaysFinalAccount()
-        {
-            return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
-        }
+        { return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum; }
 
         /// <summary>
         /// 出納データから出金データを取り出し、出金、振替に振り分けて合計を算出します
@@ -484,14 +479,10 @@ namespace WPF.ViewModels
             }
 
             foreach (ReceiptsAndExpenditure rae in AllDataList)
-            {
-                if (!rae.IsPayment) { WithdrawalAllocation(rae); }
-            }
+            { if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
 
             void ContainTodayWroteWithdrawal(ReceiptsAndExpenditure rae)
-            {
-                if (!rae.IsPayment) { WithdrawalAllocation(rae); }
-            }
+            { if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
         }
         /// <summary>
         /// 出金データを出金、振替に振り分けます
@@ -500,13 +491,9 @@ namespace WPF.ViewModels
         private void WithdrawalAllocation(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
             if (receiptsAndExpenditure.Content.Text == "口座入金")
-            {
-                TransferSum += receiptsAndExpenditure.Price;
-            }
+            { TransferSum += receiptsAndExpenditure.Price; }
             else
-            {
-                WithdrawalSum += receiptsAndExpenditure.Price;
-            }
+            { WithdrawalSum += receiptsAndExpenditure.Price; }
         }
         /// <summary>
         /// 本日の入金合計を算出します
@@ -520,15 +507,12 @@ namespace WPF.ViewModels
                 { ContainTodayWrotePayment(rae); }
             }
             foreach (ReceiptsAndExpenditure rae in AllDataList)
-            {
-                if (rae.IsPayment) { i += rae.Price; }
-            }
+            { if (rae.IsPayment) { i += rae.Price; } }
+
             PaymentSum = i;
 
             void ContainTodayWrotePayment(ReceiptsAndExpenditure rae)
-            {
-                i += rae.IsPayment ? rae.Price : 0;
-            }
+            { i += rae.IsPayment ? rae.Price : 0; }
         }
         /// <summary>
         /// 金庫の総計金額
@@ -724,7 +708,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 出金合計
         /// </summary>
-        public int  WithdrawalSum
+        public int WithdrawalSum
         {
             get => withdrawalSum;
             set
@@ -1366,6 +1350,7 @@ namespace WPF.ViewModels
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount,
                 Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
+
             Pagination.TotalRowCount = count;
             ReceiptsAndExpenditures = list;
 

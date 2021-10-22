@@ -122,7 +122,7 @@ namespace Infrastructure.ExcelOutputData
                         myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
                         myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
                         myWorksheet.Cell(StartRowPosition, 4).Value = "前月より繰越";
-                        PreviousDayBalance = DataBaseConnect.CallFinalAccountPerMonth
+                        PreviousDayBalance = DataBaseConnect.CallPrecedingYearFinalAccount
                             (rae.OutputDate);
                         myWorksheet.Cell(StartRowPosition, 9).Value =
                             CommaDelimitedAmount(PreviousDayBalance);
