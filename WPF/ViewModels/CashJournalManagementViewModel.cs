@@ -19,8 +19,10 @@ namespace WPF.ViewModels
         private string yearString;
         private string monthString = DateTime.Today.AddMonths(0).Month.ToString();
         private string outputButtonContent = "出力";
+        private string shunjuenText;
         private bool outputButtonEnabled;
         private bool isClose = true;
+        private bool isDeptVisibility;
         private readonly IDataOutput DataOutput;
 
         public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect,
@@ -29,6 +31,8 @@ namespace WPF.ViewModels
             DataOutput = dataOutput;
             YearString = DateTime.Now.Year.ToString();
             OutputCommand = new DelegateCommand(() => Output(), () => true);
+            IsDeptVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
+            ShunjuenText = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : string.Empty;
         }
         public CashJournalManagementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
@@ -141,6 +145,30 @@ namespace WPF.ViewModels
             set
             {
                 isClose = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方部門項目のVisibility
+        /// </summary>
+        public bool IsDeptVisibility
+        {
+            get => isDeptVisibility;
+            set
+            {
+                isDeptVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 春秋苑会計テキスト、ワイズなら空文字
+        /// </summary>
+        public string ShunjuenText
+        {
+            get => shunjuenText;
+            set
+            {
+                shunjuenText = value;
                 CallPropertyChanged();
             }
         }

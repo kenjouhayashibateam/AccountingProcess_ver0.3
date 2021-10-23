@@ -73,7 +73,7 @@
                 </Button.InputBindings>
             </Button>
         </GroupBox>
-        <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理をする種類、場所を選んでください" Grid.Row="2" Margin="5">
+        <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理設定" Grid.Row="2" Margin="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -111,6 +111,13 @@
                     </Grid>
                 </Grid>
                 <ToggleButton Grid.Column="3" Content="{Binding AccountingGenreContent}" IsChecked="{Binding IsShunjuen}" Margin="10,5"/>
+                <Grid Grid.Column="4" Visibility="{Binding IsWizeCoreMenuVisibility,Converter={StaticResource VisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="PracticalOperationsItemsGroupBox" Header="実務項目" Grid.Row="3" Margin="5">
@@ -176,35 +183,45 @@
         </GroupBox>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="PrecedingYearFinalAccountUpdateButton" Grid.Column="1" Content="前年度決算更新" Visibility="{Binding IsUpdatePrecedingYearfinalAccountVisibility,Converter={StaticResource VisibilityConverter}}" Margin="10,15">
+            <Grid Grid.Column="1" Visibility="{Binding IsCreditDeptVisibility,Converter={StaticResource VisibilityConverter}}">
+            <!--<Grid Grid.Column="1">-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="変更する貸方部門" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                <ComboBox Grid.Row="1" Name="CreditDeptComboBox" ItemsSource="{Binding CreditDepts}" SelectedValue="{Binding SelectedCreditDept}" DisplayMemberPath="Dept" Margin="5,5,5,15"/>
+            </Grid>
+            <Button x:Name="PrecedingYearFinalAccountUpdateButton" Grid.Column="2" Content="前年度決算更新" Visibility="{Binding IsUpdatePrecedingYearfinalAccountVisibility,Converter={StaticResource VisibilityConverter}}" Margin="10,15">
                 
             </Button>
-            <Button x:Name="PrecedingYearFinalAccountRegistrationButton" Grid.Row="0" Grid.Column="2" Visibility="{Binding IsRegistrationPrecedingYearFinalAccountVisiblity,Converter={StaticResource VisibilityConverter}}" Content="前年度決算登録" Margin="10,15" >
+            <Button x:Name="PrecedingYearFinalAccountRegistrationButton" Grid.Row="0" Grid.Column="3" Visibility="{Binding IsRegistrationPrecedingYearFinalAccountVisiblity,Converter={StaticResource VisibilityConverter}}" Content="前年度決算登録" Margin="10,15" >
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding RegistrationPrecedingYearFinalAccountCommand}" Key="Space"/>
                     <MouseBinding Command="{Binding RegistrationPrecedingYearFinalAccountCommand}" MouseAction="LeftClick"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="3" Visibility="{Binding IsAdminPermisson,Converter={StaticResource VisibilityConverter}}" Content="データ管理" Margin="10,15">
+            <Button x:Name="ShowDataManagementViewButton" Grid.Row="0" Grid.Column="4" Visibility="{Binding IsAdminPermisson,Converter={StaticResource VisibilityConverter}}" Content="データ管理" Margin="10,15">
                 <Button.InputBindings>
                     <MouseBinding Command="{Binding ShowDataManagementCommand}" MouseAction="LeftClick"/>
                     <KeyBinding Command="{Binding ShowDataManagementCommand}" Key="Space"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="LogoutButton" Content="ログアウト" Grid.Column="4" IsEnabled="{Binding IsLogoutEnabled}" Margin="10,15">
+            <Button x:Name="LogoutButton" Content="ログアウト" Grid.Column="5" IsEnabled="{Binding IsLogoutEnabled}" Margin="10,15">
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding LogoutCommand}" Key="Space"/>
                     <MouseBinding Command="{Binding LogoutCommand}" MouseAction="LeftClick"/>
                 </Button.InputBindings>
             </Button>
-            <Button x:Name="WindowCloseButton" Grid.Column="5" ToolTip="システムを終了します"  Margin="10,15">
+            <Button x:Name="WindowCloseButton" Grid.Column="6" ToolTip="システムを終了します"  Margin="10,15">
                 <StackPanel>
                     <svcg:SvgViewbox Height="35" behavior:SvgViewboxAttachment.Source="Exit.svg"/>
                 </StackPanel>

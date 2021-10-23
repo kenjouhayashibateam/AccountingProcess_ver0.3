@@ -187,8 +187,11 @@ namespace WPF.ViewModels
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
             SetBalanceFinalAccount();
-            AccountingProcessLocation.OriginalTotalAmount =
-                DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
+            if (AccountingProcessLocation.Location == "管理事務所")
+            {
+                AccountingProcessLocation.OriginalTotalAmount =
+                    DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
+            }
         }
         /// <summary>
         /// 伝票出力で使用するリストを表示するコマンド

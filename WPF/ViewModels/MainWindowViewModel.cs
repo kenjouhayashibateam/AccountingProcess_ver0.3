@@ -19,6 +19,7 @@ namespace WPF.ViewModels
     public class MainWindowViewModel : BaseViewModel, IClosing,IOriginalTotalAmountObserver
     {
         #region Properties
+        #region bools
         private bool callClosingMessage;
         private bool processFeatureEnabled;
         private bool shorendoChecked;
@@ -34,11 +35,15 @@ namespace WPF.ViewModels
         private bool isWizeCoreMenuEnabled;
         private bool isCondolenceEnabled;
         private bool isUpdatePrecedingYearfinalAccountVisibility;
+        private bool isWizeCoreMenuVisibility;
+        private bool isCreditDeptVisibility;
+        #endregion
         private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private string depositAmount;
         private string depositAmountInfo;
         private string showSlipManagementContent;
         private string accountingGenreContent;
+        private CreditDept selectedCreditDept;
         #endregion
 
         public enum Locations
@@ -84,9 +89,16 @@ namespace WPF.ViewModels
             ShowSearchReceiptsAndExpenditureCommand = new DelegateCommand
                 (() => CreateShowWindowCommand
                     (ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
+            CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
-
+        /// <summary>
+        /// 貸方勘定リスト
+        /// </summary>
+        public readonly ObservableCollection<CreditDept> CreditDepts;
+        /// <summary>
+        /// 出納データ閲覧画面表示コマンド
+        /// </summary>
         public DelegateCommand ShowSearchReceiptsAndExpenditureCommand { get; }
         /// <summary>
         /// 経理担当場所を管理事務所に設定するコマンド
@@ -407,6 +419,8 @@ namespace WPF.ViewModels
                     ShowSlipManagementContent =
                         AccountingProcessLocation.OriginalTotalAmount == 0 ?
                             "預かり金額を設定して下さい" : "出納管理";
+
+                    IsCondolenceEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 }
                 depositAmount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
@@ -505,15 +519,17 @@ namespace WPF.ViewModels
             set
             {
                 isShunjuen = value;
-                AccountingGenreContent = value ? "春秋苑会計（工事中)" : "ワイズコア会計（工事中）";
+                AccountingGenreContent = value ? "春秋苑会計" : "ワイズコア会計";
                 AccountingProcessLocation.IsAccountingGenreShunjuen = value;
+                IsWizeCoreMenuVisibility = !value;
+                IsCreditDeptVisibility = !value && IsUpdatePrecedingYearfinalAccountVisibility;
                 if (KanriJimushoChecked)
                 {
                     AccountingProcessLocation.OriginalTotalAmount =
                         DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
                     SetLocationKanriJimusho();
                 }
-                else if(ShorendoChecked)
+                else if (ShorendoChecked)
                 {
                     SetLocationShorendo();
                 }
@@ -580,6 +596,42 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ワイズコアの貸方部門選択メニューのvisibility
+        /// </summary>
+        public bool IsWizeCoreMenuVisibility
+        {
+            get => isWizeCoreMenuVisibility;
+            set
+            {
+                isWizeCoreMenuVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 貸方部門項目のVisibility
+        /// </summary>
+        public bool IsCreditDeptVisibility
+        {
+            get => isCreditDeptVisibility;
+            set
+            {
+                isCreditDeptVisibility = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された貸方部門
+        /// </summary>
+        public CreditDept SelectedCreditDept
+        {
+            get => selectedCreditDept;
+            set
+            {
+                selectedCreditDept = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -589,7 +641,7 @@ namespace WPF.ViewModels
             KanriJimushoChecked = true;
             ProcessFeatureEnabled = true;
             IsDepositMenuEnabled = false;
-            if (IsShunjuen) 
+            if (IsShunjuen)
             {
                 IsShunjuenMenuEnabled = true;
                 IsWizeCoreMenuEnabled = false;
@@ -620,7 +672,7 @@ namespace WPF.ViewModels
             IsDepositMenuEnabled = true;
             ProcessFeatureEnabled = true;
             IsPartTransportRegistrationEnabled = false;
-            if(IsShunjuen)
+            if (IsShunjuen)
             {
                 IsShunjuenMenuEnabled = true;
                 IsWizeCoreMenuEnabled = false;
@@ -703,8 +755,6 @@ namespace WPF.ViewModels
         }
 
         public void OriginalTotalAmoutNotify()
-        {
-            DepositAmount = AmountWithUnit(AccountingProcessLocation.OriginalTotalAmount);
-        }
+        { DepositAmount = AmountWithUnit(AccountingProcessLocation.OriginalTotalAmount); }
     }
 }

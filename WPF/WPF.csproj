@@ -158,6 +158,7 @@
     <Compile Include="Views\CondolenceOperationView.xaml.cs">
       <DependentUpon>CondolenceOperationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Datas\InverseBoolConverter.cs" />
     <Compile Include="Views\CreateCondolencesView.xaml.cs">
       <DependentUpon>CreateCondolencesView.xaml</DependentUpon>
     </Compile>

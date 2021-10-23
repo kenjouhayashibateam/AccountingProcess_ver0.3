@@ -20,11 +20,9 @@ namespace Domain.Entities.ValueObjects
         public void Add(IOriginalTotalAmountObserver originalTotalAmountObserver)
         { Observers.Add(originalTotalAmountObserver); }
         public void Remove(IOriginalTotalAmountObserver originalTotalAmountObserver)
-        { Observers.Remove(originalTotalAmountObserver); }
+        { _ = Observers.Remove(originalTotalAmountObserver); }
         private void Notify()
-        {
-            foreach (IOriginalTotalAmountObserver ota in Observers) { ota.OriginalTotalAmoutNotify(); }
-        }
+        { foreach (IOriginalTotalAmountObserver ota in Observers) { ota.OriginalTotalAmoutNotify(); } }
         /// <summary>
         /// 担当場所
         /// </summary>

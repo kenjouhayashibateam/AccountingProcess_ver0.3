@@ -9,6 +9,7 @@
         xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:data="clr-namespace:WPF.Views.Datas"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="200" Width="350">
@@ -16,6 +17,11 @@
     <Window.DataContext>
         <vm:CashJournalManagementViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <data:InverseBoolConverter x:Key="InverseBool"/>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>
     
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
@@ -29,7 +35,7 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="出力月を設定してボタンをクリックしてください" Margin="5">
@@ -37,8 +43,20 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
+                <TextBlock Grid.Row="0" Text="{Binding ShunjuenText}" VerticalAlignment="Center" Margin="5"/>
+                <Grid Grid.Row="0" Visibility="{Binding IsDeptVisibility,Converter={StaticResource VisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton Grid.Column="0" Content="蓮華庵" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <RadioButton Grid.Column="1" Content="春秋庵" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <RadioButton Grid.Column="2" Content="香華" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -52,7 +70,7 @@
                     <TextBox x:Name="MonthTextBox" Grid.Column="3" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" Text="{Binding MonthString,UpdateSourceTrigger=PropertyChanged}" MaxLength="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" InputMethod.PreferredImeState="Off" Margin="5"/>
                     <TextBlock Text="月の出納帳を出力する" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                 </Grid>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
@@ -74,7 +92,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" IsEnabled="{Binding IsClose}" Grid.Column="3" Margin="5">
                 <StackPanel>
-                    <svgc:SvgViewbox Height="40" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                    <svgc:SvgViewbox Height="20" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
                 </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
