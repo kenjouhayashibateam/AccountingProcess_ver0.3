@@ -288,7 +288,7 @@ namespace WPF.ViewModels
             IsDataOperationButtonEnabled = false;
             ReceiptsAndExpenditure rae =
                 new ReceiptsAndExpenditure
-                (0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location,
+                (0, DateTime.Now, LoginRep.Rep, AccountingProcessLocation.Location.ToString(),
                 SelectedCreditDept, SelectedContent, JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity,
                 AccountActivityDate, DefaultDate, IsReducedTaxRate);
 

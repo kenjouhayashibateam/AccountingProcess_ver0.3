@@ -170,7 +170,7 @@ namespace Domain.Repositories
         /// <param name="registrationDateStart">登録日検索開始日時</param>
         /// <param name="registrationDateEnd">登録日検索最終日時</param>
         /// <param name="location">経理担当場所</param>
-        /// <param name="creditDept">貸方勘定</param>
+        /// <param name="creditDept">貸方部門</param>
         /// <param name="content">内容</param>
         /// <param name="detail">詳細</param>
         /// <param name="accountingSubject">勘定科目</param>
@@ -197,7 +197,7 @@ namespace Domain.Repositories
         /// <param name="registrationDateStart">登録日検索開始日時</param>
         /// <param name="registrationDateEnd">登録日検索最終日時</param>
         /// <param name="location">経理担当場所</param>
-        /// <param name="creditDept">貸方勘定</param>
+        /// <param name="creditDept">貸方部門</param>
         /// <param name="content">内容</param>
         /// <param name="detail">詳細</param>
         /// <param name="accountingSubject">勘定科目</param>

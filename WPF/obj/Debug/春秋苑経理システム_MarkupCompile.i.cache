@@ -16,5 +16,5 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
 31-207628246
 Views\CashJournalManagementView.xaml;Views\CondolenceOperationView.xaml;Views\CreateCondolencesView.xaml;Views\CreateVoucherView.xaml;Views\DataManagementView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\PartTimerTransportationExpensesRegistrationView.xaml;Views\ReceiptsAndExpenditureOperationView.xaml;Views\ReceiptsAndExpenditureRegistrationInputHelperView.xaml;Views\RemainingMoneyCalculationView.xaml;Views\ReceiptsAndExpenditureMangementView.xaml;Views\SearchReceiptsAndExpenditureView.xaml;Views\ShorendoCashBoxCalculationView.xaml;Views\VoucherManagementView.xaml;
 
-False
+True
 

@@ -129,7 +129,7 @@ namespace WPF.ViewModels
             }
 
             Condolence condolence = new Condolence
-                (0, AccountingProcessLocation.Location, addressee, string.Empty, "法事", almsgiving, carTip, mealTip, 
+                (0, AccountingProcessLocation.Location.ToString(), addressee, string.Empty, "法事", almsgiving, carTip, mealTip, 
                     carAndMealTip, socialGethering, string.Empty, accountActivityDate, LoginRep.GetInstance().Rep.Name,
                     string.Empty);
             CondolenceOperation co = CondolenceOperation.GetInstance();
@@ -312,8 +312,8 @@ namespace WPF.ViewModels
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today,
-                AccountingProcessLocation.Location, string.Empty, string.Empty, string.Empty, string.Empty,
-                string.Empty, true, true, true, true, true, SearchDate, SearchDate, DefaultDate,
+                AccountingProcessLocation.Location.ToString(), string.Empty, string.Empty, string.Empty,
+                string.Empty,string.Empty, true, true, true, true, true, SearchDate, SearchDate, DefaultDate,
                 DateTime.Today, Pagination.PageCount, Pagination.SelectedSortColumn,
                 Pagination.SortDirectionIsASC);
 

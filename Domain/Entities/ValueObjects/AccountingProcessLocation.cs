@@ -7,6 +7,13 @@ namespace Domain.Entities.ValueObjects
     {
         void OriginalTotalAmoutNotify();
     }
+
+    public enum Locations
+    {
+        管理事務所,
+        青蓮堂
+    }
+
     /// <summary>
     /// 経理担当場所（シングルトン）
     /// </summary>
@@ -14,7 +21,8 @@ namespace Domain.Entities.ValueObjects
     {
         private static readonly AccountingProcessLocation accountingLocation =
             new AccountingProcessLocation();
-        private readonly List<IOriginalTotalAmountObserver> Observers = new List<IOriginalTotalAmountObserver>();
+        private readonly List<IOriginalTotalAmountObserver> Observers =
+            new List<IOriginalTotalAmountObserver>();
         private static int originalTotalAmount;
 
         public void Add(IOriginalTotalAmountObserver originalTotalAmountObserver)
@@ -26,7 +34,7 @@ namespace Domain.Entities.ValueObjects
         /// <summary>
         /// 担当場所
         /// </summary>
-        public static string Location { get; set; }
+        public static Locations Location { get; set; }
         /// <summary>
         /// 金庫計算、出納登録前の金額
         /// </summary>
@@ -49,7 +57,7 @@ namespace Domain.Entities.ValueObjects
         /// 担当場所を設定します
         /// </summary>
         /// <param name="location">場所</param>
-        public static void SetLocation(string location) { Location = location; }
+        public static void SetLocation(Locations location) { Location = location; }
         /// <summary>
         /// 春秋苑の会計かﾜｲｽﾞｺｱの会計か
         /// </summary>

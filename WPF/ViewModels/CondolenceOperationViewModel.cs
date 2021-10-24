@@ -112,10 +112,15 @@ namespace WPF.ViewModels
         public DelegateCommand AmountClearCommand { get; set; }
         private void AmountClear()
         {
+            AlmsgivingAmount = 0;
             Almsgiving = AmountWithUnit(0);
+            CarAndMealTipAmount = 0;
             CarTip = AmountWithUnit(0);
+            MealTipAmount = 0;
             MealTip = AmountWithUnit(0);
+            CarAndMealTipAmount = 0;
             CarAndMealTip = AmountWithUnit(0);
+            SocialGatheringAmount = 0;
             SocialGathering = AmountWithUnit(0);
         }
         /// <summary>
@@ -221,11 +226,7 @@ namespace WPF.ViewModels
             AccountActivityDate = DefaultDate;
             OwnerName = string.Empty;
             SoryoName = string.Empty;
-            Almsgiving = string.Empty;
-            CarTip = string.Empty;
-            MealTip = string.Empty;
-            CarAndMealTip = string.Empty;
-            SocialGathering = string.Empty;
+            AmountClear();
             Note = string.Empty;
             FixToggle = true;
             IsAlmsgivingSearch = true;
@@ -240,7 +241,7 @@ namespace WPF.ViewModels
         private void OperationData()
         {
             OperationCondolence = new Condolence
-                (ID, AccountingProcessLocation.Location, OwnerName, GetFirstName(SoryoName),
+                (ID, AccountingProcessLocation.Location.ToString(), OwnerName, GetFirstName(SoryoName),
                     ContentText, IntAmount(Almsgiving), IntAmount(CarTip), IntAmount(MealTip),
                     IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note, AccountActivityDate,
                     IsReceptionBlank ? string.Empty : CounterReceiver,

@@ -46,11 +46,6 @@ namespace WPF.ViewModels
         private CreditDept selectedCreditDept;
         #endregion
 
-        public enum Locations
-        {
-            管理事務所,
-            青蓮堂
-        }
         /// <summary>
         /// コンストラクタ　DelegateCommand、LoginRepのインスタンスを生成します
         /// </summary>
@@ -271,7 +266,7 @@ namespace WPF.ViewModels
             ShowSlipManagementContent = "出納管理";
             if (!ReturnIsRepLogin()) { return false; }
 
-            if (AccountingProcessLocation.Location == Locations.管理事務所.ToString()) { return true; }
+            if (AccountingProcessLocation.Location == Locations.管理事務所) { return true; }
 
             bool b = !string.IsNullOrEmpty(DepositAmount);
             if (!b)
@@ -320,7 +315,7 @@ namespace WPF.ViewModels
                     string.Empty : "、収支日報";
             }
 
-            if (AccountingProcessLocation.Location != "管理事務所") { NoOutputed = string.Empty; }
+            if (AccountingProcessLocation.Location != Locations.管理事務所) { NoOutputed = string.Empty; }
 
             NoOutputed = string.IsNullOrEmpty(NoOutputed) ?
                 string.Empty : $"\r\n\r\n\t※{NoOutputed}が出力されていません";
@@ -368,7 +363,7 @@ namespace WPF.ViewModels
             set
             {
                 kanriJimushoChecked = value;
-                if (value) { AccountingProcessLocation.SetLocation(Locations.管理事務所.ToString()); }
+                if (value) { AccountingProcessLocation.SetLocation(Locations.管理事務所); }
                 ValidationProperty(nameof(KanriJimushoChecked), value);
                 CallPropertyChanged();
             }
@@ -382,7 +377,7 @@ namespace WPF.ViewModels
             set
             {
                 shorendoChecked = value;
-                if (value) { AccountingProcessLocation.SetLocation(Locations.青蓮堂.ToString()); }
+                if (value) { AccountingProcessLocation.SetLocation(Locations.青蓮堂); }
                 ValidationProperty(nameof(ShorendoChecked), value);
                 CallPropertyChanged();
             }

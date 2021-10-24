@@ -23,7 +23,14 @@ namespace WPF.ViewModels
         private bool outputButtonEnabled;
         private bool isClose = true;
         private bool isDeptVisibility;
+        private bool isRengean;
+        private bool isShunjuan;
+        private bool isKouge;
         private readonly IDataOutput DataOutput;
+        /// <summary>
+        /// 出納帳で限定する貸方部門
+        /// </summary>
+        private CreditDept OutputCreditDept;
 
         public CashJournalManagementViewModel(IDataBaseConnect dataBaseConnect,
             IDataOutput dataOutput) : base(dataBaseConnect)
@@ -32,6 +39,7 @@ namespace WPF.ViewModels
             YearString = DateTime.Now.Year.ToString();
             OutputCommand = new DelegateCommand(() => Output(), () => true);
             IsDeptVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
+            OutputButtonEnabled = IsDeptVisibility ? OutputCreditDept != null : IsDeptVisibility;
             ShunjuenText = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : string.Empty;
         }
         public CashJournalManagementViewModel() :
@@ -169,6 +177,50 @@ namespace WPF.ViewModels
             set
             {
                 shunjuenText = value;
+                CallPropertyChanged();
+            }
+        }
+        private void SetCreditDept(string dept)
+        {
+            OutputCreditDept = DataBaseConnect.ReferenceCreditDept(dept, true, false)[0];
+            OutputButtonEnabled = true;
+        }
+        /// <summary>
+        /// 蓮華庵チェック
+        /// </summary>
+        public bool IsRengean
+        {
+            get => isRengean;
+            set
+            {
+                isRengean = value;
+                if (value) { SetCreditDept("蓮華庵"); }
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 春秋庵チェック
+        /// </summary>
+        public bool IsShunjuan
+        {
+            get => isShunjuan;
+            set
+            {
+                isShunjuan = value;
+                if (value) { SetCreditDept("春秋庵"); }
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 香華チェック
+        /// </summary>
+        public bool IsKouge
+        {
+            get => isKouge;
+            set
+            {
+                isKouge = value;
+                if (value) { SetCreditDept("香華"); }
                 CallPropertyChanged();
             }
         }

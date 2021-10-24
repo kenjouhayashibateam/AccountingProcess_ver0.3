@@ -52,9 +52,9 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton Grid.Column="0" Content="蓮華庵" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <RadioButton Grid.Column="1" Content="春秋庵" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <RadioButton Grid.Column="2" Content="香華" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <RadioButton Grid.Column="0" Content="蓮華庵" IsChecked="{Binding IsRengean}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <RadioButton Grid.Column="1" Content="春秋庵" IsChecked="{Binding IsShunjuan}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <RadioButton Grid.Column="2" Content="香華" IsChecked="{Binding IsKouge}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>

@@ -247,7 +247,7 @@ namespace WPF.ViewModels
         {
             Pagination.CountReset(isPageCountReset);
 
-            string location = IsLocationLimiting ? AccountingProcessLocation.Location : string.Empty;
+            string location = IsLocationLimiting ? AccountingProcessLocation.Location.ToString() : string.Empty;
 
             (int count, ObservableCollection<Condolence> list) =
                 DataBaseConnect.ReferenceCondolence

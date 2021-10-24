@@ -32,13 +32,15 @@ namespace WPF.ViewModels
 
             OperationData.SetData
                 (new ReceiptsAndExpenditure
-                    (0, DateTime.Today, LoginRep.GetInstance().Rep, AccountingProcessLocation.Location, cd, c, 
+                    (0, DateTime.Today, LoginRep.GetInstance().Rep,
+                        AccountingProcessLocation.Location.ToString(), cd, c,
                         string.Empty, 0, true, true, DateTime.Today, DefaultDate, false));
 
             InputContentCommand = new DelegateCommand(() => InputContent(), () => true);
         }
-        public ReceiptsAndExpenditureRegistrationHelperViewModel() : 
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public ReceiptsAndExpenditureRegistrationHelperViewModel() :
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        { }
         /// <summary>
         /// OperationDataを更新してウィンドウを閉じるコマンド
         /// </summary>

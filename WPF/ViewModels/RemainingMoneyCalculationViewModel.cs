@@ -814,7 +814,7 @@ namespace WPF.ViewModels
                 new DelegateCommand(() => SetOtherMoneyTitleDefault(), () => true);
             DefaultWindowTitle = "金庫金額計算";
             OutputButtonEnabled = true;
-            if (AccountingProcessLocation.Location == MainWindowViewModel.Locations.管理事務所.ToString())
+            if (AccountingProcessLocation.Location == Locations.管理事務所)
             { SetOtherMoneyTitleDefault(); }
         }
         public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }

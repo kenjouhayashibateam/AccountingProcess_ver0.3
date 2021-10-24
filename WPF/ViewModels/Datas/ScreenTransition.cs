@@ -15,7 +15,7 @@ namespace WPF.ViewModels.Datas
         /// <returns>金庫金額計算ウィンドウインスタンス</returns>
         public static Window RemainingMoneyCalculation()
         {
-            return AccountingProcessLocation.Location == "管理事務所" ?
+            return AccountingProcessLocation.Location == Locations.管理事務所 ?
                 new RemainingMoneyCalculationView() :
                 (Window)new ShorendoCashBoxCalculationView();
         }

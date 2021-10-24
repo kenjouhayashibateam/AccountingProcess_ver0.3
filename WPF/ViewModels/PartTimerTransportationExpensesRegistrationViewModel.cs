@@ -43,7 +43,8 @@ namespace WPF.ViewModels
             string countInfo;
             LoginRep loginRep = LoginRep.GetInstance();
             ReceiptsAndExpenditure templateReceiptsAndExpenditure =
-                new ReceiptsAndExpenditure(0, DateTime.Today, loginRep.Rep, AccountingProcessLocation.Location,
+                new ReceiptsAndExpenditure(0, DateTime.Today, loginRep.Rep, 
+                    AccountingProcessLocation.Location.ToString(),
                     DataBaseConnect.CallCreditDept("credit_dept1"), DataBaseConnect.CallContent("content16"),
                     string.Empty, 0, false, true, DateTime.Today, DefaultDate, false);
             //pdListにPartDataを格納して、登録する件数を計算する

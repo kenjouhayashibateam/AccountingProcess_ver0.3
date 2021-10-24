@@ -82,7 +82,7 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetBorderStyle()
         {
             //管理事務所と青蓮堂でボーダースタイルを変える
-            if (AccountingProcessLocation.Location == "管理事務所")
+            if (AccountingProcessLocation.Location == Locations.管理事務所)
             {
                 _ = MySheetCellRange(5, 3, 6, 5).Style
                     .Border.SetBottomBorder(XLBorderStyleValues.Thin)
@@ -145,7 +145,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(10, 3).Value = WithdrawalWithUnit;
             myWorksheet.Cell(10, 5).Value = TodayFinalAccountWithUnit;
 
-            if (AccountingProcessLocation.Location == "管理事務所")
+            if (AccountingProcessLocation.Location == Locations.管理事務所)
             {
                 myWorksheet.Cell(5, 3).Value = "本部長";
                 myWorksheet.Cell(5, 4).Value = "副住職";
