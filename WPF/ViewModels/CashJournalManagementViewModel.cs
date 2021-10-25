@@ -39,7 +39,7 @@ namespace WPF.ViewModels
             YearString = DateTime.Now.Year.ToString();
             OutputCommand = new DelegateCommand(() => Output(), () => true);
             IsDeptVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
-            OutputButtonEnabled = IsDeptVisibility ? OutputCreditDept != null : IsDeptVisibility;
+            OutputButtonEnabled = IsDeptVisibility ? OutputCreditDept != null : true;
             ShunjuenText = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : string.Empty;
         }
         public CashJournalManagementViewModel() :
@@ -58,6 +58,8 @@ namespace WPF.ViewModels
             DateTime searchDateEnd =
                 searchDateStart == DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)) ? DateTime.Today :
                                                 searchDateStart.AddMonths(1).AddDays(-1);
+            string dept = AccountingProcessLocation.IsAccountingGenreShunjuen ? string.Empty :
+                OutputCreditDept.Dept;
 
             if (searchDateStart < new DateTime(2021, 4, 1))
             {
@@ -72,7 +74,7 @@ namespace WPF.ViewModels
                 () => DataOutput.ReceiptsAndExpenditureData
                     (
                         DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Now, string.Empty, string.Empty, string.Empty, string.Empty,
+                            (DefaultDate, DateTime.Now, string.Empty, dept, string.Empty, string.Empty,
                                 string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
                                 false, true, true, true, DefaultDate, DateTime.Now, searchDateStart, searchDateEnd)
                     )
