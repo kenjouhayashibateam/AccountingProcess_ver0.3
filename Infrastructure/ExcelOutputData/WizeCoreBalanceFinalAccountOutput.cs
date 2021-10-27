@@ -1,9 +1,6 @@
 ﻿using ClosedXML.Excel;
+using Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace Infrastructure.ExcelOutputData
@@ -141,7 +138,7 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             //係印
-            _ = MySheetCellRange(4, 6, 4, 8).Style
+            _ = MySheetCellRange(4, 6, 5, 8).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             //横浜銀行残高の縦位置
@@ -187,6 +184,7 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(4, 6).Value = "承認印";
             myWorksheet.Cell(4, 7).Value = "経理印";
             myWorksheet.Cell(4, 8).Value = "係印";
+            myWorksheet.Cell(5, 8).Value = LoginRep.GetInstance().Rep.FirstName;
             //残高
             myWorksheet.Cell(5, 1).Value = "横浜銀行残高";
             myWorksheet.Cell(5, 3).Value = AmountWithUnit(YokohamaBankAmount);

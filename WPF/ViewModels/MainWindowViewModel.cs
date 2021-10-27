@@ -16,7 +16,7 @@ namespace WPF.ViewModels
     /// <summary>gds
     /// メインウィンドウ
     /// </summary>
-    public class MainWindowViewModel : BaseViewModel, IClosing,IOriginalTotalAmountObserver
+    public class MainWindowViewModel : BaseViewModel, IClosing, IOriginalTotalAmountObserver
     {
         #region Properties
         #region bools
@@ -56,7 +56,8 @@ namespace WPF.ViewModels
             IsShunjuen = true;
 
             ShowRemainingMoneyCalculationCommand = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.RemainingMoneyCalculation()), () => true);
+                (() => CreateShowWindowCommand
+                    (ScreenTransition.RemainingMoneyCalculation()), () => true);
             MessageBoxCommand =
                 new DelegateCommand(() => ClosingMessage(), () => true);
             SetLocationKanriJimushoCommand =
@@ -179,7 +180,8 @@ namespace WPF.ViewModels
                 }
                 else
                 {
-                    ObservableCollection<CreditDept> list = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+                    ObservableCollection<CreditDept> list =
+                        DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
                     int amount = default;
 
                     foreach (CreditDept cd in list)
@@ -219,7 +221,8 @@ namespace WPF.ViewModels
                 if (CallPreviousPerMonthFinalAccountRegisterInfo("春秋苑") == MessageBoxResult.Yes)
                 {
                     _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
-                    IsRegistrationPrecedingYearFinalAccountVisiblity = false;//前年度決算が登録されたので、登録ボタンを隠す
+                    //前年度決算が登録されたので、登録ボタンを隠す
+                    IsRegistrationPrecedingYearFinalAccountVisiblity = false;
                 }
             }
 
@@ -306,7 +309,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void ClosingMessage()
         {
-            string NoOutputed = AccountingProcessLocation.IsCashBoxOutputed ? string.Empty : "金種表";
+            string NoOutputed =
+                AccountingProcessLocation.IsCashBoxOutputed ? string.Empty : "金種表";
 
             if (string.IsNullOrEmpty(NoOutputed)) { NoOutputed = "収支日報"; }
             else
@@ -315,7 +319,8 @@ namespace WPF.ViewModels
                     string.Empty : "、収支日報";
             }
 
-            if (AccountingProcessLocation.Location != Locations.管理事務所) { NoOutputed = string.Empty; }
+            if (AccountingProcessLocation.Location != Locations.管理事務所)
+            { NoOutputed = string.Empty; }
 
             NoOutputed = string.IsNullOrEmpty(NoOutputed) ?
                 string.Empty : $"\r\n\r\n\t※{NoOutputed}が出力されていません";
@@ -418,6 +423,7 @@ namespace WPF.ViewModels
                     IsCondolenceEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 }
                 depositAmount = CommaDelimitedAmount(value);
+                ValidationProperty(nameof(DepositAmount), value);
                 CallPropertyChanged();
             }
         }
@@ -653,8 +659,10 @@ namespace WPF.ViewModels
                 DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
 
             DepositAmountInfo = "前日決算金額";
-            DepositAmount = CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
-            IsSlipManagementEnabled = IsPartTransportRegistrationEnabled = IsCreateVoucherEnabled =
+            DepositAmount =
+                CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
+            IsSlipManagementEnabled = IsPartTransportRegistrationEnabled =
+                IsCreateVoucherEnabled =
                 LoginRep.Rep.Name != string.Empty;
             ShowSlipManagementContent = "出納管理";
         }
@@ -695,7 +703,8 @@ namespace WPF.ViewModels
             if (!b)
             {
                 WavSoundPlayCommand.Play("Shutdown.wav");
-                Thread.Sleep(2700);//wav再生時間の取得方法を模索すること。21.9.19時点でいいのがなかった
+                //wav再生時間の取得方法を模索すること。21.9.19時点でいいのがなかった
+                Thread.Sleep(2700);
             }
             return b;
         }
@@ -708,6 +717,9 @@ namespace WPF.ViewModels
                     SetLocationErrorsListOperation(propertyName);
                     break;
                 case nameof(ShorendoChecked):
+                    SetLocationErrorsListOperation(propertyName);
+                    break;
+                case nameof(DepositAmount):
                     SetLocationErrorsListOperation(propertyName);
                     break;
                 default:
@@ -724,7 +736,9 @@ namespace WPF.ViewModels
                     "経理担当場所を設定して下さい");
             if (GetErrors(propertyName) == null)
             {
-                ErrorsListOperation(shorendoChecked & string.IsNullOrEmpty(DepositAmount),
+                ErrorsListOperation
+                    (shorendoChecked & 
+                    (string.IsNullOrEmpty(DepositAmount) || IntAmount(DepositAmount) == 0),
                     nameof(DepositAmount), "金額を入力してください");
             }
         }
