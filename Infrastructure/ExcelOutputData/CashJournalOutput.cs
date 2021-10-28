@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
 using System.Collections;
@@ -122,8 +123,9 @@ namespace Infrastructure.ExcelOutputData
                         myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
                         myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
                         myWorksheet.Cell(StartRowPosition, 4).Value = "前月より繰越";
-                        PreviousDayBalance = DataBaseConnect.CallPrecedingYearFinalAccount
-                            (rae.OutputDate);
+                        PreviousDayBalance = DataBaseConnect.CallFinalMonthFinalAccount
+                            (rae.OutputDate, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                                AccountingProcessLocation.IsAccountingGenreShunjuen ? null : rae.CreditDept);
                         myWorksheet.Cell(StartRowPosition, 9).Value =
                             CommaDelimitedAmount(PreviousDayBalance);
                         pageBalance += PreviousDayBalance;

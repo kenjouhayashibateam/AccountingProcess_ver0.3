@@ -170,3 +170,4 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.Gene
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CoreCompileInputs.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete

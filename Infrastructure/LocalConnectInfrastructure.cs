@@ -666,5 +666,8 @@ namespace Infrastructure
 
             return i;
         }
+
+        public int CallFinalMonthFinalAccount(DateTime date, bool isShunjuen, CreditDept creditDept)
+        { return 1000; }
     }
 }

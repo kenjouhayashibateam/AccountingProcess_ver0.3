@@ -982,5 +982,20 @@ namespace Infrastructure
         {
             throw new NotImplementedException();
         }
+
+        public int CallFinalMonthFinalAccount(DateTime date, bool isShunjuen, CreditDept creditDept)
+        {
+            SettingConectionString();
+            string dept = creditDept == null ? string.Empty : creditDept.Dept;
+            SqlCommand cmd =
+                new SqlCommand($"select dbo.call_previous_month_final_account('{date}','{isShunjuen}','{dept}')", Cn);
+
+            Cn.Open();
+
+            int amount = default;
+            using (Cn) { amount = (int)cmd.ExecuteScalar(); }
+
+            return amount;
+        }
     }
 }
