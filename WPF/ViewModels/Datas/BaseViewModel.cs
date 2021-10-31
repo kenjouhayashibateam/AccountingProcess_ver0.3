@@ -108,6 +108,7 @@ namespace WPF.ViewModels.Datas
                 callShowMessageBox = value;
                 CallPropertyChanged();
                 callShowMessageBox = false;
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -190,7 +191,8 @@ namespace WPF.ViewModels.Datas
         /// <returns>エラー内容</returns>
         public IEnumerable GetErrors(string propertyName)
         {
-            return !CurrentErrors.ContainsKey(propertyName) ? null : (IEnumerable)CurrentErrors[propertyName];
+            return !CurrentErrors.ContainsKey(propertyName) ?
+                null : (IEnumerable)CurrentErrors[propertyName];
         }
         /// <summary>
         /// エラーリスト
@@ -262,6 +264,20 @@ namespace WPF.ViewModels.Datas
                 string s = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : "ワイズコア会計";
                 WindowTitle =
                     $"{DefaultWindowTitle}（ログイン{Space}:{Space}{rep.FirstName}）{s}";
+                if (!DataBaseConnect.IsConnectiongProductionServer())
+                {
+                    MessageBox = new MessageBoxInfo()
+                    {
+                        Message =
+                            $"テストサーバーに接続されているため正規のデータの呼び出し、書き込みが出来なくなっています。\r\n" +
+                            $"開発担当者に、正規サーバーへの接続の修正を依頼して下さい。",
+                        Title = "接続が正しくありません",
+                        Image = MessageBoxImage.Exclamation,
+                        Button = MessageBoxButton.OK
+                    };
+                    CallShowMessageBox = true;
+                    WavSoundPlayCommand.Play("DQnoroi.wav");
+                }
             }
         }
         /// <summary>

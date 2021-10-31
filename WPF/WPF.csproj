@@ -139,6 +139,7 @@
     <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureOperationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureRegistrationHelperViewModel.cs" />
+    <Compile Include="ViewModels\RegistrationFlowerSellReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
     <Compile Include="ViewModels\SearchReceiptsAndExpenditureViewModel.cs" />
@@ -188,6 +189,9 @@
     </Compile>
     <Compile Include="Views\ReceiptsAndExpenditureRegistrationInputHelperView.xaml.cs">
       <DependentUpon>ReceiptsAndExpenditureRegistrationInputHelperView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml.cs">
+      <DependentUpon>RegistrationFlowerSellReceiptsAndExpenditureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RemainingMoneyCalculationView.xaml.cs">
       <DependentUpon>RemainingMoneyCalculationView.xaml</DependentUpon>
@@ -251,6 +255,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReceiptsAndExpenditureRegistrationInputHelperView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

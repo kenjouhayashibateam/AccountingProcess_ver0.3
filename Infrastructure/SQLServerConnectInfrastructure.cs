@@ -33,7 +33,13 @@ namespace Infrastructure
             Cn = new SqlConnection
             {
                 ConnectionString = Properties.Settings.Default.SystemAdminConnection
+                //ConnectionString = Properties.Settings.Default.TestServerConnectionString
             };
+        }
+        public bool IsConnectiongProductionServer()
+        {
+            SettingConectionString();
+            return Cn.ConnectionString == Properties.Settings.Default.SystemAdminConnection;
         }
         /// <summary>
         /// sqlを実行するコマンドを生成します
@@ -996,6 +1002,26 @@ namespace Infrastructure
             using (Cn) { amount = (int)cmd.ExecuteScalar(); }
 
             return amount;
+        }
+
+        public int UpdatePrecedingYearFinalAccount()
+        {
+            int amount = CallFinalMonthFinalAccount(new DateTime(DateTime.Today.Year, 4, 1), true, null);
+            Parameters = new Dictionary<string, object>()
+            { {"@reference_date",DateTime.Today},{ "@amount",amount} };
+
+            return ReturnGeneretedParameterCommand
+                ("update_preceding_year_final_account").ExecuteNonQuery();
+        }
+
+        public int UpdatePrecedingYearFinalAccount(CreditDept creditDept)
+        {
+            int amount = CallFinalMonthFinalAccount(new DateTime(DateTime.Today.Year, 4, 1), false, creditDept);
+            Parameters = new Dictionary<string, object>()
+            { {"@reference_date",DateTime.Today},{"@credit_dept_id",creditDept.ID},{"@amount",amount }};
+
+            return ReturnGeneretedParameterCommand
+                ("update_wize_core_preceding_year_final_account").ExecuteNonQuery();
         }
     }
 }

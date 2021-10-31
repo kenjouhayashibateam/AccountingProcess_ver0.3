@@ -669,5 +669,13 @@ namespace Infrastructure
 
         public int CallFinalMonthFinalAccount(DateTime date, bool isShunjuen, CreditDept creditDept)
         { return 1000; }
+
+        public int UpdatePrecedingYearFinalAccount()
+        { return 1; }
+
+        public int UpdatePrecedingYearFinalAccount(CreditDept creditDept)
+        { return 1; }
+
+        public bool IsConnectiongProductionServer() { return true; }
     }
 }

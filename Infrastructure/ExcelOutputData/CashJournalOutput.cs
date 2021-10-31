@@ -122,7 +122,8 @@ namespace Infrastructure.ExcelOutputData
                     {
                         myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
                         myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
-                        myWorksheet.Cell(StartRowPosition, 4).Value = "前月より繰越";
+                        myWorksheet.Cell(StartRowPosition, 4).Value =
+                            CurrentDate.Month == 4 ? "前年度より繰越" : "前月より繰越";
                         PreviousDayBalance = DataBaseConnect.CallFinalMonthFinalAccount
                             (rae.OutputDate, AccountingProcessLocation.IsAccountingGenreShunjuen,
                                 AccountingProcessLocation.IsAccountingGenreShunjuen ? null : rae.CreditDept);

@@ -55,5 +55,16 @@ namespace Infrastructure.Properties {
                 return ((string)(this["SingyoujiDataBaseConnection"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.156\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
+            "sa;Password=sqlserver")]
+        public string TestServerConnectionString {
+            get {
+                return ((string)(this["TestServerConnectionString"]));
+            }
+        }
     }
 }

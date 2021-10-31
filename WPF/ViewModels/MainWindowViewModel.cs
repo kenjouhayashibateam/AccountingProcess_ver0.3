@@ -34,11 +34,11 @@ namespace WPF.ViewModels
         private bool isShunjuenMenuEnabled;
         private bool isWizeCoreMenuEnabled;
         private bool isCondolenceEnabled;
-        private bool isUpdatePrecedingYearfinalAccountVisibility;
+        private bool isUpdatePrecedingYearFinalAccountVisibility;
         private bool isWizeCoreMenuVisibility;
         private bool isCreditDeptVisibility;
+        private bool isCommonEnabled;
         #endregion
-        private readonly LoginRep LoginRep = LoginRep.GetInstance();
         private string depositAmount;
         private string depositAmountInfo;
         private string showSlipManagementContent;
@@ -51,7 +51,7 @@ namespace WPF.ViewModels
         /// </summary>
         public MainWindowViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+            LoginRep.GetInstance().SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
             AccountingProcessLocation.GetInstance().Add(this);
             IsShunjuen = true;
 
@@ -86,8 +86,65 @@ namespace WPF.ViewModels
                 (() => CreateShowWindowCommand
                     (ScreenTransition.SearchReceiptsAndExpenditure()), () => true);
             CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+            UpdatePrecedingYearFinalAccountCommand = new DelegateCommand
+                (() => UpdatePrecedingYearFinalAccount(), () => true);
+            ShowRegistrationFlowerReceiptsAndExpenditureCommand = new DelegateCommand
+                (() => CreateShowWindowCommand
+                    (ScreenTransition.RegistrationFlowerReceiptsAndExpenditure()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 花売りデータ登録画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowRegistrationFlowerReceiptsAndExpenditureCommand { get; }
+        /// <summary>
+        /// 前年度決算更新コマンド
+        /// </summary>
+        public DelegateCommand UpdatePrecedingYearFinalAccountCommand { get; }
+        private void UpdatePrecedingYearFinalAccount()
+        {
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen)
+            { UpdateShunjuenFinalAccount(); }
+            else { UpdateWizeCoreFinalAccount(); }
+
+            void UpdateWizeCoreFinalAccount()
+            {
+                if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, SelectedCreditDept) ==
+                    DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, false, SelectedCreditDept))
+                {
+                    CallNoUPdateMessage(SelectedCreditDept.Dept, 
+                        DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, false, SelectedCreditDept));
+                    return;
+                }
+                _ = DataBaseConnect.UpdatePrecedingYearFinalAccount(SelectedCreditDept);
+            }
+
+            void UpdateShunjuenFinalAccount()
+            {
+                if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today) ==
+                    DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, true, null))
+                {
+                    CallNoUPdateMessage
+                        ("春秋苑", DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today));
+                    return;
+                }
+                _ = DataBaseConnect.UpdatePrecedingYearFinalAccount();
+            }
+
+            void CallNoUPdateMessage(string dept, int finalAmount)
+            {
+                MessageBox = new MessageBoxInfo()
+                {
+                    Message = $"{dept}{Space}前年度決算額{Space}" +
+                                    $"{AmountWithUnit(finalAmount)}は更新の必要がありません。" +
+                                    $"\r\n出納データを更新した場合のみクリックしてください",
+                    Title = "更新不要通知",
+                    Button = MessageBoxButton.OK,
+                    Image = MessageBoxImage.Information
+                };
+                CallShowMessageBox = true;
+            }
+        }
         /// <summary>
         /// 貸方勘定リスト
         /// </summary>
@@ -139,12 +196,14 @@ namespace WPF.ViewModels
         public DelegateCommand LogoutCommand { get; set; }
         private void Logout()
         {
-            LoginRep.SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
+            LoginRep.GetInstance().SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
             IsSlipManagementEnabled = false;
             IsCreateVoucherEnabled = false;
             IsPartTransportRegistrationEnabled = false;
             ShowSlipManagementContent = "出納管理";
             IsLogoutEnabled = false;
+            IsCondolenceEnabled = false;
+            IsCommonEnabled = false;
         }
         /// <summary>
         /// 前月決算額を確認したうえで登録します
@@ -153,18 +212,18 @@ namespace WPF.ViewModels
         {
             //今日の日付が4月1日~4月20日なら登録ボタンを可視化する
             IsRegistrationPrecedingYearFinalAccountVisiblity =
-                IsUpdatePrecedingYearfinalAccountVisibility =
                 DateTime.Today > CurrentFiscalYearFirstDate &&
-                DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
+                DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20)
+                && LoginRep.GetInstance().Rep.IsAdminPermisson;
 
-            if (string.IsNullOrEmpty(LoginRep.Rep.Name))
+            if (string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name))
             {
                 CallNoLoginMessage();
                 IsSlipManagementEnabled = false;
                 ShowSlipManagementContent = "出納管理";
                 return;
             }
-            //前月決算が登録されていれば登録ボタンを隠す
+            //前月決算が登録されていれば登録ボタンを隠して更新ボタンを可視化する
             if (IsRegistrationPrecedingYearFinalAccountVisiblity) { SetButtonVsisbility(); }
             //登録ボタンが可視化されていなければ処理を終了する
             if (!IsRegistrationPrecedingYearFinalAccountVisiblity) { return; }
@@ -188,6 +247,8 @@ namespace WPF.ViewModels
                     { amount += DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, cd); }
                     IsRegistrationPrecedingYearFinalAccountVisiblity = amount == 0;
                 }
+                IsUpdatePrecedingYearFinalAccountVisibility =
+                    !IsRegistrationPrecedingYearFinalAccountVisiblity;
             }
         }
         /// <summary>
@@ -301,7 +362,7 @@ namespace WPF.ViewModels
         /// <returns>判定結果</returns>
         private bool ReturnIsRepLogin()
         {
-            bool b = LoginRep.Rep.ID != string.Empty;
+            bool b = LoginRep.GetInstance().Rep.ID != string.Empty;
             return b;
         }
         /// <summary>
@@ -408,7 +469,7 @@ namespace WPF.ViewModels
             set
             {
                 AccountingProcessLocation.OriginalTotalAmount = IntAmount(value);
-                if (LoginRep.Rep.Name != string.Empty)
+                if (LoginRep.GetInstance().Rep.Name != string.Empty)
                 {
                     IsSlipManagementEnabled = IsCreateVoucherEnabled =
                         AccountingProcessLocation.OriginalTotalAmount != 0;
@@ -422,6 +483,7 @@ namespace WPF.ViewModels
 
                     IsCondolenceEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 }
+                SetMenuEnabled();
                 depositAmount = CommaDelimitedAmount(value);
                 ValidationProperty(nameof(DepositAmount), value);
                 CallPropertyChanged();
@@ -523,7 +585,9 @@ namespace WPF.ViewModels
                 AccountingGenreContent = value ? "春秋苑会計" : "ワイズコア会計";
                 AccountingProcessLocation.IsAccountingGenreShunjuen = value;
                 IsWizeCoreMenuVisibility = !value;
-                IsCreditDeptVisibility = !value && IsUpdatePrecedingYearfinalAccountVisibility;
+                IsCreditDeptVisibility =
+                    !value && IsUpdatePrecedingYearFinalAccountVisibility && LoginRep.GetInstance().Rep.IsAdminPermisson;
+
                 if (KanriJimushoChecked)
                 {
                     AccountingProcessLocation.OriginalTotalAmount =
@@ -531,9 +595,7 @@ namespace WPF.ViewModels
                     SetLocationKanriJimusho();
                 }
                 else if (ShorendoChecked)
-                {
-                    SetLocationShorendo();
-                }
+                { SetLocationShorendo(); }
                 CallPropertyChanged();
             }
         }
@@ -588,12 +650,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 前年度決算更新ボタンのvisibility
         /// </summary>
-        public bool IsUpdatePrecedingYearfinalAccountVisibility
+        public bool IsUpdatePrecedingYearFinalAccountVisibility
         {
-            get => isUpdatePrecedingYearfinalAccountVisibility;
+            get => isUpdatePrecedingYearFinalAccountVisibility;
             set
             {
-                isUpdatePrecedingYearfinalAccountVisibility = value;
+                isUpdatePrecedingYearFinalAccountVisibility = value;
                 CallPropertyChanged();
             }
         }
@@ -633,6 +695,18 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 共通処理メニューのEnabled
+        /// </summary>
+        public bool IsCommonEnabled
+        {
+            get => isCommonEnabled;
+            set
+            {
+                isCommonEnabled = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -654,7 +728,6 @@ namespace WPF.ViewModels
                 IsWizeCoreMenuEnabled = true;
             }
             ConfirmationPrecedingYearFinalAccount();
-
             AccountingProcessLocation.OriginalTotalAmount =
                 DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
 
@@ -662,19 +735,13 @@ namespace WPF.ViewModels
             DepositAmount =
                 CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled =
-                IsCreateVoucherEnabled =
-                LoginRep.Rep.Name != string.Empty;
+                IsCreateVoucherEnabled = IsCondolenceEnabled =
+                LoginRep.GetInstance().Rep.Name != string.Empty;
             ShowSlipManagementContent = "出納管理";
         }
-        /// <summary>
-        /// 経理担当場所を青蓮堂に設定します
-        /// </summary>
-        private void SetLocationShorendo()
+
+        private void SetMenuEnabled()
         {
-            ShorendoChecked = true;
-            IsDepositMenuEnabled = true;
-            ProcessFeatureEnabled = true;
-            IsPartTransportRegistrationEnabled = false;
             if (IsShunjuen)
             {
                 IsShunjuenMenuEnabled = true;
@@ -685,12 +752,43 @@ namespace WPF.ViewModels
                 IsShunjuenMenuEnabled = false;
                 IsWizeCoreMenuEnabled = true;
             }
+
+            if (string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name))
+            {
+                IsShunjuenMenuEnabled = false;
+                IsWizeCoreMenuEnabled = false;
+                IsCommonEnabled = false;
+            }
+            else
+            {
+                IsCommonEnabled =
+                    (ShorendoChecked && IntAmount(DepositAmount) != 0) || KanriJimushoChecked;
+            }
+        }
+        /// <summary>
+        /// 経理担当場所を青蓮堂に設定します
+        /// </summary>
+        private void SetLocationShorendo()
+        {
+            ShorendoChecked = true;
+            IsDepositMenuEnabled = true;
+            ProcessFeatureEnabled = true;
+            IsPartTransportRegistrationEnabled = false;
+            SetMenuEnabled();
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
             if (AccountingProcessLocation.OriginalTotalAmount == 0)
-            { ShowSlipManagementContent = "預かり金額を設定して下さい"; }
-
+            {
+                ShowSlipManagementContent = "預かり金額を設定して下さい";
+                IsShunjuenMenuEnabled = false;
+                IsWizeCoreMenuEnabled = false;
+            }
+            else
+            {
+                IsShunjuenMenuEnabled = IsShunjuen;
+                IsWizeCoreMenuEnabled = !IsShunjuen;
+            }
         }
         /// <summary>
         /// 画面を閉じるメソッドを使用するかのチェック

@@ -39,7 +39,7 @@ namespace WPF.ViewModels
             YearString = DateTime.Now.Year.ToString();
             OutputCommand = new DelegateCommand(() => Output(), () => true);
             IsDeptVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
-            OutputButtonEnabled = IsDeptVisibility ? OutputCreditDept != null : true;
+            OutputButtonEnabled = !IsDeptVisibility || OutputCreditDept != null;
             ShunjuenText = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : string.Empty;
         }
         public CashJournalManagementViewModel() :

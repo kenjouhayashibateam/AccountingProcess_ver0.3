@@ -245,6 +245,17 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int RegistrationPrecedingYearFinalAccount(CreditDept creditDept);
         /// <summary>
+        /// 春秋苑前年度決算を更新します
+        /// </summary>
+        /// <returns></returns>
+        public int UpdatePrecedingYearFinalAccount();
+        /// <summary>
+        /// ワイズコア前年度決算を更新します
+        /// </summary>
+        /// <param name="creditDept"></param>
+        /// <returns></returns>
+        public int UpdatePrecedingYearFinalAccount(CreditDept creditDept);
+        /// <summary>
         /// ワイズコアの前年度決算額を返します
         /// </summary>
         /// <param name="creditDept"></param>
@@ -429,5 +440,10 @@ namespace Domain.Repositories
         public int ReturnWizeCoreDayBalance
             (DateTime referenceDate, WizeCoreDept wizeCoreDept,
                 WizeCoreAmountCategory wizeCoreAmountCategory);
+        /// <summary>
+        /// 正式サーバーに接続しているか
+        /// </summary>
+        /// <returns></returns>
+        public bool IsConnectiongProductionServer();
     }
 }

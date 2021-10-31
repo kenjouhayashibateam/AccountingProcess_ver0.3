@@ -42,7 +42,7 @@ namespace WPF.Views.Behaviors
                     WavSoundPlayCommand.Play("Notify.wav");
                     break;
                 case MessageBoxImage.Exclamation:
-                    WavSoundPlayCommand.Play("CriticalStop.wav");
+                    WavSoundPlayCommand.Play("CriticalStop.wav"); 
                     break;
                 default:
                     break;
