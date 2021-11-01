@@ -608,7 +608,7 @@ namespace Infrastructure
         public int DeleteContentDefaultCreditDept(Content content) { return 1; }
 
         public string GetBranchNumber(AccountingSubject accountingSubject)
-        { return "001"; }
+        { return null; }
 
         public int Update(AccountingSubject accountingSubject, string branchNumber)
         { return 1; }

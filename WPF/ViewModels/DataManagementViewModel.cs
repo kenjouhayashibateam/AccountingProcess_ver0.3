@@ -859,9 +859,9 @@ namespace WPF.ViewModels
             get => branchNumber;
             set
             {
-                branchNumber = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
-                CallPropertyChanged();
+                branchNumber = int.TryParse(value, out _) ? value : string.Empty;
                 ValidationProperty(nameof(BranchNumber), value);
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -1148,13 +1148,13 @@ namespace WPF.ViewModels
             CurrentAccountingSubject =
                 new AccountingSubject(null, AccountingSubjectCodeField, AccountingSubjectField,
                     IsShunjuen, IsAccountingSubjectValidity);
-            string branchNo = BranchNumber ?? $"枝番：{BranchNumber}\r\n";
+            string branchNo = BranchNumber ?? $"枝番\t\t:\t{BranchNumber}\r\n";
             if (CallConfirmationDataOperation
-                ($"勘定科目コード : {CurrentAccountingSubject.SubjectCode}\r\n" +
+                ($"勘定科目コード\t:\t{CurrentAccountingSubject.SubjectCode}\r\n" +
                 $"{branchNo}" +
-                $"勘定科目 : {CurrentAccountingSubject.Subject}" +
-                $"\r\n有効性 : {CurrentAccountingSubject.IsValidity}" +
-                $"\r\n会計：{(IsShunjuen ? "春秋苑" : "ワイズコア")}" +
+                $"勘定科目\t\t:\t{CurrentAccountingSubject.Subject}" +
+                $"\r\n有効性\t\t:\t{CurrentAccountingSubject.IsValidity}" +
+                $"\r\n会計\t\t:\t{(IsShunjuen ? "春秋苑" : "ワイズコア")}" +
                 $"\r\n\r\n登録しますか？", "勘定科目") ==
                 MessageBoxResult.Cancel) { return; }
 
@@ -2314,11 +2314,7 @@ namespace WPF.ViewModels
                     }
                     break;
                 case nameof(BranchNumber):
-                    if (!string.IsNullOrEmpty((string)value))
-                    {
-                        ErrorsListOperation(ReferenceAccountingSubjectCode.Length != 3, propertyName,
-                            "コードの桁数が不正です");
-                    }
+                    
                     break;
                 case nameof(CreditDeptField):
                     SetNullOrEmptyError(propertyName, value);
