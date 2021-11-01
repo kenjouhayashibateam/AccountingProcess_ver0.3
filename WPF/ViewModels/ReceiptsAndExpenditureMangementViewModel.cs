@@ -196,7 +196,8 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.Location == Locations.管理事務所)
             {
                 AccountingProcessLocation.OriginalTotalAmount =
-                    DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
+                    DataBaseConnect.PreviousDayFinalAmount
+                        (AccountingProcessLocation.IsAccountingGenreShunjuen);
             }
         }
         /// <summary>
@@ -1221,9 +1222,8 @@ namespace WPF.ViewModels
             set
             {
                 isLimitCreditDept = value;
-                if (value)
-                { OutputMenuHeader = "各種出力（貸方部門を限定したリストが表示されているので出力出来ません。）"; }
-                else { OutputMenuHeader = "各種出力"; }
+                OutputMenuHeader = value ?
+                    "各種出力（貸方部門を限定したリストが表示されているので出力出来ません。）" : "各種出力";
                 SetOutputGroupEnabled();
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();

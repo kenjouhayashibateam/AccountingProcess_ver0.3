@@ -52,3 +52,4 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infr
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CoreCompileInputs.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.dll
 C:\Users\001\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete

@@ -39,7 +39,8 @@ namespace WPF.ViewModels.Datas
 
         public OperationType GetOperationType() { return operationType; }
 
-        public static ReceiptsAndExpenditureOperation GetInstance() { return _receiptsAndExpenditureOperation; }
+        public static ReceiptsAndExpenditureOperation GetInstance()
+        { return _receiptsAndExpenditureOperation; }
 
         public void SetOperationType(OperationType type) { operationType = type; }
 

@@ -586,7 +586,8 @@ namespace WPF.ViewModels
                 AccountingProcessLocation.IsAccountingGenreShunjuen = value;
                 IsWizeCoreMenuVisibility = !value;
                 IsCreditDeptVisibility =
-                    !value && IsUpdatePrecedingYearFinalAccountVisibility && LoginRep.GetInstance().Rep.IsAdminPermisson;
+                    !value && IsUpdatePrecedingYearFinalAccountVisibility &&
+                    LoginRep.GetInstance().Rep.IsAdminPermisson;
 
                 if (KanriJimushoChecked)
                 {

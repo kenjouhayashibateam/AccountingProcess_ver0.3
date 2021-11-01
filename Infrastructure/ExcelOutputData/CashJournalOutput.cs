@@ -303,7 +303,8 @@ namespace Infrastructure.ExcelOutputData
                 .Border.SetTopBorder(XLBorderStyleValues.Thin)
                 .Border.SetRightBorder(XLBorderStyleValues.Thin)
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            _ = myWorksheet.Cell(StartRowPosition, 1).Style.Border.SetRightBorder(XLBorderStyleValues.Dashed);
+            _ = myWorksheet.Cell(StartRowPosition, 1).Style.Border
+                .SetRightBorder(XLBorderStyleValues.Dashed);
             _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetLeftBorder(XLBorderStyleValues.Dashed);
             _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
             _ = myWorksheet.Cell(StartRowPosition, 3).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);

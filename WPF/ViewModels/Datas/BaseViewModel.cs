@@ -269,7 +269,8 @@ namespace WPF.ViewModels.Datas
                     MessageBox = new MessageBoxInfo()
                     {
                         Message =
-                            $"テストサーバーに接続されているため正規のデータの呼び出し、書き込みが出来なくなっています。\r\n" +
+                            $"テストサーバーに接続されているため正規のデータの呼び出し、" +
+                            $"書き込みが出来なくなっています。\r\n" +
                             $"開発担当者に、正規サーバーへの接続の修正を依頼して下さい。",
                         Title = "接続が正しくありません",
                         Image = MessageBoxImage.Exclamation,

@@ -118,7 +118,8 @@ namespace Domain.Entities.Helpers
             if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(soltValue)) { return string.Empty; }
 
             byte[] soltHash = Encoding.UTF8.GetBytes(soltValue);
-            byte[] returnValue = KeyDerivation.Pbkdf2(value, soltHash, KeyDerivationPrf.HMACSHA256, 10000, 256 / 8);
+            byte[] returnValue = KeyDerivation.Pbkdf2
+                (value, soltHash, KeyDerivationPrf.HMACSHA256, 10000, 256 / 8);
 
             return string.Concat(returnValue.Select(b => $"{b:x2}"));
         }

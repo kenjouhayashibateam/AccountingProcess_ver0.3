@@ -15,7 +15,8 @@ namespace WPF.Views.Behaviors
             return !(value is bool b) ? string.Empty : b ? "法事" : "葬儀";
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) { return null; }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        { return null; }
 
         private static IsMemorialServiceConverter MemorialServiceConverter;
 

@@ -69,14 +69,16 @@ namespace Infrastructure.ExcelOutputData
         /// </summary>
         /// <returns></returns>
         protected bool IsSameData
-            (ReceiptsAndExpenditure validateReceiotsAndExpenditure, DateTime currentActivityDate, string currentDept,
-                string currentSubjectCode, string currentSubject, string currentContent, string currentLocation, bool isTaxRate)
+            (ReceiptsAndExpenditure validateReceiotsAndExpenditure, DateTime currentActivityDate,
+                string currentDept, string currentSubjectCode, string currentSubject, string currentContent,
+                string currentLocation, bool isTaxRate)
         {
-            //出力ページの出納データが強制的に単独にする内容文字列配列に入っているものでPageCountが1ならTrue
-            //あるいは、出力ページの出納データが強制的に単独にする内容文字列配列に入っていない、
-            //出力ページが比較するデータと、貸方部門が同じ、勘定科目コードが同じ、勘定科目が同じ、入出金日が同じ、
-            //比較する出納データが強制的に単独にする内容文字列配列に含まれていない、出力ページが10を超えていない、
-            //経理担当場所が同じ、出力ページの軽減税率チェックが比較する出納データと同じ場合にTrueを返す
+            //出力ページの出納データが強制的に単独にする内容文字列配列に入っているものでPageCountが1なら
+            //True。あるいは、出力ページの出納データが強制的に単独にする内容文字列配列に入っていない、
+            //出力ページが比較するデータと、貸方部門が同じ、勘定科目コードが同じ、勘定科目が同じ、
+            //入出金日が同じ、比較する出納データが強制的に単独にする内容文字列配列に含まれていない
+            //、出力ページが10を超えていない、経理担当場所が同じ、出力ページの軽減税率チェックが比較する
+            //出納データと同じ場合にTrueを返す
             return (IndependentContent.Contains(currentContent) &&
                 IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) && PageCount == 1)
                 || (!IndependentContent.Contains(currentContent) &&

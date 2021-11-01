@@ -184,9 +184,10 @@ namespace Infrastructure
         {
             Parameters = new Dictionary<string, object>()
             {
-                {"@accounting_subject_id", accountingSubject.ID},{ "@subject_code",accountingSubject.SubjectCode},
+                {"@accounting_subject_id", accountingSubject.ID},
+                { "@subject_code",accountingSubject.SubjectCode},
                 { "@subject",accountingSubject.Subject},{ "@is_shunjuen",accountingSubject.IsShunjuen},
-                {"@is_validity", accountingSubject.IsValidity},                { "@operation_staff_id", LoginRep.Rep.ID}
+                {"@is_validity", accountingSubject.IsValidity}, { "@operation_staff_id", LoginRep.Rep.ID}
             };
 
             return ReturnGeneretedParameterCommand
@@ -265,14 +266,16 @@ namespace Infrastructure
         }
 
         public ObservableCollection<Content> ReferenceContent
-            (string contentText, string accountingSubjectCode, string accountingSubject, bool isShunjuen, bool isValidityTrueOnly)
+            (string contentText, string accountingSubjectCode, string accountingSubject, bool isShunjuen,
+                bool isValidityTrueOnly)
         {
             ObservableCollection<Content> contents = new ObservableCollection<Content>();
 
             Parameters = new Dictionary<string, object>()
             {
                 { "@content", contentText},{"@subject_code", accountingSubjectCode},
-                {"@subject", accountingSubject},{ "@is_shunjuen",isShunjuen},{ "@true_only", isValidityTrueOnly}
+                {"@subject", accountingSubject},{ "@is_shunjuen",isShunjuen},
+                { "@true_only", isValidityTrueOnly}
             };
 
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
@@ -286,7 +289,8 @@ namespace Infrastructure
                         new AccountingSubject((string)dataReader["accounting_subject_id"],
                             (string)dataReader["subject_code"], (string)dataReader["subject"],
                             (bool)dataReader["is_shunjuen"], true),
-                        (int)dataReader["flat_rate"], (string)dataReader["content"], (bool)dataReader["is_validity"])
+                        (int)dataReader["flat_rate"], (string)dataReader["content"],
+                        (bool)dataReader["is_validity"])
                     );
             }
             return contents;
@@ -320,7 +324,8 @@ namespace Infrastructure
                 ReturnGeneretedParameterCommand
                     ("reference_affiliation_accounting_subject").ExecuteReader();
 
-            while (DataReader.Read()) { list.Add(CallAccountingSubject((string)DataReader["accounting_subject_id"])); }
+            while (DataReader.Read()) 
+            { list.Add(CallAccountingSubject((string)DataReader["accounting_subject_id"])); }
 
             return list;
         }
@@ -334,13 +339,16 @@ namespace Infrastructure
                 { "@registration_date", receiptsAndExpenditure.RegistrationDate }, 
                 { "@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID }, 
                 { "@credit_dept_id", receiptsAndExpenditure.CreditDept.ID }, 
-                { "@content_id", receiptsAndExpenditure.Content.ID }, { "@detail", receiptsAndExpenditure.Detail }, 
-                { "@price", receiptsAndExpenditure.Price }, { "@is_payment", receiptsAndExpenditure.IsPayment }, 
-                { "@is_validity", receiptsAndExpenditure.IsValidity }, 
-                { "@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate } 
+                { "@content_id", receiptsAndExpenditure.Content.ID },
+                { "@detail", receiptsAndExpenditure.Detail }, 
+                { "@price", receiptsAndExpenditure.Price }, 
+                { "@is_payment", receiptsAndExpenditure.IsPayment }, 
+                { "@is_validity", receiptsAndExpenditure.IsValidity },
+                { "@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate }
             };
 
-            return ReturnGeneretedParameterCommand("registration_receipts_and_expenditure").ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand
+                ("registration_receipts_and_expenditure").ExecuteNonQuery();
         }
 
         private ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure()
@@ -368,7 +376,8 @@ namespace Infrastructure
             {
                 { "@location", location},{"@account_activity_date_start", accountActivityDateStart},
                 { "@account_activity_date_end", accountActivityDateEnd},
-                {"@registration_date_start", registrationDateStart},{"@registration_date_end", registrationDateEnd},
+                {"@registration_date_start", registrationDateStart},
+                {"@registration_date_end", registrationDateEnd},
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
                 { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
                 {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
@@ -551,7 +560,8 @@ namespace Infrastructure
             {
                 { "@location", location},{"@account_activity_date_start", accountActivityDateStart},
                 { "@account_activity_date_end", accountActivityDateEnd},
-                {"@registration_date_start", registrationDateStart},{"@registration_date_end", registrationDateEnd},
+                {"@registration_date_start", registrationDateStart},
+                {"@registration_date_end", registrationDateEnd},
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
                 { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
                 {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
@@ -589,7 +599,8 @@ namespace Infrastructure
                 (bool)dataReader["is_shunjuen_dept"]);
             paramAccountingSubject =
                 new AccountingSubject((string)dataReader["accounting_subject_id"],
-                (string)dataReader["subject_code"], (string)dataReader["subject"], (bool)dataReader["is_shunjuen"],
+                (string)dataReader["subject_code"], (string)dataReader["subject"],
+                (bool)dataReader["is_shunjuen"],
                 true);
             paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
                 (int)dataReader["flat_rate"], (string)dataReader["content"], true);
@@ -759,7 +770,8 @@ namespace Infrastructure
         public int DeleteConvertContent(Content convertContent)
         {
             Parameters = new Dictionary<string, object>() { { "@content_id", convertContent.ID } };
-            return ReturnGeneretedParameterCommand("delete_content_convert_voucher").ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand
+                ("delete_content_convert_voucher").ExecuteNonQuery();
         }
 
         public int Registration(Voucher voucher)
@@ -786,7 +798,8 @@ namespace Infrastructure
 
         public Voucher CallLatestVoucher()
         {
-            SqlDataReader dataReader = ExecuteNoParameterStoredProc("call_latest_voucher").ExecuteReader();
+            SqlDataReader dataReader =
+                ExecuteNoParameterStoredProc("call_latest_voucher").ExecuteReader();
             Voucher voucher = new Voucher
                 (0, string.Empty, new ObservableCollection<ReceiptsAndExpenditure>(), DateTime.Today,
                     LoginRep.GetInstance().Rep, true);
@@ -796,7 +809,8 @@ namespace Infrastructure
                       ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
                           new ObservableCollection<ReceiptsAndExpenditure>(),
                           (DateTime)dataReader["output_date"],
-                          new Rep((string)dataReader["staff_id"], (string)dataReader["name"], string.Empty, true, false),
+                          new Rep((string)dataReader["staff_id"], (string)dataReader["name"], string.Empty, true,
+                            false),
                           (bool)dataReader["is_validity"]);
             }
 
@@ -902,8 +916,9 @@ namespace Infrastructure
             CreditDept creditDept = null;
             while (sqlDataReader.Read())
             {
-                creditDept = new CreditDept((string)sqlDataReader["credit_dept_id"], (string)sqlDataReader["dept"],
-                    (bool)sqlDataReader["is_validity"], (bool)sqlDataReader["is_shunjuen_dept"]);
+                creditDept = new CreditDept((string)sqlDataReader["credit_dept_id"],
+                    (string)sqlDataReader["dept"], (bool)sqlDataReader["is_validity"],
+                    (bool)sqlDataReader["is_shunjuen_dept"]);
             }
             return creditDept;
         }
@@ -984,7 +999,9 @@ namespace Infrastructure
                 ("registration_branch_number").ExecuteNonQuery();
         }
 
-        public int ReturnWizeCoreDayBalance(DateTime referenceDate, WizeCoreDept wizeCoreDept, WizeCoreAmountCategory wizeCoreAmountCategory)
+        public int ReturnWizeCoreDayBalance
+            (DateTime referenceDate, WizeCoreDept wizeCoreDept,
+                WizeCoreAmountCategory wizeCoreAmountCategory)
         {
             throw new NotImplementedException();
         }
@@ -993,8 +1010,8 @@ namespace Infrastructure
         {
             SettingConectionString();
             string dept = creditDept == null ? string.Empty : creditDept.Dept;
-            SqlCommand cmd =
-                new SqlCommand($"select dbo.call_previous_month_final_account('{date}','{isShunjuen}','{dept}')", Cn);
+            SqlCommand cmd = new SqlCommand
+                    ($"select dbo.call_previous_month_final_account('{date}','{isShunjuen}','{dept}')", Cn);
 
             Cn.Open();
 

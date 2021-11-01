@@ -55,7 +55,8 @@ namespace WPF.ViewModels
                 if (!pd.IsExclusion) { registerCount++; }
             }
             //登録件数を文字列に格納する
-            countInfo = registerCount == DataList.Count ? $"{DataList.Count}{Space}件" : $"{registerCount}/{DataList.Count}{Space}件";
+            countInfo = registerCount == DataList.Count ? $"{DataList.Count}{Space}件" :
+                $"{registerCount}/{DataList.Count}{Space}件";
             //登録件数が0ならメソッドを終了する
             if (registerCount == 0)
             {

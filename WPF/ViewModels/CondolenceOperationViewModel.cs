@@ -551,7 +551,8 @@ namespace WPF.ViewModels
             get => ownerName;
             set
             {
-                if (ConfirmationOwnerName(ownerName, value) == MessageBoxResult.Yes) { ownerName = value; }
+                if (ConfirmationOwnerName(ownerName, value) == MessageBoxResult.Yes)
+                { ownerName = value; }
                 ValidationProperty(nameof(OwnerName), value);
                 CallPropertyChanged();
             }
@@ -926,7 +927,8 @@ namespace WPF.ViewModels
             OperationDataCommand = new DelegateCommand(() => OperationData(), () => true);
             AlmsgivingSearchCommand = new DelegateCommand(() => AlmsgivingSearch(), () => true);
             TipSearchCommand = new DelegateCommand(() => TipSearch(), () => true);
-            SocialGatheringSearchCommand = new DelegateCommand(() => SocialGatheringSearch(), () => true);
+            SocialGatheringSearchCommand = new DelegateCommand
+                (() => SocialGatheringSearch(), () => true);
             DeleteCondolenceCommand = new DelegateCommand(() => DeleteCondolence(), () => true);
             AmountClearCommand = new DelegateCommand(() => AmountClear(), () => true);
         }

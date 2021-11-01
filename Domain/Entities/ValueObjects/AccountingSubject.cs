@@ -24,7 +24,8 @@
         /// <summary>
         /// IDの数字
         /// </summary>
-        public int Number => string.IsNullOrEmpty(ID) ? 0 : int.Parse(ID.Replace("accounting_subject", string.Empty));
+        public int Number => string.IsNullOrEmpty(ID) ? 0 :
+            int.Parse(ID.Replace("accounting_subject", string.Empty));
         /// <summary>
         /// 春秋苑の勘定科目かどうか
         /// </summary>

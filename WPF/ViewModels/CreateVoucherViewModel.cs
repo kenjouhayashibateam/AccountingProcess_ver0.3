@@ -129,9 +129,9 @@ namespace WPF.ViewModels
             }
 
             Condolence condolence = new Condolence
-                (0, AccountingProcessLocation.Location.ToString(), addressee, string.Empty, "法事", almsgiving, carTip, mealTip, 
-                    carAndMealTip, socialGethering, string.Empty, accountActivityDate, LoginRep.GetInstance().Rep.Name,
-                    string.Empty);
+                (0, AccountingProcessLocation.Location.ToString(), addressee, string.Empty, "法事", almsgiving,
+                    carTip, mealTip, carAndMealTip, socialGethering, string.Empty, accountActivityDate,
+                    LoginRep.GetInstance().Rep.Name, string.Empty);
             CondolenceOperation co = CondolenceOperation.GetInstance();
             co.SetData(condolence);
 

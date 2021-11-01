@@ -136,9 +136,11 @@ namespace WPF.Views.Behaviors
                     textBox.MaxLength = (int)args.NewValue;
                 };
         }
-        public static int GetMaxLength(DependencyObject obj0) { return (int)obj0.GetValue(MaxLengthProperty); }
+        public static int GetMaxLength(DependencyObject obj0)
+        { return (int)obj0.GetValue(MaxLengthProperty); }
 
-        public static void SetMaxLength(DependencyObject obj, int value) { obj.SetValue(MaxLengthProperty, value); }
+        public static void SetMaxLength(DependencyObject obj, int value)
+        { obj.SetValue(MaxLengthProperty, value); }
     }
 }
 

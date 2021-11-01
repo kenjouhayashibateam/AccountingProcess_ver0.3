@@ -25,7 +25,12 @@ namespace Infrastructure.ExcelOutputData
             bfao.DataOutput();
         }
 
-        public void BalanceFinalAccount(int rengeanPreviousDayFinalAccount, int rengeanPayment, int rengeanWithdrawal, int rengeanTranceferAmount, int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal, int shunjuanTranceferAmount, int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal, int kougeTranceferAmount, int yokohamaBankAmount, int shunjuenAmount)
+        public void BalanceFinalAccount
+            (int rengeanPreviousDayFinalAccount, int rengeanPayment, int rengeanWithdrawal,
+                int rengeanTranceferAmount, int shunjuanPreviousDayFinalAccount, int shunjuanPayment,
+                int shunjuanWithdrawal, int shunjuanTranceferAmount, int kougePreviousDayFinalAccount,
+                int kougePayment, int kougeWithdrawal, int kougeTranceferAmount, int yokohamaBankAmount,
+                int shunjuenAmount)
         {
             WizeCoreBalanceFinalAccountOutput wcbfa =
                 new WizeCoreBalanceFinalAccountOutput

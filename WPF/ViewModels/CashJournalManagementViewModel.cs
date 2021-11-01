@@ -229,7 +229,8 @@ namespace WPF.ViewModels
 
         private void SetOutputButtonEnabled()
         {
-            OutputButtonEnabled = !HasErrors && !string.IsNullOrEmpty(YearString) && !string.IsNullOrEmpty(MonthString);
+            OutputButtonEnabled = !HasErrors && !string.IsNullOrEmpty(YearString) &&
+                !string.IsNullOrEmpty(MonthString);
         }
 
         public override void ValidationProperty(string propertyName, object value)

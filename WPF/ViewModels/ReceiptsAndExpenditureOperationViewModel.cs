@@ -689,8 +689,8 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
 
                 if (!ComboContents.Equals(DataBaseConnect.ReferenceContent
-                    (string.Empty, ComboAccountingSubjectCode, value, AccountingProcessLocation.IsAccountingGenreShunjuen,
-                        OperationData.Data == null)))
+                    (string.Empty, ComboAccountingSubjectCode, value,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null)))
                 {
                     ComboContents =
                         DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, 
@@ -1314,7 +1314,8 @@ namespace WPF.ViewModels
                 DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
                     AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
             ComboCreditDepts = DataBaseConnect.ReferenceCreditDept
-                (string.Empty, OperationData.Data == null, AccountingProcessLocation.IsAccountingGenreShunjuen);
+                (string.Empty, OperationData.Data == null,
+                    AccountingProcessLocation.IsAccountingGenreShunjuen);
         }
 
         protected override void SetDelegateCommand()

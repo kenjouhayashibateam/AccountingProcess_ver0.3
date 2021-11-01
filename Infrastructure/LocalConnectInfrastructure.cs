@@ -23,7 +23,8 @@ namespace Infrastructure
 
         public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept) { return 5000; }
 
-        public Rep CallRep(string id) { return new Rep("rep0", "林飛 顕誠", GetHashValue("aaa", "rep0"), true, true); }
+        public Rep CallRep(string id)
+        { return new Rep("rep0", "林飛 顕誠", GetHashValue("aaa", "rep0"), true, true); }
 
         public int DeleteConvertContent(Content convertContent) { return 1; }
 
@@ -286,8 +287,8 @@ namespace Infrastructure
 
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                string content, string detail, string accountingSubject, string accountingSubjectCode, bool isShunjuen,
-                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
+                string content, string detail, string accountingSubject, string accountingSubjectCode,
+                bool isShunjuen,　bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                 bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                 DateTime outputDateStart, DateTime OutputDateEnd)
         {
@@ -403,8 +404,8 @@ namespace Infrastructure
                 string location, string creditDept, string content, string detail, string accountingSubject,
                 string accountingSubjectCode, bool isShunjuen, bool whichDepositAndWithdrawalOnly,
                 bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
-                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd, int pageCount,
-                string sortColumn, bool sortDirection)
+                DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd,
+                int pageCount, string sortColumn, bool sortDirection)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
@@ -618,7 +619,9 @@ namespace Infrastructure
         public int Registration(AccountingSubject accountingSubject, string branchNumber)
         { return 1; }
 
-        public int ReturnWizeCoreDayBalance(DateTime referenceDate, WizeCoreDept wizeCoreDept, WizeCoreAmountCategory wizeCoreAmountCategory)
+        public int ReturnWizeCoreDayBalance
+            (DateTime referenceDate, WizeCoreDept wizeCoreDept,
+                WizeCoreAmountCategory wizeCoreAmountCategory)
         {
             string s = wizeCoreDept.ToString() + wizeCoreAmountCategory.ToString();
             int i = default;

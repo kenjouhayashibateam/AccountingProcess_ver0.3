@@ -60,7 +60,8 @@ namespace Infrastructure.ExcelOutputData
             _ = MySheetCellRange(7, 4, 12, 4).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Center;
             _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
             _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
@@ -68,7 +69,8 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             _ = MySheetCellRange(15, 1, 19, 7).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            _ = MySheetCellRange(15, 1, 15, 7).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            _ = MySheetCellRange(15, 1, 15, 7).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Center;
             _ = MySheetCellRange(16, 1, 19, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
             _ = MySheetCellRange(16, 2, 19, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             _ = MySheetCellRange(16, 4, 19, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;

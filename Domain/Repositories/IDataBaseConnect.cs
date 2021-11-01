@@ -187,10 +187,10 @@ namespace Domain.Repositories
         /// <returns></returns>
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                string content, string detail, string accountingSubject, string accountingSubjectCode, bool isShunjuen,
-                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
-                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
-                DateTime outputDateEnd);
+                string content, string detail, string accountingSubject, string accountingSubjectCode,
+                bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
+                bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
+                DateTime outputDateStart, DateTime outputDateEnd);
         /// <summary>
         /// 出納データを検索します
         /// </summary>
@@ -218,8 +218,8 @@ namespace Domain.Repositories
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
             ReferenceReceiptsAndExpenditure
                 (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
-                    string content, string detail, string accountingSubject, string accountingSubjectCode, bool isShunjuen,
-                    bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
+                    string content, string detail, string accountingSubject, string accountingSubjectCode,
+                    bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                     bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                     DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
                     bool sortDirection);
