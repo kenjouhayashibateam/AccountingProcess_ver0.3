@@ -147,7 +147,7 @@ namespace Infrastructure
             Parameters = new Dictionary<string, object>()
             {
                 {"@subject_code", accountingSubject.SubjectCode},{"@subject", accountingSubject.Subject },
-                { "@validity", accountingSubject.IsValidity},{"@staff_id", LoginRep.Rep.ID}
+                { "@is_shunjuen",accountingSubject.IsShunjuen},{ "@validity", accountingSubject.IsValidity},{"@staff_id", LoginRep.Rep.ID}
             };
 
             return ReturnGeneretedParameterCommand

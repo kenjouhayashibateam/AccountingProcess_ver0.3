@@ -1146,7 +1146,7 @@ namespace WPF.ViewModels
         private async void AccountSubjectRetistration()
         {
             CurrentAccountingSubject =
-                new AccountingSubject(null, AccountingSubjectCodeField, AccountingSubjectField,
+                new AccountingSubject(string.Empty, AccountingSubjectCodeField, AccountingSubjectField,
                     IsShunjuen, IsAccountingSubjectValidity);
             string branchNo = BranchNumber ?? $"枝番\t\t:\t{BranchNumber}\r\n";
             if (CallConfirmationDataOperation
