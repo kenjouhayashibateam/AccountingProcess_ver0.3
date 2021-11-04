@@ -8,124 +8,182 @@
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="450" Width="300">
+        Title="{Binding WindowTitle}" Height="500" Width="350">
+    
     <Window.DataContext>
         <vm:RegistrationFlowerSellReceiptsAndExpenditureViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <Style x:Key="WatermarkTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid Background="White">
+                            <Border BorderBrush="DimGray" BorderThickness="1">
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock x:Name="WatermarkLabel" Text="{TemplateBinding Tag}" Opacity=".5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Visibility" TargetName="WatermarkLabel" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources> 
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="7*"/>
+            <RowDefinition Height="8*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="登録内容" Grid.Row="0" Margin="5">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="7*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1"/>
-                <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="2" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="4" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="5" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="6" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="7" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="8" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="9" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
-                <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="4" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="5" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="6" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="7" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="8" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="9" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Row="1" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="2" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="4" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="5" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="6" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="7" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="8" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="9" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,1,1,1"/>
-                <Border Grid.Row="1" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="3" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="4" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="5" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="6" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="7" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="8" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <Border Grid.Row="9" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="物販" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="並花" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="上花" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="特花" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="榊" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="樒" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="線香　縦" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="7" Grid.Column="0" Text="線香　横" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBox Grid.Row="8" Grid.Column="0" Text="" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="Native,FullShape" Margin="5"/>
-                <TextBlock Grid.Row="9" Grid.Column="0" Text="チケット" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="単価" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="4" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="5" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="6" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="7" Grid.Column="1" Text="1,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <Grid Grid.Row="8" Grid.Column="1">
+                <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1"/>
+                    <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="2" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="4" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="5" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="6" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="7" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="8" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="9" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                    <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="4" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="5" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="6" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="7" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="8" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="9" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="2" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="4" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="5" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="6" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="7" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="8" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="9" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                    <Border Grid.Row="1" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="3" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="4" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="5" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="6" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="7" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="8" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <Border Grid.Row="9" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="物販" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="単価" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="数量" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="小計" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding CemeteryFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CemeteryFlowerUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding CemeteryFlowerCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding HighFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HighFlowerUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding HighFlowerCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding SpecialFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SpecialFlowerUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding SpecialFlowerCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding Sakaki}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SakakiUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding SakakiCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding Anisatum}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding AnisatumUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding AnisatumCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding IncenseStickVertical}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding IncenseStickVerticalUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding IncenseStickVerticalCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding IncenseStickHorizontal}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding IncenseStickHorizontalUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding IncenseStickHorizontalCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBox Grid.Row="8" Grid.Column="0" Text="{Binding OrderFlower}" Style="{StaticResource WatermarkTextBox}" Tag="その他の物販" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="Native,FullShape" Margin="5"/>
+                    <Grid Grid.Row="8" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,5,0,5"/>
+                        <TextBlock Grid.Column="1" Text="{Binding OrderFlowerUnitPriceValue}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                    </Grid>
+                    <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding OrderFlowerCount}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="9" Grid.Column="0" Text="チケット" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                    <TextBlock Grid.Row="9" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBox Grid.Row="9" Grid.Column="2" Text="" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="3" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="4" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="5" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="6" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="7" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="8" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                    <TextBlock Grid.Row="9" Grid.Column="3" Text="10,000 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,5,0,5"/>
-                    <TextBlock Grid.Column="1" Text="円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                    <TextBlock Text="総計：" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="売上" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="10,000 円" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    </Grid>
+                    <TextBlock Text="-" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <Grid Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="チケット割引" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="10,000 円" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    </Grid>
+                    <TextBlock Text="＝" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="100,000 円" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                 </Grid>
-                <TextBlock Grid.Row="9" Grid.Column="1" Text="500 円" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="数量" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="3" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="4" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="5" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="6" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="7" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="8" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBox Grid.Row="9" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5"/>
-                <TextBlock Grid.Row="0" Grid.Column="3" Text="小計" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="8" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
-                <TextBlock Grid.Row="9" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
             </Grid>
         </GroupBox>
         <Grid Grid.Row="1">
@@ -135,7 +193,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="CloseButton" Grid.Column="1" Margin="5">
                 <StackPanel>
-                    <svgc:SvgViewbox Height="30" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                    <svgc:SvgViewbox Height="20" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
                 </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" Key="Space"/>
