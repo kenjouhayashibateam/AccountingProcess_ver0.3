@@ -13,7 +13,8 @@ namespace WPF.ViewModels
     /// <summary>
     /// 花売り出納データ登録画面ViewModel
     /// </summary>
-    public class RegistrationFlowerSellReceiptsAndExpenditureViewModel : BaseViewModel
+    public class RegistrationFlowerSellReceiptsAndExpenditureViewModel :
+        JustRegistraterDataViewModel
     {
         #region Properties
         #region strings
@@ -168,16 +169,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 総計を計算します
-        /// </summary>
-        private void TotalAmountCalculation()
-        {
-            TotalAmount = CemeteryFlowerTotalAmount + HighFlowerTotalAmount +
-                SpecialFlowerTotalAmount + SakakiTotalAmount + AnisatumTotalAmount +
-                IncenseStickVerticalTotalAmount + IncenseStickHorizontalTotalAmount +
-                OrderFlowerTotalAmount;
-        }
-        /// <summary>
         /// 墓地花小計
         /// </summary>
         private int CemeteryFlowerTotalAmount
@@ -283,6 +274,16 @@ namespace WPF.ViewModels
         public RegistrationFlowerSellReceiptsAndExpenditureViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
+        /// <summary>
+        /// 総計を計算します
+        /// </summary>
+        private void TotalAmountCalculation()
+        {
+            TotalAmount = CemeteryFlowerTotalAmount + HighFlowerTotalAmount +
+                SpecialFlowerTotalAmount + SakakiTotalAmount + AnisatumTotalAmount +
+                IncenseStickVerticalTotalAmount + IncenseStickHorizontalTotalAmount +
+                OrderFlowerTotalAmount;
+        }
         /// <summary>
         /// 墓地花
         /// </summary>

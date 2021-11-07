@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\CashJournalManagementViewModel.cs" />
     <Compile Include="ViewModels\Commands\WavSoundPlayCommand.cs" />
     <Compile Include="ViewModels\Datas\CondolenceOperation.cs" />
+    <Compile Include="ViewModels\Datas\JustRegistraterDataViewModel.cs" />
     <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\CondolenceOperationViewModel.cs" />
     <Compile Include="ViewModels\CreateCondolencesViewModel.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />
+    <Compile Include="ViewModels\ProductSalesRegistrationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureOperationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureRegistrationHelperViewModel.cs" />
     <Compile Include="ViewModels\RegistrationFlowerSellReceiptsAndExpenditureViewModel.cs" />
@@ -183,6 +185,9 @@
     </Compile>
     <Compile Include="Views\PartTimerTransportationExpensesRegistrationView.xaml.cs">
       <DependentUpon>PartTimerTransportationExpensesRegistrationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductSalesRegistrationView.xaml.cs">
+      <DependentUpon>ProductSalesRegistrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReceiptsAndExpenditureOperationView.xaml.cs">
       <DependentUpon>ReceiptsAndExpenditureOperationView.xaml</DependentUpon>
@@ -247,6 +252,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\PartTimerTransportationExpensesRegistrationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProductSalesRegistrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

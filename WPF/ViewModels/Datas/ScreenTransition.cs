@@ -90,5 +90,10 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window RegistrationFlowerReceiptsAndExpenditure()
         { return new RegistrationFlowerSellReceiptsAndExpenditureView(); }
+        /// <summary>
+        /// 物販売上登録画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window ProductSalesRegistration() { return new ProductSalesRegistrationView(); }
     }
 }

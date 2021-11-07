@@ -33,7 +33,7 @@ namespace WPF.ViewModels
         private bool isShunjuen;
         private bool isShunjuenMenuEnabled;
         private bool isWizeCoreMenuEnabled;
-        private bool isCondolenceEnabled;
+        private bool isShunjuenCommonEnabled;
         private bool isUpdatePrecedingYearFinalAccountVisibility;
         private bool isWizeCoreMenuVisibility;
         private bool isCreditDeptVisibility;
@@ -91,8 +91,15 @@ namespace WPF.ViewModels
             ShowRegistrationFlowerReceiptsAndExpenditureCommand = new DelegateCommand
                 (() => CreateShowWindowCommand
                     (ScreenTransition.RegistrationFlowerReceiptsAndExpenditure()), () => true);
+            ShowProductSalesRegistrationViewCommand = new DelegateCommand
+                (() => CreateShowWindowCommand
+                    (ScreenTransition.ProductSalesRegistration()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 物販売上登録画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowProductSalesRegistrationViewCommand { get; }
         /// <summary>
         /// 花売りデータ登録画面表示コマンド
         /// </summary>
@@ -202,7 +209,7 @@ namespace WPF.ViewModels
             IsPartTransportRegistrationEnabled = false;
             ShowSlipManagementContent = "出納管理";
             IsLogoutEnabled = false;
-            IsCondolenceEnabled = false;
+            IsShunjuenCommonEnabled = false;
             IsCommonEnabled = false;
         }
         /// <summary>
@@ -481,7 +488,7 @@ namespace WPF.ViewModels
                         AccountingProcessLocation.OriginalTotalAmount == 0 ?
                             "預かり金額を設定して下さい" : "出納管理";
 
-                    IsCondolenceEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
+                    IsShunjuenCommonEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 }
                 SetMenuEnabled();
                 depositAmount = CommaDelimitedAmount(value);
@@ -639,12 +646,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 御布施一覧のEnabled
         /// </summary>
-        public bool IsCondolenceEnabled
+        public bool IsShunjuenCommonEnabled
         {
-            get => isCondolenceEnabled;
+            get => isShunjuenCommonEnabled;
             set
             {
-                isCondolenceEnabled = value;
+                isShunjuenCommonEnabled = value;
                 CallPropertyChanged();
             }
         }
@@ -721,7 +728,7 @@ namespace WPF.ViewModels
             {
                 IsShunjuenMenuEnabled = true;
                 IsWizeCoreMenuEnabled = false;
-                IsCondolenceEnabled = true;
+                IsShunjuenCommonEnabled = true;
             }
             else
             {
@@ -736,7 +743,7 @@ namespace WPF.ViewModels
             DepositAmount =
                 CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled =
-                IsCreateVoucherEnabled = IsCondolenceEnabled =
+                IsCreateVoucherEnabled = IsShunjuenCommonEnabled =
                 LoginRep.GetInstance().Rep.Name != string.Empty;
             ShowSlipManagementContent = "出納管理";
         }

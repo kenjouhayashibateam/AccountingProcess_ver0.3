@@ -66,12 +66,19 @@
             </Grid>
         </GroupBox>
         <GroupBox x:Name="LoginGroupBox" Header="ログインしてください" Grid.Row="1" Margin="5">
-            <Button x:Name="LoginButton" Content="ログイン" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="375,5">
-                <Button.InputBindings>
-                    <MouseBinding Command="{Binding ShowLoginCommand}" MouseAction="LeftClick"/>
-                    <KeyBinding Command="{Binding ShowLoginCommand}" Key="Space"/>
-                </Button.InputBindings>
-            </Button>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="LoginButton" Grid.Column="1" Content="ログイン" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50,5">
+                    <Button.InputBindings>
+                        <MouseBinding Command="{Binding ShowLoginCommand}" MouseAction="LeftClick"/>
+                        <KeyBinding Command="{Binding ShowLoginCommand}" Key="Space"/>
+                    </Button.InputBindings>
+                </Button>
+            </Grid>
         </GroupBox>
         <GroupBox x:Name="ManagementLocationSelectGroupBox" Header="経理処理設定" Grid.Row="2" Margin="5">
             <Grid>
@@ -161,14 +168,21 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsCondolenceEnabled}" Margin="5,20">
+                        <Button Content="お布施一覧管理" Grid.Row="0" IsEnabled="{Binding IsShunjuenCommonEnabled}" Margin="5,8">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
                             </Button.InputBindings>
                         </Button>
-                        <Button Content="パート交通費登録" Grid.Row="1" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,20">
+                        <Button Content="物販売上登録&#10;(工事中)" Grid.Row="1" IsEnabled="{Binding IsShunjuenCommonEnabled}" Margin="5,8">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding ShowProductSalesRegistrationViewCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding ShowProductSalesRegistrationViewCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
+                        <Button Content="パート交通費登録" Grid.Row="2" IsEnabled="{Binding IsPartTransportRegistrationEnabled}" Margin="5,8">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding ShowPartTimerTransPortCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding ShowPartTimerTransPortCommand}" MouseAction="LeftClick"/>
