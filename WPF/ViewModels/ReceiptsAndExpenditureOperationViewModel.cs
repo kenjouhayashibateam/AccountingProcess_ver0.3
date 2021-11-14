@@ -696,7 +696,7 @@ namespace WPF.ViewModels
                         DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, 
                         AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
                     SelectedContent = ComboContents.Count > 0 ? ComboContents[0] : null;
-                    ComboContentText = SelectedContent.Text ?? string.Empty;
+                    ComboContentText = SelectedContent == null ? string.Empty : SelectedContent.Text;
                 }
 
                 void PropertyClear()

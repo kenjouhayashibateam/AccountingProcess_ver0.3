@@ -336,10 +336,12 @@
                                             </Button.InputBindings>
                                         </Button>
                                         <Button x:Name="BuranchNumberDeleteButton" Grid.Column="2" Visibility="{Binding IsBranchNumberOperationVisibility,Converter={StaticResource VisibilityConverter}}" Content="削除" VerticalAlignment="Bottom" Margin="5,0">
-                                            
+                                            <Button.InputBindings>
+                                              
+                                            </Button.InputBindings>
                                         </Button>
                                    </Grid>
-                                    <TextBox x:Name="BranchNumberTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding BranchNumber}" Visibility="{Binding IsBranchNumberVisibility,Converter={StaticResource VisibilityConverter}}" MaxLength="3" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,5,50,5"/>
+                                    <TextBox x:Name="BranchNumberTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding BranchNumber,UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsBranchNumberVisibility,Converter={StaticResource VisibilityConverter}}" MaxLength="3" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,5,50,5"/>
                                 </Grid>
                                 <TextBlock Text="勘定科目" Grid.Row="3"  VerticalAlignment="Bottom" Margin="5,0"/>
                                 <TextBox x:Name="AccountingSubjectTextBox" Grid.Row="4" Text="{Binding AccountingSubjectField,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsAccountingSubjectFieldEnabled}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>

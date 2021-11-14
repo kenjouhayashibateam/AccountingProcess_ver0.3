@@ -32,8 +32,8 @@ namespace Infrastructure
         {
             Cn = new SqlConnection
             {
-                ConnectionString = Properties.Settings.Default.SystemAdminConnection
-                //ConnectionString = Properties.Settings.Default.TestServerConnectionString
+                //ConnectionString = Properties.Settings.Default.SystemAdminConnection
+                ConnectionString = Properties.Settings.Default.TestServerConnectionString
             };
         }
         public bool IsConnectiongProductionServer()
@@ -480,15 +480,18 @@ namespace Infrastructure
             return amount;
         }
 
-        public int PreviousDayFinalAmount(CreditDept creditDept) 
+        public int PreviousDayFinalAmount(CreditDept creditDept)
         {
+            int amount = default;
             SettingConectionString();
             SqlCommand cmd = new SqlCommand
-                ($"return_previous_day_final_credit_dept_amount({creditDept.ID})", Cn);
+                ($"select dbo.return_previous_day_final_credit_dept_amount(@credit_dept_id,@date)", Cn);
+            _ = cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
+            _ = cmd.Parameters.AddWithValue("@date", DateTime.Today);
+            //($"return_previous_day_final_credit_dept_amount('{creditDept.ID}','{DateTime.Today.ToShortDateString()}')", Cn);
+            Cn.Open();
 
-            int amount = default;
             using (Cn) { amount = (int)cmd.ExecuteScalar(); }
-
             return amount;
         }
 
@@ -565,9 +568,9 @@ namespace Infrastructure
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
                 { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
                 {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
-                {"@is_shunjuen",isShunjuen },{"@contain_outputted", isContainOutputted}, 
-                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart}, 
-                { "@output_date_end", outputDateEnd},{"@page", pageCount},{"@column",sortColumn}, 
+                {"@is_shunjuen",isShunjuen },{"@contain_outputted", isContainOutputted},
+                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
+                { "@output_date_end", outputDateEnd},{"@page", pageCount},{"@column",sortColumn},
                 { "@is_order_asc",sortDirection}
             };
 

@@ -86,6 +86,7 @@ namespace WPF.ViewModels
         private bool isClose = true;
         private bool isCeresaAmountVisibility;
         private bool isLimitCreditDept;
+        private bool isPairAmountReadOnly;
         #endregion
         #region DateTime
         private DateTime searchEndDate = DateTime.Today;
@@ -132,16 +133,26 @@ namespace WPF.ViewModels
             DefaultListExpress();
             SetBalanceFinalAccount();
             RefreshList();
-            PairAmountTitle = AccountingProcessLocation.IsAccountingGenreShunjuen ?
-                "ワイズコア仮受金" : "春秋苑仮払金";
-            IsCeresaAmountVisibility = AccountingProcessLocation.IsAccountingGenreShunjuen;
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen)
+            {
+                PairAmountTitle = "ワイズコア仮受金";
+                IsCeresaAmountVisibility = true;
+                IsPairAmountReadOnly = false;
+            }
+            else
+            {
+                PairAmountTitle = "春秋苑仮払金";
+                IsCeresaAmountVisibility = false;
+                IsPairAmountReadOnly = true;
+            }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
             SelectedCreditDept = CreditDepts[0];
         }
         public ReceiptsAndExpenditureMangementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataOutput(),
-                DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+                DefaultInfrastructure.GetDefaultDataBaseConnect())
+        { }
 
         public DelegateCommand PasswordCheckReversCommand { get; set; }
         /// <summary>
@@ -322,7 +333,7 @@ namespace WPF.ViewModels
             FinalAccountCategory =
                 AccountingProcessLocation.Location == Locations.管理事務所 ? "前日決算" : "預かり金額";
 
-            ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
+            ListTitle = $"一覧 : {FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";
         }
         /// <summary>
         /// 今日付けで伝票出力したデータリストを保持します
@@ -498,8 +509,10 @@ namespace WPF.ViewModels
         /// <param name="receiptsAndExpenditure"></param>
         private void WithdrawalAllocation(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
-            if (receiptsAndExpenditure.Content.Text == "口座入金")
+            if (receiptsAndExpenditure.Content.Text.Contains("口座入金"))
             { TransferSum += receiptsAndExpenditure.Price; }
+            else if (!receiptsAndExpenditure.CreditDept.IsShunjuenDept && receiptsAndExpenditure.Content.Text.Contains("仮払金"))
+            { PairAmount = AmountWithUnit(IntAmount(PairAmount) + receiptsAndExpenditure.Price); }
             else
             { WithdrawalSum += receiptsAndExpenditure.Price; }
         }
@@ -1252,6 +1265,29 @@ namespace WPF.ViewModels
                 selectedCreditDept = value;
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
+                if (value != null) { SetPreviousDayFinalAmount(); }
+
+                void SetPreviousDayFinalAmount()
+                {
+                    if (AccountingProcessLocation.Location != Locations.管理事務所 || !IsLimitCreditDept ||
+                        AccountingProcessLocation.IsAccountingGenreShunjuen)
+                    { return; }
+
+                    ListTitle = $"一覧：{FinalAccountCategory}{Space}" +
+                        $"{AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(value))}";
+                }
+            }
+        }
+        /// <summary>
+        /// 仮払金の読み取り専用チェック
+        /// </summary>
+        public bool IsPairAmountReadOnly
+        {
+            get => isPairAmountReadOnly;
+            set
+            {
+                isPairAmountReadOnly = value;
+                CallPropertyChanged(); 
             }
         }
 
@@ -1354,6 +1390,7 @@ namespace WPF.ViewModels
             PaymentSum = 0;
             WithdrawalSum = 0;
             TransferSum = 0;
+            PairAmount = string.Empty;
 
             if (IsPeriodSearch)
             {
@@ -1372,6 +1409,9 @@ namespace WPF.ViewModels
                 OutputDateEnd = SearchOutputDateStart;
             }
 
+            if (!AccountingProcessLocation.IsAccountingGenreShunjuen)
+            { SetLimitedCreditDeptFinalBalance(); }
+
             string Location;
             Location = IsLocationSearch ? AccountingProcessLocation.Location.ToString() : string.Empty;
 
@@ -1383,6 +1423,14 @@ namespace WPF.ViewModels
             Pagination.SetProperty();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
             SetCashboxTotalAmount();
+
+            void SetLimitedCreditDeptFinalBalance()
+            {
+                PreviousDayFinalAccount = IsLimitCreditDept
+                    ? DataBaseConnect.PreviousDayFinalAmount(SelectedCreditDept)
+                    : DataBaseConnect.PreviousDayFinalAmount
+                            (AccountingProcessLocation.IsAccountingGenreShunjuen);
+            }
         }
         /// <summary>
         /// データベースに接続して出納データリストを生成します

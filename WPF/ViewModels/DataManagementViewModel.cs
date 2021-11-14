@@ -133,7 +133,7 @@ namespace WPF.ViewModels
             SetDataRegistrationCommand.Execute();
             IsContentDefaultCreditDeptRegistration = true;
             IsBranchNumberVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
-            IsShunjuen = AccountingProcessLocation.IsAccountingGenreShunjuen;
+            IsShunjuenDept = IsShunjuen = AccountingProcessLocation.IsAccountingGenreShunjuen;            
         }
         public DataManagementViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
 
@@ -169,8 +169,7 @@ namespace WPF.ViewModels
             CreateAccountSubjects();
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, false, AccountingProcessLocation.IsAccountingGenreShunjuen);
-            Contents = DataBaseConnect.ReferenceContent(string.Empty, string.Empty, string.Empty,
-                AccountingProcessLocation.IsAccountingGenreShunjuen, false);
+            CreateContents();
         }
 
         protected override void SetDataOperationButtonContent(DataOperation operation)
@@ -1160,24 +1159,7 @@ namespace WPF.ViewModels
 
             IsAccountingSubjectOperationButtonEnabled = false;
             AccountingSubnectOperationButtonContent = "登録中";
-            _ = await Task.Run(() => DataBaseConnect.Registration(CurrentAccountingSubject));
-            ObservableCollection<AccountingSubject> accountingSubjects =
-                 DataBaseConnect.ReferenceAccountingSubject(AccountingSubjectCodeField, AccountingSubjectField, IsShunjuen, false);
-            if (accountingSubjects.Count != 1)
-            {
-                MessageBox = new MessageBoxInfo()
-                {
-                    Message = "勘定科目が特定できなかったため、枝番は登録されませんでした。",
-                    Title = "枝番登録エラー",
-                    Image = MessageBoxImage.Exclamation,
-                    Button = MessageBoxButton.OK
-                };
-                CallShowMessageBox = true;
-            }
-            else
-            {
-                BranchNumberRegistration(accountingSubjects[0]);
-            }
+            await Task.Run(() => Registration());
             AccountingSubjectDetailFieldClear();
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
                 (string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
@@ -1186,6 +1168,26 @@ namespace WPF.ViewModels
             CallCompletedRegistration();
             IsAccountingSubjectOperationButtonEnabled = true;
             AccountingSubnectOperationButtonContent = "登録";
+            
+            void Registration()
+            {
+                _ = DataBaseConnect.Registration(CurrentAccountingSubject);
+                ObservableCollection<AccountingSubject> accountingSubjects =
+                    DataBaseConnect.ReferenceAccountingSubject(AccountingSubjectCodeField, AccountingSubjectField, IsShunjuen, false);
+                if (accountingSubjects.Count != 1)
+                {
+                    MessageBox = new MessageBoxInfo()
+                    {
+                        Message = "勘定科目が特定できなかったため、枝番は登録されませんでした。",
+                        Title = "枝番登録エラー",
+                        Image = MessageBoxImage.Exclamation,
+                        Button = MessageBoxButton.OK
+                    };
+                    CallShowMessageBox = true;
+                }
+                else
+                { BranchNumberRegistration(accountingSubjects[0]); }
+            }
         }
         /// <summary>
         /// 枝番を登録します
@@ -1441,20 +1443,20 @@ namespace WPF.ViewModels
             CurrentCreditDept = new CreditDept(null, CreditDeptField, IsCreditDeptValidity, IsShunjuenDept);
 
             if (CallConfirmationDataOperation
-                ($"貸方勘定 : {CreditDeptField}\r\n有効性 : {IsCreditDeptValidity}", "貸方勘定") ==
-                    MessageBoxResult.Cancel) { return; }
+                ($"貸方勘定 : {CreditDeptField}\r\n有効性 : {IsCreditDeptValidity}\r\n" +
+                    $"春秋苑会計：{IsShunjuenDept}", "貸方勘定") == MessageBoxResult.Cancel) { return; }
 
             CreditDeptOperationButtonContent = "登録中";
             IsCreditDeptOperationButtonEnabled = false;
-            _ = await Task.Run(() => _ = DataBaseConnect.Registration(CurrentCreditDept));
+            _ = await Task.Run(() => DataBaseConnect.Registration(CurrentCreditDept));
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, IsCreditDeptValidityTrueOnly, AccountingProcessLocation.IsAccountingGenreShunjuen);
             CreditDeptFieldClear();
             CallCompletedRegistration();
             CreditDeptOperationButtonContent = "登録";
             IsCreditDeptOperationButtonEnabled = true;
-
         }
+
         private void CreditDeptFieldClear()
         {
             CreditDeptField = string.Empty;
@@ -1673,7 +1675,8 @@ namespace WPF.ViewModels
             {
                 string s = value.Replace(",", string.Empty);
                 flatRateField = int.TryParse(s, out int i) ? CommaDelimitedAmount(i) : string.Empty;
-                flatRateField = (i <= 0) ? string.Empty : CommaDelimitedAmount(i);
+                flatRateField = (i == 0) ? string.Empty : CommaDelimitedAmount(i);
+                if (value == "-") { flatRateField = value; }
                 CallPropertyChanged();
             }
         }
@@ -2131,12 +2134,13 @@ namespace WPF.ViewModels
         private async void ContentRegistration()
         {
             int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
+            CreditDept defaultCreditDept = SelectedContentDefaultCreditDept;
             CurrentContent = new Content(string.Empty, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
-            string flatRateInfo = (i > 0) ? AmountWithUnit(i) : "金額設定無し";
+            string flatRateInfo = (i != 0) ? AmountWithUnit(i) : "金額設定無し";
             string confirmationVoucherText = string.IsNullOrEmpty(ContentConvertText) ?
                 string.Empty : $"\r\n受納証但し書き{Space}:{Space}{ContentConvertText}";
-            string confirmationDefaultCreditDept = SelectedContentDefaultCreditDept == null ?
-                string.Empty : $"\r\n既定の貸方部門{Space}:{Space}{SelectedContentDefaultCreditDept.Dept}";
+            string confirmationDefaultCreditDept = defaultCreditDept == null ?
+                string.Empty : $"\r\n既定の貸方部門{Space}:{Space}{defaultCreditDept.Dept}";
 
             if (CallConfirmationDataOperation($"伝票内容 : {CurrentContent.Text}\r\n" +
                 $"勘定科目 : {CurrentContent.AccountingSubject.Subject}\r\n" +
@@ -2150,9 +2154,7 @@ namespace WPF.ViewModels
 
             await Task.Run(() => RegistrationContentAndOptionPropety());
 
-            Contents = DataBaseConnect.ReferenceContent
-                (string.Empty, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
-                    IsContentValidityTrueOnly);
+            CreateContents();
             ContentDetailFieldClear();
             CallCompletedRegistration();
             IsContentOperationEnabled = true;
@@ -2169,7 +2171,7 @@ namespace WPF.ViewModels
                 if (!string.IsNullOrEmpty(ContentConvertText)) { RegistrationContentConvertText(); }
 
                 if (IsContentDefaultCreditDeptSetting)
-                { _ = DataBaseConnect.Registration(SelectedContentDefaultCreditDept, CurrentContent); }
+                { _ = DataBaseConnect.Registration(defaultCreditDept, contents[0]); }
 
                 void RegistrationContentConvertText()
                 {
@@ -2250,9 +2252,7 @@ namespace WPF.ViewModels
             ContentDataOperationContent = "更新中";
             _ = await Task.Run(() => DataBaseConnect.Update(CurrentContent));
             ContentDetailFieldClear();
-            Contents = DataBaseConnect.ReferenceContent
-                (string.Empty, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
-                    IsContentValidityTrueOnly);
+            CreateContents();
             CallCompletedUpdate();
             ContentDataOperationContent = "更新";
             IsContentOperationEnabled = true;
