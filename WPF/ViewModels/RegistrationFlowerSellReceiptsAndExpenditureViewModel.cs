@@ -228,6 +228,9 @@ namespace WPF.ViewModels
         /// </summary>
         private void AmountCalculation()
         {
+            FlowerListTotalCount = 0;
+            FlowerListTotalAmount = string.Empty;
+            FlowerDataList = new Dictionary<string, KeyValuePair<int, int>>();
             CemeteryFlowerTotalAmount = AmountWithUnit
                 (IntAmount(CemeteryFlowerUnitPrice) * CemeteryFlowerCount);
             OperationDataList
@@ -246,8 +249,7 @@ namespace WPF.ViewModels
                 (ref FlowerDataList, BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount));
             TicketTotalAmount = AmountWithUnit(IntAmount(TicketUnitPrice) * TicketCount);
             OperationDataList
-                (ref FlowerDataList, Ticket, TicketCount, IntAmount(TicketTotalAmount));            FlowerListTotalCount = 0;
-            FlowerListTotalAmount = string.Empty;
+                (ref FlowerDataList, Ticket, TicketCount, IntAmount(TicketTotalAmount));
             foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in FlowerDataList)
             {
                 FlowerListTotalAmount =
@@ -255,13 +257,14 @@ namespace WPF.ViewModels
                 FlowerListTotalCount += pair.Value.Key;
             }
 
+            OtherFlowerListCount = 0;
+            OtherFlowerListTotalAmount = string.Empty;
+            OtherFlowerDataList = new Dictionary<string, KeyValuePair<int, int>>();
             SakakiTotalAmount = AmountWithUnit(IntAmount(SakakiUnitPrice) * SakakiCount);
             OperationDataList(ref OtherFlowerDataList, Sakaki, SakakiCount, IntAmount(SakakiTotalAmount));
             AnisatumTotalAmount = AmountWithUnit(IntAmount(AnisatumUnitPrice) * AnisatumCount);
             OperationDataList
                 (ref OtherFlowerDataList, Anisatum, AnisatumCount, IntAmount(AnisatumTotalAmount));
-            OtherFlowerListCount = 0;
-            OtherFlowerListTotalAmount = string.Empty;
             foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in OtherFlowerDataList)
             {
                 OtherFlowerListCount += pair.Value.Key;
@@ -468,7 +471,7 @@ namespace WPF.ViewModels
             get => cemeteryFlowerCount;
             set
             {
-                cemeteryFlowerCount = value;
+                cemeteryFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -481,7 +484,7 @@ namespace WPF.ViewModels
             get => highFlowerCount;
             set
             {
-                highFlowerCount = value;
+                highFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -494,7 +497,7 @@ namespace WPF.ViewModels
             get => specialFlowerCount;
             set
             {
-                specialFlowerCount = value;
+                specialFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -507,7 +510,7 @@ namespace WPF.ViewModels
             get => sakakiCount;
             set
             {
-                sakakiCount = value;
+                sakakiCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -520,7 +523,7 @@ namespace WPF.ViewModels
             get => anisatumCount;
             set
             {
-                anisatumCount = value;
+                anisatumCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -533,7 +536,7 @@ namespace WPF.ViewModels
             get => incenseStickCount;
             set
             {
-                incenseStickCount = value;
+                incenseStickCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -546,7 +549,7 @@ namespace WPF.ViewModels
             get => ticketCount;
             set
             {
-                ticketCount = value;
+                ticketCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -586,8 +589,9 @@ namespace WPF.ViewModels
             get => basketFlowerCount;
             set
             {
-                basketFlowerCount = value;
+                basketFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
                 CallPropertyChanged();
+                AmountCalculation();
             }
         }
         /// <summary>

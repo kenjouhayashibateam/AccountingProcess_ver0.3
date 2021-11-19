@@ -2,10 +2,12 @@
 using Domain.Entities;
 using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
+using Domain.Repositories;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -19,6 +21,8 @@ namespace Infrastructure.ExcelOutputData
         private readonly SlipType mySlipType;
         private readonly bool IsPayment;
         private readonly bool IsPreviousDay;
+        private readonly IDataBaseConnect DataBaseConnect =
+            DefaultInfrastructure.GetDefaultDataBaseConnect();
         /// <summary>
         /// 伝票の種類
         /// </summary>
@@ -52,20 +56,23 @@ namespace Infrastructure.ExcelOutputData
         {
             string code = string.Empty;
             string subject = string.Empty;
-            string content = string.Empty ;
+            DateTime currentDate = DefaultDate;
+            string content = string.Empty;
             string location = default;
             string creditDept = default;
             string clerk = default;
-            bool isTaxRate = false;
             int contentCount = 0;
+            int TotalPrice = 0;
+            bool isTaxRate = false;
+            bool isNextSlip;
             int inputRow = 0;
             int inputContentColumn = 0;
-            int TotalPrice = 0;
 
             //日付、入出金チェック、科目コード、勘定科目でソートして、伝票におこす
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderByDescending
                 (r => r.IsPayment)
                 .ThenBy(r => r.CreditDept.Dept)
+                .ThenBy(r => r.AccountActivityDate)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
                 .ThenBy(r => r.IsReducedTaxRate)
@@ -77,16 +84,19 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(code)) { code = rae.Content.AccountingSubject.SubjectCode; }
                 //subjectの初期値を設定する
                 if (string.IsNullOrEmpty(subject)) { subject = rae.Content.AccountingSubject.Subject; }
-                DateTime currentDate = TextHelper.DefaultDate;
                 //currentDateの初期値を設定する
-                if (currentDate == TextHelper.DefaultDate) { currentDate = rae.AccountActivityDate; }
+                if (currentDate == DefaultDate) { currentDate = rae.AccountActivityDate; }
                 if (string.IsNullOrEmpty(content)) { content = rae.Content.Text; }//contentの初期値を設定する}
                 if (string.IsNullOrEmpty(location)) { location = rae.Location; }
                 if (string.IsNullOrEmpty(creditDept)) { creditDept = rae.CreditDept.Dept; }
                 if (string.IsNullOrEmpty(clerk)) { clerk = rae.RegistrationRep.FirstName; }
                 contentCount++;
 
-                if (IsSameData(rae, currentDate, creditDept, code, subject, content, location, isTaxRate))
+                isNextSlip = IsSameData(rae, currentDate, creditDept, code, subject, content, location, isTaxRate);
+                DateTime WizeCoreAccountingActivityDate = DefaultDate;
+                if (isNextSlip) { WizeCoreFix(); }
+
+                if (isNextSlip)
                 {
                     ItemIndex++;
                     TotalPrice += rae.Price;
@@ -94,6 +104,7 @@ namespace Infrastructure.ExcelOutputData
                 else
                 {
                     currentDate = rae.AccountActivityDate;//入出金日を代入
+                    WizeCoreAccountingActivityDate = rae.AccountActivityDate;
                     code = rae.Content.AccountingSubject.SubjectCode;
                     subject = rae.Content.AccountingSubject.Subject;
                     content = rae.Content.Text;
@@ -123,9 +134,11 @@ namespace Infrastructure.ExcelOutputData
                 if (inputRow == 18)
                 { return; }
                 //伝票の詳細を設定したセルに出力する
-                myWorksheet.Cell(inputRow, inputContentColumn).Value =
-                    $@"{ReturnProvisoContent(rae)} {rae.Detail} " +
-                    $@"\{TextHelper.CommaDelimitedAmount(rae.Price)}-";
+                myWorksheet.Cell(inputRow, inputContentColumn).Value = rae.Price < 0
+                    ? $@"{ReturnProvisoContent(rae)} {rae.Detail} " +
+                        $"▲\\{CommaDelimitedAmount(rae.Price * -1)}-"
+                    : $@"{ReturnProvisoContent(rae)} {rae.Detail} " +
+                        $@"\{CommaDelimitedAmount(rae.Price)}-";
                 //{rae.Content.Text}伝票の一番上の右の欄に入金日を出力                
                 myWorksheet.Cell(StartRowPosition + 1, 16).Value =
                     $"{rae.AccountActivityDate:M/d}";
@@ -142,9 +155,7 @@ namespace Infrastructure.ExcelOutputData
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
                 //前日の青蓮堂の担当者と当日の伝票出力者（管理事務所の経理）が違う場合の対応
                 if (OutputRep.FirstName == clerk)
-                {
-                    myWorksheet.Cell(StartRowPosition + 6, 20).Value = OutputRep.FirstName;
-                }
+                { myWorksheet.Cell(StartRowPosition + 6, 20).Value = OutputRep.FirstName; }
                 else
                 {
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value = clerk;
@@ -158,6 +169,11 @@ namespace Infrastructure.ExcelOutputData
                 string ass =
                     $"{rae.Content.AccountingSubject.Subject} : " +
                     $"{rae.Content.AccountingSubject.SubjectCode}";
+                if (!string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber
+                    (rae.Content.AccountingSubject)))
+                {
+                    ass += $"-{DataBaseConnect.GetBranchNumber(rae.Content.AccountingSubject)}";
+                }
                 switch (mySlipType)
                 {
                     case SlipType.Payment:
@@ -173,6 +189,18 @@ namespace Infrastructure.ExcelOutputData
                 };
                 s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
+
+                //ワイズコア会計は入出金日で伝票を分ける
+                void WizeCoreFix()
+                {
+                    if (AccountingProcessLocation.IsAccountingGenreShunjuen) { return; }
+                    if (!isNextSlip) { return; }
+                    if (WizeCoreAccountingActivityDate == DefaultDate)
+                    { WizeCoreAccountingActivityDate = rae.AccountActivityDate; }
+
+                    bool b = WizeCoreAccountingActivityDate == rae.AccountActivityDate;
+                    isNextSlip = b;
+                }
             }
         }
 
@@ -251,13 +279,13 @@ namespace Infrastructure.ExcelOutputData
                 { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 30 };
         }
 
-        protected override double SetMaeginsBottom() { return ToInch(0); }
+        protected override double SetMarginsBottom() { return ToInch(0); }
 
-        protected override double SetMaeginsLeft() { return ToInch(2); }
+        protected override double SetMarginsLeft() { return ToInch(2); }
 
-        protected override double SetMaeginsRight() { return ToInch(0.5); }
+        protected override double SetMarginsRight() { return ToInch(0.5); }
 
-        protected override double SetMaeginsTop() { return ToInch(0); }
+        protected override double SetMarginsTop() { return ToInch(0); }
 
         protected override void SetMerge()
         {

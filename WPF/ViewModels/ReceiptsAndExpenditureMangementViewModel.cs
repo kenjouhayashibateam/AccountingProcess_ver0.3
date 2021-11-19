@@ -378,8 +378,10 @@ namespace WPF.ViewModels
             { TodaysFinalAccount = AmountWithUnit(todayTotalAmount); }
             else
             {
-                int difference = PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum -
-                    Cashbox.GetTotalAmount();
+                int suspensePayment =
+                    AccountingProcessLocation.IsAccountingGenreShunjuen ? 0 : IntAmount(PairAmount);
+                int difference = PreviousDayFinalAccount - WithdrawalSum - TransferSum +
+                    PaymentSum - suspensePayment - Cashbox.GetTotalAmount();
                 TodaysFinalAccount =
                     $"リストの収支に対して現金が\r\n{AmountWithUnit(Math.Abs(difference))}" +
                     $"{(difference < 0 ? "超過" : "不足")}しています";
@@ -417,35 +419,62 @@ namespace WPF.ViewModels
             }
             else
             {
-                int rengeanPDFA = DataBaseConnect.ReturnWizeCoreDayBalance
-                        ( DateTime.Now, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.繰越);
-                int rengeanPay = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.入金);
-                int rengeanWith = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.出金);
-                int rengeanBank = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.蓮華庵, WizeCoreAmountCategory.銀行振替);
-                int shunjuanPDFA = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.繰越);
-                int shunjuanPay = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.入金);
-                int shunjuanWith = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.出金);
-                int shunjuanBank = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.春秋庵, WizeCoreAmountCategory.銀行振替);
-                int kougePDFA = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.繰越);
-                int kougePay = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.入金);
-                int kougeWith = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.出金);
-                int kougeBank = DataBaseConnect.ReturnWizeCoreDayBalance
-                    (DateTime.Today, WizeCoreDept.香華, WizeCoreAmountCategory.銀行振替);
+                int rengeanPDFA = DataBaseConnect.PreviousDayFinalAmount
+                    (DataBaseConnect.ReferenceCreditDept(WizeCoreDept.蓮華庵.ToString(), true, false)[0]);
+
+                int rengeanPay = default;
+                int rengeanWith = default;
+                int rengeanBank = default;
+                int rengeanShunjuen = default;
+                AmountSorting(WizeCoreDept.蓮華庵, ref rengeanPay, ref rengeanWith, ref rengeanBank,
+                    ref rengeanShunjuen);
+
+                int shunjuanPDFA = DataBaseConnect.PreviousDayFinalAmount
+                    (DataBaseConnect.ReferenceCreditDept(WizeCoreDept.春秋庵.ToString(), true, false)[0]);
+
+                int shunjuanPay = default;
+                int shunjuanWith = default;
+                int shunjuanBank = default;
+                int shunjuanShunjuen = default;
+                AmountSorting(WizeCoreDept.春秋庵, ref shunjuanPay, ref shunjuanWith, ref shunjuanBank,
+                    ref shunjuanShunjuen);
+
+                int kougePDFA = DataBaseConnect.PreviousDayFinalAmount
+                    (DataBaseConnect.ReferenceCreditDept(WizeCoreDept.香華.ToString(), true, false)[0]);
+
+                int kougePay = default;
+                int kougeWith = default;
+                int kougeBank = default;
+                int kougeShunjuen = default;
+                AmountSorting(WizeCoreDept.香華, ref kougePay, ref kougeWith, ref kougeBank,
+                    ref kougeShunjuen);
 
                 await Task.Run(() =>
                     DataOutput.BalanceFinalAccount(rengeanPDFA, rengeanPay, rengeanWith, rengeanBank,
-                        shunjuanPDFA, shunjuanPay, shunjuanWith, shunjuanBank, kougePDFA, kougePay,
-                        kougeWith, kougeBank, IntAmount(YokohamaBankAmount), IntAmount(PairAmount)));
+                        rengeanShunjuen, shunjuanPDFA, shunjuanPay, shunjuanWith, shunjuanBank,
+                        shunjuanShunjuen, kougePDFA, kougePay, kougeWith, kougeBank, kougeShunjuen,
+                        IntAmount(YokohamaBankAmount), IntAmount(PairAmount)));
+
+                void AmountSorting(WizeCoreDept wizeCoreDept, ref int payment, ref int withdrawal,
+                    ref int bankAmount, ref int shunjuenAmount)
+                {
+                    foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                        (DefaultDate, DateTime.Today, string.Empty, wizeCoreDept.ToString(), string.Empty,
+                            string.Empty, string.Empty, string.Empty, false, false, true, true, true, DefaultDate,
+                            DateTime.Today, DateTime.Today, DateTime.Today))
+                    {
+                        if (rae.IsPayment) { payment += rae.Price; }
+                        else { WithdrawalSorting(rae, ref withdrawal, ref bankAmount, ref shunjuenAmount); }
+                    }
+                }
+
+                static void WithdrawalSorting(ReceiptsAndExpenditure rae, ref int withdrawal,
+                    ref int bankAmount, ref int shunjuenAmount)
+                {
+                    if (rae.Content.Text.Contains("口座入金")) { bankAmount += rae.Price; }
+                    else if (rae.Content.Text.Contains("仮払金")) { shunjuenAmount += rae.Price; }
+                    else { withdrawal += rae.Price; }
+                }
             }
             BalanceFinalAccountOutputButtonContent = "収支日報";
             IsOutputGroupEnabled = true;
@@ -1329,7 +1358,11 @@ namespace WPF.ViewModels
             else
             {
                 BalanceFinalAccount =
-                      $"{FinalAccountCategory} + 入金伝票 - 出金伝票 : {AmountWithUnit(ListAmount)}";
+                    $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
+                    $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
+                    $"{AmountWithUnit(PaymentSum)}-{Space}" +
+                    $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
+                    $"{Space}={Space}{AmountWithUnit(ListAmount)}";
             }
             SetCashboxTotalAmount();
             SetOutputButtonEnabled(ListAmount);

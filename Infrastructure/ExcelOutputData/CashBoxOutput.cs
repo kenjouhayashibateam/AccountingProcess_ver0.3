@@ -197,13 +197,13 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(21, 1).Value = $"合計　{myCashbox.GetTotalAmountWithUnit()}";
         }
 
-        protected override double SetMaeginsBottom() { return ToInch(1.91); }
+        protected override double SetMarginsBottom() { return ToInch(1.91); }
 
-        protected override double SetMaeginsLeft() { return ToInch(1.78); }
+        protected override double SetMarginsLeft() { return ToInch(1.78); }
 
-        protected override double SetMaeginsRight() { return ToInch(1.78); }
+        protected override double SetMarginsRight() { return ToInch(1.78); }
 
-        protected override double SetMaeginsTop() { return ToInch(1.91); }
+        protected override double SetMarginsTop() { return ToInch(1.91); }
 
         protected override void SetMerge()
         {

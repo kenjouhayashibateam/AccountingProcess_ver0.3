@@ -128,10 +128,10 @@ namespace Infrastructure.ExcelOutputData
         protected void SetMargins()
         {
             _ = myWorksheet.PageSetup.Margins
-                .SetLeft(SetMaeginsLeft())
-                .SetTop(SetMaeginsTop())
-                .SetRight(SetMaeginsRight())
-                .SetBottom(SetMaeginsBottom());
+                .SetLeft(SetMarginsLeft())
+                .SetTop(SetMarginsTop())
+                .SetRight(SetMarginsRight())
+                .SetBottom(SetMarginsBottom());
         }
         /// <summary>
         /// エクセルシートのフォント名を返します
@@ -149,22 +149,22 @@ namespace Infrastructure.ExcelOutputData
         /// エクセルシートのTopの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract double SetMaeginsTop();
+        protected abstract double SetMarginsTop();
         /// <summary>
         /// エクセルシートのLeftの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract double SetMaeginsLeft();
+        protected abstract double SetMarginsLeft();
         /// <summary>
         /// エクセルシートのRightの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract double SetMaeginsRight();
+        protected abstract double SetMarginsRight();
         /// <summary>
         /// エクセルシートのBottomの余白を設定します
         /// </summary>
         /// <returns></returns>
-        protected abstract double SetMaeginsBottom();
+        protected abstract double SetMarginsBottom();
         /// <summary>
         /// エクセルシートのセルの結合を設定します
         /// </summary>

@@ -432,15 +432,6 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int DeleteBranchNumber(AccountingSubject accountingSubject);
         /// <summary>
-        /// ワイズコアの各収支金額を返します
-        /// </summary>
-        /// <param name="referenceDate"></param>
-        /// <param name="wizeCoreDept"></param>
-        /// <returns></returns>
-        public int ReturnWizeCoreDayBalance
-            (DateTime referenceDate, WizeCoreDept wizeCoreDept,
-                WizeCoreAmountCategory wizeCoreAmountCategory);
-        /// <summary>
         /// 正式サーバーに接続しているか
         /// </summary>
         /// <returns></returns>

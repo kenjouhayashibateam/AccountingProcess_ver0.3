@@ -334,13 +334,13 @@ namespace Infrastructure.ExcelOutputData
             }
         }
 
-        protected override double SetMaeginsBottom() { return ToInch(1.3); }
+        protected override double SetMarginsBottom() { return ToInch(1.3); }
 
-        protected override double SetMaeginsLeft() { return ToInch(1.3); }
+        protected override double SetMarginsLeft() { return ToInch(1.3); }
 
-        protected override double SetMaeginsRight() { return ToInch(1.3); }
+        protected override double SetMarginsRight() { return ToInch(1.3); }
 
-        protected override double SetMaeginsTop() { return ToInch(1.9); }
+        protected override double SetMarginsTop() { return ToInch(1.9); }
 
         protected override void SetMerge()
         {

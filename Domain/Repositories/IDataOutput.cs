@@ -34,23 +34,28 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="rengeanPreviousDayFinalAccount">蓮華庵前日繰越</param>
         /// <param name="rengeanPayment">蓮華庵入金</param>
-        /// <param name="rengeanWithdrawalWithUnit">蓮華庵出金</param>
+        /// <param name="rengeanWithdrawal">蓮華庵出金</param>
         /// <param name="rengeanTranceferAmount">蓮華庵銀行振替</param>
+        /// <param name="rengeanShunjuenTranceferAmount">蓮華庵春秋苑振替</param>
         /// <param name="shunjuanPreviousDayFinalAccount">春秋庵前日繰越</param>
         /// <param name="shunjuanPayment">春秋庵入金</param>
         /// <param name="shunjuanWithdrawal">春秋庵出金</param>
         /// <param name="shunjuanTranceferAmount">春秋庵銀行振替</param>
+        /// <param name="shunjuanShunjuenTranceferAmount">春秋庵春秋苑振替</param>
         /// <param name="kougePreviousDayFinalAccount">香華前日繰越</param>
         /// <param name="kougePayment">香華入金</param>
         /// <param name="kougeWithdrawal">香華出金</param>
         /// <param name="kougeTranceferAmount">香華銀行振替</param>
+        /// <param name="kougeShunjuenTranceferAmount">香華春秋苑振替</param>
         /// <param name="yokohamaBankAmount">横浜銀行残高</param>
         /// <param name="shunjuenAmount">春秋苑仮払金</param>
         void BalanceFinalAccount
-            (int rengeanPreviousDayFinalAccount, int rengeanPayment,int rengeanWithdrawal,
-                int rengeanTranceferAmount,int shunjuanPreviousDayFinalAccount, int shunjuanPayment,
-                int shunjuanWithdrawal, int shunjuanTranceferAmount, int kougePreviousDayFinalAccount,
-                int kougePayment, int kougeWithdrawal, int kougeTranceferAmount, int yokohamaBankAmount,
+            (int rengeanPreviousDayFinalAccount, int rengeanPayment, int rengeanWithdrawal,
+                int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
+                int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal,
+                int shunjuanTranceferAmount, int shunjuanShunjuenTranceferAmount,
+                int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal,
+                int kougeTranceferAmount, int kougeShunjuenTranceferAmount, int yokohamaBankAmount,
                 int shunjuenAmount);
         /// <summary>
         /// 出納データを出力します

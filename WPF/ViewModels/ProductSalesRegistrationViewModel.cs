@@ -99,9 +99,7 @@ namespace WPF.ViewModels
         }
 
         public override void ValidationProperty(string propertyName, object value)
-        {
-            throw new NotImplementedException();
-        }
+        { }
 
         protected override void SetWindowDefaultTitle()
         { DefaultWindowTitle = "物販売上登録"; }

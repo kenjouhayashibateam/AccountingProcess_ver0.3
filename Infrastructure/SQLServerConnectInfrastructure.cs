@@ -970,7 +970,9 @@ namespace Infrastructure
                 ("get_branch_number").ExecuteReader();
 
             string s = string.Empty;
-            while (sqlDataReader.Read()) { s = (string)sqlDataReader["branch_number"]; }
+            while (sqlDataReader.Read()) 
+            { 
+                s = (string)sqlDataReader["branch_number"]; }
 
             return s;
         }
@@ -1000,13 +1002,6 @@ namespace Infrastructure
 
             return ReturnGeneretedParameterCommand
                 ("registration_branch_number").ExecuteNonQuery();
-        }
-
-        public int ReturnWizeCoreDayBalance
-            (DateTime referenceDate, WizeCoreDept wizeCoreDept,
-                WizeCoreAmountCategory wizeCoreAmountCategory)
-        {
-            throw new NotImplementedException();
         }
 
         public int CallFinalMonthFinalAccount(DateTime date, bool isShunjuen, CreditDept creditDept)
