@@ -132,7 +132,7 @@ namespace WPF.ViewModels
                     DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, true, null))
                 {
                     CallNoUPdateMessage
-                        ("春秋苑", DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today));
+                        (SHUNJUEN, DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today));
                     return;
                 }
                 _ = DataBaseConnect.UpdatePrecedingYearFinalAccount();
@@ -286,7 +286,7 @@ namespace WPF.ViewModels
 
             void ShunjuenRegistration()
             {
-                if (CallPreviousPerMonthFinalAccountRegisterInfo("春秋苑") == MessageBoxResult.Yes)
+                if (CallPreviousPerMonthFinalAccountRegisterInfo(SHUNJUEN) == MessageBoxResult.Yes)
                 {
                     _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
                     //前年度決算が登録されたので、登録ボタンを隠す

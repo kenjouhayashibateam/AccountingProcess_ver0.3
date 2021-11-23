@@ -1153,7 +1153,7 @@ namespace WPF.ViewModels
                 $"{branchNo}" +
                 $"勘定科目\t\t:\t{CurrentAccountingSubject.Subject}" +
                 $"\r\n有効性\t\t:\t{CurrentAccountingSubject.IsValidity}" +
-                $"\r\n会計\t\t:\t{(IsShunjuen ? "春秋苑" : "ワイズコア")}" +
+                $"\r\n会計\t\t:\t{(IsShunjuen ? SHUNJUEN : WIZECORE)}" +
                 $"\r\n\r\n登録しますか？", "勘定科目") ==
                 MessageBoxResult.Cancel) { return; }
 
@@ -1774,7 +1774,8 @@ namespace WPF.ViewModels
             }
 
             bool isContentDefaultCreditDeptCheck =
-                !IsContentDefaultCreditDeptSetting || SelectedContentDefaultCreditDept != null;
+                (IsContentDefaultCreditDeptSetting && SelectedContentDefaultCreditDept != null) ||
+                !IsContentDefaultCreditDeptSetting;
 
             IsContentOperationEnabled =
                 affiliationAccountingSubject != null && !string.IsNullOrEmpty(ContentField) &&
@@ -2036,6 +2037,7 @@ namespace WPF.ViewModels
             {
                 selectedContentDefaultCreditDept = value;
                 CallPropertyChanged();
+                SetContentOperationButtonEnabled();
             }
         }
         /// <summary>
@@ -2072,6 +2074,7 @@ namespace WPF.ViewModels
             {
                 isContentDefaultCreditDeptSetting = value;
                 CallPropertyChanged();
+                SetContentOperationButtonEnabled();
             }
         }
         /// <summary>
@@ -2208,6 +2211,7 @@ namespace WPF.ViewModels
             IsContentValidity = true;
             IsContentConvertButtonVisibility = false;
             IsContentDefaultCreditDeptButtonVisibility = false;
+            IsContentDefaultCreditDeptSetting = false;
             SelectedContentDefaultCreditDept = null;
             IsContentDefaultCreditDeptSettingEnabled = true;
         }

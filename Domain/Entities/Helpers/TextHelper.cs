@@ -12,6 +12,8 @@ namespace Domain.Entities.Helpers
     /// </summary>
     public class TextHelper
     {
+        public const string SHUNJUEN = "春秋苑";
+        public const string WIZECORE = "ワイズコア";
         /// <summary>
         /// 和暦のイニシャル
         /// </summary>

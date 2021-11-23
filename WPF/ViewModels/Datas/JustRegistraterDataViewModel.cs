@@ -46,6 +46,7 @@ namespace WPF.ViewModels.Datas
                 Button = MessageBoxButton.OKCancel,
                 Image = MessageBoxImage.Question,
             };
+            CallShowMessageBox = true;
             return MessageBox.Result;
         }
     }

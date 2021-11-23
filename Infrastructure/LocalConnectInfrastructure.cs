@@ -17,7 +17,7 @@ namespace Infrastructure
         { return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true); }
 
         public CreditDept CallCreditDept(string id)
-        { return new CreditDept("credit_dept0", "春秋苑", true, true); }
+        { return new CreditDept("credit_dept0", SHUNJUEN, true, true); }
 
         public int CallPrecedingYearFinalAccount(DateTime monthEnd) { return 10000; }
 
@@ -260,7 +260,7 @@ namespace Infrastructure
                 new Content("content3",OtherMiscellaneousIncome,-1,"管理料",true),
                 new Content("content4",OtherContribution,-1,"骨壺",true),
                 new Content("content5",OtherTyadokoroIncome,-1,"ビール、ライター",true),
-                new Content("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),
+                new Content("content6",SuspenseReceiptMoney,-1,WIZECORE,true),
                 new Content("content7",TravelExpense,-1,"3ヶ月交通費",true),
                 new Content("content8",SuppliesExpense,-1,"コード、マウスパッド",true),
                 new Content("content9",VehicleFee,-1,"ヴィッツ　ガソリン代",true),
@@ -278,7 +278,7 @@ namespace Infrastructure
         {
             ObservableCollection<CreditDept> list = new ObservableCollection<CreditDept>
             {
-                new CreditDept("credit_dept1","春秋苑",true,true),
+                new CreditDept("credit_dept1",SHUNJUEN,true,true),
                 new CreditDept("credit_dept2","法務部",true,true),
                 new CreditDept("credit_dept3","ホテル",false,false)
             };
@@ -409,7 +409,7 @@ namespace Infrastructure
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
-            CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true, true);
+            CreditDept shunjuen = new CreditDept("credit_dept1", SHUNJUEN, true, true);
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
                 ("accounting_subject11", "815", "冥加読経料", true, true);
@@ -449,7 +449,7 @@ namespace Infrastructure
                         DateTime.Today.AddDays(1),DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
                     new Content
-                    ("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,
+                    ("content6",SuspenseReceiptMoney,-1,WIZECORE,true),string.Empty,1010000,true,true,
                         DateTime.Today,DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"管理事務所",shunjuen,
                     new Content
@@ -559,7 +559,7 @@ namespace Infrastructure
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 
-            CreditDept shunjuen = new CreditDept("credit_dept1", "春秋苑", true, true);
+            CreditDept shunjuen = new CreditDept("credit_dept1", SHUNJUEN, true, true);
             CreditDept singyouji = new CreditDept("credit_dept2", "法務部", true, true);
             AccountingSubject Ofuse = new AccountingSubject
                 ("accounting_subject11", "815", "冥加読経料", true, true);
@@ -587,7 +587,7 @@ namespace Infrastructure
                         DateTime.Today.AddDays(1),DateTime.Today.AddDays(-1),false),
                 new ReceiptsAndExpenditure(2,DateTime.Today,repAkima,"青蓮堂",shunjuen,
                     new Content
-                    ("content6",SuspenseReceiptMoney,-1,"ワイズコア",true),string.Empty,1010000,true,true,
+                    ("content6",SuspenseReceiptMoney,-1,WIZECORE,true),string.Empty,1010000,true,true,
                         DateTime.Today,DateTime.Today.AddDays(-1),false),
                 };
 

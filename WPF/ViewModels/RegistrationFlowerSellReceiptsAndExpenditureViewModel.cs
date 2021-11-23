@@ -99,23 +99,6 @@ namespace WPF.ViewModels
         public DelegateCommand RegistrationCommand { get; }
         private void Registration()
         {
-            string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\r\n\r\n";
-
-            if (CemeteryFlowerCount > 0)
-            { AddString(CemeteryFlower, CemeteryFlowerCount, IntAmount(CemeteryFlowerTotalAmount)); }
-            if (HighFlowerCount > 0)
-            { AddString(HighFlower, HighFlowerCount, IntAmount(HighFlowerTotalAmount)); }
-            if (SpecialFlowerCount > 0)
-            { AddString(SpecialFlower, SpecialFlowerCount, IntAmount(SpecialFlowerTotalAmount)); }
-            if (TicketCount > 0) { AddString(Ticket, TicketCount, IntAmount(TicketTotalAmount)); }
-            if (BasketFlowerCount > 0)
-            { AddString(BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount)); }
-            if (SakakiCount > 0) { AddString(Sakaki, SakakiCount, IntAmount(SakakiTotalAmount)); }
-            if (AnisatumCount > 0)
-            { AddString(Anisatum, AnisatumCount, IntAmount(AnisatumTotalAmount)); }
-            if (IncenseStickCount > 0)
-            { AddString(IncenseStick, IncenseStickCount, IntAmount(IncenseStickTotalAmount)); }
-
             ObservableCollection<ReceiptsAndExpenditure> list =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(),
@@ -136,6 +119,23 @@ namespace WPF.ViewModels
                 CallShowMessageBox = true;
                 return;
             }
+
+            string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\r\n\r\n";
+
+            if (CemeteryFlowerCount > 0)
+            { AddString(CemeteryFlower, CemeteryFlowerCount, IntAmount(CemeteryFlowerTotalAmount)); }
+            if (HighFlowerCount > 0)
+            { AddString(HighFlower, HighFlowerCount, IntAmount(HighFlowerTotalAmount)); }
+            if (SpecialFlowerCount > 0)
+            { AddString(SpecialFlower, SpecialFlowerCount, IntAmount(SpecialFlowerTotalAmount)); }
+            if (TicketCount > 0) { AddString(Ticket, TicketCount, IntAmount(TicketTotalAmount)); }
+            if (BasketFlowerCount > 0)
+            { AddString(BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount)); }
+            if (SakakiCount > 0) { AddString(Sakaki, SakakiCount, IntAmount(SakakiTotalAmount)); }
+            if (AnisatumCount > 0)
+            { AddString(Anisatum, AnisatumCount, IntAmount(AnisatumTotalAmount)); }
+            if (IncenseStickCount > 0)
+            { AddString(IncenseStick, IncenseStickCount, IntAmount(IncenseStickTotalAmount)); }
 
             if (CallConfirmationDataOperation
                 ($"{dataContent}\r\n登録します。よろしいですか？", "花売り") ==
