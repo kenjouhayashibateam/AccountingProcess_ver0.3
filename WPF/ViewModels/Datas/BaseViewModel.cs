@@ -108,7 +108,6 @@ namespace WPF.ViewModels.Datas
                 callShowMessageBox = value;
                 CallPropertyChanged();
                 callShowMessageBox = false;
-                CallPropertyChanged();
             }
         }
         /// <summary>

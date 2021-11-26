@@ -32,8 +32,8 @@ namespace Infrastructure
         {
             Cn = new SqlConnection
             {
-                //ConnectionString = Properties.Settings.Default.SystemAdminConnection
-                ConnectionString = Properties.Settings.Default.TestServerConnectionString
+                ConnectionString = Properties.Settings.Default.SystemAdminConnection
+                //ConnectionString = Properties.Settings.Default.TestServerConnectionString
             };
         }
         public bool IsConnectiongProductionServer()

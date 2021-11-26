@@ -4,7 +4,9 @@ using Domain.Repositories;
 using Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
@@ -24,6 +26,9 @@ namespace WPF.ViewModels
         private int sakeCount;
         private int lighterProtecterCount;
         private int tieCount;
+        private int stockingCount;
+        private int nosiBagCount;
+        private int candleCount;
         #endregion
         #region strings
         private const string LIGHTER = "ライター";
@@ -31,6 +36,9 @@ namespace WPF.ViewModels
         private const string SAKE = "日本酒";
         private const string LIGHTERPROTECTER = "にぎっ点火";
         private const string TIE = "ネクタイ";
+        private const string STOCKING = "ストッキング";
+        private const string NOSIBAG = "のし袋";
+        private const string CANDLE = "ろうそく";
         private string lighterUnitPrice;
         private string lighterTotalAmount;
         private string beerUnitPrice;
@@ -41,14 +49,24 @@ namespace WPF.ViewModels
         private string lighterProtecterTotalAmount;
         private string tieUnitPrice;
         private string tieTotalAmount;
+        private string stockingUnitPrice;
+        private string stockingTotalAmount;
+        private string nosiBagUnitPrice;
+        private string nosiBagTotalAmount;
+        private string candleUnitPrice;
+        private string candleTotalAmount;
         private string menuTitle;
-        public string Lighter => LIGHTER;
-        public string Beer => BEER;
-        public string Sake => SAKE;
-        public string LighterProtecter => LIGHTERPROTECTER;
-        public string Tie => TIE;
+        private string lighter;
+        private string beer;
+        private string sake;
+        private string lighterProtecter;
+        private string tie;
+        private string stocking;
+        private string nosiBag;
+        private string candle;
         private string totalAmount;
         private string operationButtonContent = "登録";
+        private string InvalidContent;
         #endregion
         private DateTime selectedDate = DateTime.Today;
         private bool isRegistrationEnabled;
@@ -62,11 +80,28 @@ namespace WPF.ViewModels
                 (string.Empty, "その他茶所収入", true, true)[0] ?? null;
             MenuTitle = $"{accountingSubject.SubjectCode}：{accountingSubject.Subject}";
             RegistrationCommand = new DelegateCommand(() => Registration(), () => true);
+            CallContentsWarningMessageCommand = new DelegateCommand
+                (() => CallContentsWarningMessage(), () => true);
             SetProperty();
         }
         public ProductSalesRegistrationViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
+        /// <summary>
+        /// 一覧の内容に不足があった場合に警告を発するコマンド
+        /// </summary>
+        public DelegateCommand CallContentsWarningMessageCommand { get; }
+        private void CallContentsWarningMessage()
+        {
+            MessageBox = new MessageBoxInfo()
+            {
+                Message = $"{InvalidContent}\r\nのデータが不足しています。先に登録を済ませて下さい。",
+                Title = "データ不足警告",
+                Image = MessageBoxImage.Warning,
+                Button = MessageBoxButton.OK
+            };
+            CallShowMessageBox = true;
+        }
         /// <summary>
         /// データ登録コマンド
         /// </summary>
@@ -75,6 +110,7 @@ namespace WPF.ViewModels
         {
             string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\r\n\r\n";
             List<ReceiptsAndExpenditure> list = new List<ReceiptsAndExpenditure>();
+            InvalidContent = string.Empty;
 
             if (LighterCount > 0)
             { AddString(LIGHTER, LighterCount, IntAmount(LighterTotalAmount)); }
@@ -82,13 +118,19 @@ namespace WPF.ViewModels
             { AddString(BEER, BeerCount, IntAmount(BeerTotalAmount)); }
             if (SakeCount > 0)
             { AddString(SAKE, SakeCount, IntAmount(SakeTotalAmount)); }
-            if (LighterProtecterCount > 0) 
+            if (LighterProtecterCount > 0)
             { AddString(LIGHTERPROTECTER, LighterCount, IntAmount(LighterProtecterTotalAmount)); }
             if (TieCount > 0)
             { AddString(TIE, TieCount, IntAmount(TieTotalAmount)); }
+            if (StockingCount > 0)
+            { AddString(STOCKING, StockingCount, IntAmount(StockingTotalAmount)); }
+            if (NosiBagCount > 0)
+            { AddString(NOSIBAG, NosiBagCount, IntAmount(NosiBagTotalAmount)); }
+            if (CandleCount > 0)
+            { AddString(CANDLE, CandleCount, IntAmount(CandleTotalAmount)); }
 
-            if (CallConfirmationDataOperation(dataContent, "物販") ==
-                System.Windows.MessageBoxResult.Cancel) { return; }
+            if (CallConfirmationDataOperation(dataContent, "物販") == MessageBoxResult.Cancel)
+            { return; }
 
             IsRegistrationEnabled = false;
             OperationButtonContent = "登録中";
@@ -107,7 +149,8 @@ namespace WPF.ViewModels
 
             void AddString(string genre, int count, int amount)
             {
-                dataContent += $"{genre}\t{count}{Space}件\t{AmountWithUnit(amount)}\r\n";
+                dataContent += $"{genre}{(genre != STOCKING ? "\t" : string.Empty)}\t" +
+                    $"{AmountWithUnit(amount)}\r\n";
 
                 CreditDept creditDept = DataBaseConnect.ReferenceCreditDept(SHUNJUEN, true, true)[0];
                 Content content = DataBaseConnect.ReferenceContent
@@ -115,7 +158,7 @@ namespace WPF.ViewModels
 
                 list.Add(new ReceiptsAndExpenditure
                     (0, DateTime.Today, LoginRep.GetInstance().Rep,
-                        AccountingProcessLocation.Location.ToString(), creditDept, content, $"{count}{Space}件",
+                        AccountingProcessLocation.Location.ToString(), creditDept, content, string.Empty,
                         amount, true, true, SelectedDate, DefaultDate, false));
             }
         }
@@ -124,21 +167,51 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetProperty()
         {
-            LighterUnitPrice = AmountWithUnit(DataBaseConnect.ReferenceContent
-                (LIGHTER, string.Empty, string.Empty, true, true)[0].FlatRate);
+            Content content;
+
+            LighterUnitPrice = ReturnContentFlatRateWithUnit(LIGHTER);
+            if (content != null) { Lighter = content.Text; }
             LighterCount = 0;
-            BeerUnitPrice = AmountWithUnit(DataBaseConnect.ReferenceContent
-                (BEER, string.Empty, string.Empty, true, true)[0].FlatRate);
+            BeerUnitPrice = ReturnContentFlatRateWithUnit(BEER);
+            if (content != null) { Beer = content.Text; }
             BeerCount = 0;
-            SakeUnitPrice = AmountWithUnit(DataBaseConnect.ReferenceContent
-                (SAKE, string.Empty, string.Empty, true, true)[0].FlatRate);
+            SakeUnitPrice = ReturnContentFlatRateWithUnit(SAKE);
+            if (content != null) { Sake = content.Text; }
             SakeCount = 0;
-            LighterProtecterUnitPrice = AmountWithUnit(DataBaseConnect.ReferenceContent
-                (LIGHTERPROTECTER, string.Empty, string.Empty, true, true)[0].FlatRate);
+            LighterProtecterUnitPrice = ReturnContentFlatRateWithUnit(LIGHTERPROTECTER);
+            if (content != null) { LighterProtecter = content.Text; }
             LighterProtecterCount = 0;
-            TieUnitPrice = AmountWithUnit(DataBaseConnect.ReferenceContent
-                (TIE, string.Empty, string.Empty, true, true)[0].FlatRate);
+            TieUnitPrice = ReturnContentFlatRateWithUnit(TIE);
+            if (content != null) { Tie = content.Text; }
             TieCount = 0;
+            StockingUnitPrice = ReturnContentFlatRateWithUnit(STOCKING);
+            if (content != null) { Stocking = content.Text; }
+            StockingCount = 0;
+            NosiBagUnitPrice = ReturnContentFlatRateWithUnit(NOSIBAG);
+            if (content != null) { NosiBag = content.Text; }
+            NosiBagCount = 0;
+            CandleUnitPrice = ReturnContentFlatRateWithUnit(CANDLE);
+            if (content != null) { Candle = content.Text; }
+            CandleCount = 0;
+
+            string ReturnContentFlatRateWithUnit(string genre)
+            {
+                content = null;
+                ObservableCollection<Content> list = DataBaseConnect.ReferenceContent
+                    (genre, string.Empty, string.Empty, true, true);
+
+                if (list.Count > 0) { content = list[0]; }
+                else { InvalidContent += $"{genre}\r\n"; }
+
+                return content == null ? string.Empty : AmountWithUnit(ValidationFlatRate());
+
+                int ValidationFlatRate()
+                {
+                    if (content.FlatRate <= 0) { InvalidContent += $"{genre}{Space}の定額\r\n"; }
+
+                    return content.FlatRate <= 0 ? 0 : content.FlatRate;
+                }
+            }
         }
         /// <summary>
         /// ライター個数
@@ -176,7 +249,7 @@ namespace WPF.ViewModels
             {
                 lighterTotalAmount = value;
                 CallPropertyChanged();
-                SetTotalAmount();
+                SetTotalAmountAndOperaionEnabled();
             }
         }
         /// <summary>
@@ -215,7 +288,7 @@ namespace WPF.ViewModels
             {
                 beerTotalAmount = value;
                 CallPropertyChanged();
-                SetTotalAmount();
+                SetTotalAmountAndOperaionEnabled();
             }
         }
         /// <summary>
@@ -240,7 +313,7 @@ namespace WPF.ViewModels
             {
                 sakeTotalAmount = value;
                 CallPropertyChanged();
-                SetTotalAmount();
+                SetTotalAmountAndOperaionEnabled();
             }
         }
         /// <summary>
@@ -279,7 +352,7 @@ namespace WPF.ViewModels
             {
                 lighterProtecterTotalAmount = value;
                 CallPropertyChanged();
-                SetTotalAmount();
+                SetTotalAmountAndOperaionEnabled();
             }
         }
         /// <summary>
@@ -333,7 +406,7 @@ namespace WPF.ViewModels
             {
                 tieTotalAmount = value;
                 CallPropertyChanged();
-                SetTotalAmount();
+                SetTotalAmountAndOperaionEnabled();
             }
         }
         /// <summary>
@@ -409,19 +482,226 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// ストッキング個数
+        /// </summary>
+        public int StockingCount
+        {
+            get => stockingCount;
+            set
+            {
+                stockingCount = value;
+                CallPropertyChanged();
+                StockingTotalAmount = AmountWithUnit(IntAmount(StockingUnitPrice) * value);
+            }
+        }
+        /// <summary>
+        /// のし袋個数
+        /// </summary>
+        public int NosiBagCount
+        {
+            get => nosiBagCount;
+            set
+            {
+                nosiBagCount = value;
+                CallPropertyChanged();
+                NosiBagTotalAmount = AmountWithUnit(IntAmount(NosiBagUnitPrice) * value);
+            }
+        }
+        /// <summary>
+        /// 蝋燭個数
+        /// </summary>
+        public int CandleCount
+        {
+            get => candleCount;
+            set
+            {
+                candleCount = value;
+                CallPropertyChanged();
+                CandleTotalAmount = AmountWithUnit(IntAmount(CandleUnitPrice) * value);
+            }
+        }
+        /// <summary>
+        /// ストッキング単価
+        /// </summary>
+        public string StockingUnitPrice
+        {
+            get => stockingUnitPrice;
+            set
+            {
+                stockingUnitPrice = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ストッキング小計
+        /// </summary>
+        public string StockingTotalAmount
+        {
+            get => stockingTotalAmount;
+            set
+            {
+                stockingTotalAmount = value;
+                CallPropertyChanged();
+                SetTotalAmountAndOperaionEnabled();
+            }
+        }
+        /// <summary>
+        /// のし袋単価
+        /// </summary>
+        public string NosiBagUnitPrice
+        {
+            get => nosiBagUnitPrice;
+            set
+            {
+                nosiBagUnitPrice = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// のし袋小計
+        /// </summary>
+        public string NosiBagTotalAmount
+        {
+            get => nosiBagTotalAmount;
+            set
+            {
+                nosiBagTotalAmount = value;
+                CallPropertyChanged();
+                SetTotalAmountAndOperaionEnabled();
+            }
+        }
+        /// <summary>
+        /// 蝋燭単価
+        /// </summary>
+        public string CandleUnitPrice
+        {
+            get => candleUnitPrice;
+            set
+            {
+                candleUnitPrice = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 蝋燭小計
+        /// </summary>
+        public string CandleTotalAmount
+        {
+            get => candleTotalAmount;
+            set
+            {
+                candleTotalAmount = value;
+                CallPropertyChanged();
+                SetTotalAmountAndOperaionEnabled();
+            }
+        }
+        /// <summary>
+        /// ライター
+        /// </summary>
+        public string Lighter
+        {
+            get => lighter;
+            set
+            {
+                lighter = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ビール
+        /// </summary>
+        public string Beer
+        {
+            get => beer;
+            set
+            {
+                beer = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 日本酒
+        /// </summary>
+        public string Sake
+        {
+            get => sake;
+            set
+            {
+                sake = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// にぎっ点火
+        /// </summary>
+        public string LighterProtecter
+        {
+            get => lighterProtecter;
+            set
+            {
+                lighterProtecter = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ネクタイ
+        /// </summary>
+        public string Tie
+        {
+            get => tie;
+            set
+            {
+                tie = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ストッキング
+        /// </summary>
+        public string Stocking
+        {
+            get => stocking;
+            set
+            {
+                stocking = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// のし袋
+        /// </summary>
+        public string NosiBag
+        {
+            get => nosiBag;
+            set
+            {
+                nosiBag = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 蝋燭
+        /// </summary>
+        public string Candle
+        {
+            get => candle;
+            set
+            {
+                candle = value;
+                CallPropertyChanged();
+            }
+        }
 
-        private void SetTotalAmount()
+        private void SetTotalAmountAndOperaionEnabled()
         {
             int i = IntAmount(LighterTotalAmount) + IntAmount(BeerTotalAmount) +
                 IntAmount(SakeTotalAmount) + IntAmount(LighterProtecterTotalAmount) +
-                IntAmount(TieTotalAmount);
-            TotalAmount = $"総計：{AmountWithUnit(i)}";
-        }
+                IntAmount(TieTotalAmount) + IntAmount(StockingTotalAmount) +
+                IntAmount(NosiBagTotalAmount) + IntAmount(CandleTotalAmount);
 
-        private void SetRegistrationButtonEnabled()
-        {
-            IsRegistrationEnabled =
-                LighterCount + BeerCount + SakeCount + LighterProtecterCount + TieCount > 0;
+            TotalAmount = $"総計：{AmountWithUnit(i)}";
+            IsRegistrationEnabled = i > 0;
         }
 
         public override void ValidationProperty(string propertyName, object value)
@@ -437,7 +717,7 @@ namespace WPF.ViewModels
                     (!int.TryParse(value.ToString(), out _), propertyName, "数字を入力して下さい。");
             }
 
-            SetRegistrationButtonEnabled();
+            SetTotalAmountAndOperaionEnabled();
         }
 
         protected override void SetWindowDefaultTitle()

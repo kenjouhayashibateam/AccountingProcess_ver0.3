@@ -176,7 +176,7 @@
                                 <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
                             </Button.InputBindings>
                         </Button>
-                        <Button Content="物販売上登録&#10;(工事中)" Grid.Row="1" IsEnabled="{Binding IsShunjuenCommonEnabled}" Margin="5,8">
+                        <Button Content="物販売上登録" Grid.Row="1" IsEnabled="{Binding IsShunjuenCommonEnabled}" Margin="5,8">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding ShowProductSalesRegistrationViewCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding ShowProductSalesRegistrationViewCommand}" MouseAction="LeftClick"/>
