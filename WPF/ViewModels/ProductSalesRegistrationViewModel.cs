@@ -66,7 +66,7 @@ namespace WPF.ViewModels
         private string candle;
         private string totalAmount;
         private string operationButtonContent = "登録";
-        private string InvalidContent;
+        private string InvalidContent = string.Empty;
         #endregion
         private DateTime selectedDate = DateTime.Today;
         private bool isRegistrationEnabled;
@@ -93,6 +93,8 @@ namespace WPF.ViewModels
         public DelegateCommand CallContentsWarningMessageCommand { get; }
         private void CallContentsWarningMessage()
         {
+            if (InvalidContent.Length == 0) { return; }
+
             MessageBox = new MessageBoxInfo()
             {
                 Message = $"{InvalidContent}\r\nのデータが不足しています。先に登録を済ませて下さい。",

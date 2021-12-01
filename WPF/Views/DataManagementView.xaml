@@ -543,7 +543,7 @@
                                                 <ColumnDefinition Width="2*"/>
                                                 <ColumnDefinition Width="3*"/>
                                             </Grid.ColumnDefinitions>
-                                            <CheckBox Content="設定する" IsChecked="{Binding IsContentDefaultCreditDeptSetting}" VerticalAlignment="Center" Margin="5,8" Grid.ColumnSpan="2"/>
+                                            <CheckBox Content="設定する" IsChecked="{Binding IsContentDefaultCreditDeptSetting}" VerticalAlignment="Center" Margin="5"/>
                                             <ComboBox Name="DefaultCreditDeptComboBox" Grid.Column="2" IsEnabled="{Binding IsContentDefaultCreditDeptSetting}" ItemsSource="{Binding ContentDefaultCreditDepts}" DisplayMemberPath="Dept" Text="{Binding SelectedContentDefaultCreditDept.Dept}" SelectedItem="{Binding SelectedContentDefaultCreditDept,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Margin="5,3"/>
                                         </Grid>
                                     </Grid>

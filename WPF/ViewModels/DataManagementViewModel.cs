@@ -1513,7 +1513,7 @@ namespace WPF.ViewModels
         public DelegateCommand ContentDefaultCreditDeptOperationCommand { get; set; }
         private void ContentDefaultCreditDeptOperation()
         {
-            if(SelectedContentDefaultCreditDept==null)
+            if (SelectedContentDefaultCreditDept == null)
             {
                 MessageBox = new MessageBoxInfo()
                 {
@@ -1802,7 +1802,8 @@ namespace WPF.ViewModels
                     ContentIDField = currentContent.ID;
                     IsContentValidity = currentContent.IsValidity;
                     ContentField = currentContent.Text;
-                    FlatRateField = currentContent.FlatRate.ToString();
+                    FlatRateField = currentContent.FlatRate == -1 ?
+                        string.Empty : currentContent.FlatRate.ToString();
                     AffiliationAccountingSubjectCode = currentContent.AccountingSubject.SubjectCode;
                     IsContentConvertButtonVisibility = true;
                     IsContentDefaultCreditDeptButtonVisibility = true;
@@ -1901,6 +1902,7 @@ namespace WPF.ViewModels
                             AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                     AffiliationAccountingSubject = AffiliationAccountingSubjects.Count == 0 ?
                         null : AffiliationAccountingSubjects[0];
+                    ReferenceAccountingSubjectBelognsContent = value;
                 }
                 else
                 {
@@ -1909,7 +1911,6 @@ namespace WPF.ViewModels
                             AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                     AffiliationAccountingSubject = null;
                 }
-                ReferenceAccountingSubjectCodeBelognsContent = value;
             }
         }
         /// <summary>
@@ -2139,7 +2140,7 @@ namespace WPF.ViewModels
             int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
             CreditDept defaultCreditDept = SelectedContentDefaultCreditDept;
             CurrentContent = new Content(string.Empty, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
-            string flatRateInfo = (i != 0) ? AmountWithUnit(i) : "金額設定無し";
+            string flatRateInfo = (i != -1) ? AmountWithUnit(i) : "金額設定無し";
             string confirmationVoucherText = string.IsNullOrEmpty(ContentConvertText) ?
                 string.Empty : $"\r\n受納証但し書き{Space}:{Space}{ContentConvertText}";
             string confirmationDefaultCreditDept = defaultCreditDept == null ?
@@ -2150,7 +2151,10 @@ namespace WPF.ViewModels
                 $"定額 : {flatRateInfo}\r\n有効性 : {CurrentContent.IsValidity}{confirmationVoucherText}" +
                 $"{confirmationDefaultCreditDept}\r\n\r\n登録しますか？", "伝票内容")
                 == MessageBoxResult.Cancel)
-            { return; }
+            {
+                IsContentDefaultCreditDeptButtonVisibility = false;
+                return;
+            }
 
             ContentDataOperationContent = "登録中";
             IsContentOperationEnabled = false;
