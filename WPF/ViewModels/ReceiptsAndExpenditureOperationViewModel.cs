@@ -1219,7 +1219,7 @@ namespace WPF.ViewModels
                     MessageBox = new MessageBoxInfo()
                     {
                         Message = $"今月以外のデータの変更は、出納帳に影響を及ぼします。\r\n" +
-                            $"変更後は必ず変更した月の出納帳を出力し、訂正を申し出て下さい。",
+                            $"変更後は必ず変更した月の出納帳を出力し、経理責任者に訂正を申し出て下さい。",
                         Image = System.Windows.MessageBoxImage.Information,
                         Button = System.Windows.MessageBoxButton.OK,
                         Title = "変更する際の注意"

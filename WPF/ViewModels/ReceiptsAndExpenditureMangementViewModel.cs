@@ -1349,7 +1349,7 @@ namespace WPF.ViewModels
                 BalanceFinalAccount =
                     $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
                     $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-                    $"{AmountWithUnit(PaymentSum)}-{Space}" +
+                    $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
                     $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
                     $"{Space}={Space}{AmountWithUnit(ListAmount)}\r\n" +
                     $"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
@@ -1360,7 +1360,7 @@ namespace WPF.ViewModels
                 BalanceFinalAccount =
                     $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
                     $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-                    $"{AmountWithUnit(PaymentSum)}-{Space}" +
+                    $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
                     $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
                     $"{Space}={Space}{AmountWithUnit(ListAmount)}";
             }
