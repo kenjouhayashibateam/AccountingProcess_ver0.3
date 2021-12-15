@@ -8,314 +8,320 @@
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="550" Width="1100">
+        Title="{Binding WindowTitle}" Height="510" Width="1050">
     <Window.DataContext>
         <vm:SearchReceiptsAndExpenditureViewModel/>
     </Window.DataContext>
-    
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="10*"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="2*"/>
-            </Grid.RowDefinitions>
-            <GroupBox Header="検索メニュー" Grid.Column="0" Margin="5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <GroupBox Grid.Row="0" Header="データの種類" Margin="5,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="9*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="検索メニュー" Grid.Column="0" Margin="5" Grid.ColumnSpan="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Grid.Row="0" Header="データの種類" Margin="5,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton Content="全て" Grid.Column="0" IsChecked="{Binding IsAllData}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                                <RadioButton Content="入金のみ" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                                <RadioButton Content="出金のみ" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                            </Grid>
+                        </GroupBox>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="入出金日" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+                                <DatePicker Grid.Column="0" SelectedDate="{Binding SearchStartDate}" VerticalContentAlignment="Center" Margin="5"/>
+                                <TextBlock Text="～" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Margin="1"/>
+                                <DatePicker Grid.Column="2" SelectedDate="{Binding SearchEndDate}" VerticalContentAlignment="Center" Margin="5"/>
+                                <Button x:Name="AllPeriodSearchButton" Grid.Column="3" Content="全期間" Margin="5">
+                                    <Button.InputBindings>
+                                        <KeyBinding Command="{Binding InputAllPeriodCommand}" Key="Space"/>
+                                        <MouseBinding Command="{Binding InputAllPeriodCommand}" MouseAction="LeftClick"/>
+                                    </Button.InputBindings>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="貸方部門" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <CheckBox Content="貸方部門を限定しない" IsChecked="{Binding IsIndiscriminateDept}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <ComboBox Name="CreditDeptCommboBox" Grid.Row="1"  ItemsSource="{Binding CreditDepts}" Text="{Binding SelectedCreditDept.Dept}" SelectedValue="{Binding SelectedCreditDept}" DisplayMemberPath="Dept" IsEnabled="{Binding IsCreditDeptsEnabled}" Margin="5"/>
+                        </Grid>
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="勘定科目" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <CheckBox Content="勘定科目を限定しない" IsChecked="{Binding IsIndiscriminateAccountingSubject}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <ComboBox Name="AccountingSubjectCommboBox" Grid.Row="1" Text="{Binding SearchAccountingSubject}" ItemsSource="{Binding AccountingSubjects}" DisplayMemberPath="Subject" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsAccountingSubjectsEnabled}" Margin="5"/>
+                        </Grid>
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="内容" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <TextBox x:Name="SearchContentTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding SearchContentText,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                            <TextBlock Text="詳細" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                            <TextBox x:Name="SearchDetailTextBox" Grid.Column="1" Grid.Row="1" Text="{Binding SearchDetail,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="7*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Column="1" Margin="5">
+                    <GroupBox.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <RadioButton Content="全て" Grid.Column="0" IsChecked="{Binding IsAllData}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                            <RadioButton Content="入金のみ" Grid.Column="1" IsChecked="{Binding IsPaymentOnly}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                            <RadioButton Content="出金のみ" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                        </Grid>
-                    </GroupBox>
-                    <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="3*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="入出金日" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="7*"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="7*"/>
-                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <DatePicker Grid.Column="0" SelectedDate="{Binding SearchStartDate}" VerticalContentAlignment="Center" Margin="5"/>
-                            <TextBlock Text="～" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                            <DatePicker Grid.Column="2" SelectedDate="{Binding SearchEndDate}" VerticalContentAlignment="Center" Margin="5"/>
-                            <Button x:Name="AllPeriodSearchButton" Grid.Column="3" Content="全期間" Margin="5">
+                            <Border Grid.Column="1" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
+                            <Border Grid.Column="6" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
+                            <Button x:Name="RefleshListButton" Grid.Column="0" Padding="3" ToolTip="リストを再構築します" HorizontalAlignment="Center" Margin="3,5,10,3">
+                                <StackPanel>
+                                    <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Reload.svg"/>
+                                </StackPanel>
                                 <Button.InputBindings>
-                                    <KeyBinding Command="{Binding InputAllPeriodCommand}" Key="Space"/>
-                                    <MouseBinding Command="{Binding InputAllPeriodCommand}" MouseAction="LeftClick"/>
+                                    <KeyBinding Command="{Binding RefreshListCommand}" Key="Space"/>
+                                    <KeyBinding Command="{Binding RefreshListCommand}" Key="Return"/>
+                                    <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
                                 </Button.InputBindings>
                             </Button>
-                        </Grid>
-                    </Grid>
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="3*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="貸方部門" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <CheckBox Content="貸方部門を限定しない" IsChecked="{Binding IsIndiscriminateDept}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Name="CreditDeptCommboBox" Grid.Row="1"  ItemsSource="{Binding CreditDepts}" Text="{Binding SelectedCreditDept.Dept}" SelectedValue="{Binding SelectedCreditDept}" DisplayMemberPath="Dept" IsEnabled="{Binding IsCreditDeptsEnabled}" Margin="5"/>
-                    </Grid>
-                    <Grid Grid.Row="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="3*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="勘定科目" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <CheckBox Content="勘定科目を限定しない" IsChecked="{Binding IsIndiscriminateAccountingSubject}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <ComboBox Name="AccountingSubjectCommboBox" Grid.Row="1" Text="{Binding SearchAccountingSubject}" ItemsSource="{Binding AccountingSubjects}" DisplayMemberPath="Subject" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsAccountingSubjectsEnabled}" Margin="5"/>
-                    </Grid>
-                    <Grid Grid.Row="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="内容" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <TextBox x:Name="SearchContentTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding SearchContentText,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
-                        <TextBlock Text="詳細" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
-                        <TextBox x:Name="SearchDetailTextBox" Grid.Column="1" Grid.Row="1" Text="{Binding SearchDetail,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
-                    </Grid>
-                </Grid>
-            </GroupBox>
-        </Grid>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <GroupBox Grid.Column="1" Margin="5">
-                <GroupBox.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Grid.Column="1" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
-                        <Border Grid.Column="6" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
-                        <Button x:Name="RefleshListButton" Grid.Column="0" Padding="3" ToolTip="リストを再構築します" HorizontalAlignment="Center" Margin="3,5,10,3">
-                            <StackPanel>
-                                <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Reload.svg"/>
+                            <Button x:Name="ShowMinPageButton" Grid.Column="1" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" ToolTip="1ページ目を表示します" Margin="10,5,3,5">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <Button x:Name="PrevPageButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;" ToolTip="前のページを表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" HorizontalAlignment="Center" Margin="3,5">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <TextBlock Text="{Binding Pagination.ListPageInfo}" Grid.Column="3" VerticalAlignment="Center" Margin="3,5"/>
+                            <Button x:Name="NextPageButton" Grid.Column="4" Padding="3,0,3,3" Content=">|" ToolTip="次のページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" HorizontalAlignment="Center" Margin="3,5">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <Button x:Name="ShowMaxPageButton" Grid.Column="5" Padding="3,0,3,3" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" ToolTip="最終ページを表示します" Margin="3,5,10,5">
+                                <Button.InputBindings>
+                                    <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
+                                    <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
+                                </Button.InputBindings>
+                            </Button>
+                            <StackPanel Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,5,3,5">
+                                <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Sort.svg"/>
                             </StackPanel>
-                            <Button.InputBindings>
-                                <KeyBinding Command="{Binding RefreshListCommand}" Key="Space"/>
-                                <KeyBinding Command="{Binding RefreshListCommand}" Key="Return"/>
-                                <MouseBinding Command="{Binding RefreshListCommand}" MouseAction="LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
-                        <Button x:Name="ShowMinPageButton" Grid.Column="1" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" ToolTip="1ページ目を表示します" Margin="10,5,3,5">
-                            <Button.InputBindings>
-                                <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
-                                <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
-                        <Button x:Name="PrevPageButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;" ToolTip="前のページを表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" HorizontalAlignment="Center" Margin="3,5">
-                            <Button.InputBindings>
-                                <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
-                                <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
-                        <TextBlock Text="{Binding Pagination.ListPageInfo}" Grid.Column="3" VerticalAlignment="Center" Margin="3,5"/>
-                        <Button x:Name="NextPageButton" Grid.Column="4" Padding="3,0,3,3" Content=">|" ToolTip="次のページを表示します" IsEnabled="{Binding Pagination.IsNextPageEnabled}" HorizontalAlignment="Center" Margin="3,5">
-                            <Button.InputBindings>
-                                <KeyBinding Command="{Binding Pagination.NextPageListExpressCommand}" Key="Space"/>
-                                <MouseBinding Command="{Binding Pagination.NextPageListExpressCommand}" MouseAction="LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
-                        <Button x:Name="ShowMaxPageButton" Grid.Column="5" Padding="3,0,3,3" Content=">>|" IsEnabled="{Binding Pagination.IsNextPageEnabled}" ToolTip="最終ページを表示します" Margin="3,5,10,5">
-                            <Button.InputBindings>
-                                <KeyBinding Command="{Binding Pagination.MaxPageExpressCommand}" Key="Space"/>
-                                <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
-                            </Button.InputBindings>
-                        </Button>
-                        <StackPanel Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,5,3,5">
-                            <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Sort.svg"/>
-                        </StackPanel>
-                        <ComboBox Name="SortContentsCommboBox" Grid.Column="7" ItemsSource="{Binding Pagination.SortColumns}" Text="{Binding Pagination.SelectedSortColumn}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="3,5" VerticalAlignment="Top"/>
-                        <ToggleButton x:Name="SortDirectionToggleButton" Grid.Column="8" Padding="3,0" IsChecked="{Binding Pagination.SortDirectionIsASC}" Content="{Binding Pagination.SortDirectionContent}" HorizontalContentAlignment="Center" Margin="3,5"/>
-                    </Grid>
-                </GroupBox.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <DataGrid Grid.Row="0" ItemsSource="{Binding ReceiptsAndExpenditures}" AutoGenerateColumns="False" Margin="5">
-                        <DataGrid.ItemContainerStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsPayment}" Value="true">
-                                        <Setter Property="Background" Value="MistyRose"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsPayment}" Value="false">
-                                        <Setter Property="Background" Value="LightCyan"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.ItemContainerStyle>
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="入出金日" Width="3*">
-                                <DataGridTemplateColumn.HeaderStyle>
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTemplateColumn.HeaderStyle>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="3*" Header="貸方部門">
-                                <DataGridTemplateColumn.HeaderStyle>
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTemplateColumn.HeaderStyle>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding CreditDept.Dept}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="2*" Header="コード">
-                                <DataGridTemplateColumn.HeaderStyle>
-                                    <Style TargetType="DataGridColumnHeader">
-                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTemplateColumn.HeaderStyle>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="5*" Header="勘定科目">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="5*" Header="内容">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="7*" Header="詳細">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="4*" Header="金額">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="リスト件数" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding ListTotalCountInfo}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <ComboBox Name="SortContentsCommboBox" Grid.Column="7" ItemsSource="{Binding Pagination.SortColumns}" Text="{Binding Pagination.SelectedSortColumn}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="3,5" VerticalAlignment="Top"/>
+                            <ToggleButton x:Name="SortDirectionToggleButton" Grid.Column="8" Padding="3,0" IsChecked="{Binding Pagination.SortDirectionIsASC}" Content="{Binding Pagination.SortDirectionContent}" HorizontalContentAlignment="Center" Margin="3,5"/>
                         </Grid>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="入金総額" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
-                            <TextBlock Text="{Binding PaymentTotalAmountWithUnit}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                        </Grid>
-                        <Grid Grid.Column="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="出金総額" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
-                            <TextBlock Text="{Binding WithdwaralTotalAmountWithUnit}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
-                        </Grid>
-                        <Grid Grid.Column="3">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="リストの総計" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
-                            <TextBlock Text="{Binding ListTotalAmountWithUnit}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                    </GroupBox.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid Grid.Row="0" ItemsSource="{Binding ReceiptsAndExpenditures}" AutoGenerateColumns="False" Margin="5">
+                            <DataGrid.ItemContainerStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPayment}" Value="true">
+                                            <Setter Property="Background" Value="MistyRose"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsPayment}" Value="false">
+                                            <Setter Property="Background" Value="LightCyan"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.ItemContainerStyle>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="入出金日" Width="3*">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="3*" Header="貸方部門">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding CreditDept.Dept}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="2*" Header="コード">
+                                    <DataGridTemplateColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTemplateColumn.HeaderStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content.AccountingSubject.SubjectCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="5*" Header="勘定科目">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content.AccountingSubject.Subject}" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="5*" Header="内容">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="7*" Header="詳細">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="4*" Header="金額">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding PriceWithUnit}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="リスト件数" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding ListTotalCountInfo}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="入金総額" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                                <TextBlock Text="{Binding PaymentTotalAmountWithUnit}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="出金総額" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                                <TextBlock Text="{Binding WithdwaralTotalAmountWithUnit}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                            </Grid>
+                            <Grid Grid.Column="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="リストの総計" Grid.Row="0" FontSize="16" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
+                                <TextBlock Text="{Binding ListTotalAmountWithUnit}" Grid.Row="1" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                            </Grid>
                         </Grid>
                     </Grid>
-                     </Grid>
-            </GroupBox>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="9*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="3" Margin="5">
-                    <StackPanel>
-                        <svgc:SvgViewbox Height="45" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
-                    </StackPanel>
-                    <Button.InputBindings>
-                        <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
-                        <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
-                    </Button.InputBindings>
-                </Button>
+                </GroupBox>
             </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CloseButton" ToolTip="このウィンドウを閉じます" Grid.Column="3" Margin="5">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="30" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>
+                    <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
         </Grid>
     </Grid>
 </Window>

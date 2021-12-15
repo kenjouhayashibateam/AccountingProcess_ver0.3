@@ -95,5 +95,10 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         /// <returns></returns>
         public static Window ProductSalesRegistration() { return new ProductSalesRegistrationView(); }
+        /// <summary>
+        /// 御布施一覧データ閲覧画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window SearchCondlences() { return new SeachCondlencesView(); }
     }
 }

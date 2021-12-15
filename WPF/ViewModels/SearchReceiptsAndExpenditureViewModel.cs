@@ -47,7 +47,7 @@ namespace WPF.ViewModels
             Pagination.Add(this);
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
-            SelectedCreditDept = CreditDepts[0];
+            if (CreditDepts.Count != 0) { SelectedCreditDept = CreditDepts[0]; }
             AccountingSubjects = DataBaseConnect.ReferenceAccountingSubject
                 (string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, true);
             SearchEndDate = DateTime.Today;

@@ -144,6 +144,7 @@
     <Compile Include="ViewModels\RegistrationFlowerSellReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
+    <Compile Include="ViewModels\SearchCondlencesViewModel.cs" />
     <Compile Include="ViewModels\SearchReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
     <Compile Include="ViewModels\VoucherManagementViewModel.cs" />
@@ -203,6 +204,9 @@
     </Compile>
     <Compile Include="Views\ReceiptsAndExpenditureMangementView.xaml.cs">
       <DependentUpon>ReceiptsAndExpenditureMangementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SeachCondlencesView.xaml.cs">
+      <DependentUpon>SeachCondlencesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SearchReceiptsAndExpenditureView.xaml.cs">
       <DependentUpon>SearchReceiptsAndExpenditureView.xaml</DependentUpon>
@@ -276,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReceiptsAndExpenditureMangementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SeachCondlencesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

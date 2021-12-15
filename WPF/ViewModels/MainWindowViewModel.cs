@@ -94,8 +94,14 @@ namespace WPF.ViewModels
             ShowProductSalesRegistrationViewCommand = new DelegateCommand
                 (() => CreateShowWindowCommand
                     (ScreenTransition.ProductSalesRegistration()), () => true);
+            ShowSearchCondlencesViewCommand = new DelegateCommand
+                (() => CreateShowWindowCommand(ScreenTransition.SearchCondlences()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 御布施一覧データ閲覧画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowSearchCondlencesViewCommand { get; }
         /// <summary>
         /// 物販売上登録画面表示コマンド
         /// </summary>

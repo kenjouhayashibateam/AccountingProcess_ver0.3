@@ -16,7 +16,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// お布施一覧作成ViewModel
     /// </summary>
-    public class CreateCondolencesViewModel : BaseViewModel,ICondolenceObserver,
+    public class CreateCondolencesViewModel : BaseViewModel, ICondolenceObserver,
         IPagenationObserver, IClosing
     {
         #region Properties
@@ -292,5 +292,7 @@ namespace WPF.ViewModels
         }
 
         public bool OnClosing() { return IsClose; }
+
+        public void RefleshList() { CreateCondolences(true); }
     }
 }
