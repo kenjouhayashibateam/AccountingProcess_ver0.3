@@ -8,7 +8,7 @@
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
-        Title="SeachCondlencesView" Height="450" Width="800">
+        Title="{Binding WindowTitle}" Height="480" Width="1200">
     
     <Window.DataContext>
         <vm:SearchCondlencesViewModel/>
@@ -21,8 +21,8 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
             <Grid>
                 <Grid.RowDefinitions>
@@ -60,9 +60,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="5" BorderBrush="Silver" BorderThickness="0.6,0,0,0"/>
                         <Button x:Name="ShowCondlenceMinPageButton" Grid.Column="0" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" ToolTip="1ページ目を表示します" Margin="10,5,3,5">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
@@ -88,15 +86,119 @@
                                 <MouseBinding Command="{Binding Pagination.MaxPageExpressCommand}" MouseAction="LeftClick"/>
                             </Button.InputBindings>
                         </Button>
-                        <StackPanel Grid.Column="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,5,3,5">
-                            <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="Sort.svg"/>
-                        </StackPanel>
-                        <ComboBox Name="CondlenceSortContentsCommboBox" Grid.Column="6" ItemsSource="{Binding Pagination.SortColumns}" Text="{Binding Pagination.SelectedSortColumn}" SelectedValuePath="Key" DisplayMemberPath="Value" Margin="3,5" VerticalAlignment="Top"/>
-                        <ToggleButton x:Name="CondlenceSortDirectionToggleButton" Grid.Column="7" Padding="3,0" IsChecked="{Binding Pagination.SortDirectionIsASC}" Content="{Binding Pagination.SortDirectionContent}" HorizontalContentAlignment="Center" Margin="3,5"/>
                     </Grid>
                 </GroupBox.Header>
-                <DataGrid Margin="5">
-
+                <DataGrid ItemsSource="{Binding Condolences}" AutoGenerateColumns="False" Margin="5">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="3*" Header="入金日">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="4*" Header="施主名">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding OwnerName}" VerticalAlignment="Center" Margin="5,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="3*" Header="内容">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Content}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="3*" Header="僧侶">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SoryoName}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="4*" Header="御布施">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Almsgiving,StringFormat={}{0:n0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="4*" Header="御車代">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding CarTip,StringFormat={}{0:n0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="4*" Header="御膳料">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding MealTip,StringFormat={}{0:n0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="4*" Header="御車代御膳料">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding CarAndMealTip,StringFormat={}{0:n0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="4*" Header="懇志">
+                            <DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SocialGathering,StringFormat={}{0:n0} 円}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
         </Grid>

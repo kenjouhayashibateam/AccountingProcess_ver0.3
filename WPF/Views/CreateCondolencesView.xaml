@@ -81,22 +81,13 @@
                             <MouseBinding Command="{Binding ShowRegistrationViewCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="ShowRefleshListButton" Grid.Column="2" Padding="3,0,3,3" ToolTip="新規登録に移動します" Margin="10,3,10,3">
-                        <StackPanel>
-                            <svgc:SvgViewbox Height="20" b:SvgViewboxAttachment.Source="Register.svg"/>
-                        </StackPanel>
-                        <Button.InputBindings>
-                            <KeyBinding Command="{Binding Pagination.RefleshListCommand}" Key="Space"/>
-                            <MouseBinding Command="{Binding Pagination.RefleshListCommand}" MouseAction="LeftClick"/>
-                        </Button.InputBindings>
-                    </Button>
-                    <Button x:Name="ShowMinPageButton" Grid.Column="3" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
+                    <Button x:Name="ShowMinPageButton" Grid.Column="2" Padding="3,0,3,3" Content="|&lt;&lt;" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="10,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.MinPageExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.MinPageExpressCommand}" MouseAction="LeftClick"/>
                         </Button.InputBindings>
                     </Button>
-                    <Button x:Name="PrevButton" Grid.Column="4" Padding="3,0,3,3" Content="|&lt;" ToolTip="前のページを表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
+                    <Button x:Name="PrevButton" Grid.Column="3" Padding="3,0,3,3" Content="|&lt;" ToolTip="前のページを表示します" IsEnabled="{Binding Pagination.IsPrevPageEnabled}" Margin="5,1,5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding Pagination.PrevPageListExpressCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding Pagination.PrevPageListExpressCommand}" MouseAction="LeftClick"/>

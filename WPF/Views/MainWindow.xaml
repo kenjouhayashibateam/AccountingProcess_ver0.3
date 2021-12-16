@@ -58,13 +58,13 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="ShowReceiptsAndExpenditureViewButton" Grid.Column="1" Content="出納データ" Margin="50,5">
+                <Button x:Name="ShowReceiptsAndExpenditureViewButton" Grid.Column="1" Content="出納データ" Margin="30,5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding ShowSearchReceiptsAndExpenditureCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding ShowSearchReceiptsAndExpenditureCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
-                <Button x:Name="ShowSearchCondlencesViewButton" Grid.Column="2" Content="御布施一覧&#10;（工事中）" Margin="50,5">
+                <Button x:Name="ShowSearchCondlencesViewButton" Grid.Column="2" Content="御布施一覧" Margin="30,5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding ShowSearchCondlencesViewCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding ShowSearchCondlencesViewCommand}" MouseAction="LeftClick"/>

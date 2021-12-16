@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using WPF.ViewModels.Datas;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
@@ -13,7 +14,7 @@ namespace WPF.ViewModels
     /// </summary>
     public class SearchCondlencesViewModel : BaseViewModel, IPagenationObserver
     {
-        private DateTime searchStartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 6);
+        private DateTime searchStartDate = DefaultDate;
         private DateTime searchEndDate = DateTime.Today;
         private Pagination pagination = Pagination.GetPagination();
         private ObservableCollection<Condolence> condolences;
@@ -22,6 +23,13 @@ namespace WPF.ViewModels
         {
             Pagination.Add(this);
             Pagination.SortDirectionIsASC = true;
+
+            int i = -(int)DateTime.Today.DayOfWeek;
+
+            if (i > -2) { i -= 6; }
+            else { i += 1; }
+
+            SearchStartDate = DateTime.Today.AddDays(i);
         }
         public SearchCondlencesViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
