@@ -147,7 +147,7 @@ namespace WPF.ViewModels
             }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
-            SelectedCreditDept = CreditDepts[0];
+            if (CreditDepts.Count > 0) { SelectedCreditDept = CreditDepts[0]; }
         }
         public ReceiptsAndExpenditureMangementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataOutput(),

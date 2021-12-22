@@ -55,6 +55,10 @@ namespace WPF.ViewModels
         private bool isInputWizardEnabled;
         private bool isAccountingSubjectEnabled;
         private bool isContentEnabled;
+        /// <summary>
+        /// 警告をスルーするか
+        /// </summary>
+        private bool IsInfoThrough = false;
         #endregion
         #region ObservableCollections
         private ObservableCollection<CreditDept> comboCreditDepts;
@@ -271,7 +275,7 @@ namespace WPF.ViewModels
                     Title = "要注意！！！",
                     Button = System.Windows.MessageBoxButton.OK
                 };
-                CallPropertyChanged(nameof(MessageBox));
+                CallShowMessageBox = true;
             }
             IsDataOperationButtonEnabled = true;
         }
@@ -354,6 +358,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetReceiptsAndExpenditureProperty()
         {
+            IsInfoThrough = true;
             OperationRep = OperationData.Data.RegistrationRep ?? loginRep.Rep;
             ReceiptsAndExpenditureIDField = OperationData.Data.ID;
             IsValidity = OperationData.Data.IsValidity;
@@ -384,6 +389,8 @@ namespace WPF.ViewModels
                 DetailText = OperationData.Data.Detail;
                 Supplement = string.Empty;
             }
+
+            IsInfoThrough = false;
 
             string SetPrice()
             {
@@ -871,8 +878,8 @@ namespace WPF.ViewModels
             set
             {
                 detailText = value.Replace('　', ' ');
-                SetDataOperationButtonEnabled();
                 CallPropertyChanged();
+                SetDataOperationButtonEnabled();
             }
         }
         /// <summary>
@@ -1171,7 +1178,7 @@ namespace WPF.ViewModels
         private bool CanOperation()
         {
             //必要なフィールドに値が入っているか
-            bool b = !HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
+                bool b = !HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
                 !string.IsNullOrEmpty(ComboContentText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectText) &
                 !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
@@ -1216,6 +1223,7 @@ namespace WPF.ViewModels
 
                 void CreateConfirmationMessage()
                 {
+                    if (IsInfoThrough) { return; }
                     MessageBox = new MessageBoxInfo()
                     {
                         Message = $"今月以外のデータの変更は、出納帳に影響を及ぼします。\r\n" +
@@ -1224,7 +1232,7 @@ namespace WPF.ViewModels
                         Button = System.Windows.MessageBoxButton.OK,
                         Title = "変更する際の注意"
                     };
-                    CallPropertyChanged(nameof(MessageBox));
+                    CallShowMessageBox = true;
                 }
             }
         }

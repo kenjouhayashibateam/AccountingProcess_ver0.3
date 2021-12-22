@@ -98,7 +98,8 @@ namespace Infrastructure.ExcelOutputData
 
                 void PageMove()
                 {
-                    if (ReturnIsSameData()) { return; }
+                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubjectCode,
+                        currentSubject, currentContent, currentLocation, isTaxRate)) { return; }
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
                     myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
@@ -142,13 +143,6 @@ namespace Infrastructure.ExcelOutputData
                         myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
                     }
                 }
-
-                bool ReturnIsSameData()
-                {
-                    return IsSameData(rae, currentActivityDate, currentDept, currentSubjectCode, currentSubject,
-                    currentContent, currentLocation, isTaxRate);
-                }
-
 
                 void SetItem()
                 {
