@@ -12,7 +12,7 @@ namespace Infrastructure.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,7 +26,7 @@ namespace Infrastructure.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.151\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.155\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
             "application_connect;Password=shunjuen9773466")]
         public string AccountingProcessConnection {
             get {
@@ -37,7 +37,7 @@ namespace Infrastructure.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.151\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.155\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
             "sa;Password=sqlserver")]
         public string SystemAdminConnection {
             get {
@@ -48,7 +48,7 @@ namespace Infrastructure.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.151\\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;User ID=s" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.155\\SQLEXPRESS;Initial Catalog=SingyoujiDataBase;User ID=s" +
             "a;Password=sqlserver")]
         public string SingyoujiDataBaseConnection {
             get {

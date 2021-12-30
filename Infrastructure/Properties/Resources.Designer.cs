@@ -19,7 +19,7 @@ namespace Infrastructure.Properties {
     // または Visual Studio のようなツールを使用して自動生成されました。
     // メンバーを追加または削除するには、.ResX ファイルを編集して、/str オプションと共に
     // ResGen を実行し直すか、または VS プロジェクトをビルドし直します。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,7 @@ namespace Infrastructure.Properties {
         }
         
         /// <summary>
-        ///   &lt;value&gt;&quot;PROVIDER=SQLOLEDB;SERVER=192.168.44.163\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlsever&quot;&lt;/value&gt; に類似しているローカライズされた文字列を検索します。
+        ///   &lt;value&gt;&quot;PROVIDER=SQLOLEDB;SERVER=192.168.44.155\SQLEXPRESS;DATABASE=accounting_process;user id=sa;password=sqlserver&quot;&lt;/value&gt; に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string DATABASECONNECTIONSTRING {
             get {
