@@ -842,9 +842,11 @@ namespace WPF.ViewModels
 
             if (IsSupplementVisiblity)
             {
+                int i = DateTime.Now.Month < 4 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+
                 Supplement = SelectedAccountingSubject.Number == 26 ?
-                    $"{DateTime.Now.Year}年度分" :
-                    $"{DateTime.Now.Year},{DateTime.Now.Year + 1}年度分";
+                    $"{i}年度分" :
+                    $"{i},{i + 1}年度分";
                 SetDetailTitle("支払者名", $"必ず「{SupplementRequiredString}」の文字を入力");
             }
             else { SetDetailTitle("その他詳細", string.Empty); }

@@ -5,7 +5,17 @@
       "ProjectGuid": "6fad176d-78e7-4cf0-bd70-61d67add67fc",
       "DisplayName": "Infrastructure",
       "ColorIndex": 0
+    },
+    "d1b65be8-8d31-47ab-abd0-5ed627c8bac6": {
+      "ProjectGuid": "d1b65be8-8d31-47ab-abd0-5ed627c8bac6",
+      "DisplayName": "WPF",
+      "ColorIndex": 1
+    },
+    "44c1b257-4db3-42e3-ad52-fe484a527144": {
+      "ProjectGuid": "44c1b257-4db3-42e3-ad52-fe484a527144",
+      "DisplayName": "Domain",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 3
 }

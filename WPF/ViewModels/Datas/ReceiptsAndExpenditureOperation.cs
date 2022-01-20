@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace WPF.ViewModels.Datas
 {
+    /// <summary>
+    /// 保持している出納データの通知インフラストラクチャ
+    /// </summary>
     public interface IReceiptsAndExpenditureOperationObserver
     {
         void ReceiptsAndExpenditureOperationNotify();

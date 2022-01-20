@@ -1487,7 +1487,7 @@ namespace WPF.ViewModels
                 AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount,
-                Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
+                Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC, pagination.CountEachPage);
 
             Pagination.TotalRowCount = count;
             ReceiptsAndExpenditures = list;
@@ -1514,5 +1514,7 @@ namespace WPF.ViewModels
         public void PageNotify() { ReferenceReceiptsAndExpenditures(false); }
 
         public bool OnClosing() { return !IsClose; }
+
+        public void SetCountEachPage() { pagination.CountEachPage = 10; }
     }
 }

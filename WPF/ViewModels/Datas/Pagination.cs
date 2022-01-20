@@ -20,6 +20,10 @@ namespace WPF.ViewModels.Datas
         /// ソートするカラム名を格納するリストを生成します
         /// </summary>
         void SetSortColumns();
+        /// <summary>
+        /// ページごとの件数を設定します
+        /// </summary>
+        void SetCountEachPage();
     }
     /// <summary>
     /// ページネーションクラス
@@ -30,6 +34,10 @@ namespace WPF.ViewModels.Datas
         private int totalRowCount;
         private int pageCount;
         private int totalPageCount;
+        /// <summary>
+        /// ページごとの件数
+        /// </summary>
+        public int CountEachPage = 10;
         private string listPageInfo = "0/0";
         private string sortDirectionContent = string.Empty;
         private string selectedSortColumn = string.Empty;
@@ -184,8 +192,8 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         public void SetProperty()
         {
-            int i = TotalRowCount / 10;
-            i += TotalRowCount % 10 == 0 ? 0 : 1;
+            int i = TotalRowCount / CountEachPage;
+            i += TotalRowCount % CountEachPage == 0 ? 0 : 1;
             TotalPageCount = i;
             ListPageInfo = $"{PageCount}/{i}";
             IsPrevPageEnabled = PageCount > 1;
@@ -247,7 +255,11 @@ namespace WPF.ViewModels.Datas
         public void Add(IPagenationObserver pagenationObserver)
         {
             pagenationObservers.Add(pagenationObserver);
-            foreach (IPagenationObserver po in pagenationObservers) { po.SetSortColumns(); }
+            foreach (IPagenationObserver po in pagenationObservers) 
+            {
+                po.SetSortColumns(); 
+                po.SetCountEachPage();
+            }
         }
 
         private void PageNotification()

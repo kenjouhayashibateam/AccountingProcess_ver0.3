@@ -475,7 +475,7 @@ namespace WPF.ViewModels
                     (DefaultDate, DateTime.Today, string.Empty, "法務部", string.Empty, string.Empty,
                         string.Empty, SearchAccountingSubjectCode, true, true, true, true, true,
                         ReceiptsAndExpenditureSearchDate, receiptsAndExpenditureSearchDate, DefaultDate,
-                        DateTime.Today, Pagination.PageCount, "ID", false);
+                        DateTime.Today, Pagination.PageCount, "ID", false, pagination.CountEachPage);
             ReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = totalRow;
             Pagination.SetProperty();
@@ -949,5 +949,7 @@ namespace WPF.ViewModels
             Pagination.SortColumns = new Dictionary<int, string>()
             {{0,"ID" },{1,"入金日"}};
         }
+
+        public void SetCountEachPage() { pagination.CountEachPage = 10; }
     }
 }

@@ -41,7 +41,7 @@ namespace WPF.ViewModels
             Pagination.CountReset(isPageReset);
             (int count, ObservableCollection<Condolence> list) =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate, string.Empty, Pagination.PageCount);
+                    (SearchStartDate, SearchEndDate, string.Empty, Pagination.PageCount, Pagination.CountEachPage);
             Condolences = list;
             Pagination.TotalRowCount = count;
             Pagination.SetProperty();
@@ -111,5 +111,7 @@ namespace WPF.ViewModels
         { }
 
         protected override void SetWindowDefaultTitle() { DefaultWindowTitle = "御布施一覧データ"; }
+
+        public void SetCountEachPage() { pagination.CountEachPage = 10; }
     }
 }

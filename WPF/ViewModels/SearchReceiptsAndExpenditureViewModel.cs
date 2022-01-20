@@ -348,7 +348,8 @@ namespace WPF.ViewModels
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail, subject,
                     string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllData, IsPaymentOnly,
                     true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), DateTime.Today,
-                    Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC);
+                    Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC,
+                    Pagination.CountEachPage);
             Pagination.TotalRowCount = count;
             ListTotalCountInfo = $"{count}{Space}件";
             ReceiptsAndExpenditures = list;
@@ -389,5 +390,7 @@ namespace WPF.ViewModels
                     {2,"科目コード" }
                 };
         }
+
+        public void SetCountEachPage() { pagination.CountEachPage = 10; }
     }
 }

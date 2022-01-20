@@ -123,6 +123,7 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\CashJournalManagementViewModel.cs" />
     <Compile Include="ViewModels\Commands\WavSoundPlayCommand.cs" />
+    <Compile Include="ViewModels\TransferSlipOperationViewModel.cs" />
     <Compile Include="ViewModels\Datas\CondolenceOperation.cs" />
     <Compile Include="ViewModels\Datas\JustRegistraterDataViewModel.cs" />
     <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="ViewModels\Datas\ReceiptsAndExpenditureOperation.cs" />
     <Compile Include="ViewModels\Datas\ScreenTransition.cs" />
     <Compile Include="ViewModels\Datas\DataOperationViewModel.cs" />
+    <Compile Include="ViewModels\Datas\TransferReceiptsAndExpenditureOperation.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />
@@ -158,6 +160,9 @@
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
     <Compile Include="Views\CashJournalManagementView.xaml.cs">
       <DependentUpon>CashJournalManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransferSlipOperationView.xaml.cs">
+      <DependentUpon>TransferSlipOperationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CondolenceOperationView.xaml.cs">
       <DependentUpon>CondolenceOperationView.xaml</DependentUpon>
@@ -220,6 +225,10 @@
     <Compile Include="Win32\Api\User32.cs" />
     <Compile Include="Win32\Constant.cs" />
     <Page Include="Views\CashJournalManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransferSlipOperationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -91,7 +91,7 @@ namespace Infrastructure
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate, string location, int pageCount)
+            (DateTime startDate, DateTime endDate, string location, int pageCount, int countEachPage)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
@@ -405,7 +405,7 @@ namespace Infrastructure
                 string accountingSubjectCode, bool isShunjuen, bool whichDepositAndWithdrawalOnly,
                 bool isPayment, bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart,
                 DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd,
-                int pageCount, string sortColumn, bool sortDirection)
+                int pageCount, string sortColumn, bool sortDirection, int countEachPage)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
 

@@ -554,7 +554,7 @@ namespace Infrastructure
                 string accountingSubject, string accountingSubjectCode, bool isShunjuen,
                 bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
                 DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
-                DateTime outputDateEnd, int pageCount, string sortColumn, bool sortDirection)
+                DateTime outputDateEnd, int pageCount, string sortColumn, bool sortDirection, int countEachPage)
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
@@ -571,7 +571,7 @@ namespace Infrastructure
                 {"@is_shunjuen",isShunjuen },{"@contain_outputted", isContainOutputted},
                 {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
                 { "@output_date_end", outputDateEnd},{"@page", pageCount},{"@column",sortColumn},
-                { "@is_order_asc",sortDirection}
+                { "@is_order_asc",sortDirection},{"@count_each_page",countEachPage}
             };
 
             SqlDataReader dataReader =
@@ -583,6 +583,7 @@ namespace Infrastructure
             _ = Parameters.Remove("@page");
             _ = Parameters.Remove("@column");
             _ = Parameters.Remove("@is_order_asc");
+            _ = Parameters.Remove("@count_each_page");
 
             return (ReferenceReceiptsAndExpenditure().Count, list);
         }
@@ -690,12 +691,14 @@ namespace Infrastructure
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate, string location, int pageCount)
+            (DateTime startDate, DateTime endDate, string location, int pageCount, int countEachPage)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             Parameters = new Dictionary<string, object>()
-            { {"@start_date", startDate},{"@end_date", endDate},
-                {"@location", location},{"@page", pageCount } };
+            { 
+                {"@start_date", startDate},{"@end_date", endDate},
+                {"@location", location},{"@page", pageCount } ,{"@count_each_page",countEachPage }
+            };
 
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_condolence").ExecuteReader();

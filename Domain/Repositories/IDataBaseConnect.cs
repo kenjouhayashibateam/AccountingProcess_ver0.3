@@ -214,6 +214,7 @@ namespace Domain.Repositories
         /// <param name="pageCount">ページカウント</param>
         /// <param name="sortColumn">ソートカラム</param>
         /// <param name="sortDirection">ソート方向</param>
+        /// <param name="countEachPage">1ページの行数</param>
         /// <returns></returns>
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
             ReferenceReceiptsAndExpenditure
@@ -222,7 +223,7 @@ namespace Domain.Repositories
                     bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                     bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                     DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
-                    bool sortDirection);
+                    bool sortDirection,int countEachPage);
         /// <summary>
         /// 前日決算額を返します
         /// </summary>
@@ -306,7 +307,7 @@ namespace Domain.Repositories
         /// <param name="pageCount">ページカウント</param>
         /// <returns></returns>
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate, string location, int pageCount);
+            (DateTime startDate, DateTime endDate, string location, int pageCount, int countEachPage);
         /// <summary>
         /// 受納証に異なった文字列を表示する伝票内容を登録します
         /// </summary>

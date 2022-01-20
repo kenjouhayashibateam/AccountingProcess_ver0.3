@@ -251,7 +251,7 @@ namespace WPF.ViewModels
 
             (int count, ObservableCollection<Condolence> list) =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate, location, Pagination.PageCount);
+                    (SearchStartDate, SearchEndDate, location, Pagination.PageCount,pagination.CountEachPage);
             Condolences = list;
             Pagination.TotalRowCount = count;
 
@@ -294,5 +294,7 @@ namespace WPF.ViewModels
         public bool OnClosing() { return IsClose; }
 
         public void RefleshList() { CreateCondolences(true); }
+
+        public void SetCountEachPage() { pagination.CountEachPage = 10; }
     }
 }

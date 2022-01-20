@@ -1902,7 +1902,7 @@ namespace WPF.ViewModels
                             AccountingProcessLocation.IsAccountingGenreShunjuen, true);
                     AffiliationAccountingSubject = AffiliationAccountingSubjects.Count == 0 ?
                         null : AffiliationAccountingSubjects[0];
-                    ReferenceAccountingSubjectBelognsContent = value;
+                    ReferenceAccountingSubjectCodeBelognsContent = value;
                 }
                 else
                 {

@@ -53,7 +53,6 @@ C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Buf
 C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Memory.xml
 C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
 C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.Properties.Resources.resources
 C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.GenerateResource.cache
 C:\Users\houmu\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache

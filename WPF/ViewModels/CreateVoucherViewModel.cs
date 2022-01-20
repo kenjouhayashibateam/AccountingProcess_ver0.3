@@ -313,9 +313,9 @@ namespace WPF.ViewModels
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today,
                 AccountingProcessLocation.Location.ToString(), string.Empty, string.Empty, string.Empty,
-                string.Empty,string.Empty, true, true, true, true, true, SearchDate, SearchDate, DefaultDate,
+                string.Empty, string.Empty, true, true, true, true, true, SearchDate, SearchDate, DefaultDate,
                 DateTime.Today, Pagination.PageCount, Pagination.SelectedSortColumn,
-                Pagination.SortDirectionIsASC);
+                Pagination.SortDirectionIsASC, Pagination.CountEachPage);
 
             SearchReceiptsAndExpenditures = list;
             Pagination.TotalRowCount = count;
@@ -495,5 +495,7 @@ namespace WPF.ViewModels
         }
 
         public bool OnClosing() { return !IsClose; }
+
+        public void SetCountEachPage() { pagination.CountEachPage = 10; }
     }
 }

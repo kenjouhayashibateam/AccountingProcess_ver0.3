@@ -327,7 +327,7 @@ namespace WPF.ViewModels
         {
             MessageBox = new MessageBoxInfo()
             {
-                Message = "ログインしてください",
+                Message = "ログインしてください。\r\nログインしていない場合は金種金額計算のみ使用できます。",
                 Button = MessageBoxButton.OK,
                 Image = MessageBoxImage.Warning,
                 Title = "担当者データがありません"

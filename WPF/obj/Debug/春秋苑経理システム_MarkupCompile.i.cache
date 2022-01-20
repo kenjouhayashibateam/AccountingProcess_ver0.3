@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\
 WPF
 none
 false
 DEBUG;TRACE
-C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
-18352547197
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\App.xaml
+19-1968770116
 
-70780158007
-31-207628246
-Views\CashJournalManagementView.xaml;Views\CondolenceOperationView.xaml;Views\CreateCondolencesView.xaml;Views\CreateVoucherView.xaml;Views\DataManagementView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\PartTimerTransportationExpensesRegistrationView.xaml;Views\ProductSalesRegistrationView.xaml;Views\ReceiptsAndExpenditureOperationView.xaml;Views\ReceiptsAndExpenditureRegistrationInputHelperView.xaml;Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml;Views\RemainingMoneyCalculationView.xaml;Views\ReceiptsAndExpenditureMangementView.xaml;Views\SeachCondlencesView.xaml;Views\SearchReceiptsAndExpenditureView.xaml;Views\ShorendoCashBoxCalculationView.xaml;Views\VoucherManagementView.xaml;
+73-985354478
+31-393439299
+Views\CashJournalManagementView.xaml;Views\TransferSlipOperationView.xaml;Views\CondolenceOperationView.xaml;Views\CreateCondolencesView.xaml;Views\CreateVoucherView.xaml;Views\DataManagementView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\PartTimerTransportationExpensesRegistrationView.xaml;Views\ProductSalesRegistrationView.xaml;Views\ReceiptsAndExpenditureOperationView.xaml;Views\ReceiptsAndExpenditureRegistrationInputHelperView.xaml;Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml;Views\RemainingMoneyCalculationView.xaml;Views\ReceiptsAndExpenditureMangementView.xaml;Views\SeachCondlencesView.xaml;Views\SearchReceiptsAndExpenditureView.xaml;Views\ShorendoCashBoxCalculationView.xaml;Views\VoucherManagementView.xaml;
 
-True
+False
 

@@ -152,7 +152,7 @@
                             <RowDefinition Height="4*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="入出金日" Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                        <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" InputMethod.PreferredImeState="off" HorizontalAlignment="Left" Margin="5,3"/>
+                        <DatePicker x:Name="AccountActivityTextBox" Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" VerticalContentAlignment="Center" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" InputMethod.PreferredImeState="off" HorizontalAlignment="Left" Margin="5,3"/>
                     </Grid>
                     <Grid Grid.Row="9">
                         <Grid.RowDefinitions>
