@@ -11,6 +11,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -700,7 +701,7 @@ namespace WPF.ViewModels
                         AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null)))
                 {
                     ComboContents =
-                        DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value, 
+                        DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value,
                         AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
                     SelectedContent = ComboContents.Count > 0 ? ComboContents[0] : null;
                     ComboContentText = SelectedContent == null ? string.Empty : SelectedContent.Text;
@@ -810,7 +811,7 @@ namespace WPF.ViewModels
             {
                 selectedContent = value;
                 CallPropertyChanged();
-                if (value == null) 
+                if (value == null)
                 {
                     ComboContentText = string.Empty;
                     return;
@@ -1180,11 +1181,11 @@ namespace WPF.ViewModels
         private bool CanOperation()
         {
             //必要なフィールドに値が入っているか
-                bool b = !HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
-                !string.IsNullOrEmpty(ComboContentText) &
-                !string.IsNullOrEmpty(ComboAccountingSubjectText) &
-                !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
-                !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
+            bool b = !HasErrors && !string.IsNullOrEmpty(ComboCreditDeptText) &
+            !string.IsNullOrEmpty(ComboContentText) &
+            !string.IsNullOrEmpty(ComboAccountingSubjectText) &
+            !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
+            !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
 
             if (!b) { return false; }
             //OperationData.Dataがnullの時は登録なのでtrueを返す

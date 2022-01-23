@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
+using static Domain.Entities.Helpers.DataHelper;
 using static Domain.Entities.Helpers.TextHelper;
 using Domain.Repositories;
 using System;
@@ -47,7 +48,7 @@ namespace Infrastructure.ExcelOutputData
             SetClerkMarkField(14, 9, 16, 10);
             SetClerkMarkField(14, CopyColumnPosition(9), 16, CopyColumnPosition(10));
 
-            void SetBottomBorderOriginalAndCopy(int row1,int column1,int row2,int column2)
+            void SetBottomBorderOriginalAndCopy(int row1, int column1, int row2, int column2)
             {
                 SetBottomBorderThin(row1, column1, row2, column2);
                 SetBottomBorderThin(row1, CopyColumnPosition(column1), row2, CopyColumnPosition(column2));
@@ -138,20 +139,20 @@ namespace Infrastructure.ExcelOutputData
             SetCellPropertyOriginalAndCopy(16, 2);
 
             void SetLocalProperty(XLAlignmentHorizontalValues horizontalValues,
-                                                XLAlignmentVerticalValues verticalValues,int size)
+                                                XLAlignmentVerticalValues verticalValues, int size)
             {
                 horizontal = horizontalValues;
                 vertical = verticalValues;
                 fontSize = size;
             }
 
-            void SetCellPropertyOriginalAndCopy(int row,int column)
+            void SetCellPropertyOriginalAndCopy(int row, int column)
             {
                 SetAlignmentAndFontSize(row, column);
                 SetAlignmentAndFontSize(row, CopyColumnPosition(column));
             }
 
-            void SetRangeProperyOriginalAndCopy(int row1,int column1,int row2,int column2)
+            void SetRangeProperyOriginalAndCopy(int row1, int column1, int row2, int column2)
             {
                 SetRangeAlignmentAndFontSize(row1, column1, row2, column2);
                 SetRangeAlignmentAndFontSize(row1, CopyColumnPosition(column1), row2,
@@ -165,7 +166,7 @@ namespace Infrastructure.ExcelOutputData
                     .Alignment.SetVertical(vertical)
                     .Font.SetFontSize(fontSize);
             }
-            
+
             void SetAlignmentAndFontSize(int row, int column)
             {
                 _ = myWorksheet.Cell(row, column).Style
@@ -302,7 +303,7 @@ namespace Infrastructure.ExcelOutputData
             {
                 int i = 8;
                 int j = 4;
-                foreach(ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
+                foreach (ReceiptsAndExpenditure rae in VoucherData.ReceiptsAndExpenditures)
                 {
                     if (prevText == ReturnProvisoContent(rae))
                     { provisoAmount += rae.Price; }

@@ -10,6 +10,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -27,7 +28,7 @@ namespace WPF.ViewModels
         public string InputSVGFullPath { get => System.IO.Path.GetFullPath("./svgFiles/input_black_24dp.svg"); }
         #endregion
         #region ObservableCollections
-        private ObservableCollection<ReceiptsAndExpenditure> voucherContents = 
+        private ObservableCollection<ReceiptsAndExpenditure> voucherContents =
             new ObservableCollection<ReceiptsAndExpenditure>();
         private ObservableCollection<ReceiptsAndExpenditure> searchReceiptsAndExpenditures;
         #endregion
@@ -52,7 +53,6 @@ namespace WPF.ViewModels
             OperationData.Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
-            SetSortColumns();
             Pagination.SortDirectionIsASC = false;
             SearchDate = DateTime.Today;
             OutputDate = DateTime.Today;
@@ -61,7 +61,8 @@ namespace WPF.ViewModels
         }
         public CreateVoucherViewModel() : this
             (DefaultInfrastructure.GetDefaultDataBaseConnect(),
-                DefaultInfrastructure.GetDefaultDataOutput()) { }
+                DefaultInfrastructure.GetDefaultDataOutput())
+        { }
         /// <summary>
         /// 受納証管理画面を表示するコマンド
         /// </summary>
@@ -142,11 +143,7 @@ namespace WPF.ViewModels
         /// </summary>
         public void SetSortColumns()
         {
-            Pagination.SortColumns = new Dictionary<int, string>()
-            {
-                { 0,"ID"},
-                { 1,"科目コード"}
-            };
+            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
         }
 
         /// <summary>
@@ -219,7 +216,7 @@ namespace WPF.ViewModels
                 };
                 return;
             }
-            string convertText = 
+            string convertText =
                 DataBaseConnect.CallContentConvertText(SelectedSeachReceiptsAndExpenditure.Content.ID);
             SelectedSeachReceiptsAndExpenditure.Content.Text =
                 convertText ?? SelectedSeachReceiptsAndExpenditure.Content.Text;
@@ -302,7 +299,7 @@ namespace WPF.ViewModels
             {
                 searchDate = value;
                 CallPropertyChanged();
-                CreateReceiptsAndExpenditures( true);
+                CreateReceiptsAndExpenditures(true);
             }
         }
         private void CreateReceiptsAndExpenditures(bool isPageReset)

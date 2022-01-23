@@ -100,5 +100,10 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         /// <returns></returns>
         public static Window SearchCondlences() { return new SeachCondlencesView(); }
+        /// <summary>
+        /// 振替出納データ管理画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window TransferReceiptsExpenditureManagement() { return new TransferSlipOperationView(); }
     }
 }

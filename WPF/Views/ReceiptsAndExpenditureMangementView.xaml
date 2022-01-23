@@ -329,7 +329,7 @@
                                 </DataGridTemplateColumn.HeaderStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="DeleteDataButton" ToolTip="詳細を表示します" FontSize="11" Margin="2">
+                                        <Button x:Name="ShowUpdateButton" ToolTip="詳細を表示します" FontSize="11" Margin="2">
                                             <StackPanel>
                                                 <svgc:SvgViewbox Height="15" behavior:SvgViewboxAttachment.Source="font_size_magnifier_zoom_icon_149003.svg"/>
                                             </StackPanel>
@@ -381,7 +381,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>                    
+                    <TextBlock Grid.Row="0" Text="入金" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                     <TextBlock Grid.Row="1" Text="{Binding PaymentSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
                 </Grid>
                 <Grid Grid.Row="0" Grid.Column="2">
@@ -399,7 +399,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="社内振替" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5,0"/>
                     <TextBlock Grid.Row="1" Text="{Binding TransferSumDisplayValue}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
-               </Grid>
+                </Grid>
                 <Grid Grid.Row="0" Grid.Column="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
@@ -426,7 +426,7 @@
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="横浜銀行残高" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <CheckBox Content="変化なし" Grid.Column="1" IsChecked="{Binding IsYokohamaBankCheck}" VerticalAlignment="Center"/>                            
+                            <CheckBox Content="変化なし" Grid.Column="1" IsChecked="{Binding IsYokohamaBankCheck}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid Grid.Column="0" Grid.Row="3">
                             <Grid.ColumnDefinitions>
@@ -450,7 +450,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="セレサ川崎残高" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
-                            <CheckBox Content="変化なし" Grid.Column="1" IsChecked="{Binding IsCeresaCheck}" VerticalAlignment="Center"/>                            
+                            <CheckBox Content="変化なし" Grid.Column="1" IsChecked="{Binding IsCeresaCheck}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid Grid.Column="1" Grid.Row="3">
                             <Grid.ColumnDefinitions>

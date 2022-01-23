@@ -10,6 +10,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -43,7 +44,7 @@ namespace WPF.ViewModels
             string countInfo;
             LoginRep loginRep = LoginRep.GetInstance();
             ReceiptsAndExpenditure templateReceiptsAndExpenditure =
-                new ReceiptsAndExpenditure(0, DateTime.Today, loginRep.Rep, 
+                new ReceiptsAndExpenditure(0, DateTime.Today, loginRep.Rep,
                     AccountingProcessLocation.Location.ToString(),
                     DataBaseConnect.CallCreditDept("credit_dept1"), DataBaseConnect.CallContent("content16"),
                     string.Empty, 0, false, true, DateTime.Today, DefaultDate, false);
@@ -135,7 +136,7 @@ namespace WPF.ViewModels
             }
             SetListTitle();
             ValidationProperty(nameof(DataList), DataList);
-          
+
             SetIsRegistrationEnabled();
         }
 

@@ -124,7 +124,7 @@
                         <TextBox x:Name="DetailTextBox" Grid.Column="0" Grid.Row="1" Text="{Binding DetailText,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
                         <CheckBox Content="軽減税率のデータ" Grid.Row="1" Grid.Column="1" FontSize="14" Visibility="{Binding IsReducedTaxRateVisiblity,Converter={StaticResource VisibilityConverter}}" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                         <TextBox x:Name="SupplementTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding Supplement,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" VerticalContentAlignment="Center" Visibility="{Binding IsSupplementVisiblity,Converter={StaticResource VisibilityConverter}}" Margin="5,3"/>
-                    </Grid> 
+                    </Grid>
                     <Grid Grid.Row="7">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>

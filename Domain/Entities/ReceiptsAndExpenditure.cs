@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Helpers;
+﻿using Domain.Entities.Datas;
+using Domain.Entities.Helpers;
 using Domain.Entities.ValueObjects;
 using System;
 
@@ -7,7 +8,7 @@ namespace Domain.Entities
     /// <summary>
     /// 出納クラス
     /// </summary>
-    public class ReceiptsAndExpenditure:ReceiptsAndExpenditureBase
+    public class ReceiptsAndExpenditure : ReceiptsAndExpenditureBase
     {
         /// <summary>
         /// 伝票内容
@@ -34,7 +35,7 @@ namespace Domain.Entities
         /// <param name="outputDate">出力日</param>
         /// <param name="isRedicedTaxRate">軽減税率チェック</param>
         public ReceiptsAndExpenditure
-            (int id, DateTime registrationDate, Rep registrationRep,string location, CreditDept creditDept, 
+            (int id, DateTime registrationDate, Rep registrationRep, string location, CreditDept creditDept,
                 Content content, string detail, int price, bool isPayment, bool isValidity,
                 DateTime accountActivityDate, DateTime outputDate, bool isRedicedTaxRate)
         {
@@ -50,7 +51,7 @@ namespace Domain.Entities
             IsValidity = isValidity;
             AccountActivityDate = accountActivityDate;
             OutputDate = outputDate;
-            IsUnprinted = OutputDate == TextHelper.DefaultDate;
+            IsUnprinted = OutputDate == DataHelper.DefaultDate;
             IsReducedTaxRate = isRedicedTaxRate;
         }
     }

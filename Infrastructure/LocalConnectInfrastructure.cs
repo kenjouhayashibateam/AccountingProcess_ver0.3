@@ -5,13 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace Infrastructure
 {
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
         public AccountingSubject CallAccountingSubject(string id)
-        { return new AccountingSubject("accounitng_subject1", "000", "法事冥加",true, true); }
+        { return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true, true); }
 
         public Content CallContent(string id)
         { return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true); }
@@ -71,7 +72,7 @@ namespace Infrastructure
             return list;
         }
 
-        public ObservableCollection<AccountingSubject> 
+        public ObservableCollection<AccountingSubject>
             ReferenceAffiliationAccountingSubject(string contentText)
         {
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
@@ -234,23 +235,23 @@ namespace Infrastructure
             (string contentText, string accountingSubjectCode, string accountingSubject, bool isShunjuen,
                 bool isValidityTrueOnly)
         {
-            AccountingSubject OtherMiscellaneousIncome = 
+            AccountingSubject OtherMiscellaneousIncome =
                 new AccountingSubject("accounting_subject0", "882", "その他雑収入", true, true);
-            AccountingSubject OtherContribution = 
+            AccountingSubject OtherContribution =
                 new AccountingSubject("accounting_subject1", "822", "その他冥加金", true, true);
-            AccountingSubject OtherTyadokoroIncome = 
+            AccountingSubject OtherTyadokoroIncome =
                 new AccountingSubject("accounting_subject2", "874", "その他茶所収入", true, true);
             AccountingSubject SuspenseReceiptMoney =
                 new AccountingSubject("accounting_subject3", "416", "仮受金", true, true);
-            AccountingSubject TravelExpense = 
+            AccountingSubject TravelExpense =
                 new AccountingSubject("accounting_subject4", "611", "旅費交通費", true, true);
             AccountingSubject SuppliesExpense =
                 new AccountingSubject("accounting_subject5", "616", "消耗品費", true, true);
             AccountingSubject VehicleFee = new AccountingSubject
                 ("accounting_subject6", "621", "車両費", true, true);
-            AccountingSubject InternalMaintenanceExpenses = 
+            AccountingSubject InternalMaintenanceExpenses =
                 new AccountingSubject("accounting_subject7", "735", "苑内整備費", true, true);
-            AccountingSubject SuspensePayment = 
+            AccountingSubject SuspensePayment =
                 new AccountingSubject("accounting_subject8", "168", "仮払金", true, true);
             AccountingSubject Seresa =
                 new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true, true);
@@ -288,7 +289,7 @@ namespace Infrastructure
         public ObservableCollection<ReceiptsAndExpenditure> ReferenceReceiptsAndExpenditure
             (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
                 string content, string detail, string accountingSubject, string accountingSubjectCode,
-                bool isShunjuen,　bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
+                bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                 bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                 DateTime outputDateStart, DateTime OutputDateEnd)
         {
@@ -548,13 +549,13 @@ namespace Infrastructure
         {
             ObservableCollection<Voucher> list = new ObservableCollection<Voucher>()
             {
-                { new Voucher(1, "あああ",CallVoucherGroupingReceiptsAndExpenditure(0), DefaultDate, 
+                { new Voucher(1, "あああ",CallVoucherGroupingReceiptsAndExpenditure(0), DefaultDate,
                     CallRep(string.Empty), true) }
             };
             return list;
         }
 
-        public ObservableCollection<ReceiptsAndExpenditure> 
+        public ObservableCollection<ReceiptsAndExpenditure>
             CallVoucherGroupingReceiptsAndExpenditure(int voucherID)
         {
             Rep repAkima = new Rep("rep2", "秋間 大樹", "bbb", true, false);
@@ -629,5 +630,21 @@ namespace Infrastructure
         { return 1; }
 
         public bool IsConnectiongProductionServer() { return true; }
+
+        public ReceiptsAndExpenditure CallTransferReceiptsAndExpenditureParentData
+            (TransferReceiptsAndExpenditure transferReceiptsAndExpenditure)
+        { return null; }
+
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(ReceiptsAndExpenditure receiptsAndExpenditure)
+        {
+            return new ObservableCollection<TransferReceiptsAndExpenditure>()
+            {
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,true,
+                    DateTime.Today,DateTime.Today,false)
+            };
+        }
     }
 }

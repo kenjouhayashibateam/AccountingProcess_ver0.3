@@ -150,6 +150,7 @@
     <Compile Include="ViewModels\SearchReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
     <Compile Include="ViewModels\VoucherManagementViewModel.cs" />
+    <Compile Include="Views\Behaviors\BoolNegativeConverter.cs" />
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
     <Compile Include="Views\Behaviors\DataGridAttachment.cs" />
     <Compile Include="Views\Behaviors\DatePickerAttachment.cs" />

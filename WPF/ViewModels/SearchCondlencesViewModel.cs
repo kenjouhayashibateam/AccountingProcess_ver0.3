@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using WPF.ViewModels.Datas;
-using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {

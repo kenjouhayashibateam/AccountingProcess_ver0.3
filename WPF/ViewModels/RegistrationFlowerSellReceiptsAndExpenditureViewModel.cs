@@ -11,6 +11,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -271,7 +272,7 @@ namespace WPF.ViewModels
                 OtherFlowerListTotalAmount =
                     AmountWithUnit(IntAmount(OtherFlowerListTotalAmount) + pair.Value.Value);
             }
-            
+
             IncenseStickTotalAmount =
                 AmountWithUnit(IntAmount(IncenseStickUnitPrice) * IncenseStickCount);
             OperationDataList
@@ -801,7 +802,7 @@ namespace WPF.ViewModels
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            
+
         }
 
         protected override void SetWindowDefaultTitle()

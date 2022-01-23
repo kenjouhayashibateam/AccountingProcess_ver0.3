@@ -2,6 +2,7 @@
 using Domain.Entities.ValueObjects;
 using Infrastructure;
 using Domain.Entities;
+using WPF.ViewModels;
 
 namespace WPF.ViewModels.Tests
 {

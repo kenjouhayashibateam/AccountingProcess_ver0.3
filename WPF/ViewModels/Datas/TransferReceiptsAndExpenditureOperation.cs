@@ -44,8 +44,8 @@ namespace WPF.ViewModels.Datas
 
         public void Notify()
         {
-            foreach (ITransferReceiptsAndExpenditureOperationObserver observer in observers) 
+            foreach (ITransferReceiptsAndExpenditureOperationObserver observer in observers)
             { observer.TransferReceiptsAndExpenditureOperationNotify(); }
-                }
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace WPF.ViewModels.Datas
         /// <summary>
         /// ページごとの件数
         /// </summary>
-        public int CountEachPage = 10;
+        public int CountEachPage;
         private string listPageInfo = "0/0";
         private string sortDirectionContent = string.Empty;
         private string selectedSortColumn = string.Empty;
@@ -254,12 +254,9 @@ namespace WPF.ViewModels.Datas
 
         public void Add(IPagenationObserver pagenationObserver)
         {
+            pagenationObserver.SetSortColumns();
+            pagenationObserver.SetCountEachPage();
             pagenationObservers.Add(pagenationObserver);
-            foreach (IPagenationObserver po in pagenationObservers) 
-            {
-                po.SetSortColumns(); 
-                po.SetCountEachPage();
-            }
         }
 
         private void PageNotification()

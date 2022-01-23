@@ -3,14 +3,12 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -37,10 +35,11 @@ namespace WPF.ViewModels
         private bool isPayment;
         private bool isValidity;
         private bool isReducedTaxRate;
+        private bool isValidityEnabled;
         #endregion
         #region Dates
-        private DateTime searchStartDate;
-        private DateTime searchEndDate;
+        private DateTime searchStartDate = DateTime.Now;
+        private DateTime searchEndDate = DateTime.Now;
         private DateTime accountActivityDate;
         #endregion
         #region ObservableCollections
@@ -58,32 +57,83 @@ namespace WPF.ViewModels
         private AccountingSubject creditAccount;
         private Content selectedContent;
         #endregion
+        private ReceiptsAndExpenditure selectedReceiptsAndExpenditure;
+        private Pagination pagination;
         #endregion
 
         public TransferSlipOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            if(TransferReceiptsAndExpenditureOperation.GetInstance() == null) { FieldClear(); }
-            else { FieldClear(); }
+            Pagination = Pagination.GetPagination();
+            Pagination.Add(this);
+            Pagination.SetProperty();
+
+            if (TransferReceiptsAndExpenditureOperation.GetInstance().GetData() == null)
+            {
+                FieldClear();
+                SetDataOperation(DataOperation.登録);
+                DataOperationButtonContent = DataOperation.登録.ToString();
+            }
+            else
+            {
+                SetProperty();
+                SetDataOperation(DataOperation.更新);
+                DataOperationButtonContent = DataOperation.更新.ToString();
+            }
+            SetDelegateCommand();
         }
         public TransferSlipOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
+        /// <summary>
+        /// 振替伝票データプロパティをセットします
+        /// </summary>
+        private void SetProperty()
+        {
+            if (TransferReceiptsAndExpenditureOperation.GetInstance().GetData() == null) { return; }
+
+            TransferReceiptsAndExpenditure trae = TransferReceiptsAndExpenditureOperation.GetInstance().GetData();
+            SearchStartDate = trae.AccountActivityDate;
+            SearchEndDate = trae.AccountActivityDate;
+            AccountActivityDate = trae.AccountActivityDate;
+            SelectedCreditDept = trae.CreditDept;
+            DebitAccountCode = trae.DebitAccount.SubjectCode;
+            DebitAccount = trae.DebitAccount;
+            CreditAccountCode = trae.CreditAccount.SubjectCode;
+            CreditAccount = trae.CreditAccount;
+            SelectedContent = DataBaseConnect.ReferenceContent
+                (trae.ContentText, string.Empty, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
+                    false)[0];
+            price = trae.Price.ToString();
+            IsReducedTaxRate = trae.IsReducedTaxRate;
+
+            ReceiptsAndExpenditure rae = DataBaseConnect.CallTransferReceiptsAndExpenditureParentData(trae);
+            if (rae == null) { return; }
+
+            IsPayment = rae.IsPayment;
+        }
+        /// <summary>
+        /// フィールドをクリアします
+        /// </summary>
         private void FieldClear()
         {
-            IsDoNotUseOriginalSlip=false;
-            SearchStartDate=DateTime.Now;
-            SearchEndDate=DateTime.Now;
-            SearchSubjectCode= string.Empty;
-            IsLimitedCreditDept=false;
+            IsDoNotUseOriginalSlip = false;
+            IsPayment = true;
+            AccountActivityDate = DateTime.Now;
+            SearchStartDate = DateTime.Now;
+            SearchEndDate = DateTime.Now;
+            SearchSubjectCode = string.Empty;
+            IsLimitedCreditDept = false;
             ReceiptsAndExpenditureFieldClear();
         }
-
+        /// <summary>
+        /// 選択された元伝票フィールドをクリアします
+        /// </summary>
         private void ReceiptsAndExpenditureFieldClear()
         {
             SelectedSubjectCode = string.Empty;
-            SelectedSubject= string.Empty;
-            SelectedContentText= string.Empty;
-            SelectedDetail= string.Empty;
-            SelectedPrice= string.Empty;
+            SelectedSubject = string.Empty;
+            SelectedContentText = string.Empty;
+            SelectedDetail = string.Empty;
+            SelectedPrice = string.Empty;
         }
         /// <summary>
         /// データ操作コマンド
@@ -93,14 +143,57 @@ namespace WPF.ViewModels
         /// 出納データ詳細表示コマンド
         /// </summary>
         public DelegateCommand ShowDetailCommand { get; set; }
+        private async void ShowDetail()
+        {
+            if (SelectedReceiptsAndExpenditure == null) { return; }
+
+            await Task.Delay(1);
+
+            ReceiptsAndExpenditureOperation.GetInstance().SetData(SelectedReceiptsAndExpenditure);
+            CreateShowWindowCommand(ScreenTransition.ReceiptsAndExpenditureOperation());
+        }
         /// <summary>
         /// 選択された出納データ反映コマンド
         /// </summary>
-        public DelegateCommand SelectedReceiptsAndExpenditureCommand { get; set; }
+        public DelegateCommand SetSelectedReceiptsAndExpenditureCommand { get; set; }
+        private async void SetSelectedReceiptsAndExpenditure()
+        {
+            await Task.Delay(1);
+
+            if (SelectedReceiptsAndExpenditure == null) { return; }
+
+            IsPayment = SelectedReceiptsAndExpenditure.IsPayment; ;
+            SelectedSubjectCode = SelectedReceiptsAndExpenditure.Content.AccountingSubject.SubjectCode;
+            SelectedSubject = SelectedReceiptsAndExpenditure.Content.AccountingSubject.Subject;
+            SelectedContentText = SelectedReceiptsAndExpenditure.Content.Text;
+            SelectedDetail = SelectedReceiptsAndExpenditure.Detail;
+            SelectedPrice = SelectedReceiptsAndExpenditure.PriceWithUnit;
+
+            int i = SelectedReceiptsAndExpenditure.Price;
+            TransferReceiptsAndExpenditures =
+                DataBaseConnect.ReferenceTransferReceiptsAndExpenditure(SelectedReceiptsAndExpenditure);
+
+            foreach (TransferReceiptsAndExpenditure trae in TransferReceiptsAndExpenditures) { i -= trae.Price; }
+
+            Price = i.ToString();
+        }
         /// <summary>
         /// 出納データ検索コマンド
         /// </summary>
         public DelegateCommand SearchReceiptsAndExpenditureCommand { get; set; }
+        private void SearchReceiptsAndExpenditure(bool isPageReset)
+        {
+            Pagination.CountReset(isPageReset);
+            string dept = SearchCreditDept == null ? string.Empty : SearchCreditDept.Dept;
+            (Pagination.TotalRowCount, ReceiptsAndExpenditures) = DataBaseConnect.ReferenceReceiptsAndExpenditure
+                (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(), dept,
+                    string.Empty, string.Empty, string.Empty, SearchSubjectCode,
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, false, true, true, true, SearchStartDate,
+                    SearchEndDate, DefaultDate, DateTime.Now, Pagination.PageCount, Pagination.SelectedSortColumn,
+                    Pagination.SortDirectionIsASC, Pagination.CountEachPage);
+
+            Pagination.SetProperty();
+        }
         /// <summary>
         /// 検索メニューの貸方部門
         /// </summary>
@@ -208,11 +301,7 @@ namespace WPF.ViewModels
             {
                 isDoNotUseOriginalSlip = value;
                 CallPropertyChanged();
-                if(value) 
-                {
-                    SearchCreditDept = null;
-
-                }
+                if (value) { SelectedReceiptsAndExpenditure = null; }
             }
         }
         /// <summary>
@@ -236,7 +325,7 @@ namespace WPF.ViewModels
             set
             {
                 selectedSubjectCode = value;
-                CallPropertyChanged ();
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -248,7 +337,7 @@ namespace WPF.ViewModels
             set
             {
                 selectedSubject = value;
-                CallPropertyChanged () ;
+                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -324,6 +413,33 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
+        /// 選択された借方、貸方勘定科目にグルーピングされた伝票内容をリストにします
+        /// </summary>
+        private void SetContents()
+        {
+            ObservableCollection<Content> debitList;
+            ObservableCollection<Content> creditList;
+            ObservableCollection<Content> List = new ObservableCollection<Content>();
+
+            if (DebitAccount != null)
+            {
+                debitList = DataBaseConnect.ReferenceContent
+                    (string.Empty, DebitAccount.SubjectCode, DebitAccount.Subject,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, true);
+                foreach (Content content in debitList) { List.Add(content); }
+            }
+
+            if (CreditAccount != null)
+            {
+                creditList = DataBaseConnect.ReferenceContent
+                    (string.Empty, CreditAccount.SubjectCode, CreditAccount.Subject,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, true);
+                foreach (Content content in creditList) { List.Add(content); }
+            }
+
+            Contents = List;
+        }
+        /// <summary>
         /// 借方勘定科目
         /// </summary>
         public AccountingSubject DebitAccount
@@ -333,6 +449,7 @@ namespace WPF.ViewModels
             {
                 debitAccount = value;
                 CallPropertyChanged();
+                if (value != null) { SetContents(); }
             }
         }
         /// <summary>
@@ -345,6 +462,13 @@ namespace WPF.ViewModels
             {
                 debitAccountCode = value;
                 CallPropertyChanged();
+                if (value.Length == 3)
+                {
+                    DebitAccounts = DataBaseConnect.ReferenceAccountingSubject
+                        (value, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, true);
+                }
+                else { return; }
+                if (DebitAccounts.Count > 0) { DebitAccount = DebitAccounts[0]; }
             }
         }
         /// <summary>
@@ -369,6 +493,13 @@ namespace WPF.ViewModels
             {
                 creditAccountCode = value;
                 CallPropertyChanged();
+                if (value.Length == 3)
+                {
+                    CreditAccounts = DataBaseConnect.ReferenceAccountingSubject
+                        (value, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, true);
+                }
+                else { return; }
+                if (CreditAccounts.Count > 0) { CreditAccount = CreditAccounts[0]; }
             }
         }
         /// <summary>
@@ -439,7 +570,7 @@ namespace WPF.ViewModels
             get => price;
             set
             {
-                price =CommaDelimitedAmount(value);
+                price = CommaDelimitedAmount(value);
                 CallPropertyChanged();
             }
         }
@@ -467,53 +598,80 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 選択された出納データ
+        /// </summary>
+        public ReceiptsAndExpenditure SelectedReceiptsAndExpenditure
+        {
+            get => selectedReceiptsAndExpenditure;
+            set
+            {
+                selectedReceiptsAndExpenditure = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 有効性チェックのEnabled
+        /// </summary>
+        public bool IsValidityEnabled
+        {
+            get => isValidityEnabled;
+            set
+            {
+                isValidityEnabled = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ページネーション
+        /// </summary>
+        public Pagination Pagination
+        {
+            get => pagination;
+            set
+            {
+                pagination = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
-            
+
         }
 
         protected override void SetDataList()
         {
-            throw new NotImplementedException();
+            SearchCreditDepts = DataBaseConnect.ReferenceCreditDept
+                (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
         }
 
         protected override void SetDataOperationButtonContent(DataOperation operation)
-        {
-            throw new NotImplementedException();
-        }
+        { DataOperationButtonContent = operation.ToString(); }
 
         protected override void SetDelegateCommand()
         {
-            throw new NotImplementedException();
+            SearchReceiptsAndExpenditureCommand = new DelegateCommand
+                (() => SearchReceiptsAndExpenditure(true), () => true);
+            ShowDetailCommand = new DelegateCommand(() => ShowDetail(), () => true);
+            SetSelectedReceiptsAndExpenditureCommand = new DelegateCommand
+                (() => SetSelectedReceiptsAndExpenditure(), () => true);
         }
 
         protected override void SetDetailLocked()
         {
-            throw new NotImplementedException();
+            IsValidityEnabled = CurrentOperation == DataOperation.更新;
         }
 
         protected override void SetWindowDefaultTitle() { WindowTitle = "複合伝票管理"; }
 
-        public void SortNotify()
-        {
-            throw new NotImplementedException();
-        }
+        public void SortNotify() { SearchReceiptsAndExpenditure(true); }
 
-        public void PageNotify()
-        {
-            throw new NotImplementedException();
-        }
+        public void PageNotify() { SearchReceiptsAndExpenditure(false); }
 
-        public void SetSortColumns()
-        {
-            throw new NotImplementedException();
-        }
+        public void SetSortColumns() { Pagination.SortColumns = ReceptsAndExpenditureListSortColumns(); }
 
-        public void SetCountEachPage()
-        {
-            throw new NotImplementedException();
-        }
+        public void SetCountEachPage() { Pagination.CountEachPage = 5; }
 
         public void TransferReceiptsAndExpenditureOperationNotify()
         {

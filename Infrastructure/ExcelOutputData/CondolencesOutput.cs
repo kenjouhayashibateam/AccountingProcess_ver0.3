@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -93,7 +94,7 @@ namespace Infrastructure.ExcelOutputData
                     SetNewPage();
                     //タイトル欄　年
                     myWorksheet.Cell(StartRowIndex + i, 1).Value =
-                        $"{condolence.AccountActivityDate.ToString($"gg{Space}y{Space}年",JapanCulture)}";
+                        $"{condolence.AccountActivityDate.ToString($"gg{Space}y{Space}年", JapanCulture)}";
                     i++;
                     currentRow = StartRowIndex + i;
                     //タイトル欄フィールドタイトル

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
-using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -40,7 +40,7 @@ namespace WPF.ViewModels
         #endregion
 
         public CreateCondolencesViewModel
-            (IDataBaseConnect dataBaseConnect,IDataOutput dataOutput) : base(dataBaseConnect)
+            (IDataBaseConnect dataBaseConnect, IDataOutput dataOutput) : base(dataBaseConnect)
         {
             DataOutput = dataOutput;
             condolenceOperation = CondolenceOperation.GetInstance();
@@ -57,11 +57,12 @@ namespace WPF.ViewModels
             ShowUpdateViewCommand = new DelegateCommand
                 (() => ShowUpdateView(), () => true);
             OutputCommand = new DelegateCommand
-                (() => Output(), () => true); 
+                (() => Output(), () => true);
         }
         public CreateCondolencesViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
-                    DefaultInfrastructure.GetDefaultDataOutput()){ }
+                    DefaultInfrastructure.GetDefaultDataOutput())
+        { }
         /// <summary>
         /// 御布施一覧出力コマンド
         /// </summary>
@@ -251,7 +252,7 @@ namespace WPF.ViewModels
 
             (int count, ObservableCollection<Condolence> list) =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate, location, Pagination.PageCount,pagination.CountEachPage);
+                    (SearchStartDate, SearchEndDate, location, Pagination.PageCount, pagination.CountEachPage);
             Condolences = list;
             Pagination.TotalRowCount = count;
 
@@ -268,7 +269,7 @@ namespace WPF.ViewModels
         public override void ValidationProperty(string propertyName, object value)
         {
             ErrorsListOperation
-                (((ObservableCollection<Condolence>)value).Count < 1, propertyName, 
+                (((ObservableCollection<Condolence>)value).Count < 1, propertyName,
                     "出力するデータがありません");
         }
 

@@ -10,6 +10,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -78,7 +79,7 @@ namespace WPF.ViewModels
             LogoutCommand =
                 new DelegateCommand(() => Logout(), () => true);
             ShowPartTimerTransPortCommand = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()), 
+                (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()),
                     () => true);
             ShowCreateCondolencesCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateCondolences()), () => true);
@@ -96,8 +97,15 @@ namespace WPF.ViewModels
                     (ScreenTransition.ProductSalesRegistration()), () => true);
             ShowSearchCondlencesViewCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.SearchCondlences()), () => true);
+            ShowTransferReceiptsAndExpenditureManagementCommand = new DelegateCommand
+                (() => CreateShowWindowCommand
+                    (ScreenTransition.TransferReceiptsExpenditureManagement()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 振替出納データ管理画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowTransferReceiptsAndExpenditureManagementCommand { get; }
         /// <summary>
         /// 御布施一覧データ閲覧画面表示コマンド
         /// </summary>
@@ -125,7 +133,7 @@ namespace WPF.ViewModels
                 if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, SelectedCreditDept) ==
                     DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, false, SelectedCreditDept))
                 {
-                    CallNoUPdateMessage(SelectedCreditDept.Dept, 
+                    CallNoUPdateMessage(SelectedCreditDept.Dept,
                         DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, false, SelectedCreditDept));
                     return;
                 }
@@ -398,7 +406,7 @@ namespace WPF.ViewModels
 
             NoOutputed = string.IsNullOrEmpty(NoOutputed) ?
                 string.Empty : $"\r\n\r\n\t※{NoOutputed}が出力されていません";
-           
+
             MessageBox = new MessageBoxInfo()
             {
                 Message = $"終了します。よろしいですか？{NoOutputed}",
@@ -849,7 +857,7 @@ namespace WPF.ViewModels
             if (GetErrors(propertyName) == null)
             {
                 ErrorsListOperation
-                    (shorendoChecked & 
+                    (shorendoChecked &
                     (string.IsNullOrEmpty(DepositAmount) || IntAmount(DepositAmount) == 0),
                     nameof(DepositAmount), "金額を入力してください");
             }

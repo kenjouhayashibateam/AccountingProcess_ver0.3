@@ -2,6 +2,7 @@
 using Domain.Entities;
 using System;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace Infrastructure.ExcelOutputData
 {

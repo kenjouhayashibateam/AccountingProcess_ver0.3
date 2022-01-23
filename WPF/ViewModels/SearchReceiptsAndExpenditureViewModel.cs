@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -382,13 +383,7 @@ namespace WPF.ViewModels
 
         public void SetSortColumns()
         {
-            Pagination.SortColumns =
-                new System.Collections.Generic.Dictionary<int, string>()
-                {
-                    {0,"ID" },
-                    {1,"入出金日" },
-                    {2,"科目コード" }
-                };
+            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
         }
 
         public void SetCountEachPage() { pagination.CountEachPage = 10; }

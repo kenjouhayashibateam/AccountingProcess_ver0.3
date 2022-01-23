@@ -69,7 +69,7 @@
       <Name>Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\WPF\WPF.csproj">
-      <Project>{D1B65BE8-8D31-47AB-ABD0-5ED627C8BAC6}</Project>
+      <Project>{d1b65be8-8d31-47ab-abd0-5ed627c8bac6}</Project>
       <Name>WPF</Name>
     </ProjectReference>
   </ItemGroup>

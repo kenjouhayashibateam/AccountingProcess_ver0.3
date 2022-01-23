@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace Infrastructure.ExcelOutputData
 {
@@ -315,10 +316,10 @@ namespace Infrastructure.ExcelOutputData
             _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, 2).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            _ = myWorksheet.Cell(StartRowPosition , 3).Style
+            _ = myWorksheet.Cell(StartRowPosition, 3).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            _ = MySheetCellRange(StartRowPosition , 4, StartRowPosition , 6).Style
+            _ = MySheetCellRange(StartRowPosition, 4, StartRowPosition, 6).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             _ = MySheetCellRange(StartRowPosition, 7, StartRowPosition, 9).Style

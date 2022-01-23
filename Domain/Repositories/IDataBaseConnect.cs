@@ -223,7 +223,7 @@ namespace Domain.Repositories
                     bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
                     bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
                     DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
-                    bool sortDirection,int countEachPage);
+                    bool sortDirection, int countEachPage);
         /// <summary>
         /// 前日決算額を返します
         /// </summary>
@@ -437,5 +437,18 @@ namespace Domain.Repositories
         /// </summary>
         /// <returns></returns>
         public bool IsConnectiongProductionServer();
+        /// <summary>
+        /// 振替伝票の元になる出納データを返します
+        /// </summary>
+        /// <param name="transferReceiptsAndExpenditure"></param>
+        /// <returns></returns>
+        public ReceiptsAndExpenditure CallTransferReceiptsAndExpenditureParentData
+            (TransferReceiptsAndExpenditure transferReceiptsAndExpenditure);
+        /// <summary>
+        /// 出納データに関連している振替データを返します
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
+            (ReceiptsAndExpenditure receiptsAndExpenditure);
     }
 }

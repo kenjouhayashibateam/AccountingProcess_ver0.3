@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -68,7 +69,7 @@ namespace WPF.ViewModels
         private void SetList()
         {
             Contents = DataBaseConnect.ReferenceContent
-                    (SearchContentText, string.Empty, SearchAccountingSubject, 
+                    (SearchContentText, string.Empty, SearchAccountingSubject,
                         AccountingProcessLocation.IsAccountingGenreShunjuen, true);
         }
         /// <summary>

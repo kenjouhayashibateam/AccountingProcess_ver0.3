@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Entities\CashBox.cs" />
     <Compile Include="Entities\Condolence.cs" />
+    <Compile Include="Entities\Helpers\DataHelper.cs" />
     <Compile Include="Entities\Helpers\ReceiptsAndExpenditureBase.cs" />
     <Compile Include="Entities\Helpers\TextHelper.cs" />
     <Compile Include="Entities\LoginRep.cs" />

@@ -256,10 +256,10 @@ namespace Infrastructure
 
         public int Update(Content content)
         {
-            Parameters = new Dictionary<string, object>() 
+            Parameters = new Dictionary<string, object>()
             {
-                { "@content_id", content.ID }, { "@content", content.Text }, { "@flat_rate", content.FlatRate }, 
-                { "@is_validity", content.IsValidity }, { "@operation_staff_id", LoginRep.Rep.ID } 
+                { "@content_id", content.ID }, { "@content", content.Text }, { "@flat_rate", content.FlatRate },
+                { "@is_validity", content.IsValidity }, { "@operation_staff_id", LoginRep.Rep.ID }
             };
 
             return ReturnGeneretedParameterCommand("update_content").ExecuteNonQuery();
@@ -324,7 +324,7 @@ namespace Infrastructure
                 ReturnGeneretedParameterCommand
                     ("reference_affiliation_accounting_subject").ExecuteReader();
 
-            while (DataReader.Read()) 
+            while (DataReader.Read())
             { list.Add(CallAccountingSubject((string)DataReader["accounting_subject_id"])); }
 
             return list;
@@ -332,17 +332,17 @@ namespace Infrastructure
 
         public int Registration(ReceiptsAndExpenditure receiptsAndExpenditure)
         {
-            Parameters = new Dictionary<string, object>() 
+            Parameters = new Dictionary<string, object>()
             {
-                { "@location", receiptsAndExpenditure.Location }, 
-                { "@account_activity_date", receiptsAndExpenditure.AccountActivityDate }, 
-                { "@registration_date", receiptsAndExpenditure.RegistrationDate }, 
-                { "@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID }, 
-                { "@credit_dept_id", receiptsAndExpenditure.CreditDept.ID }, 
+                { "@location", receiptsAndExpenditure.Location },
+                { "@account_activity_date", receiptsAndExpenditure.AccountActivityDate },
+                { "@registration_date", receiptsAndExpenditure.RegistrationDate },
+                { "@registration_staff_id", receiptsAndExpenditure.RegistrationRep.ID },
+                { "@credit_dept_id", receiptsAndExpenditure.CreditDept.ID },
                 { "@content_id", receiptsAndExpenditure.Content.ID },
-                { "@detail", receiptsAndExpenditure.Detail }, 
-                { "@price", receiptsAndExpenditure.Price }, 
-                { "@is_payment", receiptsAndExpenditure.IsPayment }, 
+                { "@detail", receiptsAndExpenditure.Detail },
+                { "@price", receiptsAndExpenditure.Price },
+                { "@is_payment", receiptsAndExpenditure.IsPayment },
                 { "@is_validity", receiptsAndExpenditure.IsValidity },
                 { "@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate }
             };
@@ -381,8 +381,8 @@ namespace Infrastructure
                 { "@credit_dept", creditDept},{"@accounting_subject_code", accountingSubjectCode},
                 { "@accounting_subject", accountingSubject }, {"@content", content},{"@detail", detail},
                 {"@limiting_is_payment", whichDepositAndWithdrawalOnly}, {"@is_payment", isPayment },
-                {"@is_shunjuen",isShunjuen},{"@contain_outputted", isContainOutputted}, 
-                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart}, 
+                {"@is_shunjuen",isShunjuen},{"@contain_outputted", isContainOutputted},
+                {"@validity_true_only", isValidityOnly},{"@output_date_start", outputDateStart},
                 { "@output_date_end", outputDateEnd}
             };
 
@@ -608,7 +608,7 @@ namespace Infrastructure
                 true);
             paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
                 (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-            
+
             return new ReceiptsAndExpenditure
                 (
                     (int)dataReader["receipts_and_expenditure_id"],
@@ -695,7 +695,7 @@ namespace Infrastructure
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>();
             Parameters = new Dictionary<string, object>()
-            { 
+            {
                 {"@start_date", startDate},{"@end_date", endDate},
                 {"@location", location},{"@page", pageCount } ,{"@count_each_page",countEachPage }
             };
@@ -973,9 +973,10 @@ namespace Infrastructure
                 ("get_branch_number").ExecuteReader();
 
             string s = string.Empty;
-            while (sqlDataReader.Read()) 
-            { 
-                s = (string)sqlDataReader["branch_number"]; }
+            while (sqlDataReader.Read())
+            {
+                s = (string)sqlDataReader["branch_number"];
+            }
 
             return s;
         }
@@ -1040,6 +1041,16 @@ namespace Infrastructure
 
             return ReturnGeneretedParameterCommand
                 ("update_wize_core_preceding_year_final_account").ExecuteNonQuery();
+        }
+
+        public ReceiptsAndExpenditure CallTransferReceiptsAndExpenditureParentData(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(ReceiptsAndExpenditure receiptsAndExpenditure)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -11,6 +11,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -80,7 +81,7 @@ namespace WPF.ViewModels
         private Pagination pagination = Pagination.GetPagination();
         public Dictionary<int, string> NoteStrings => new Dictionary<int, string>()
         { { 0, "佐野商店" }, { 1, "徳島" }, { 2, "緑山メモリアルパーク" } };
-        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>() 
+        public Dictionary<int, string> ContentStrings => new Dictionary<int, string>()
         { { 0, "法事" }, { 1, "葬儀" }, { 2, "法名授与" }, { 3, "彼岸読経" }, { 4, "盆読経" } };
         private readonly LoginRep GetLoginRep = LoginRep.GetInstance();
         #endregion
@@ -317,7 +318,7 @@ namespace WPF.ViewModels
             if (condolence.CarAndMealTip != OperationCondolence.CarAndMealTip)
             {
                 updateContent +=
-                    $"御車代御膳料{Space}:{Space}{AmountWithUnit(condolence.CarAndMealTip)}{Space}→" + 
+                    $"御車代御膳料{Space}:{Space}{AmountWithUnit(condolence.CarAndMealTip)}{Space}→" +
                     $"{Space}{AmountWithUnit(OperationCondolence.CarAndMealTip)}\r\n";
             }
 
@@ -497,7 +498,7 @@ namespace WPF.ViewModels
         /// </summary>
         public DateTime ReceiptsAndExpenditureSearchDate
         {
-            get => receiptsAndExpenditureSearchDate; 
+            get => receiptsAndExpenditureSearchDate;
             set
             {
                 receiptsAndExpenditureSearchDate = value;
@@ -946,8 +947,7 @@ namespace WPF.ViewModels
 
         public void SetSortColumns()
         {
-            Pagination.SortColumns = new Dictionary<int, string>()
-            {{0,"ID" },{1,"入金日"}};
+            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
         }
 
         public void SetCountEachPage() { pagination.CountEachPage = 10; }

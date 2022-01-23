@@ -12,6 +12,7 @@ using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace WPF.ViewModels
 {
@@ -162,13 +163,7 @@ namespace WPF.ViewModels
 
         public void SetSortColumns()
         {
-            Pagination.SortColumns = new Dictionary<int, string>()
-            {
-                {0, "ID"},
-                {1,"科目コード" },
-                {2,"入出金日" },
-                {3,"伝票出力日" }
-            };
+            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
         }
 
         /// <summary>
@@ -327,7 +322,7 @@ namespace WPF.ViewModels
         private void SetListTitle()
         {
             SetTodayWroteList();
-            
+
             previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
 
             FinalAccountCategory =
@@ -345,7 +340,7 @@ namespace WPF.ViewModels
                    (new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), string.Empty, string.Empty,
                         string.Empty, string.Empty, string.Empty, string.Empty,
                         AccountingProcessLocation.IsAccountingGenreShunjuen,
-                        false, true, true, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1), 
+                        false, true, true, true, new DateTime(1900, 1, 1), new DateTime(9999, 1, 1),
                         DateTime.Today, DateTime.Today);
         }
         /// <summary>
@@ -1316,7 +1311,7 @@ namespace WPF.ViewModels
             set
             {
                 isPairAmountReadOnly = value;
-                CallPropertyChanged(); 
+                CallPropertyChanged();
             }
         }
 
@@ -1487,7 +1482,7 @@ namespace WPF.ViewModels
                 AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd, Pagination.PageCount,
-                Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC, pagination.CountEachPage);
+                Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC, Pagination.CountEachPage);
 
             Pagination.TotalRowCount = count;
             ReceiptsAndExpenditures = list;
