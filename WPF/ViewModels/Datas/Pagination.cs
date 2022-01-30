@@ -23,7 +23,7 @@ namespace WPF.ViewModels.Datas
         /// <summary>
         /// ページごとの件数を設定します
         /// </summary>
-        void SetCountEachPage();
+        int SetCountEachPage();
     }
     /// <summary>
     /// ページネーションクラス
@@ -255,7 +255,7 @@ namespace WPF.ViewModels.Datas
         public void Add(IPagenationObserver pagenationObserver)
         {
             pagenationObserver.SetSortColumns();
-            pagenationObserver.SetCountEachPage();
+            CountEachPage = pagenationObserver.SetCountEachPage();
             pagenationObservers.Add(pagenationObserver);
         }
 

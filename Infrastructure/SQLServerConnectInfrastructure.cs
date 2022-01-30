@@ -1043,12 +1043,7 @@ namespace Infrastructure
                 ("update_wize_core_preceding_year_final_account").ExecuteNonQuery();
         }
 
-        public ReceiptsAndExpenditure CallTransferReceiptsAndExpenditureParentData(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(ReceiptsAndExpenditure receiptsAndExpenditure)
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(DateTime accountActivityDateStart, DateTime acountActivityDateEnd, string location, string dept, string debitAccountCode, string creditAccountCode, bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
         {
             throw new NotImplementedException();
         }

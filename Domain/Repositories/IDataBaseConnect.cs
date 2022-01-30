@@ -437,18 +437,29 @@ namespace Domain.Repositories
         /// </summary>
         /// <returns></returns>
         public bool IsConnectiongProductionServer();
+        ///// <summary>
+        ///// 出納データに関連している振替データを返します
+        ///// </summary>
+        ///// <returns></returns>
+        //public ObservableCollection<TransferReceiptsAndExpenditure> CallGroupingTransferReceiptsAndExpenditure
+        //    (ReceiptsAndExpenditure receiptsAndExpenditure);
         /// <summary>
-        /// 振替伝票の元になる出納データを返します
+        /// 振替データを検索します
         /// </summary>
-        /// <param name="transferReceiptsAndExpenditure"></param>
-        /// <returns></returns>
-        public ReceiptsAndExpenditure CallTransferReceiptsAndExpenditureParentData
-            (TransferReceiptsAndExpenditure transferReceiptsAndExpenditure);
-        /// <summary>
-        /// 出納データに関連している振替データを返します
-        /// </summary>
+        /// <param name="accountActivityDateStart">振替日検索開始日</param>
+        /// <param name="acountActivityDateEnd">振替日検索最終日</param>
+        /// <param name="location">経理担当場所</param>
+        /// <param name="dept">貸方部門</param>
+        /// <param name="debitAccountCode">借方勘定科目コード</param>
+        /// <param name="creditAccountCode">貸方勘定科目コード</param>
+        /// <param name="isValidityTrueOnly">有効なもののみのリストにするか</param>
+        /// <param name="containOutputted">既に出力したものも含むか</param>
+        /// <param name="outputDateStart">印刷日検索開始日</param>
+        /// <param name="outputDateEnd">印刷日検索最終日</param>
         /// <returns></returns>
         public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (ReceiptsAndExpenditure receiptsAndExpenditure);
+            (DateTime accountActivityDateStart, DateTime acountActivityDateEnd, string location, string dept, 
+                string debitAccountCode, string creditAccountCode, bool isValidityTrueOnly, bool containOutputted, 
+                DateTime outputDateStart, DateTime outputDateEnd);
     }
 }

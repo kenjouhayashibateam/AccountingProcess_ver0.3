@@ -44,7 +44,21 @@
             <RowDefinition Height="7*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="{Binding DetailTitle}" Background="{Binding DetailBackGroundColor}" Grid.Row="0" Margin="5,3">
+        <GroupBox Grid.Row="0" Margin="5,3">
+            <GroupBox.Style>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPaymentCheck}" Value="true">
+                            <Setter Property="Background" Value="MistyRose"/>
+                            <Setter Property="Header" Value="入金伝票"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsPaymentCheck}" Value="false">
+                            <Setter Property="Background" Value="LightCyan"/>
+                            <Setter Property="Header" Value="出金伝票"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20*"/>
@@ -67,7 +81,20 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding ReceiptsAndExpenditureIDFieldText}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <CheckBox Content="データを有効にする" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsValidity}" Margin="5,0"/>
-                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" Content="{Binding DepositAndWithdrawalContetnt}" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3"/>
+                    <ToggleButton x:Name="DepositAndWithdrawalToggleButton" Grid.Row="2" IsChecked="{Binding IsPaymentCheck}" IsEnabled="{Binding IsPaymentCheckEnabled}" Margin="5,3">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content" Value="出金に変更"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter Property="Content" Value="入金に変更"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
                     <Button x:Name="PropertyInputWizard" Grid.Row="3" Content="伝票内容から勘定科目を選択する(登録のみ)" IsEnabled="{Binding IsInputWizardEnabled}" Margin="5,3">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowWizardCommand}" Key="Space"/>

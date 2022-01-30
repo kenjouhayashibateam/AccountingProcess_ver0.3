@@ -123,7 +123,6 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\CashJournalManagementViewModel.cs" />
     <Compile Include="ViewModels\Commands\WavSoundPlayCommand.cs" />
-    <Compile Include="ViewModels\TransferSlipOperationViewModel.cs" />
     <Compile Include="ViewModels\Datas\CondolenceOperation.cs" />
     <Compile Include="ViewModels\Datas\JustRegistraterDataViewModel.cs" />
     <Compile Include="ViewModels\Datas\NotifyPropertyChanged.cs" />
@@ -149,6 +148,8 @@
     <Compile Include="ViewModels\SearchCondlencesViewModel.cs" />
     <Compile Include="ViewModels\SearchReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
+    <Compile Include="ViewModels\TransferReceiptsAndExpenditureManagementViewModel.cs" />
+    <Compile Include="ViewModels\TransferReceiptsAndExpenditureOperationViewModel.cs" />
     <Compile Include="ViewModels\VoucherManagementViewModel.cs" />
     <Compile Include="Views\Behaviors\BoolNegativeConverter.cs" />
     <Compile Include="Views\Behaviors\ComboBoxAttachment.cs" />
@@ -162,8 +163,11 @@
     <Compile Include="Views\CashJournalManagementView.xaml.cs">
       <DependentUpon>CashJournalManagementView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TransferSlipOperationView.xaml.cs">
-      <DependentUpon>TransferSlipOperationView.xaml</DependentUpon>
+    <Compile Include="Views\TransferReceiptsAndExpenditureManagementView.xaml.cs">
+      <DependentUpon>TransferReceiptsAndExpenditureManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransferReceiptsAndExpenditureOperationView.xaml.cs">
+      <DependentUpon>TransferReceiptsAndExpenditureOperationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CondolenceOperationView.xaml.cs">
       <DependentUpon>CondolenceOperationView.xaml</DependentUpon>
@@ -229,7 +233,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TransferSlipOperationView.xaml">
+    <Page Include="Views\TransferReceiptsAndExpenditureManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransferReceiptsAndExpenditureOperationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

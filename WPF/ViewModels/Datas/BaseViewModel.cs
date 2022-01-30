@@ -204,8 +204,12 @@ namespace WPF.ViewModels.Datas
         /// <param name="value"></param>
         protected void SetNullOrEmptyError(string propertyName, object value)
         {
-            ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName,
-                Properties.Resources.NullErrorInfo);
+            ErrorsListOperation(value == null, propertyName, Properties.Resources.NullErrorInfo);
+            if (GetErrors(propertyName) == null)
+            {
+                ErrorsListOperation(string.IsNullOrEmpty(value.ToString()), propertyName,
+                    Properties.Resources.NullErrorInfo);
+            }
         }
         /// <summary>
         /// エラーを追加します

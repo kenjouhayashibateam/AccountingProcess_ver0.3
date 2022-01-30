@@ -17,9 +17,9 @@ namespace WPF.Views
     /// <summary>
     /// TransferSlipOperationView.xaml の相互作用ロジック
     /// </summary>
-    public partial class TransferSlipOperationView : Window
+    public partial class TransferReceiptsAndExpenditureOperationView : Window
     {
-        public TransferSlipOperationView()
+        public TransferReceiptsAndExpenditureOperationView()
         {
             InitializeComponent();
         }

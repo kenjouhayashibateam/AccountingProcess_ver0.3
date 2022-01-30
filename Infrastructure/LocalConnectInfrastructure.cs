@@ -631,11 +631,7 @@ namespace Infrastructure
 
         public bool IsConnectiongProductionServer() { return true; }
 
-        public ReceiptsAndExpenditure CallTransferReceiptsAndExpenditureParentData
-            (TransferReceiptsAndExpenditure transferReceiptsAndExpenditure)
-        { return null; }
-
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(ReceiptsAndExpenditure receiptsAndExpenditure)
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(DateTime accountActivityDateStart, DateTime acountActivityDateEnd, string location, string dept, string debitAccountCode, string creditAccountCode, bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
         {
             return new ObservableCollection<TransferReceiptsAndExpenditure>()
             {
@@ -643,6 +639,26 @@ namespace Infrastructure
                     AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ううう","えええ",3500,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"おおお","かかか",19800,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ききき","くくく",5600,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,true,
                     DateTime.Today,DateTime.Today,false)
             };
         }

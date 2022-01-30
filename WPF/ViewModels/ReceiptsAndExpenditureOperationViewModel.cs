@@ -25,7 +25,6 @@ namespace WPF.ViewModels
         #region Strings
         private string receiptsAndExpenditureIDFieldText;
         private string detailTitle;
-        private string depositAndWithdrawalContetnt;
         private string comboCreditDeptText;
         private string comboAccountingSubjectCode;
         private string comboAccountingSubjectText;
@@ -80,7 +79,6 @@ namespace WPF.ViewModels
         private DateTime slipOutputDate;
         #endregion
         private int HoldingPrice;
-        private SolidColorBrush detailBackGroundColor;
         private readonly ReceiptsAndExpenditureOperation OperationData = ReceiptsAndExpenditureOperation.GetInstance();
         private int receiptsAndExpenditureIDField;
         private readonly LoginRep loginRep = LoginRep.GetInstance();
@@ -478,18 +476,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 入出金に応じて、詳細の色を決める
-        /// </summary>
-        public SolidColorBrush DetailBackGroundColor
-        {
-            get => detailBackGroundColor;
-            set
-            {
-                detailBackGroundColor = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// 有効性
         /// </summary>
         public bool IsValidity
@@ -498,18 +484,6 @@ namespace WPF.ViewModels
             set
             {
                 isValidity = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 入出金のトグルボタンのContent
-        /// </summary>
-        public string DepositAndWithdrawalContetnt
-        {
-            get => depositAndWithdrawalContetnt;
-            set
-            {
-                depositAndWithdrawalContetnt = value;
                 CallPropertyChanged();
             }
         }
@@ -1018,18 +992,6 @@ namespace WPF.ViewModels
             set
             {
                 isPaymentCheck = value;
-                if (value)
-                {
-                    DepositAndWithdrawalContetnt = "出金に変更";
-                    DetailTitle = "入金伝票";
-                    DetailBackGroundColor = new SolidColorBrush(Colors.MistyRose);
-                }
-                else
-                {
-                    DepositAndWithdrawalContetnt = "入金に変更";
-                    DetailTitle = "出金伝票";
-                    DetailBackGroundColor = new SolidColorBrush(Colors.LightCyan);
-                }
                 CallPropertyChanged();
             }
         }

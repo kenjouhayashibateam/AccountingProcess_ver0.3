@@ -104,6 +104,6 @@ namespace WPF.ViewModels.Datas
         /// 振替出納データ管理画面を呼び出します
         /// </summary>
         /// <returns></returns>
-        public static Window TransferReceiptsExpenditureManagement() { return new TransferSlipOperationView(); }
+        public static Window TransferReceiptsExpenditureManagement() { return new TransferReceiptsAndExpenditureOperationView(); }
     }
 }

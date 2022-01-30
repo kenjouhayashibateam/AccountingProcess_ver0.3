@@ -296,6 +296,6 @@ namespace WPF.ViewModels
 
         public void RefleshList() { CreateCondolences(true); }
 
-        public void SetCountEachPage() { pagination.CountEachPage = 10; }
+        public int SetCountEachPage() => 10;
     }
 }

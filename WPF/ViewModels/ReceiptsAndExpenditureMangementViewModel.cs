@@ -1510,6 +1510,6 @@ namespace WPF.ViewModels
 
         public bool OnClosing() { return !IsClose; }
 
-        public void SetCountEachPage() { pagination.CountEachPage = 10; }
+        public int SetCountEachPage() => 10;
     }
 }

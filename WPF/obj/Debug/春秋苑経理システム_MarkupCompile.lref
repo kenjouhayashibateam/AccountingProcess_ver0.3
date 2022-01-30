@@ -1,7 +1,8 @@
 ﻿C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\GeneratedInternalTypeHelper.g.cs
 
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\CashJournalManagementView.xaml;;
-FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\TransferSlipOperationView.xaml;;
+FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\TransferReceiptsAndExpenditureManagementView.xaml;;
+FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\TransferReceiptsAndExpenditureOperationView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\CondolenceOperationView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\CreateCondolencesView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\CreateVoucherView.xaml;;
