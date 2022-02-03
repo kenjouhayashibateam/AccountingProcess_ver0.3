@@ -242,7 +242,7 @@
                                 <TextBlock Text="{Binding CreditDeptIDField}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 <CheckBox Content="データを有効にする" Grid.Row="1" IsChecked="{Binding IsCreditDeptValidity}" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="貸方部門" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0"/>
-                                <TextBox x:Name="CreditDeptTextBox" Grid.Row="3" Text="{Binding CreditDeptField}" IsEnabled="{Binding IsCreditDeptEnabled}" VerticalAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
+                                <TextBox x:Name="CreditDeptTextBox" Grid.Row="3" Text="{Binding CreditDeptField,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsCreditDeptEnabled}" VerticalAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5"/>
                                 <CheckBox Content="春秋苑会計（出納帳が春秋苑）" Grid.Row="4" VerticalAlignment="Center" IsChecked="{Binding IsShunjuenDept}" Margin="5,0"/>
                             </Grid>
                             <Button x:Name="CreditDeptOperationButton" Grid.Row="1" IsEnabled="{Binding IsCreditDeptOperationButtonEnabled}" Content="{Binding CreditDeptOperationButtonContent}" Margin="5">

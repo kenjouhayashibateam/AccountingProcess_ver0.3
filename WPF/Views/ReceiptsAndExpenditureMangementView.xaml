@@ -18,10 +18,6 @@
         <vm:ReceiptsAndExpenditureMangementViewModel/>
     </Window.DataContext>
 
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-    </Window.Resources>
-
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <behavior:ShowDialogBehavior/>

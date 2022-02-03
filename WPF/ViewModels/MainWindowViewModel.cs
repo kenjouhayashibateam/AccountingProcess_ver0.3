@@ -612,13 +612,34 @@ namespace WPF.ViewModels
 
                 if (KanriJimushoChecked)
                 {
-                    AccountingProcessLocation.OriginalTotalAmount =
-                        DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
+                    SetPreviousDayFinalAmount();
+  
                     SetLocationKanriJimusho();
                 }
                 else if (ShorendoChecked)
                 { SetLocationShorendo(); }
                 CallPropertyChanged();
+                void SetPreviousDayFinalAmount()
+                {
+                    if(IsShunjuen)
+                    {
+                        AccountingProcessLocation.OriginalTotalAmount =
+                            DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
+                    }
+                    else
+                    {
+                        ObservableCollection<CreditDept> creditDepts =
+                            DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+                        int amount = 0;
+
+                        foreach (CreditDept creditDept in creditDepts)
+                        {
+                            amount+=DataBaseConnect.PreviousDayFinalAmount(creditDept);
+                        }
+
+                        AccountingProcessLocation.OriginalTotalAmount = amount;
+                    }
+                }
             }
         }
         /// <summary>
