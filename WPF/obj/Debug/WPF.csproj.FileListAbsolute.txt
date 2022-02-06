@@ -278,3 +278,4 @@ C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\Transfe
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.g.cs
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureManagementView.baml
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.baml
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\App.baml

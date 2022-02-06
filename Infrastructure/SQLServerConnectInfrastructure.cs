@@ -32,8 +32,8 @@ namespace Infrastructure
         {
             Cn = new SqlConnection
             {
-                //ConnectionString = Properties.Settings.Default.SystemAdminConnection
-                ConnectionString = Properties.Settings.Default.TestServerConnectionString
+                ConnectionString = Properties.Settings.Default.SystemAdminConnection
+                //ConnectionString = Properties.Settings.Default.TestServerConnectionString
             };
         }
         public bool IsConnectiongProductionServer()
@@ -1043,9 +1043,77 @@ namespace Infrastructure
                 ("update_wize_core_preceding_year_final_account").ExecuteNonQuery();
         }
 
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(DateTime accountActivityDateStart, DateTime acountActivityDateEnd, string location, string dept, string debitAccountCode, string creditAccountCode, bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
         {
-            throw new NotImplementedException();
+            ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
+            SetReferenceTransferReceiptsAndExpenditureParameters
+                (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode, debitAccount,
+                    creditAccountCode, creditAccount, isValidityTrueOnly, containOutputted, outputDateStart, outputDateEnd);
+            SqlDataReader reader =
+                ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure_all_data").ExecuteReader();
+
+            Rep rep;
+            CreditDept creditDept;
+            AccountingSubject debitAccountingSubject;
+            AccountingSubject creditAccountingSubject;
+
+            while (reader.Read()) 
+            {
+                rep = new Rep((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
+                creditDept = new CreditDept((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
+                debitAccountingSubject = new AccountingSubject((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
+                creditAccountingSubject = new AccountingSubject((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
+
+                list.Add(new TransferReceiptsAndExpenditure
+                    ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
+                        (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
+                        (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
+                        (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
+                        (bool)reader["is_reduced_tax_rate"]));
+            }
+
+            return list;
+        }
+
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
+                int page, string column, bool isOrderAsc, int countEachPage)
+        {
+            SetReferenceTransferReceiptsAndExpenditureParameters(isShunjuenDept, accountActivityDateStart,
+                accountActivityDateEnd, location, dept, debitAccountCode, debitAccount, creditAccountCode, creditAccount,
+                isValidityTrueOnly, containOutputted, outputDateStart, outputDateEnd);
+            Parameters.Add("page", page);
+            Parameters.Add("column", column);
+            Parameters.Add("is_order_asc", isOrderAsc);
+            Parameters.Add("count_each_page", countEachPage);
+
+            ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
+
+            SqlDataReader reader = ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure").ExecuteReader();
+
+            return list;
+        }
+
+        private void SetReferenceTransferReceiptsAndExpenditureParameters
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
+
+        {
+            Parameters = new Dictionary<string, object>()
+            {
+                {"@is_shunjuen_dept",isShunjuenDept },{"@accont_activity_start_date",accountActivityDateStart},
+                {"@account_activity_end_date",accountActivityDateEnd},{ "@location",location},{ "@dept",dept},
+                { "@debit_account_code",debitAccountCode},{ "@debit_account",debitAccount},
+                { "@credit_account_code",creditAccountCode},{ "@credit_account",creditAccount},
+                { "@is_validity_true_only",isValidityTrueOnly},{ "@contain_outputted",containOutputted},
+                { "@output_start_date",outputDateStart},{ "@output_end_date",outputDateEnd}
+            };
         }
     }
 }

@@ -631,7 +631,10 @@ namespace Infrastructure
 
         public bool IsConnectiongProductionServer() { return true; }
 
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure(DateTime accountActivityDateStart, DateTime acountActivityDateEnd, string location, string dept, string debitAccountCode, string creditAccountCode, bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
         {
             return new ObservableCollection<TransferReceiptsAndExpenditure>()
             {
@@ -659,8 +662,44 @@ namespace Infrastructure
                     AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980000,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ううう","えええ",3500,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"おおお","かかか",19800,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ききき","くくく",5600,true,
+                    DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,true,
                     DateTime.Today,DateTime.Today,false)
             };
+        }
+
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
+                int page, string column, bool isOrderAsc, int countEachPage)
+        {
+            return ReferenceTransferReceiptsAndExpenditure
+                (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode,
+                    debitAccount, creditAccountCode, creditAccount, true, true, outputDateStart, outputDateEnd);
         }
     }
 }

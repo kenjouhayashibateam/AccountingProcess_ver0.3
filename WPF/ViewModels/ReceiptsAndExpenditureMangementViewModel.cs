@@ -154,7 +154,12 @@ namespace WPF.ViewModels
             this(DefaultInfrastructure.GetDefaultDataOutput(),
                 DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
-
+        /// <summary>
+        /// 振替データ管理画面呼び出しコマンド
+        /// </summary>
+        public DelegateCommand ShowTransferReceiptsAndExpenditurOperationCommand { get; set; }
+        private void ShowTransferReceiptsAndExpenditureOperation()
+        { CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView()); }
         public DelegateCommand PasswordCheckReversCommand { get; set; }
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
@@ -162,9 +167,7 @@ namespace WPF.ViewModels
         private void CheckRevers() { PasswordCharCheck = !PasswordCharCheck; }
 
         public void SetSortColumns()
-        {
-            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
-        }
+        { Pagination.SortColumns = ReceptsAndExpenditureListSortColumns(); }
 
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
@@ -291,7 +294,6 @@ namespace WPF.ViewModels
         private void SetProperty()
         {
             Pagination.SelectedSortColumn = Pagination.SortColumns[0];
-            SearchStartDate = DateTime.Today;
             TodaysFinalAccount = AmountWithUnit(ReturnTodaysFinalAccount());
             SetOutputGroupEnabled();
             IsReceiptsAndExpenditureOutputButtonEnabled = true;
@@ -500,6 +502,8 @@ namespace WPF.ViewModels
             ShowCashJournalManagementCommand = new DelegateCommand
                 (() => ShowCashJournalManagement(), () => true);
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
+            ShowTransferReceiptsAndExpenditurOperationCommand = new DelegateCommand
+                (() => ShowTransferReceiptsAndExpenditureOperation(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します

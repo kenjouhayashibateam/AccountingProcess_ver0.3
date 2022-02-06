@@ -99,7 +99,7 @@ namespace WPF.ViewModels
                 (() => CreateShowWindowCommand(ScreenTransition.SearchCondlences()), () => true);
             ShowTransferReceiptsAndExpenditureManagementCommand = new DelegateCommand
                 (() => CreateShowWindowCommand
-                    (ScreenTransition.TransferReceiptsExpenditureManagement()), () => true);
+                    (ScreenTransition.TransferReceiptsAndExpenditureManagement()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>

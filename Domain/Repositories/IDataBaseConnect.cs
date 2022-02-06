@@ -437,17 +437,11 @@ namespace Domain.Repositories
         /// </summary>
         /// <returns></returns>
         public bool IsConnectiongProductionServer();
-        ///// <summary>
-        ///// 出納データに関連している振替データを返します
-        ///// </summary>
-        ///// <returns></returns>
-        //public ObservableCollection<TransferReceiptsAndExpenditure> CallGroupingTransferReceiptsAndExpenditure
-        //    (ReceiptsAndExpenditure receiptsAndExpenditure);
         /// <summary>
         /// 振替データを検索します
         /// </summary>
         /// <param name="accountActivityDateStart">振替日検索開始日</param>
-        /// <param name="acountActivityDateEnd">振替日検索最終日</param>
+        /// <param name="accountActivityDateEnd">振替日検索最終日</param>
         /// <param name="location">経理担当場所</param>
         /// <param name="dept">貸方部門</param>
         /// <param name="debitAccountCode">借方勘定科目コード</param>
@@ -458,8 +452,13 @@ namespace Domain.Repositories
         /// <param name="outputDateEnd">印刷日検索最終日</param>
         /// <returns></returns>
         public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (DateTime accountActivityDateStart, DateTime acountActivityDateEnd, string location, string dept, 
-                string debitAccountCode, string creditAccountCode, bool isValidityTrueOnly, bool containOutputted, 
-                DateTime outputDateStart, DateTime outputDateEnd);
+            (bool isShunjuenDept,DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted,  DateTime outputDateStart, DateTime outputDateEnd);
+        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
+                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
+                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
+                int page, string column, bool isOrderAsc, int countEachPage);
     }
 }
