@@ -15,14 +15,13 @@ namespace Infrastructure.ExcelOutputData
     /// <summary>
     /// 伝票出力クラス
     /// </summary>
-    internal class SlipOutput : OutputList
+    internal class SlipOutput : SlipOutputBase
     {
         protected ObservableCollection<ReceiptsAndExpenditure> ReceiptsAndExpenditures;
-        protected Rep OutputRep;
         private readonly SlipType mySlipType;
         private readonly bool IsPayment;
         private readonly bool IsPreviousDay;
-        private readonly IDataBaseConnect DataBaseConnect =
+        private readonly IDataBaseConnect DataBaseConnect = 
             DefaultInfrastructure.GetDefaultDataBaseConnect();
         /// <summary>
         /// 伝票の種類
@@ -40,14 +39,13 @@ namespace Infrastructure.ExcelOutputData
             /// <summary>
             /// 社内振替伝票
             /// </summary>
-            Transter
+            Transfer
         }
 
         internal SlipOutput
-            (ObservableCollection<ReceiptsAndExpenditure> outputDatas, Rep outputRep,
-                SlipType slipType, bool isPreviousDay) : base(outputDatas)
+            (ObservableCollection<ReceiptsAndExpenditure> outputDatas, SlipType slipType, bool isPreviousDay) :
+                base(outputDatas)
         {
-            OutputRep = outputRep;
             mySlipType = slipType;
             IsPayment = mySlipType == SlipType.Payment;
             IsPreviousDay = isPreviousDay;
@@ -55,8 +53,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected void SlipDataOutput()
         {
-            string code = string.Empty;
-            string subject = string.Empty;
+            AccountingSubject subject = null;
             DateTime currentDate = DefaultDate;
             string content = string.Empty;
             string location = default;
@@ -74,6 +71,7 @@ namespace Infrastructure.ExcelOutputData
                 (r => r.IsPayment)
                 .ThenBy(r => r.CreditDept.Dept)
                 .ThenBy(r => r.AccountActivityDate)
+                .ThenBy(r => r.Content.AccountingSubject.ID)
                 .ThenBy(r => r.Content.AccountingSubject.SubjectCode)
                 .ThenBy(r => r.Content.AccountingSubject.Subject)
                 .ThenBy(r => r.IsReducedTaxRate)
@@ -81,10 +79,8 @@ namespace Infrastructure.ExcelOutputData
                 )
             {
                 if (rae.IsPayment != IsPayment) { continue; }
-                //codeの初期値を設定する
-                if (string.IsNullOrEmpty(code)) { code = rae.Content.AccountingSubject.SubjectCode; }
                 //subjectの初期値を設定する
-                if (string.IsNullOrEmpty(subject)) { subject = rae.Content.AccountingSubject.Subject; }
+                if (subject == null) { subject = rae.Content.AccountingSubject; }
                 //currentDateの初期値を設定する
                 if (currentDate == DefaultDate) { currentDate = rae.AccountActivityDate; }
                 if (string.IsNullOrEmpty(content)) { content = rae.Content.Text; }//contentの初期値を設定する}
@@ -93,9 +89,17 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(clerk)) { clerk = rae.RegistrationRep.FirstName; }
                 contentCount++;
 
-                isNextSlip = IsSameData(rae, currentDate, creditDept, code, subject, content, location, isTaxRate);
+                string ass =
+                    $"{rae.Content.AccountingSubject.Subject} : " +
+                    $"{rae.Content.AccountingSubject.SubjectCode}";
+                if (!string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber
+                    (rae.Content.AccountingSubject)))
+                {
+                    ass += $"-{DataBaseConnect.GetBranchNumber(rae.Content.AccountingSubject)}";
+                }
+
+                isNextSlip = IsSameData(rae, currentDate, creditDept, subject, content, location, isTaxRate);
                 DateTime WizeCoreAccountingActivityDate = DefaultDate;
-                if (isNextSlip) { WizeCoreFix(); }
 
                 if (isNextSlip)
                 {
@@ -106,8 +110,7 @@ namespace Infrastructure.ExcelOutputData
                 {
                     currentDate = rae.AccountActivityDate;//入出金日を代入
                     WizeCoreAccountingActivityDate = rae.AccountActivityDate;
-                    code = rae.Content.AccountingSubject.SubjectCode;
-                    subject = rae.Content.AccountingSubject.Subject;
+                    subject = rae.Content.AccountingSubject;
                     content = rae.Content.Text;
                     TotalPrice = rae.Price;
                     creditDept = rae.CreditDept.Dept;
@@ -155,26 +158,18 @@ namespace Infrastructure.ExcelOutputData
                 //前日の日付にする場合の対応
                 DateTime OutputDate = IsPreviousDay ? DateTime.Today.AddDays(-1) : DateTime.Today;
                 //前日の青蓮堂の担当者と当日の伝票出力者（管理事務所の経理）が違う場合の対応
-                if (OutputRep.FirstName == clerk)
-                { myWorksheet.Cell(StartRowPosition + 6, 20).Value = OutputRep.FirstName; }
+                if (LoginRep.GetInstance().Rep.FirstName == clerk)
+                { myWorksheet.Cell(StartRowPosition + 6, 20).Value = LoginRep.GetInstance().Rep.FirstName; }
                 else
                 {
                     myWorksheet.Cell(StartRowPosition + 6, 20).Value = clerk;
-                    myWorksheet.Cell(StartRowPosition + 6, 18).Value = OutputRep.FirstName;
+                    myWorksheet.Cell(StartRowPosition + 6, 18).Value = LoginRep.GetInstance().Rep.FirstName;
                 }
                 //出力日
                 myWorksheet.Cell(StartRowPosition + 10, 1).Value = OutputDate.Year;
                 myWorksheet.Cell(StartRowPosition + 10, 2).Value = OutputDate.Month;
                 myWorksheet.Cell(StartRowPosition + 10, 3).Value = OutputDate.Day;
                 //勘定科目
-                string ass =
-                    $"{rae.Content.AccountingSubject.Subject} : " +
-                    $"{rae.Content.AccountingSubject.SubjectCode}";
-                if (!string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber
-                    (rae.Content.AccountingSubject)))
-                {
-                    ass += $"-{DataBaseConnect.GetBranchNumber(rae.Content.AccountingSubject)}";
-                }
                 switch (mySlipType)
                 {
                     case SlipType.Payment:
@@ -183,25 +178,13 @@ namespace Infrastructure.ExcelOutputData
                     case SlipType.Withdrawal:
                         myWorksheet.Cell(StartRowPosition + 9, 4).Value = ass;
                         break;
-                    case SlipType.Transter:
+                    case SlipType.Transfer:
                         break;
                     default:
                         break;
                 };
                 s = rae.CreditDept.ID == "credit_dept3" ? string.Empty : rae.CreditDept.Dept;
                 myWorksheet.Cell(StartRowPosition + 9, 16).Value = s;
-
-                //ワイズコア会計は入出金日で伝票を分ける
-                void WizeCoreFix()
-                {
-                    if (AccountingProcessLocation.IsAccountingGenreShunjuen) { return; }
-                    if (!isNextSlip) { return; }
-                    if (WizeCoreAccountingActivityDate == DefaultDate)
-                    { WizeCoreAccountingActivityDate = rae.AccountActivityDate; }
-
-                    bool b = WizeCoreAccountingActivityDate == rae.AccountActivityDate;
-                    isNextSlip = b;
-                }
             }
         }
 
@@ -211,107 +194,7 @@ namespace Infrastructure.ExcelOutputData
             ExcelOpen();
         }
 
-        protected override void PageStyle()
-        {
-            SetBorderStyle();
-            SetCellsStyle();
-            SetMargins();
-            SetMerge();
-            myWorksheet.PageSetup.PageOrientation = XLPageOrientation.Landscape;
-        }
-
-        protected override void SetBorderStyle()
-        {
-            _ = myWorksheet.Style
-                .Border.SetLeftBorder(XLBorderStyleValues.None)
-                .Border.SetTopBorder(XLBorderStyleValues.None)
-                .Border.SetRightBorder(XLBorderStyleValues.None)
-                .Border.SetBottomBorder(XLBorderStyleValues.None);
-        }
-
-        protected override void SetCellsStyle()
-        {
-            _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 5, 20).Style
-                .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
-            _ = myWorksheet.Cell(StartRowPosition + 1, 1).Style.
-                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-            _ = myWorksheet.Cell(StartRowPosition + 1, 16).Style.
-                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            _ = myWorksheet.Cell(StartRowPosition + 2, 16).Style.
-                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            _ = myWorksheet.Cell(StartRowPosition + 3, 16).Style.
-                Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            for (int i = StartRowPosition + 1; i < StartRowPosition + 7; i++)
-            {
-                _ = myWorksheet.Cell(i, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                _ = myWorksheet.Cell(i, 1).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                _ = myWorksheet.Cell(i, 1).Style.Alignment.SetShrinkToFit(true);
-                _ = myWorksheet.Cell(i, 11).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-                _ = myWorksheet.Cell(i, 11).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                _ = myWorksheet.Cell(i, 11).Style.Alignment.SetShrinkToFit(true);
-            }
-            _ = MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 6, 20).Style
-                .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            _ = MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 16).Style
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
-                .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom)
-                .Alignment.SetShrinkToFit(true);
-            _ = MySheetCellRange(StartRowPosition + 10, 1, StartRowPosition + 10, 13).Style
-                .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom);
-            _ = myWorksheet.Cell(StartRowPosition + 10, 1).Style
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-            _ = MySheetCellRange(StartRowPosition + 10, 2, StartRowPosition + 10, 3).Style
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-            _ = MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 10, 13).Style
-                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
-        }
-
-        protected override double[] SetColumnSizes()
-        {
-            return new double[]
-                { 5, 4.71, 5.14, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 1.29, 1.29, 1.43, 10.29,
-                    10.43, 5.29, 0.75, 5.43, 0.83, 4.57 };
-        }
-
-        protected override double[] SetRowSizes()
-        {
-            return new double[]
-                { 24, 20.25, 20.25, 20.25, 20.25, 20.25, 18.75, 18.75, 9, 30, 30 };
-        }
-
-        protected override double SetMarginsBottom() { return ToInch(0); }
-
-        protected override double SetMarginsLeft() { return ToInch(2); }
-
-        protected override double SetMarginsRight() { return ToInch(0.5); }
-
-        protected override double SetMarginsTop() { return ToInch(0); }
-
-        protected override void SetMerge()
-        {
-            _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 15).Merge();
-            for (int i = 1; i < 6; i++)
-            {
-                _ = MySheetCellRange(StartRowPosition + i, 1, StartRowPosition + i, 9).Merge();
-                _ = MySheetCellRange(StartRowPosition + i, 11, StartRowPosition + i, 15).Merge();
-            }
-            for (int i = 1; i < 5; i++)
-            { _ = MySheetCellRange(StartRowPosition + i, 16, StartRowPosition + i, 20).Merge(); }
-            _ = MySheetCellRange(StartRowPosition + 6, 18, StartRowPosition + 7, 18).Merge();
-            _ = MySheetCellRange(StartRowPosition + 6, 20, StartRowPosition + 7, 20).Merge();
-            _ = MySheetCellRange(StartRowPosition + 9, 4, StartRowPosition + 9, 13).Merge();
-            _ = MySheetCellRange(StartRowPosition + 9, 14, StartRowPosition + 9, 15).Merge();
-            _ = MySheetCellRange(StartRowPosition + 9, 16, StartRowPosition + 9, 19).Merge();
-        }
-
-        protected override void SetSheetStyle() { myWorksheet.Style.Font.FontSize = 11; }
-
-        protected override XLPaperSize SheetPaperSize() { return XLPaperSize.A4Paper; }
-
         protected override void SetList(IEnumerable outputList)
         { ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList; }
-
-        protected override string SetSheetFontName() { return "ＭＳ 明朝"; }
     }
 }

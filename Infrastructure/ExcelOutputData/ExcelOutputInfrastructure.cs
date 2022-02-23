@@ -63,8 +63,7 @@ namespace Infrastructure.ExcelOutputData
                 bool isPreviousDay)
         {
             SlipType st = isPayment ? SlipType.Payment : SlipType.Withdrawal;
-            LoginRep loginRep = LoginRep.GetInstance();
-            SlipOutput pso = new SlipOutput(receiptsAndExpenditures, loginRep.Rep, st, isPreviousDay);
+            SlipOutput pso = new SlipOutput(receiptsAndExpenditures, st, isPreviousDay);
             pso.Output();
         }
 
@@ -74,6 +73,12 @@ namespace Infrastructure.ExcelOutputData
             CashJournalOutput raeo =
                 new CashJournalOutput(receiptsAndExpenditures);
             raeo.Output();
+        }
+
+        public void TransferSlips(ObservableCollection<TransferReceiptsAndExpenditure> transferReceiptsAndExpenditures)
+        {
+            TransferSlipOutput tso = new TransferSlipOutput(transferReceiptsAndExpenditures);
+            tso.Output();
         }
 
         public void VoucherData(Voucher voucher, bool isReissue, DateTime prepaidDate)

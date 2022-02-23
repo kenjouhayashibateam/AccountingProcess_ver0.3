@@ -264,6 +264,6 @@ namespace WPF.ViewModels
             DefaultWindowTitle = $"受納証管理 : {AccountingProcessLocation.Location}";
         }
 
-        public bool OnClosing() { return !IsClose; }
+        public bool CancelClose() { return !IsClose; }
     }
 }

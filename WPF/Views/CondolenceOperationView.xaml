@@ -17,6 +17,7 @@
     </Window.DataContext>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+        <behavior:BoolNegativeConverter x:Key="BoolNeg"/>
     </Window.Resources>
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
@@ -245,7 +246,20 @@
                         <ComboBox x:Name="ContentComboBox" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ContentStrings}" Text="{Binding ContentText}" DisplayMemberPath="Value" VerticalContentAlignment="Center" Margin="5"/>
                         <ComboBox Name="SoryoNameComboBox" Grid.Row="1" Grid.Column="1" IsEditable="True" ItemsSource="{Binding SoryoList}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding SoryoName}" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" VerticalContentAlignment="Center" Margin="5"/>
                         <ComboBox x:Name="NoteTextComboBox" Grid.Row="1" Grid.Column="2" Text="{Binding Note}" VerticalContentAlignment="Center" ItemsSource="{Binding NoteStrings}" DisplayMemberPath="Value" IsEditable="True" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" Margin="5"/>
-                        <ToggleButton x:Name="ReceiverToggleButton" Grid.Row="1" Grid.Column="3" IsEnabled="{Binding IsFixToggleEnabled}" IsChecked="{Binding FixToggle}" Content="{Binding FixToggleContent}" Margin="5"/>
+                        <ToggleButton x:Name="ReceiverToggleButton" Grid.Row="1" Grid.Column="3" IsEnabled="{Binding IsReceptionBlank,Converter={StaticResource BoolNeg}}" IsChecked="{Binding FixToggle}" Margin="5">
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding FixToggle}" Value="true">
+                                            <Setter Property="Content" Value="窓口受付"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding FixToggle}" Value="false">
+                                            <Setter Property="Content" Value="郵送対応"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+                        </ToggleButton>
                         <CheckBox Content="窓口、郵送を空欄にする" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" IsChecked="{Binding IsReceptionBlank}" Margin="5"/>
                     </Grid>
                 </Grid>
@@ -255,7 +269,19 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="DeleteButton" Content="データ削除" Grid.Column="1" Visibility="{Binding IsDeleteButtonVisibility,Converter={StaticResource VisibilityConverter}}" Margin="3">
+                    <Button x:Name="DeleteButton" Content="データ削除" Grid.Column="1" Margin="3">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataOperationButtonContent}" Value="登録">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataOperationButtonContent}" Value="更新">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding DeleteCondolenceCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding DeleteCondolenceCommand}" MouseAction="LeftClick"/>

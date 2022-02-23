@@ -20,15 +20,9 @@ namespace WPF.ViewModels.Tests
             vm.IsCheckedRegistration = true;
             vm.DataBaseConnect = new LocalConnectInfrastructure();
             LoginRep.GetInstance().SetRep(new Rep("aaa", "aaa", "aaa", true, true));
-            Assert.AreEqual(vm.IsRepNameDataEnabled, true);
-            Assert.AreEqual(vm.IsRepPasswordEnabled, false);
-            Assert.AreEqual(vm.IsRepNewPasswordEnabled, true);
-            Assert.AreEqual(vm.IsRepReferenceMenuEnabled, false);
             Assert.AreEqual(vm.RepName, string.Empty);
             Assert.AreEqual(vm.RepCurrentPassword, string.Empty);
             Assert.AreEqual(vm.RepNewPassword, string.Empty);
-            Assert.AreEqual(vm.RepDataOperationButtonContent, "登録");
-            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
         }
         [TestMethod()]
         public void 担当者の更新時フィールドプロパティ()
@@ -36,12 +30,6 @@ namespace WPF.ViewModels.Tests
             vm.SetDataUpdateCommand.Execute();
 
             SetAdminPermissionRep();
-
-            Assert.AreEqual(vm.IsRepNameDataEnabled, false);
-            Assert.AreEqual(vm.IsRepPasswordEnabled, true);
-            Assert.AreEqual(vm.IsRepNewPasswordEnabled, false);
-            Assert.AreEqual(vm.IsRepReferenceMenuEnabled, true);
-            Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
 
             vm.CurrentRep = vm.RepList[0];
 
@@ -54,10 +42,8 @@ namespace WPF.ViewModels.Tests
             vm.RepCurrentPassword = "bbb";
 
             Assert.AreEqual(vm.IsRepOperationButtonEnabled, false);
-            Assert.AreEqual(vm.IsRepNewPasswordEnabled, false);
 
             vm.RepCurrentPassword = "aaa";
-            Assert.AreEqual(vm.IsRepNewPasswordEnabled, true);
             Assert.AreEqual(vm.IsRepOperationButtonEnabled, true);
 
             vm.RepNewPassword = "bbb";

@@ -79,17 +79,15 @@ namespace WPF.ViewModels
         private DateTime slipOutputDate;
         #endregion
         private int HoldingPrice;
-        private readonly ReceiptsAndExpenditureOperation OperationData = ReceiptsAndExpenditureOperation.GetInstance();
+        private ReceiptsAndExpenditure OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
         private int receiptsAndExpenditureIDField;
-        private readonly LoginRep loginRep = LoginRep.GetInstance();
         #endregion
 
         public ReceiptsAndExpenditureOperationViewModel
             (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
         {
-            OperationData = ReceiptsAndExpenditureOperation.GetInstance();
-            OperationData.Add(this);
-            if (OperationData.Data != null)
+            ReceiptsAndExpenditureOperation.GetInstance().Add(this);
+            if (ReceiptsAndExpenditureOperation.GetInstance().Data != null)
             {
                 SetDataUpdateCommand.Execute();
                 SetReceiptsAndExpenditureProperty();
@@ -121,7 +119,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetDetailFieldProperty()
         {
-            switch (OperationData.GetOperationType())
+            switch (ReceiptsAndExpenditureOperation.GetInstance().GetOperationType())
             {
                 case ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure:
                     SetDetailTitle("その他詳細", string.Empty);
@@ -134,7 +132,7 @@ namespace WPF.ViewModels
                     break;
             }
             IsPaymentCheckEnabled =
-                OperationData.GetOperationType() ==
+                ReceiptsAndExpenditureOperation.GetInstance().GetOperationType() ==
                 ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure;
         }
         /// <summary>
@@ -163,69 +161,77 @@ namespace WPF.ViewModels
         /// </summary>
         private async void DataUpdate()
         {
+            OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
+
             IsDataOperationButtonEnabled = false;
-            if (OperationData.Data == null) { return; }
+            if (OperationData == null) { return; }
 
             string UpdateCotent = string.Empty;
 
-            if (OperationData.Data.IsPayment != IsPaymentCheck)
+            if (OperationData.IsPayment != IsPaymentCheck)
             {
                 string formCheck = IsPaymentCheck ? "入金" : "出金";
-                string instanceCheck = OperationData.Data.IsPayment ? "入金" : "出金";
+                string instanceCheck = OperationData.IsPayment ? "入金" : "出金";
                 UpdateCotent += $"入出金 : { instanceCheck} → { formCheck }";
             }
 
-            if (OperationData.Data.AccountActivityDate != AccountActivityDate)
+            if (OperationData.AccountActivityDate != AccountActivityDate)
             {
                 UpdateCotent +=
-                    $"入出金日 : {OperationData.Data.AccountActivityDate.ToShortDateString()} → " +
+                    $"入出金日 : {OperationData.AccountActivityDate.ToShortDateString()} → " +
                     $"{AccountActivityDate.ToShortDateString()}\r\n";
             }
 
-            if (OperationData.Data.CreditDept.Dept != ComboCreditDeptText)
+            if (OperationData.CreditDept.Dept != ComboCreditDeptText)
             {
                 UpdateCotent +=
-                    $"貸方勘定 : {OperationData.Data.CreditDept.Dept} → {ComboCreditDeptText}\r\n";
+                    $"貸方勘定 : {OperationData.CreditDept.Dept} → {ComboCreditDeptText}\r\n";
             }
 
-            if (OperationData.Data.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode)
+            if (OperationData.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode)
             {
+                string originalBranchNumber =
+                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)) ?
+                    string.Empty : DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject);
+                string updateBranchNumber =
+                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(SelectedAccountingSubject)) ?
+                    string.Empty : DataBaseConnect.GetBranchNumber(SelectedAccountingSubject);
                 UpdateCotent +=
-                    $"勘定科目コード : {OperationData.Data.Content.AccountingSubject.SubjectCode} → " +
-                    $"{ComboAccountingSubjectCode}\r\n";
+                    $"勘定科目コード : {OperationData.Content.AccountingSubject.SubjectCode}{originalBranchNumber} → " +
+                    $"{ComboAccountingSubjectCode}{updateBranchNumber}\r\n";
             }
 
-            if (OperationData.Data.Content.AccountingSubject.Subject != ComboAccountingSubjectText)
+            if (OperationData.Content.AccountingSubject.Subject != ComboAccountingSubjectText)
             {
-                UpdateCotent += $"勘定科目 : {OperationData.Data.Content.AccountingSubject.Subject} → " +
+                UpdateCotent += $"勘定科目 : {OperationData.Content.AccountingSubject.Subject} → " +
                     $"{ComboAccountingSubjectText}\r\n";
             }
 
-            if (OperationData.Data.Content.Text != ComboContentText)
-            { UpdateCotent += $"内容 : {OperationData.Data.Content.Text} → {ComboContentText}\r\n"; }
+            if (OperationData.Content.Text != ComboContentText)
+            { UpdateCotent += $"内容 : {OperationData.Content.Text} → {ComboContentText}\r\n"; }
 
-            if (OperationData.Data.Detail != JoinDetail())
-            { UpdateCotent += $"詳細 : {OperationData.Data.Detail} → {JoinDetail()}\r\n"; }
+            if (OperationData.Detail != JoinDetail())
+            { UpdateCotent += $"詳細 : {OperationData.Detail} → {JoinDetail()}\r\n"; }
 
-            if (OperationData.Data.Price != IntAmount(price))
+            if (OperationData.Price != IntAmount(price))
             {
-                UpdateCotent += $"金額 : {AmountWithUnit(OperationData.Data.Price)} → " +
+                UpdateCotent += $"金額 : {AmountWithUnit(OperationData.Price)} → " +
                     $"{AmountWithUnit(IntAmount(Price))}\r\n";
             }
 
-            if (OperationData.Data.IsValidity != IsValidity)
-            { UpdateCotent += $"有効性 : {OperationData.Data.IsValidity} → {IsValidity}\r\n"; }
+            if (OperationData.IsValidity != IsValidity)
+            { UpdateCotent += $"有効性 : {OperationData.IsValidity} → {IsValidity}\r\n"; }
 
-            if (OperationData.Data.OutputDate != SlipOutputDate)
+            if (OperationData.OutputDate != SlipOutputDate)
             {
-                UpdateCotent += $"出力日 : {OperationData.Data.OutputDate.ToShortDateString()} → " +
+                UpdateCotent += $"出力日 : {OperationData.OutputDate.ToShortDateString()} → " +
                     $"{(SlipOutputDate == DefaultDate ? "未出力" : SlipOutputDate.ToShortDateString())}\r\n";
             }
 
-            if (OperationData.Data.IsReducedTaxRate != IsReducedTaxRate)
+            if (OperationData.IsReducedTaxRate != IsReducedTaxRate)
             {
                 UpdateCotent +=
-                    $"軽減税率データ : {OperationData.Data.IsReducedTaxRate} → {IsReducedTaxRate}\r\n";
+                    $"軽減税率データ : {OperationData.IsReducedTaxRate} → {IsReducedTaxRate}\r\n";
             }
 
             if (UpdateCotent.Length == 0)
@@ -247,20 +253,20 @@ namespace WPF.ViewModels
             ReceiptsAndExpenditure updateData =
                 new ReceiptsAndExpenditure
                 (ReceiptsAndExpenditureIDField, RegistrationDate, OperationRep,
-                OperationData.Data.Location, SelectedCreditDept, SelectedContent,
+                OperationData.Location, SelectedCreditDept, SelectedContent,
                 JoinDetail(), IntAmount(price), IsPaymentCheck, IsValidity,
                 AccountActivityDate, SlipOutputDate, IsReducedTaxRate);
 
             DataOperationButtonContent = "更新中";
             _ = await Task.Run(() => _ = DataBaseConnect.Update(updateData));
-            OperationData.SetData(updateData);
-            OperationData.Notify();
             CallCompletedUpdate();
+            ReceiptsAndExpenditureOperation.GetInstance().SetData(updateData);
+            ReceiptsAndExpenditureOperation.GetInstance().Notify();
             DataOperationButtonContent = "更新";
 
-            if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) { return; }
+            if (OperationData.OutputDate.Month == DateTime.Today.Month) { return; }
 
-            if (OperationData.Data.OutputDate == DefaultDate) { return; }
+            if (OperationData.OutputDate == DefaultDate) { return; }
 
             CreateResubmitInfo();
 
@@ -269,7 +275,7 @@ namespace WPF.ViewModels
                 MessageBox = new MessageBoxInfo()
                 {
                     Message =
-                        $"訂正した出納帳（{OperationData.Data.OutputDate.Month}月分）を必ず印刷してください。",
+                        $"訂正した出納帳（{OperationData.OutputDate.Month}月分）を必ず印刷してください。",
                     Image = System.Windows.MessageBoxImage.Information,
                     Title = "要注意！！！",
                     Button = System.Windows.MessageBoxButton.OK
@@ -301,7 +307,7 @@ namespace WPF.ViewModels
                        $"経理担当場所\t : {rae.Location}\r\n" +
                        $"入出金日\t\t : {rae.AccountActivityDate.ToShortDateString()}\r\n" +
                        $"入出金\t\t : {depositAndWithdrawalText}\r\n" +
-                       $"貸方勘定\t\t : {rae.CreditDept.Dept}\r\n" +
+                       $"貸方部門\t\t : {rae.CreditDept.Dept}\r\n" +
                        $"コード\t\t : {rae.Content.AccountingSubject.SubjectCode}\r\n" +
                        $"勘定科目\t\t : {rae.Content.AccountingSubject.Subject}\r\n" +
                        $"内容\t\t : {rae.Content.Text}\r\n" +
@@ -312,25 +318,36 @@ namespace WPF.ViewModels
                    == System.Windows.MessageBoxResult.Cancel)
             {
                 IsDataOperationButtonEnabled = true;
+                ReceiptsAndExpenditureOperation.GetInstance().SetData(rae);
+                SetReceiptsAndExpenditureProperty();
+                ReceiptsAndExpenditureOperation.GetInstance().SetData(null);
                 return;
             }
 
             DataOperationButtonContent = "登録中";
             _ = await Task.Run(() => _ = DataBaseConnect.Registration(rae));
-            OperationData.SetData(rae);
-            OperationData.Notify();
             CallShowMessageBox = true;
-            FieldClear();
             CallCompletedRegistration();
+            await Task.Run(() => SetOperationData());
+            FieldClear();
             DataOperationButtonContent = "登録";
+
+
+            void SetOperationData()
+            { 
+                ReceiptsAndExpenditureOperation.GetInstance().SetData(rae);
+                ReceiptsAndExpenditureOperation.GetInstance().Notify();
+            }
         }
         /// <summary>
         /// フィールドの値をクリアします
         /// </summary>
         private void FieldClear()
         {
+            OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
+
             IsValidity = true;
-            OperationData.SetData(null);
+            ReceiptsAndExpenditureOperation.GetInstance().SetData(null);
             ComboCreditDeptText = string.Empty;
             ComboAccountingSubjectCodes.Clear();
             SelectedAccountingSubjectCode = null;
@@ -343,7 +360,7 @@ namespace WPF.ViewModels
             Price = string.Empty;
             AccountActivityDate = DateTime.Today;
             RegistrationDate = DateTime.Today;
-            OperationRep = loginRep.Rep;
+            OperationRep = LoginRep.GetInstance().Rep;
             SlipOutputDate = DefaultDate;
             IsOutput = false;
             IsOutputCheckEnabled = false;
@@ -357,35 +374,37 @@ namespace WPF.ViewModels
         /// </summary>
         private void SetReceiptsAndExpenditureProperty()
         {
+            OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
+
             IsInfoThrough = true;
-            OperationRep = OperationData.Data.RegistrationRep ?? loginRep.Rep;
-            ReceiptsAndExpenditureIDField = OperationData.Data.ID;
-            IsValidity = OperationData.Data.IsValidity;
-            IsPaymentCheck = OperationData.Data.IsPayment;
-            SlipOutputDate = OperationData.Data.OutputDate;
-            IsOutput = OperationData.Data.OutputDate != DefaultDate;
-            IsOutputCheckEnabled = OperationData.Data.ID > 0;
-            SelectedAccountingSubjectCode = OperationData.Data.Content.AccountingSubject;
-            ComboAccountingSubjectCode = OperationData.Data.Content.AccountingSubject.SubjectCode;
-            SelectedAccountingSubject = OperationData.Data.Content.AccountingSubject;
-            ComboAccountingSubjectText = OperationData.Data.Content.AccountingSubject.Subject;
-            ComboContentText = OperationData.Data.Content.Text;
-            SelectedContent = OperationData.Data.Content;
-            SelectedCreditDept = OperationData.Data.CreditDept;
-            ComboCreditDeptText = OperationData.Data.CreditDept.Dept;
-            DetailText = OperationData.Data.Detail;
+            OperationRep = OperationData.RegistrationRep ?? LoginRep.GetInstance().Rep;
+            ReceiptsAndExpenditureIDField = OperationData.ID;
+            IsValidity = OperationData.IsValidity;
+            IsPaymentCheck = OperationData.IsPayment;
+            SlipOutputDate = OperationData.OutputDate;
+            IsOutput = OperationData.OutputDate != DefaultDate;
+            IsOutputCheckEnabled = OperationData.ID > 0;
+            SelectedAccountingSubjectCode = OperationData.Content.AccountingSubject;
+            ComboAccountingSubjectCode = OperationData.Content.AccountingSubject.SubjectCode;
+            SelectedAccountingSubject = OperationData.Content.AccountingSubject;
+            ComboAccountingSubjectText = OperationData.Content.AccountingSubject.Subject;
+            ComboContentText = OperationData.Content.Text;
+            SelectedContent = OperationData.Content;
+            SelectedCreditDept = OperationData.CreditDept;
+            ComboCreditDeptText = OperationData.CreditDept.Dept;
+            DetailText = OperationData.Detail;
             Price = SetPrice();
-            HoldingPrice = OperationData.Data.Price;
-            AccountActivityDate = OperationData.Data.AccountActivityDate;
-            RegistrationDate = OperationData.Data.RegistrationDate;
-            IsReducedTaxRate = OperationData.Data.IsReducedTaxRate;
+            HoldingPrice = OperationData.Price;
+            AccountActivityDate = OperationData.AccountActivityDate;
+            RegistrationDate = OperationData.RegistrationDate;
+            IsReducedTaxRate = OperationData.IsReducedTaxRate;
             //補足が入力されるContentの場合に、各フィールドに値を振り分ける。
             //現状管理料のみだが、他に出てきた時にはelse if句で対応する
             SetDetailFieldProperty();
-            if (OperationData.Data.Content.Text.Contains("管理料")) { ManagementFeeTextAllocation(); }
+            if (OperationData.Content.Text.Contains("管理料")) { ManagementFeeTextAllocation(); }
             else
             {
-                DetailText = OperationData.Data.Detail;
+                DetailText = OperationData.Detail;
                 Supplement = string.Empty;
             }
 
@@ -393,10 +412,10 @@ namespace WPF.ViewModels
 
             string SetPrice()
             {
-                return OperationData.Data.Price == 0
-                    ? OperationData.Data.Content.FlatRate > 0 ?
-                        CommaDelimitedAmount(OperationData.Data.Content.FlatRate) : string.Empty
-                    : CommaDelimitedAmount(OperationData.Data.Price);
+                return OperationData.Price == 0
+                    ? OperationData.Content.FlatRate > 0 ?
+                        CommaDelimitedAmount(OperationData.Content.FlatRate) : string.Empty
+                    : CommaDelimitedAmount(OperationData.Price);
             }
         }
         /// <summary>
@@ -404,7 +423,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void ManagementFeeTextAllocation()
         {
-            string s = OperationData.Data.Detail.Replace(SpaceF, Space);
+            string s = ReceiptsAndExpenditureOperation.GetInstance().Data.Detail.Replace(SpaceF, Space);
             string[] detailArray = s.Split(' ');
             DetailText = string.Empty;
             Supplement = string.Empty;
@@ -542,7 +561,7 @@ namespace WPF.ViewModels
             {
                 comboAccountingSubjectCode = string.Empty;
 
-                if (string.IsNullOrEmpty(value) && OperationData.Data == null)
+                if (string.IsNullOrEmpty(value) && ReceiptsAndExpenditureOperation.GetInstance().Data == null)
                 {
                     SetField();
                     ValidationProperty(nameof(ComboAccountingSubjectCode), comboAccountingSubjectCode);
@@ -672,11 +691,13 @@ namespace WPF.ViewModels
 
                 if (!ComboContents.Equals(DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode, value,
-                        AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null)))
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, 
+                        ReceiptsAndExpenditureOperation.GetInstance().Data == null)))
                 {
                     ComboContents =
                         DataBaseConnect.ReferenceContent(string.Empty, ComboAccountingSubjectCode, value,
-                        AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, 
+                        ReceiptsAndExpenditureOperation.GetInstance().Data == null);
                     SelectedContent = ComboContents.Count > 0 ? ComboContents[0] : null;
                     ComboContentText = SelectedContent == null ? string.Empty : SelectedContent.Text;
                 }
@@ -721,7 +742,8 @@ namespace WPF.ViewModels
                 ComboContents = DataBaseConnect.ReferenceContent
                     (string.Empty, ComboAccountingSubjectCode,
                         ComboAccountingSubjectText ?? string.Empty,
-                        AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
+                        AccountingProcessLocation.IsAccountingGenreShunjuen,
+                        ReceiptsAndExpenditureOperation.GetInstance().Data == null);
 
                 ComboContentText =
                     ComboContents.Count > 0 ? ComboContents.Count != 0 ?
@@ -930,7 +952,6 @@ namespace WPF.ViewModels
             set
             {
                 slipOutputDate = value;
-                SlipOutputDateTitle = slipOutputDate == DefaultDate ? "伝票出力日（未出力）" : "伝票出力日";
                 CallPropertyChanged();
             }
         }
@@ -1075,9 +1096,10 @@ namespace WPF.ViewModels
         private void SetOutputDate(bool value)
         {
             SlipOutputDate = value
-                ? OperationData.Data.OutputDate == DefaultDate ?
-                        DateTime.Today : OperationData.Data.OutputDate
+                ? ReceiptsAndExpenditureOperation.GetInstance().Data.OutputDate == DefaultDate ?
+                        DateTime.Today : ReceiptsAndExpenditureOperation.GetInstance().Data.OutputDate
                 : DefaultDate;
+            SlipOutputDateTitle = slipOutputDate == DefaultDate ? "伝票出力日（未出力）" : "伝票出力日";
         }
         /// <summary>
         /// 補足に促す注意
@@ -1149,13 +1171,15 @@ namespace WPF.ViewModels
             !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
             !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
 
+            OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
+
             if (!b) { return false; }
             //OperationData.Dataがnullの時は登録なのでtrueを返す
-            if (OperationData.Data == null) { return true; }
+            if (OperationData == null) { return true; }
             //ここまでの条件で伝票出力されていなければtrueを返す
-            if (OperationData.Data.OutputDate == DefaultDate) { return true; }
+            if (OperationData.OutputDate == DefaultDate) { return true; }
             //伝票出力されたのが今月中ならtrueを返す
-            if (OperationData.Data.OutputDate.Month == DateTime.Today.Month) { return true; }
+            if (OperationData.OutputDate.Month == DateTime.Today.Month) { return true; }
             //伝票出力日が今年度中かをbに代入
             b = IsInCorrectionDeadline();
             //今年度以前ならfalseを返す
@@ -1177,7 +1201,7 @@ namespace WPF.ViewModels
             {
                 if (SlipOutputDate == DefaultDate) { return true; }
                 bool b = DateTime.Today > CurrentFiscalYearFirstDate.AddDays(20);
-                return b && OperationData.Data.OutputDate > CurrentFiscalYearFirstDate;
+                return b && OperationData.OutputDate > CurrentFiscalYearFirstDate;
             }
 
             bool IsExceptMonthUpdate()
@@ -1279,15 +1303,17 @@ namespace WPF.ViewModels
 
         protected override void SetDataList()
         {
+            OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
+
             ComboContents = new ObservableCollection<Content>();
             ComboAccountingSubjectCodes =
                 DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
-                    AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData == null);
             ComboAccountingSubjects =
                 DataBaseConnect.ReferenceAccountingSubject(string.Empty, string.Empty,
-                    AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData.Data == null);
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, OperationData == null);
             ComboCreditDepts = DataBaseConnect.ReferenceCreditDept
-                (string.Empty, OperationData.Data == null,
+                (string.Empty, OperationData == null,
                     AccountingProcessLocation.IsAccountingGenreShunjuen);
         }
 

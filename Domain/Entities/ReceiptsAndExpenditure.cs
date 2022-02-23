@@ -19,6 +19,10 @@ namespace Domain.Entities
         /// </summary>
         public bool IsPayment { get; set; }
         /// <summary>
+        /// 未出力かのチェック
+        /// </summary>
+        public bool IsUnprinted { get; set; }
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="id">ID</param>

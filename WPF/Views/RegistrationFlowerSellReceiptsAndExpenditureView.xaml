@@ -12,7 +12,7 @@
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="610" Width="350">
-    
+
     <Window.DataContext>
         <vm:RegistrationFlowerSellReceiptsAndExpenditureViewModel/>
     </Window.DataContext>
@@ -48,13 +48,13 @@
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
     </i:Interaction.Behaviors>
-    
+
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
             <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
         </ib:DataTrigger>
     </ib:Interaction.Triggers>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="10*"/>
@@ -251,7 +251,7 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="総計：" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="総計：" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
@@ -260,17 +260,17 @@
                         <TextBlock Text="売上" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                         <TextBlock Text="{Binding SalesAmount}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                     </Grid>
-                    <TextBlock Text="-" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="-" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
                     <Grid Grid.Column="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="チケット割引" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
-                        <TextBlock Text="{Binding TicketTotalAmount}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding TicketTotalAmountValue}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
                     </Grid>
-                    <TextBlock Text="＝" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
-                    <TextBlock Text="{Binding TotalAmount}" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="＝" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="{Binding TotalAmount}" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
                 </Grid>
             </Grid>
         </GroupBox>

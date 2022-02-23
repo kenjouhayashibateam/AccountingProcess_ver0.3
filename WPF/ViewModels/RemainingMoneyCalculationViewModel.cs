@@ -1004,6 +1004,6 @@ namespace WPF.ViewModels
             DefaultWindowTitle = $"金庫金額計算 : {AccountingProcessLocation.Location}";
         }
 
-        public bool OnClosing() { return !IsClose; }
+        public bool CancelClose() { return !IsClose; }
     }
 }

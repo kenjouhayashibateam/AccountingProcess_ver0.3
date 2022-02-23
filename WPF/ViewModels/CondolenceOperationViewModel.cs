@@ -43,8 +43,6 @@ namespace WPF.ViewModels
         private string dataOperationButtonContent = string.Empty;
         private string counterReceiver = string.Empty;
         private string mailRepresentative = string.Empty;
-        private string fixToggleContent = string.Empty;
-        private string condolenceContent = "法事";
         private string Location = string.Empty;
         /// <summary>
         /// 検索する勘定科目コード
@@ -59,8 +57,6 @@ namespace WPF.ViewModels
         private bool isOperationButtonEnabled = false;
         private bool isReceptionBlank = false;
         private bool fixToggle = true;
-        private bool isFixToggleEnabled = false;
-        private bool isDeleteButtonVisibility = true;
         #endregion
         #region Others
         private Dictionary<int, string> soryoList = new Dictionary<int, string>();
@@ -202,7 +198,7 @@ namespace WPF.ViewModels
             AccountActivityDate = condolence.AccountActivityDate;
             Location = condolence.Location;
             OwnerName = condolence.OwnerName;
-            CondolenceContent = condolence.Content;
+            ContentText = condolence.Content;
             SoryoName = condolence.SoryoName;
             Almsgiving = AmountWithUnit(condolence.Almsgiving);
             CarTip = AmountWithUnit(condolence.CarTip);
@@ -216,7 +212,6 @@ namespace WPF.ViewModels
             IsAlmsgivingSearch = true;
             IsReceptionBlank = string.IsNullOrEmpty(condolence.CounterReceiver) &&
                 string.IsNullOrEmpty(condolence.MailRepresentative);
-            IsDeleteButtonVisibility = true;
         }
         /// <summary>
         /// プロパティをクリアします
@@ -233,7 +228,6 @@ namespace WPF.ViewModels
             IsAlmsgivingSearch = true;
             ContentText = ContentStrings[0];
             IsReceptionBlank = false;
-            IsDeleteButtonVisibility = false;
         }
         /// <summary>
         /// データ操作コマンド
@@ -634,19 +628,6 @@ namespace WPF.ViewModels
                     IntAmount(CarAndMealTip) + IntAmount(SocialGathering));
         }
         /// <summary>
-        /// 内容が法事かのチェック　Trueが法事、Falseが葬儀
-        /// </summary>
-        public string CondolenceContent
-        {
-            get => condolenceContent;
-            set
-            {
-                condolenceContent = value;
-                ContentText = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// 内容のText
         /// </summary>
         public string ContentText
@@ -828,7 +809,6 @@ namespace WPF.ViewModels
             set
             {
                 isReceptionBlank = value;
-                IsFixToggleEnabled = !value;
                 if (value) { FixToggle = true; }
                 CallPropertyChanged();
             }
@@ -844,43 +824,6 @@ namespace WPF.ViewModels
                 fixToggle = value;
                 MailRepresentative = value ? string.Empty : GetLoginRep.Rep.Name;
                 CounterReceiver = value ? GetLoginRep.Rep.Name : string.Empty;
-                FixToggleContent = value ? "窓口受付" : "郵送対応";
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 窓口、郵送トグルのContent
-        /// </summary>
-        public string FixToggleContent
-        {
-            get => fixToggleContent;
-            set
-            {
-                fixToggleContent = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 窓口、郵送トグルのEnabled
-        /// </summary>
-        public bool IsFixToggleEnabled
-        {
-            get => isFixToggleEnabled;
-            set
-            {
-                isFixToggleEnabled = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 削除ボタンVisibility
-        /// </summary>
-        public bool IsDeleteButtonVisibility
-        {
-            get => isDeleteButtonVisibility;
-            set
-            {
-                isDeleteButtonVisibility = value;
                 CallPropertyChanged();
             }
         }
@@ -947,7 +890,7 @@ namespace WPF.ViewModels
 
         public void SetSortColumns()
         {
-            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
+            Pagination.SortColumns = ReceiptsAndExpenditureListSortColumns();
         }
 
         public int SetCountEachPage() => 10;

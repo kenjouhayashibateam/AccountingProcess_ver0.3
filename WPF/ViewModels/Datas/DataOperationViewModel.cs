@@ -25,7 +25,7 @@ namespace WPF.ViewModels.Datas
             更新
         }
 
-        public DataOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
+        public DataOperationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect) 
         {
             SetDelegateCommand();
             SetDataList();

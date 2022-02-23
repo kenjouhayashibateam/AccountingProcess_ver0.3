@@ -82,5 +82,8 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="condolences"></param>
         void Condolences(ObservableCollection<Condolence> condolences);
+
+        void TransferSlips(ObservableCollection<TransferReceiptsAndExpenditure>
+            transferReceiptsAndExpenditures);
     }
 }

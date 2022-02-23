@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
 using System.Collections;
@@ -70,7 +71,7 @@ namespace Infrastructure.ExcelOutputData
         /// <returns></returns>
         protected bool IsSameData
             (ReceiptsAndExpenditure validateReceiotsAndExpenditure, DateTime currentActivityDate,
-                string currentDept, string currentSubjectCode, string currentSubject, string currentContent,
+                string currentDept, AccountingSubject currentSubject, string currentContent,
                 string currentLocation, bool isTaxRate)
         {
             //出力ページの出納データが強制的に単独にする内容文字列配列に入っているものでPageCountが1なら
@@ -79,16 +80,48 @@ namespace Infrastructure.ExcelOutputData
             //入出金日が同じ、比較する出納データが強制的に単独にする内容文字列配列に含まれていない
             //、出力ページが10を超えていない、経理担当場所が同じ、出力ページの軽減税率チェックが比較する
             //出納データと同じ場合にTrueを返す
-            return (IndependentContent.Contains(currentContent) &&
-                IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) && PageCount == 1)
-                || (!IndependentContent.Contains(currentContent) &&
-                currentDept == validateReceiotsAndExpenditure.CreditDept.Dept &&
-                currentSubjectCode == validateReceiotsAndExpenditure.Content.AccountingSubject.SubjectCode &&
-                currentSubject == validateReceiotsAndExpenditure.Content.AccountingSubject.Subject &&
-                currentActivityDate == validateReceiotsAndExpenditure.AccountActivityDate &&
-                !IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) &&
-                ItemIndex < 10 && currentLocation == validateReceiotsAndExpenditure.Location &&
-                isTaxRate == validateReceiotsAndExpenditure.IsReducedTaxRate);
+            bool b = (IndependentContent.Contains(currentContent) &&
+                IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) && PageCount == 1);
+            if (!b)
+            {
+                b = (!IndependentContent.Contains(currentContent) &&
+                    currentDept == validateReceiotsAndExpenditure.CreditDept.Dept &&
+                    currentSubject.Equals(validateReceiotsAndExpenditure.Content.AccountingSubject) &&
+                    currentActivityDate == validateReceiotsAndExpenditure.AccountActivityDate &&
+                    !IndependentContent.Contains(validateReceiotsAndExpenditure.Content.Text) &&
+                    ItemIndex < 10 && currentLocation == validateReceiotsAndExpenditure.Location &&
+                    isTaxRate == validateReceiotsAndExpenditure.IsReducedTaxRate);
+            }
+            return b;
+        }
+        /// <summary>
+        /// 振替データを同一の要素に出力するかを返します
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsSameData(TransferReceiptsAndExpenditure validateTransferReceiptsAndExpenditure,
+            DateTime currentActivityDate, string currentDept,AccountingSubject currentCreditAccount,
+            AccountingSubject currentDebitAccount, string currentContent, string currentLocation, bool isTaxRate)
+        {
+            //出力ページの振替データが強制的に単独にする内容文字列配列に入っているものでPageCountが1なら
+            //True。あるいは、出力ページの振替データが強制的に単独にする内容文字列配列に入っていない、
+            //出力ページが比較するデータと、貸方部門が同じ、貸方勘定科目コードが同じ、貸方勘定科目が同じ、
+            //借方勘定科目コードが同じ、借方勘定科目が同じ、入出金日が同じ、比較する出納データが強制的に単独にする
+            //内容文字列配列に含まれていない、出力ページが10を超えていない、経理担当場所が同じ、
+            //出力ページの軽減税率チェックが比較する出納データと同じ場合にTrueを返す
+            bool b = (IndependentContent.Contains(currentContent) &&
+                IndependentContent.Contains(validateTransferReceiptsAndExpenditure.ContentText) && PageCount == 1);
+            if (!b)
+            {
+                b = (!IndependentContent.Contains(currentContent) &&
+                    currentDept == validateTransferReceiptsAndExpenditure.CreditDept.Dept &&
+                    currentCreditAccount.Equals(validateTransferReceiptsAndExpenditure.CreditAccount) &&
+                    currentDebitAccount.Equals(validateTransferReceiptsAndExpenditure.DebitAccount)&&
+                    currentActivityDate == validateTransferReceiptsAndExpenditure.AccountActivityDate &&
+                    !IndependentContent.Contains(validateTransferReceiptsAndExpenditure.ContentText) &&
+                    ItemIndex < 10 && currentLocation == validateTransferReceiptsAndExpenditure.Location &&
+                    isTaxRate == validateTransferReceiptsAndExpenditure.IsReducedTaxRate);
+            }
+            return b;
         }
         /// <summary>
         /// 提出書類に表記する内容を返します

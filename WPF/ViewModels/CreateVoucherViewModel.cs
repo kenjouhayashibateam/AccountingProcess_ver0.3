@@ -143,7 +143,7 @@ namespace WPF.ViewModels
         /// </summary>
         public void SetSortColumns()
         {
-            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
+            Pagination.SortColumns = ReceiptsAndExpenditureListSortColumns();
         }
 
         /// <summary>
@@ -491,7 +491,7 @@ namespace WPF.ViewModels
             CreateReceiptsAndExpenditures(false);
         }
 
-        public bool OnClosing() { return !IsClose; }
+        public bool CancelClose() { return !IsClose; }
 
         public int SetCountEachPage() => 10;
     }

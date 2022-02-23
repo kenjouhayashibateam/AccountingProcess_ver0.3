@@ -2,6 +2,7 @@
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
+using Infrastructure.ExcelOutputData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,12 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
+using WPF.Views.Datas;
 using static Domain.Entities.Helpers.DataHelper;
 using static Domain.Entities.Helpers.TextHelper;
 
 namespace WPF.ViewModels
 {
-    public class TransferReceiptsAndExpenditureManagementViewModel : BaseViewModel, IPagenationObserver
+    public class TransferReceiptsAndExpenditureManagementViewModel : BaseViewModel, IPagenationObserver,
+        ITransferReceiptsAndExpenditureOperationObserver, IClosing
     {
         #region Properties
         #region Bools
@@ -26,20 +29,24 @@ namespace WPF.ViewModels
         private bool isContainOutputted;
         private bool isLimitDebitAccount;
         private bool isLimitCreditAccount;
+        private bool isCloseCancel = false;
         #endregion
         #region Strings
         private string referenceLocationCheckContent;
         private string searchCreditAccountCode = string.Empty;
         private string searchDebitAccountCode = string.Empty;
         private string totalAmountDisplayValue;
+        private string outputContent = "出力";
         #endregion
         private DateTime searchStartDate = DateTime.Today;
         private DateTime searchEndDate = DateTime.Today;
         #region ObservableCollections
         private ObservableCollection<CreditDept> creditDepts;
         private ObservableCollection<TransferReceiptsAndExpenditure> transferReceiptsAndExpenditures;
-        private ObservableCollection<AccountingSubject> searchDebitAccounts;
-        private ObservableCollection<AccountingSubject> searchCreditAccounts;
+        private ObservableCollection<AccountingSubject> searchDebitAccounts =
+            new ObservableCollection<AccountingSubject>();
+        private ObservableCollection<AccountingSubject> searchCreditAccounts =
+            new ObservableCollection<AccountingSubject>();
         /// <summary>
         /// 検索結果の全データリスト
         /// </summary>
@@ -55,23 +62,64 @@ namespace WPF.ViewModels
         /// リストの総金額
         /// </summary>
         private int TotalAmount;
+        private TransferReceiptsAndExpenditure selectedTransferReceiptsAndExpenditure;
+        private IDataOutput DataOutput;
         #endregion
 
         public TransferReceiptsAndExpenditureManagementViewModel
-            (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
+            (IDataBaseConnect dataBaseConnect,IDataOutput dataOutput) : base(dataBaseConnect)
         {
+            DataOutput = dataOutput;
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             Pagination.SortDirectionIsASC = false;
+            TransferReceiptsAndExpenditureOperation.GetInstance().Add(this);
             ShowTransferReceiptsAndExpenditureOperationCommand = new DelegateCommand
                 (() => ShowTransferReceiptsAndExpenditureOperation(), () => true); 
             RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
+            ShowDetailCommand = new DelegateCommand(() => ShowDetail(), () => true);
+            OutputCommand = new DelegateCommand(() => Output(), () => true);
             CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
             SelectedCreditDept = CreditDepts[0];
             ReferenceLocationCheckContent = $"経理担当場所：{AccountingProcessLocation.Location}のデータのみを表示する";
+            IsLocationSearch = true;
+            IsPeriodSearch = false;
         }
         public TransferReceiptsAndExpenditureManagementViewModel() :
-            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect(), new ExcelOutputInfrastructure()) { }
+        /// <summary>
+        /// 出力コマンド
+        /// </summary>
+        public DelegateCommand OutputCommand { get; set; }
+        private async void Output()
+        {
+            OutputContent = "出力中";
+            IsCloseCancel = true;
+
+            await Task.Run(() => SlipsOutputProcess());
+            IsCloseCancel = false;
+            OutputContent = "出力";
+
+            void SlipsOutputProcess()
+            {
+                DataOutput.TransferSlips(AllDataList);
+                //foreach (TransferReceiptsAndExpenditure trae in AllDataList)
+                //{
+                //    trae.OutputDate = DateTime.Now;
+                //    _ = DataBaseConnect.Update(trae);
+                //}
+            }
+        }
+        /// <summary>
+        /// 詳細表示コマンド
+        /// </summary>
+        public DelegateCommand ShowDetailCommand { get; set; }
+        private async void ShowDetail()
+        {
+            await Task.Delay(1);
+            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(SelectedTransferReceiptsAndExpenditure);
+            CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView());
+        }
         /// <summary>
         /// 検索結果再読み込みコマンド
         /// </summary>
@@ -107,6 +155,8 @@ namespace WPF.ViewModels
                     location, dept, debitCode, debit, creditCode, credit, IsValidity, IsContainOutputted, DefaultDate, outputEnd);
 
             Pagination.TotalRowCount = AllDataList.Count;
+            Pagination.SetProperty();
+
             TotalAmount = 0;
             foreach (TransferReceiptsAndExpenditure trae in AllDataList) { TotalAmount += trae.Price; }
             SetTotalAmount();
@@ -117,7 +167,10 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowTransferReceiptsAndExpenditureOperationCommand { get; set; }
         private void ShowTransferReceiptsAndExpenditureOperation()
-        { CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView()); }
+        {
+            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(null);
+            CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView()); 
+        }
         /// <summary>
         /// 検索で貸方部門を限定するか
         /// </summary>
@@ -128,7 +181,7 @@ namespace WPF.ViewModels
             {
                 isLimitCreditDept = value;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -153,7 +206,7 @@ namespace WPF.ViewModels
             {
                 selectedCreditDept = value;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -166,6 +219,9 @@ namespace WPF.ViewModels
             {
                 isPeriodSearch = value;
                 CallPropertyChanged();
+                if (value) { SearchEndDate = DateTime.Now; }
+                else { SearchEndDate = SearchStartDate; }
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -178,7 +234,8 @@ namespace WPF.ViewModels
             {
                 searchStartDate = value < SearchEndDate ? value : SearchEndDate;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                if (!IsPeriodSearch) { SearchEndDate = value; }
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -191,7 +248,7 @@ namespace WPF.ViewModels
             {
                 searchEndDate = value > SearchStartDate ? value : SearchStartDate;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -216,7 +273,7 @@ namespace WPF.ViewModels
             {
                 isLocationSearch = value;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -229,7 +286,7 @@ namespace WPF.ViewModels
             {
                 isValidityTrueOnly = value;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -242,7 +299,7 @@ namespace WPF.ViewModels
             {
                 isContainOutputted = value;
                 CallPropertyChanged();
-                ReferenceTransferReceiptsAndExpenditure(false);
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -370,6 +427,7 @@ namespace WPF.ViewModels
             {
                 selectedCreditAccount = value;
                 CallPropertyChanged();
+                ReferenceTransferReceiptsAndExpenditure(true);
             }
         }
         /// <summary>
@@ -396,12 +454,48 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 選択された振替データ
+        /// </summary>
+        public TransferReceiptsAndExpenditure SelectedTransferReceiptsAndExpenditure
+        {
+            get => selectedTransferReceiptsAndExpenditure;
+            set
+            {
+                selectedTransferReceiptsAndExpenditure = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 出直機能Content
+        /// </summary>
+        public string OutputContent
+        {
+            get => outputContent;
+            set
+            {
+                outputContent = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// ウィンドウを閉じるのをキャンセルするか
+        /// </summary>
+        public bool IsCloseCancel
+        {
+            get => isCloseCancel;
+            set
+            {
+                isCloseCancel = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {  }
 
         protected override void SetWindowDefaultTitle()
-        { DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}"; }
+        { DefaultWindowTitle = $"振替データ管理 : {AccountingProcessLocation.Location}"; }
 
         public void SortNotify() { ReferenceTransferReceiptsAndExpenditure(true); }
 
@@ -410,6 +504,10 @@ namespace WPF.ViewModels
         public void SetSortColumns()
         { Pagination.SortColumns = new Dictionary<int, string>() { { 0, "ID" }, { 1, "振替日" }, { 2, "伝票出力日" } }; }
 
-        public int SetCountEachPage() => 10;        
+        public int SetCountEachPage() => 10;
+
+        public void TransferReceiptsAndExpenditureOperationNotify() { ReferenceTransferReceiptsAndExpenditure(true); }
+
+        public bool CancelClose() => IsCloseCancel;
     }
 }

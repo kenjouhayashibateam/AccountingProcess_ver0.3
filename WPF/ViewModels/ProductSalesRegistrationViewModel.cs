@@ -726,6 +726,6 @@ namespace WPF.ViewModels
         protected override void SetWindowDefaultTitle()
         { DefaultWindowTitle = "物販売上登録"; }
 
-        public bool OnClosing() { return !IsClose; }
+        public bool CancelClose() { return !IsClose; }
     }
 }

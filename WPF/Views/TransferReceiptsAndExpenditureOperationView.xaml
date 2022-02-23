@@ -8,8 +8,10 @@
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}"  Height="600" Width="300">
+        Title="{Binding WindowTitle}"  Height="700" Width="360">
 
     <Window.DataContext>
         <vm:TransferReceiptsAndExpenditureOperationViewModel/>
@@ -25,57 +27,55 @@
         <behavior:SystemMenuBehavior CanMinimize="False"/>
     </i:Interaction.Behaviors>
 
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
+
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="17*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <GroupBox Header="登録する振替伝票" Grid.Column="0" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="4*"/>
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Row="0" Content="データを有効にする" IsChecked="{Binding IsValidity}" IsEnabled="{Binding IsValidityEnabled}" Margin="5,0" VerticalAlignment="Center"/>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="3*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="振替日" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <DatePicker Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" VerticalContentAlignment="Center" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,3,140,5"/>
-                </Grid>
+                <TextBlock Grid.Row="0" Text="{Binding IDFieldValue}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                <CheckBox Grid.Row="1" Content="データを有効にする" IsChecked="{Binding IsValidity}" IsEnabled="{Binding IsValidityEnabled}" Margin="5,0" VerticalAlignment="Center"/>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*"/>
                         <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="貸方部門" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <ComboBox Grid.Row="1" Name="OperationCreditDeptComboBox" ItemsSource="{Binding CreditDepts}" SelectedItem="{Binding SelectedCreditDept}" DisplayMemberPath="Dept" Margin="5,3,100,5"/>
+                    <TextBlock Grid.Row="0" Text="振替日" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <DatePicker Grid.Row="1" SelectedDate="{Binding AccountActivityDate}" VerticalContentAlignment="Center" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,3,200,5"/>
                 </Grid>
                 <Grid Grid.Row="3">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1.5*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="借方勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="コード" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <TextBox Grid.Row="2" Grid.Column="0" MaxLength="3" Text="{Binding DebitAccountCode,UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="5,3"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DebitAccounts}" SelectedItem="{Binding DebitAccount}" DisplayMemberPath="Subject" Margin="5,3"/>
+                    <TextBlock Grid.Row="0" Text="貸方部門" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <ComboBox Grid.Row="1" SelectedValue="{Binding SelectedCreditDept}" ItemsSource="{Binding CreditDepts}" DisplayMemberPath="Dept" Text="{Binding Dept}" Margin="5,3,170,5"/>
                 </Grid>
                 <Grid Grid.Row="4">
                     <Grid.RowDefinitions>
@@ -85,50 +85,133 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="貸方勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="借方勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="コード" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <TextBox Grid.Row="2" Grid.Column="0" MaxLength="3" Text="{Binding DebitAccountCode,UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="5,3"/>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding CreditAccountCode,UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,3"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CreditAccounts}" SelectedItem="{Binding CreditAccount}" DisplayMemberPath="Subject" Margin="5,3"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding DebitAccounts}" SelectedItem="{Binding DebitAccount}" DisplayMemberPath="Subject" Margin="5,3"/>
                 </Grid>
                 <Grid Grid.Row="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="貸方勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="コード" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="勘定科目" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding CreditAccountCode,UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" VerticalContentAlignment="Center" Margin="5,3"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CreditAccounts}" SelectedItem="{Binding CreditAccount}" DisplayMemberPath="Subject" Margin="5,3"/>
+                </Grid>
+                <Grid Grid.Row="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="内容" VerticalAlignment="Bottom" Margin="5,0"/>
                     <ComboBox Grid.Row="1" ItemsSource="{Binding Contents}" SelectedItem="{Binding SelectedContent}" DisplayMemberPath="Text" Margin="5,3"/>
                 </Grid>
-                <Grid Grid.Row="6">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="詳細" VerticalAlignment="Bottom" Margin="5,0"/>
-                    <TextBox Grid.Row="1" Text="{Binding DetailText,UpdateSourceTrigger=PropertyChanged}" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
-                </Grid>
                 <Grid Grid.Row="7">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Text="詳細" VerticalAlignment="Bottom" Margin="5,0"/>
+                    <TextBox Grid.Row="1" Text="{Binding DetailText,UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" InputMethod.PreferredImeState="On" InputMethod.PreferredImeConversionMode="FullShape,Native" Margin="5,3"/>
+                    <CheckBox Grid.Row="1" Grid.Column="2" Content="軽減税率のデータ" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" Margin="5,0,5,3"/>
+                </Grid>
+                <Grid Grid.Row="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="金額" VerticalAlignment="Bottom" Margin="5,0"/>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" Margin="5,3"/>
+                        <TextBox Grid.Column="0" Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" InputMethod.PreferredImeState="Off" Margin="5,3"/>
                         <TextBlock Grid.Column="1" Text="円" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                        <Button x:Name="ZeroAddButton" Content="000を付け足す" Grid.Column="2" Margin="5,5,50,5">
+                            <Button.InputBindings>
+                                <KeyBinding Command="{Binding ZeroAddCommand}" Key="Space"/>
+                                <MouseBinding Command="{Binding ZeroAddCommand}" MouseAction="LeftClick"/>
+                            </Button.InputBindings>
+                        </Button>
                     </Grid>
                 </Grid>
-                <CheckBox Grid.Row="8" Content="軽減税率のデータ" IsChecked="{Binding IsReducedTaxRate}" VerticalAlignment="Center" Margin="5,0"/>
-                <Button Grid.Row="9" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding CanOperation}" Margin="5,3">
+                <Grid Grid.Row="9">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Column="0" Grid.RowSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="登録日" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                        <DatePicker Grid.Row="1" SelectedDate="{Binding RegistrationDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" VerticalContentAlignment="Center" IsEnabled="False" Margin="5,3,5,5"/>
+                    </Grid>
+                    <TextBlock Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsOutputted}" Value="false">
+                                        <Setter Property="Text" Value="印刷日（未印刷）"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsOutputted}" Value="true">
+                                        <Setter Property="Text" Value="印刷日"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding OutputDate}"  IsEnabled="False" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" VerticalContentAlignment="Center"  Margin="5,3,5,5"/>
+                    <CheckBox Grid.Row="1" Grid.Column="2" Content="印刷済みフラグ" IsChecked="{Binding IsOutputted}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="5">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataOperationButtonContent}" Value="登録">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataOperationButtonContent}" Value="更新">
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                </Grid>
+                <Grid Grid.Row="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="登録担当者" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0"/>
+                    <TextBox Grid.Row="1" x:Name="RegistrationRepComboBox"  Text="{Binding OperationRep.Name}" VerticalContentAlignment="Center" IsEnabled="False" Margin="5,3,120,3"/>
+                </Grid> 
+                <Button Grid.Row="11" Content="{Binding DataOperationButtonContent}" IsEnabled="{Binding CanOperation}" Margin="5,10,5,3">
                     <Button.InputBindings>
-                        <KeyBinding Command="{Binding DataOperationCommand}" Key="Space"/>
-                        <MouseBinding Command="{Binding DataOperationCommand}" MouseAction="LeftClick"/>
+                        <KeyBinding Command="{Binding OperationDataCommand}" Key="Space"/>
+                        <MouseBinding Command="{Binding OperationDataCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
             </Grid>
@@ -138,9 +221,9 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="CloseButton" Grid.Column="1" Margin="5">
+            <Button x:Name="CloseButton" Grid.Column="1" Margin="5,3">
                 <StackPanel>
-                    <svgc:SvgViewbox Height="30" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                    <svgc:SvgViewbox Height="25" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
                 </StackPanel>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}" Key="Space"/>

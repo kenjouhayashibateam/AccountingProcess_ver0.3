@@ -55,10 +55,6 @@ namespace Domain.Entities.Datas
         /// </summary>
         public DateTime OutputDate { get; set; }
         /// <summary>
-        /// 未出力かのチェック
-        /// </summary>
-        public bool IsUnprinted { get; set; }
-        /// <summary>
         /// 軽減税率かのチェック
         /// </summary>
         public bool IsReducedTaxRate { get; set; }

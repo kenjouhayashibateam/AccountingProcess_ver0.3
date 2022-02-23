@@ -26,7 +26,6 @@ namespace WPF.ViewModels
         private bool shorendoChecked;
         private bool kanriJimushoChecked;
         private bool isSlipManagementEnabled;
-        private bool isDepositMenuEnabled;
         private bool isRegistrationPrecedingYearFinalAccountVisiblity;
         private bool isLogoutEnabled;
         private bool isCreateVoucherEnabled;
@@ -41,7 +40,6 @@ namespace WPF.ViewModels
         private bool isCommonEnabled;
         #endregion
         private string depositAmount;
-        private string depositAmountInfo;
         private string showSlipManagementContent;
         private string accountingGenreContent;
         private CreditDept selectedCreditDept;
@@ -511,30 +509,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 預り金メニューのEnabled
-        /// </summary>
-        public bool IsDepositMenuEnabled
-        {
-            get => isDepositMenuEnabled;
-            set
-            {
-                isDepositMenuEnabled = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// 預り金欄の案内文字列
-        /// </summary>
-        public string DepositAmountInfo
-        {
-            get => depositAmountInfo;
-            set
-            {
-                depositAmountInfo = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// 前月決算登録ボタンのVisiblity
         /// </summary>
         public bool IsRegistrationPrecedingYearFinalAccountVisiblity
@@ -758,7 +732,6 @@ namespace WPF.ViewModels
         {
             KanriJimushoChecked = true;
             ProcessFeatureEnabled = true;
-            IsDepositMenuEnabled = false;
             if (IsShunjuen)
             {
                 IsShunjuenMenuEnabled = true;
@@ -774,7 +747,6 @@ namespace WPF.ViewModels
             AccountingProcessLocation.OriginalTotalAmount =
                 DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
 
-            DepositAmountInfo = "前日決算金額";
             DepositAmount =
                 CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled =
@@ -814,12 +786,10 @@ namespace WPF.ViewModels
         private void SetLocationShorendo()
         {
             ShorendoChecked = true;
-            IsDepositMenuEnabled = true;
             ProcessFeatureEnabled = true;
             IsPartTransportRegistrationEnabled = false;
             SetMenuEnabled();
             AccountingProcessLocation.OriginalTotalAmount = 0;
-            DepositAmountInfo = "預かった金庫の金額を入力してください";
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
             if (AccountingProcessLocation.OriginalTotalAmount == 0)
             {
@@ -837,7 +807,7 @@ namespace WPF.ViewModels
         /// 画面を閉じるメソッドを使用するかのチェック
         /// </summary>
         /// <returns>YesNo</returns>
-        public bool OnClosing()
+        public bool CancelClose()
         {
             CallClosingMessage = true;
             bool b = MessageBox.Result != MessageBoxResult.Yes;

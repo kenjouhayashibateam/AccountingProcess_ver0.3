@@ -85,7 +85,6 @@ namespace WPF.ViewModels
         private bool isYokohamaBankCheck = false;
         private bool isCeresaCheck = false;
         private bool isClose = true;
-        private bool isCeresaAmountVisibility;
         private bool isLimitCreditDept;
         private bool isPairAmountReadOnly;
         #endregion
@@ -137,13 +136,11 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.IsAccountingGenreShunjuen)
             {
                 PairAmountTitle = "ワイズコア仮受金";
-                IsCeresaAmountVisibility = true;
                 IsPairAmountReadOnly = false;
             }
             else
             {
                 PairAmountTitle = "春秋苑仮払金";
-                IsCeresaAmountVisibility = false;
                 IsPairAmountReadOnly = true;
             }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
@@ -159,7 +156,10 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowTransferReceiptsAndExpenditurOperationCommand { get; set; }
         private void ShowTransferReceiptsAndExpenditureOperation()
-        { CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView()); }
+        {
+            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(null);
+            CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView()); 
+        }
         public DelegateCommand PasswordCheckReversCommand { get; set; }
         /// <summary>
         /// パスワードの文字を隠すかのチェックを反転させます
@@ -167,7 +167,7 @@ namespace WPF.ViewModels
         private void CheckRevers() { PasswordCharCheck = !PasswordCharCheck; }
 
         public void SetSortColumns()
-        { Pagination.SortColumns = ReceptsAndExpenditureListSortColumns(); }
+        { Pagination.SortColumns = ReceiptsAndExpenditureListSortColumns(); }
 
         /// <summary>
         /// データ更新を行う画面を表示するコマンド
@@ -375,10 +375,8 @@ namespace WPF.ViewModels
             { TodaysFinalAccount = AmountWithUnit(todayTotalAmount); }
             else
             {
-                int suspensePayment =
-                    AccountingProcessLocation.IsAccountingGenreShunjuen ? 0 : IntAmount(PairAmount);
                 int difference = PreviousDayFinalAccount - WithdrawalSum - TransferSum +
-                    PaymentSum - suspensePayment - Cashbox.GetTotalAmount();
+                    PaymentSum - Cashbox.GetTotalAmount();
                 TodaysFinalAccount =
                     $"リストの収支に対して現金が\r\n{AmountWithUnit(Math.Abs(difference))}" +
                     $"{(difference < 0 ? "超過" : "不足")}しています";
@@ -468,8 +466,8 @@ namespace WPF.ViewModels
                 static void WithdrawalSorting(ReceiptsAndExpenditure rae, ref int withdrawal,
                     ref int bankAmount, ref int shunjuenAmount)
                 {
-                    if (rae.Content.Text.Contains("口座入金")) { bankAmount += rae.Price; }
-                    else if (rae.Content.Text.Contains("仮払金")) { shunjuenAmount += rae.Price; }
+                    if (rae.Content.Text.Contains("銀行")) { bankAmount += rae.Price; }
+                    else if (rae.Content.Text.Contains("春秋苑")) { shunjuenAmount += rae.Price; }
                     else { withdrawal += rae.Price; }
                 }
             }
@@ -539,8 +537,10 @@ namespace WPF.ViewModels
         {
             if (receiptsAndExpenditure.Content.Text.Contains("口座入金"))
             { TransferSum += receiptsAndExpenditure.Price; }
-            else if (!receiptsAndExpenditure.CreditDept.IsShunjuenDept && receiptsAndExpenditure.Content.Text.Contains("仮払金"))
-            { PairAmount = AmountWithUnit(IntAmount(PairAmount) + receiptsAndExpenditure.Price); }
+            else if (!receiptsAndExpenditure.CreditDept.IsShunjuenDept && receiptsAndExpenditure.Content.Text.Contains("春秋苑"))
+            {
+                TransferSum += receiptsAndExpenditure.Price;
+                PairAmount = AmountWithUnit(IntAmount(PairAmount) + receiptsAndExpenditure.Price); }
             else
             { WithdrawalSum += receiptsAndExpenditure.Price; }
         }
@@ -1243,18 +1243,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// セレサ川崎の金額欄のvisibility
-        /// </summary>
-        public bool IsCeresaAmountVisibility
-        {
-            get => isCeresaAmountVisibility;
-            set
-            {
-                isCeresaAmountVisibility = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// 検索メニューで貸方部門を限定するか
         /// </summary>
         public bool IsLimitCreditDept
@@ -1455,6 +1443,10 @@ namespace WPF.ViewModels
             Pagination.SetProperty();
             ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
             SetCashboxTotalAmount();
+            SetTodayWroteList();
+            SetPeymentSum();
+            SetWithdrawalSumAndTransferSum();
+            SetBalanceFinalAccount();
 
             void SetLimitedCreditDeptFinalBalance()
             {
@@ -1497,10 +1489,6 @@ namespace WPF.ViewModels
                 AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllShowItem,
                 IsPaymentOnly, IsContainOutputted, IsValidityTrueOnly, accountActivityDateStart,
                 accountActivityDateEnd, outputDateStart, outputDateEnd);
-
-            SetPeymentSum();
-            SetWithdrawalSumAndTransferSum();
-            SetBalanceFinalAccount();
         }
 
         protected override void SetWindowDefaultTitle()
@@ -1512,7 +1500,7 @@ namespace WPF.ViewModels
 
         public void PageNotify() { ReferenceReceiptsAndExpenditures(false); }
 
-        public bool OnClosing() { return !IsClose; }
+        public bool CancelClose() { return !IsClose; }
 
         public int SetCountEachPage() => 10;
     }

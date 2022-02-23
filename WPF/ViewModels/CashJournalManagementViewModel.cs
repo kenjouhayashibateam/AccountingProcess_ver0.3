@@ -282,6 +282,6 @@ namespace WPF.ViewModels
                 $"{AccountingProcessLocation.GetAccountingGenreString}";
         }
 
-        public bool OnClosing() { return !IsClose; }
+        public bool CancelClose() { return !IsClose; }
     }
 }

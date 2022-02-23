@@ -77,6 +77,8 @@
     <Compile Include="ExcelOutputData\OutputList.cs" />
     <Compile Include="ExcelOutputData\CashJournalOutput.cs" />
     <Compile Include="ExcelOutputData\SlipOutput.cs" />
+    <Compile Include="ExcelOutputData\SlipOutputBase.cs" />
+    <Compile Include="ExcelOutputData\TransferSlipOutput.cs" />
     <Compile Include="ExcelOutputData\VoucherOutput.cs" />
     <Compile Include="ExcelOutputData\WizeCoreBalanceFinalAccountOutput.cs" />
     <Compile Include="LocalConnectInfrastructure.cs" />

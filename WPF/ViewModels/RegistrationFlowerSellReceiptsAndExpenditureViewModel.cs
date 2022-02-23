@@ -55,6 +55,7 @@ namespace WPF.ViewModels
         private string ticket;
         private string ticketUnitPrice;
         private string ticketTotalAmount;
+        private string ticketTotalAmountValue;
         private string totalAmount;
         private string salesAmount;
         private string registrationButtonContent = "登録";
@@ -103,7 +104,7 @@ namespace WPF.ViewModels
             ObservableCollection<ReceiptsAndExpenditure> list =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(),
-                        string.Empty, string.Empty, string.Empty, string.Empty, "811", false, true, true, true,
+                        string.Empty, string.Empty, "件", string.Empty, "811", false, true, true, true,
                         true, SelectedDate, SelectedDate, DefaultDate, DateTime.Now);
 
             if (list.Count != 0)
@@ -121,7 +122,8 @@ namespace WPF.ViewModels
                 return;
             }
 
-            string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\r\n\r\n";
+            string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\t" +
+                $"{AccountingProcessLocation.Location}\r\n\r\n";
 
             if (CemeteryFlowerCount > 0)
             { AddString(CemeteryFlower, CemeteryFlowerCount, IntAmount(CemeteryFlowerTotalAmount)); }
@@ -132,11 +134,11 @@ namespace WPF.ViewModels
             if (TicketCount > 0) { AddString(Ticket, TicketCount, IntAmount(TicketTotalAmount)); }
             if (BasketFlowerCount > 0)
             { AddString(BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount)); }
+            if (IncenseStickCount > 0)
+            { AddString(IncenseStick, IncenseStickCount, IntAmount(IncenseStickTotalAmount)); }
             if (SakakiCount > 0) { AddString(Sakaki, SakakiCount, IntAmount(SakakiTotalAmount)); }
             if (AnisatumCount > 0)
             { AddString(Anisatum, AnisatumCount, IntAmount(AnisatumTotalAmount)); }
-            if (IncenseStickCount > 0)
-            { AddString(IncenseStick, IncenseStickCount, IntAmount(IncenseStickTotalAmount)); }
 
             if (CallConfirmationDataOperation
                 ($"{dataContent}\r\n登録します。よろしいですか？", "花売り") ==
@@ -157,18 +159,21 @@ namespace WPF.ViewModels
                 {
                     CreditDept creditDept = DataBaseConnect.ReferenceCreditDept("香華", true, false)[0];
                     AccountingSubject accountingSubject = DataBaseConnect.ReferenceAccountingSubject
-                        ("811", string.Empty, false, true)[0];
+                        ("811", string.Empty, false, true).Count > 0 ? DataBaseConnect.ReferenceAccountingSubject
+                        ("811", string.Empty, false, true)[0] : null;
                     Content content;
 
                     Register(FlowerDataList, accountingSubject);
 
                     accountingSubject = DataBaseConnect.ReferenceAccountingSubject
-                        ("813", string.Empty, false, true)[0];
+                        ("813", string.Empty, false, true).Count > 0 ?
+                        DataBaseConnect.ReferenceAccountingSubject("813", string.Empty, false, true)[0] : null;
 
                     Register(IncenseStickDataList, accountingSubject);
 
-                    accountingSubject = DataBaseConnect.ReferenceAccountingSubject
-                        ("828", "その他売上", false, true)[0];
+                    accountingSubject =
+                        DataBaseConnect.ReferenceAccountingSubject("828", "その他売上", false, true).Count > 0 ?
+                        DataBaseConnect.ReferenceAccountingSubject("828", "その他売上", false, true)[0] : null;
 
                     Register(OtherFlowerDataList, accountingSubject);
 
@@ -249,6 +254,7 @@ namespace WPF.ViewModels
             OperationDataList
                 (ref FlowerDataList, BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount));
             TicketTotalAmount = AmountWithUnit(IntAmount(TicketUnitPrice) * TicketCount);
+            TicketTotalAmountValue = AmountWithUnit(-(IntAmount(TicketTotalAmount)));
             OperationDataList
                 (ref FlowerDataList, Ticket, TicketCount, IntAmount(TicketTotalAmount));
             foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in FlowerDataList)
@@ -799,10 +805,25 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// チケット総額表示文字列
+        /// </summary>
+        public string TicketTotalAmountValue
+        {
+            get => ticketTotalAmountValue;
+            set
+            {
+                ticketTotalAmountValue = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
-
+            if(propertyName==nameof(TotalAmount))
+            {
+                ErrorsListOperation((int)value <= 0, propertyName, "売り上げを計上できません");
+            }
         }
 
         protected override void SetWindowDefaultTitle()

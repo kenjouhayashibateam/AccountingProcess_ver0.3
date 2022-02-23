@@ -52,7 +52,7 @@ namespace Domain.Entities.Helpers
         /// </summary>
         public static DateTime DefaultDate = DateTime.Parse("1900/01/01");
 
-        public static Dictionary<int, string> ReceptsAndExpenditureListSortColumns()
+        public static Dictionary<int, string> ReceiptsAndExpenditureListSortColumns()
         {
             return new Dictionary<int, string>()
             {

@@ -5,6 +5,6 @@
     /// </summary>
     public interface IClosing
     {
-        bool OnClosing();
+        bool CancelClose();
     }
 }

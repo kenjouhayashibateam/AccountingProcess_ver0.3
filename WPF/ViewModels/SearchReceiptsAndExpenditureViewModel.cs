@@ -383,7 +383,7 @@ namespace WPF.ViewModels
 
         public void SetSortColumns()
         {
-            Pagination.SortColumns = ReceptsAndExpenditureListSortColumns();
+            Pagination.SortColumns = ReceiptsAndExpenditureListSortColumns();
         }
 
         public int SetCountEachPage() => 10;

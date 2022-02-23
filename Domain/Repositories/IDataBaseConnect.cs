@@ -455,10 +455,40 @@ namespace Domain.Repositories
             (bool isShunjuenDept,DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
                 string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
                 bool isValidityTrueOnly, bool containOutputted,  DateTime outputDateStart, DateTime outputDateEnd);
+        /// <summary>
+        /// 振替データを検索します
+        /// </summary>
+        /// <param name="accountActivityDateStart">振替日検索開始日</param>
+        /// <param name="accountActivityDateEnd">振替日検索最終日</param>
+        /// <param name="location">経理担当場所</param>
+        /// <param name="dept">貸方部門</param>
+        /// <param name="debitAccountCode">借方勘定科目コード</param>
+        /// <param name="creditAccountCode">貸方勘定科目コード</param>
+        /// <param name="isValidityTrueOnly">有効なもののみのリストにするか</param>
+        /// <param name="containOutputted">既に出力したものも含むか</param>
+        /// <param name="outputDateStart">印刷日検索開始日</param>
+        /// <param name="outputDateEnd">印刷日検索最終日</param>
+        /// <param name="page">ページ</param>
+        /// <param name="column">カラム名</param>
+        /// <param name="isOrderAsc">昇順降順</param>
+        /// <param name="countEachPage">1ページ当たりの行数</param>
+        /// <returns></returns>
         public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
             (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
                 string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
                 bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
                 int page, string column, bool isOrderAsc, int countEachPage);
+        /// <summary>
+        /// 振替データを登録します
+        /// </summary>
+        /// <param name="transferReceiptsAndExpenditure"></param>
+        /// <returns></returns>
+        public int Registration(TransferReceiptsAndExpenditure trae);
+        /// <summary>
+        /// 振替データを更新します
+        /// </summary>
+        /// <param name="transferReceiptsAndExpenditure"></param>
+        /// <returns></returns>
+        public int Update(TransferReceiptsAndExpenditure trae);
     }
 }

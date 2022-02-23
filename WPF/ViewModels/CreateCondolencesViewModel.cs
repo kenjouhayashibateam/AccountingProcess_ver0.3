@@ -209,7 +209,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// Location限定チェックのContent
         /// </summary>
-        public string LocationLimitingContent
+        public string LocationLimitingContent 
         {
             get => locationLimitingContent;
             set
@@ -292,7 +292,7 @@ namespace WPF.ViewModels
             };
         }
 
-        public bool OnClosing() { return IsClose; }
+        public bool CancelClose() { return IsClose; }
 
         public void RefleshList() { CreateCondolences(true); }
 

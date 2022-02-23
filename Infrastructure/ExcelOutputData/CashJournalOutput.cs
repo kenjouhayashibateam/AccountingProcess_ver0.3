@@ -57,8 +57,7 @@ namespace Infrastructure.ExcelOutputData
             bool isPageMove = false;
             bool isTaxRate = false;
             string detailString = default;
-            string currentSubjectCode = string.Empty;
-            string currentSubject = string.Empty;
+            AccountingSubject currentSubject = null;
             string currentDept = string.Empty;
             string currentContent = string.Empty;
             DateTime currentActivityDate = DefaultDate;
@@ -99,8 +98,7 @@ namespace Infrastructure.ExcelOutputData
 
                 void PageMove()
                 {
-                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubjectCode,
-                        currentSubject, currentContent, currentLocation, isTaxRate)) { return; }
+                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubject, currentContent, currentLocation, isTaxRate)) { return; }
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
                     myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
@@ -147,7 +145,7 @@ namespace Infrastructure.ExcelOutputData
 
                 void SetItem()
                 {
-                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubjectCode, currentSubject,
+                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubject,
                        currentContent, currentLocation, isTaxRate))
                     {
                         slipPayment += rae.IsPayment ? rae.Price : 0;
@@ -162,8 +160,7 @@ namespace Infrastructure.ExcelOutputData
                         slipPayment = rae.IsPayment ? rae.Price : 0;
                         slipWithdrawal = rae.IsPayment ? 0 : rae.Price;
                         currentLocation = rae.Location;
-                        currentSubjectCode = rae.Content.AccountingSubject.SubjectCode;
-                        currentSubject = rae.Content.AccountingSubject.Subject;
+                        currentSubject = rae.Content.AccountingSubject;
                         currentDept = rae.CreditDept.Dept;
                         currentContent = rae.Content.Text;
                         isTaxRate = rae.IsReducedTaxRate;
@@ -171,6 +168,7 @@ namespace Infrastructure.ExcelOutputData
                         else { slipWithdrawal = rae.Price; }
                         ItemIndex = 1;
                         detailString = rae.Detail;
+                        SetDetailValue();
                         myWorksheet.Cell(StartRowPosition, 3).Value = rae.Content.AccountingSubject.SubjectCode;
                         myWorksheet.Cell(StartRowPosition, 4).Value = rae.Content.AccountingSubject.Subject;
                         myWorksheet.Cell(StartRowPosition, 5).Value = ReturnProvisoContent(rae);
@@ -181,6 +179,13 @@ namespace Infrastructure.ExcelOutputData
                     }
                 }
 
+                void SetDetailValue()
+                {
+                    if (rae.Content.AccountingSubject.IsShunjuen) { return; }
+                    if (!string.IsNullOrEmpty(detailString)) { return; }
+
+                    detailString = rae.AccountActivityDate.ToString("M/d");
+                }
                 void SetBalance()
                 {
                     if (CurrentDate != rae.OutputDate)

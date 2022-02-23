@@ -30,10 +30,6 @@ namespace WPF.ViewModels
         private string _currentRepPasswordBackground;
         private string _newRepPasswordBorderBrush;
         private string _newRepPasswordBackground;
-        private readonly string TrueControlBorderBrush = "#000000";
-        private readonly string FalseControlBorderBrush = "#FFABADB3";
-        private readonly string TrueControlBackground = "#FFFFFF";
-        private readonly string FalseControlBackground = "#A9A9A9";
         private bool _isRepValidity;
         private bool _isRepNameDataEnabled;
         private bool _isRepPasswordEnabled;
@@ -519,16 +515,6 @@ namespace WPF.ViewModels
             {
                 _isRepPasswordEnabled = value;
                 CallPropertyChanged();
-                if (value)
-                {
-                    CurrentRepPasswordBorderBrush = TrueControlBorderBrush;
-                    CurrentRepPasswordBackground = TrueControlBackground;
-                }
-                else
-                {
-                    CurrentRepPasswordBorderBrush = FalseControlBorderBrush;
-                    CurrentRepPasswordBackground = FalseControlBackground;
-                }
             }
         }
         /// <summary>
@@ -603,16 +589,6 @@ namespace WPF.ViewModels
             {
                 _isRepNewPasswordEnabled = value;
                 CallPropertyChanged();
-                if (value)
-                {
-                    NewRepPasswordBorderBrush = TrueControlBorderBrush;
-                    NewRepPasswordBackground = TrueControlBackground;
-                }
-                else
-                {
-                    NewRepPasswordBorderBrush = FalseControlBorderBrush;
-                    NewRepPasswordBackground = FalseControlBackground;
-                }
             }
         }
         /// <summary>
@@ -1144,15 +1120,16 @@ namespace WPF.ViewModels
         /// </summary>
         private async void AccountSubjectRetistration()
         {
-            CurrentAccountingSubject =
+            AccountingSubject accountingSubject =
                 new AccountingSubject(string.Empty, AccountingSubjectCodeField, AccountingSubjectField,
                     IsShunjuen, IsAccountingSubjectValidity);
-            string branchNo = BranchNumber ?? $"枝番\t\t:\t{BranchNumber}\r\n";
+            string branchNo = string.IsNullOrEmpty(BranchNumber) ? string.Empty :
+                $"枝番\t\t:\t{BranchNumber}\r\n";
             if (CallConfirmationDataOperation
-                ($"勘定科目コード\t:\t{CurrentAccountingSubject.SubjectCode}\r\n" +
+                ($"勘定科目コード\t:\t{accountingSubject.SubjectCode}\r\n" +
                 $"{branchNo}" +
-                $"勘定科目\t\t:\t{CurrentAccountingSubject.Subject}" +
-                $"\r\n有効性\t\t:\t{CurrentAccountingSubject.IsValidity}" +
+                $"勘定科目\t\t:\t{accountingSubject.Subject}" +
+                $"\r\n有効性\t\t:\t{accountingSubject.IsValidity}" +
                 $"\r\n会計\t\t:\t{(IsShunjuen ? SHUNJUEN : WIZECORE)}" +
                 $"\r\n\r\n登録しますか？", "勘定科目") ==
                 MessageBoxResult.Cancel) { return; }
@@ -1171,7 +1148,7 @@ namespace WPF.ViewModels
             
             void Registration()
             {
-                _ = DataBaseConnect.Registration(CurrentAccountingSubject);
+                _ = DataBaseConnect.Registration(accountingSubject);
                 ObservableCollection<AccountingSubject> accountingSubjects =
                     DataBaseConnect.ReferenceAccountingSubject(AccountingSubjectCodeField, AccountingSubjectField, IsShunjuen, false);
                 if (accountingSubjects.Count != 1)
@@ -1506,6 +1483,7 @@ namespace WPF.ViewModels
             _ = await Task.Run
                 (() => DataBaseConnect.DeleteContentDefaultCreditDept(CurrentContent));
             SelectedContentDefaultCreditDept = null;
+            IsContentDefaultCreditDeptEnabled = true;
         }
         /// <summary>
         /// 伝票内容規定の貸方部門データを操作するコマンド
@@ -2232,10 +2210,16 @@ namespace WPF.ViewModels
             int newFlatRate = IntAmount(FlatRateField);
             if (newFlatRate < 0) { newFlatRate = 0; }
 
+            int i = CurrentContent.FlatRate;
+            string currentFlatRateInfo = (i != -1) ? AmountWithUnit(i) : "金額設定無し";
+
+            i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
+            string newFlatRateInfo = (i != -1) ? AmountWithUnit(i) : "金額設定無し";
+
             if (oldFlatRate != newFlatRate)
             {
                 updateContents =
-                    $"定額 : {AmountWithUnit(CurrentContent.FlatRate)} → {FlatRateField}円\r\n";
+                    $"定額 : {currentFlatRateInfo} → {newFlatRateInfo}\r\n";
             }
             if (CurrentContent.IsValidity != IsContentValidity)
             {
@@ -2252,7 +2236,7 @@ namespace WPF.ViewModels
                 ($"伝票内容 : {ContentField}\r\n\r\n{updateContents}\r\n\r\n更新しますか？", "伝票内容") ==
                 MessageBoxResult.Cancel) { return; }
 
-            int i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out int j)) ? -1 : j;
+            i = (!int.TryParse(FlatRateField.Replace(",", string.Empty), out j)) ? -1 : j;
             CurrentContent =
                 new Content(ContentIDField, AffiliationAccountingSubject, i, ContentField, IsContentValidity);
 
@@ -2275,7 +2259,7 @@ namespace WPF.ViewModels
                     SetNullOrEmptyError(propertyName, value);
                     break;
                 case nameof(RepCurrentPassword):
-                    if (IsRepPasswordEnabled)
+                    if (RepDataOperationButtonContent != "登録")
                     {
                         ErrorsListOperation
                             (RepCurrentPassword != CurrentRep.Password, propertyName,

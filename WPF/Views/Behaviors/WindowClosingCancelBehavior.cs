@@ -21,7 +21,7 @@ namespace WPF.Views.Behaviors
         {
             Window window = sender as Window;
 
-            if (window.DataContext is IClosing) { e.Cancel = (window.DataContext as IClosing).OnClosing(); }
+            if (window.DataContext is IClosing) { e.Cancel = (window.DataContext as IClosing).CancelClose(); }
         }
     }
 }

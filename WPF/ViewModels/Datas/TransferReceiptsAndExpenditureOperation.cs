@@ -33,8 +33,7 @@ namespace WPF.ViewModels.Datas
         public void SetData(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure)
         { operationData = transferReceiptsAndExpenditure; }
 
-        public TransferReceiptsAndExpenditure GetData()
-        { return operationData; }
+        public TransferReceiptsAndExpenditure GetData() => operationData;
 
         public void Add(ITransferReceiptsAndExpenditureOperationObserver observer)
         { observers.Add(observer); }

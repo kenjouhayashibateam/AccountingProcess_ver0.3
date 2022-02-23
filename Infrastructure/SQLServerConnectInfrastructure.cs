@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using static Domain.Entities.Helpers.TextHelper;
+using static Domain.Entities.Helpers.DataHelper;
 
 namespace Infrastructure
 {
@@ -281,14 +282,17 @@ namespace Infrastructure
             SqlDataReader dataReader = ReturnGeneretedParameterCommand
                 ("reference_content").ExecuteReader();
 
+            AccountingSubject account;
+                
             while (dataReader.Read())
             {
+                account = new AccountingSubject((string)dataReader["accounting_subject_id"],
+                            (string)dataReader["subject_code"], (string)dataReader["subject"],
+                            (bool)dataReader["is_shunjuen"], true);
+
                 contents.Add
                     (
-                        new Content((string)dataReader["content_id"],
-                        new AccountingSubject((string)dataReader["accounting_subject_id"],
-                            (string)dataReader["subject_code"], (string)dataReader["subject"],
-                            (bool)dataReader["is_shunjuen"], true),
+                        new Content((string)dataReader["content_id"],account,
                         (int)dataReader["flat_rate"], (string)dataReader["content"],
                         (bool)dataReader["is_validity"])
                     );
@@ -488,7 +492,6 @@ namespace Infrastructure
                 ($"select dbo.return_previous_day_final_credit_dept_amount(@credit_dept_id,@date)", Cn);
             _ = cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
             _ = cmd.Parameters.AddWithValue("@date", DateTime.Today);
-            //($"return_previous_day_final_credit_dept_amount('{creditDept.ID}','{DateTime.Today.ToShortDateString()}')", Cn);
             Cn.Open();
 
             using (Cn) { amount = (int)cmd.ExecuteScalar(); }
@@ -512,9 +515,10 @@ namespace Infrastructure
         public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept)
         {
             SqlCommand cmd =
-                new SqlCommand("select dbo.call_previous_month_final_account(@date,@credit_dept", Cn);
+                new SqlCommand("select dbo.call_previous_month_final_account(@date,@credit_dept_id,@credit_dept", Cn);
             _ = cmd.Parameters.AddWithValue("@date", date);
-            _ = cmd.Parameters.AddWithValue("@credit_dept", creditDept);
+            _ = cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
+            _ = cmd.Parameters.AddWithValue("@credit_dept", creditDept.Dept);
             Cn.Open();
 
             int amount = default;
@@ -1011,9 +1015,15 @@ namespace Infrastructure
         public int CallFinalMonthFinalAccount(DateTime date, bool isShunjuen, CreditDept creditDept)
         {
             SettingConectionString();
+            string iD = creditDept == null ? string.Empty : creditDept.ID;
             string dept = creditDept == null ? string.Empty : creditDept.Dept;
-            SqlCommand cmd = new SqlCommand
-                    ($"select dbo.call_previous_month_final_account('{date}','{isShunjuen}','{dept}')", Cn);
+            SqlCommand cmd =
+             new SqlCommand($"select dbo.call_previous_month_final_account(@date,@is_shunjuen,@credit_dept_id,@credit_dept)", Cn);
+
+            _ = cmd.Parameters.AddWithValue("@date", date);
+            _ = cmd.Parameters.AddWithValue("@is_shunjuen", isShunjuen);
+            _ = cmd.Parameters.AddWithValue("@credit_dept_id", iD);
+            _ = cmd.Parameters.AddWithValue("@credit_dept", dept);
 
             Cn.Open();
 
@@ -1096,6 +1106,26 @@ namespace Infrastructure
 
             SqlDataReader reader = ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure").ExecuteReader();
 
+            Rep rep;
+            CreditDept creditDept;
+            AccountingSubject debitAccountingSubject;
+            AccountingSubject creditAccountingSubject;
+
+            while (reader.Read())
+            {
+                rep = new Rep((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
+                creditDept = new CreditDept((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
+                debitAccountingSubject = new AccountingSubject((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
+                creditAccountingSubject = new AccountingSubject((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
+
+                list.Add(new TransferReceiptsAndExpenditure
+                    ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
+                        (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
+                        (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
+                        (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
+                        (bool)reader["is_reduced_tax_rate"]));
+            }
+
             return list;
         }
 
@@ -1107,13 +1137,41 @@ namespace Infrastructure
         {
             Parameters = new Dictionary<string, object>()
             {
-                {"@is_shunjuen_dept",isShunjuenDept },{"@accont_activity_start_date",accountActivityDateStart},
+                {"@is_shunjuen_dept",isShunjuenDept },{"@account_activity_start_date",accountActivityDateStart},
                 {"@account_activity_end_date",accountActivityDateEnd},{ "@location",location},{ "@dept",dept},
                 { "@debit_account_code",debitAccountCode},{ "@debit_account",debitAccount},
                 { "@credit_account_code",creditAccountCode},{ "@credit_account",creditAccount},
                 { "@is_validity_true_only",isValidityTrueOnly},{ "@contain_outputted",containOutputted},
                 { "@output_start_date",outputDateStart},{ "@output_end_date",outputDateEnd}
             };
+        }
+
+        public int Registration(TransferReceiptsAndExpenditure trae)
+        {
+            Parameters = new Dictionary<string, object>()
+            {
+                {"@location",trae.Location},{"@account_activity_date",trae.AccountActivityDate},
+                {"@registration_date",trae.RegistrationDate},{"@registration_staff_id",trae.RegistrationRep.ID},
+                {"@credit_dept_id",trae.CreditDept.ID},{"@debit_accounts_id",trae.DebitAccount.ID},
+                {"@credit_accounts_id",trae.CreditAccount.ID},{"@content_text",trae.ContentText},{"@detail",trae.Detail },
+                {"@price",trae.Price },{"@is_validity",trae.IsValidity },{"@is_reduced_tax_rate",trae.IsReducedTaxRate } };
+
+            return ReturnGeneretedParameterCommand("registration_transfer_receipts_and_expenditure").ExecuteNonQuery();
+        }
+
+        public int Update(TransferReceiptsAndExpenditure trae)
+        {
+            Parameters = new Dictionary<string, object>()
+            {
+                { "@transfer_receipts_and_expenditure_id",trae.ID},{"@location",trae.Location},
+                {"@account_activity_date",trae.AccountActivityDate},{"@credit_dept_id",trae.CreditDept.ID},
+                {"@debit_accounts_id",trae.DebitAccount.ID},{"@credit_accounts_id",trae.CreditAccount.ID},
+                {"@content_text",trae.ContentText},{"@detail",trae.Detail },{"@price",trae.Price },{"@is_validity",trae.IsValidity },
+                { "@is_unprinted",trae.OutputDate==DefaultDate },{ "@operation_staff_id",LoginRep.GetInstance().Rep.ID},
+                {"@is_reduced_tax_rate",trae.IsReducedTaxRate } 
+            };
+
+            return ReturnGeneretedParameterCommand("update_transfer_receipts_and_expenditure").ExecuteNonQuery();
         }
     }
 }

@@ -93,7 +93,7 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
@@ -109,13 +109,39 @@
                         <KeyBinding Command="{Binding SetLodationShorendoCommand}" Key="Space"/>
                     </RadioButton.InputBindings>
                 </RadioButton>
-                <Grid Grid.Column="3" IsEnabled="{Binding IsDepositMenuEnabled}">
+                <Grid Grid.Column="3">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding KanriJimushoChecked}" Value="true">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ShorendoChecked}" Value="true">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding DepositAmountInfo}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0"/>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding KanriJimushoChecked}" Value="true">
+                                            <Setter Property="Text" Value="前日決算金額"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ShorendoChecked}" Value="true">
+                                            <Setter Property="Text" Value="預かった金庫の金額を入力してください"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
@@ -126,14 +152,20 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                <ToggleButton Grid.Column="4" Content="{Binding AccountingGenreContent}" IsChecked="{Binding IsShunjuen}" Margin="10,5"/>
-                <Grid Grid.Column="4" Visibility="{Binding IsWizeCoreMenuVisibility,Converter={StaticResource VisibilityConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                </Grid>
+                <ToggleButton Grid.Column="4" IsChecked="{Binding IsShunjuen}" Margin="10,5">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsShunjuen}" Value="true">
+                                    <Setter Property="Content" Value="春秋苑会計"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsShunjuen}" Value="false">
+                                    <Setter Property="Content" Value="ワイズコア会計"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="PracticalOperationsItemsGroupBox" Header="実務項目" Grid.Row="3" Margin="5">
@@ -167,7 +199,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="ShowTransferReceiptsAndExpenditureManagementView" Grid.Row="0" Grid.Column="0" Content="振替データ管理&#10;(工事中)" Margin="50,10">
+                    <Button x:Name="ShowTransferReceiptsAndExpenditureManagementView" Grid.Row="0" Grid.Column="0" IsEnabled="{Binding IsSlipManagementEnabled}" Content="振替データ管理&#10;(工事中)" Margin="50,10">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowTransferReceiptsAndExpenditureManagementCommand}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowTransferReceiptsAndExpenditureManagementCommand}" MouseAction="LeftClick"/>

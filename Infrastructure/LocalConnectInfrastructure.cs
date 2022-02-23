@@ -666,7 +666,7 @@ namespace Infrastructure
                 new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
                     AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980000,true,
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,true,
                     DateTime.Today,DateTime.Today,false),
                 new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
                     AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
@@ -701,5 +701,9 @@ namespace Infrastructure
                 (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode,
                     debitAccount, creditAccountCode, creditAccount, true, true, outputDateStart, outputDateEnd);
         }
+
+        public int Registration(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure) => 1;
+
+        public int Update(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure) => 1;
     }
 }
