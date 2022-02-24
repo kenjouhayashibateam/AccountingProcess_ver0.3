@@ -548,7 +548,7 @@ namespace WPF.ViewModels
             {
                 selectedCreditDept = value;
                 CallPropertyChanged();
-                ComboCreditDeptText = value == null ? string.Empty : value.Dept;
+                //ComboCreditDeptText = value == null ? string.Empty : value.Dept;
             }
         }
         /// <summary>
@@ -739,11 +739,16 @@ namespace WPF.ViewModels
             {
                 selectedAccountingSubject = value;
                 //SelectedAccountingSubjectCode = value;
-                ComboContents = DataBaseConnect.ReferenceContent
-                    (string.Empty, ComboAccountingSubjectCode,
-                        ComboAccountingSubjectText ?? string.Empty,
-                        AccountingProcessLocation.IsAccountingGenreShunjuen,
-                        ReceiptsAndExpenditureOperation.GetInstance().Data == null);
+                if (value == null)
+                { ComboContents.Clear(); }
+                else
+                {
+                    ComboContents = DataBaseConnect.ReferenceContent
+                        (string.Empty, ComboAccountingSubjectCode,
+                            ComboAccountingSubjectText ?? string.Empty,
+                            AccountingProcessLocation.IsAccountingGenreShunjuen,
+                            ReceiptsAndExpenditureOperation.GetInstance().Data == null);
+                }
 
                 ComboContentText =
                     ComboContents.Count > 0 ? ComboContents.Count != 0 ?

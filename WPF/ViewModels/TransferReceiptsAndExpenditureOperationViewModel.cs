@@ -100,9 +100,23 @@ namespace WPF.ViewModels
             DebitAccount = trae.DebitAccount;
             CreditAccountCode = trae.CreditAccount.SubjectCode;
             CreditAccount = trae.CreditAccount;
-            Content content = DataBaseConnect.ReferenceContent
+            ObservableCollection<Content> contents = DataBaseConnect.ReferenceContent
                 (trae.ContentText, DebitAccountCode, DebitAccount.Subject,
-                    AccountingProcessLocation.IsAccountingGenreShunjuen, false)[0];
+                    AccountingProcessLocation.IsAccountingGenreShunjuen, false);
+            if (contents.Count == 0)
+            {
+                contents = DataBaseConnect.ReferenceContent
+                    (trae.ContentText, CreditAccountCode, CreditAccount.Subject,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, false);
+            }
+
+            if (contents.Count == 0)
+            {
+                DataOperationButtonContent = "内容が無効です";
+                return;
+            }
+            Content content = contents[0];
+
             int i = Contents.IndexOf(content);
             if (i < 0)
             {

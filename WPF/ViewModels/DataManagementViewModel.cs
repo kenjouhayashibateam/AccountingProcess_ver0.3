@@ -1035,10 +1035,10 @@ namespace WPF.ViewModels
             get => referenceAccountingSubjectCode;
             set
             {
-                if (referenceAccountingSubject == value) { return; }
+                if (referenceAccountingSubjectCode == value) { return; }
                 referenceAccountingSubjectCode = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
                 CallPropertyChanged();
-                CreateAccountSubjects();
+                if (!string.IsNullOrEmpty(value)) { CreateAccountSubjects(); }
             }
         }
 
