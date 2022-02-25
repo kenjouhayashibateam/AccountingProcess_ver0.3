@@ -325,7 +325,7 @@ namespace WPF.ViewModels
         {
             SetTodayWroteList();
 
-            previousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
+            PreviousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
 
             FinalAccountCategory =
                 AccountingProcessLocation.Location == Locations.管理事務所 ? "前日決算" : "預かり金額";
@@ -381,7 +381,6 @@ namespace WPF.ViewModels
                     $"リストの収支に対して現金が\r\n{AmountWithUnit(Math.Abs(difference))}" +
                     $"{(difference < 0 ? "超過" : "不足")}しています";
             }
-
             SetOutputGroupEnabled();
         }
         /// <summary>
@@ -934,6 +933,7 @@ namespace WPF.ViewModels
             {
                 previousDayFinalAccountDisplayValue = value;
                 CallPropertyChanged();
+                SetBalanceFinalAccount();
             }
         }
         /// <summary>
@@ -1253,8 +1253,15 @@ namespace WPF.ViewModels
                 isLimitCreditDept = value;
                 OutputMenuHeader = value ?
                     "各種出力（貸方部門を限定したリストが表示されているので出力出来ません。）" : "各種出力";
+                if (value) { SelectedCreditDept = CreditDepts[0]; }
+                else 
+                {
+                    AccountingProcessLocation.OriginalTotalAmount =
+                        DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
+                    SelectedCreditDept = null; }
                 SetOutputGroupEnabled();
                 ReferenceReceiptsAndExpenditures(true);
+                SetListTitle();
                 CallPropertyChanged();
             }
         }
@@ -1289,8 +1296,9 @@ namespace WPF.ViewModels
                         AccountingProcessLocation.IsAccountingGenreShunjuen)
                     { return; }
 
-                    ListTitle = $"一覧：{FinalAccountCategory}{Space}" +
-                        $"{AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(value))}";
+                    PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount(value);
+                    AccountingProcessLocation.OriginalTotalAmount = PreviousDayFinalAccount;
+                    ListTitle = $"一覧：{FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";
                 }
             }
         }
@@ -1429,9 +1437,6 @@ namespace WPF.ViewModels
                 OutputDateEnd = SearchOutputDateStart;
             }
 
-            if (!AccountingProcessLocation.IsAccountingGenreShunjuen)
-            { SetLimitedCreditDeptFinalBalance(); }
-
             string Location;
             Location = IsLocationSearch ? AccountingProcessLocation.Location.ToString() : string.Empty;
 
@@ -1447,14 +1452,6 @@ namespace WPF.ViewModels
             SetPeymentSum();
             SetWithdrawalSumAndTransferSum();
             SetBalanceFinalAccount();
-
-            void SetLimitedCreditDeptFinalBalance()
-            {
-                PreviousDayFinalAccount = IsLimitCreditDept
-                    ? DataBaseConnect.PreviousDayFinalAmount(SelectedCreditDept)
-                    : DataBaseConnect.PreviousDayFinalAmount
-                            (AccountingProcessLocation.IsAccountingGenreShunjuen);
-            }
         }
         /// <summary>
         /// データベースに接続して出納データリストを生成します

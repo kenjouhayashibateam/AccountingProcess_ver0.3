@@ -32,10 +32,10 @@ namespace Infrastructure
         private void SettingConectionString()
         {
             Cn = new SqlConnection
-            {
-                ConnectionString = Properties.Settings.Default.SystemAdminConnection
-                //ConnectionString = Properties.Settings.Default.TestServerConnectionString
-            };
+            (
+                Properties.Settings.Default.SystemAdminConnection
+                //Properties.Settings.Default.TestServerConnectionString
+            );
         }
         public bool IsConnectiongProductionServer()
         {
@@ -80,9 +80,8 @@ namespace Infrastructure
 
                 foreach (KeyValuePair<string, object> param in Parameters)
                 { _ = Cmd.Parameters.AddWithValue(param.Key, param.Value); }
+                return Cmd;
             }
-
-            return Cmd;
         }
         /// <summary>
         /// パラメータのないストアドを実行します
@@ -130,16 +129,17 @@ namespace Infrastructure
             Parameters = new Dictionary<string, object>()
             {{ "@staff_name", repName},{ "@true_only", isValidityTrueOnly}};
 
-            SqlDataReader DataReader = ReturnGeneretedParameterCommand
-                ("reference_staff").ExecuteReader();
-            while (DataReader.Read())
+            using (SqlDataReader DataReader = ReturnGeneretedParameterCommand
+                 ("reference_staff").ExecuteReader())
             {
-                reps.Add
-                    (new Rep((string)DataReader["staff_id"], (string)DataReader["name"],
-                        (string)DataReader["password"], (bool)DataReader["is_validity"],
-                        (bool)DataReader["is_permission"]));
+                while (DataReader.Read())
+                {
+                    reps.Add
+                        (new Rep((string)DataReader["staff_id"], (string)DataReader["name"],
+                            (string)DataReader["password"], (bool)DataReader["is_validity"],
+                            (bool)DataReader["is_permission"]));
+                }
             }
-
             return reps;
         }
 
@@ -167,17 +167,17 @@ namespace Infrastructure
                 {"@true_only", isTrueOnly}
             };
 
-            SqlDataReader DataReader = ReturnGeneretedParameterCommand
-                    ("reference_accounting_subject").ExecuteReader();
-
-            while (DataReader.Read())
+            using (SqlDataReader DataReader = ReturnGeneretedParameterCommand
+                    ("reference_accounting_subject").ExecuteReader())
             {
-                accountingSubjects.Add
-                    (new AccountingSubject((string)DataReader["accounting_subject_id"],
-                        (string)DataReader["subject_code"], (string)DataReader["subject"],
-                        (bool)DataReader["is_shunjuen"], (bool)DataReader["is_validity"]));
+                while (DataReader.Read())
+                {
+                    accountingSubjects.Add
+                        (new AccountingSubject((string)DataReader["accounting_subject_id"],
+                            (string)DataReader["subject_code"], (string)DataReader["subject"],
+                            (bool)DataReader["is_shunjuen"], (bool)DataReader["is_validity"]));
+                }
             }
-
             return accountingSubjects;
         }
 
@@ -217,14 +217,15 @@ namespace Infrastructure
                 {"@shunjuen_account", isShunjuenAccount }
             };
 
-            SqlDataReader DataReader = ReturnGeneretedParameterCommand
-                ("reference_credit_dept").ExecuteReader();
-
-            while (DataReader.Read())
+            using (SqlDataReader DataReader = ReturnGeneretedParameterCommand
+                ("reference_credit_dept").ExecuteReader())
             {
-                creditDepts.Add
-                    (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"],
-                    (bool)DataReader["is_validity"], isShunjuenAccount));
+                while (DataReader.Read())
+                {
+                    creditDepts.Add
+                        (new CreditDept((string)DataReader["credit_dept_id"], (string)DataReader["dept"],
+                        (bool)DataReader["is_validity"], isShunjuenAccount));
+                }
             }
 
             return creditDepts;
@@ -278,25 +279,27 @@ namespace Infrastructure
                 {"@subject", accountingSubject},{ "@is_shunjuen",isShunjuen},
                 { "@true_only", isValidityTrueOnly}
             };
-
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("reference_content").ExecuteReader();
-
-            AccountingSubject account;
-                
-            while (dataReader.Read())
+            //処理止まる
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                ("reference_content").ExecuteReader())
             {
-                account = new AccountingSubject((string)dataReader["accounting_subject_id"],
-                            (string)dataReader["subject_code"], (string)dataReader["subject"],
-                            (bool)dataReader["is_shunjuen"], true);
+                AccountingSubject account;
 
-                contents.Add
-                    (
-                        new Content((string)dataReader["content_id"],account,
-                        (int)dataReader["flat_rate"], (string)dataReader["content"],
-                        (bool)dataReader["is_validity"])
-                    );
+                while (dataReader.Read())
+                {
+                    account = new AccountingSubject((string)dataReader["accounting_subject_id"],
+                                (string)dataReader["subject_code"], (string)dataReader["subject"],
+                                (bool)dataReader["is_shunjuen"], true);
+
+                    contents.Add
+                        (
+                            new Content((string)dataReader["content_id"], account,
+                            (int)dataReader["flat_rate"], (string)dataReader["content"],
+                            (bool)dataReader["is_validity"])
+                        );
+                }
             }
+
             return contents;
         }
 
@@ -304,15 +307,17 @@ namespace Infrastructure
         {
             Parameters = new Dictionary<string, object>()
             { { "@accounting_subject_id", id} };
-            SqlDataReader DataReader = ReturnGeneretedParameterCommand
-                    ("call_accounting_subject").ExecuteReader();
 
-            while (DataReader.Read())
+            using (SqlDataReader DataReader = ReturnGeneretedParameterCommand
+                    ("call_accounting_subject").ExecuteReader())
             {
-                return new AccountingSubject
-                    ((string)DataReader["accounting_subject_id"],
-                    (string)DataReader["subject_code"], (string)DataReader["subject"],
-                    (bool)DataReader["is_shunjuen"], (bool)DataReader["is_validity"]);
+                while (DataReader.Read())
+                {
+                    return new AccountingSubject
+                        ((string)DataReader["accounting_subject_id"],
+                        (string)DataReader["subject_code"], (string)DataReader["subject"],
+                        (bool)DataReader["is_shunjuen"], (bool)DataReader["is_validity"]);
+                }
             }
 
             return null;
@@ -324,12 +329,13 @@ namespace Infrastructure
             ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>();
             Parameters = new Dictionary<string, object>()
             { {"@content", contentText}};
-            using SqlDataReader DataReader =
-                ReturnGeneretedParameterCommand
-                    ("reference_affiliation_accounting_subject").ExecuteReader();
 
-            while (DataReader.Read())
-            { list.Add(CallAccountingSubject((string)DataReader["accounting_subject_id"])); }
+            using (SqlDataReader DataReader = ReturnGeneretedParameterCommand
+                    ("reference_affiliation_accounting_subject").ExecuteReader())
+            {
+                while (DataReader.Read())
+                { list.Add(CallAccountingSubject((string)DataReader["accounting_subject_id"])); }
+            }
 
             return list;
         }
@@ -360,10 +366,10 @@ namespace Infrastructure
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
 
-            using SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("reference_receipts_and_expenditure_all_data").ExecuteReader();
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                ("reference_receipts_and_expenditure_all_data").ExecuteReader())
+            { while (dataReader.Read()) { list.Add(CreateReceiptsAndExpenditure(dataReader)); } }
 
-            while (dataReader.Read()) { list.Add(CreateReceiptsAndExpenditure(dataReader)); }
             return list;
         }
 
@@ -398,14 +404,15 @@ namespace Infrastructure
             Rep rep = default;
             Parameters = new Dictionary<string, object>() { { "@staff_id", id } };
 
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("call_staff").ExecuteReader();
-
-            while (dataReader.Read())
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                 ("call_staff").ExecuteReader())
             {
-                rep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
-                    (string)dataReader["password"], (bool)dataReader["is_validity"],
-                    (bool)dataReader["is_permission"]);
+                while (dataReader.Read())
+                {
+                    rep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                        (string)dataReader["password"], (bool)dataReader["is_validity"],
+                        (bool)dataReader["is_permission"]);
+                }
             }
 
             return rep;
@@ -415,13 +422,15 @@ namespace Infrastructure
         {
             CreditDept creditDept = default;
             Parameters = new Dictionary<string, object>() { { "@credit_dept_id", id } };
-            SqlDataReader dataReader =
-                ReturnGeneretedParameterCommand("call_credit_dept").ExecuteReader();
 
-            while (dataReader.Read())
+            using (SqlDataReader dataReader =
+                ReturnGeneretedParameterCommand("call_credit_dept").ExecuteReader())
             {
-                creditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"],
-                    (bool)dataReader["is_validity"], (bool)dataReader["is_shunjuen_dept"]);
+                while (dataReader.Read())
+                {
+                    creditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"],
+                        (bool)dataReader["is_validity"], (bool)dataReader["is_shunjuen_dept"]);
+                }
             }
 
             return creditDept;
@@ -431,20 +440,22 @@ namespace Infrastructure
         {
             Content content = default;
             Parameters = new Dictionary<string, object>() { { "@content_id", id } };
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("call_content").ExecuteReader();
 
-            while (dataReader.Read())
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                 ("call_content").ExecuteReader())
             {
-                content = new Content
-                    (
-                        (string)dataReader["content_id"],
-                        new AccountingSubject((string)dataReader["accounting_subject_id"],
-                        (string)dataReader["subject_code"], (string)dataReader["subject"],
-                        (bool)dataReader["is_shunjuen"], true),
-                        (int)dataReader["flat_rate"], (string)dataReader["content"],
-                        (bool)dataReader["is_validity"]
-                    );
+                while (dataReader.Read())
+                {
+                    content = new Content
+                        (
+                            (string)dataReader["content_id"],
+                            new AccountingSubject((string)dataReader["accounting_subject_id"],
+                            (string)dataReader["subject_code"], (string)dataReader["subject"],
+                            (bool)dataReader["is_shunjuen"], true),
+                            (int)dataReader["flat_rate"], (string)dataReader["content"],
+                            (bool)dataReader["is_validity"]
+                        );
+                }
             }
 
             return content;
@@ -578,11 +589,9 @@ namespace Infrastructure
                 { "@is_order_asc",sortDirection},{"@count_each_page",countEachPage}
             };
 
-            SqlDataReader dataReader =
-                ReturnGeneretedParameterCommand
-                    ("reference_receipts_and_expenditure").ExecuteReader();
-
-            while (dataReader.Read()) { list.Add(CreateReceiptsAndExpenditure(dataReader)); }
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                     ("reference_receipts_and_expenditure").ExecuteReader())
+            { while (dataReader.Read()) { list.Add(CreateReceiptsAndExpenditure(dataReader)); } }
 
             _ = Parameters.Remove("@page");
             _ = Parameters.Remove("@column");
@@ -627,9 +636,7 @@ namespace Infrastructure
         public Dictionary<int, string> GetSoryoList()
         {
             Cn = new SqlConnection
-            {
-                ConnectionString = Properties.Settings.Default.SingyoujiDataBaseConnection
-            };
+            { ConnectionString = Properties.Settings.Default.SingyoujiDataBaseConnection };
 
             Cn.Open();
 
@@ -643,14 +650,16 @@ namespace Infrastructure
             Dictionary<int, string> list = new Dictionary<int, string>();
             using (Cn)
             {
-                using SqlDataReader dataReader = Cmd.ExecuteReader();
-
-                while (dataReader.Read())
+                using (SqlDataReader dataReader = Cmd.ExecuteReader())
                 {
-                    list.Add((int)dataReader["PersonInChargeID"],
-                                    (string)dataReader["PersonInChargeName"]);
+                    while (dataReader.Read())
+                    {
+                        list.Add((int)dataReader["PersonInChargeID"],
+                                        (string)dataReader["PersonInChargeName"]);
+                    }
                 }
             }
+
             return list;
         }
 
@@ -704,13 +713,9 @@ namespace Infrastructure
                 {"@location", location},{"@page", pageCount } ,{"@count_each_page",countEachPage }
             };
 
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("reference_condolence").ExecuteReader();
-
-            while (dataReader.Read())
-            {
-                list.Add(CreateCondolence(dataReader));
-            }
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                 ("reference_condolence").ExecuteReader())
+            { while (dataReader.Read()) { list.Add(CreateCondolence(dataReader)); } }
 
             return (ReferenceCondolence(startDate, endDate, location).Count, list);
         }
@@ -733,13 +738,9 @@ namespace Infrastructure
             Parameters = new Dictionary<string, object>()
             {{ "@start_date", startDate},{"@end_date", endDate},{"@location",location } };
 
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("reference_condolence_all_data").ExecuteReader();
-
-            while (dataReader.Read())
-            {
-                list.Add(CreateCondolence(dataReader));
-            }
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                 ("reference_condolence_all_data").ExecuteReader())
+            { while (dataReader.Read()) { list.Add(CreateCondolence(dataReader)); } }
 
             return list;
         }
@@ -767,12 +768,15 @@ namespace Infrastructure
             if (string.IsNullOrEmpty(id)) { return string.Empty; }
 
             Parameters = new Dictionary<string, object>() { { "@content_id", id } };
-
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("reference_content_convert_voucher").ExecuteReader();
+            
             string s = default;
-            while (dataReader.Read())
-            { s = (string)dataReader["convert_text"] ?? string.Empty; }
+
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                ("reference_content_convert_voucher").ExecuteReader())
+            {
+                while (dataReader.Read())
+                { s = (string)dataReader["convert_text"] ?? string.Empty; }
+            }
 
             return s;
         }
@@ -808,20 +812,23 @@ namespace Infrastructure
 
         public Voucher CallLatestVoucher()
         {
-            SqlDataReader dataReader =
-                ExecuteNoParameterStoredProc("call_latest_voucher").ExecuteReader();
             Voucher voucher = new Voucher
                 (0, string.Empty, new ObservableCollection<ReceiptsAndExpenditure>(), DateTime.Today,
                     LoginRep.GetInstance().Rep, true);
-            while (dataReader.Read())
+
+            using (SqlDataReader dataReader =
+                  ExecuteNoParameterStoredProc("call_latest_voucher").ExecuteReader())
             {
-                voucher = new Voucher
-                      ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
-                          new ObservableCollection<ReceiptsAndExpenditure>(),
-                          (DateTime)dataReader["output_date"],
-                          new Rep((string)dataReader["staff_id"], (string)dataReader["name"], string.Empty, true,
-                            false),
-                          (bool)dataReader["is_validity"]);
+                while (dataReader.Read())
+                {
+                    voucher = new Voucher
+                          ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
+                              new ObservableCollection<ReceiptsAndExpenditure>(),
+                              (DateTime)dataReader["output_date"],
+                              new Rep((string)dataReader["staff_id"], (string)dataReader["name"], string.Empty, true,
+                                false),
+                              (bool)dataReader["is_validity"]);
+                }
             }
 
             return voucher;
@@ -846,22 +853,23 @@ namespace Infrastructure
 
             ObservableCollection<Voucher> list = new ObservableCollection<Voucher>();
 
-            SqlDataReader dataReader =
-                ReturnGeneretedParameterCommand("reference_voucher").ExecuteReader();
-
             Rep paramRep;
 
-            while (dataReader.Read())
+            using (SqlDataReader dataReader =
+                ReturnGeneretedParameterCommand("reference_voucher").ExecuteReader())
             {
-                paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
-                    (string)dataReader["password"], (bool)dataReader["staff_validity"],
-                    (bool)dataReader["is_permission"]);
+                while (dataReader.Read())
+                {
+                    paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                        (string)dataReader["password"], (bool)dataReader["staff_validity"],
+                        (bool)dataReader["is_permission"]);
 
-                list.Add(new Voucher
-                    ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
-                    new ObservableCollection<ReceiptsAndExpenditure>(),
-                    (DateTime)dataReader["output_date"], paramRep,
-                    (bool)dataReader["validity"]));
+                    list.Add(new Voucher
+                        ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
+                        new ObservableCollection<ReceiptsAndExpenditure>(),
+                        (DateTime)dataReader["output_date"], paramRep,
+                        (bool)dataReader["validity"]));
+                }
             }
 
             foreach (Voucher voucher in list)
@@ -875,36 +883,39 @@ namespace Infrastructure
         {
             Parameters = new Dictionary<string, object>()
             { {"@voucher_id",voucherID}};
+
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
-
-            SqlDataReader dataReader = ReturnGeneretedParameterCommand
-                ("call_voucher_grouping_receipts_and_expenditure").ExecuteReader();
 
             Rep paramRep;
             CreditDept paramCreditDept;
             Content paramContent;
             AccountingSubject paramAccountingSubject;
 
-            while (dataReader.Read())
+            using (SqlDataReader dataReader = ReturnGeneretedParameterCommand
+                ("call_voucher_grouping_receipts_and_expenditure").ExecuteReader())
             {
-                paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
-                    (string)dataReader["password"], (bool)dataReader["staff_validity"],
-                    (bool)dataReader["is_permission"]);
-                paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"],
-                    (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
-                paramAccountingSubject = new AccountingSubject((string)dataReader["account_subject_id"],
-                    (string)dataReader["subject_code"], (string)dataReader["subject"],
-                    (bool)dataReader["is_shunjuen"], true);
-                paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
-                    (int)dataReader["flat_rate"], (string)dataReader["content"], true);
-                list.Add(new ReceiptsAndExpenditure
-                    ((int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
-                        paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
-                        (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
-                        (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
-                        (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"]));
+                while (dataReader.Read())
+                {
+                    paramRep = new Rep((string)dataReader["staff_id"], (string)dataReader["name"],
+                        (string)dataReader["password"], (bool)dataReader["staff_validity"],
+                        (bool)dataReader["is_permission"]);
+                    paramCreditDept = new CreditDept((string)dataReader["credit_dept_id"],
+                        (string)dataReader["dept"], true, (bool)dataReader["is_shunjuen_dept"]);
+                    paramAccountingSubject = new AccountingSubject((string)dataReader["account_subject_id"],
+                        (string)dataReader["subject_code"], (string)dataReader["subject"],
+                        (bool)dataReader["is_shunjuen"], true);
+                    paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
+                        (int)dataReader["flat_rate"], (string)dataReader["content"], true);
+                    list.Add(new ReceiptsAndExpenditure
+                        ((int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
+                            paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
+                            (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
+                            (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
+                            (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"]));
+                }
             }
+
             return list;
         }
 
@@ -916,20 +927,21 @@ namespace Infrastructure
 
         public CreditDept CallContentDefaultCreditDept(Content content)
         {
-            Parameters = new Dictionary<string, object>()
-            {
-                {"@content_id",content.ID }
-            };
-            SqlDataReader sqlDataReader =
-                ReturnGeneretedParameterCommand("call_content_default_credit_dept").ExecuteReader();
-
+            Parameters = new Dictionary<string, object>() { { "@content_id", content.ID } };
+            
             CreditDept creditDept = null;
-            while (sqlDataReader.Read())
+
+            using (SqlDataReader sqlDataReader =
+                 ReturnGeneretedParameterCommand("call_content_default_credit_dept").ExecuteReader())
             {
-                creditDept = new CreditDept((string)sqlDataReader["credit_dept_id"],
-                    (string)sqlDataReader["dept"], (bool)sqlDataReader["is_validity"],
-                    (bool)sqlDataReader["is_shunjuen_dept"]);
+                while (sqlDataReader.Read())
+                {
+                    creditDept = new CreditDept((string)sqlDataReader["credit_dept_id"],
+                        (string)sqlDataReader["dept"], (bool)sqlDataReader["is_validity"],
+                        (bool)sqlDataReader["is_shunjuen_dept"]);
+                }
             }
+
             return creditDept;
         }
 
@@ -972,14 +984,16 @@ namespace Infrastructure
         {
             Parameters = new Dictionary<string, object>()
             { { "@accounting_subject_id", accountingSubject.ID } };
-
-            SqlDataReader sqlDataReader = ReturnGeneretedParameterCommand
-                ("get_branch_number").ExecuteReader();
-
+            
             string s = string.Empty;
-            while (sqlDataReader.Read())
+
+            using (SqlDataReader sqlDataReader = ReturnGeneretedParameterCommand
+                ("get_branch_number").ExecuteReader())
             {
-                s = (string)sqlDataReader["branch_number"];
+                while (sqlDataReader.Read())
+                {
+                    s = (string)sqlDataReader["branch_number"];
+                }
             }
 
             return s;
@@ -1062,27 +1076,33 @@ namespace Infrastructure
             SetReferenceTransferReceiptsAndExpenditureParameters
                 (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode, debitAccount,
                     creditAccountCode, creditAccount, isValidityTrueOnly, containOutputted, outputDateStart, outputDateEnd);
-            SqlDataReader reader =
-                ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure_all_data").ExecuteReader();
 
-            Rep rep;
+                Rep rep;
             CreditDept creditDept;
             AccountingSubject debitAccountingSubject;
             AccountingSubject creditAccountingSubject;
 
-            while (reader.Read()) 
+            using (SqlDataReader reader =
+                ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure_all_data").ExecuteReader())
             {
-                rep = new Rep((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
-                creditDept = new CreditDept((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
-                debitAccountingSubject = new AccountingSubject((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
-                creditAccountingSubject = new AccountingSubject((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
+                while (reader.Read())
+                {
+                    rep = new Rep
+                        ((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
+                    creditDept = new CreditDept
+                        ((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
+                    debitAccountingSubject = new AccountingSubject
+                        ((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
+                    creditAccountingSubject = new AccountingSubject
+                        ((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
 
-                list.Add(new TransferReceiptsAndExpenditure
-                    ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
-                        (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
-                        (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
-                        (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
-                        (bool)reader["is_reduced_tax_rate"]));
+                    list.Add(new TransferReceiptsAndExpenditure
+                        ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
+                            (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
+                            (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
+                            (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
+                            (bool)reader["is_reduced_tax_rate"]));
+                }
             }
 
             return list;
@@ -1104,26 +1124,32 @@ namespace Infrastructure
 
             ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
 
-            SqlDataReader reader = ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure").ExecuteReader();
-
             Rep rep;
             CreditDept creditDept;
             AccountingSubject debitAccountingSubject;
             AccountingSubject creditAccountingSubject;
 
-            while (reader.Read())
+            using (SqlDataReader reader = ReturnGeneretedParameterCommand
+                ("reference_transfer_receipts_and_expenditure").ExecuteReader())
             {
-                rep = new Rep((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
-                creditDept = new CreditDept((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
-                debitAccountingSubject = new AccountingSubject((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
-                creditAccountingSubject = new AccountingSubject((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
+                while (reader.Read())
+                {
+                    rep = new Rep
+                        ((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
+                    creditDept = new CreditDept
+                        ((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
+                    debitAccountingSubject = new AccountingSubject
+                        ((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
+                    creditAccountingSubject = new AccountingSubject
+                        ((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
 
-                list.Add(new TransferReceiptsAndExpenditure
-                    ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
-                        (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
-                        (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
-                        (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
-                        (bool)reader["is_reduced_tax_rate"]));
+                    list.Add(new TransferReceiptsAndExpenditure
+                        ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
+                            (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
+                            (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
+                            (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
+                            (bool)reader["is_reduced_tax_rate"]));
+                }
             }
 
             return list;

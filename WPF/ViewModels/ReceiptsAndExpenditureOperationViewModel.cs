@@ -55,6 +55,7 @@ namespace WPF.ViewModels
         private bool isInputWizardEnabled;
         private bool isAccountingSubjectEnabled;
         private bool isContentEnabled;
+        private bool IsPassDataNotifyProcess = false;
         /// <summary>
         /// 警告をスルーするか
         /// </summary>
@@ -328,10 +329,11 @@ namespace WPF.ViewModels
             _ = await Task.Run(() => _ = DataBaseConnect.Registration(rae));
             CallShowMessageBox = true;
             CallCompletedRegistration();
-            await Task.Run(() => SetOperationData());
+            IsPassDataNotifyProcess = true;
+            SetOperationData();
+            IsPassDataNotifyProcess = false;
             FieldClear();
             DataOperationButtonContent = "登録";
-
 
             void SetOperationData()
             { 
@@ -819,6 +821,8 @@ namespace WPF.ViewModels
                 }
                 if (value.Text != ComboContentText)
                 { ComboContentText = value.Text; }
+
+                SetContentProperty();
             }
         }
         /// <summary>
@@ -859,7 +863,11 @@ namespace WPF.ViewModels
                 ComboCreditDeptText = string.Empty;
                 SelectedCreditDept = null;
             }
-            else { SelectedCreditDept = DataBaseConnect.CallCreditDept(creditDept.ID); }
+            else
+            {
+                SelectedCreditDept = DataBaseConnect.CallCreditDept(creditDept.ID);
+                ComboCreditDeptText = SelectedCreditDept.Dept;
+            }
         }
         /// <summary>
         /// 詳細テキストブロックに表示するタイトル
@@ -1231,7 +1239,8 @@ namespace WPF.ViewModels
             }
         }
 
-        public void ReceiptsAndExpenditureOperationNotify() { SetReceiptsAndExpenditureProperty(); }
+        public void ReceiptsAndExpenditureOperationNotify() 
+        { if (!IsPassDataNotifyProcess) { SetReceiptsAndExpenditureProperty(); }}
 
         public override void ValidationProperty(string propertyName, object value)
         {

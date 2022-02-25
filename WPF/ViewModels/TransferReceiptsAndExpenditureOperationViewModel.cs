@@ -207,10 +207,9 @@ namespace WPF.ViewModels
             _ = await Task.Run(() => _ = DataBaseConnect.Registration(trae));
             CallShowMessageBox = true;
             CallCompletedRegistration();
+            SetOperationData();
             DataOperationButtonContent = "登録";
             CanClosing = true;
-
-            await Task.Run(() => SetOperationData());
 
             void SetOperationData()
             {
