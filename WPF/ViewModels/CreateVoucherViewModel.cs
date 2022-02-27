@@ -3,7 +3,6 @@ using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
@@ -17,7 +16,7 @@ namespace WPF.ViewModels
     /// <summary>
     /// 受納証作成画面ViewModel
     /// </summary>
-    public class CreateVoucherViewModel : BaseViewModel,
+    public class CreateVoucherViewModel : JustRegistraterDataViewModel,
         IReceiptsAndExpenditureOperationObserver, IPagenationObserver, IClosing
     {
         #region Properties
@@ -162,23 +161,14 @@ namespace WPF.ViewModels
         public DelegateCommand VoucherOutputCommand { get; set; }
         private async void VoucherOutput()
         {
-            if ((MessageBox = new MessageBoxInfo()
-            {
-                Message = "データベースに登録し、出力します。よろしいですか？",
-                Image = System.Windows.MessageBoxImage.Question,
-                Title = "操作確認",
-                Button = System.Windows.MessageBoxButton.OKCancel
-            }).Result == System.Windows.MessageBoxResult.Cancel)
-            {
-                return;
-            }
+            if (CallConfirmationDataOperation("データベースに登録し、出力します。よろしいですか？", "受納書") ==
+                System.Windows.MessageBoxResult.Cancel) { return; }
 
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;
             IsClose = false;
             Voucher voucher;
-            VoucherRegistration();
-            await Task.Run(() => DataOutput.VoucherData(voucher, false, PrepaidDate));
+            await Task.Run(() => VoucherRegistration());
             VoucherAddressee = string.Empty;
             VoucherContents.Clear();
             SetTotalAmount();
@@ -190,10 +180,14 @@ namespace WPF.ViewModels
                 voucher = new Voucher
                     (0, VoucherAddressee, VoucherContents, OutputDate, LoginRep.GetInstance().Rep, true);
                 _ = DataBaseConnect.Registration(voucher);
+
                 voucher = DataBaseConnect.CallLatestVoucher();
+
                 voucher.ReceiptsAndExpenditures = VoucherContents;
                 foreach (ReceiptsAndExpenditure rae in VoucherContents)
                 { _ = DataBaseConnect.Registration(voucher.ID, rae.ID); }
+
+                DataOutput.VoucherData(voucher, false, PrepaidDate);
             }
         }
         /// <summary>

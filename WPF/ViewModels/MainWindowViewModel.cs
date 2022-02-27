@@ -41,7 +41,6 @@ namespace WPF.ViewModels
         #endregion
         private string depositAmount;
         private string showSlipManagementContent;
-        private string accountingGenreContent;
         private CreditDept selectedCreditDept;
         #endregion
 
@@ -496,9 +495,7 @@ namespace WPF.ViewModels
 
                 if (ShorendoChecked)
                 {
-                    ShowSlipManagementContent =
-                        AccountingProcessLocation.OriginalTotalAmount == 0 ?
-                            "預かり金額を設定して下さい" : "出納管理";
+                    SetSlipContent();
 
                     IsShunjuenCommonEnabled = AccountingProcessLocation.OriginalTotalAmount != 0;
                 }
@@ -506,6 +503,17 @@ namespace WPF.ViewModels
                 depositAmount = CommaDelimitedAmount(value);
                 ValidationProperty(nameof(DepositAmount), value);
                 CallPropertyChanged();
+
+                void SetSlipContent()
+                {
+                    if (AccountingProcessLocation.IsAccountingGenreShunjuen)
+                    {
+                        ShowSlipManagementContent =
+                            AccountingProcessLocation.OriginalTotalAmount == 0 ?
+                                "預かり金額を設定して下さい" : "出納管理";
+                    }
+                    else { ShowSlipManagementContent = "出納管理"; }
+                }
             }
         }
         /// <summary>
@@ -577,7 +585,6 @@ namespace WPF.ViewModels
             set
             {
                 isShunjuen = value;
-                AccountingGenreContent = value ? "春秋苑会計" : "ワイズコア会計";
                 AccountingProcessLocation.IsAccountingGenreShunjuen = value;
                 IsWizeCoreMenuVisibility = !value;
                 IsCreditDeptVisibility =
@@ -592,7 +599,9 @@ namespace WPF.ViewModels
                 }
                 else if (ShorendoChecked)
                 { SetLocationShorendo(); }
+
                 CallPropertyChanged();
+
                 void SetPreviousDayFinalAmount()
                 {
                     if(IsShunjuen)
@@ -614,18 +623,6 @@ namespace WPF.ViewModels
                         AccountingProcessLocation.OriginalTotalAmount = amount;
                     }
                 }
-            }
-        }
-        /// <summary>
-        /// 春秋苑会計トグルボタンのコンテント
-        /// </summary>
-        public string AccountingGenreContent
-        {
-            get => accountingGenreContent;
-            set
-            {
-                accountingGenreContent = value;
-                CallPropertyChanged();
             }
         }
         /// <summary>
@@ -757,16 +754,8 @@ namespace WPF.ViewModels
 
         private void SetMenuEnabled()
         {
-            if (IsShunjuen)
-            {
-                IsShunjuenMenuEnabled = true;
-                IsWizeCoreMenuEnabled = false;
-            }
-            else
-            {
-                IsShunjuenMenuEnabled = false;
-                IsWizeCoreMenuEnabled = true;
-            }
+            IsShunjuenMenuEnabled = IsShunjuen;
+            IsWizeCoreMenuEnabled = !IsShunjuen;
 
             if (string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name))
             {
@@ -775,9 +764,21 @@ namespace WPF.ViewModels
                 IsCommonEnabled = false;
             }
             else
+            { SetIsCommonEnabled(); }
+
+            void SetIsCommonEnabled()
             {
-                IsCommonEnabled =
-                    (ShorendoChecked && IntAmount(DepositAmount) != 0) || KanriJimushoChecked;
+                if (AccountingProcessLocation.IsAccountingGenreShunjuen)
+                {
+                    IsCommonEnabled =
+                        (ShorendoChecked && IntAmount(DepositAmount) != 0) || KanriJimushoChecked;
+                }
+                else
+                {
+                    IsCommonEnabled = true;
+                    IsSlipManagementEnabled = true;
+                    IsCreateVoucherEnabled = true;
+                }
             }
         }
         /// <summary>
@@ -791,16 +792,21 @@ namespace WPF.ViewModels
             SetMenuEnabled();
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
-            if (AccountingProcessLocation.OriginalTotalAmount == 0)
-            {
-                ShowSlipManagementContent = "預かり金額を設定して下さい";
-                IsShunjuenMenuEnabled = false;
-                IsWizeCoreMenuEnabled = false;
-            }
+            if (AccountingProcessLocation.OriginalTotalAmount == 0) { SetControleProperty(); }
             else
             {
                 IsShunjuenMenuEnabled = IsShunjuen;
                 IsWizeCoreMenuEnabled = !IsShunjuen;
+            }
+
+            void SetControleProperty()
+            {
+                if (AccountingProcessLocation.IsAccountingGenreShunjuen)
+                {
+                    ShowSlipManagementContent = "預かり金額を設定して下さい";
+                    IsShunjuenMenuEnabled = false;
+                    IsWizeCoreMenuEnabled = false;
+                }
             }
         }
         /// <summary>

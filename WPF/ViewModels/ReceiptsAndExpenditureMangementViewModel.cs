@@ -142,6 +142,8 @@ namespace WPF.ViewModels
             {
                 PairAmountTitle = "春秋苑仮払金";
                 IsPairAmountReadOnly = true;
+                IsPeriodSearch = false;
+                SearchStartDate = DateTime.Now;
             }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
@@ -258,24 +260,36 @@ namespace WPF.ViewModels
             PaymentSlipsOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             IsClose = false;
-            await Task.Run(() => SlipsOutputProcess());
+
+            await Task.Run(() => DataOutput.PaymentAndWithdrawalSlips(AllDataList, isPayment, IsPreviousDayOutput));
+            
+            SlipsOutputProcess();
             SetOutputGroupEnabled();
             IsClose = true;
             PaymentSlipsOutputButtonContent = s;
 
             void SlipsOutputProcess()
             {
-                DataOutput.PaymentAndWithdrawalSlips
-                    (AllDataList, isPayment, IsPreviousDayOutput);
+                DateTime d = IsPreviousDayOutput ? DateTime.Now.AddDays(-1) : DateTime.Today;
+
+                //MessageBox = new MessageBoxInfo()
+                //{
+                //    Message = $"出納データの出力日を、「未出力」から「{d:d}」に変更し登録します。\r\n\r\nよろしいですか？",
+                //    Image = MessageBoxImage.Question,
+                //    Button = MessageBoxButton.YesNo,
+                //    Title = "出力登録"
+                //};
+                //CallShowMessageBox = true;
+
+                //if (MessageBox.Result == MessageBoxResult.No) { return; }
+
                 foreach (ReceiptsAndExpenditure rae in AllDataList)
                 {
                     if (rae.IsPayment != isPayment) { continue; }
                     rae.IsUnprinted = false;
                     _ = DataBaseConnect.Update(rae);
                     if (IsPreviousDayOutput)
-                    {
-                        _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae);
-                    }
+                    { _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae); }
                 }
             }
         }
