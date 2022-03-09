@@ -193,10 +193,10 @@ namespace WPF.ViewModels
             {
                 string originalBranchNumber =
                     string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)) ?
-                    string.Empty : DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject);
+                    string.Empty : $"-{DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)}";
                 string updateBranchNumber =
                     string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(SelectedAccountingSubject)) ?
-                    string.Empty : DataBaseConnect.GetBranchNumber(SelectedAccountingSubject);
+                    string.Empty : $"-{DataBaseConnect.GetBranchNumber(SelectedAccountingSubject)}";
                 UpdateCotent +=
                     $"勘定科目コード : {OperationData.Content.AccountingSubject.SubjectCode}{originalBranchNumber} → " +
                     $"{ComboAccountingSubjectCode}{updateBranchNumber}\r\n";

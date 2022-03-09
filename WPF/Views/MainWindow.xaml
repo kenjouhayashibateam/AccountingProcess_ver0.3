@@ -11,7 +11,7 @@
         xmlns:b="clr-namespace:WPF.Views.Behaviors"
         xmlns:vm="clr-namespace:WPF.ViewModels"
         mc:Ignorable="d"
-        Title="{Binding WindowTitle}" Height="550" Width="800" WindowStartupLocation="CenterScreen" FocusManager.FocusedElement="{Binding ElementName=LoginButton}">
+        Title="{Binding WindowTitle}" Height="580" Width="800" WindowStartupLocation="CenterScreen" FocusManager.FocusedElement="{Binding ElementName=LoginButton}">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -152,15 +152,15 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                <ToggleButton Grid.Column="4" IsChecked="{Binding IsShunjuen}" Margin="10,5">
+                <ToggleButton Grid.Column="4" IsChecked="{Binding IsShunjuen}" Margin="10,3">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsShunjuen}" Value="true">
-                                    <Setter Property="Content" Value="春秋苑会計"/>
+                                    <Setter Property="Content" Value="ワイズコア会計に変更"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsShunjuen}" Value="false">
-                                    <Setter Property="Content" Value="ワイズコア会計"/>
+                                    <Setter Property="Content" Value="春秋苑会計に変更"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -245,7 +245,7 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <Button Content="花売り伝票登録&#10;（工事中）" Grid.Row="0" Margin="5,20">
+                        <Button Content="花売り伝票登録" Grid.Row="0" Margin="5,20">
                             <Button.InputBindings>
                                 <KeyBinding Command="{Binding ShowRegistrationFlowerReceiptsAndExpenditureCommand}" Key="Space"/>
                                 <MouseBinding Command="{Binding ShowRegistrationFlowerReceiptsAndExpenditureCommand}" MouseAction="LeftClick"/>

@@ -37,7 +37,9 @@ namespace Infrastructure.ExcelOutputData
         /// エクセルファイルを保存しているフォルダのFullPath
         /// </summary>
         protected readonly string openPath =
-            System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
+            System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) +
+                Properties.Resources.SaveFile;
+            //System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
         /// <summary>
         /// コンストラクタ　ログ保存のインフラストラクチャを設定します
         /// </summary>
@@ -75,11 +77,6 @@ namespace Infrastructure.ExcelOutputData
             {
                 _ = myWorksheet.Protect(Properties.Resources.ExcelWorkbookPassword);
                 myWorkbook.SaveAs(openPath);
-                //エクセルを前面に出す
-                foreach(Process p in Process.GetProcesses())
-                {
-
-                }
                 Process current = Process.GetCurrentProcess();
                 Process.GetProcessesByName(current.ProcessName)
                     .ToList()
@@ -117,7 +114,7 @@ namespace Infrastructure.ExcelOutputData
             //出力ファイルを検出して閉じる
             foreach (Workbook wb in myWorkbooks)
             {
-                if (wb.Name == Properties.Resources.SaveFile) { wb.Close(SaveChanges: false); }
+                if (wb.Name.Contains(Properties.Resources.SaveFile)) { wb.Close(SaveChanges: false); }
             }
             //開いているワークブックがなければエクセルアプリケーションを終了する
             if (myWorkbooks.Count == 0) { App.Quit(); }

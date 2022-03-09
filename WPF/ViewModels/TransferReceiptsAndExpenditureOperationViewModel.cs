@@ -103,19 +103,27 @@ namespace WPF.ViewModels
             ObservableCollection<Content> contents = DataBaseConnect.ReferenceContent
                 (trae.ContentText, DebitAccountCode, DebitAccount.Subject,
                     AccountingProcessLocation.IsAccountingGenreShunjuen, false);
-            if (contents.Count == 0)
-            {
-                contents = DataBaseConnect.ReferenceContent
-                    (trae.ContentText, CreditAccountCode, CreditAccount.Subject,
-                        AccountingProcessLocation.IsAccountingGenreShunjuen, false);
-            }
+
+            ObservableCollection<Content> credits = DataBaseConnect.ReferenceContent
+                   (trae.ContentText, CreditAccountCode, CreditAccount.Subject,
+                       AccountingProcessLocation.IsAccountingGenreShunjuen, false);
+
+            foreach(Content c in credits) { contents.Add(c); }
 
             if (contents.Count == 0)
             {
                 DataOperationButtonContent = "内容が無効です";
                 return;
             }
-            Content content = contents[0];
+            Content content = null;
+
+            foreach(Content c in contents) { content = trae.ContentText == c.Text ? c : null; }
+
+            if(content == null)
+            {
+                DataOperationButtonContent = "内容が無効です";
+                return;
+            }
 
             int i = Contents.IndexOf(content);
             if (i < 0)

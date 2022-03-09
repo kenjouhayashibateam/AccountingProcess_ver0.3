@@ -142,8 +142,8 @@ namespace WPF.ViewModels
             {
                 PairAmountTitle = "春秋苑仮払金";
                 IsPairAmountReadOnly = true;
-                IsPeriodSearch = false;
-                SearchStartDate = DateTime.Now;
+                //IsPeriodSearch = false;
+                //SearchStartDate = DateTime.Now;
             }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);

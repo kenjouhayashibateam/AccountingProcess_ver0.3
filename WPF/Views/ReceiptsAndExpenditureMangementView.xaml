@@ -219,6 +219,7 @@
                         </Grid>
                     </GroupBox.Header>
                     <DataGrid x:Name="ReceiptsAndExpenditureDataGrid" EnableColumnVirtualization="True" VirtualizingPanel.ScrollUnit="Item" SelectionUnit="FullRow" VirtualizingPanel.IsVirtualizing="False" ItemsSource="{Binding ReceiptsAndExpenditures,Mode=TwoWay}" SelectedItem="{Binding SelectedReceiptsAndExpenditure}" CanUserSortColumns="True" AutoGenerateColumns="False" Margin="0,3,0,0">
+                        
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
                                 <Style.Triggers>

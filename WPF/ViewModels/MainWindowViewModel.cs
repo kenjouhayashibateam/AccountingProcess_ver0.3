@@ -602,6 +602,11 @@ namespace WPF.ViewModels
 
                 CallPropertyChanged();
 
+                SetWindowDefaultTitle();
+                string s = string.IsNullOrEmpty(LoginRep.GetInstance().Rep.FirstName) ? string.Empty : 
+                    $"（ログイン：{LoginRep.GetInstance().Rep.FirstName}）";
+                WindowTitle = $"{DefaultWindowTitle}{s}";
+
                 void SetPreviousDayFinalAmount()
                 {
                     if(IsShunjuen)
@@ -856,11 +861,11 @@ namespace WPF.ViewModels
                 ErrorsListOperation
                     (shorendoChecked &
                     (string.IsNullOrEmpty(DepositAmount) || IntAmount(DepositAmount) == 0),
-                    nameof(DepositAmount), "金額を入力してください");
+                    nameof(DepositAmount), "金額を入力してください"); 
             }
         }
 
-        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = "春秋苑経理システム"; }
+        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = $"春秋苑経理システム：{(IsShunjuen ? "春秋苑会計" : "ワイズコア会計")}"; }
 
         public override void SetRep(Rep rep)
         {
