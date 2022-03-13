@@ -1,3 +1,4 @@
+ERROR	2022/03/10 13:56:56	ExcelConnect	HRESULT からの例外:0x800AC472
 ERROR	2022/03/04 18:19:59	SQLServerConnect	ユーザー 'sa' はログインできませんでした。
 ERROR	2022/03/04 18:19:11	SQLServerConnect	ユーザー 'sa' はログインできませんでした。
 ERROR	2022/03/04 18:19:06	SQLServerConnect	ユーザー 'sa' はログインできませんでした。
@@ -6,6 +7,8 @@ ERROR	2022/03/04 18:18:56	SQLServerConnect	ユーザー 'sa' はログインで�
 ERROR	2022/03/04 18:18:44	SQLServerConnect	ユーザー 'sa' はログインできませんでした。
 ERROR	2022/02/26 9:59:04	SQLServerConnect	SQL Server への接続を確立しているときにネットワーク関連またはインスタンス固有のエラーが発生しました。サーバーが見つからないかアクセスできません。インスタンス名が正しいこと、および SQL Server がリモート接続を許可するように構成されていることを確認してください。 (provider: SQL Network Interfaces, error: 26 - 指定されたサーバーまたはインスタンスの位置を特定しているときにエラーが発生しました)
 ERROR	2022/02/13 11:05:15	SQLServerConnect	SQL Server への接続を確立しているときにネットワーク関連またはインスタンス固有のエラーが発生しました。サーバーが見つからないかアクセスできません。インスタンス名が正しいこと、および SQL Server がリモート接続を許可するように構成されていることを確認してください。 (provider: SQL Network Interfaces, error: 26 - 指定されたサーバーまたはインスタンスの位置を特定しているときにエラーが発生しました)
+
+
 
 
 

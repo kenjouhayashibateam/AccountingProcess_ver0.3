@@ -26,8 +26,8 @@ namespace Infrastructure.ExcelOutputData
         }
 
         public void BalanceFinalAccount
-            (int rengeanPreviousDayFinalAccount, int rengeanPayment, int rengeanWithdrawal,
-                int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
+            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount, int rengeanPayment,
+                int rengeanWithdrawal, int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
                 int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal,
                 int shunjuanTranceferAmount, int shunjuanShunjuenTranceferAmount,
                 int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal,
@@ -36,8 +36,8 @@ namespace Infrastructure.ExcelOutputData
         {
             WizeCoreBalanceFinalAccountOutput wcbfa =
                 new WizeCoreBalanceFinalAccountOutput
-                    (rengeanPreviousDayFinalAccount, rengeanPayment, rengeanWithdrawal,
-                        rengeanTranceferAmount, rengeanShunjuenTranceferAmount,
+                    (isContainDailyReportToNotOutputData, rengeanPreviousDayFinalAccount, rengeanPayment,
+                        rengeanWithdrawal, rengeanTranceferAmount, rengeanShunjuenTranceferAmount,
                         shunjuanPreviousDayFinalAccount, shunjuanPayment, shunjuanWithdrawal,
                         shunjuanTranceferAmount, shunjuanShunjuenTranceferAmount,
                         kougePreviousDayFinalAccount, kougePayment, kougeWithdrawal,

@@ -1182,7 +1182,7 @@ namespace WPF.ViewModels
             !string.IsNullOrEmpty(ComboContentText) &
             !string.IsNullOrEmpty(ComboAccountingSubjectText) &
             !string.IsNullOrEmpty(ComboAccountingSubjectCode) &
-            !string.IsNullOrEmpty(Price) && 0 < IntAmount(price);
+            (!string.IsNullOrEmpty(Price) && 0 != IntAmount(price) && IntAmount(price) != -1);
 
             OperationData = ReceiptsAndExpenditureOperation.GetInstance().Data;
 

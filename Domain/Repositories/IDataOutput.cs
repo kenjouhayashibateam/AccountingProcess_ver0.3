@@ -32,6 +32,7 @@ namespace Domain.Repositories
         /// <summary>
         /// ワイズコア収支日報を出力します
         /// </summary>
+        /// <param name="isContainDailyReportToNotOutputData">未出力出納データを含ませるか</param>
         /// <param name="rengeanPreviousDayFinalAccount">蓮華庵前日繰越</param>
         /// <param name="rengeanPayment">蓮華庵入金</param>
         /// <param name="rengeanWithdrawal">蓮華庵出金</param>
@@ -50,8 +51,8 @@ namespace Domain.Repositories
         /// <param name="yokohamaBankAmount">横浜銀行残高</param>
         /// <param name="shunjuenAmount">春秋苑仮払金</param>
         void BalanceFinalAccount
-            (int rengeanPreviousDayFinalAccount, int rengeanPayment, int rengeanWithdrawal,
-                int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
+            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount, int rengeanPayment,
+                int rengeanWithdrawal, int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
                 int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal,
                 int shunjuanTranceferAmount, int shunjuanShunjuenTranceferAmount,
                 int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal,

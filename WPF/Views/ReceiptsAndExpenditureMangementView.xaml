@@ -103,6 +103,7 @@
                                     <RowDefinition Height="3*"/>
                                 </Grid.RowDefinitions>
                                 <CheckBox Content="期間検索" Grid.Row="0" IsChecked="{Binding IsPeriodSearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
+                                <CheckBox Content="入出金日を今日の日付に限定する" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" IsChecked="{Binding IsTodayOnlySearch}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,3"/>
                                 <TextBlock Text="入出金日" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
                                 <DatePicker Grid.Column="1" Grid.Row="1" SelectedDate="{Binding SearchStartDate}" HorizontalAlignment="Center" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" InputMethod.PreferredImeState="Off" VerticalAlignment="Center" Margin="5"/>
                                 <TextBlock Text="～" Grid.Column="2" Grid.Row="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsSearchInfoVisibility,Converter={StaticResource VisibilityConverter}}"/>
@@ -507,7 +508,7 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Row="0" Grid.Column="1">
+                <Grid Grid.Row="0" Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -534,24 +535,25 @@
                     <CheckBox Content="前日の日付で出力する" Grid.Row="1" IsChecked="{Binding IsPreviousDayOutput}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14" Margin="5">
                     </CheckBox>
                 </Grid>
-                <Button x:Name="PaymentSlipsOutputButton" Grid.Column="2" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="30,5">
+                <Button x:Name="PaymentSlipsOutputButton" Grid.Column="1" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="30,5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding PaymentSlipsOutputCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding PaymentSlipsOutputCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
-                <Button x:Name="WithdrawalSlipsOutputButton" Grid.Column="3" Content="{Binding WithdrawalSlipsOutputButtonContent}" IsEnabled="{Binding IsWithdrawalSlipsOutputEnabled}" Margin="30,5">
+                <Button x:Name="WithdrawalSlipsOutputButton" Grid.Column="2" Content="{Binding WithdrawalSlipsOutputButtonContent}" IsEnabled="{Binding IsWithdrawalSlipsOutputEnabled}" Margin="30,5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding WithdrawalSlipsOutputCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding WithdrawalSlipsOutputCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
-                <Button x:Name="BalanceFinalAccountOutputButton" Grid.Column="4" Content="{Binding BalanceFinalAccountOutputButtonContent}" IsEnabled="{Binding IsBalanceFinalAccountOutputEnabled}" Margin="30,5">
+                <Button x:Name="BalanceFinalAccountOutputButton" Grid.Column="3" Content="{Binding BalanceFinalAccountOutputButtonContent}" IsEnabled="{Binding IsBalanceFinalAccountOutputEnabled}" Margin="30,5">
                     <Button.InputBindings>
                         <KeyBinding Command="{Binding BalanceFinalAccountOutputCommand}" Key="Space"/>
                         <MouseBinding Command="{Binding BalanceFinalAccountOutputCommand}" MouseAction="LeftClick"/>
                     </Button.InputBindings>
                 </Button>
+                <CheckBox Grid.Column="4" Content="日報に本日の未出力分の&#xa;出納データを含ませる" IsChecked="{Binding IsContainDailyReportToNotOutputData}" Visibility="{Binding IsShunjuen,Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Center" Margin="5"/>
             </Grid>
         </GroupBox>
         <Grid Grid.Row="3">

@@ -30,6 +30,7 @@ namespace WPF.ViewModels
         private bool isLimitDebitAccount;
         private bool isLimitCreditAccount;
         private bool isCloseCancel = false;
+        private bool isChangeOutputDate;
         #endregion
         #region Strings
         private string referenceLocationCheckContent;
@@ -40,9 +41,10 @@ namespace WPF.ViewModels
         #endregion
         private DateTime searchStartDate = DateTime.Today;
         private DateTime searchEndDate = DateTime.Today;
+        private DateTime changeOutputDate = DateTime.Today;
         #region ObservableCollections
         private ObservableCollection<CreditDept> creditDepts;
-        private ObservableCollection<TransferReceiptsAndExpenditure> transferReceiptsAndExpenditures;
+        private ObservableCollection<TransferReceiptsAndExpendtitureListItem> transferReceiptsAndExpenditures;
         private ObservableCollection<AccountingSubject> searchDebitAccounts =
             new ObservableCollection<AccountingSubject>();
         private ObservableCollection<AccountingSubject> searchCreditAccounts =
@@ -62,8 +64,8 @@ namespace WPF.ViewModels
         /// リストの総金額
         /// </summary>
         private int TotalAmount;
-        private TransferReceiptsAndExpenditure selectedTransferReceiptsAndExpenditure;
-        private IDataOutput DataOutput;
+        private readonly IDataOutput DataOutput;
+        private TransferReceiptsAndExpendtitureListItem selectedListItem;
         #endregion
 
         public TransferReceiptsAndExpenditureManagementViewModel
@@ -102,12 +104,35 @@ namespace WPF.ViewModels
 
             void SlipsOutputProcess()
             {
-                DataOutput.TransferSlips(AllDataList);
-                //foreach (TransferReceiptsAndExpenditure trae in AllDataList)
-                //{
-                //    trae.OutputDate = DateTime.Now;
-                //    _ = DataBaseConnect.Update(trae);
-                //}
+                ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
+
+                if (IsChangeOutputDate)
+                {
+                    foreach (TransferReceiptsAndExpendtitureListItem listItem in TransferReceiptsAndExpenditures)
+                    { AddItem(listItem); }
+
+                    DataOutput.TransferSlips(list);
+                    foreach (TransferReceiptsAndExpenditure trae in list)
+                    {
+                        trae.OutputDate = ChangeOutputDate;
+                        _ = DataBaseConnect.Update(trae);
+                    }
+                }
+                else
+                {
+                    DataOutput.TransferSlips(AllDataList);
+                    foreach (TransferReceiptsAndExpenditure trae in AllDataList)
+                    {
+                        trae.OutputDate = ChangeOutputDate;
+                        _ = DataBaseConnect.Update(trae);
+                    }
+                }
+
+                void AddItem(TransferReceiptsAndExpendtitureListItem transferReceiptsAndExpendtitureListItem)
+                {
+                    if (transferReceiptsAndExpendtitureListItem.IsOutput)
+                    { list.Add(transferReceiptsAndExpendtitureListItem.Data); }
+                }
             }
         }
         /// <summary>
@@ -117,7 +142,7 @@ namespace WPF.ViewModels
         private async void ShowDetail()
         {
             await Task.Delay(1);
-            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(SelectedTransferReceiptsAndExpenditure);
+            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(SelectedListItem.Data);
             CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView());
         }
         /// <summary>
@@ -133,7 +158,7 @@ namespace WPF.ViewModels
         private void ReferenceTransferReceiptsAndExpenditure(bool isPageReset)
         {
             Pagination.CountReset(isPageReset);
-
+            
             string dept = IsLimitCreditDept ? SelectedCreditDept.Dept : string.Empty;
             string location = IsLocationSearch ? AccountingProcessLocation.Location.ToString() : string.Empty;
             string creditCode = SearchCreditAccountCode.Length == 3 ? SearchCreditAccountCode : string.Empty;
@@ -142,12 +167,17 @@ namespace WPF.ViewModels
             string debit = SelectedDebitAccount == null ? string.Empty : SelectedDebitAccount.Subject;
             DateTime outputEnd = IsContainOutputted ? DateTime.Now : DefaultDate;
 
-            TransferReceiptsAndExpenditures =
+            ObservableCollection<TransferReceiptsAndExpenditure> list =
                 DataBaseConnect.ReferenceTransferReceiptsAndExpenditure
                 (AccountingProcessLocation.IsAccountingGenreShunjuen, SearchStartDate, SearchEndDate,
                     location, dept, debitCode, debit, creditCode, credit, IsValidity, IsContainOutputted, DefaultDate, outputEnd,
                     Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC,
                     Pagination.CountEachPage);
+
+            TransferReceiptsAndExpenditures = new ObservableCollection<TransferReceiptsAndExpendtitureListItem>();
+
+            foreach(TransferReceiptsAndExpenditure trae in list)
+            { TransferReceiptsAndExpenditures.Add(new TransferReceiptsAndExpendtitureListItem(trae, !IsChangeOutputDate)); }
 
             AllDataList =
                 DataBaseConnect.ReferenceTransferReceiptsAndExpenditure
@@ -158,7 +188,13 @@ namespace WPF.ViewModels
             Pagination.SetProperty();
 
             TotalAmount = 0;
-            foreach (TransferReceiptsAndExpenditure trae in AllDataList) { TotalAmount += trae.Price; }
+            if (IsChangeOutputDate)
+            {
+                foreach (TransferReceiptsAndExpendtitureListItem listItem in TransferReceiptsAndExpenditures)
+                { TotalAmount += listItem.IsOutput ? listItem.Data.Price : 0; }
+            }
+            else
+            { foreach (TransferReceiptsAndExpenditure trae in AllDataList) { TotalAmount += trae.Price; } }
             SetTotalAmount();
         }
         private void SetTotalAmount() { TotalAmountDisplayValue = $"リストの総金額：{AmountWithUnit(TotalAmount)}"; }
@@ -305,7 +341,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 検索結果リスト
         /// </summary>
-        public ObservableCollection<TransferReceiptsAndExpenditure> TransferReceiptsAndExpenditures
+        public ObservableCollection<TransferReceiptsAndExpendtitureListItem> TransferReceiptsAndExpenditures
         {
             get => transferReceiptsAndExpenditures;
             set
@@ -455,18 +491,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 選択された振替データ
-        /// </summary>
-        public TransferReceiptsAndExpenditure SelectedTransferReceiptsAndExpenditure
-        {
-            get => selectedTransferReceiptsAndExpenditure;
-            set
-            {
-                selectedTransferReceiptsAndExpenditure = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// 出直機能Content
         /// </summary>
         public string OutputContent
@@ -490,6 +514,44 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 出力日を指定するか
+        /// </summary>
+        public bool IsChangeOutputDate
+        {
+            get => isChangeOutputDate;
+            set
+            {
+                isChangeOutputDate = value;
+                CallPropertyChanged();
+                if (!value) { ChangeOutputDate=DateTime.Now; }
+                ReferenceTransferReceiptsAndExpenditure(true);
+            }
+        }
+        /// <summary>
+        /// 伝票出力日
+        /// </summary>
+        public DateTime ChangeOutputDate
+        {
+            get => changeOutputDate;
+            set
+            {
+                changeOutputDate = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された振替データ
+        /// </summary>
+        public TransferReceiptsAndExpendtitureListItem SelectedListItem
+        {
+            get => selectedListItem;
+            set
+            {
+                selectedListItem = value;
+                CallPropertyChanged();
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {  }
@@ -509,5 +571,20 @@ namespace WPF.ViewModels
         public void TransferReceiptsAndExpenditureOperationNotify() { ReferenceTransferReceiptsAndExpenditure(true); }
 
         public bool CancelClose() => IsCloseCancel;
+
+        /// <summary>
+        /// リスト表示する振替データクラス
+        /// </summary>
+        public class TransferReceiptsAndExpendtitureListItem
+        {
+            public TransferReceiptsAndExpenditure Data { get; set; }
+            public bool IsOutput { get; set; }
+
+            public TransferReceiptsAndExpendtitureListItem(TransferReceiptsAndExpenditure data, bool isOutput)
+            {
+                Data = data;
+                IsOutput = isOutput;
+            }
+        }
     }
 }
