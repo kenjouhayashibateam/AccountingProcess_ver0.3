@@ -112,5 +112,10 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window TransferReceiptsAndExpenditureOperationView()
         { return new TransferReceiptsAndExpenditureOperationView(); }
+        /// <summary>
+        /// 法事計算書登録画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window MemorialServiceAccountRegister() { return new MemorialServiceAccountRegisterView(); }
     }
 }

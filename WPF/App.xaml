@@ -5,5 +5,24 @@
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+        <Style x:Key="WatermarkTextbox" TargetType="{x:Type TextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid Background="White">
+                            <Border BorderBrush="DimGray" BorderThickness="1">
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock x:Name="WaterMarkLabel"  Text="{TemplateBinding Tag}" Opacity=".5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Visibility" TargetName="WaterMarkLabel" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

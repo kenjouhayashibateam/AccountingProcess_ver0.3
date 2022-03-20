@@ -97,8 +97,14 @@ namespace WPF.ViewModels
             ShowTransferReceiptsAndExpenditureManagementCommand = new DelegateCommand
                 (() => CreateShowWindowCommand
                     (ScreenTransition.TransferReceiptsAndExpenditureManagement()), () => true);
+            ShowMemorialServiceAccountRegister = new DelegateCommand
+                (() => CreateShowWindowCommand(ScreenTransition.MemorialServiceAccountRegister()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 法事計算書登録画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowMemorialServiceAccountRegister { get; }
         /// <summary>
         /// 振替出納データ管理画面表示コマンド
         /// </summary>

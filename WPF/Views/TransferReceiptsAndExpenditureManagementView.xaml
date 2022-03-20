@@ -205,18 +205,6 @@
             </GroupBox.Header>
             <DataGrid ItemsSource="{Binding TransferReceiptsAndExpenditures}" SelectedItem="{Binding SelectedListItem}" AutoGenerateColumns="False" Margin="0,3,0,0">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="1*" Header="出力">
-                        <DataGridTemplateColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTemplateColumn.HeaderStyle>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsOutput,Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Center" IsEnabled="{Binding Path=DataContext.IsChangeOutputDate,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="1*" Header="有効">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -225,7 +213,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding Data.IsValidity}" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                <CheckBox IsChecked="{Binding IsValidity}" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -237,7 +225,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.AccountActivityDate,StringFormat=yy/MM/dd}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding AccountActivityDate,StringFormat=yy/MM/dd}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -249,7 +237,7 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.Location}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding Location}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -261,42 +249,42 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.CreditDept.Dept}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding CreditDept.Dept}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="4*" Header="借方勘定科目">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.DebitAccount.Subject}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding DebitAccount.Subject}" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="4*" Header="貸方勘定科目">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.CreditAccount.Subject}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding CreditAccount.Subject}" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="4*" Header="内容">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.ContentText}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding ContentText}" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="4*" Header="詳細">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.Detail}" VerticalAlignment="Center" Margin="5"/>
+                                <TextBlock Text="{Binding Detail}" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="2*" Header="金額">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Data.PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                                <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -311,9 +299,9 @@
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="{Binding Data.OutputDate,StringFormat=yy/MM/dd}"/>
+                                            <Setter Property="Text" Value="{Binding OutputDate,StringFormat=yy/MM/dd}"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Data.OutputDate,StringFormat=yyyy/MM/dd}" Value= "1900/01/01">
+                                                <DataTrigger Binding="{Binding OutputDate,StringFormat=yyyy/MM/dd}" Value= "1900/01/01">
                                                     <Setter Property="Text" Value="未出力"/>
                                                 </DataTrigger>
                                             </Style.Triggers>

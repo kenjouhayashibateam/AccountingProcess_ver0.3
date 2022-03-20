@@ -150,7 +150,6 @@ namespace WPF.ViewModels
             }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
-            if (CreditDepts.Count > 0) { SelectedCreditDept = CreditDepts[0]; }
 
             //ワイズコア会計で青蓮堂で会計する際の伝票検索設定
             void ShorendoWizecoreSeachFieldSetting() 
@@ -522,8 +521,18 @@ namespace WPF.ViewModels
                 void AmountSorting(IEnumerable<ReceiptsAndExpenditure> raeList, ref int payment,
                     ref int withdrawal, ref int bankAmount, ref int shunjuenAmount)
                 {
+                    int pay = default;
+                    int with = default;
+                    int bank = default;
+                    int shunjuen = default;
+
                     foreach (ReceiptsAndExpenditure rae in raeList)
-                    { SetPrice(rae,ref payment,ref withdrawal,ref bankAmount,ref shunjuanBank); }
+                    { SetPrice(rae,ref pay,ref with,ref bank,ref shunjuen); }
+
+                    payment = pay;
+                    withdrawal = with;
+                    bankAmount = bank;
+                    shunjuenAmount = shunjuen;
 
                     void SetPrice(ReceiptsAndExpenditure rae,ref int payment,ref int withdrawal,ref int bankAmount,ref int shunjuenAmount)
                     {
@@ -536,6 +545,7 @@ namespace WPF.ViewModels
                     ref int bankAmount, ref int shunjuenAmount)
                 {
                     if (rae.Content.Text.Contains("銀行")) { bankAmount += rae.Price; }
+                    else if (rae.Content.Text.Contains("口座入金")) { bankAmount+=rae.Price; }
                     else if (rae.Content.Text.Contains("春秋苑")) { shunjuenAmount += rae.Price; }
                     else { withdrawal += rae.Price; }
                 }

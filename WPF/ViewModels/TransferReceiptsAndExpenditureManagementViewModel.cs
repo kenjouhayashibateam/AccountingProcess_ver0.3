@@ -44,7 +44,7 @@ namespace WPF.ViewModels
         private DateTime changeOutputDate = DateTime.Today;
         #region ObservableCollections
         private ObservableCollection<CreditDept> creditDepts;
-        private ObservableCollection<TransferReceiptsAndExpendtitureListItem> transferReceiptsAndExpenditures;
+        private ObservableCollection<TransferReceiptsAndExpenditure> transferReceiptsAndExpenditures;
         private ObservableCollection<AccountingSubject> searchDebitAccounts =
             new ObservableCollection<AccountingSubject>();
         private ObservableCollection<AccountingSubject> searchCreditAccounts =
@@ -65,7 +65,7 @@ namespace WPF.ViewModels
         /// </summary>
         private int TotalAmount;
         private readonly IDataOutput DataOutput;
-        private TransferReceiptsAndExpendtitureListItem selectedListItem;
+        private TransferReceiptsAndExpenditure selectedListItem;
         #endregion
 
         public TransferReceiptsAndExpenditureManagementViewModel
@@ -104,15 +104,10 @@ namespace WPF.ViewModels
 
             void SlipsOutputProcess()
             {
-                ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
-
+                DataOutput.TransferSlips(AllDataList);
                 if (IsChangeOutputDate)
                 {
-                    foreach (TransferReceiptsAndExpendtitureListItem listItem in TransferReceiptsAndExpenditures)
-                    { AddItem(listItem); }
-
-                    DataOutput.TransferSlips(list);
-                    foreach (TransferReceiptsAndExpenditure trae in list)
+                    foreach (TransferReceiptsAndExpenditure trae in AllDataList)
                     {
                         trae.OutputDate = ChangeOutputDate;
                         _ = DataBaseConnect.Update(trae);
@@ -127,12 +122,6 @@ namespace WPF.ViewModels
                         _ = DataBaseConnect.Update(trae);
                     }
                 }
-
-                void AddItem(TransferReceiptsAndExpendtitureListItem transferReceiptsAndExpendtitureListItem)
-                {
-                    if (transferReceiptsAndExpendtitureListItem.IsOutput)
-                    { list.Add(transferReceiptsAndExpendtitureListItem.Data); }
-                }
             }
         }
         /// <summary>
@@ -142,7 +131,7 @@ namespace WPF.ViewModels
         private async void ShowDetail()
         {
             await Task.Delay(1);
-            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(SelectedListItem.Data);
+            TransferReceiptsAndExpenditureOperation.GetInstance().SetData(SelectedListItem);
             CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView());
         }
         /// <summary>
@@ -167,17 +156,12 @@ namespace WPF.ViewModels
             string debit = SelectedDebitAccount == null ? string.Empty : SelectedDebitAccount.Subject;
             DateTime outputEnd = IsContainOutputted ? DateTime.Now : DefaultDate;
 
-            ObservableCollection<TransferReceiptsAndExpenditure> list =
+            TransferReceiptsAndExpenditures =
                 DataBaseConnect.ReferenceTransferReceiptsAndExpenditure
                 (AccountingProcessLocation.IsAccountingGenreShunjuen, SearchStartDate, SearchEndDate,
                     location, dept, debitCode, debit, creditCode, credit, IsValidity, IsContainOutputted, DefaultDate, outputEnd,
                     Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC,
                     Pagination.CountEachPage);
-
-            TransferReceiptsAndExpenditures = new ObservableCollection<TransferReceiptsAndExpendtitureListItem>();
-
-            foreach(TransferReceiptsAndExpenditure trae in list)
-            { TransferReceiptsAndExpenditures.Add(new TransferReceiptsAndExpendtitureListItem(trae, !IsChangeOutputDate)); }
 
             AllDataList =
                 DataBaseConnect.ReferenceTransferReceiptsAndExpenditure
@@ -190,8 +174,8 @@ namespace WPF.ViewModels
             TotalAmount = 0;
             if (IsChangeOutputDate)
             {
-                foreach (TransferReceiptsAndExpendtitureListItem listItem in TransferReceiptsAndExpenditures)
-                { TotalAmount += listItem.IsOutput ? listItem.Data.Price : 0; }
+                foreach (TransferReceiptsAndExpenditure listItem in TransferReceiptsAndExpenditures)
+                { TotalAmount += listItem.Price; }
             }
             else
             { foreach (TransferReceiptsAndExpenditure trae in AllDataList) { TotalAmount += trae.Price; } }
@@ -341,7 +325,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 検索結果リスト
         /// </summary>
-        public ObservableCollection<TransferReceiptsAndExpendtitureListItem> TransferReceiptsAndExpenditures
+        public ObservableCollection<TransferReceiptsAndExpenditure> TransferReceiptsAndExpenditures
         {
             get => transferReceiptsAndExpenditures;
             set
@@ -543,7 +527,7 @@ namespace WPF.ViewModels
         /// <summary>
         /// 選択された振替データ
         /// </summary>
-        public TransferReceiptsAndExpendtitureListItem SelectedListItem
+        public TransferReceiptsAndExpenditure SelectedListItem
         {
             get => selectedListItem;
             set
@@ -571,20 +555,5 @@ namespace WPF.ViewModels
         public void TransferReceiptsAndExpenditureOperationNotify() { ReferenceTransferReceiptsAndExpenditure(true); }
 
         public bool CancelClose() => IsCloseCancel;
-
-        /// <summary>
-        /// リスト表示する振替データクラス
-        /// </summary>
-        public class TransferReceiptsAndExpendtitureListItem
-        {
-            public TransferReceiptsAndExpenditure Data { get; set; }
-            public bool IsOutput { get; set; }
-
-            public TransferReceiptsAndExpendtitureListItem(TransferReceiptsAndExpenditure data, bool isOutput)
-            {
-                Data = data;
-                IsOutput = isOutput;
-            }
-        }
     }
 }

@@ -83,7 +83,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// 未出力出納データを含ませるか
         /// </summary>
-        private bool IsContainDailyReportToNotOutputData;
+        private readonly bool IsContainDailyReportToNotOutputData;
         /// <param name="rengeanPreviousDayFinalAccount">蓮華庵前日繰越</param>
         /// <param name="rengeanPayment">蓮華庵入金</param>
         /// <param name="rengeanWithdrawal">蓮華庵出金</param>
