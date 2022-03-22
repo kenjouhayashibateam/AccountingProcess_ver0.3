@@ -83,6 +83,7 @@ namespace WPF.ViewModels
             new Dictionary<string, KeyValuePair<int, int>>();
         #endregion
         private bool isRegistrationEnabled;
+        private bool isDuplication;
         private DateTime selectedDate = DateTime.Today;
         #endregion
 
@@ -101,26 +102,10 @@ namespace WPF.ViewModels
         public DelegateCommand RegistrationCommand { get; }
         private void Registration()
         {
-            ObservableCollection<ReceiptsAndExpenditure> list =
-                DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(),
-                        string.Empty, string.Empty, "件", string.Empty, "811", false, true, true, true,
-                        true, SelectedDate, SelectedDate, DefaultDate, DateTime.Now);
+            bool b = IsDuplication;
+            if (!IsDuplication) { b = VerificationData(); }
 
-            if (list.Count != 0)
-            {
-                MessageBox = new MessageBoxInfo()
-                {
-                    Message = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}" +
-                    $"の{AccountingProcessLocation.Location}は墓地花売上データが存在します。\r\n" +
-                    $"出納管理からデータの更新、追加を行ってください。",
-                    Image = MessageBoxImage.Information,
-                    Button = MessageBoxButton.OK,
-                    Title = "墓地花売上の一括登録は1日1回です。"
-                };
-                CallShowMessageBox = true;
-                return;
-            }
+            if (!b) { return; }
 
             string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\t" +
                 $"{AccountingProcessLocation.Location}\r\n\r\n";
@@ -150,6 +135,31 @@ namespace WPF.ViewModels
             DatasRegistration();
             IsRegistrationEnabled = true;
             RegistrationButtonContent = "登録";
+
+            bool  VerificationData()
+            {
+            ObservableCollection<ReceiptsAndExpenditure> list =
+                DataBaseConnect.ReferenceReceiptsAndExpenditure
+                    (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(),
+                        string.Empty, string.Empty, "件", string.Empty, "811", false, true, true, true,
+                        true, SelectedDate, SelectedDate, DefaultDate, DateTime.Now);
+
+                if (list.Count != 0)
+                {
+                    MessageBox = new MessageBoxInfo()
+                    {
+                        Message = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}" +
+                        $"の{AccountingProcessLocation.Location}は墓地花売上データが存在します。\r\n" +
+                        $"出納管理からデータの更新、追加を行ってください。",
+                        Image = MessageBoxImage.Information,
+                        Button = MessageBoxButton.OK,
+                        Title = "墓地花売上の一括登録は1日1回です。"
+                    };
+                    CallShowMessageBox = true;
+                    return false;
+                }
+                return true;
+            }
 
             async void DatasRegistration()
             {
@@ -814,6 +824,18 @@ namespace WPF.ViewModels
             set
             {
                 ticketTotalAmountValue = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 重複した日付の登録の許可
+        /// </summary>
+        public bool IsDuplication
+        {
+            get => isDuplication;
+            set
+            {
+                isDuplication = value;
                 CallPropertyChanged();
             }
         }

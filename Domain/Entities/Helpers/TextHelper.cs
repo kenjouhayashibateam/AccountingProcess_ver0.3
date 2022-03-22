@@ -36,6 +36,7 @@ namespace Domain.Entities.Helpers
         /// <returns>00,000,000</returns>
         public static string CommaDelimitedAmount(string amount)
         {
+            if (string.IsNullOrEmpty(amount)) { return string.Empty; }
             string s = amount.Replace(",", string.Empty);
             s = s.Replace(Properties.Resources.Unit, string.Empty);
             return int.TryParse(s, out int i) ? CommaDelimitedAmount(i) : string.Empty;

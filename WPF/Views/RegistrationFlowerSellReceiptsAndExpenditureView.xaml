@@ -78,6 +78,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Text="登録日時" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0" />
                     <DatePicker Grid.Column="0" Grid.Row="1" SelectedDate="{Binding SelectedDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,3,3,3"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" Content="重複した日付の登録を許可する" IsChecked="{Binding IsDuplication}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
