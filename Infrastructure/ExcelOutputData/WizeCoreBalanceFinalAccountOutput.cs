@@ -310,6 +310,8 @@ namespace Infrastructure.ExcelOutputData
                 //印欄
                 myWorksheet.Cell(4, 9).Value = "係印";
                 myWorksheet.Cell(5, 9).Value = LoginRep.GetInstance().Rep.FirstName;
+                //経理担当場所
+                myWorksheet.Cell(6, 1).Value = $"経理担当場所：{AccountingProcessLocation.Location}";
                 //表タイトル
                 myWorksheet.Cell(7, 2).Value = $"入金";
                 myWorksheet.Cell(7, 6).Value = "出金";
@@ -353,6 +355,7 @@ namespace Infrastructure.ExcelOutputData
 
             void SetContainDailyReportToNotOutputDataStyle()
             {
+                _ = MySheetCellRange(6, 1, 6, 5).Merge();//経理担当場所
                 _ = MySheetCellRange(7, 2, 7, 5).Merge();//表タイトル入金
                 _ = MySheetCellRange(7, 6, 7, 7).Merge();//表タイトル出金
                 _ = MySheetCellRange(7, 8, 7, 9).Merge();//表タイトル合計

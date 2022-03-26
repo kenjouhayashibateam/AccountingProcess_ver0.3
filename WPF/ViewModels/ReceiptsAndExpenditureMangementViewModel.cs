@@ -90,7 +90,6 @@ namespace WPF.ViewModels
         private bool isPairAmountReadOnly;
         private bool isContainDailyReportToNotOutputData;
         public bool IsShunjuen { get => !AccountingProcessLocation.IsAccountingGenreShunjuen; }
-        private bool isTodayOnlySearch;
         #endregion
         #region DateTime
         private DateTime searchEndDate = DateTime.Today;
@@ -131,6 +130,7 @@ namespace WPF.ViewModels
                 (ReceiptsAndExpenditureOperation.OperationType.ReceiptsAndExpenditure);
             DataOutput = dataOutput;
             IsPreviousDayOutputEnabled = false;
+            IsLimitCreditDept = false;
             PreviousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
             SetProperty();
             SetDelegateCommand();
@@ -164,6 +164,15 @@ namespace WPF.ViewModels
             this(DefaultInfrastructure.GetDefaultDataOutput(),
                 DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
+        /// <summary>
+        /// 入出金日を今日に限定するコマンド
+        /// </summary>
+        public DelegateCommand TodayLimitedCommand { get; set; }
+        private void TodayLimited()
+        {
+            IsPeriodSearch = false;
+            SearchStartDate= DateTime.Now;
+        }
         /// <summary>
         /// 振替データ管理画面呼び出しコマンド
         /// </summary>
@@ -581,6 +590,7 @@ namespace WPF.ViewModels
             PasswordCheckReversCommand = new DelegateCommand(() => CheckRevers(), () => true);
             ShowTransferReceiptsAndExpenditurOperationCommand = new DelegateCommand
                 (() => ShowTransferReceiptsAndExpenditureOperation(), () => true);
+            TodayLimitedCommand = new DelegateCommand(() => TodayLimited(), () => true);
         }
         /// <summary>
         /// 本日の決算額を返します
@@ -678,7 +688,6 @@ namespace WPF.ViewModels
                 IsSearchInfoVisibility = value;
                 CallPropertyChanged();
                 if (!value) { SearchEndDate = SearchStartDate; }
-                else { IsTodayOnlySearch = false; }
             }
         }
         /// <summary>
@@ -1410,24 +1419,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-        /// <summary>
-        /// 入出金日を今日の日付に限定するか
-        /// </summary>
-        public bool IsTodayOnlySearch
-        {
-            get => isTodayOnlySearch;
-            set
-            {
-                isTodayOnlySearch = value;
-                CallPropertyChanged();
-
-                if (!value) { return; }
-
-                SearchStartDate = DateTime.Now;
-                IsPeriodSearch = false;
-            }
-        }
-
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>

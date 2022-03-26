@@ -234,7 +234,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void ConfirmationPrecedingYearFinalAccount()
         {
-            //今日の日付が4月1日~4月20日なら登録ボタンを可視化する
+            //ログインアカウントが管理者権限を所持していて、なおかつ今日の日付が4月1日~4月20日なら登録ボタンを可視化する
             IsRegistrationPrecedingYearFinalAccountVisiblity =
                 DateTime.Today > CurrentFiscalYearFirstDate &&
                 DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20)
@@ -365,11 +365,14 @@ namespace WPF.ViewModels
             return b;
         }
         /// <summary>
-        /// 経理担当場所が青蓮堂で、預り金のテキストボックスの値が0だった時に警告します
+        /// 春秋苑会計の経理担当場所が青蓮堂で、預り金のテキストボックスの値が0だった時に警告します
         /// </summary>
         private void CallDepositAmountEmptyMessage()
         {
+            if(AccountingProcessLocation.Location== Locations.管理事務所) { return; }
+            if (!IsShunjuen) { return; }
             if (IntAmount(DepositAmount) != 0) { return; }
+
             MessageBox = new MessageBoxInfo()
             {
                 Message =
@@ -397,17 +400,15 @@ namespace WPF.ViewModels
             string NoOutputed =
                 AccountingProcessLocation.IsCashBoxOutputed ? string.Empty : "金種表";
 
-            if (string.IsNullOrEmpty(NoOutputed)) { NoOutputed = "収支日報"; }
+            if (string.IsNullOrEmpty(NoOutputed))
+            { NoOutputed = AccountingProcessLocation.IsBalanceAccountOutputed ? string.Empty : "収支日報"; }
             else
-            {
-                NoOutputed += AccountingProcessLocation.IsBalanceAccountOutputed ?
-                    string.Empty : "、収支日報";
-            }
+            { NoOutputed += AccountingProcessLocation.IsBalanceAccountOutputed ? string.Empty : "、収支日報"; }
 
             if (AccountingProcessLocation.Location != Locations.管理事務所)
             { NoOutputed = string.Empty; }
 
-            NoOutputed = string.IsNullOrEmpty(NoOutputed) ?
+            NoOutputed = string.IsNullOrEmpty(NoOutputed) ? 
                 string.Empty : $"\r\n\r\n\t※{NoOutputed}が出力されていません";
 
             MessageBox = new MessageBoxInfo()

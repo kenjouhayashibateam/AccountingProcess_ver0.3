@@ -218,7 +218,7 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button Content="法事計算書登録&#xa;（工事中）" IsEnabled="{Binding IsSlipManagementEnabled}" Margin="10">
+                    <Button Content="法事計算書登録" IsEnabled="{Binding IsSlipManagementEnabled}" Margin="10">
                         <Button.InputBindings>
                             <KeyBinding Command="{Binding ShowMemorialServiceAccountRegister}" Key="Space"/>
                             <MouseBinding Command="{Binding ShowMemorialServiceAccountRegister}" MouseAction="LeftClick"/>
