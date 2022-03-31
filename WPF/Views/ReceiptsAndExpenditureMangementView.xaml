@@ -17,7 +17,7 @@
     <Window.DataContext>
         <vm:ReceiptsAndExpenditureMangementViewModel/>
     </Window.DataContext>
-
+    
     <i:Interaction.Triggers>
         <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
             <behavior:ShowDialogBehavior/>
@@ -516,9 +516,9 @@
                 <Grid Grid.Row="0" Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="80,5,5,5">
+                    <Grid Grid.Row="0" Margin="80,3,5,3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="8*"/>
                             <ColumnDefinition Width="2*"/>
@@ -537,8 +537,32 @@
                             </Button.Template>
                         </Button>
                     </Grid>
-                    <CheckBox Content="前日の日付で出力する" Grid.Row="1" IsChecked="{Binding IsPreviousDayOutput}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="14" Margin="5">
-                    </CheckBox>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Content="前日の日付で出力する" Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsPreviousDayOutput}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,3">
+                            <CheckBox.Style>
+                                <Style TargetType="CheckBox">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChangePermitPeriod}" Value="true">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsChangePermitPeriod}" Value="false">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+                        <RadioButton Content="前日の日付で出力する" Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsPreviousDayOutput}" Visibility="{Binding IsChangePermitPeriod,Converter={StaticResource VisibilityConverter}}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,3"/>
+                        <RadioButton Grid.Row="1" Grid.Column="1" Content="前年度末日で出力する" IsChecked="{Binding IsPrecedingYearLastDayOutput}" Visibility="{Binding IsChangePermitPeriod,Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,3"/>
+                    </Grid>
                 </Grid>
                 <Button x:Name="PaymentSlipsOutputButton" Grid.Column="1" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="30,5">
                     <Button.InputBindings>

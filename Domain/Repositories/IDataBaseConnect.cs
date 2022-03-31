@@ -277,9 +277,10 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int CallFinalMonthFinalAccount(DateTime date, bool isShunjuen, CreditDept creditDept);
         /// <summary>
-        /// 伝票の出力日を前日に変更します
+        /// 伝票の出力日を変更します
         /// </summary>
-        public int ReceiptsAndExpenditurePreviousDayChange(ReceiptsAndExpenditure receiptsAndExpenditure);
+        public int ReceiptsAndExpenditureOutputDateChange
+            (ReceiptsAndExpenditure receiptsAndExpenditure,DateTime outputDate);
         /// <summary>
         /// 信行寺の僧侶リストを返します
         /// </summary>

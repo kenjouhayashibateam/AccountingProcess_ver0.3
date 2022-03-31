@@ -525,11 +525,12 @@ namespace Infrastructure
 
         public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept)
         {
+            SettingConectionString();
             SqlCommand cmd =
-                new SqlCommand("select dbo.call_previous_month_final_account(@date,@credit_dept_id,@credit_dept", Cn);
+                new SqlCommand
+                ("select dbo.call_wize_core_preceding_year_final_account(@date,@credit_dept_id)", Cn);
             _ = cmd.Parameters.AddWithValue("@date", date);
             _ = cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
-            _ = cmd.Parameters.AddWithValue("@credit_dept", creditDept.Dept);
             Cn.Open();
 
             int amount = default;
@@ -552,8 +553,8 @@ namespace Infrastructure
             return amount;
         }
 
-        public int ReceiptsAndExpenditurePreviousDayChange
-            (ReceiptsAndExpenditure receiptsAndExpenditure)
+        public int ReceiptsAndExpenditureOutputDateChange
+            (ReceiptsAndExpenditure receiptsAndExpenditure, DateTime outputDate)
         {
             return NewCommand(CommandType.Text,
                 $"select * from receipts_and_expenditure_data with(tablockx) begin tran " +

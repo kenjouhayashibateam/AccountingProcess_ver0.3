@@ -90,6 +90,8 @@ namespace WPF.ViewModels
         private bool isPairAmountReadOnly;
         private bool isContainDailyReportToNotOutputData;
         public bool IsShunjuen { get => !AccountingProcessLocation.IsAccountingGenreShunjuen; }
+        private bool isChangePermitPeriod;
+        private bool isPrecedingYearLastDayOutput;
         #endregion
         #region DateTime
         private DateTime searchEndDate = DateTime.Today;
@@ -150,6 +152,9 @@ namespace WPF.ViewModels
             }
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
+
+            IsChangePermitPeriod = DateTime.Today > CurrentFiscalYearFirstDate &&
+                DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
 
             //ワイズコア会計で青蓮堂で会計する際の伝票検索設定
             void ShorendoWizecoreSeachFieldSetting() 
@@ -292,13 +297,17 @@ namespace WPF.ViewModels
             {
                 DateTime d = IsPreviousDayOutput ? DateTime.Now.AddDays(-1) : DateTime.Today;
 
+                if (IsPreviousDayOutput) { d = DateTime.Now.AddDays(-1); }
+                else if (IsPrecedingYearLastDayOutput) { d = CurrentFiscalYearFirstDate.AddDays(-1); }
+                else { d = DateTime.Now; }
+
                 foreach (ReceiptsAndExpenditure rae in AllDataList)
                 {
                     if (rae.IsPayment != isPayment) { continue; }
                     rae.IsUnprinted = false;
                     _ = DataBaseConnect.Update(rae);
                     if (IsPreviousDayOutput)
-                    { _ = DataBaseConnect.ReceiptsAndExpenditurePreviousDayChange(rae); }
+                    { _ = DataBaseConnect.ReceiptsAndExpenditureOutputDateChange(rae,d); }
                 }
             }
         }
@@ -1419,6 +1428,31 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 年度末変更許可期間か
+        /// </summary>
+        public bool IsChangePermitPeriod
+        {
+            get => isChangePermitPeriod;
+            set
+            {
+                isChangePermitPeriod = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 前年度末日で出力するか
+        /// </summary>
+        public bool IsPrecedingYearLastDayOutput
+        {
+            get => isPrecedingYearLastDayOutput;
+            set
+            {
+                isPrecedingYearLastDayOutput = value;
+                CallPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>

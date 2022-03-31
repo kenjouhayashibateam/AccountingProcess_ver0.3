@@ -49,8 +49,8 @@ namespace Infrastructure
 
         public int PreviousDayFinalAmount(CreditDept creditDept) { return 0; }
 
-        public int ReceiptsAndExpenditurePreviousDayChange
-            (ReceiptsAndExpenditure receiptsAndExpenditure)
+        public int ReceiptsAndExpenditureOutputDateChange
+            (ReceiptsAndExpenditure receiptsAndExpenditure,DateTime outputDate)
         { return 0; }
 
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject

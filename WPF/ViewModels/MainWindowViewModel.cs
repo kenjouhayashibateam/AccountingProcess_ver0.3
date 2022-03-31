@@ -127,8 +127,7 @@ namespace WPF.ViewModels
         public DelegateCommand UpdatePrecedingYearFinalAccountCommand { get; }
         private void UpdatePrecedingYearFinalAccount()
         {
-            if (AccountingProcessLocation.IsAccountingGenreShunjuen)
-            { UpdateShunjuenFinalAccount(); }
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen) { UpdateShunjuenFinalAccount(); }
             else { UpdateWizeCoreFinalAccount(); }
 
             void UpdateWizeCoreFinalAccount()
@@ -289,7 +288,9 @@ namespace WPF.ViewModels
             void WizeCoreOperation()
             {
                 bool IsNotExistsData = false;
-                foreach (CreditDept cd in DataBaseConnect.ReferenceCreditDept(string.Empty, true, false))
+                ObservableCollection<CreditDept> list = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+
+                foreach (CreditDept cd in list)
                 {
                     if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, cd) != 0) { continue; }
 
@@ -613,6 +614,8 @@ namespace WPF.ViewModels
                 string s = string.IsNullOrEmpty(LoginRep.GetInstance().Rep.FirstName) ? string.Empty : 
                     $"（ログイン：{LoginRep.GetInstance().Rep.FirstName}）";
                 WindowTitle = $"{DefaultWindowTitle}{s}";
+
+                if (!string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name)) { ConfirmationPrecedingYearFinalAccount(); }
 
                 void SetPreviousDayFinalAmount()
                 {

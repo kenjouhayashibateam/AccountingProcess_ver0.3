@@ -79,6 +79,7 @@ namespace WPF.ViewModels
         private bool isStoneWorkPartInput;
         private bool isCloseCancel = false;
         private bool canOperation;
+        private bool isIndoorCemeteryCineration;
         #endregion
         #region ReceiptsAndExpenditures
         private ReceiptsAndExpenditure noukotuData;
@@ -119,15 +120,19 @@ namespace WPF.ViewModels
         private ObservableCollection<TransferReceiptsAndExpenditure> WizeCoreTransferData;
         private ObservableCollection<Content> buddhistChantDonationContents;
         private ObservableCollection<Content> stoneWorkPartContents;
+        private ObservableCollection<Content> floralTributeCotents;
+        #endregion
+        #region Contents
+        private Content selectedGraveCleaningContent;
+        private Content selectedStoneWorkPartContent;
+        private Content selectedBuddhistChantDonationContent;
+        private Content selectedFloralTributeContent;
         #endregion
         private DateTime accountActivityDate;
         private Dictionary<string,int> places = new Dictionary<string, int>() 
         { { string.Empty, 0 }, { "礼拝堂", 50000 }, { "白蓮華堂", 50000 }, { "青蓮堂", 50000 }, { "特別参拝室", 10000 } };
         private KeyValuePair<string, int> selectedPlace;
         private List<string> variousChanges = new List<string>() { string.Empty, "名義変更", "再発行" };
-        private Content selectedGraveCleaningContent;
-        private Content selectedStoneWorkPartContent;
-        private Content selectedBuddhistChantDonationContent;
         private readonly int[] BoneEnshrinedAmounts = new int[2] { 3000, 30000 };
         private TransferReceiptsAndExpenditure rengeanMealSalesData;
         private TransferReceiptsAndExpenditure rengeanBeverageSalesData;
@@ -153,27 +158,28 @@ namespace WPF.ViewModels
             FlowerOfferingCount = 0;
             CustomerName = string.Empty;
             SelectedVariousChange = string.Empty;
-            VariousChangeAmount = string.Empty;
-            BoneVaseAmount = string.Empty;
-            OfferingAmount = string.Empty;
-            ReturnGiftAmount = string.Empty;
-            BlancAmount = string.Empty;
-            BoneWashingAmount = string.Empty;
-            BoneBagAmount = string.Empty;
-            TagPlateAddingSculptureAmount = string.Empty;
-            GraveCleaningAmount = string.Empty;
-            FloralTributeAmount = string.Empty;
-            CemeteryFlowerAmount = string.Empty;
-            IncenseStickAmount = string.Empty;
+            VariousChangeAmount = "0";
+            BoneVaseAmount = "0";
+            OfferingAmount = "0";
+            ReturnGiftAmount = "0";
+            BlancAmount = "0";
+            BoneWashingAmount = "0";
+            BoneBagAmount = "0";
+            TagPlateAddingSculptureAmount = "0";
+            GraveCleaningAmount = "0";
+            FloralTributeAmount = "0";
+            CemeteryFlowerAmount = "0";
+            IncenseStickAmount = "0";
             FlowerOfferingFlatRate = string.Empty;
-            ShunjuanReturnGiftAmount = string.Empty;
-            RengeanSalesAmount = string.Empty;
-            BuddhistChantDonationAmount = string.Empty;
-            AlmsgivingAmount = string.Empty;
-            CarTipAmount = string.Empty;
-            MealTipAmount = string.Empty;
-            CarAndMealTipAmount = string.Empty;
-            StoneWorkPartAmount = string.Empty;
+            ShunjuanReturnGiftAmount = "0";
+            RengeanSalesAmount = "0";
+            BuddhistChantDonationAmount = "0";
+            AlmsgivingAmount = "0";
+            CarTipAmount = "0";
+            MealTipAmount = "0";
+            CarAndMealTipAmount = "0";
+            StoneWorkPartAmount = "0";
+            ShunjuanMealSalesAmount = "0";
             IsNoukotuInput = false;
             IsBurningIncenseTableInput = false;
             IsStupaStandInput = false;
@@ -182,6 +188,7 @@ namespace WPF.ViewModels
             NoukotuAccountToggle = true;
             IsSundry = false;
             IsStoneWorkPartInput = false;
+            IsIndoorCemeteryCineration = false;
             SelectedBuddhistChantDonationContent = BuddhistChantDonationContents[0];
         }
         /// <summary>
@@ -582,15 +589,18 @@ namespace WPF.ViewModels
 
                 if (FloralTributeData == null)
                 {
+                    FloralTributeCotents = DataBaseConnect.ReferenceContent(string.Empty, "812", string.Empty, false, true);
+                    SelectedFloralTributeContent ??= FloralTributeCotents[0];
                     FloralTributeData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("供花", "812", string.Empty, false, true)[0], CustomerName,
-                        IntAmount(FloralTributeAmount), true, true, AccountActivityDate, DefaultDate, false);
+                        SelectedFloralTributeContent, CustomerName, IntAmount(FloralTributeAmount), true, true,
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
                     FloralTributeData.AccountActivityDate = AccountActivityDate;
                     FloralTributeData.Price = IntAmount(FloralTributeAmount);
                     FloralTributeData.Detail = CustomerName;
+                    FloralTributeData.Content = SelectedFloralTributeContent;
                 }
                 WizeCoreData.Add(FloralTributeData);
 
@@ -844,8 +854,11 @@ namespace WPF.ViewModels
             {
                 selectedPlace = value;
                 CallPropertyChanged();
-                MemorialServiceDonationAmount = value.Value;
-                MemorialServiceDonationData.Price = value.Value + ServiceFee;
+                MemorialServiceDonationAmount = value.Key == "青蓮堂" ? ReturnShorendoAmount() : value.Value;
+                MemorialServiceDonationData.Price = MemorialServiceDonationAmount + ServiceFee;
+
+                int ReturnShorendoAmount()
+                { return IsIndoorCemeteryCineration ? 20000 : value.Value; }
             }
         }
         /// <summary>
@@ -1936,6 +1949,47 @@ namespace WPF.ViewModels
                 SetShunjuenSubTotal();
             }
         }
+        /// <summary>
+        /// 供花売上伝票内容リスト
+        /// </summary>
+        public ObservableCollection<Content> FloralTributeCotents
+        {
+            get => floralTributeCotents;
+            set
+            {
+                floralTributeCotents = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択された供花売上伝票内容
+        /// </summary>
+        public Content SelectedFloralTributeContent
+        {
+            get => selectedFloralTributeContent;
+            set
+            {
+                selectedFloralTributeContent = value;
+                CallPropertyChanged();
+                SetWizeCoreSubTotal();
+            }
+        }
+        /// <summary>
+        /// 屋内御廟納骨か
+        /// </summary>
+        public bool IsIndoorCemeteryCineration
+        {
+            get => isIndoorCemeteryCineration;
+            set
+            {
+                isIndoorCemeteryCineration = value;
+                CallPropertyChanged();
+
+                MemorialServiceDonationAmount = value ? ReturnAmount() : SelectedPlace.Value;
+
+                int ReturnAmount() => SelectedPlace.Key == "青蓮堂" ? 20000 : SelectedPlace.Value;
+            }
+        }
 
         public override void ValidationProperty(string propertyName, object value)
         {
@@ -1949,9 +2003,9 @@ namespace WPF.ViewModels
                 case nameof(VariousChangeAmount):
                     b = IntAmount((string)value) > 0;
                     if (b)
-                    {
+                    { 
                         ErrorsListOperation
-                            (string.IsNullOrEmpty(SelectedVariousChange), propertyName, "伝票内容を選択してください");
+                            (string.IsNullOrEmpty(SelectedVariousChange), propertyName, "伝票内容を選択してください"); 
                     }
                     else { ErrorsListOperation(false, propertyName, string.Empty); }
                     break;
@@ -1967,13 +2021,9 @@ namespace WPF.ViewModels
 
             void VerificationAmountToContent(Content content)
             {
-                    b = IntAmount((string)value) > 0;
-                    if (b) 
-                    {
-                        ErrorsListOperation
-                            (content == null, propertyName, "伝票内容を選択してください"); 
-                    }
-                    else { ErrorsListOperation(false, propertyName, string.Empty); }
+                b = IntAmount((string)value) > 0;
+                if (b) { ErrorsListOperation(content == null, propertyName, "伝票内容を選択してください"); }
+                else { ErrorsListOperation(false, propertyName, string.Empty); }
             }
         }
 

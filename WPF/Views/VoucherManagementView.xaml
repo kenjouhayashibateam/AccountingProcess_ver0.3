@@ -59,8 +59,8 @@
         </GroupBox>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Header="検索結果" Margin="5">
                 <Grid>
@@ -167,21 +167,21 @@
                         <DataGridTemplateColumn Header="経理担当場所" Width="1*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Location}" Margin="5"></TextBlock>
+                                    <TextBlock Text="{Binding Location}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"></TextBlock>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="内容" Width="1*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Content.Text}" Margin="5"/>
+                                    <TextBlock Text="{Binding Content.Text}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="金額" Width="1*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding PriceWithUnit}" Margin="5"/>
+                                    <TextBlock Text="{Binding PriceWithUnit}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
