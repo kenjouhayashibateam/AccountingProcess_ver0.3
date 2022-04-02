@@ -263,11 +263,11 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept);
         /// <summary>
-        /// 春秋苑の前年度決算額を返します
+        /// 前年度決算額を返します
         /// </summary>
         /// <param name="date">基準の日付</param>
         /// <returns></returns>
-        public int CallPrecedingYearFinalAccount(DateTime date);
+        public int CallPrecedingYearFinalAccount(DateTime date,bool isShunjuen);
         /// <summary>
         /// 前月決算を返します
         /// </summary>
@@ -491,5 +491,18 @@ namespace Domain.Repositories
         /// <param name="transferReceiptsAndExpenditure"></param>
         /// <returns></returns>
         public int Update(TransferReceiptsAndExpenditure trae);
+        /// <summary>
+        /// 春秋苑の年度末決算を計算して返します
+        /// </summary>
+        /// <param name="fiscalYearEndDate">年度末日</param>
+        /// <returns></returns>
+        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate);
+        /// <summary>
+        /// ワイズコアの年度末決算を計算して返します
+        /// </summary>
+        /// <param name="fiscalYearEndDate">年度末日</param>
+        /// <param name="creditDept"></param>
+        /// <returns></returns>
+        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept);
     }
 }

@@ -153,7 +153,7 @@ namespace WPF.ViewModels
             CreditDepts = DataBaseConnect.ReferenceCreditDept
                 (string.Empty, true, AccountingProcessLocation.IsAccountingGenreShunjuen);
 
-            IsChangePermitPeriod = DateTime.Today > CurrentFiscalYearFirstDate &&
+            IsChangePermitPeriod = DateTime.Today >= CurrentFiscalYearFirstDate &&
                 DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
 
             //ワイズコア会計で青蓮堂で会計する際の伝票検索設定
@@ -360,10 +360,6 @@ namespace WPF.ViewModels
 
             PreviousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
 
-            if (AccountingProcessLocation.Location == Locations.管理事務所)
-            {
-
-            }
             FinalAccountCategory =
                 AccountingProcessLocation.Location == Locations.管理事務所 ? "前日決算" : "預かり金額";
 

@@ -38,6 +38,7 @@ namespace WPF.ViewModels
         private bool isWizeCoreMenuVisibility;
         private bool isCreditDeptVisibility;
         private bool isCommonEnabled;
+        private bool IsPrecedingYearFinalAccountRegisterVerified = false;
         #endregion
         private string depositAmount;
         private string showSlipManagementContent;
@@ -144,11 +145,11 @@ namespace WPF.ViewModels
 
             void UpdateShunjuenFinalAccount()
             {
-                if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today) ==
+                if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, true) ==
                     DataBaseConnect.CallFinalMonthFinalAccount(DateTime.Today, true, null))
                 {
                     CallNoUPdateMessage
-                        (SHUNJUEN, DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today));
+                        (SHUNJUEN, DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, true)) ;
                     return;
                 }
                 _ = DataBaseConnect.UpdatePrecedingYearFinalAccount();
@@ -235,7 +236,7 @@ namespace WPF.ViewModels
         {
             //ログインアカウントが管理者権限を所持していて、なおかつ今日の日付が4月1日~4月20日なら登録ボタンを可視化する
             IsRegistrationPrecedingYearFinalAccountVisiblity =
-                DateTime.Today > CurrentFiscalYearFirstDate &&
+                DateTime.Today >= CurrentFiscalYearFirstDate &&
                 DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20)
                 && LoginRep.GetInstance().Rep.IsAdminPermisson;
 
@@ -258,7 +259,7 @@ namespace WPF.ViewModels
                 if (IsShunjuen)
                 {
                     IsRegistrationPrecedingYearFinalAccountVisiblity =
-                        DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today) == 0;
+                        DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today,IsShunjuen) == 0;
                 }
                 else
                 {
@@ -293,7 +294,6 @@ namespace WPF.ViewModels
                 foreach (CreditDept cd in list)
                 {
                     if (DataBaseConnect.CallPrecedingYearFinalAccount(DateTime.Today, cd) != 0) { continue; }
-
                     creditDept = cd;
                     if (CallPreviousPerMonthFinalAccountRegisterInfo(cd.Dept) == MessageBoxResult.Yes)
                     { Registration(cd); }
@@ -309,6 +309,7 @@ namespace WPF.ViewModels
                     _ = DataBaseConnect.RegistrationPrecedingYearFinalAccount();
                     //前年度決算が登録されたので、登録ボタンを隠す
                     IsRegistrationPrecedingYearFinalAccountVisiblity = false;
+                    IsUpdatePrecedingYearFinalAccountVisibility = true;
                 }
             }
 
@@ -320,6 +321,17 @@ namespace WPF.ViewModels
                 string amount = IsShunjuen ? AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(true)) :
                     AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(creditDept));
 
+                if (IntAmount(amount) == 0) 
+                {
+                    amount = AccountingProcessLocation.IsAccountingGenreShunjuen ?
+                        AmountWithUnit(DataBaseConnect.RetutnFiscalYearEndFinalAccountCalculation
+                        (CurrentFiscalYearFirstDate.AddDays(-1))) :
+                        AmountWithUnit(DataBaseConnect.RetutnFiscalYearEndFinalAccountCalculation
+                        (CurrentFiscalYearFirstDate.AddDays(-1), creditDept));
+                }
+
+                if(IntAmount(amount) == 0) { return MessageBoxResult.No; }
+
                 MessageBox = new MessageBoxInfo()
                 {
                     Message =
@@ -328,7 +340,6 @@ namespace WPF.ViewModels
                     Title = "登録確認",
                     Button = MessageBoxButton.YesNo
                 };
-                CallPropertyChanged(nameof(MessageBox));
                 return MessageBox.Result;
             }
         }
@@ -615,7 +626,17 @@ namespace WPF.ViewModels
                     $"（ログイン：{LoginRep.GetInstance().Rep.FirstName}）";
                 WindowTitle = $"{DefaultWindowTitle}{s}";
 
-                if (!string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name)) { ConfirmationPrecedingYearFinalAccount(); }
+                if (!string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name)) { CallConfirmationPrecedingYearFinalAccount(); }
+
+                void CallConfirmationPrecedingYearFinalAccount()
+                {
+                    if (IsPrecedingYearFinalAccountRegisterVerified) { IsPrecedingYearFinalAccountRegisterVerified = false; }
+                    else
+                    {
+                        ConfirmationPrecedingYearFinalAccount();
+                        IsPrecedingYearFinalAccountRegisterVerified = true;
+                    }
+                }
 
                 void SetPreviousDayFinalAmount()
                 {
@@ -755,7 +776,14 @@ namespace WPF.ViewModels
                 IsShunjuenMenuEnabled = false;
                 IsWizeCoreMenuEnabled = true;
             }
-            ConfirmationPrecedingYearFinalAccount();
+
+            if (IsPrecedingYearFinalAccountRegisterVerified) { IsPrecedingYearFinalAccountRegisterVerified = false; }
+            else 
+            {
+                ConfirmationPrecedingYearFinalAccount();
+                IsPrecedingYearFinalAccountRegisterVerified = true;
+            }
+
             AccountingProcessLocation.OriginalTotalAmount =
                 DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
 

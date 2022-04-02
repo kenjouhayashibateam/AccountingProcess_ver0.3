@@ -511,8 +511,9 @@ namespace Infrastructure
 
         public int RegistrationPrecedingYearFinalAccount()
         {
+            Parameters.Clear();
             return ReturnGeneretedParameterCommand
-                ("registration_preceding_year_final_account_table").ExecuteNonQuery();
+                ("registration_preceding_year_final_account_table_shunjuen").ExecuteNonQuery();
         }
 
         public int RegistrationPrecedingYearFinalAccount(CreditDept creditDept)
@@ -539,19 +540,20 @@ namespace Infrastructure
             return amount;
         }
 
-        public int CallPrecedingYearFinalAccount(DateTime date)
+        public int CallPrecedingYearFinalAccount(DateTime date,bool isShunjuen)
         {
             SettingConectionString();
             SqlCommand Cmd =
-                new SqlCommand("select dbo.call_shunjuen_preceding_year_final_account(@date)", Cn);
+                new SqlCommand("select dbo.call_preceding_year_final_account(@date,@is_shunjuen)", Cn);
             _ = Cmd.Parameters.AddWithValue("@date", date);
+            _ = Cmd.Parameters.AddWithValue("@is_shunjuen", isShunjuen);
             Cn.Open();
 
             int amount = default;
             using (Cn) { amount = (int)Cmd.ExecuteScalar(); }
 
             return amount;
-        }
+         }
 
         public int ReceiptsAndExpenditureOutputDateChange
             (ReceiptsAndExpenditure receiptsAndExpenditure, DateTime outputDate)
@@ -1199,6 +1201,43 @@ namespace Infrastructure
             };
 
             return ReturnGeneretedParameterCommand("update_transfer_receipts_and_expenditure").ExecuteNonQuery();
+        }
+
+        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate)
+        {
+            SettingConectionString();
+            SqlCommand cmd =
+             new SqlCommand
+             ($"select dbo.retutn_shunjuen_fiscal_year_end_final_account_calculation" +
+                $"(@fiscal_year_end_date)", Cn);
+
+            _ = cmd.Parameters.AddWithValue("@fiscal_year_end_date", fiscalYearEndDate);
+
+            Cn.Open();
+
+            int amount = default;
+            using (Cn) { amount = (int)cmd.ExecuteScalar(); }
+
+            return amount;
+        }
+
+        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept)
+        {
+            SettingConectionString();
+            SqlCommand cmd =
+             new SqlCommand
+             ($"select dbo.retutn_wize_core_fiscal_year_end_final_account_calculation" +
+                $"(@fiscal_year_end_date,@credit_dept_id)", Cn);
+
+            _ = cmd.Parameters.AddWithValue("@fiscal_year_end_date", fiscalYearEndDate);
+            _ = cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
+
+            Cn.Open();
+
+            int amount = default;
+            using (Cn) { amount = (int)cmd.ExecuteScalar(); }
+
+            return amount;
         }
     }
 }

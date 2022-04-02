@@ -1205,7 +1205,10 @@ namespace WPF.ViewModels
 
             b = IsExceptMonthUpdate();
 
-            if (b) { b = LoginRep.GetInstance().Rep.IsAdminPermisson; }
+            if (b) 
+            {
+                DataOperationButtonContent = "管理者権限をお持ちでないので更新できません";
+                b = LoginRep.GetInstance().Rep.IsAdminPermisson; }
             else { DataOperationButtonContent = "訂正期限が過ぎています。"; }
 
             return b;
@@ -1213,8 +1216,7 @@ namespace WPF.ViewModels
             bool IsInCorrectionDeadline()
             {
                 if (SlipOutputDate == DefaultDate) { return true; }
-                bool b = DateTime.Today > CurrentFiscalYearFirstDate.AddDays(20);
-                return b && OperationData.OutputDate > CurrentFiscalYearFirstDate;
+                return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20)&&DateTime.Today>CurrentFiscalYearFirstDate.AddDays(-1);
             }
 
             bool IsExceptMonthUpdate()

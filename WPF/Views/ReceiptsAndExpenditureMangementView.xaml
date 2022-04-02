@@ -561,7 +561,7 @@
                             </CheckBox.Style>
                         </CheckBox>
                         <RadioButton Content="前日の日付で出力する" Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsPreviousDayOutput}" Visibility="{Binding IsChangePermitPeriod,Converter={StaticResource VisibilityConverter}}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,3"/>
-                        <RadioButton Grid.Row="1" Grid.Column="1" Content="前年度末日で出力する" IsChecked="{Binding IsPrecedingYearLastDayOutput}" Visibility="{Binding IsChangePermitPeriod,Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,3"/>
+                        <RadioButton Grid.Row="1" Grid.Column="1" Content="前年度末日で出力する" IsChecked="{Binding IsPrecedingYearLastDayOutput}" Visibility="{Binding IsChangePermitPeriod,Converter={StaticResource VisibilityConverter}}" IsEnabled="{Binding IsPreviousDayOutputEnabled}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,3"/>
                     </Grid>
                 </Grid>
                 <Button x:Name="PaymentSlipsOutputButton" Grid.Column="1" Content="{Binding PaymentSlipsOutputButtonContent}" IsEnabled="{Binding IsPaymentSlipsOutputEnabled}" Margin="30,5">

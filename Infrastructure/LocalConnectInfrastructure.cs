@@ -20,7 +20,7 @@ namespace Infrastructure
         public CreditDept CallCreditDept(string id)
         { return new CreditDept("credit_dept0", SHUNJUEN, true, true); }
 
-        public int CallPrecedingYearFinalAccount(DateTime monthEnd) { return 10000; }
+        public int CallPrecedingYearFinalAccount(DateTime monthEnd,bool isShunjuen) { return 10000; }
 
         public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept) { return 5000; }
 
@@ -705,5 +705,9 @@ namespace Infrastructure
         public int Registration(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure) => 1;
 
         public int Update(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure) => 1;
+
+        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate) => 0;
+
+        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept) => 0;
     }
 }
