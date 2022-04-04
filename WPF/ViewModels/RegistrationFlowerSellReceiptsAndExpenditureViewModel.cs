@@ -133,7 +133,7 @@ namespace WPF.ViewModels
             RegistrationButtonContent = "登録中";
             IsRegistrationEnabled = false;
             DatasRegistration();
-            IsRegistrationEnabled = true;
+            SetProperty();
             RegistrationButtonContent = "登録";
 
             bool  VerificationData()
@@ -214,20 +214,29 @@ namespace WPF.ViewModels
         {
             CemeteryFlower = GetContent(CEMETERYFLOWER).Text;
             CemeteryFlowerUnitPrice = AmountWithUnit(GetContent(CEMETERYFLOWER).FlatRate);
+            CemeteryFlowerCount = 0;
             HighFlower = GetContent(HIGHFLOWER).Text;
             HighFlowerUnitPrice = AmountWithUnit(GetContent(HIGHFLOWER).FlatRate);
+            HighFlowerCount = 0;
             SpecialFlower = GetContent(SPECIALFLOWER).Text;
             SpecialFlowerUnitPrice = AmountWithUnit(GetContent(SPECIALFLOWER).FlatRate);
+            SpecialFlowerCount = 0;
             Sakaki = GetContent(SAKAKI).Text;
             SakakiUnitPrice = AmountWithUnit(GetContent(SAKAKI).FlatRate);
+            SakakiCount = 0;
             Anisatum = GetContent(ANISATUM).Text;
             AnisatumUnitPrice = AmountWithUnit(GetContent(ANISATUM).FlatRate);
+            AnisatumCount = 0;
             BasketFlower = GetContent(BASKETFLOWER).Text;
             BasketFlowerUnitPrice = AmountWithUnit(GetContent(BASKETFLOWER).FlatRate);
+            BasketFlowerCount = 0;
             IncenseStick = GetContent(INCENSESTICK).Text;
             IncenseStickUnitPrice = AmountWithUnit(GetContent(INCENSESTICK).FlatRate);
+            IncenseStickCount = 0;
             Ticket = GetContent(TICKET).Text;
             TicketUnitPrice = AmountWithUnit(GetContent(TICKET).FlatRate);
+            TicketCount = 0;
+            AmountCalculation();
 
             Content GetContent(string text)
             {
@@ -245,7 +254,7 @@ namespace WPF.ViewModels
         private void AmountCalculation()
         {
             FlowerListTotalCount = 0;
-            FlowerListTotalAmount = string.Empty;
+            FlowerListTotalAmount = AmountWithUnit(0);
             FlowerDataList = new Dictionary<string, KeyValuePair<int, int>>();
             CemeteryFlowerTotalAmount = AmountWithUnit
                 (IntAmount(CemeteryFlowerUnitPrice) * CemeteryFlowerCount);
@@ -275,7 +284,7 @@ namespace WPF.ViewModels
             }
 
             OtherFlowerListCount = 0;
-            OtherFlowerListTotalAmount = string.Empty;
+            OtherFlowerListTotalAmount = AmountWithUnit(0);
             OtherFlowerDataList = new Dictionary<string, KeyValuePair<int, int>>();
             SakakiTotalAmount = AmountWithUnit(IntAmount(SakakiUnitPrice) * SakakiCount);
             OperationDataList(ref OtherFlowerDataList, Sakaki, SakakiCount, IntAmount(SakakiTotalAmount));

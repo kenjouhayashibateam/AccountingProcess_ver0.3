@@ -318,19 +318,13 @@ namespace WPF.ViewModels
 
             MessageBoxResult CallPreviousPerMonthFinalAccountRegisterInfo(string accountingDept)
             {
-                string amount = IsShunjuen ? AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(true)) :
-                    AmountWithUnit(DataBaseConnect.PreviousDayFinalAmount(creditDept));
+                string amount = AccountingProcessLocation.IsAccountingGenreShunjuen ?
+                    AmountWithUnit(DataBaseConnect.RetutnFiscalYearEndFinalAccountCalculation
+                    (CurrentFiscalYearFirstDate.AddDays(-1))) :
+                    AmountWithUnit(DataBaseConnect.RetutnFiscalYearEndFinalAccountCalculation
+                    (CurrentFiscalYearFirstDate.AddDays(-1), creditDept));
 
-                if (IntAmount(amount) == 0) 
-                {
-                    amount = AccountingProcessLocation.IsAccountingGenreShunjuen ?
-                        AmountWithUnit(DataBaseConnect.RetutnFiscalYearEndFinalAccountCalculation
-                        (CurrentFiscalYearFirstDate.AddDays(-1))) :
-                        AmountWithUnit(DataBaseConnect.RetutnFiscalYearEndFinalAccountCalculation
-                        (CurrentFiscalYearFirstDate.AddDays(-1), creditDept));
-                }
-
-                if(IntAmount(amount) == 0) { return MessageBoxResult.No; }
+                if (IntAmount(amount) == 0) { return MessageBoxResult.No; }
 
                 MessageBox = new MessageBoxInfo()
                 {
