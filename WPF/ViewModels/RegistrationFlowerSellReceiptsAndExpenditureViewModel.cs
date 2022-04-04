@@ -61,16 +61,16 @@ namespace WPF.ViewModels
         private string registrationButtonContent = "登録";
         private string flowerListTotalAmount;
         private string otherFlowerListTotalAmount;
+        private string cemeteryFlowerCount;
+        private string highFlowerCount;
+        private string specialFlowerCount;
+        private string sakakiCount;
+        private string anisatumCount;
+        private string incenseStickCount;
+        private string basketFlowerCount;
+        private string ticketCount;
         #endregion
-        #region ints
-        private int cemeteryFlowerCount;
-        private int highFlowerCount;
-        private int specialFlowerCount;
-        private int sakakiCount;
-        private int anisatumCount;
-        private int incenseStickCount;
-        private int basketFlowerCount;
-        private int ticketCount;
+        #region Ints
         private int flowerListTotalCount;
         private int otherFlowerListCount;
         #endregion
@@ -110,20 +110,29 @@ namespace WPF.ViewModels
             string dataContent = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}\t" +
                 $"{AccountingProcessLocation.Location}\r\n\r\n";
 
-            if (CemeteryFlowerCount > 0)
-            { AddString(CemeteryFlower, CemeteryFlowerCount, IntAmount(CemeteryFlowerTotalAmount)); }
-            if (HighFlowerCount > 0)
-            { AddString(HighFlower, HighFlowerCount, IntAmount(HighFlowerTotalAmount)); }
-            if (SpecialFlowerCount > 0)
-            { AddString(SpecialFlower, SpecialFlowerCount, IntAmount(SpecialFlowerTotalAmount)); }
-            if (TicketCount > 0) { AddString(Ticket, TicketCount, IntAmount(TicketTotalAmount)); }
-            if (BasketFlowerCount > 0)
-            { AddString(BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount)); }
-            if (IncenseStickCount > 0)
-            { AddString(IncenseStick, IncenseStickCount, IntAmount(IncenseStickTotalAmount)); }
-            if (SakakiCount > 0) { AddString(Sakaki, SakakiCount, IntAmount(SakakiTotalAmount)); }
-            if (AnisatumCount > 0)
-            { AddString(Anisatum, AnisatumCount, IntAmount(AnisatumTotalAmount)); }
+            int i = default;
+            i = IntAmount(CemeteryFlowerCount);
+            if (i > 0)
+            { AddString(CemeteryFlower, i, IntAmount(CemeteryFlowerTotalAmount)); }
+            i = IntAmount(HighFlowerCount);
+            if (i > 0)
+            { AddString(HighFlower, i, IntAmount(HighFlowerTotalAmount)); }
+            i = IntAmount(SpecialFlowerCount);
+            if (i > 0)
+            { AddString(SpecialFlower, i, IntAmount(SpecialFlowerTotalAmount)); }
+            i=IntAmount(TicketCount);
+            if (i > 0) { AddString(Ticket, i, IntAmount(TicketTotalAmount)); }
+            i = IntAmount(BasketFlowerCount);
+            if (i > 0)
+            { AddString(BasketFlower, i, IntAmount(BasketFlowerTotalAmount)); }
+            i = IntAmount(IncenseStickCount);
+            if (i > 0)
+            { AddString(IncenseStick, i, IntAmount(IncenseStickTotalAmount)); }
+            i = IntAmount(SakakiCount);
+            if (i > 0) { AddString(Sakaki, i, IntAmount(SakakiTotalAmount)); }
+            i = IntAmount(AnisatumCount);
+            if (i > 0)
+            { AddString(Anisatum, i, IntAmount(AnisatumTotalAmount)); }
 
             if (CallConfirmationDataOperation
                 ($"{dataContent}\r\n登録します。よろしいですか？", "花売り") ==
@@ -214,28 +223,28 @@ namespace WPF.ViewModels
         {
             CemeteryFlower = GetContent(CEMETERYFLOWER).Text;
             CemeteryFlowerUnitPrice = AmountWithUnit(GetContent(CEMETERYFLOWER).FlatRate);
-            CemeteryFlowerCount = 0;
+            CemeteryFlowerCount = "0";
             HighFlower = GetContent(HIGHFLOWER).Text;
             HighFlowerUnitPrice = AmountWithUnit(GetContent(HIGHFLOWER).FlatRate);
-            HighFlowerCount = 0;
+            HighFlowerCount = "0";
             SpecialFlower = GetContent(SPECIALFLOWER).Text;
             SpecialFlowerUnitPrice = AmountWithUnit(GetContent(SPECIALFLOWER).FlatRate);
-            SpecialFlowerCount = 0;
+            SpecialFlowerCount = "0";
             Sakaki = GetContent(SAKAKI).Text;
             SakakiUnitPrice = AmountWithUnit(GetContent(SAKAKI).FlatRate);
-            SakakiCount = 0;
+            SakakiCount = "0";
             Anisatum = GetContent(ANISATUM).Text;
             AnisatumUnitPrice = AmountWithUnit(GetContent(ANISATUM).FlatRate);
-            AnisatumCount = 0;
+            AnisatumCount = "0";
             BasketFlower = GetContent(BASKETFLOWER).Text;
             BasketFlowerUnitPrice = AmountWithUnit(GetContent(BASKETFLOWER).FlatRate);
-            BasketFlowerCount = 0;
+            BasketFlowerCount = "0";
             IncenseStick = GetContent(INCENSESTICK).Text;
             IncenseStickUnitPrice = AmountWithUnit(GetContent(INCENSESTICK).FlatRate);
-            IncenseStickCount = 0;
+            IncenseStickCount = "0";
             Ticket = GetContent(TICKET).Text;
             TicketUnitPrice = AmountWithUnit(GetContent(TICKET).FlatRate);
-            TicketCount = 0;
+            TicketCount = "0";
             AmountCalculation();
 
             Content GetContent(string text)
@@ -257,25 +266,29 @@ namespace WPF.ViewModels
             FlowerListTotalAmount = AmountWithUnit(0);
             FlowerDataList = new Dictionary<string, KeyValuePair<int, int>>();
             CemeteryFlowerTotalAmount = AmountWithUnit
-                (IntAmount(CemeteryFlowerUnitPrice) * CemeteryFlowerCount);
+                (IntAmount(CemeteryFlowerUnitPrice) * IntAmount(CemeteryFlowerCount));
             OperationDataList
-                (ref FlowerDataList, CemeteryFlower, CemeteryFlowerCount,
+                (ref FlowerDataList, CemeteryFlower, IntAmount(CemeteryFlowerCount),
                     IntAmount(CemeteryFlowerTotalAmount));
-            HighFlowerTotalAmount = AmountWithUnit(IntAmount(HighFlowerUnitPrice) * HighFlowerCount);
+            HighFlowerTotalAmount =
+                AmountWithUnit(IntAmount(HighFlowerUnitPrice) * IntAmount(HighFlowerCount));
             OperationDataList
-                (ref FlowerDataList, HighFlower, HighFlowerCount, IntAmount(HighFlowerTotalAmount));
+                (ref FlowerDataList, HighFlower, IntAmount(HighFlowerCount),
+                    IntAmount(HighFlowerTotalAmount));
             SpecialFlowerTotalAmount = AmountWithUnit
-                (IntAmount(SpecialFlowerUnitPrice) * SpecialFlowerCount);
+                (IntAmount(SpecialFlowerUnitPrice) * IntAmount(SpecialFlowerCount));
             OperationDataList
-               (ref FlowerDataList, SpecialFlower, SpecialFlowerCount, IntAmount(SpecialFlowerTotalAmount));
+               (ref FlowerDataList, SpecialFlower, IntAmount(SpecialFlowerCount),
+                    IntAmount(SpecialFlowerTotalAmount));
             BasketFlowerTotalAmount =
-                AmountWithUnit(IntAmount(BasketFlowerUnitPrice) * BasketFlowerCount);
+                AmountWithUnit(IntAmount(BasketFlowerUnitPrice) *  IntAmount(BasketFlowerCount));
             OperationDataList
-                (ref FlowerDataList, BasketFlower, BasketFlowerCount, IntAmount(BasketFlowerTotalAmount));
-            TicketTotalAmount = AmountWithUnit(IntAmount(TicketUnitPrice) * TicketCount);
+                (ref FlowerDataList, BasketFlower, IntAmount(BasketFlowerCount),
+                    IntAmount(BasketFlowerTotalAmount));
+            TicketTotalAmount = AmountWithUnit(IntAmount(TicketUnitPrice) *  IntAmount(TicketCount));
             TicketTotalAmountValue = AmountWithUnit(-(IntAmount(TicketTotalAmount)));
             OperationDataList
-                (ref FlowerDataList, Ticket, TicketCount, IntAmount(TicketTotalAmount));
+                (ref FlowerDataList, Ticket, IntAmount(TicketCount), IntAmount(TicketTotalAmount));
             foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in FlowerDataList)
             {
                 FlowerListTotalAmount =
@@ -286,11 +299,14 @@ namespace WPF.ViewModels
             OtherFlowerListCount = 0;
             OtherFlowerListTotalAmount = AmountWithUnit(0);
             OtherFlowerDataList = new Dictionary<string, KeyValuePair<int, int>>();
-            SakakiTotalAmount = AmountWithUnit(IntAmount(SakakiUnitPrice) * SakakiCount);
-            OperationDataList(ref OtherFlowerDataList, Sakaki, SakakiCount, IntAmount(SakakiTotalAmount));
-            AnisatumTotalAmount = AmountWithUnit(IntAmount(AnisatumUnitPrice) * AnisatumCount);
+            SakakiTotalAmount = AmountWithUnit(IntAmount(SakakiUnitPrice) *  IntAmount(SakakiCount));
             OperationDataList
-                (ref OtherFlowerDataList, Anisatum, AnisatumCount, IntAmount(AnisatumTotalAmount));
+                (ref OtherFlowerDataList, Sakaki, IntAmount(SakakiCount), IntAmount(SakakiTotalAmount));
+            AnisatumTotalAmount =
+                AmountWithUnit(IntAmount(AnisatumUnitPrice) *  IntAmount(AnisatumCount));
+            OperationDataList
+                (ref OtherFlowerDataList, Anisatum, IntAmount(AnisatumCount), 
+                    IntAmount(AnisatumTotalAmount));
             foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in OtherFlowerDataList)
             {
                 OtherFlowerListCount += pair.Value.Key;
@@ -299,9 +315,9 @@ namespace WPF.ViewModels
             }
 
             IncenseStickTotalAmount =
-                AmountWithUnit(IntAmount(IncenseStickUnitPrice) * IncenseStickCount);
+                AmountWithUnit(IntAmount(IncenseStickUnitPrice) * IntAmount(IncenseStickCount));
             OperationDataList
-                (ref IncenseStickDataList, IncenseStick, IncenseStickCount,
+                (ref IncenseStickDataList, IncenseStick, IntAmount(IncenseStickCount),
                     IntAmount(IncenseStickTotalAmount));
 
             SalesAmount = AmountWithUnit(IntAmount(CemeteryFlowerTotalAmount) +
@@ -492,12 +508,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 墓地花数量
         /// </summary>
-        public int CemeteryFlowerCount
+        public string CemeteryFlowerCount
         {
             get => cemeteryFlowerCount;
             set
             {
-                cemeteryFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                cemeteryFlowerCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -505,12 +521,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 上花数量
         /// </summary>
-        public int HighFlowerCount
+        public string HighFlowerCount
         {
             get => highFlowerCount;
             set
             {
-                highFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                highFlowerCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -518,12 +534,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 特花数量
         /// </summary>
-        public int SpecialFlowerCount
+        public string SpecialFlowerCount
         {
             get => specialFlowerCount;
             set
             {
-                specialFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                specialFlowerCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -531,12 +547,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 榊数量
         /// </summary>
-        public int SakakiCount
+        public string SakakiCount
         {
             get => sakakiCount;
             set
             {
-                sakakiCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                sakakiCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -544,12 +560,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 樒数量
         /// </summary>
-        public int AnisatumCount
+        public string AnisatumCount
         {
             get => anisatumCount;
             set
             {
-                anisatumCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                anisatumCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -557,12 +573,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 線香縦数量
         /// </summary>
-        public int IncenseStickCount
+        public string IncenseStickCount
         {
             get => incenseStickCount;
             set
             {
-                incenseStickCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                incenseStickCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -570,12 +586,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// チケット数量
         /// </summary>
-        public int TicketCount
+        public string TicketCount
         {
             get => ticketCount;
             set
             {
-                ticketCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                ticketCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }
@@ -590,9 +606,10 @@ namespace WPF.ViewModels
             {
                 totalAmount = value;
                 CallPropertyChanged();
-                IsRegistrationEnabled = CemeteryFlowerCount + HighFlowerCount + SpecialFlowerCount +
-                    BasketFlowerCount + SakakiCount + AnisatumCount + IncenseStickCount +
-                    TicketCount != 0;
+                IsRegistrationEnabled = IntAmount(CemeteryFlowerCount) + IntAmount(HighFlowerCount) +
+                    IntAmount(SpecialFlowerCount) + IntAmount(BasketFlowerCount) +
+                    IntAmount(SakakiCount) + IntAmount(AnisatumCount) + IntAmount(IncenseStickCount) +
+                    IntAmount(TicketCount) != 0;
             }
         }
         /// <summary>
@@ -610,12 +627,12 @@ namespace WPF.ViewModels
         /// <summary>
         /// 籠花数量
         /// </summary>
-        public int BasketFlowerCount
+        public string BasketFlowerCount
         {
             get => basketFlowerCount;
             set
             {
-                basketFlowerCount = int.TryParse(value.ToString(), out int _) ? value : 0;
+                basketFlowerCount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 AmountCalculation();
             }

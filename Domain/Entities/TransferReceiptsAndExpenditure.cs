@@ -37,9 +37,10 @@ namespace Domain.Entities
         /// <param name="accountActivityDate">振替日</param>
         /// <param name="outputDate">出力日</param>
         /// <param name="isRedicedTaxRate">軽減税率チェック</param>
-        public TransferReceiptsAndExpenditure(int id, DateTime registrationDate, Rep registrationRep, string location, CreditDept creditDept,
-                AccountingSubject debitAccount, AccountingSubject creditAccount, string contentText, string detail, int price, bool isValidity,
-                DateTime accountActivityDate, DateTime outputDate, bool isRedicedTaxRate)
+        public TransferReceiptsAndExpenditure(int id, DateTime registrationDate, Rep registrationRep,
+            string location, CreditDept creditDept, AccountingSubject debitAccount, 
+            AccountingSubject creditAccount, string contentText, string detail, int price, bool isValidity, 
+            DateTime accountActivityDate, DateTime outputDate, bool isRedicedTaxRate)
         {
             ID = id;
             RegistrationDate = registrationDate;

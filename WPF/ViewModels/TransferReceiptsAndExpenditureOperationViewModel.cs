@@ -92,7 +92,8 @@ namespace WPF.ViewModels
         {
             if (TransferReceiptsAndExpenditureOperation.GetInstance().GetData() == null) { return; }
 
-            TransferReceiptsAndExpenditure trae = TransferReceiptsAndExpenditureOperation.GetInstance().GetData();
+            TransferReceiptsAndExpenditure trae = 
+                TransferReceiptsAndExpenditureOperation.GetInstance().GetData();
             ID = trae.ID;
             IsValidity = trae.IsValidity;
             AccountActivityDate = trae.AccountActivityDate;
@@ -185,11 +186,13 @@ namespace WPF.ViewModels
             CanClosing = false;
             TransferReceiptsAndExpenditure trae = new TransferReceiptsAndExpenditure
                 (0, DateTime.Now, LoginRep.GetInstance().Rep, AccountingProcessLocation.Location.ToString(),
-                    SelectedCreditDept, DebitAccount, CreditAccount, SelectedContent.Text, DetailText, IntAmount(Price),
-                    IsValidity, AccountActivityDate, OutputDate, IsReducedTaxRate);
-            string debitBranchNumber = string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(DebitAccount)) ?
+                    SelectedCreditDept, DebitAccount, CreditAccount, SelectedContent.Text, DetailText, 
+                    IntAmount(Price), IsValidity, AccountActivityDate, OutputDate, IsReducedTaxRate);
+            string debitBranchNumber =
+                string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(DebitAccount)) ?
                 string.Empty : $"-{DataBaseConnect.GetBranchNumber(DebitAccount)}";
-            string creditBranchNumber = string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(CreditAccount)) ?
+            string creditBranchNumber =
+                string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(CreditAccount)) ?
                 string.Empty : $"-{DataBaseConnect.GetBranchNumber(CreditAccount)}";
 
             if (CallConfirmationDataOperation
@@ -234,7 +237,8 @@ namespace WPF.ViewModels
             if (TransferReceiptsAndExpenditureOperation.GetInstance().GetData() == null) { return; }
 
             string UpdateCotent = string.Empty;
-            TransferReceiptsAndExpenditure trae = TransferReceiptsAndExpenditureOperation.GetInstance().GetData();
+            TransferReceiptsAndExpenditure trae =
+                TransferReceiptsAndExpenditureOperation.GetInstance().GetData();
 
             if (trae.AccountActivityDate != AccountActivityDate)
             {
@@ -251,13 +255,15 @@ namespace WPF.ViewModels
 
             if (trae.DebitAccount.SubjectCode != DebitAccountCode)
             {
-                string updateBranchNumber = string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(DebitAccount)) ?
+                string updateBranchNumber =
+                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(DebitAccount)) ?
                     string.Empty : $"-{DataBaseConnect.GetBranchNumber(DebitAccount)}";
-                string originalBranchNumber = string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(trae.DebitAccount)) ?
+                string originalBranchNumber =
+                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(trae.DebitAccount)) ?
                     string.Empty : $"-{DataBaseConnect.GetBranchNumber(CreditAccount)}";
                 UpdateCotent +=
-                    $"借方勘定科目コード：{trae.DebitAccount.SubjectCode}{originalBranchNumber}{Space}→{Space}" +
-                    $"{DebitAccountCode}{updateBranchNumber}\r\n";
+                    $"借方勘定科目コード：{trae.DebitAccount.SubjectCode}{originalBranchNumber}" +
+                    $"{Space}→{Space}{DebitAccountCode}{updateBranchNumber}\r\n";
             }
 
             if (trae.DebitAccount.Subject != DebitAccount.Subject)
@@ -268,13 +274,15 @@ namespace WPF.ViewModels
 
             if (trae.CreditAccount.SubjectCode != CreditAccountCode)
             {
-                string originalBranchNumber = string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(trae.CreditAccount)) ?
+                string originalBranchNumber = 
+                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(trae.CreditAccount)) ?
                     string.Empty : $"-{DataBaseConnect.GetBranchNumber(DebitAccount)}";
-                string updateBranchNumber = string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(CreditAccount)) ?
+                string updateBranchNumber =
+                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(CreditAccount)) ?
                     string.Empty : $"-{DataBaseConnect.GetBranchNumber(CreditAccount)}";
                 UpdateCotent +=
-                    $"貸方勘定科目コード：{trae.CreditAccount.SubjectCode}{originalBranchNumber}{Space}→{Space}" +
-                    $"{CreditAccountCode}{updateBranchNumber}\r\n";
+                    $"貸方勘定科目コード：{trae.CreditAccount.SubjectCode}{originalBranchNumber}" +
+                    $"{Space}→{Space}{CreditAccountCode}{updateBranchNumber}\r\n";
             }
 
             if (trae.CreditAccount.Subject != CreditAccount.Subject)
@@ -329,9 +337,9 @@ namespace WPF.ViewModels
 
             TransferReceiptsAndExpenditure updateData = new TransferReceiptsAndExpenditure
                 (ID, RegistrationDate, OperationRep,
-                    TransferReceiptsAndExpenditureOperation.GetInstance().GetData().Location, SelectedCreditDept,
-                    DebitAccount,CreditAccount, SelectedContent.Text, DetailText, IntAmount(Price), IsValidity,
-                    AccountActivityDate, OutputDate, IsReducedTaxRate);
+                    TransferReceiptsAndExpenditureOperation.GetInstance().GetData().Location,
+                    SelectedCreditDept, DebitAccount,CreditAccount, SelectedContent.Text, DetailText, 
+                    IntAmount(Price), IsValidity, AccountActivityDate, OutputDate, IsReducedTaxRate);
 
             DataOperationButtonContent = "更新中";
             _ = await Task.Run(() => DataBaseConnect.Update(updateData));
@@ -627,10 +635,15 @@ namespace WPF.ViewModels
         {
             if (TransferReceiptsAndExpenditureOperation.GetInstance().GetData() == null)
             { OutputDate = DefaultDate; }
-            OutputDate = value
-                ? TransferReceiptsAndExpenditureOperation.GetInstance().GetData().OutputDate == DefaultDate ?
-                        DateTime.Today : TransferReceiptsAndExpenditureOperation.GetInstance().GetData().OutputDate
-                : DefaultDate;
+            OutputDate = value ?
+                ReturnDate() : DefaultDate;
+
+            static DateTime ReturnDate()
+            {
+                return TransferReceiptsAndExpenditureOperation.GetInstance().GetData().OutputDate ==
+                    DefaultDate ? DateTime.Today : 
+                    TransferReceiptsAndExpenditureOperation.GetInstance().GetData().OutputDate;
+            }
         }
         /// <summary>
         /// ID表示文字列
@@ -755,7 +768,8 @@ namespace WPF.ViewModels
             {
                 SetNullOrEmptyError(propertyName, value);
                 if (GetErrors(propertyName) == null)
-                { ErrorsListOperation(value.ToString().Length != 3, propertyName, "コードは3桁にしてください"); }
+                { ErrorsListOperation(value.ToString().Length != 3, propertyName, 
+                    "コードは3桁にしてください"); }
             }
 
             CanOperation = !HasErrors && SelectedCreditDept != null && AccountActivityDate != null &&
@@ -782,7 +796,8 @@ namespace WPF.ViewModels
             ZeroAddCommand = new DelegateCommand(() => ZeroAdd(), () => true);
         }
 
-        protected override void SetDetailLocked() { IsValidityEnabled = CurrentOperation == DataOperation.更新; }
+        protected override void SetDetailLocked() 
+        { IsValidityEnabled = CurrentOperation == DataOperation.更新; }
 
         protected override void SetWindowDefaultTitle() { DefaultWindowTitle = "振替データ管理"; }
 

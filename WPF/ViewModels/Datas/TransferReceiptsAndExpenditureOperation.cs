@@ -24,8 +24,8 @@ namespace WPF.ViewModels.Datas
 
         private static TransferReceiptsAndExpenditure operationData;
 
-        private static readonly TransferReceiptsAndExpenditureOperation _TransferReceiptsAndExpenditureOperation =
-            new TransferReceiptsAndExpenditureOperation();
+        private static readonly TransferReceiptsAndExpenditureOperation
+            _TransferReceiptsAndExpenditureOperation = new TransferReceiptsAndExpenditureOperation();
 
         public static TransferReceiptsAndExpenditureOperation GetInstance()
         { return _TransferReceiptsAndExpenditureOperation; }

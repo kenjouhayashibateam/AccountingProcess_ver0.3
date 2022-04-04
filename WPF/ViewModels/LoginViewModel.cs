@@ -172,7 +172,8 @@ namespace WPF.ViewModels
                         (string.IsNullOrEmpty((string)value), propertyName, Properties.Resources.NullErrorInfo);
                     if (string.IsNullOrEmpty((string)value)) { break; }
                     ErrorsListOperation
-                        (password != CurrentRep.Password, propertyName, Properties.Resources.PasswordErrorInfo);
+                        (password != CurrentRep.Password, propertyName,
+                            Properties.Resources.PasswordErrorInfo);
                     if (GetErrors(propertyName) != null)
                     {
                         ErrorsListOperation

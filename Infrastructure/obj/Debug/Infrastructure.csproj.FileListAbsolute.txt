@@ -81,3 +81,4 @@ C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\In
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.dll
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.pdb
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete

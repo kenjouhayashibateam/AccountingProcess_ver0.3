@@ -9,12 +9,13 @@ namespace WPF.ViewModels.Datas
     /// </summary>
     public abstract class JustRegistraterDataViewModel : BaseViewModel
     {
-        protected JustRegistraterDataViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
-        {}
+        protected JustRegistraterDataViewModel
+            (IDataBaseConnect dataBaseConnect) : base(dataBaseConnect) {}
         /// <summary>
         /// 登録完了メッセージを生成、呼び出します
         /// </summary>
-        protected void CallCompletedRegistration() { CallOkInfomationMessageBox("登録完了", "登録しました"); }
+        protected void CallCompletedRegistration() 
+        { CallOkInfomationMessageBox("登録完了", "登録しました"); }
         /// <summary>
         /// OKメッセージを生成します
         /// </summary>

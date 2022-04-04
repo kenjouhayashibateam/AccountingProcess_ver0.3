@@ -43,8 +43,8 @@ namespace Infrastructure.ExcelOutputData
         }
 
         internal SlipOutput
-            (ObservableCollection<ReceiptsAndExpenditure> outputDatas, SlipType slipType, bool isPreviousDay) :
-                base(outputDatas)
+            (ObservableCollection<ReceiptsAndExpenditure> outputDatas,
+                SlipType slipType, bool isPreviousDay) : base(outputDatas)
         {
             mySlipType = slipType;
             IsPayment = mySlipType == SlipType.Payment;

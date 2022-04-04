@@ -98,10 +98,14 @@ namespace Infrastructure.ExcelOutputData
 
                 void PageMove()
                 {
-                    if (IsSameData(rae, currentActivityDate, currentDept, currentSubject, currentContent, currentLocation, isTaxRate)) { return; }
+                    if (IsSameData
+                        (rae, currentActivityDate, currentDept, currentSubject, currentContent,
+                        currentLocation, isTaxRate))
+                    { return; }
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
-                    myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
+                    myWorksheet.Cell(StartRowPosition, 8).Value =
+                        CommaDelimitedAmount(pageWithdrawal);
                     pageBalance += payment - withdrawal;
                     myWorksheet.Cell(StartRowPosition, 9).Value =
                         CommaDelimitedAmount(pageBalance);
@@ -169,8 +173,10 @@ namespace Infrastructure.ExcelOutputData
                         ItemIndex = 1;
                         detailString = rae.Detail;
                         SetDetailValue();
-                        myWorksheet.Cell(StartRowPosition, 3).Value = rae.Content.AccountingSubject.SubjectCode;
-                        myWorksheet.Cell(StartRowPosition, 4).Value = rae.Content.AccountingSubject.Subject;
+                        myWorksheet.Cell(StartRowPosition, 3).Value =
+                            rae.Content.AccountingSubject.SubjectCode;
+                        myWorksheet.Cell(StartRowPosition, 4).Value = 
+                            rae.Content.AccountingSubject.Subject;
                         myWorksheet.Cell(StartRowPosition, 5).Value = ReturnProvisoContent(rae);
                         myWorksheet.Cell(StartRowPosition, 6).Value = detailString;
                         SetPrice(StartRowPosition);
@@ -247,14 +253,16 @@ namespace Infrastructure.ExcelOutputData
             SetStyleAndNextIndex();
             string s = LoginRep.GetInstance().Rep.Name ?? string.Empty;
             _ = myWorksheet.PageSetup.Footer.Center.AddText
-                ($"&09{CurrentDate.ToString($"ggy年", JapanCulture)}{CurrentDate.Month}{Space}月{Space}-" +
-                    $"{Space}&P{Space}", XLHFOccurrence.AllPages);
+                ($"&09{CurrentDate.ToString($"ggy年", JapanCulture)}" +
+                    $"{CurrentDate.Month}{Space}月{Space}-{Space}&P{Space}",
+                    XLHFOccurrence.AllPages);
             ExcelOpen();
 
             void SetTitle()
             {
                 SetMerge();
-                _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length).Style
+                _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length)
+                    .Style
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                     .Alignment.SetVertical(XLAlignmentVerticalValues.Bottom)
                     .Border.SetRightBorder(XLBorderStyleValues.None)
@@ -305,15 +313,24 @@ namespace Infrastructure.ExcelOutputData
                 .Border.SetBottomBorder(XLBorderStyleValues.Thin);
             _ = myWorksheet.Cell(StartRowPosition, 1).Style.Border
                 .SetRightBorder(XLBorderStyleValues.Dashed);
-            _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetLeftBorder(XLBorderStyleValues.Dashed);
-            _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 3).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 6).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 7).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 7).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 8).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 8).Style.Border.SetRightBorder(XLBorderStyleValues.Double);
-            _ = myWorksheet.Cell(StartRowPosition, 9).Style.Border.SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border
+                .SetLeftBorder(XLBorderStyleValues.Dashed);
+            _ = myWorksheet.Cell(StartRowPosition, 2).Style.Border
+                .SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 3).Style.Border
+                .SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 6).Style.Border
+                .SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 7).Style.Border
+                .SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 7).Style.Border
+                .SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 8).Style.Border
+                .SetLeftBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 8).Style.Border
+                .SetRightBorder(XLBorderStyleValues.Double);
+            _ = myWorksheet.Cell(StartRowPosition, 9).Style.Border
+                .SetLeftBorder(XLBorderStyleValues.Double);
         }
 
         protected override void SetCellsStyle()
@@ -348,7 +365,8 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            _ = MySheetCellRange(StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length - 2).Merge();
+            _ = MySheetCellRange
+                (StartRowPosition, 1, StartRowPosition, SetColumnSizes().Length - 2).Merge();
             _ = MySheetCellRange(StartRowPosition, SetColumnSizes().Length - 1,
                 StartRowPosition, SetColumnSizes().Length).Merge();
             _ = MySheetCellRange(StartRowPosition + 1, 1, StartRowPosition + 1, 2).Merge();

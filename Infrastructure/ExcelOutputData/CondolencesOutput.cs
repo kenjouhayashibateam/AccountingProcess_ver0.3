@@ -176,7 +176,8 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetMerge()
         {
-            _ = MySheetCellRange(StartRowIndex + 1, 1, StartRowIndex + 1, SetColumnSizes().Length).Merge();
+            _ = MySheetCellRange
+                (StartRowIndex + 1, 1, StartRowIndex + 1, SetColumnSizes().Length).Merge();
         }
 
         protected override double[] SetRowSizes()

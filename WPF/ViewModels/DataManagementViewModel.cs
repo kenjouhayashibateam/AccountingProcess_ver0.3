@@ -756,7 +756,8 @@ namespace WPF.ViewModels
                     }
                     break;
                 case DataOperation.更新:
-                    IsRepOperationButtonEnabled = CurrentRep.Password == GetHashValue(RepCurrentPassword, CurrentRep.ID);
+                    IsRepOperationButtonEnabled = CurrentRep.Password ==
+                        GetHashValue(RepCurrentPassword, CurrentRep.ID);
                     if (!IsRepOperationButtonEnabled)
                     {
                         IsRepOperationButtonEnabled = CurrentRep.Password == RepCurrentPassword;
@@ -1036,7 +1037,8 @@ namespace WPF.ViewModels
             set
             {
                 if (referenceAccountingSubjectCode == value) { return; }
-                referenceAccountingSubjectCode = int.TryParse(value, out int i) ? i.ToString("000") : string.Empty;
+                referenceAccountingSubjectCode = int.TryParse(value, out int i) ?
+                    i.ToString("000") : string.Empty;
                 CallPropertyChanged();
                 if (!string.IsNullOrEmpty(value)) { CreateAccountSubjects(); }
             }
@@ -1150,7 +1152,8 @@ namespace WPF.ViewModels
             {
                 _ = DataBaseConnect.Registration(accountingSubject);
                 ObservableCollection<AccountingSubject> accountingSubjects =
-                    DataBaseConnect.ReferenceAccountingSubject(AccountingSubjectCodeField, AccountingSubjectField, IsShunjuen, false);
+                    DataBaseConnect.ReferenceAccountingSubject
+                    (AccountingSubjectCodeField, AccountingSubjectField, IsShunjuen, false);
                 if (accountingSubjects.Count != 1)
                 {
                     MessageBox = new MessageBoxInfo()
@@ -1427,7 +1430,8 @@ namespace WPF.ViewModels
             IsCreditDeptOperationButtonEnabled = false;
             _ = await Task.Run(() => DataBaseConnect.Registration(CurrentCreditDept));
             CreditDepts = DataBaseConnect.ReferenceCreditDept
-                (string.Empty, IsCreditDeptValidityTrueOnly, AccountingProcessLocation.IsAccountingGenreShunjuen);
+                (string.Empty, IsCreditDeptValidityTrueOnly,
+                    AccountingProcessLocation.IsAccountingGenreShunjuen);
             CreditDeptFieldClear();
             CallCompletedRegistration();
             CreditDeptOperationButtonContent = "登録";

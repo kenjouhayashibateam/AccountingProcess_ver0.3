@@ -51,7 +51,8 @@ namespace Infrastructure.ExcelOutputData
             void SetBottomBorderOriginalAndCopy(int row1, int column1, int row2, int column2)
             {
                 SetBottomBorderThin(row1, column1, row2, column2);
-                SetBottomBorderThin(row1, CopyColumnPosition(column1), row2, CopyColumnPosition(column2));
+                SetBottomBorderThin
+                    (row1, CopyColumnPosition(column1), row2, CopyColumnPosition(column2));
             }
             void SetBottomBorderThin(int row1, int column1, int row2, int column2)
             {

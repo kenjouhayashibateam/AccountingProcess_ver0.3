@@ -41,7 +41,8 @@ namespace WPF.ViewModels
             OutputCommand = new DelegateCommand(() => Output(), () => true);
             IsDeptVisibility = !AccountingProcessLocation.IsAccountingGenreShunjuen;
             OutputButtonEnabled = !IsDeptVisibility || OutputCreditDept != null;
-            ShunjuenText = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : string.Empty;
+            ShunjuenText = AccountingProcessLocation.IsAccountingGenreShunjuen ?
+                "春秋苑会計" : string.Empty;
         }
         public CashJournalManagementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(),
@@ -57,8 +58,8 @@ namespace WPF.ViewModels
             DateTime searchDateStart = new DateTime(IntAmount(YearString), IntAmount(MonthString), 1);
             //今日が1日の場合のみ最終日をスタートを先月末日に設定する
             DateTime searchDateEnd =
-                searchDateStart == DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)) ? DateTime.Today :
-                                                searchDateStart.AddMonths(1).AddDays(-1);
+                searchDateStart == DateTime.Today.AddDays(-1 * (DateTime.Today.Day - 1)) ?
+                    DateTime.Today : searchDateStart.AddMonths(1).AddDays(-1);
             string dept = AccountingProcessLocation.IsAccountingGenreShunjuen ? string.Empty :
                 OutputCreditDept.Dept;
 
@@ -261,11 +262,13 @@ namespace WPF.ViewModels
                         SetNullOrEmptyError(propertyName, value);
                         int y = IntAmount(YearString);
                         int m = IntAmount((string)value);
-                        ErrorsListOperation(!Enumerable.Range(1, 12).Contains(m), propertyName, "月が無効です");
+                        ErrorsListOperation(!Enumerable.Range(1, 12).Contains(m), propertyName,
+                            "月が無効です");
                         if (GetErrors(propertyName) == null && GetErrors(nameof(YearString)) == null)
                         {
                             ErrorsListOperation
-                                   (new DateTime(y, m, 1) > DateTime.Now, propertyName, "未来の出納帳は出せません");
+                                   (new DateTime(y, m, 1) > DateTime.Now, propertyName,
+                                   "未来の出納帳は出せません");
                         }
                         break;
                     }

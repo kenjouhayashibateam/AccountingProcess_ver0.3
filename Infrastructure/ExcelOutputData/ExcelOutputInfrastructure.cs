@@ -26,13 +26,13 @@ namespace Infrastructure.ExcelOutputData
         }
 
         public void BalanceFinalAccount
-            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount, int rengeanPayment,
-                int rengeanWithdrawal, int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
-                int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal,
-                int shunjuanTranceferAmount, int shunjuanShunjuenTranceferAmount,
-                int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal,
-                int kougeTranceferAmount, int kougeShunjuenTranceferAmount, int yokohamaBankAmount,
-                int shunjuenAmount)
+            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount,
+                int rengeanPayment, int rengeanWithdrawal, int rengeanTranceferAmount, 
+                int rengeanShunjuenTranceferAmount, int shunjuanPreviousDayFinalAccount,
+                int shunjuanPayment, int shunjuanWithdrawal, int shunjuanTranceferAmount,
+                int shunjuanShunjuenTranceferAmount, int kougePreviousDayFinalAccount, 
+                int kougePayment, int kougeWithdrawal, int kougeTranceferAmount, 
+                int kougeShunjuenTranceferAmount, int yokohamaBankAmount, int shunjuenAmount)
         {
             WizeCoreBalanceFinalAccountOutput wcbfa =
                 new WizeCoreBalanceFinalAccountOutput
@@ -75,7 +75,8 @@ namespace Infrastructure.ExcelOutputData
             raeo.Output();
         }
 
-        public void TransferSlips(ObservableCollection<TransferReceiptsAndExpenditure> transferReceiptsAndExpenditures)
+        public void TransferSlips
+            (ObservableCollection<TransferReceiptsAndExpenditure> transferReceiptsAndExpenditures)
         {
             TransferSlipOutput tso = new TransferSlipOutput(transferReceiptsAndExpenditures);
             tso.Output();

@@ -264,7 +264,8 @@ namespace WPF.ViewModels.Datas
             else
             {
                 IsAdminPermisson = rep.IsAdminPermisson;
-                string s = AccountingProcessLocation.IsAccountingGenreShunjuen ? "春秋苑会計" : "ワイズコア会計";
+                string s = AccountingProcessLocation.IsAccountingGenreShunjuen ?
+                    "春秋苑会計" : "ワイズコア会計";
                 WindowTitle =
                     $"{DefaultWindowTitle}（ログイン{Space}:{Space}{rep.FirstName}）{s}";
                 if (!DataBaseConnect.IsConnectiongProductionServer())

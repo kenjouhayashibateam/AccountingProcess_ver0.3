@@ -47,7 +47,8 @@ namespace WPF.ViewModels.Datas
         private bool isNextPageEnabled = true;
         private bool sortDirectionIsASC = true;
         private Dictionary<int, string> sortColumns;
-        private readonly List<IPagenationObserver> pagenationObservers = new List<IPagenationObserver>();
+        private readonly List<IPagenationObserver> pagenationObservers =
+            new List<IPagenationObserver>();
 
         private Pagination()
         {

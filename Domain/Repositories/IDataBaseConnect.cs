@@ -220,10 +220,10 @@ namespace Domain.Repositories
             ReferenceReceiptsAndExpenditure
                 (DateTime registrationDateStart, DateTime registrationDateEnd, string location, string creditDept,
                     string content, string detail, string accountingSubject, string accountingSubjectCode,
-                    bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted,
-                    bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
-                    DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn,
-                    bool sortDirection, int countEachPage);
+                    bool isShunjuen, bool whichDepositAndWithdrawalOnly, bool isPayment,
+                    bool isContainOutputted, bool isValidityOnly, DateTime accountActivityDateStart, 
+                    DateTime accountActivityDateEnd, DateTime outputDateStart, DateTime outputDateEnd,
+                    int pageCount, string sortColumn, bool sortDirection, int countEachPage);
         /// <summary>
         /// 前日決算額を返します
         /// </summary>
@@ -452,10 +452,12 @@ namespace Domain.Repositories
         /// <param name="outputDateStart">印刷日検索開始日</param>
         /// <param name="outputDateEnd">印刷日検索最終日</param>
         /// <returns></returns>
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (bool isShunjuenDept,DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted,  DateTime outputDateStart, DateTime outputDateEnd);
+        public ObservableCollection<TransferReceiptsAndExpenditure>
+            ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept,DateTime accountActivityDateStart, 
+                DateTime accountActivityDateEnd, string location, string dept, string debitAccountCode,
+                string debitAccount, string creditAccountCode, string creditAccount, bool isValidityTrueOnly,
+                bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd);
         /// <summary>
         /// 振替データを検索します
         /// </summary>
@@ -474,11 +476,13 @@ namespace Domain.Repositories
         /// <param name="isOrderAsc">昇順降順</param>
         /// <param name="countEachPage">1ページ当たりの行数</param>
         /// <returns></returns>
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
-                int page, string column, bool isOrderAsc, int countEachPage);
+        public ObservableCollection<TransferReceiptsAndExpenditure>
+            ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
+                string location, string dept, string debitAccountCode, string debitAccount, 
+                string creditAccountCode, string creditAccount, bool isValidityTrueOnly, bool containOutputted,
+                DateTime outputDateStart, DateTime outputDateEnd, int page, string column, bool isOrderAsc,
+                int countEachPage);
         /// <summary>
         /// 振替データを登録します
         /// </summary>
@@ -503,6 +507,7 @@ namespace Domain.Repositories
         /// <param name="fiscalYearEndDate">年度末日</param>
         /// <param name="creditDept"></param>
         /// <returns></returns>
-        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept);
+        public int RetutnFiscalYearEndFinalAccountCalculation
+            (DateTime fiscalYearEndDate, CreditDept creditDept);
     }
 }

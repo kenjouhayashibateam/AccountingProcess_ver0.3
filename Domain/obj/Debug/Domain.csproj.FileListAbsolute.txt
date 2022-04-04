@@ -60,3 +60,4 @@ C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csp
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.dll
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.pdb
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
+C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache

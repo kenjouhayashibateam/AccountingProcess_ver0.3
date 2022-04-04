@@ -17,6 +17,7 @@ namespace WPF.ViewModels
     public class SearchReceiptsAndExpenditureViewModel : BaseViewModel, IPagenationObserver
     {
         #region Properties
+        #region Strings
         private string searchAccountingSubject = string.Empty;
         private string listTotalCountInfo;
         private string paymentTotalAmountWithUnit;
@@ -24,6 +25,7 @@ namespace WPF.ViewModels
         private string listTotalAmountWithUnit;
         private string searchContentText = string.Empty;
         private string searchDetail = string.Empty;
+        #endregion
         #region Bools
         private bool isAllData = true;
         private bool isPaymentOnly;
@@ -346,11 +348,11 @@ namespace WPF.ViewModels
 
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail, subject,
-                    string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllData, IsPaymentOnly,
-                    true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), DateTime.Today,
-                    Pagination.PageCount, Pagination.SelectedSortColumn, Pagination.SortDirectionIsASC,
-                    Pagination.CountEachPage);
+                (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail, 
+                    subject,　string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllData,
+                    IsPaymentOnly,　true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), 
+                    DateTime.Today,　Pagination.PageCount, Pagination.SelectedSortColumn,
+                    Pagination.SortDirectionIsASC,　Pagination.CountEachPage);
             Pagination.TotalRowCount = count;
             ListTotalCountInfo = $"{count}{Space}件";
             ReceiptsAndExpenditures = list;
@@ -362,8 +364,8 @@ namespace WPF.ViewModels
             foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                 (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail,
                     subject, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
-                    !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1),
-                    DateTime.Today))
+                    !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, 
+                    DefaultDate.AddDays(1), DateTime.Today))
             {
                 if (rae.IsPayment) { payment += rae.Price; }
                 else { withdrawal += rae.Price; }

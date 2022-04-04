@@ -102,13 +102,13 @@ namespace Infrastructure.ExcelOutputData
         /// <param name="yokohamaBankAmount">横浜銀行残高</param>
         /// <param name="shunjuenAmount">春秋苑仮払金</param>
         public WizeCoreBalanceFinalAccountOutput
-            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount, int rengeanPayment,
-                int rengeanWithdrawal, int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
-                int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal,
-                int shunjuanTranceferAmount, int shunjuanShunjuenTranceferAmount,
-                int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal,
-                int kougeTranceferAmount, int kougeShunjuenTranceferAmount, int yokohamaBankAmount,
-                int shunjuenAmount)
+            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount,
+                int rengeanPayment, int rengeanWithdrawal, int rengeanTranceferAmount,
+                int rengeanShunjuenTranceferAmount, int shunjuanPreviousDayFinalAccount,
+                int shunjuanPayment, int shunjuanWithdrawal, int shunjuanTranceferAmount,
+                int shunjuanShunjuenTranceferAmount, int kougePreviousDayFinalAccount,
+                int kougePayment, int kougeWithdrawal, int kougeTranceferAmount,
+                int kougeShunjuenTranceferAmount, int yokohamaBankAmount, int shunjuenAmount)
         {
             RengeanPreviousDayFinalAccount = rengeanPreviousDayFinalAccount;
             RengeanPayment = rengeanPayment;
@@ -241,7 +241,8 @@ namespace Infrastructure.ExcelOutputData
             int totalPay = RengeanPayment + ShunjuanPayment + KougePayment;
             int totalWith = RengeanWithdrawal + ShunjuanWithdrawal + KougeWithdrawal;
             int totalTra = RengeanTrancefer + ShunjuanTrancefer + KougeTrancefer;
-            int totalShun = RengeanShunjuenTrancefer + ShunjuanShunjuenTrancefer + KougeShunjuenTrancefer;
+            int totalShun =
+                RengeanShunjuenTrancefer + ShunjuanShunjuenTrancefer + KougeShunjuenTrancefer;
 
             if (IsContainDailyReportToNotOutputData)
             { SetContainDailyReportToNotOutputDataStyle(); }

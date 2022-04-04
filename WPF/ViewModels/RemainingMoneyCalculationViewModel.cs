@@ -817,7 +817,8 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.Location == Locations.管理事務所)
             { SetOtherMoneyTitleDefault(); }
         }
-        public RemainingMoneyCalculationViewModel() : this(DefaultInfrastructure.GetDefaultDataOutput()) { }
+        public RemainingMoneyCalculationViewModel() :
+            this(DefaultInfrastructure.GetDefaultDataOutput()) { }
         /// <summary>
         /// 各プロパティに値を入力します
         /// </summary>

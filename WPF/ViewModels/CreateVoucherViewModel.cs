@@ -24,7 +24,8 @@ namespace WPF.ViewModels
         private string voucherAddressee;
         private string voucherTotalAmountDisplayValue;
         private string outputButtonContent;
-        public string InputSVGFullPath { get => System.IO.Path.GetFullPath("./svgFiles/input_black_24dp.svg"); }
+        public string InputSVGFullPath
+        { get => System.IO.Path.GetFullPath("./svgFiles/input_black_24dp.svg"); }
         #endregion
         #region ObservableCollections
         private ObservableCollection<ReceiptsAndExpenditure> voucherContents =
@@ -161,8 +162,9 @@ namespace WPF.ViewModels
         public DelegateCommand VoucherOutputCommand { get; set; }
         private async void VoucherOutput()
         {
-            if (CallConfirmationDataOperation("データベースに登録し、出力します。よろしいですか？", "受納書") ==
-                System.Windows.MessageBoxResult.Cancel) { return; }
+            if (CallConfirmationDataOperation
+                ("データベースに登録し、出力します。よろしいですか？", "受納書") ==
+                    System.Windows.MessageBoxResult.Cancel) { return; }
 
             OutputButtonContent = "出力中";
             IsOutputButtonEnabled = false;

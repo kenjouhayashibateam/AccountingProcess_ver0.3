@@ -19,7 +19,8 @@ namespace Infrastructure.ExcelOutputData
         private readonly IDataBaseConnect DataBaseConnect =
             DefaultInfrastructure.GetDefaultDataBaseConnect();
 
-        internal TransferSlipOutput(ObservableCollection<TransferReceiptsAndExpenditure> outputList) : base(outputList)
+        internal TransferSlipOutput
+            (ObservableCollection<TransferReceiptsAndExpenditure> outputList) : base(outputList)
         {}
         private void SlipDataOutput()
         {
@@ -37,7 +38,8 @@ namespace Infrastructure.ExcelOutputData
                 int inputRow = 0;
                 int inputContentColumn = 0;
 
-            foreach (TransferReceiptsAndExpenditure trae in TransferReceiptsAndExpenditures.OrderByDescending
+            foreach 
+                (TransferReceiptsAndExpenditure trae in TransferReceiptsAndExpenditures.OrderByDescending
                 (r => r.CreditDept.Dept)
                 .ThenBy(r => r.AccountActivityDate)
                 .ThenBy(r => r.DebitAccount.ID)
@@ -154,6 +156,9 @@ namespace Infrastructure.ExcelOutputData
         }
 
         protected override void SetList(IEnumerable outputList)
-        { TransferReceiptsAndExpenditures = (ObservableCollection<TransferReceiptsAndExpenditure>)outputList; }
+        {
+            TransferReceiptsAndExpenditures = 
+                (ObservableCollection<TransferReceiptsAndExpenditure>)outputList; 
+        }
     }
 }

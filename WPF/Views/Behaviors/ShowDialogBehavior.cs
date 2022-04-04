@@ -18,9 +18,9 @@ namespace WPF.Views.Behaviors
         {
             DependencyPropertyChangedEventArgs e = (DependencyPropertyChangedEventArgs)parameter;
             ShowWindowData showForm = (ShowWindowData)e.NewValue;
-
+            //親画面を代入
             showForm.WindowData.Owner =
-                Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive); ;//親画面を代入
+                Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive); ;
             showForm.WindowData.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             _ = showForm.WindowData.ShowDialog();
         }

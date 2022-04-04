@@ -20,6 +20,7 @@ namespace WPF.Views.Behaviors
                     svg.Source = new Uri($"{ResourceFullPath}/{v.NewValue}");
                 }));
 
-        public static void SetSource(DependencyObject obj, string value) { obj.SetValue(SouceProperty, value); }
+        public static void SetSource(DependencyObject obj, string value) 
+        { obj.SetValue(SouceProperty, value); }
     }
 }

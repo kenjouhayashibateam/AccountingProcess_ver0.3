@@ -192,14 +192,17 @@ namespace WPF.ViewModels
             if (OperationData.Content.AccountingSubject.SubjectCode != ComboAccountingSubjectCode)
             {
                 string originalBranchNumber =
-                    string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)) ?
-                    string.Empty : $"-{DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)}";
+                    string.IsNullOrEmpty
+                    (DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)) ?
+                    string.Empty : 
+                    $"-{DataBaseConnect.GetBranchNumber(OperationData.Content.AccountingSubject)}";
                 string updateBranchNumber =
                     string.IsNullOrEmpty(DataBaseConnect.GetBranchNumber(SelectedAccountingSubject)) ?
                     string.Empty : $"-{DataBaseConnect.GetBranchNumber(SelectedAccountingSubject)}";
                 UpdateCotent +=
-                    $"勘定科目コード : {OperationData.Content.AccountingSubject.SubjectCode}{originalBranchNumber} → " +
-                    $"{ComboAccountingSubjectCode}{updateBranchNumber}\r\n";
+                    $"勘定科目コード : {OperationData.Content.AccountingSubject.SubjectCode}" +
+                    $"{originalBranchNumber}{Space}→{Space}{ComboAccountingSubjectCode}" +
+                    $"{updateBranchNumber}\r\n";
             }
 
             if (OperationData.Content.AccountingSubject.Subject != ComboAccountingSubjectText)
@@ -1216,7 +1219,8 @@ namespace WPF.ViewModels
             bool IsInCorrectionDeadline()
             {
                 if (SlipOutputDate == DefaultDate) { return true; }
-                return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20)&&DateTime.Today>CurrentFiscalYearFirstDate.AddDays(-1);
+                return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20) &&
+                    DateTime.Today > CurrentFiscalYearFirstDate.AddDays(-1);
             }
 
             bool IsExceptMonthUpdate()

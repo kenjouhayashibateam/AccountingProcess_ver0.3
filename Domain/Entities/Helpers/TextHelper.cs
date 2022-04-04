@@ -48,7 +48,8 @@ namespace Domain.Entities.Helpers
         public static int IntAmount(string amount)
         {
             if (string.IsNullOrEmpty(amount)) { return 0; }
-            string s = amount.Replace(Properties.Resources.Unit, string.Empty);//***,*** 円に対応する。円を削除
+            //***,*** 円に対応する。円を削除
+            string s = amount.Replace(Properties.Resources.Unit, string.Empty);
             s = s.Replace(",", string.Empty);
             return CommaDelimitedAmount(s) == string.Empty ? 0 : int.Parse(s);
         }

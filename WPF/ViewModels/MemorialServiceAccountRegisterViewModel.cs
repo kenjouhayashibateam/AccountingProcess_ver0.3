@@ -130,25 +130,31 @@ namespace WPF.ViewModels
         #endregion
         private DateTime accountActivityDate;
         private Dictionary<string,int> places = new Dictionary<string, int>() 
-        { { string.Empty, 0 }, { "礼拝堂", 50000 }, { "白蓮華堂", 50000 }, { "青蓮堂", 50000 }, { "特別参拝室", 10000 } };
+        { { string.Empty, 0 }, { "礼拝堂", 50000 }, { "白蓮華堂", 50000 }, { "青蓮堂", 50000 },
+            { "特別参拝室", 10000 } };
         private KeyValuePair<string, int> selectedPlace;
-        private List<string> variousChanges = new List<string>() { string.Empty, "名義変更", "再発行" };
+        private List<string> variousChanges = new List<string>() 
+        { string.Empty, "名義変更", "再発行" };
         private readonly int[] BoneEnshrinedAmounts = new int[2] { 3000, 30000 };
         private TransferReceiptsAndExpenditure rengeanMealSalesData;
         private TransferReceiptsAndExpenditure rengeanBeverageSalesData;
         #endregion
 
-        public MemorialServiceAccountRegisterViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
+        public MemorialServiceAccountRegisterViewModel(IDataBaseConnect dataBaseConnect) :
+            base(dataBaseConnect)
         {
             AccountActivityDate = DateTime.Now;
             SetReceiptsAndExpenditure();
             NoukotuAccountToggle = true;
-            BuddhistChantDonationContents = DataBaseConnect.ReferenceContent(string.Empty, "831", "懇志読経料", true, true);
-            StoneWorkPartContents = DataBaseConnect.ReferenceContent(string.Empty, "254", "石材工事部勘定", true, true);
+            BuddhistChantDonationContents = 
+                DataBaseConnect.ReferenceContent(string.Empty, "831", "懇志読経料", true, true);
+            StoneWorkPartContents = 
+                DataBaseConnect.ReferenceContent(string.Empty, "254", "石材工事部勘定", true, true);
             DataRegistrationCommand = new DelegateCommand(() => DataRegistration(), () => true);
             FieldClear();
         }
-        public MemorialServiceAccountRegisterViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        public MemorialServiceAccountRegisterViewModel() : 
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         private void FieldClear()
         {
             GuestsNumber = 0;
@@ -197,7 +203,8 @@ namespace WPF.ViewModels
         public DelegateCommand DataRegistrationCommand { get; }
         private async void DataRegistration()
         {
-            if (CallConfirmationDataOperation("一括登録しますか？", "一括登録") == System.Windows.MessageBoxResult.Cancel)
+            if (CallConfirmationDataOperation("一括登録しますか？", "一括登録") == 
+                System.Windows.MessageBoxResult.Cancel)
             { return; }
 
             IsCloseCancel = true;
@@ -234,7 +241,8 @@ namespace WPF.ViewModels
         /// <summary>
         /// 総計を設定します
         /// </summary>
-        private void SetTotalAmount() { TotalAmount = ShunjuenSubTotal + HoumuSubTotal + WizeCoreSubTotal; }
+        private void SetTotalAmount()
+        { TotalAmount = ShunjuenSubTotal + HoumuSubTotal + WizeCoreSubTotal; }
         /// <summary>
         /// ワイズコア小計を設定します
         /// </summary>
@@ -281,9 +289,11 @@ namespace WPF.ViewModels
 
             if (StoneWorkPartData == null)
             {
-                StoneWorkPartData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                    DataBaseConnect.ReferenceContent(string.Empty, "254", "石材工事部勘定", true, true)[0], CustomerName,
-                    IntAmount(StoneWorkPartAmount), true, true, AccountActivityDate, DefaultDate, false);
+                StoneWorkPartData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                    shunjuenDept, 
+                    DataBaseConnect.ReferenceContent(string.Empty, "254", "石材工事部勘定", true, true)[0], 
+                    CustomerName, IntAmount(StoneWorkPartAmount), true, true, AccountActivityDate, 
+                    DefaultDate, false);
             }
             else
             {
@@ -299,9 +309,11 @@ namespace WPF.ViewModels
 
                 if (AlmsgivingData == null)
                 {
-                    AlmsgivingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("御布施", "815", string.Empty, true, true)[0], CustomerName,
-                        IntAmount(AlmsgivingAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    AlmsgivingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        shunjuenDept, 
+                        DataBaseConnect.ReferenceContent("御布施", "815", string.Empty, true, true)[0],
+                        CustomerName, IntAmount(AlmsgivingAmount), true, true, AccountActivityDate,
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -314,8 +326,9 @@ namespace WPF.ViewModels
                 if (CarTipData == null)
                 {
                     CarTipData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("御車代", "832", string.Empty, true, true)[0], CustomerName,
-                        IntAmount(CarTipAmount), true, true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceContent("御車代", "832", string.Empty, true, true)[0], 
+                        CustomerName, IntAmount(CarTipAmount), true, true, AccountActivityDate, DefaultDate, 
+                        false);
                 }
                 else
                 {
@@ -327,9 +340,11 @@ namespace WPF.ViewModels
 
                 if (MealTipData == null)
                 {
-                    MealTipData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("御膳料", "832", string.Empty, true, true)[0], CustomerName,
-                        IntAmount(MealTipAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    MealTipData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("御膳料", "832", string.Empty, true, true)[0], 
+                        CustomerName, IntAmount(MealTipAmount), true, true, AccountActivityDate, 
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -341,9 +356,11 @@ namespace WPF.ViewModels
 
                 if (CarAndMealTipData == null)
                 {
-                    CarAndMealTipData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("御車代御膳料", "832", string.Empty, true, true)[0], CustomerName,
-                        IntAmount(CarAndMealTipAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    CarAndMealTipData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("御車代御膳料", "832", string.Empty, true, true)[0], 
+                        CustomerName, IntAmount(CarAndMealTipAmount), true, true, AccountActivityDate,
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -359,9 +376,11 @@ namespace WPF.ViewModels
 
                 if (BuddhistChantDonationData == null)
                 {
-                    BuddhistChantDonationData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent(string.Empty, "831", "懇志読経料", true, true)[0], CustomerName,
-                        IntAmount(BuddhistChantDonationAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    BuddhistChantDonationData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent(string.Empty, "831", "懇志読経料", true, true)[0],
+                        CustomerName, IntAmount(BuddhistChantDonationAmount), true, true, 
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -374,9 +393,10 @@ namespace WPF.ViewModels
 
                 if (NoukotuData == null)
                 {
-                    NoukotuData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("納骨", "811", string.Empty, true, true)[0], CustomerName,
-                        NoukotuAmount, true, true, AccountActivityDate, DefaultDate, false);
+                    NoukotuData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("納骨", "811", string.Empty, true, true)[0],
+                        CustomerName, NoukotuAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -388,9 +408,11 @@ namespace WPF.ViewModels
 
                 if (MemorialServiceDonationData == null)
                 {
-                    MemorialServiceDonationData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("法事冥加", "813", string.Empty, true, true)[0], string.Empty,
-                        MemorialServiceDonationAmount + ServiceFee, true, true, AccountActivityDate, DefaultDate, false);
+                    MemorialServiceDonationData = new ReceiptsAndExpenditure(0, DateTime.Today, rep,
+                        location, shunjuenDept,
+                        DataBaseConnect.ReferenceContent("法事冥加", "813", string.Empty, true, true)[0], 
+                        string.Empty, MemorialServiceDonationAmount + ServiceFee, true, true, 
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -402,9 +424,11 @@ namespace WPF.ViewModels
 
                 if (BurningIncenseTableData == null)
                 {
-                    BurningIncenseTableData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("焼香台", "812", string.Empty, true, true)[0], string.Empty,
-                        BurningIncenseTableAmount, true, true, AccountActivityDate, DefaultDate, false);
+                    BurningIncenseTableData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, 
+                        location, shunjuenDept, 
+                        DataBaseConnect.ReferenceContent("焼香台", "812", string.Empty, true, true)[0],
+                        string.Empty, BurningIncenseTableAmount, true, true, AccountActivityDate, 
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -416,9 +440,10 @@ namespace WPF.ViewModels
 
                 if (StupaStandData == null)
                 {
-                    StupaStandData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("簡易塔婆立", "812", string.Empty, true, true)[0], string.Empty,
-                        StupaStandAmount, true, true, AccountActivityDate, DefaultDate, false);
+                    StupaStandData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("簡易塔婆立", "812", string.Empty, true, true)[0], 
+                        string.Empty, StupaStandAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -431,8 +456,8 @@ namespace WPF.ViewModels
                 if (parasolData == null)
                 {
                     ParasolData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("パラソル", "812", string.Empty, true, true)[0], string.Empty,
-                        ParasolAmount, true, true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceContent("パラソル", "812", string.Empty, true, true)[0], 
+                        string.Empty, ParasolAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -442,17 +467,22 @@ namespace WPF.ViewModels
                 }
                 ShunjuenData.Add(ParasolData);
 
-                SelectedVariousChange = string.IsNullOrEmpty(SelectedVariousChange) ? string.Empty : SelectedVariousChange;
-                VariousChangeData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                    DataBaseConnect.ReferenceContent(SelectedVariousChange, "814", string.Empty, true, true)[0], CustomerName,
-                    IntAmount(VariousChangeAmount), true, true, AccountActivityDate, DefaultDate, false);
+                SelectedVariousChange = string.IsNullOrEmpty(SelectedVariousChange) ? 
+                    string.Empty : SelectedVariousChange;
+                VariousChangeData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                    shunjuenDept,
+                    DataBaseConnect.ReferenceContent
+                        (SelectedVariousChange, "814", string.Empty, true, true)[0],
+                    CustomerName, IntAmount(VariousChangeAmount), true, true, AccountActivityDate, 
+                    DefaultDate, false);
                 ShunjuenData.Add(VariousChangeData);
 
                 if (BoneEnshrinedData == null)
                 {
-                    BoneEnshrinedData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("ご遺骨預かり", "817", string.Empty, true, true)[0], string.Empty,
-                        BoneEnshrinedAmount, true, true, AccountActivityDate, DefaultDate, false);
+                    BoneEnshrinedData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("ご遺骨預かり", "817", string.Empty, true, true)[0], 
+                        string.Empty, BoneEnshrinedAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -465,8 +495,8 @@ namespace WPF.ViewModels
                 if (StupaData == null)
                 {
                     StupaData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("卒塔婆", "822", string.Empty, true, true)[0], string.Empty,
-                        StupaAmount, true, true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceContent("卒塔婆", "822", string.Empty, true, true)[0], 
+                        string.Empty, StupaAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -479,8 +509,9 @@ namespace WPF.ViewModels
                 if (BoneVaseData == null)
                 {
                     BoneVaseData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("骨壺", "822", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(BoneVaseAmount), true, true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceContent("骨壺", "822", string.Empty, true, true)[0], 
+                        string.Empty, IntAmount(BoneVaseAmount), true, true, AccountActivityDate, 
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -493,8 +524,9 @@ namespace WPF.ViewModels
                 if (OfferingData == null)
                 {
                     OfferingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("供物", "871", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(OfferingAmount), true, true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceContent("供物", "871", string.Empty, true, true)[0], 
+                        string.Empty, IntAmount(OfferingAmount), true, true, AccountActivityDate, DefaultDate,
+                        false);
                 }
                 else
                 {
@@ -506,9 +538,11 @@ namespace WPF.ViewModels
 
                 if (ReturnGiftData == null)
                 {
-                    ReturnGiftData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("返礼品", "871", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(ReturnGiftAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    ReturnGiftData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("返礼品", "871", string.Empty, true, true)[0], 
+                        string.Empty, IntAmount(ReturnGiftAmount), true, true, AccountActivityDate, 
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -521,8 +555,8 @@ namespace WPF.ViewModels
                 if (BlancData == null)
                 {
                     BlancData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("ブラン", "871", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(BlancAmount), true, true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceContent("ブラン", "871", string.Empty, true, true)[0], 
+                        string.Empty, IntAmount(BlancAmount), true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -534,9 +568,11 @@ namespace WPF.ViewModels
 
                 if (BoneWashingData == null)
                 {
-                    BoneWashingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("洗骨料", "852", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(BoneWashingAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    BoneWashingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("洗骨料", "852", string.Empty, true, true)[0], 
+                        string.Empty, IntAmount(BoneWashingAmount), true, true, AccountActivityDate, 
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -548,9 +584,11 @@ namespace WPF.ViewModels
 
                 if (BoneBagData == null)
                 {
-                    BoneBagData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("納骨袋", "852", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(BoneBagAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    BoneBagData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        shunjuenDept,
+                        DataBaseConnect.ReferenceContent("納骨袋", "852", string.Empty, true, true)[0], 
+                        string.Empty, IntAmount(BoneBagAmount), true, true, AccountActivityDate,
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -562,9 +600,11 @@ namespace WPF.ViewModels
 
                 if (TagPlateAddingSculptureData == null)
                 {
-                    TagPlateAddingSculptureData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
-                        DataBaseConnect.ReferenceContent("銘板追加彫刻", "882", string.Empty, true, true)[0], string.Empty,
-                        IntAmount(TagPlateAddingSculptureAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    TagPlateAddingSculptureData = new ReceiptsAndExpenditure(0, DateTime.Today, rep,
+                        location, shunjuenDept,
+                        DataBaseConnect.ReferenceContent("銘板追加彫刻", "882", string.Empty, true, true)[0],
+                        string.Empty, IntAmount(TagPlateAddingSculptureAmount), true, true, 
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -574,9 +614,11 @@ namespace WPF.ViewModels
                 }
                 ShunjuenData.Add(TagPlateAddingSculptureData);
 
-                GraveCleaningContents = DataBaseConnect.ReferenceContent(string.Empty, "821", "墓域清掃料", true, true);
+                GraveCleaningContents = DataBaseConnect.ReferenceContent
+                    (string.Empty, "821", "墓域清掃料", true, true);
                 SelectedGraveCleaningContent ??= GraveCleaningContents[0];
-                GraveCleaningData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, shunjuenDept,
+                GraveCleaningData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                    shunjuenDept,
                     SelectedGraveCleaningContent, CustomerName, IntAmount(GraveCleaningAmount), true, true,
                     AccountActivityDate, DefaultDate, false);
                 ShunjuenData.Add(GraveCleaningData);
@@ -589,11 +631,12 @@ namespace WPF.ViewModels
 
                 if (FloralTributeData == null)
                 {
-                    FloralTributeCotents = DataBaseConnect.ReferenceContent(string.Empty, "812", string.Empty, false, true);
+                    FloralTributeCotents = DataBaseConnect.ReferenceContent
+                        (string.Empty, "812", string.Empty, false, true);
                     SelectedFloralTributeContent ??= FloralTributeCotents[0];
-                    FloralTributeData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        SelectedFloralTributeContent, CustomerName, IntAmount(FloralTributeAmount), true, true,
-                        AccountActivityDate, DefaultDate, false);
+                    FloralTributeData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        wizeCoreDept, SelectedFloralTributeContent, CustomerName, 
+                        IntAmount(FloralTributeAmount), true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -606,9 +649,11 @@ namespace WPF.ViewModels
 
                 if (CemeteryFlowerData == null)
                 {
-                    CemeteryFlowerData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("墓地花", "811", string.Empty, false, true)[0], CustomerName,
-                        IntAmount(CemeteryFlowerAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    CemeteryFlowerData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        wizeCoreDept,
+                        DataBaseConnect.ReferenceContent("墓地花", "811", string.Empty, false, true)[0],
+                        CustomerName, IntAmount(CemeteryFlowerAmount), true, true, AccountActivityDate,
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -620,9 +665,11 @@ namespace WPF.ViewModels
 
                 if (IncenseStickData == null)
                 {
-                    IncenseStickData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("線香", "813", string.Empty, false, true)[0], CustomerName,
-                        IntAmount(IncenseStickAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    IncenseStickData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        wizeCoreDept,
+                        DataBaseConnect.ReferenceContent("線香", "813", string.Empty, false, true)[0], 
+                        CustomerName, IntAmount(IncenseStickAmount), true, true, AccountActivityDate,
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -634,9 +681,10 @@ namespace WPF.ViewModels
 
                 if (FlowerOfferingData == null)
                 {
-                    FlowerOfferingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("献花", "828", string.Empty, false, true)[0], CustomerName,
-                        FlowerOfferingAmount, true, true, AccountActivityDate, DefaultDate, false);
+                    FlowerOfferingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        wizeCoreDept,
+                        DataBaseConnect.ReferenceContent("献花", "828", string.Empty, false, true)[0],
+                        CustomerName, FlowerOfferingAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -650,9 +698,11 @@ namespace WPF.ViewModels
 
                 if (ShunjuanReturnGiftData == null)
                 {
-                    ShunjuanReturnGiftData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("法事饅頭", "820", string.Empty, false, true)[0], CustomerName,
-                        IntAmount(ShunjuanReturnGiftAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    ShunjuanReturnGiftData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location,
+                        wizeCoreDept,
+                        DataBaseConnect.ReferenceContent("法事饅頭", "820", string.Empty, false, true)[0], 
+                        CustomerName, IntAmount(ShunjuanReturnGiftAmount), true, true, 
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -664,9 +714,11 @@ namespace WPF.ViewModels
 
                 if (ShunjuanMealSalesData == null)
                 {
-                    ShunjuanMealSalesData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("売上", "815", "法事食事売上", false, true)[0], CustomerName,
-                        IntAmount(ShunjuanMealSalesAmount), true, true, AccountActivityDate, DefaultDate, false);
+                    ShunjuanMealSalesData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        wizeCoreDept,
+                        DataBaseConnect.ReferenceContent("売上", "815", "法事食事売上", false, true)[0], 
+                        CustomerName, IntAmount(ShunjuanMealSalesAmount), true, true, AccountActivityDate,
+                        DefaultDate, false);
                 }
                 else
                 {
@@ -680,14 +732,22 @@ namespace WPF.ViewModels
 
                 Content content;
 
-                if (IsSundry) { content = DataBaseConnect.ReferenceContent("法事売上", "000", string.Empty, false, true)[0]; }
-                else { content = DataBaseConnect.ReferenceContent("売上", "815", "法事食事売上", false, true)[0]; }
+                if (IsSundry) 
+                { 
+                    content = 
+                        DataBaseConnect.ReferenceContent("法事売上", "000", string.Empty, false, true)[0]; 
+                }
+                else 
+                { 
+                    content = 
+                        DataBaseConnect.ReferenceContent("売上", "815", "法事食事売上", false, true)[0]; 
+                }
 
                 if (RengeanSalesData == null)
                 {
-                    RengeanSalesData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
-                        content, CustomerName, IntAmount(RengeanSalesAmount), true, true, AccountActivityDate, DefaultDate,
-                        false);
+                    RengeanSalesData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
+                        wizeCoreDept, content, CustomerName, IntAmount(RengeanSalesAmount), true, true, 
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -701,10 +761,12 @@ namespace WPF.ViewModels
 
                 if (RengeanMealSalesData == null)
                 {
-                    RengeanMealSalesData = new TransferReceiptsAndExpenditure(0, DateTime.Today, rep, location, wizeCoreDept,
+                    RengeanMealSalesData = new TransferReceiptsAndExpenditure(0, DateTime.Today, rep,
+                        location, wizeCoreDept,
                         DataBaseConnect.ReferenceAccountingSubject("000", string.Empty, false, true)[0],
-                        DataBaseConnect.ReferenceAccountingSubject("815", "法事食事売上", false, true)[0], content.Text,
-                        CustomerName, IntAmount(RengeanMealSalesAmount), true, AccountActivityDate, DefaultDate, false);
+                        DataBaseConnect.ReferenceAccountingSubject("815", "法事食事売上", false, true)[0],
+                        content.Text, CustomerName, IntAmount(RengeanMealSalesAmount), true,
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -716,10 +778,12 @@ namespace WPF.ViewModels
 
                 if (RengeanBeverageSalesData == null)
                 {
-                    RengeanBeverageSalesData = new TransferReceiptsAndExpenditure(0, DateTime.Today, rep, location,
-                        wizeCoreDept, DataBaseConnect.ReferenceAccountingSubject("000", string.Empty, false, true)[0],
-                        DataBaseConnect.ReferenceAccountingSubject("815", "法事飲料売上", false, true)[0], content.Text,
-                        CustomerName, IntAmount(RengeanBeverageSalesAmount), true, AccountActivityDate, DefaultDate, false);
+                    RengeanBeverageSalesData = new TransferReceiptsAndExpenditure(0, DateTime.Today, rep,
+                        location, wizeCoreDept, 
+                        DataBaseConnect.ReferenceAccountingSubject("000", string.Empty, false, true)[0],
+                        DataBaseConnect.ReferenceAccountingSubject("815", "法事飲料売上", false, true)[0], 
+                        content.Text, CustomerName, IntAmount(RengeanBeverageSalesAmount), true, 
+                        AccountActivityDate, DefaultDate, false);
                 }
                 else
                 {
@@ -854,7 +918,8 @@ namespace WPF.ViewModels
             {
                 selectedPlace = value;
                 CallPropertyChanged();
-                MemorialServiceDonationAmount = value.Key == "青蓮堂" ? ReturnShorendoAmount() : value.Value;
+                MemorialServiceDonationAmount = value.Key == "青蓮堂" ? 
+                    ReturnShorendoAmount() : value.Value;
                 MemorialServiceDonationData.Price = MemorialServiceDonationAmount + ServiceFee;
 
                 int ReturnShorendoAmount()
@@ -1040,9 +1105,9 @@ namespace WPF.ViewModels
                 CreditDept creditDept = DataBaseConnect.ReferenceCreditDept("春秋苑", true, true)[0];
                 Content content = DataBaseConnect.ReferenceContent(value, "814", string.Empty, true, true)[0];
 
-                VariousChangeData = new ReceiptsAndExpenditure(0, DateTime.Today, LoginRep.GetInstance().Rep, 
-                    AccountingProcessLocation.Location.ToString(), creditDept, content, CustomerName, 0, true, true, 
-                    AccountActivityDate, DefaultDate, false);
+                VariousChangeData = new ReceiptsAndExpenditure(0, DateTime.Today, 
+                    LoginRep.GetInstance().Rep,  AccountingProcessLocation.Location.ToString(), creditDept,
+                    content, CustomerName, 0, true, true,  AccountActivityDate, DefaultDate, false);
             }
         }
         /// <summary>
@@ -1645,7 +1710,8 @@ namespace WPF.ViewModels
                 rengeanMealSalesAmount = CommaDelimitedAmount(value);
                 CallPropertyChanged();
                 SetWizeCoreSubTotal();
-                RengeanBeverageSalesAmount = (IntAmount(RengeanSalesAmount) - IntAmount(value)).ToString();
+                RengeanBeverageSalesAmount =
+                    (IntAmount(RengeanSalesAmount) - IntAmount(value)).ToString();
             }
         }
         /// <summary>
@@ -2005,7 +2071,8 @@ namespace WPF.ViewModels
                     if (b)
                     { 
                         ErrorsListOperation
-                            (string.IsNullOrEmpty(SelectedVariousChange), propertyName, "伝票内容を選択してください"); 
+                            (string.IsNullOrEmpty(SelectedVariousChange), propertyName,
+                                "伝票内容を選択してください"); 
                     }
                     else { ErrorsListOperation(false, propertyName, string.Empty); }
                     break;

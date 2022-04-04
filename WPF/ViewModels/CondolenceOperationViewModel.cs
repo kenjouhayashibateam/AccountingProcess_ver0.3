@@ -127,9 +127,10 @@ namespace WPF.ViewModels
         private void DeleteCondolence()
         {
             OperationCondolence = new Condolence
-                (ID, Location, OwnerName, SoryoName, ContentText, IntAmount(Almsgiving), IntAmount(CarTip),
-                    IntAmount(MealTip), IntAmount(CarAndMealTip), IntAmount(SocialGathering), Note,
-                    AccountActivityDate, CounterReceiver, MailRepresentative);
+                (ID, Location, OwnerName, SoryoName, ContentText, IntAmount(Almsgiving),
+                    IntAmount(CarTip), IntAmount(MealTip), IntAmount(CarAndMealTip), 
+                    IntAmount(SocialGathering), Note, AccountActivityDate, CounterReceiver, 
+                    MailRepresentative);
             if (DeleteConfirmation() == MessageBoxResult.No) { return; }
             _ = DataBaseConnect.Delete(OperationCondolence);
             MessageBox = new MessageBoxInfo()
@@ -326,7 +327,8 @@ namespace WPF.ViewModels
             if (condolence.Note != OperationCondolence.Note)
             {
                 updateContent +=
-                    $"備考{Space}:{Space}{condolence.Note}{Space}→{Space}{OperationCondolence.Note}\r\n";
+                    $"備考{Space}:{Space}{condolence.Note}{Space}→{Space}" +
+                    $"{OperationCondolence.Note}\r\n";
             }
 
             if (condolence.CounterReceiver != OperationCondolence.CounterReceiver)

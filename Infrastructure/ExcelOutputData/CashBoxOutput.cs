@@ -50,10 +50,14 @@ namespace Infrastructure.ExcelOutputData
             _ = MySheetCellRange(3, 1, 3, 3).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            _ = MySheetCellRange(4, 1, 12, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            _ = MySheetCellRange(4, 1, 12, 3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            _ = MySheetCellRange(4, 2, 12, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            _ = MySheetCellRange(4, 3, 12, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(4, 1, 12, 1).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(4, 1, 12, 3).Style.Alignment.Vertical =
+                XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(4, 2, 12, 2).Style.Alignment.Horizontal = 
+                XLAlignmentHorizontalValues.Center;
+            _ = MySheetCellRange(4, 3, 12, 3).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Right;
             _ = MySheetCellRange(6, 4, 6, 6).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
@@ -62,19 +66,27 @@ namespace Infrastructure.ExcelOutputData
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
             _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Horizontal =
                 XLAlignmentHorizontalValues.Center;
-            _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-            _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(7, 5, 12, 12).Style.Alignment.Vertical =
+                XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Horizontal = 
+                XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(7, 6, 12, 6).Style.Alignment.Vertical = 
+                XLAlignmentVerticalValues.Center;
             _ = myWorksheet.Cell(14, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-            _ = MySheetCellRange(15, 1, 19, 7).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            _ = MySheetCellRange(15, 1, 19, 7).Style.Alignment.Vertical =
+                XLAlignmentVerticalValues.Center;
             _ = MySheetCellRange(15, 1, 15, 7).Style.Alignment.Horizontal =
                 XLAlignmentHorizontalValues.Center;
-            _ = MySheetCellRange(16, 1, 19, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-            _ = MySheetCellRange(16, 2, 19, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            _ = MySheetCellRange(16, 4, 19, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
-            _ = MySheetCellRange(16, 5, 19, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(16, 1, 19, 1).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Left;
+            _ = MySheetCellRange(16, 2, 19, 2).Style.Alignment.Horizontal =
+                XLAlignmentHorizontalValues.Right;
+            _ = MySheetCellRange(16, 4, 19, 4).Style.Alignment.Horizontal = 
+                XLAlignmentHorizontalValues.Left;
+            _ = MySheetCellRange(16, 5, 19, 5).Style.Alignment.Horizontal = 
+                XLAlignmentHorizontalValues.Right;
             _ = myWorksheet.Cell(21, 1).Style
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center);

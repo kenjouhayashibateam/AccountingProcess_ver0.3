@@ -116,6 +116,7 @@ namespace WPF.ViewModels.Datas
         /// 法事計算書登録画面を呼び出します
         /// </summary>
         /// <returns></returns>
-        public static Window MemorialServiceAccountRegister() { return new MemorialServiceAccountRegisterView(); }
+        public static Window MemorialServiceAccountRegister() 
+        { return new MemorialServiceAccountRegisterView(); }
     }
 }

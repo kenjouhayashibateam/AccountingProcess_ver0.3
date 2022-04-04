@@ -39,7 +39,6 @@ namespace Infrastructure.ExcelOutputData
         protected readonly string openPath =
             System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) +
                 Properties.Resources.SaveFile;
-            //System.IO.Path.GetFullPath(Properties.Resources.SaveFolderPath + Properties.Resources.SaveFile);
         /// <summary>
         /// コンストラクタ　ログ保存のインフラストラクチャを設定します
         /// </summary>

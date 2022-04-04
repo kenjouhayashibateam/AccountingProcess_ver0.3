@@ -154,6 +154,7 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="0" BorderBrush="Silver" BorderThickness="0,0,0.6,0"/>
                     <Border Grid.Column="2" BorderBrush="Silver" BorderThickness="0,0,0.6,0"/>
@@ -201,11 +202,13 @@
                     </StackPanel>
                     <ComboBox Grid.Column="9" Name="SortColumnComboBox" ItemsSource="{Binding Pagination.SortColumns}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalContentAlignment="Center" Margin="5,2"/>
                     <ToggleButton Content="{Binding Pagination.SortDirectionContent}" Grid.Column="10" Padding="3,0" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="3,2,5,2"/>
+                    <CheckBox Grid.Column="11" Content="選択して印字する" IsChecked="{Binding IsOutputDataSelect}" VerticalAlignment="Center" />
                 </Grid>
             </GroupBox.Header>
-            <DataGrid ItemsSource="{Binding TransferReceiptsAndExpenditures}" SelectedItem="{Binding SelectedListItem}" AutoGenerateColumns="False" Margin="0,3,0,0">
+            <DataGrid ItemsSource="{Binding TransferReceiptsAndExpenditures}" SelectedValue="{Binding SelectedListItem}" AutoGenerateColumns="False" Margin="0,3,0,0">
                 <DataGrid.Columns>
-                    <!--<DataGridTemplateColumn Width="1*" Header="印刷">
+                    <!--<DataGridCheckBoxColumn Width="1*" Header="印刷" Binding="{Binding IsOutput}"/>-->
+                    <DataGridTemplateColumn Width="1*" Header="印刷">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -213,10 +216,10 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsOutput,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                <CheckBox IsChecked="{Binding IsOutput,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DataContext.IsOutputDataSelect,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>-->
-                    <!--</DataGridTemplateColumn>-->
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="1*" Header="有効">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">

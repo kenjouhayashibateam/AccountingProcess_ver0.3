@@ -148,7 +148,8 @@ namespace Infrastructure
             Parameters = new Dictionary<string, object>()
             {
                 {"@subject_code", accountingSubject.SubjectCode},{"@subject", accountingSubject.Subject },
-                { "@is_shunjuen",accountingSubject.IsShunjuen},{ "@validity", accountingSubject.IsValidity},{"@staff_id", LoginRep.Rep.ID}
+                { "@is_shunjuen",accountingSubject.IsShunjuen},{ "@validity", accountingSubject.IsValidity},
+                {"@staff_id", LoginRep.Rep.ID}
             };
 
             return ReturnGeneretedParameterCommand
@@ -414,7 +415,6 @@ namespace Infrastructure
                         (bool)dataReader["is_permission"]);
                 }
             }
-
             return rep;
         }
 
@@ -428,11 +428,11 @@ namespace Infrastructure
             {
                 while (dataReader.Read())
                 {
-                    creditDept = new CreditDept((string)dataReader["credit_dept_id"], (string)dataReader["dept"],
-                        (bool)dataReader["is_validity"], (bool)dataReader["is_shunjuen_dept"]);
+                    creditDept = new CreditDept((string)dataReader["credit_dept_id"], 
+                        (string)dataReader["dept"], (bool)dataReader["is_validity"],
+                        (bool)dataReader["is_shunjuen_dept"]);
                 }
             }
-
             return creditDept;
         }
 
@@ -457,7 +457,6 @@ namespace Infrastructure
                         );
                 }
             }
-
             return content;
         }
 
@@ -567,12 +566,14 @@ namespace Infrastructure
         }
 
         public (int TotalRows, ObservableCollection<ReceiptsAndExpenditure> List)
-            ReferenceReceiptsAndExpenditure(DateTime registrationDateStart,
+            ReferenceReceiptsAndExpenditure
+            (DateTime registrationDateStart,
                 DateTime registrationDateEnd, string location, string creditDept, string content, string detail,
                 string accountingSubject, string accountingSubjectCode, bool isShunjuen,
-                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, bool isValidityOnly,
-                DateTime accountActivityDateStart, DateTime accountActivityDateEnd, DateTime outputDateStart,
-                DateTime outputDateEnd, int pageCount, string sortColumn, bool sortDirection, int countEachPage)
+                bool whichDepositAndWithdrawalOnly, bool isPayment, bool isContainOutputted, 
+                bool isValidityOnly, DateTime accountActivityDateStart, DateTime accountActivityDateEnd,
+                DateTime outputDateStart, DateTime outputDateEnd, int pageCount, string sortColumn, 
+                bool sortDirection, int countEachPage)
         {
             ObservableCollection<ReceiptsAndExpenditure> list =
                 new ObservableCollection<ReceiptsAndExpenditure>();
@@ -828,8 +829,8 @@ namespace Infrastructure
                           ((int)dataReader["voucher_id"], (string)dataReader["addressee"],
                               new ObservableCollection<ReceiptsAndExpenditure>(),
                               (DateTime)dataReader["output_date"],
-                              new Rep((string)dataReader["staff_id"], (string)dataReader["name"], string.Empty, true,
-                                false),
+                              new Rep((string)dataReader["staff_id"], (string)dataReader["name"], string.Empty,
+                                true, false),
                               (bool)dataReader["is_validity"]);
                 }
             }
@@ -911,10 +912,11 @@ namespace Infrastructure
                     paramContent = new Content((string)dataReader["content_id"], paramAccountingSubject,
                         (int)dataReader["flat_rate"], (string)dataReader["content"], true);
                     list.Add(new ReceiptsAndExpenditure
-                        ((int)dataReader["receipts_and_expenditure_id"], (DateTime)dataReader["registration_date"],
-                            paramRep, (string)dataReader["location"], paramCreditDept, paramContent,
-                            (string)dataReader["detail"], (int)dataReader["price"], (bool)dataReader["is_payment"],
-                            (bool)dataReader["is_validity"], (DateTime)dataReader["account_activity_date"],
+                        ((int)dataReader["receipts_and_expenditure_id"],
+                            (DateTime)dataReader["registration_date"], paramRep, (string)dataReader["location"],
+                            paramCreditDept, paramContent, (string)dataReader["detail"], (int)dataReader["price"], 
+                            (bool)dataReader["is_payment"], (bool)dataReader["is_validity"], 
+                            (DateTime)dataReader["account_activity_date"],
                             (DateTime)dataReader["output_date"], (bool)dataReader["is_reduced_tax_rate"]));
                 }
             }
@@ -1035,7 +1037,9 @@ namespace Infrastructure
             string iD = creditDept == null ? string.Empty : creditDept.ID;
             string dept = creditDept == null ? string.Empty : creditDept.Dept;
             SqlCommand cmd =
-             new SqlCommand($"select dbo.call_previous_month_final_account(@date,@is_shunjuen,@credit_dept_id,@credit_dept)", Cn);
+             new SqlCommand
+             ($"select dbo.call_previous_month_final_account" +
+                $"(@date,@is_shunjuen,@credit_dept_id,@credit_dept)", Cn);
 
             _ = cmd.Parameters.AddWithValue("@date", date);
             _ = cmd.Parameters.AddWithValue("@is_shunjuen", isShunjuen);
@@ -1062,23 +1066,31 @@ namespace Infrastructure
 
         public int UpdatePrecedingYearFinalAccount(CreditDept creditDept)
         {
-            int amount = CallFinalMonthFinalAccount(new DateTime(DateTime.Today.Year, 4, 1), false, creditDept);
+            int amount = CallFinalMonthFinalAccount
+                (new DateTime(DateTime.Today.Year, 4, 1), false, creditDept);
             Parameters = new Dictionary<string, object>()
-            { {"@reference_date",DateTime.Today},{"@credit_dept_id",creditDept.ID},{"@amount",amount }};
+            { 
+                {"@reference_date",DateTime.Today},{"@credit_dept_id",creditDept.ID},
+                {"@amount",amount }
+            };
 
             return ReturnGeneretedParameterCommand
                 ("update_wize_core_preceding_year_final_account").ExecuteNonQuery();
         }
 
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
+        public ObservableCollection<TransferReceiptsAndExpenditure>
+            ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, 
+                string location, string dept, string debitAccountCode, string debitAccount, 
+                string creditAccountCode, string creditAccount, bool isValidityTrueOnly, bool containOutputted, 
+                DateTime outputDateStart,  DateTime outputDateEnd)
         {
-            ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
+            ObservableCollection<TransferReceiptsAndExpenditure> list =
+                new ObservableCollection<TransferReceiptsAndExpenditure>();
             SetReferenceTransferReceiptsAndExpenditureParameters
-                (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode, debitAccount,
-                    creditAccountCode, creditAccount, isValidityTrueOnly, containOutputted, outputDateStart, outputDateEnd);
+                (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept,
+                    debitAccountCode, debitAccount, creditAccountCode, creditAccount, isValidityTrueOnly,
+                    containOutputted, outputDateStart, outputDateEnd);
 
                 Rep rep;
             CreditDept creditDept;
@@ -1086,46 +1098,55 @@ namespace Infrastructure
             AccountingSubject creditAccountingSubject;
 
             using (SqlDataReader reader =
-                ReturnGeneretedParameterCommand("reference_transfer_receipts_and_expenditure_all_data").ExecuteReader())
+                ReturnGeneretedParameterCommand
+                ("reference_transfer_receipts_and_expenditure_all_data").ExecuteReader())
             {
                 while (reader.Read())
                 {
                     rep = new Rep
-                        ((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
+                        ((string)reader["registration_staff_id"], (string)reader["name"], 
+                            (string)reader["password"], true, false);
                     creditDept = new CreditDept
-                        ((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
+                        ((string)reader["credit_dept_id"], (string)reader["dept"], true, 
+                        (bool)reader["is_shunjuen_dept"]);
                     debitAccountingSubject = new AccountingSubject
-                        ((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
+                        ((string)reader["debit_accounts_id"], (string)reader["debit_code"], 
+                            (string)reader["debit"], true, true);
                     creditAccountingSubject = new AccountingSubject
-                        ((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
+                        ((string)reader["credit_accounts_id"], (string)reader["credit_code"], 
+                            (string)reader["credit"], true, true);
 
                     list.Add(new TransferReceiptsAndExpenditure
-                        ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
-                            (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
-                            (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
-                            (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
+                        ((int)reader["transfer_receipts_and_expenditure_id"],
+                            (DateTime)reader["registration_date"],  rep, (string)reader["location"], creditDept, 
+                            debitAccountingSubject, creditAccountingSubject, (string)reader["content_text"], 
+                            (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"], 
+                            (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"], 
                             (bool)reader["is_reduced_tax_rate"]));
                 }
             }
-
             return list;
         }
-
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
-                int page, string column, bool isOrderAsc, int countEachPage)
+       
+        public ObservableCollection<TransferReceiptsAndExpenditure>
+            ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, 
+                string location, string dept, string debitAccountCode, string debitAccount, 
+                string creditAccountCode, string creditAccount, bool isValidityTrueOnly,
+                bool containOutputted,  DateTime outputDateStart,  DateTime outputDateEnd, int page, 
+                string column,  bool isOrderAsc, int countEachPage)
         {
-            SetReferenceTransferReceiptsAndExpenditureParameters(isShunjuenDept, accountActivityDateStart,
-                accountActivityDateEnd, location, dept, debitAccountCode, debitAccount, creditAccountCode, creditAccount,
-                isValidityTrueOnly, containOutputted, outputDateStart, outputDateEnd);
+            SetReferenceTransferReceiptsAndExpenditureParameters(isShunjuenDept, 
+                accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode,
+                debitAccount, creditAccountCode, 
+                creditAccount, isValidityTrueOnly, containOutputted, outputDateStart, outputDateEnd);
             Parameters.Add("page", page);
             Parameters.Add("column", column);
             Parameters.Add("is_order_asc", isOrderAsc);
             Parameters.Add("count_each_page", countEachPage);
 
-            ObservableCollection<TransferReceiptsAndExpenditure> list = new ObservableCollection<TransferReceiptsAndExpenditure>();
+            ObservableCollection<TransferReceiptsAndExpenditure> list =
+                new ObservableCollection<TransferReceiptsAndExpenditure>();
 
             Rep rep;
             CreditDept creditDept;
@@ -1138,19 +1159,25 @@ namespace Infrastructure
                 while (reader.Read())
                 {
                     rep = new Rep
-                        ((string)reader["registration_staff_id"], (string)reader["name"], (string)reader["password"], true, false);
+                        ((string)reader["registration_staff_id"], (string)reader["name"], 
+                            (string)reader["password"], true, false);
                     creditDept = new CreditDept
-                        ((string)reader["credit_dept_id"], (string)reader["dept"], true, (bool)reader["is_shunjuen_dept"]);
+                        ((string)reader["credit_dept_id"], (string)reader["dept"], true, 
+                        (bool)reader["is_shunjuen_dept"]);
                     debitAccountingSubject = new AccountingSubject
-                        ((string)reader["debit_accounts_id"], (string)reader["debit_code"], (string)reader["debit"], true, true);
+                        ((string)reader["debit_accounts_id"], (string)reader["debit_code"], 
+                            (string)reader["debit"], true, true);
                     creditAccountingSubject = new AccountingSubject
-                        ((string)reader["credit_accounts_id"], (string)reader["credit_code"], (string)reader["credit"], true, true);
+                        ((string)reader["credit_accounts_id"], (string)reader["credit_code"], 
+                            (string)reader["credit"], true, true);
 
                     list.Add(new TransferReceiptsAndExpenditure
-                        ((int)reader["transfer_receipts_and_expenditure_id"], (DateTime)reader["registration_date"], rep,
-                            (string)reader["location"], creditDept, debitAccountingSubject, creditAccountingSubject,
-                            (string)reader["content_text"], (string)reader["detail"], (int)reader["price"], (bool)reader["is_validity"],
-                            (DateTime)reader["account_activity_date"], (DateTime)reader["output_date"],
+                        ((int)reader["transfer_receipts_and_expenditure_id"], 
+                            (DateTime)reader["registration_date"], rep, (string)reader["location"], 
+                            creditDept, debitAccountingSubject,  creditAccountingSubject, 
+                            (string)reader["content_text"], (string)reader["detail"],  (int)reader["price"],  
+                            (bool)reader["is_validity"], 
+                            (DateTime)reader["account_activity_date"],  (DateTime)reader["output_date"],
                             (bool)reader["is_reduced_tax_rate"]));
                 }
             }
@@ -1159,33 +1186,40 @@ namespace Infrastructure
         }
 
         private void SetReferenceTransferReceiptsAndExpenditureParameters
-            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, 
+                string location, string dept, string debitAccountCode, string debitAccount,
+                string creditAccountCode,
+                string creditAccount, bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, 
+                DateTime outputDateEnd)
 
         {
             Parameters = new Dictionary<string, object>()
             {
-                {"@is_shunjuen_dept",isShunjuenDept },{"@account_activity_start_date",accountActivityDateStart},
-                {"@account_activity_end_date",accountActivityDateEnd},{ "@location",location},{ "@dept",dept},
-                { "@debit_account_code",debitAccountCode},{ "@debit_account",debitAccount},
-                { "@credit_account_code",creditAccountCode},{ "@credit_account",creditAccount},
-                { "@is_validity_true_only",isValidityTrueOnly},{ "@contain_outputted",containOutputted},
-                { "@output_start_date",outputDateStart},{ "@output_end_date",outputDateEnd}
+                {"@is_shunjuen_dept",isShunjuenDept },{"@account_activity_start_date",
+                    accountActivityDateStart},
+                {"@account_activity_end_date",accountActivityDateEnd},{ "@location",location},
+                { "@dept",dept}, { "@debit_account_code",debitAccountCode},
+                { "@debit_account",debitAccount}, { "@credit_account_code",creditAccountCode},
+                { "@credit_account",creditAccount}, { "@is_validity_true_only",isValidityTrueOnly},
+                { "@contain_outputted",containOutputted}, { "@output_start_date",outputDateStart},
+                { "@output_end_date",outputDateEnd}
             };
         }
-
+      
         public int Registration(TransferReceiptsAndExpenditure trae)
         {
             Parameters = new Dictionary<string, object>()
             {
                 {"@location",trae.Location},{"@account_activity_date",trae.AccountActivityDate},
-                {"@registration_date",trae.RegistrationDate},{"@registration_staff_id",trae.RegistrationRep.ID},
+                {"@registration_date",trae.RegistrationDate},{"@registration_staff_id",
+                    trae.RegistrationRep.ID},
                 {"@credit_dept_id",trae.CreditDept.ID},{"@debit_accounts_id",trae.DebitAccount.ID},
-                {"@credit_accounts_id",trae.CreditAccount.ID},{"@content_text",trae.ContentText},{"@detail",trae.Detail },
-                {"@price",trae.Price },{"@is_validity",trae.IsValidity },{"@is_reduced_tax_rate",trae.IsReducedTaxRate } };
+                {"@credit_accounts_id",trae.CreditAccount.ID},{"@content_text",trae.ContentText},
+                {"@detail",trae.Detail }, {"@price",trae.Price },{"@is_validity",trae.IsValidity },
+                {"@is_reduced_tax_rate",trae.IsReducedTaxRate } };
 
-            return ReturnGeneretedParameterCommand("registration_transfer_receipts_and_expenditure").ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand
+                ("registration_transfer_receipts_and_expenditure").ExecuteNonQuery();
         }
 
         public int Update(TransferReceiptsAndExpenditure trae)
@@ -1193,14 +1227,18 @@ namespace Infrastructure
             Parameters = new Dictionary<string, object>()
             {
                 { "@transfer_receipts_and_expenditure_id",trae.ID},{"@location",trae.Location},
-                {"@account_activity_date",trae.AccountActivityDate},{"@credit_dept_id",trae.CreditDept.ID},
-                {"@debit_accounts_id",trae.DebitAccount.ID},{"@credit_accounts_id",trae.CreditAccount.ID},
-                {"@content_text",trae.ContentText},{"@detail",trae.Detail },{"@price",trae.Price },{"@is_validity",trae.IsValidity },
-                { "@is_unprinted",trae.OutputDate==DefaultDate },{ "@operation_staff_id",LoginRep.GetInstance().Rep.ID},
+                {"@account_activity_date",trae.AccountActivityDate},{"@credit_dept_id",
+                    trae.CreditDept.ID},
+                {"@debit_accounts_id",trae.DebitAccount.ID},{"@credit_accounts_id",
+                    trae.CreditAccount.ID},
+                {"@content_text",trae.ContentText},{"@detail",trae.Detail },{"@price",trae.Price },
+                {"@is_validity",trae.IsValidity }, { "@is_unprinted",trae.OutputDate==DefaultDate },
+                { "@operation_staff_id",LoginRep.GetInstance().Rep.ID}, 
                 {"@is_reduced_tax_rate",trae.IsReducedTaxRate } 
             };
 
-            return ReturnGeneretedParameterCommand("update_transfer_receipts_and_expenditure").ExecuteNonQuery();
+            return ReturnGeneretedParameterCommand
+                ("update_transfer_receipts_and_expenditure").ExecuteNonQuery();
         }
 
         public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate)
@@ -1221,7 +1259,8 @@ namespace Infrastructure
             return amount;
         }
 
-        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept)
+        public int RetutnFiscalYearEndFinalAccountCalculation
+            (DateTime fiscalYearEndDate, CreditDept creditDept)
         {
             SettingConectionString();
             SqlCommand cmd =

@@ -286,7 +286,8 @@ namespace WPF.ViewModels
             IsOutputGroupEnabled = false;
             IsClose = false;
 
-            await Task.Run(() => DataOutput.PaymentAndWithdrawalSlips(AllDataList, isPayment, IsPreviousDayOutput));
+            await Task.Run(() => 
+                DataOutput.PaymentAndWithdrawalSlips(AllDataList, isPayment, IsPreviousDayOutput));
             
             SlipsOutputProcess();
             SetOutputGroupEnabled();
@@ -465,10 +466,11 @@ namespace WPF.ViewModels
                 SetPreviousDayFinalAmount();
 
                 await Task.Run(() =>
-                    DataOutput.BalanceFinalAccount(IsContainDailyReportToNotOutputData, rengeanPDFA, rengeanPay,
-                        rengeanWith, rengeanBank, rengeanShunjuen, shunjuanPDFA, shunjuanPay, shunjuanWith, 
-                        shunjuanBank, shunjuanShunjuen, kougePDFA, kougePay, kougeWith, kougeBank, kougeShunjuen,
-                        IntAmount(YokohamaBankAmount), IntAmount(PairAmount)));
+                    DataOutput.BalanceFinalAccount(IsContainDailyReportToNotOutputData, rengeanPDFA,
+                        rengeanPay, rengeanWith, rengeanBank, rengeanShunjuen, shunjuanPDFA, 
+                        shunjuanPay, shunjuanWith,  shunjuanBank, shunjuanShunjuen, kougePDFA, 
+                        kougePay, kougeWith, kougeBank,  kougeShunjuen, IntAmount(YokohamaBankAmount),
+                        IntAmount(PairAmount)));
 
                 void SetPreviousDayFinalAmount()
                 {
@@ -489,20 +491,20 @@ namespace WPF.ViewModels
                     if (b)
                     {
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.蓮華庵.ToString(), string.Empty,
-                                string.Empty, string.Empty, string.Empty, false, false, true, true, true, DefaultDate,
-                                DateTime.Today, DateTime.Today, DateTime.Today), ref rengeanPay, ref rengeanWith,
-                                ref rengeanBank, ref rengeanShunjuen);
+                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.蓮華庵.ToString(),
+                                string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true, 
+                                true,  DefaultDate,  DateTime.Today, DateTime.Today, DateTime.Today), 
+                                ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.春秋庵.ToString(), string.Empty,
-                                string.Empty, string.Empty, string.Empty, false, false, true, true, true, DefaultDate,
-                                DateTime.Today, DateTime.Today, DateTime.Today), ref shunjuanPay, ref shunjuanWith,
-                                ref shunjuanBank, ref shunjuanShunjuen);
+                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.春秋庵.ToString(), 
+                                string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true, true, 
+                                DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today), ref shunjuanPay, 
+                                ref shunjuanWith, ref shunjuanBank, ref shunjuanShunjuen);
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.香華.ToString(), string.Empty, 
-                                string.Empty, string.Empty, string.Empty, false, false, true, true, true, DefaultDate, 
-                                DateTime.Today, DateTime.Today, DateTime.Today), ref kougePay, ref kougeWith, ref kougeBank,
-                                ref kougeShunjuen);
+                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.香華.ToString(),
+                                string.Empty,  string.Empty, string.Empty, string.Empty, false, false, true, true, true, 
+                                DefaultDate,  DateTime.Today, DateTime.Today, DateTime.Today), ref kougePay, 
+                                ref kougeWith, ref kougeBank, ref kougeShunjuen);
                     }
                     else
                     {
@@ -526,9 +528,13 @@ namespace WPF.ViewModels
                             }
                         }
 
-                        AmountSorting(rengeanList, ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
-                        AmountSorting(shunjuanList, ref shunjuanPay, ref shunjuanWith, ref shunjuanBank, ref shunjuanShunjuen);
-                        AmountSorting(kougeList, ref kougePay, ref kougeWith, ref kougeBank, ref kougeShunjuen);
+                        AmountSorting
+                            (rengeanList, ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
+                        AmountSorting
+                            (shunjuanList, ref shunjuanPay, ref shunjuanWith, ref shunjuanBank, 
+                                ref shunjuanShunjuen);
+                        AmountSorting
+                            (kougeList, ref kougePay, ref kougeWith, ref kougeBank, ref kougeShunjuen);
                     }
                 }
 
@@ -548,7 +554,9 @@ namespace WPF.ViewModels
                     bankAmount = bank;
                     shunjuenAmount = shunjuen;
 
-                    void SetPrice(ReceiptsAndExpenditure rae,ref int payment,ref int withdrawal,ref int bankAmount,ref int shunjuenAmount)
+                    void SetPrice
+                        (ReceiptsAndExpenditure rae,ref int payment,ref int withdrawal,ref int bankAmount,
+                            ref int shunjuenAmount)
                     {
                         if (rae.IsPayment) { payment += rae.Price; }
                         else { WithdrawalSorting(rae, ref withdrawal, ref bankAmount, ref shunjuenAmount); }
@@ -631,7 +639,8 @@ namespace WPF.ViewModels
         {
             if (receiptsAndExpenditure.Content.Text.Contains("口座入金"))
             { TransferSum += receiptsAndExpenditure.Price; }
-            else if (!receiptsAndExpenditure.CreditDept.IsShunjuenDept && receiptsAndExpenditure.Content.Text.Contains("春秋苑"))
+            else if (!receiptsAndExpenditure.CreditDept.IsShunjuenDept &&
+                receiptsAndExpenditure.Content.Text.Contains("春秋苑"))
             {
                 TransferSum += receiptsAndExpenditure.Price;
                 PairAmount = AmountWithUnit(IntAmount(PairAmount) + receiptsAndExpenditure.Price); }
@@ -1353,7 +1362,8 @@ namespace WPF.ViewModels
                 {
                     AccountingProcessLocation.OriginalTotalAmount =
                         AccountingProcessLocation.Location == Locations.管理事務所 ?
-                        DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen) :
+                        DataBaseConnect.PreviousDayFinalAmount
+                            (AccountingProcessLocation.IsAccountingGenreShunjuen) :
                         AccountingProcessLocation.OriginalTotalAmount;
                     SelectedCreditDept = null; }
                 SetOutputGroupEnabled();
@@ -1396,7 +1406,8 @@ namespace WPF.ViewModels
 
                     PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount(value);
                     AccountingProcessLocation.OriginalTotalAmount = PreviousDayFinalAccount;
-                    ListTitle = $"一覧：{FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";
+                    ListTitle =
+                        $"一覧：{FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";
                 }
             }
         }

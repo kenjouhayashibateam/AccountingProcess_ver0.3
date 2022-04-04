@@ -71,8 +71,8 @@ namespace Domain.Entities
         public int GetTotalAmount()
         {
             int i = 0;//総金額変数
-
-            foreach (OtherMoney om in OtherMoneys) { i += om.Amount; }//OtherMoneysの金額をすべて加算する
+            //OtherMoneysの金額をすべて加算する
+            foreach (OtherMoney om in OtherMoneys) { i += om.Amount; }
             //MoneyCategorysの金額をすべて加算する
             foreach (KeyValuePair<Denomination, MoneyCategory> mc in MoneyCategorys)
             { i += mc.Value.Amount; }

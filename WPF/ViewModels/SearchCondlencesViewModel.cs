@@ -41,7 +41,8 @@ namespace WPF.ViewModels
             Pagination.CountReset(isPageReset);
             (int count, ObservableCollection<Condolence> list) =
                 DataBaseConnect.ReferenceCondolence
-                    (SearchStartDate, SearchEndDate, string.Empty, Pagination.PageCount, Pagination.CountEachPage);
+                    (SearchStartDate, SearchEndDate, string.Empty, Pagination.PageCount, 
+                        Pagination.CountEachPage);
             Condolences = list;
             Pagination.TotalRowCount = count;
             Pagination.SetProperty();

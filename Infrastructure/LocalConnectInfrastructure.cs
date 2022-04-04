@@ -15,14 +15,19 @@ namespace Infrastructure
         { return new AccountingSubject("accounitng_subject1", "000", "法事冥加", true, true); }
 
         public Content CallContent(string id)
-        { return new Content("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true); }
+        { 
+            return new Content
+                ("content0", CallAccountingSubject("accounting_subject0"), 1000, "煙草", true); 
+        }
 
         public CreditDept CallCreditDept(string id)
         { return new CreditDept("credit_dept0", SHUNJUEN, true, true); }
 
-        public int CallPrecedingYearFinalAccount(DateTime monthEnd,bool isShunjuen) { return 10000; }
+        public int CallPrecedingYearFinalAccount(DateTime monthEnd,bool isShunjuen) 
+        { return 10000; }
 
-        public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept) { return 5000; }
+        public int CallPrecedingYearFinalAccount(DateTime date, CreditDept creditDept) 
+        { return 5000; }
 
         public Rep CallRep(string id)
         { return new Rep("rep0", "林飛 顕誠", GetHashValue("aaa", "rep0"), true, true); }
@@ -56,7 +61,8 @@ namespace Infrastructure
         public ObservableCollection<AccountingSubject> ReferenceAccountingSubject
             (string subjectCode, string subject, bool isShunjuen, bool isTrueOnly)
         {
-            ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
+            ObservableCollection<AccountingSubject> list = 
+                new ObservableCollection<AccountingSubject>
             {
                 new AccountingSubject("accounting_subject0", "882", "その他雑収入", true, true),
                 new AccountingSubject("accounting_subject1", "822", "その他冥加金", true, true),
@@ -75,7 +81,8 @@ namespace Infrastructure
         public ObservableCollection<AccountingSubject>
             ReferenceAffiliationAccountingSubject(string contentText)
         {
-            ObservableCollection<AccountingSubject> list = new ObservableCollection<AccountingSubject>
+            ObservableCollection<AccountingSubject> list =
+                new ObservableCollection<AccountingSubject>
             {
                 new AccountingSubject("accounting_subject0", "882", "その他雑収入", true, true),
                 new AccountingSubject("accounting_subject1", "822", "その他冥加金", true, true),
@@ -86,19 +93,21 @@ namespace Infrastructure
                 new AccountingSubject("accounting_subject6", "621", "車両費", true, true),
                 new AccountingSubject("accounting_subject7", "735", "苑内整備費", true, true),
                 new AccountingSubject("accounting_subject8", "168", "仮払金", true, true),
-                new AccountingSubject("accounting_subject9", "133", "セレサ川崎普通貯金", true, true)
+                new AccountingSubject
+                ("accounting_subject9", "133", "セレサ川崎普通貯金", true, true)
             };
             return list;
         }
 
         public (int TotalRows, ObservableCollection<Condolence> List) ReferenceCondolence
-            (DateTime startDate, DateTime endDate, string location, int pageCount, int countEachPage)
+            (DateTime startDate, DateTime endDate, string location, int pageCount,
+            int countEachPage)
         {
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -109,8 +118,8 @@ namespace Infrastructure
                     (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -121,8 +130,8 @@ namespace Infrastructure
                     (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -133,8 +142,8 @@ namespace Infrastructure
                     (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -145,8 +154,8 @@ namespace Infrastructure
                     (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -167,8 +176,32 @@ namespace Infrastructure
             ObservableCollection<Condolence> list = new ObservableCollection<Condolence>()
             {
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
+                new Condolence
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,
+                        DateTime.Today, string.Empty,"藤井"),
+                new Condolence
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
+                        DateTime.Today.AddDays(-1),"藤井",string.Empty),
+                new Condolence
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
+                        DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
+                new Condolence
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
+                new Condolence
+                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,
+                        DateTime.Today, string.Empty,"藤井"),
+                new Condolence
+                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
+                        DateTime.Today.AddDays(-1),"藤井",string.Empty),
+                new Condolence
+                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
+                        DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
+                new Condolence
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -179,8 +212,8 @@ namespace Infrastructure
                     (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -191,32 +224,8 @@ namespace Infrastructure
                     (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
                         DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
                 new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
-                new Condolence
-                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
-                        string.Empty,"藤井"),
-                new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
-                        DateTime.Today.AddDays(-1),"藤井",string.Empty),
-                new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
-                        DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
-                new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
-                new Condolence
-                    (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
-                        string.Empty,"藤井"),
-                new Condolence
-                    (3,"管理事務所","ううう家","林飛 顕誠","法事",300000,10000,10000,0,0,"大成祭典",
-                        DateTime.Today.AddDays(-1),"藤井",string.Empty),
-                new Condolence
-                    (4,"管理事務所","えええ家","安田 一貴","法事",50000,10000,5000,0,0,string.Empty,
-                        DateTime.Today.AddDays(-1),string.Empty,"深瀬"),
-                new Condolence
-                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,"深瀬",
-                        string.Empty),
+                    (1,"管理事務所","あああ家","林飛","法事",10000,5000,0,0,1000,"佐野商店",DateTime.Today,
+                        "深瀬", string.Empty),
                 new Condolence
                     (2,"管理事務所","いいい家","安田","葬儀",50000,0,0,5000,5000,string.Empty,DateTime.Today,
                         string.Empty,"藤井"),
@@ -631,75 +640,91 @@ namespace Infrastructure
 
         public bool IsConnectiongProductionServer() { return true; }
 
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd)
+        public ObservableCollection<TransferReceiptsAndExpenditure>
+            ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, 
+                string location, string dept, string debitAccountCode, string debitAccount, 
+                string creditAccountCode, string creditAccount, bool isValidityTrueOnly,
+                bool containOutputted,  DateTime outputDateStart, DateTime outputDateEnd)
         {
             return new ObservableCollection<TransferReceiptsAndExpenditure>()
             {
                 new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0], 
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,true,
+                    ReferenceAccountingSubject
+                    (string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,true,
                     DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                new TransferReceiptsAndExpenditure(1,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept
+                    (string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ううう","えええ",3500,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ううう","えええ",
+                    3500,true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(2,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0], 
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"おおお","かかか",19800,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"おおお","かかか",
+                    19800, true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(3,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ききき","くくく",5600,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ききき","くくく",5600,
+                    true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(4,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,
+                    true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(5,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"あああ","いいい",1980,
+                    true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(6,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ううう","えええ",3500,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ううう","えええ",3500,
+                    true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(7,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"おおお","かかか",19800,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"おおお","かかか",19800,
+                    true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(8,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ききき","くくく",5600,true,
-                    DateTime.Today,DateTime.Today,false),
-                new TransferReceiptsAndExpenditure(0,DateTime.Today,LoginRep.GetInstance().Rep,
-                    AccountingProcessLocation.Location.ToString(),ReferenceCreditDept(string.Empty,true,true)[0],
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"ききき","くくく",5600,
+                    true, DateTime.Today,DateTime.Today,false),
+                new TransferReceiptsAndExpenditure(9,DateTime.Today,LoginRep.GetInstance().Rep,
+                    AccountingProcessLocation.Location.ToString(),
+                    ReferenceCreditDept(string.Empty,true,true)[0],
                     ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],
-                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,true,
-                    DateTime.Today,DateTime.Today,false)
+                    ReferenceAccountingSubject(string.Empty,string.Empty,true,true)[0],"けけけ","こここ",150,
+                    true, DateTime.Today,DateTime.Today,false)
             };
         }
 
-        public ObservableCollection<TransferReceiptsAndExpenditure> ReferenceTransferReceiptsAndExpenditure
-            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, string location,
-                string dept, string debitAccountCode, string debitAccount, string creditAccountCode, string creditAccount,
-                bool isValidityTrueOnly, bool containOutputted, DateTime outputDateStart, DateTime outputDateEnd,
-                int page, string column, bool isOrderAsc, int countEachPage)
+        public ObservableCollection<TransferReceiptsAndExpenditure>
+            ReferenceTransferReceiptsAndExpenditure
+            (bool isShunjuenDept, DateTime accountActivityDateStart, DateTime accountActivityDateEnd, 
+                string location, string dept, string debitAccountCode, string debitAccount, 
+                string creditAccountCode, string creditAccount, bool isValidityTrueOnly, bool containOutputted,
+                DateTime outputDateStart, DateTime outputDateEnd, int page, string column, 
+                bool isOrderAsc, int countEachPage)
         {
             return ReferenceTransferReceiptsAndExpenditure
-                (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept, debitAccountCode,
-                    debitAccount, creditAccountCode, creditAccount, true, true, outputDateStart, outputDateEnd);
+                (isShunjuenDept, accountActivityDateStart, accountActivityDateEnd, location, dept,
+                    debitAccountCode, debitAccount, creditAccountCode, creditAccount, true, true, 
+                    outputDateStart, outputDateEnd);
         }
 
         public int Registration(TransferReceiptsAndExpenditure transferReceiptsAndExpenditure) => 1;

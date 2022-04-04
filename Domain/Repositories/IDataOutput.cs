@@ -51,13 +51,13 @@ namespace Domain.Repositories
         /// <param name="yokohamaBankAmount">横浜銀行残高</param>
         /// <param name="shunjuenAmount">春秋苑仮払金</param>
         void BalanceFinalAccount
-            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount, int rengeanPayment,
-                int rengeanWithdrawal, int rengeanTranceferAmount, int rengeanShunjuenTranceferAmount,
-                int shunjuanPreviousDayFinalAccount, int shunjuanPayment, int shunjuanWithdrawal,
-                int shunjuanTranceferAmount, int shunjuanShunjuenTranceferAmount,
-                int kougePreviousDayFinalAccount, int kougePayment, int kougeWithdrawal,
-                int kougeTranceferAmount, int kougeShunjuenTranceferAmount, int yokohamaBankAmount,
-                int shunjuenAmount);
+            (bool isContainDailyReportToNotOutputData, int rengeanPreviousDayFinalAccount,
+                int rengeanPayment, int rengeanWithdrawal, int rengeanTranceferAmount, 
+                int rengeanShunjuenTranceferAmount, int shunjuanPreviousDayFinalAccount,
+                int shunjuanPayment, int shunjuanWithdrawal, int shunjuanTranceferAmount, 
+                int shunjuanShunjuenTranceferAmount, int kougePreviousDayFinalAccount, 
+                int kougePayment, int kougeWithdrawal, int kougeTranceferAmount, 
+                int kougeShunjuenTranceferAmount, int yokohamaBankAmount, int shunjuenAmount);
         /// <summary>
         /// 出納データを出力します
         /// </summary>

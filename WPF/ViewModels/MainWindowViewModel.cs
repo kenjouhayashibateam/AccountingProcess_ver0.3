@@ -99,7 +99,8 @@ namespace WPF.ViewModels
                 (() => CreateShowWindowCommand
                     (ScreenTransition.TransferReceiptsAndExpenditureManagement()), () => true);
             ShowMemorialServiceAccountRegister = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.MemorialServiceAccountRegister()), () => true);
+                (() => CreateShowWindowCommand(ScreenTransition.MemorialServiceAccountRegister()),
+                    () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
         /// <summary>
@@ -234,7 +235,8 @@ namespace WPF.ViewModels
         /// </summary>
         private void ConfirmationPrecedingYearFinalAccount()
         {
-            //ログインアカウントが管理者権限を所持していて、なおかつ今日の日付が4月1日~4月20日なら登録ボタンを可視化する
+            //ログインアカウントが管理者権限を所持していて、
+            //なおかつ今日の日付が4月1日~4月20日なら登録ボタンを可視化する
             IsRegistrationPrecedingYearFinalAccountVisiblity =
                 DateTime.Today >= CurrentFiscalYearFirstDate &&
                 DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20)
@@ -289,7 +291,8 @@ namespace WPF.ViewModels
             void WizeCoreOperation()
             {
                 bool IsNotExistsData = false;
-                ObservableCollection<CreditDept> list = DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
+                ObservableCollection<CreditDept> list =
+                    DataBaseConnect.ReferenceCreditDept(string.Empty, true, false);
 
                 foreach (CreditDept cd in list)
                 {
@@ -407,9 +410,15 @@ namespace WPF.ViewModels
                 AccountingProcessLocation.IsCashBoxOutputed ? string.Empty : "金種表";
 
             if (string.IsNullOrEmpty(NoOutputed))
-            { NoOutputed = AccountingProcessLocation.IsBalanceAccountOutputed ? string.Empty : "収支日報"; }
+            { 
+                NoOutputed = AccountingProcessLocation.IsBalanceAccountOutputed ?
+                    string.Empty : "収支日報";
+            }
             else
-            { NoOutputed += AccountingProcessLocation.IsBalanceAccountOutputed ? string.Empty : "、収支日報"; }
+            { 
+                NoOutputed += AccountingProcessLocation.IsBalanceAccountOutputed ? 
+                    string.Empty : "、収支日報"; 
+            }
 
             if (AccountingProcessLocation.Location != Locations.管理事務所)
             { NoOutputed = string.Empty; }
@@ -620,11 +629,13 @@ namespace WPF.ViewModels
                     $"（ログイン：{LoginRep.GetInstance().Rep.FirstName}）";
                 WindowTitle = $"{DefaultWindowTitle}{s}";
 
-                if (!string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name)) { CallConfirmationPrecedingYearFinalAccount(); }
+                if (!string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name)) 
+                { CallConfirmationPrecedingYearFinalAccount(); }
 
                 void CallConfirmationPrecedingYearFinalAccount()
                 {
-                    if (IsPrecedingYearFinalAccountRegisterVerified) { IsPrecedingYearFinalAccountRegisterVerified = false; }
+                    if (IsPrecedingYearFinalAccountRegisterVerified) 
+                    { IsPrecedingYearFinalAccountRegisterVerified = false; }
                     else
                     {
                         ConfirmationPrecedingYearFinalAccount();
@@ -771,7 +782,8 @@ namespace WPF.ViewModels
                 IsWizeCoreMenuEnabled = true;
             }
 
-            if (IsPrecedingYearFinalAccountRegisterVerified) { IsPrecedingYearFinalAccountRegisterVerified = false; }
+            if (IsPrecedingYearFinalAccountRegisterVerified)
+            { IsPrecedingYearFinalAccountRegisterVerified = false; }
             else 
             {
                 ConfirmationPrecedingYearFinalAccount();
@@ -897,7 +909,8 @@ namespace WPF.ViewModels
             }
         }
 
-        protected override void SetWindowDefaultTitle() { DefaultWindowTitle = $"春秋苑経理システム：{(IsShunjuen ? "春秋苑会計" : "ワイズコア会計")}"; }
+        protected override void SetWindowDefaultTitle() 
+        { DefaultWindowTitle = $"春秋苑経理システム：{(IsShunjuen ? "春秋苑会計" : "ワイズコア会計")}"; }
 
         public override void SetRep(Rep rep)
         {
