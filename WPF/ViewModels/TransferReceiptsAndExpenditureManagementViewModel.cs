@@ -23,7 +23,7 @@ namespace WPF.ViewModels
         #region Properties
         #region Bools
         private bool isLimitCreditDept;
-        private bool isPeriodSearch = false;
+        private bool isPeriodSearch = true;
         private bool isLocationSearch = true;
         private bool isValidityTrueOnly;
         private bool isContainOutputted;
@@ -40,7 +40,7 @@ namespace WPF.ViewModels
         private string totalAmountDisplayValue;
         private string outputContent = "出力";
         #endregion
-        private DateTime searchStartDate = DateTime.Today;
+        private DateTime searchStartDate = DateTime.Today.AddDays((-1*DateTime.Today.Day)+1);
         private DateTime searchEndDate = DateTime.Today;
         private DateTime changeOutputDate = DateTime.Today;
         #region ObservableCollections
@@ -88,7 +88,7 @@ namespace WPF.ViewModels
             ReferenceLocationCheckContent =
                 $"経理担当場所：{AccountingProcessLocation.Location}のデータのみを表示する";
             IsLocationSearch = true;
-            IsPeriodSearch = false;
+            IsPeriodSearch = true;
         }
         public TransferReceiptsAndExpenditureManagementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(), new ExcelOutputInfrastructure()) { }

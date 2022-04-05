@@ -100,7 +100,7 @@ namespace WPF.ViewModels
         /// 登録コマンド
         /// </summary>
         public DelegateCommand RegistrationCommand { get; }
-        private void Registration()
+        private async void Registration()
         {
             bool b = IsDuplication;
             if (!IsDuplication) { b = VerificationData(); }
@@ -141,17 +141,17 @@ namespace WPF.ViewModels
 
             RegistrationButtonContent = "登録中";
             IsRegistrationEnabled = false;
-            DatasRegistration();
+            await Task.Run(() => DatasRegistration());
             SetProperty();
             RegistrationButtonContent = "登録";
 
             bool  VerificationData()
             {
-            ObservableCollection<ReceiptsAndExpenditure> list =
-                DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(),
-                        string.Empty, string.Empty, "件", string.Empty, "811", false, true, true, true,
-                        true, SelectedDate, SelectedDate, DefaultDate, DateTime.Now);
+                ObservableCollection<ReceiptsAndExpenditure> list =
+                    DataBaseConnect.ReferenceReceiptsAndExpenditure
+                        (DefaultDate, DateTime.Now, AccountingProcessLocation.Location.ToString(),
+                            string.Empty, string.Empty, "件", string.Empty, "811", false, true, true, true,
+                            true, SelectedDate, SelectedDate, DefaultDate, DateTime.Now);
 
                 if (list.Count != 0)
                 {
@@ -170,48 +170,44 @@ namespace WPF.ViewModels
                 return true;
             }
 
-            async void DatasRegistration()
+            void DatasRegistration()
             {
-                await Task.Run(() => DataRegister());
-
-                void DataRegister()
+                CreditDept creditDept = DataBaseConnect.ReferenceCreditDept("香華", true, false)[0];
+                AccountingSubject accountingSubject = DataBaseConnect.ReferenceAccountingSubject
+                    ("811", string.Empty, false, true).Count > 0 ? DataBaseConnect.ReferenceAccountingSubject
+                    ("811", string.Empty, false, true)[0] : null;
+                Content content;
+                
+                Register(FlowerDataList, accountingSubject);
+                
+                accountingSubject = DataBaseConnect.ReferenceAccountingSubject
+                    ("813", string.Empty, false, true).Count > 0 ?
+                    DataBaseConnect.ReferenceAccountingSubject("813", string.Empty, false, true)[0] : null;
+                
+                Register(IncenseStickDataList, accountingSubject);
+                
+                accountingSubject =
+                    DataBaseConnect.ReferenceAccountingSubject("828", "その他売上", false, true).Count > 0 ?
+                    DataBaseConnect.ReferenceAccountingSubject("828", "その他売上", false, true)[0] : null;
+                
+                Register(OtherFlowerDataList, accountingSubject);
+                
+                CallCompletedRegistration();
+                
+                void Register(Dictionary<string, KeyValuePair<int, int>> list,
+                    AccountingSubject accountingSubject)
                 {
-                    CreditDept creditDept = DataBaseConnect.ReferenceCreditDept("香華", true, false)[0];
-                    AccountingSubject accountingSubject = DataBaseConnect.ReferenceAccountingSubject
-                        ("811", string.Empty, false, true).Count > 0 ? DataBaseConnect.ReferenceAccountingSubject
-                        ("811", string.Empty, false, true)[0] : null;
-                    Content content;
-
-                    Register(FlowerDataList, accountingSubject);
-
-                    accountingSubject = DataBaseConnect.ReferenceAccountingSubject
-                        ("813", string.Empty, false, true).Count > 0 ?
-                        DataBaseConnect.ReferenceAccountingSubject("813", string.Empty, false, true)[0] : null;
-
-                    Register(IncenseStickDataList, accountingSubject);
-
-                    accountingSubject =
-                        DataBaseConnect.ReferenceAccountingSubject("828", "その他売上", false, true).Count > 0 ?
-                        DataBaseConnect.ReferenceAccountingSubject("828", "その他売上", false, true)[0] : null;
-
-                    Register(OtherFlowerDataList, accountingSubject);
-
-                    CallCompletedRegistration();
-
-                    void Register(Dictionary<string, KeyValuePair<int, int>> list,
-                        AccountingSubject accountingSubject)
+                    foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in list)
                     {
-                        foreach (KeyValuePair<string, KeyValuePair<int, int>> pair in list)
-                        {
-                            content = DataBaseConnect.ReferenceContent
-                                (pair.Key, accountingSubject.SubjectCode, accountingSubject.Subject, false, true)[0];
-                            _ = DataBaseConnect.Registration
-                                (new ReceiptsAndExpenditure
-                                    (0, DateTime.Today, LoginRep.GetInstance().Rep,
-                                        AccountingProcessLocation.Location.ToString(), creditDept, content,
-                                        $"{pair.Value.Key}{Space}件", pair.Value.Value, true, true, SelectedDate,
-                                        DefaultDate, false));
-                        }
+                        content = DataBaseConnect.ReferenceContent
+                            (pair.Key, accountingSubject.SubjectCode, accountingSubject.Subject, false, true)[0];
+
+                        _ = DataBaseConnect.Registration
+                            (new ReceiptsAndExpenditure
+                                (0, DateTime.Today, LoginRep.GetInstance().Rep,
+                                    AccountingProcessLocation.Location.ToString(), creditDept, content,
+                                    $"{pair.Value.Key}{Space}件", pair.Value.Value, true, true, SelectedDate,
+                                    DefaultDate, false));
                     }
                 }
             }
