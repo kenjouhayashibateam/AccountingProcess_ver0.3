@@ -64,7 +64,7 @@ namespace WPF.ViewModels
                 OutputCreditDept.Dept;
 
             if (searchDateStart < new DateTime(2021, 4, 1))
-            {
+            { 
                 CallOutputBlockingMessage();
                 return;
             }
@@ -231,8 +231,18 @@ namespace WPF.ViewModels
 
         private void SetOutputButtonEnabled()
         {
-            OutputButtonEnabled = !HasErrors && !string.IsNullOrEmpty(YearString) &&
+            bool b = !HasErrors && !string.IsNullOrEmpty(YearString) &&
                 !string.IsNullOrEmpty(MonthString);
+
+            if (b) { b = ReturnCreditDeptErrorCheck(); }
+
+            OutputButtonEnabled = b;
+            
+            bool ReturnCreditDeptErrorCheck()
+            {
+                if (AccountingProcessLocation.IsAccountingGenreShunjuen) { return true; }
+                return OutputCreditDept != null;
+            }
         }
 
         public override void ValidationProperty(string propertyName, object value)

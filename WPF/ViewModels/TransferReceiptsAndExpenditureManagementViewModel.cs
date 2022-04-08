@@ -6,8 +6,6 @@ using Infrastructure.ExcelOutputData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
@@ -82,6 +80,7 @@ namespace WPF.ViewModels
             RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
             ShowDetailCommand = new DelegateCommand(() => ShowDetail(), () => true);
             OutputCommand = new DelegateCommand(() => Output(), () => true);
+            SetTotalAmountCommand = new DelegateCommand(() => SetTotalAmount(), () => true);
             CreditDepts = DataBaseConnect.ReferenceCreditDept(string.Empty, true, 
                 AccountingProcessLocation.IsAccountingGenreShunjuen);
             SelectedCreditDept = CreditDepts[0];
@@ -92,6 +91,10 @@ namespace WPF.ViewModels
         }
         public TransferReceiptsAndExpenditureManagementViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect(), new ExcelOutputInfrastructure()) { }
+        /// <summary>
+        /// 総金額を設定するコマンド
+        /// </summary>
+        public DelegateCommand SetTotalAmountCommand { get; set; }
         /// <summary>
         /// 出力コマンド
         /// </summary>
@@ -193,7 +196,7 @@ namespace WPF.ViewModels
 
             foreach (TransferReceiptsAndExpenditure trae in list)
             {
-                TransferReceiptsAndExpenditures.Add(new ListItem(true, trae));
+                TransferReceiptsAndExpenditures.Add(new ListItem(!IsOutputDataSelect, trae));
             }
 
             list =
@@ -222,7 +225,16 @@ namespace WPF.ViewModels
             SetTotalAmount();
         }
         private void SetTotalAmount()
-        { TotalAmountDisplayValue = $"リストの総金額：{AmountWithUnit(TotalAmount)}"; }
+        {
+            ObservableCollection<ListItem> list = IsOutputDataSelect ? TransferReceiptsAndExpenditures : AllDataList;
+            TotalAmount = 0;
+            foreach (ListItem listItem in list)
+            {
+                if (!listItem.IsOutput) { continue; }
+                TotalAmount += listItem.Data.Price;
+            }
+            TotalAmountDisplayValue = $"リストの総金額：{AmountWithUnit(TotalAmount)}"; 
+        }
         /// <summary>
         /// 振替伝票操作画面呼び出しコマンド
         /// </summary>
@@ -601,6 +613,7 @@ namespace WPF.ViewModels
                 }
 
                 TransferReceiptsAndExpenditures = items;
+                SetTotalAmount();
             }
         }
 
@@ -631,7 +644,8 @@ namespace WPF.ViewModels
         {
             private bool isOutput;
 
-            public bool IsOutput { get => isOutput; set { isOutput = value; } }
+            public bool IsOutput
+            { get => isOutput; set { isOutput = value; } }
 
             public TransferReceiptsAndExpenditure Data { get; set; }
 
@@ -639,25 +653,6 @@ namespace WPF.ViewModels
             {
                 IsOutput = isOutput;
                 Data = data;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj == null || !GetType().Equals(obj.GetType())) { return false; }
-
-                ListItem listItem = obj as ListItem;
-
-                return listItem.Data.ID == Data.ID;
-            }
-
-            public override int GetHashCode()
-            {
-                int hashCode = 1751214745;
-                hashCode = hashCode * -1521134295 + IsOutput.GetHashCode();
-                hashCode =
-                    hashCode * -1521134295 + 
-                    EqualityComparer<TransferReceiptsAndExpenditure>.Default.GetHashCode(Data);
-                return hashCode;
             }
         }
     }

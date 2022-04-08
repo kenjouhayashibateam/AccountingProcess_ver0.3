@@ -159,10 +159,11 @@ namespace WPF.ViewModels
                     {
                         Message = $"{SelectedDate.ToString("ggy年M月d日", JapanCulture)}" +
                         $"の{AccountingProcessLocation.Location}は墓地花売上データが存在します。\r\n" +
-                        $"出納管理からデータの更新、追加を行ってください。",
+                        $"重複した日付の登録を許可するチェックを入れて再登録するか、" +
+                        $"出納データ管理からデータの更新、追加を行ってください。",
                         Image = MessageBoxImage.Information,
                         Button = MessageBoxButton.OK,
-                        Title = "墓地花売上の一括登録は1日1回です。"
+                        Title = "墓地花売上一括登録"
                     };
                     CallShowMessageBox = true;
                     return false;

@@ -43,6 +43,7 @@ namespace WPF.ViewModels
         private string depositAmount;
         private string showSlipManagementContent;
         private CreditDept selectedCreditDept;
+        private ObservableCollection<CreditDept> creditDepts;
         #endregion
 
         /// <summary>
@@ -171,10 +172,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// 貸方勘定リスト
-        /// </summary>
-        public readonly ObservableCollection<CreditDept> CreditDepts;
-        /// <summary>
         /// 出納データ閲覧画面表示コマンド
         /// </summary>
         public DelegateCommand ShowSearchReceiptsAndExpenditureCommand { get; }
@@ -225,7 +222,7 @@ namespace WPF.ViewModels
             IsSlipManagementEnabled = false;
             IsCreateVoucherEnabled = false;
             IsPartTransportRegistrationEnabled = false;
-            ShowSlipManagementContent = "出納管理";
+            ShowSlipManagementContent = "出納データ管理";
             IsLogoutEnabled = false;
             IsShunjuenCommonEnabled = false;
             IsCommonEnabled = false;
@@ -246,9 +243,12 @@ namespace WPF.ViewModels
             {
                 CallNoLoginMessage();
                 IsSlipManagementEnabled = false;
-                ShowSlipManagementContent = "出納管理";
+                ShowSlipManagementContent = "出納データ管理";
                 return;
             }
+
+            if (AccountingProcessLocation.Location != Locations.管理事務所) { return; }
+
             //前月決算が登録されていれば登録ボタンを隠して更新ボタンを可視化する
             if (IsRegistrationPrecedingYearFinalAccountVisiblity) { SetButtonVsisbility(); }
             //登録ボタンが可視化されていなければ処理を終了する
@@ -360,7 +360,7 @@ namespace WPF.ViewModels
         /// <returns></returns>
         public bool SetOperationButtonEnabled()
         {
-            ShowSlipManagementContent = "出納管理";
+            ShowSlipManagementContent = "出納データ管理";
             if (!ReturnIsRepLogin()) { return false; }
 
             if (AccountingProcessLocation.Location == Locations.管理事務所) { return true; }
@@ -532,9 +532,9 @@ namespace WPF.ViewModels
                     {
                         ShowSlipManagementContent =
                             AccountingProcessLocation.OriginalTotalAmount == 0 ?
-                                "預かり金額を設定して下さい" : "出納管理";
+                                "預かり金額を設定して下さい" : "出納データ管理";
                     }
-                    else { ShowSlipManagementContent = "出納管理"; }
+                    else { ShowSlipManagementContent = "出納データ管理"; }
                 }
             }
         }
@@ -762,6 +762,19 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 貸方勘定リスト
+        /// </summary>
+
+        public ObservableCollection<CreditDept> CreditDepts
+        {
+            get => creditDepts;
+            set
+            {
+                creditDepts = value;
+                CallPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// 経理担当場所を管理事務所に設定します
@@ -798,7 +811,7 @@ namespace WPF.ViewModels
             IsSlipManagementEnabled = IsPartTransportRegistrationEnabled =
                 IsCreateVoucherEnabled = IsShunjuenCommonEnabled =
                 LoginRep.GetInstance().Rep.Name != string.Empty;
-            ShowSlipManagementContent = "出納管理";
+            ShowSlipManagementContent = "出納データ管理";
         }
 
         private void SetMenuEnabled()

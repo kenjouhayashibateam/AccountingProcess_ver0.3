@@ -132,7 +132,7 @@ namespace Infrastructure.ExcelOutputData
 
         protected override void SetDataStrings()
         {
-            myWorksheet.Cell(2, 4).Value = DateTime.Today.ToString("yyyy年MM月dd日（ddd）");
+            myWorksheet.Cell(2, 4).Value = DateTime.Now.ToString("yyyy年MM月dd日（ddd）HH:mm現在");
             myWorksheet.Cell(3, 1).Value = "収支日報";
             myWorksheet.Cell(5, 5).Value = "係";
             myWorksheet.Cell(6, 5).Value = LoginRep.GetInstance().Rep.FirstName;
@@ -206,7 +206,7 @@ namespace Infrastructure.ExcelOutputData
         {
             myWorksheet.Style.Font.FontSize = 11;
             myWorksheet.Style.Font.FontName = "ＭＳ Ｐゴシック";
-            myWorksheet.Cell(2, 4).Style.Font.FontSize = 14;
+            myWorksheet.Cell(2, 4).Style.Font.FontSize = 10.5;
             myWorksheet.Cell(3, 1).Style.Font.FontSize = 28;
             myWorksheet.Cell(6, 5).Style.Font.FontSize = 12;
             myWorksheet.Cell(8, 1).Style.Font.FontSize = 16;

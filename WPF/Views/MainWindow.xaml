@@ -293,6 +293,15 @@
                 <ComboBox Grid.Row="1" Name="CreditDeptComboBox" ItemsSource="{Binding CreditDepts}" SelectedValue="{Binding SelectedCreditDept}" DisplayMemberPath="Dept" Margin="5,5,5,15"/>
             </Grid>
             <Button x:Name="PrecedingYearFinalAccountUpdateButton" Grid.Column="3" Content="前年度決算更新" Visibility="{Binding IsUpdatePrecedingYearFinalAccountVisibility,Converter={StaticResource VisibilityConverter}}" Margin="10,15">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedCreditDept}" Value="null">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding UpdatePrecedingYearFinalAccountCommand}" Key="Space"/>
                     <MouseBinding Command="{Binding UpdatePrecedingYearFinalAccountCommand}" MouseAction="LeftClick"/>

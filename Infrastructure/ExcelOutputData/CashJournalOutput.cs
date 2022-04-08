@@ -144,6 +144,7 @@ namespace Infrastructure.ExcelOutputData
                             CommaDelimitedAmount(pageBalance);
                         myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
                         myWorksheet.Cell(StartRowPosition + 1, 2).Value = CurrentDate.Day;
+                        payment = pagePayment = withdrawal = pageWithdrawal = 0;
                     }
                 }
 

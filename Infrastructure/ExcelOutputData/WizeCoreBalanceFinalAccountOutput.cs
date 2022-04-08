@@ -185,7 +185,7 @@ namespace Infrastructure.ExcelOutputData
             _ = MySheetCellRange(2, 1, 12, SetColumnSizes().Length).Style
                 .Font.SetFontSize(11);
             //日付、社名
-            _ = MySheetCellRange(2, 8, 3, 8).Style
+            _ = MySheetCellRange(2, 7, 3, 8).Style
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                 .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
             //係印
@@ -230,9 +230,9 @@ namespace Infrastructure.ExcelOutputData
             //タイトル
             myWorksheet.Cell(1, 1).Value = "収支日報";
             //日付
-            DateTime d = DateTime.Today;
-            myWorksheet.Cell(2, 8).Value =
-                $"{d.ToString("ggy", JapanCulture)}年{d.Month}月{d.Day}日（{d:ddd}）";
+            DateTime d = DateTime.Now;
+            myWorksheet.Cell(2, 7).Value =
+                $"{d.ToString("ggy", JapanCulture)}年{d.Month}月{d.Day}日（{d:ddd}）{d.Hour}:{d.Minute}現在";
             //社名
             myWorksheet.Cell(3, 8).Value = "(株)ワイズ・コア";
             //合計金額
@@ -347,7 +347,7 @@ namespace Infrastructure.ExcelOutputData
         protected override void SetMerge()
         {
             _ = MySheetCellRange(1, 1, 1, SetColumnSizes().Length).Merge();//タイトル
-            _ = MySheetCellRange(2, 8, 2, 9).Merge();//日付
+            _ = MySheetCellRange(2, 7, 2, 9).Merge();//日付
             _ = MySheetCellRange(3, 8, 3, 9).Merge();//社名
 
             if (!IsContainDailyReportToNotOutputData)

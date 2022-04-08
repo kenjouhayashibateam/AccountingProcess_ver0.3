@@ -202,12 +202,11 @@
                     </StackPanel>
                     <ComboBox Grid.Column="9" Name="SortColumnComboBox" ItemsSource="{Binding Pagination.SortColumns}" SelectedValuePath="Key" DisplayMemberPath="Value" Text="{Binding Pagination.SelectedSortColumn}" VerticalContentAlignment="Center" Margin="5,2"/>
                     <ToggleButton Content="{Binding Pagination.SortDirectionContent}" Grid.Column="10" Padding="3,0" IsChecked="{Binding Pagination.SortDirectionIsASC}" Margin="3,2,5,2"/>
-                    <CheckBox Grid.Column="11" Content="選択して印字する" IsChecked="{Binding IsOutputDataSelect}" VerticalAlignment="Center" />
+                    <CheckBox Grid.Column="11" Content="選択して印字する" ToolTip="同一ページのチェックのみ可能です。ページを渡ってのチェックは出来ません。" IsChecked="{Binding IsOutputDataSelect}" VerticalAlignment="Center" />
                 </Grid>
             </GroupBox.Header>
             <DataGrid ItemsSource="{Binding TransferReceiptsAndExpenditures}" SelectedValue="{Binding SelectedListItem}" AutoGenerateColumns="False" Margin="0,3,0,0">
                 <DataGrid.Columns>
-                    <!--<DataGridCheckBoxColumn Width="1*" Header="印刷" Binding="{Binding IsOutput}"/>-->
                     <DataGridTemplateColumn Width="1*" Header="印刷">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -216,7 +215,11 @@
                         </DataGridTemplateColumn.HeaderStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsOutput,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DataContext.IsOutputDataSelect,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                <CheckBox IsChecked="{Binding IsOutput,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DataContext.IsOutputDataSelect,RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">
+                                    <CheckBox.InputBindings>
+                                        <MouseBinding Command="{Binding Path=DataContext.SetTotalAmountCommand,RelativeSource={RelativeSource AncestorType={x:Type CheckBox}}}" MouseAction="LeftClick"/>
+                                    </CheckBox.InputBindings>
+                                </CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
