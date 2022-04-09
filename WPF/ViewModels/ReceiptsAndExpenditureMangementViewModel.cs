@@ -362,7 +362,7 @@ namespace WPF.ViewModels
             PreviousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
 
             FinalAccountCategory =
-                AccountingProcessLocation.Location == Locations.管理事務所 ? "前日決算" : "預かり金額";
+                AccountingProcessLocation.Location == Locations.管理事務所 ? "前回決算" : "預かり金額";
 
             ListTitle = $"一覧 : {FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";
         }
@@ -619,17 +619,17 @@ namespace WPF.ViewModels
         {
             WithdrawalSum = 0;
             TransferSum = 0;
-            if (AccountingProcessLocation.Location == Locations.管理事務所)
-            {
-                foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-                { ContainTodayWroteWithdrawal(rae); }
-            }
+            //if (AccountingProcessLocation.Location == Locations.管理事務所)
+            //{
+            //    foreach (ReceiptsAndExpenditure rae in TodayWroteList)
+            //    { ContainTodayWroteWithdrawal(rae); }
+            //}
 
             foreach (ReceiptsAndExpenditure rae in AllDataList)
             { if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
 
-            void ContainTodayWroteWithdrawal(ReceiptsAndExpenditure rae)
-            { if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
+            //void ContainTodayWroteWithdrawal(ReceiptsAndExpenditure rae)
+            //{ if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
         }
         /// <summary>
         /// 出金データを出金、振替に振り分けます
@@ -653,18 +653,18 @@ namespace WPF.ViewModels
         private void SetPeymentSum()
         {
             int i = 0;
-            if (AccountingProcessLocation.Location == Locations.管理事務所)
-            {
-                foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-                { ContainTodayWrotePayment(rae); }
-            }
+            //if (AccountingProcessLocation.Location == Locations.管理事務所)
+            //{
+            //    foreach (ReceiptsAndExpenditure rae in TodayWroteList)
+            //    { ContainTodayWrotePayment(rae); }
+            //}
             foreach (ReceiptsAndExpenditure rae in AllDataList)
             { if (rae.IsPayment) { i += rae.Price; } }
 
             PaymentSum = i;
 
-            void ContainTodayWrotePayment(ReceiptsAndExpenditure rae)
-            { i += rae.IsPayment ? rae.Price : 0; }
+            //void ContainTodayWrotePayment(ReceiptsAndExpenditure rae)
+            //{ i += rae.IsPayment ? rae.Price : 0; }
         }
         /// <summary>
         /// 金庫の総計金額
@@ -1321,7 +1321,7 @@ namespace WPF.ViewModels
         /// 管理事務所なら「前日残高」、青蓮堂なら「預り金」
         /// </summary>
         public string PreviousDayBalanceText =>
-            AccountingProcessLocation.Location == Locations.管理事務所 ? "前日残高" : "預り金";
+            AccountingProcessLocation.Location == Locations.管理事務所 ? "前回決算" : "預り金";
         /// <summary>
         /// 出力メニューグループボックスのHeader 
         /// </summary>
@@ -1475,35 +1475,43 @@ namespace WPF.ViewModels
 
             if (AccountingProcessLocation.Location == Locations.青蓮堂) { TodayWroteList.Clear(); }
 
-            int todayPayment = 0;
-            int todayWithdrawal = default;
+            BalanceFinalAccount =
+                $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
+                $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
+                $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
+                $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
+                $"{Space}={Space}{AmountWithUnit(ListAmount)}";
 
-            if (TodayWroteList.Count != 0)
-            {
-                foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
-                {
-                    if (receiptsAndExpenditure.IsPayment) { todayPayment += receiptsAndExpenditure.Price; }
-                    else { todayWithdrawal += receiptsAndExpenditure.Price; }
-                }
-                ListAmount += todayPayment - todayWithdrawal;
-                BalanceFinalAccount =
-                    $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
-                    $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-                    $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
-                    $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
-                    $"{Space}={Space}{AmountWithUnit(ListAmount)}\r\n" +
-                    $"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
-                    $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
-            }
-            else
-            {
-                BalanceFinalAccount =
-                    $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
-                    $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-                    $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
-                    $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
-                    $"{Space}={Space}{AmountWithUnit(ListAmount)}";
-            }
+            //int todayPayment = 0;
+            //int todayWithdrawal = default;
+
+            //if (TodayWroteList.Count != 0)
+            //{
+            //    foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
+            //    {
+            //        if (receiptsAndExpenditure.IsPayment) { todayPayment += receiptsAndExpenditure.Price; }
+            //        else { todayWithdrawal += receiptsAndExpenditure.Price; }
+            //    }
+            //    ListAmount += todayPayment - todayWithdrawal;
+            //    BalanceFinalAccount =
+            //        $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
+            //        $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
+            //        $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
+            //        $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
+            //        $"{Space}={Space}{AmountWithUnit(ListAmount)}";
+            //    $"\r\n" +
+            //    $"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
+            //    $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
+            //}
+            //else
+            //{
+            //    BalanceFinalAccount =
+            //        $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
+            //        $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
+            //        $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
+            //        $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
+            //        $"{Space}={Space}{AmountWithUnit(ListAmount)}";
+            //}
             SetCashboxTotalAmount();
             SetOutputButtonEnabled(ListAmount);
         }

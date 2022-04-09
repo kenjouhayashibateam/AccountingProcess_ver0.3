@@ -1,9 +1,9 @@
 ﻿using ClosedXML.Excel;
 using Domain.Entities;
+using Domain.Entities.ValueObjects;
 using System;
 using static Domain.Entities.Helpers.TextHelper;
 using static Domain.Entities.Helpers.DataHelper;
-using Domain.Entities.ValueObjects;
 
 namespace Infrastructure.ExcelOutputData
 {

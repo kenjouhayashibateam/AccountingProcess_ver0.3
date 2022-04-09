@@ -39,6 +39,7 @@ namespace WPF.ViewModels
         private bool isCreditDeptVisibility;
         private bool isCommonEnabled;
         private bool IsPrecedingYearFinalAccountRegisterVerified = false;
+        private bool canOperation;
         #endregion
         private string depositAmount;
         private string showSlipManagementContent;
@@ -104,6 +105,16 @@ namespace WPF.ViewModels
                     () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        private void SetCanOperation()
+        {
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen) { CanOperation = true; }
+            else { CanOperation = ReturnBool(); }
+
+            bool ReturnBool()
+            {
+                return SelectedCreditDept != null;
+            }
+        }
         /// <summary>
         /// 法事計算書登録画面表示コマンド
         /// </summary>
@@ -632,6 +643,8 @@ namespace WPF.ViewModels
                 if (!string.IsNullOrEmpty(LoginRep.GetInstance().Rep.Name)) 
                 { CallConfirmationPrecedingYearFinalAccount(); }
 
+                SetCanOperation();
+
                 void CallConfirmationPrecedingYearFinalAccount()
                 {
                     if (IsPrecedingYearFinalAccountRegisterVerified) 
@@ -748,6 +761,7 @@ namespace WPF.ViewModels
             {
                 selectedCreditDept = value;
                 CallPropertyChanged();
+                SetCanOperation();
             }
         }
         /// <summary>
@@ -772,6 +786,18 @@ namespace WPF.ViewModels
             set
             {
                 creditDepts = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 決算操作が出来るか
+        /// </summary>
+        public bool CanOperation
+        {
+            get => canOperation;
+            set
+            {
+                canOperation = value;
                 CallPropertyChanged();
             }
         }

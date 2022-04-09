@@ -6,7 +6,9 @@ using Infrastructure.ExcelOutputData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
+using System.Timers;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
@@ -65,6 +67,7 @@ namespace WPF.ViewModels
         private int TotalAmount;
         private readonly IDataOutput DataOutput;
         private ListItem selectedListItem;
+        private Timer AmountTimer;
         #endregion
 
         public TransferReceiptsAndExpenditureManagementViewModel
@@ -587,6 +590,7 @@ namespace WPF.ViewModels
             {
                 selectedListItem = value;
                 CallPropertyChanged();
+                SetTotalAmount();
             }
         }
         /// <summary>
@@ -599,10 +603,7 @@ namespace WPF.ViewModels
             {
                 isOutputDataSelect = value;
                 CallPropertyChanged();
-                foreach (ListItem li in AllDataList)
-                {
-                    li.IsOutput = !value;
-                }
+                foreach (ListItem li in AllDataList) { li.IsOutput = !value; }
                 
                 ObservableCollection<ListItem> items = new ObservableCollection<ListItem>(); 
 
@@ -611,6 +612,15 @@ namespace WPF.ViewModels
                     li.IsOutput = !value;
                     items.Add(li);
                 }
+
+                AmountTimer = new Timer(50);
+                AmountTimer.Elapsed += (sender, e) =>
+                  {
+                      if (value) { SetTotalAmount(); }
+                      else { AmountTimer.Stop(); }
+                  };
+
+                if (value) { AmountTimer.Start(); }
 
                 TransferReceiptsAndExpenditures = items;
                 SetTotalAmount();
