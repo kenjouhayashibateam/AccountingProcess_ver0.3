@@ -377,6 +377,7 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.Location == Locations.管理事務所) { return true; }
 
             bool b = !string.IsNullOrEmpty(DepositAmount);
+
             if (!b)
             {
                 CallDepositAmountEmptyMessage();
@@ -626,8 +627,7 @@ namespace WPF.ViewModels
 
                 if (KanriJimushoChecked)
                 {
-                    SetPreviousDayFinalAmount();
-  
+                    SetPreviousDayFinalAmount();  
                     SetLocationKanriJimusho();
                 }
                 else if (ShorendoChecked)
@@ -661,7 +661,7 @@ namespace WPF.ViewModels
                     if(IsShunjuen)
                     {
                         AccountingProcessLocation.OriginalTotalAmount =
-                            DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
+                            DataBaseConnect.PreviousFinalAmount(IsShunjuen);
                     }
                     else
                     {
@@ -671,7 +671,7 @@ namespace WPF.ViewModels
 
                         foreach (CreditDept creditDept in creditDepts)
                         {
-                            amount+=DataBaseConnect.PreviousDayFinalAmount(creditDept);
+                            amount+=DataBaseConnect.PreviousFinalAmount(creditDept);
                         }
 
                         AccountingProcessLocation.OriginalTotalAmount = amount;

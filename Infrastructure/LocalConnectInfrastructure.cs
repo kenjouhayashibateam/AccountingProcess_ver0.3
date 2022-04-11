@@ -734,5 +734,9 @@ namespace Infrastructure
         public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate) => 0;
 
         public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept) => 0;
+
+        public int PreviousFinalAmount(bool isShunjuen) => 0;
+
+        public int PreviousFinalAmount(CreditDept creditDept) => 0;
     }
 }

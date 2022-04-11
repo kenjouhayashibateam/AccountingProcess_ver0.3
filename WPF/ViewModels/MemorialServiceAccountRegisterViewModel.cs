@@ -1976,6 +1976,7 @@ namespace WPF.ViewModels
             {
                 totalAmount = value;
                 CallPropertyChanged();
+                CanOperation = !HasErrors && value > 0;
             }
         }
         /// <summary>

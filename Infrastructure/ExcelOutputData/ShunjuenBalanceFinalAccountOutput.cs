@@ -149,7 +149,7 @@ namespace Infrastructure.ExcelOutputData
             {
                 myWorksheet.Cell(5, 3).Value = "本部長";
                 myWorksheet.Cell(5, 4).Value = "副住職";
-                myWorksheet.Cell(9, 1).Value = "前日より繰越";
+                myWorksheet.Cell(9, 1).Value = "前回より繰越";
                 myWorksheet.Cell(9, 4).Value = "社内振替";
                 myWorksheet.Cell(10, 4).Value = TranceferAmountWithUnit;
                 myWorksheet.Cell(12, 1).Value = "横浜銀行残高";

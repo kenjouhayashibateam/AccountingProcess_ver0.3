@@ -1279,5 +1279,32 @@ namespace Infrastructure
 
             return amount;
         }
+
+        public int PreviousFinalAmount(bool isShunjuen)
+        {
+            SettingConectionString();
+            SqlCommand Cmd = new SqlCommand
+                ($"select dbo.return_previous_final_amount('" +
+                    $"{AccountingProcessLocation.IsAccountingGenreShunjuen}')", Cn);
+            Cn.Open();
+            int amount = default;
+            using (Cn) { amount = (int)Cmd.ExecuteScalar(); }
+
+            return amount;
+        }
+
+        public int PreviousFinalAmount(CreditDept creditDept)
+        {
+            int amount = default;
+            SettingConectionString();
+            SqlCommand cmd = new SqlCommand
+                ($"select dbo.return_previous_final_credit_dept_amount(@credit_dept_id,@date)", Cn);
+            _ = cmd.Parameters.AddWithValue("@credit_dept_id", creditDept.ID);
+            _ = cmd.Parameters.AddWithValue("@date", DateTime.Today);
+            Cn.Open();
+
+            using (Cn) { amount = (int)cmd.ExecuteScalar(); }
+            return amount;
+        }
     }
 }

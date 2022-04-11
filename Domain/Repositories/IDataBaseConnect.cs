@@ -236,6 +236,18 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int PreviousDayFinalAmount(CreditDept creditDept);
         /// <summary>
+        /// 前回決算額を返します
+        /// </summary>
+        /// <param name="isShunjuen"></param>
+        /// <returns></returns>
+        public int PreviousFinalAmount(bool isShunjuen);
+        /// <summary>
+        /// 貸方部門の前回決算額を返します
+        /// </summary>
+        /// <param name="creditDept"></param>
+        /// <returns></returns>
+        public int PreviousFinalAmount(CreditDept creditDept);
+        /// <summary>
         /// 春秋苑前年度決算を登録します
         /// </summary>
         public int RegistrationPrecedingYearFinalAccount();
