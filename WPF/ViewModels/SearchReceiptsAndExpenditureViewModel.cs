@@ -34,6 +34,8 @@ namespace WPF.ViewModels
         private bool isIndiscriminateAccountingSubject = false;
         private bool isCreditDeptsEnabled = true;
         private bool isAccountingSubjectsEnabled = true;
+        private bool locationToggle;
+        private bool isLocationLimited;
         #endregion
         private DateTime searchStartDate = DateTime.Today;
         private DateTime searchEndDate = DateTime.Today;
@@ -58,6 +60,7 @@ namespace WPF.ViewModels
             InputAllPeriodCommand = new DelegateCommand(() => InputAllPeriod(), () => true);
             RefreshListCommand = new DelegateCommand(() => RefreshList(), () => true);
             Pagination.SortDirectionIsASC = false;
+            LocationToggle = true;
         }
         public SearchReceiptsAndExpenditureViewModel() :
             this(DefaultInfrastructure.GetDefaultDataBaseConnect())
@@ -339,16 +342,46 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
+        /// <summary>
+        /// 経理担当場所のトグル
+        /// </summary>
+        public bool LocationToggle
+        {
+            get => locationToggle;
+            set
+            {
+                locationToggle = value;
+                CallPropertyChanged();
+                CreateReceiptsAndExpenditures(true);
+            }
+        }
+        /// <summary>
+        /// 経理担当場所を限定するか
+        /// </summary>
+        public bool IsLocationLimited
+        {
+            get => isLocationLimited;
+            set
+            {
+                isLocationLimited = value;
+                CallPropertyChanged();
+                CreateReceiptsAndExpenditures(true);
+            }
+        }
 
         private void CreateReceiptsAndExpenditures(bool isPageReset)
         {
             Pagination.CountReset(isPageReset);
             string creditDept = IsIndiscriminateDept ? string.Empty : SelectedCreditDept.Dept;
             string subject = IsIndiscriminateAccountingSubject ? string.Empty : SearchAccountingSubject;
+            string location = string.Empty;
+
+            if (IsLocationLimited) 
+            { location = LocationToggle ? Locations.管理事務所.ToString() : Locations.青蓮堂.ToString(); }
 
             (int count, ObservableCollection<ReceiptsAndExpenditure> list) =
                 DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail, 
+                (DefaultDate, DateTime.Today, location,creditDept, SearchContentText, SearchDetail, 
                     subject,　string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, !IsAllData,
                     IsPaymentOnly,　true, true, SearchStartDate, SearchEndDate, DefaultDate.AddDays(1), 
                     DateTime.Today,　Pagination.PageCount, Pagination.SelectedSortColumn,
@@ -362,7 +395,7 @@ namespace WPF.ViewModels
             int withdrawal = 0;
 
             foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
-                (DefaultDate, DateTime.Today, string.Empty, creditDept, SearchContentText, SearchDetail,
+                (DefaultDate, DateTime.Today, location, creditDept, SearchContentText, SearchDetail,
                     subject, string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen,
                     !IsAllData, IsPaymentOnly, true, true, SearchStartDate, SearchEndDate, 
                     DefaultDate.AddDays(1), DateTime.Today))

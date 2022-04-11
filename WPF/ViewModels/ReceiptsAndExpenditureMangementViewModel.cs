@@ -1496,7 +1496,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
         /// <summary>
         /// リストの収支決算を表示します
         /// </summary>
@@ -1573,9 +1572,7 @@ namespace WPF.ViewModels
             IsPreviousDayOutputEnabled = false;
 
             if (AccountingProcessLocation.Location == Locations.青蓮堂)
-            {
-                IsWithdrawalSlipsOutputEnabled = IsPaymentSlipsOutputEnabled = false;
-            }
+            { IsWithdrawalSlipsOutputEnabled = IsPaymentSlipsOutputEnabled = false; }
 
             void VerificationLimitCreditDept()
             {

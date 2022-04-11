@@ -26,12 +26,13 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="5*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <GroupBox Header="検索メニュー" Grid.Column="0" Margin="5" Grid.ColumnSpan="2">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
@@ -50,7 +51,30 @@
                                 <RadioButton Content="出金のみ" Grid.Column="2" IsChecked="{Binding IsWithdrawalOnly}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
                             </Grid>
                         </GroupBox>
-                        <Grid Grid.Row="1">
+                        <GroupBox Grid.Row="1" Header="経理担当場所" Margin="5,3">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Column="0" Content="限定する" IsChecked="{Binding IsLocationLimited}" VerticalAlignment="Center" Margin="5,3"/>
+                                <ToggleButton Grid.Column="1" IsChecked="{Binding LocationToggle}" IsEnabled="{Binding IsLocationLimited}" Margin="5,3">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding LocationToggle}" Value="true">
+                                                    <Setter Property="Content" Value="管理事務所"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding LocationToggle}" Value="false">
+                                                    <Setter Property="Content" Value="青蓮堂"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+                            </Grid>
+                        </GroupBox>
+                        <Grid Grid.Row="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>
                                 <RowDefinition Height="3*"/>
@@ -74,7 +98,7 @@
                                 </Button>
                             </Grid>
                         </Grid>
-                        <Grid Grid.Row="2">
+                        <Grid Grid.Row="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
@@ -87,7 +111,7 @@
                             <CheckBox Content="貸方部門を限定しない" IsChecked="{Binding IsIndiscriminateDept}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                             <ComboBox Name="CreditDeptCommboBox" Grid.Row="1"  ItemsSource="{Binding CreditDepts}" Text="{Binding SelectedCreditDept.Dept}" SelectedValue="{Binding SelectedCreditDept}" DisplayMemberPath="Dept" IsEnabled="{Binding IsCreditDeptsEnabled}" Margin="5"/>
                         </Grid>
-                        <Grid Grid.Row="3">
+                        <Grid Grid.Row="4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
@@ -100,7 +124,7 @@
                             <CheckBox Content="勘定科目を限定しない" IsChecked="{Binding IsIndiscriminateAccountingSubject}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0"/>
                             <ComboBox Name="AccountingSubjectCommboBox" Grid.Row="1" Text="{Binding SearchAccountingSubject}" ItemsSource="{Binding AccountingSubjects}" DisplayMemberPath="Subject" behavior:ComboBoxAttachment.IsIMEModeOnGotFocus="True" IsEditable="True" IsEnabled="{Binding IsAccountingSubjectsEnabled}" Margin="5"/>
                         </Grid>
-                        <Grid Grid.Row="4">
+                        <Grid Grid.Row="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
