@@ -514,7 +514,7 @@ namespace WPF.ViewModels
                                 true, DefaultDate, DateTime.Today, DefaultDate, DefaultDate),
                                 ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Today, location, WizeCoreDept.蓮華庵.ToString(),
+                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.蓮華庵.ToString(),
                                 string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true,
                                 true, DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today),
                                 ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
@@ -524,7 +524,7 @@ namespace WPF.ViewModels
                                 DefaultDate, DateTime.Today, DefaultDate, DefaultDate), ref shunjuanPay,
                                 ref shunjuanWith, ref shunjuanBank, ref shunjuanShunjuen);
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Today, location, WizeCoreDept.春秋庵.ToString(),
+                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.春秋庵.ToString(),
                                 string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true, true,
                                 DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today), ref shunjuanPay,
                                 ref shunjuanWith, ref shunjuanBank, ref shunjuanShunjuen);
@@ -534,7 +534,7 @@ namespace WPF.ViewModels
                                 DefaultDate, DateTime.Today, DefaultDate, DefaultDate), ref kougePay,
                                 ref kougeWith, ref kougeBank, ref kougeShunjuen);
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                            (DefaultDate, DateTime.Today, location, WizeCoreDept.香華.ToString(),
+                            (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.香華.ToString(),
                                 string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true, true,
                                 DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today), ref kougePay,
                                 ref kougeWith, ref kougeBank, ref kougeShunjuen);
