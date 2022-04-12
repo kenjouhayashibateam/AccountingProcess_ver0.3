@@ -600,13 +600,28 @@ namespace WPF.ViewModels
 
                 PDFA = DataBaseConnect.PreviousDayFinalAmount(true);
 
-                foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Today,string.Empty, string.Empty, string.Empty, string.Empty,
-                        string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
-                        DateTime.Today, DateTime.Today))
+                if (AccountingProcessLocation.Location == Locations.管理事務所)
                 {
-                    paySum += rae.Price;
+                    foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                        (DefaultDate, DateTime.Today, string.Empty, string.Empty, string.Empty, string.Empty,
+                            string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
+                            DateTime.Today, DateTime.Today))
+                    {
+                        paySum += rae.Price;
+                    }
+
+                    foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                        (DefaultDate, DateTime.Today, string.Empty, string.Empty, string.Empty, string.Empty,
+                            string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
+                            DateTime.Today, DateTime.Today))
+                    {
+                        if (rae.Content.Text.Contains("口座入金"))
+                        { traSum += rae.Price; }
+                        else
+                        { withSum += rae.Price; }
+                    }
                 }
+
                 foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
                         string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
@@ -615,16 +630,6 @@ namespace WPF.ViewModels
                     paySum += rae.Price;
                 }
 
-                foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Today,string.Empty, string.Empty, string.Empty, string.Empty,
-                        string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
-                        DateTime.Today, DateTime.Today))
-                {
-                    if (rae.Content.Text.Contains("口座入金"))
-                    { traSum += rae.Price; }
-                    else
-                    { withSum += rae.Price; }
-                }
                 foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
                         string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
