@@ -431,21 +431,24 @@ namespace WPF.ViewModels
         /// <summary>
         /// 収支日報を出力します
         /// </summary>
-        private async void BalanceFinalAccountOutput()
+        private void BalanceFinalAccountOutput()
         {
             BalanceFinalAccountOutputButtonContent = "出力中";
             IsOutputGroupEnabled = false;
             IsClose = false;
-            if (AccountingProcessLocation.IsAccountingGenreShunjuen)
-            {
-                await Task.Run(() =>
-                    DataOutput.BalanceFinalAccount(AmountWithUnit(PreviousDayFinalAccount),
-                        PaymentSumDisplayValue, WithdrawalSumDisplayValue, TransferSumDisplayValue,
-                        TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
-                        AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
-                        IsYokohamaBankCheck, IsCeresaCheck));
-            }
-            else
+
+            string location = IsLocationSearch ?
+                AccountingProcessLocation.Location.ToString() : string.Empty;
+
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen) { SetShunjuenData(); }
+            else { SetWizeCoreData(); }
+
+            BalanceFinalAccountOutputButtonContent = "収支日報";
+            IsOutputGroupEnabled = true;
+            IsClose = true;
+            AccountingProcessLocation.IsBalanceAccountOutputed = true;
+
+            async void SetWizeCoreData()
             {
                 int rengeanPDFA;
                 int shunjuanPay = default;
@@ -467,9 +470,9 @@ namespace WPF.ViewModels
 
                 await Task.Run(() =>
                     DataOutput.BalanceFinalAccount(IsContainDailyReportToNotOutputData, rengeanPDFA,
-                        rengeanPay, rengeanWith, rengeanBank, rengeanShunjuen, shunjuanPDFA, 
-                        shunjuanPay, shunjuanWith,  shunjuanBank, shunjuanShunjuen, kougePDFA, 
-                        kougePay, kougeWith, kougeBank,  kougeShunjuen, IntAmount(YokohamaBankAmount),
+                        rengeanPay, rengeanWith, rengeanBank, rengeanShunjuen, shunjuanPDFA,
+                        shunjuanPay, shunjuanWith, shunjuanBank, shunjuanShunjuen, kougePDFA,
+                        kougePay, kougeWith, kougeBank, kougeShunjuen, IntAmount(YokohamaBankAmount),
                         IntAmount(PairAmount)));
 
                 void SetPreviousDayFinalAmount()
@@ -482,7 +485,7 @@ namespace WPF.ViewModels
 
                     shunjuanPDFA = b ? DataBaseConnect.PreviousDayFinalAmount
                         (DataBaseConnect.ReferenceCreditDept(WizeCoreDept.春秋庵.ToString(), true, false)[0]) :
-                        PreviousDayFinalAccount; 
+                        PreviousDayFinalAccount;
 
                     kougePDFA = b ? DataBaseConnect.PreviousDayFinalAmount
                         (DataBaseConnect.ReferenceCreditDept(WizeCoreDept.香華.ToString(), true, false)[0]) :
@@ -490,24 +493,6 @@ namespace WPF.ViewModels
 
                     if (b)
                     {
-                        //AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                        //    (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.蓮華庵.ToString(),
-                        //        string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true,
-                        //        true, DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today),
-                        //        ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
-                        //AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                        //    (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.春秋庵.ToString(),
-                        //        string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true, true,
-                        //        DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today), ref shunjuanPay,
-                        //        ref shunjuanWith, ref shunjuanBank, ref shunjuanShunjuen);
-                        //AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
-                        //    (DefaultDate, DateTime.Today, string.Empty, WizeCoreDept.香華.ToString(),
-                        //        string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true, true,
-                        //        DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today), ref kougePay,
-                        //        ref kougeWith, ref kougeBank, ref kougeShunjuen);
-
-                        string location = IsLocationSearch ?
-                            AccountingProcessLocation.Location.ToString() : string.Empty;
                         AmountSorting(DataBaseConnect.ReferenceReceiptsAndExpenditure
                             (DefaultDate, DateTime.Today, location, WizeCoreDept.蓮華庵.ToString(),
                                 string.Empty, string.Empty, string.Empty, string.Empty, false, false, true, true,
@@ -564,7 +549,7 @@ namespace WPF.ViewModels
                         AmountSorting
                             (rengeanList, ref rengeanPay, ref rengeanWith, ref rengeanBank, ref rengeanShunjuen);
                         AmountSorting
-                            (shunjuanList, ref shunjuanPay, ref shunjuanWith, ref shunjuanBank, 
+                            (shunjuanList, ref shunjuanPay, ref shunjuanWith, ref shunjuanBank,
                                 ref shunjuanShunjuen);
                         AmountSorting
                             (kougeList, ref kougePay, ref kougeWith, ref kougeBank, ref kougeShunjuen);
@@ -580,19 +565,15 @@ namespace WPF.ViewModels
                     int shunjuen = default;
 
                     foreach (ReceiptsAndExpenditure rae in raeList)
-                    { SetPrice(rae,ref pay,ref with,ref bank,ref shunjuen); }
+                    { SetPrice(rae, ref pay, ref with, ref bank, ref shunjuen); }
 
-                    //payment = pay;
-                    //withdrawal = with;
-                    //bankAmount = bank;
-                    //shunjuenAmount = shunjuen;
                     payment += pay;
                     withdrawal += with;
                     bankAmount += bank;
                     shunjuenAmount += shunjuen;
 
                     void SetPrice
-                        (ReceiptsAndExpenditure rae,ref int payment,ref int withdrawal,ref int bankAmount,
+                        (ReceiptsAndExpenditure rae, ref int payment, ref int withdrawal, ref int bankAmount,
                             ref int shunjuenAmount)
                     {
                         if (rae.IsPayment) { payment += rae.Price; }
@@ -604,15 +585,64 @@ namespace WPF.ViewModels
                     ref int bankAmount, ref int shunjuenAmount)
                 {
                     if (rae.Content.Text.Contains("銀行")) { bankAmount += rae.Price; }
-                    else if (rae.Content.Text.Contains("口座入金")) { bankAmount+=rae.Price; }
+                    else if (rae.Content.Text.Contains("口座入金")) { bankAmount += rae.Price; }
                     else if (rae.Content.Text.Contains("春秋苑")) { shunjuenAmount += rae.Price; }
                     else { withdrawal += rae.Price; }
                 }
             }
-            BalanceFinalAccountOutputButtonContent = "収支日報";
-            IsOutputGroupEnabled = true;
-            IsClose = true;
-            AccountingProcessLocation.IsBalanceAccountOutputed = true;
+
+            async void SetShunjuenData()
+            {
+                int PDFA;
+                int paySum = default;
+                int withSum = default;
+                int traSum = default;
+
+                PDFA = DataBaseConnect.PreviousDayFinalAmount(true);
+
+                foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                    (DefaultDate, DateTime.Today,string.Empty, string.Empty, string.Empty, string.Empty,
+                        string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
+                        DateTime.Today, DateTime.Today))
+                {
+                    paySum += rae.Price;
+                }
+                foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                    (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
+                        string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
+                        DefaultDate, DefaultDate))
+                {
+                    paySum += rae.Price;
+                }
+
+                foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                    (DefaultDate, DateTime.Today,string.Empty, string.Empty, string.Empty, string.Empty,
+                        string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
+                        DateTime.Today, DateTime.Today))
+                {
+                    if (rae.Content.Text.Contains("口座入金"))
+                    { traSum += rae.Price; }
+                    else
+                    { withSum += rae.Price; }
+                }
+                foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
+                    (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
+                        string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
+                        DefaultDate, DefaultDate))
+                {
+                    if (rae.Content.Text.Contains("口座入金"))
+                    { traSum += rae.Price; }
+                    else
+                    { withSum += rae.Price; }
+                }
+
+                await Task.Run(() =>
+                    DataOutput.BalanceFinalAccount(AmountWithUnit(PDFA),
+                        AmountWithUnit(paySum), AmountWithUnit(withSum), AmountWithUnit(traSum),
+                        TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
+                        AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
+                        IsYokohamaBankCheck, IsCeresaCheck));
+            }
         }
 
         protected void SetDelegateCommand()
@@ -690,18 +720,11 @@ namespace WPF.ViewModels
         private void SetPeymentSum()
         {
             int i = 0;
-            //if (AccountingProcessLocation.Location == Locations.管理事務所)
-            //{
-            //    foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-            //    { ContainTodayWrotePayment(rae); }
-            //}
+ 
             foreach (ReceiptsAndExpenditure rae in AllDataList)
             { if (rae.IsPayment) { i += rae.Price; } }
 
             PaymentSum = i;
-
-            //void ContainTodayWrotePayment(ReceiptsAndExpenditure rae)
-            //{ i += rae.IsPayment ? rae.Price : 0; }
         }
         /// <summary>
         /// 金庫の総計金額
@@ -1518,36 +1541,6 @@ namespace WPF.ViewModels
                 $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
                 $"{Space}={Space}{AmountWithUnit(ListAmount)}";
 
-            //int todayPayment = 0;
-            //int todayWithdrawal = default;
-
-            //if (TodayWroteList.Count != 0)
-            //{
-            //    foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
-            //    {
-            //        if (receiptsAndExpenditure.IsPayment) { todayPayment += receiptsAndExpenditure.Price; }
-            //        else { todayWithdrawal += receiptsAndExpenditure.Price; }
-            //    }
-            //    ListAmount += todayPayment - todayWithdrawal;
-            //    BalanceFinalAccount =
-            //        $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
-            //        $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-            //        $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
-            //        $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
-            //        $"{Space}={Space}{AmountWithUnit(ListAmount)}";
-            //    $"\r\n" +
-            //    $"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
-            //    $"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
-            //}
-            //else
-            //{
-            //    BalanceFinalAccount =
-            //        $"{FinalAccountCategory}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
-            //        $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-            //        $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
-            //        $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
-            //        $"{Space}={Space}{AmountWithUnit(ListAmount)}";
-            //}
             SetCashboxTotalAmount();
             SetOutputButtonEnabled(ListAmount);
         }
