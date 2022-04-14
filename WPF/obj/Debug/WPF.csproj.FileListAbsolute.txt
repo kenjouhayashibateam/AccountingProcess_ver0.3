@@ -293,3 +293,5 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\T
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.baml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ProductSalesRegistrationView.baml
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SeachCondlencesView.baml
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShunjuenMenuView.g.cs
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShunjuenMenuView.baml

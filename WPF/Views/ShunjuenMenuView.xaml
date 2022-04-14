@@ -1,0 +1,72 @@
+﻿<Window x:Class="WPF.Views.ShunjuenMenuView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF.Views"
+        xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="450" Width="300">
+    
+    <Window.DataContext>
+        <vm:ShunjuenMenuViewModel/>
+    </Window.DataContext>
+
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
+
+    <i:Interaction.Triggers>
+        <interactions:PropertyChangedTrigger Binding="{Binding ShowWindow}">
+            <behavior:ShowDialogBehavior/>
+        </interactions:PropertyChangedTrigger>
+        <interactions:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interactions:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
+
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding ShowWindowCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Button Content="お布施一覧管理" Grid.Row="0" Margin="5,8">
+            <Button.InputBindings>
+                <KeyBinding Command="{Binding ShowCreateCondolencesCommand}" Key="Space"/>
+                <MouseBinding Command="{Binding ShowCreateCondolencesCommand}" MouseAction="LeftClick"/>
+            </Button.InputBindings>
+        </Button>
+        <Button Content="物販売上登録" Grid.Row="1" Margin="5,8">
+            <Button.InputBindings>
+                <KeyBinding Command="{Binding ShowProductSalesRegistrationViewCommand}" Key="Space"/>
+                <MouseBinding Command="{Binding ShowProductSalesRegistrationViewCommand}" MouseAction="LeftClick"/>
+            </Button.InputBindings>
+        </Button>
+        <Button Content="パート交通費登録" Grid.Row="2" Margin="5,8">
+            <Button.InputBindings>
+                <KeyBinding Command="{Binding ShowPartTimerTransPortCommand}" Key="Space"/>
+                <MouseBinding Command="{Binding ShowPartTimerTransPortCommand}" MouseAction="LeftClick"/>
+            </Button.InputBindings>
+        </Button>
+        <Button Content="管理料入金登録" Grid.Row="3" Margin="5,8">
+        </Button>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </Grid>
+</Window>

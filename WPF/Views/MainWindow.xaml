@@ -79,6 +79,12 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="ShowShunjuenMenuButton" Visibility="Visible" Content="経理処理メニュー" Margin="5">
+                    <Button.InputBindings>
+                        <MouseBinding Command="{Binding ShowShunjuenMenuCommand}" MouseAction="LeftClick"/>
+                        <KeyBinding Command="{Binding ShowShunjuenMenuCommand}" Key="Space"/>
+                    </Button.InputBindings>
+                </Button>
                 <Button x:Name="LoginButton" Grid.Column="1" Content="ログイン" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50,5">
                     <Button.InputBindings>
                         <MouseBinding Command="{Binding ShowLoginCommand}" MouseAction="LeftClick"/>

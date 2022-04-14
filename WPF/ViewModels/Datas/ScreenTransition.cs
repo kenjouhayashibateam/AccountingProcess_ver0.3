@@ -118,5 +118,10 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window MemorialServiceAccountRegister() 
         { return new MemorialServiceAccountRegisterView(); }
+        /// <summary>
+        /// 春秋苑経理処理メニュー画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window ShunjuenMenu() { return new ShunjuenMenuView(); }
     }
 }

@@ -76,8 +76,7 @@ namespace WPF.ViewModels
                 (() => CreateShowWindowCommand(ScreenTransition.CreateVoucher()), () => true);
             RegistrationPrecedingYearFinalAccountCommand =
                 new DelegateCommand(() => RegistrationPrecedingYearFinalAccount(), () => true);
-            LogoutCommand =
-                new DelegateCommand(() => Logout(), () => true);
+            LogoutCommand = new DelegateCommand(() => Logout(), () => true);
             ShowPartTimerTransPortCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()),
                     () => true);
@@ -103,8 +102,17 @@ namespace WPF.ViewModels
             ShowMemorialServiceAccountRegister = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.MemorialServiceAccountRegister()),
                     () => true);
+            ShowShunjuenMenuCommand=new DelegateCommand
+                (() => CreateShowWindowCommand(ScreenTransition.ShunjuenMenu()), () => true);
         }
         public MainWindowViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 春秋苑経理処理メニュー画面表示コマンド
+        /// </summary>
+        public DelegateCommand ShowShunjuenMenuCommand { get; }
+        /// <summary>
+        /// 決算データ操作許可を操作します
+        /// </summary>
         private void SetCanOperation()
         {
             if (AccountingProcessLocation.IsAccountingGenreShunjuen) { CanOperation = true; }

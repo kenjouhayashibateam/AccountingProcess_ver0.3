@@ -364,7 +364,38 @@ namespace WPF.ViewModels
             FinalAccountCategory =
                 AccountingProcessLocation.Location == Locations.管理事務所 ? "前回決算" : "預かり金額";
 
-            ListTitle = $"一覧 : {FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";
+            string dept = SelectedCreditDept == null ? string.Empty : SelectedCreditDept.Dept;
+            ObservableCollection<ReceiptsAndExpenditure> list =
+                DataBaseConnect.ReferenceReceiptsAndExpenditure
+                (DefaultDate, DateTime.Today, string.Empty, dept, string.Empty, string.Empty, string.Empty,
+                    string.Empty, AccountingProcessLocation.IsAccountingGenreShunjuen, false, true, true, true,
+                    DefaultDate, DateTime.Today, DateTime.Today, DateTime.Today);
+            int payment = default;
+            int withdrawal = default;
+            foreach (ReceiptsAndExpenditure rae in list)
+            {
+                if (rae.IsPayment) { payment += rae.Price; }
+                else { withdrawal += rae.Price; }
+            }
+            string todayAmountText;
+            string paymentText = payment == 0 ? string.Empty : $"入金：{AmountWithUnit(payment)}";
+            string withdrawalText = withdrawal == 0 ? string.Empty : $"出金：{AmountWithUnit(withdrawal)}";
+            todayAmountText = paymentText.Length == 0 ? string.Empty : paymentText;
+            
+            if (todayAmountText.Length > 0)
+            { todayAmountText += withdrawalText.Length == 0 ? string.Empty : $"、{withdrawalText}"; }
+            else { todayAmountText = withdrawalText; }
+
+            ListTitle =
+                $"一覧 : {FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}" +
+                $"{ReturnTodayAmount(todayAmountText)}";
+
+            static string ReturnTodayAmount(string todayAmountText)
+            {
+                if (AccountingProcessLocation.Location != Locations.管理事務所) { return string.Empty; }
+                return todayAmountText.Length > 0 ?
+                    $"{SpaceF}本日出力済みの{todayAmountText}を含む" : string.Empty;
+            }
         }
         /// <summary>
         /// 今日付けで伝票出力したデータリストを保持します
@@ -1636,7 +1667,7 @@ namespace WPF.ViewModels
                 (AccountActivityDateStart, AccountActivityDateEnd, OutputDateStart, OutputDateEnd,
                     Location, isPageCountReset);
             Pagination.SetProperty();
-            ListTitle = $"一覧 : {FinalAccountCategory} {AmountWithUnit(PreviousDayFinalAccount)}";
+            SetListTitle();
             SetCashboxTotalAmount();
             SetTodayWroteList();
             SetPeymentSum();

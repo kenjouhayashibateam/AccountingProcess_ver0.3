@@ -149,6 +149,7 @@
     <Compile Include="ViewModels\SearchCondlencesViewModel.cs" />
     <Compile Include="ViewModels\SearchReceiptsAndExpenditureViewModel.cs" />
     <Compile Include="ViewModels\ShorendoCashBoxCalculationViewModel.cs" />
+    <Compile Include="ViewModels\ShunjuenMenuViewModel.cs" />
     <Compile Include="ViewModels\TransferReceiptsAndExpenditureManagementViewModel.cs" />
     <Compile Include="ViewModels\TransferReceiptsAndExpenditureOperationViewModel.cs" />
     <Compile Include="ViewModels\VoucherManagementViewModel.cs" />
@@ -170,6 +171,9 @@
     </Compile>
     <Compile Include="Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml.cs">
       <DependentUpon>RegistrationFlowerSellReceiptsAndExpenditureView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShunjuenMenuView.xaml.cs">
+      <DependentUpon>ShunjuenMenuView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TransferReceiptsAndExpenditureManagementView.xaml.cs">
       <DependentUpon>TransferReceiptsAndExpenditureManagementView.xaml</DependentUpon>
@@ -243,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShunjuenMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
