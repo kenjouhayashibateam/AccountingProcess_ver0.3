@@ -474,7 +474,7 @@ namespace Infrastructure
                 { "@is_payment", receiptsAndExpenditure.IsPayment},
                 { "@is_validity", receiptsAndExpenditure.IsValidity},
                 {"@is_unprinted", receiptsAndExpenditure.IsUnprinted},
-                {"@operation_staff_id", LoginRep.Rep.ID},
+                {"@operation_staff_id", LoginRep.GetInstance().Rep.ID},
                 { "@is_reduced_tax_rate", receiptsAndExpenditure.IsReducedTaxRate}
             };
 
@@ -655,13 +655,11 @@ namespace Infrastructure
             Dictionary<int, string> list = new Dictionary<int, string>();
             using (Cn)
             {
-                using (SqlDataReader dataReader = Cmd.ExecuteReader())
+                using SqlDataReader dataReader = Cmd.ExecuteReader();
+                while (dataReader.Read())
                 {
-                    while (dataReader.Read())
-                    {
-                        list.Add((int)dataReader["PersonInChargeID"],
-                                        (string)dataReader["PersonInChargeName"]);
-                    }
+                    list.Add((int)dataReader["PersonInChargeID"],
+                                    (string)dataReader["PersonInChargeName"]);
                 }
             }
 
@@ -997,9 +995,7 @@ namespace Infrastructure
                 ("get_branch_number").ExecuteReader())
             {
                 while (sqlDataReader.Read())
-                {
-                    s = (string)sqlDataReader["branch_number"];
-                }
+                { s = (string)sqlDataReader["branch_number"]; }
             }
 
             return s;
@@ -1093,7 +1089,7 @@ namespace Infrastructure
                     debitAccountCode, debitAccount, creditAccountCode, creditAccount, isValidityTrueOnly,
                     containOutputted, outputDateStart, outputDateEnd);
 
-                Rep rep;
+            Rep rep;
             CreditDept creditDept;
             AccountingSubject debitAccountingSubject;
             AccountingSubject creditAccountingSubject;
@@ -1305,6 +1301,95 @@ namespace Infrastructure
 
             using (Cn) { amount = (int)cmd.ExecuteScalar(); }
             return amount;
+        }
+
+        public Lessee ReferenceLessee(string managementNumber)
+        {
+            Parameters = new Dictionary<string, object>()
+            { {"@ManagementNumber",managementNumber},{"@LesseeName",string.Empty } };
+
+            Cn = new SqlConnection()
+            { ConnectionString = Properties.Settings.Default.COMMONDataBaseConectionString };
+
+            Cn.Open();
+
+            SqlCommand Cmd = new SqlCommand
+            {
+                Connection = Cn,
+                CommandType = CommandType.StoredProcedure,
+                CommandText = "Call_ShunjyuenData"
+            };
+
+            foreach (KeyValuePair<string, object> param in Parameters)
+            {
+                Cmd.Parameters.AddWithValue(param.Key, param.Value);
+            }
+
+            Lessee lessee = null;
+            string s;
+            string ku;
+            string kuiki;
+            string gawa;
+            string ban;
+            string edaban;
+            string number;
+            string lesseeName;
+            string receiverName;
+            string area;
+            double d;
+
+            using (Cn)
+            {
+                using SqlDataReader reader = Cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    ku = (string)reader["GraveNumberKu"];
+                    kuiki = (string)reader["GraveNumberKuiki"];
+                    gawa = (string)reader["GraveNumberGawa"];
+                    ban = (string)reader["GraveNumberBan"];
+                    edaban = (string)reader["GraveNumberEdaban"];
+
+                    s = AdjustmentGraveNumber(ku, kuiki, gawa, ban, edaban);
+
+                    number = (string)reader["ManagementNumber"];
+                    lesseeName = (string)reader["LesseeName"];
+                    receiverName = DBNull.Value.Equals(reader["ReceiverName"]) ? string.Empty : (string)reader["ReceiverName"];
+                    area = (string)reader["AreaOfGrave"];
+                    d = double.Parse(area);
+                    lessee = new Lessee(number, lesseeName, receiverName, s, d);
+                }
+            }
+
+            return lessee;
+        }
+
+        public ObservableCollection<KeyValuePair<decimal, int>> GetManagementFeeList()
+        {
+            ObservableCollection<KeyValuePair<decimal, int>> list = new ObservableCollection<KeyValuePair<decimal, int>>();
+            Dictionary<decimal, int> map = new Dictionary<decimal, int>();
+
+            SettingConectionString();            
+
+            using (Cn)
+            {
+                using SqlDataReader reader = 
+                    NewCommand
+                    (CommandType.Text, @"select * from management_fee_master").ExecuteReader();
+
+                while (reader.Read()) { map.Add((decimal)reader["area"], (int)reader["amount"]); }
+            }
+
+            foreach (KeyValuePair<decimal, int> kvp in map) { list.Add(kvp); }
+
+            return list;
+        }
+
+        public int Registration(decimal area,int amount)
+        {
+            Parameters = new Dictionary<string, object>()
+            { {"@area",area},{"@amount",amount } };
+
+            return ReturnGeneretedParameterCommand("registration_management_fee").ExecuteNonQuery();
         }
     }
 }

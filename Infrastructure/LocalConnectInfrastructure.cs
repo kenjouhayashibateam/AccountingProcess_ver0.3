@@ -733,10 +733,19 @@ namespace Infrastructure
 
         public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate) => 0;
 
-        public int RetutnFiscalYearEndFinalAccountCalculation(DateTime fiscalYearEndDate, CreditDept creditDept) => 0;
+        public int RetutnFiscalYearEndFinalAccountCalculation
+            (DateTime fiscalYearEndDate, CreditDept creditDept) => 0;
 
         public int PreviousFinalAmount(bool isShunjuen) => 0;
 
         public int PreviousFinalAmount(CreditDept creditDept) => 0;
+
+        public Lessee ReferenceLessee(string managementNumber)
+        { return new Lessee(string.Empty, string.Empty, string.Empty, string.Empty, 0); }
+
+        public ObservableCollection<KeyValuePair<decimal, int>> GetManagementFeeList() =>
+            new ObservableCollection<KeyValuePair<decimal, int>>();
+
+        public int Registration(decimal area,int amount) => 0;
     }
 }

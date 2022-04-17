@@ -521,5 +521,22 @@ namespace Domain.Repositories
         /// <returns></returns>
         public int RetutnFiscalYearEndFinalAccountCalculation
             (DateTime fiscalYearEndDate, CreditDept creditDept);
+        /// <summary>
+        /// 名義人データを検索して返します
+        /// </summary>
+        /// <param name="managementNumber"></param>
+        /// <returns></returns>
+        public Lessee ReferenceLessee(string managementNumber);
+        /// <summary>
+        /// 管理料一覧を取得します
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<KeyValuePair<decimal, int>> GetManagementFeeList();
+        /// <summary>
+        /// 管理料を登録します
+        /// </summary>
+        /// <param name="managementFee"></param>
+        /// <returns></returns>
+        public int Registration(decimal area,int amount);
     }
 }

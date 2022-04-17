@@ -1,8 +1,10 @@
 ﻿
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\App.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\CashJournalManagementView.xaml;;
+FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\ManagementFeeManagementView.xaml;;
+FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\ManagementFeePaymentRegistrationView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\MemorialServiceAccountRegisterView.xaml;;
-FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml;;
+FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\FlowerSellReceiptsAndExpenditureRegistrationView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\ShunjuenMenuView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\TransferReceiptsAndExpenditureManagementView.xaml;;
 FC:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\Views\TransferReceiptsAndExpenditureOperationView.xaml;;

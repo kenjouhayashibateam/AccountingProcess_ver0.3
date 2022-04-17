@@ -228,7 +228,6 @@ C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.Su
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Interop.TaskScheduler.dll
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.ResolveComReference.cache
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.g.cs
-C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RegistrationFlowerSellReceiptsAndExpenditureView.g.cs
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureManagementView.g.cs
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.g.cs
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CondolenceOperationView.g.cs
@@ -253,7 +252,6 @@ C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経�
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム_MarkupCompile.lref
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\App.baml
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CashJournalManagementView.baml
-C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RegistrationFlowerSellReceiptsAndExpenditureView.baml
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureManagementView.baml
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.baml
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\CondolenceOperationView.baml
@@ -295,3 +293,9 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\P
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\SeachCondlencesView.baml
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShunjuenMenuView.g.cs
 C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShunjuenMenuView.baml
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\FlowerSellReceiptsAndExpenditureRegistrationView.g.cs
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\FlowerSellReceiptsAndExpenditureRegistrationView.baml
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ManagementFeeManagementView.g.cs
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ManagementFeeManagementView.baml
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ManagementFeePaymentRegistrationView.g.cs
+C:\Users\houmu\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ManagementFeePaymentRegistrationView.baml

@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Domain.Entities.Helpers
 {
@@ -96,6 +97,89 @@ namespace Domain.Entities.Helpers
         {
             JapaneseCalendar jc = new JapaneseCalendar();
             return DataHelper.EraInitials[jc.GetEra(dateTime)];
+        }
+        /// <summary>
+        /// 春秋苑墓地番号を生成して返します
+        /// </summary>
+        /// <param name="graveNumberKu">区</param>
+        /// <param name="graveNumberKuiki">区域</param>
+        /// <param name="graveNumberGawa">側</param>
+        /// <param name="graveNumberBan">番</param>
+        /// <param name="graveNumberEdaban">枝番</param>
+        /// <returns></returns>
+        public static string AdjustmentGraveNumber(string graveNumberKu, string graveNumberKuiki, string graveNumberGawa, string graveNumberBan, string graveNumberEdaban)
+        {
+            StringBuilder value = new StringBuilder();
+
+            value.Append(ConvertKu());
+            value.Append($"{ConvertNumber(graveNumberKuiki)}区");
+            value.Append($"{ConvertNumber(graveNumberGawa)}側");
+            value.Append($"{ConvertNumber(graveNumberBan)}");
+            value.Append($"{ConvertNumber(graveNumberEdaban)}番");
+
+            return value.ToString();
+
+            string ConvertNumber(string number)
+            {
+                Regex regex = new Regex(@"^[0-9]+$");
+
+                if(string.IsNullOrEmpty(number)) { return string.Empty; }
+
+                if (regex.IsMatch(number)) { return ReturnString(); }
+
+                int j = default;
+                int k = default;
+
+                for (int i = 0; i < number.Length - 1; i++)
+                {
+                    if (!regex.IsMatch(number.Substring(i, 1)))
+                    {
+                        j = i;
+                        break;
+                    }
+
+                    k = number.IndexOf(number.Substring(i, 1));
+                    if (k > 0)
+                    {
+                        j = i;
+                        break;
+                    }
+                }
+
+                return number.Substring(j);
+
+                string ReturnString()
+                {
+                    int i = int.Parse(number);
+                    return i == 0 ? string.Empty : i.ToString();
+                }
+            }
+
+            string ConvertKu()
+            {
+                return graveNumberKu switch
+                {
+                    "01" => "東",
+                    "02" => "西",
+                    "03" => "南",
+                    "04" => "北",
+                    "05" => "中",
+                    "10" => "東特",
+                    "11" => "二特",
+                    "12" => "北特",
+                    "20" => "御廟",
+                    "東" => "01",
+                    "西" => "02",
+                    "南" => "03",
+                    "北" => "04",
+                    "中" => "05",
+                    "東特" => "10",
+                    "二特" => "11",
+                    "北特" => "12",
+                    "御廟" => "20",
+                    _ => string.Empty,
+                };
+            }
         }
     }
 }

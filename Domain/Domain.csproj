@@ -75,6 +75,7 @@
     <Compile Include="Entities\ValueObjects\AccountingProcessLocation.cs" />
     <Compile Include="Entities\ValueObjects\Content.cs" />
     <Compile Include="Entities\ValueObjects\CreditDept.cs" />
+    <Compile Include="Entities\ValueObjects\Lessee.cs" />
     <Compile Include="Entities\ValueObjects\MoneyCategory.cs" />
     <Compile Include="Entities\ValueObjects\OtherMoney.cs" />
     <Compile Include="Entities\ValueObjects\Rep.cs" />

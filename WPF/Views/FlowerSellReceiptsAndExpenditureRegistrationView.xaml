@@ -1,0 +1,301 @@
+﻿<Window x:Class="WPF.Views.RegistrationFlowerSellReceiptsAndExpenditureView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WPF.ViewModels"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interaction="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ib="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:WPF.Views"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="610" Width="350">
+
+    <Window.DataContext>
+        <vm:FlowerSellReceiptsAndExpenditureRegistrationViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="WatermarkTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid Background="White">
+                            <Border BorderBrush="DimGray" BorderThickness="1">
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock x:Name="WatermarkLabel" Text="{TemplateBinding Tag}" Opacity=".5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Visibility" TargetName="WatermarkLabel" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <i:Interaction.Triggers>
+        <interaction:PropertyChangedTrigger Binding="{Binding MessageBox}">
+            <behavior:MessageBoxBehavior/>
+        </interaction:PropertyChangedTrigger>
+    </i:Interaction.Triggers>
+
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
+
+    <ib:Interaction.Triggers>
+        <ib:DataTrigger Binding="{Binding CallShowMessageBox}" Value="true">
+            <ib:InvokeCommandAction Command="{Binding MessageBoxCommand}"/>
+        </ib:DataTrigger>
+    </ib:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="登録内容" Grid.Row="0" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="9*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="6*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Text="登録日時" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0" />
+                    <DatePicker Grid.Column="0" Grid.Row="1" SelectedDate="{Binding SelectedDate}" behavior:DatePickerAttachment.IsIMEModeOffGotFocus="True" Margin="5,3,3,3"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" Content="重複した日付の登録を許可する" IsChecked="{Binding IsDuplication}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24*"/>
+                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="12*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="墓地花売上" Grid.Row="0" Margin="5,2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="0.1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1"/>
+                            <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="4" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="5" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="6" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="7" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="4" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="5" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="6" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="7" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="4" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="5" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="6" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="7" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="4" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="5" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="6" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="7" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="物販" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="単価" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="数量" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="0" Grid.Column="3" Text="小計" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding CemeteryFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CemeteryFlowerUnitPrice}" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding CemeteryFlowerCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding CemeteryFlowerTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding HighFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding HighFlowerUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding HighFlowerCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding HighFlowerTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding SpecialFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SpecialFlowerUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding SpecialFlowerCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="3" Grid.Column="3" Text="{Binding SpecialFlowerTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding BasketFlower}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding BasketFlowerUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding BasketFlowerCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="4" Grid.Column="3" Text="{Binding BasketFlowerTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding Ticket}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding TicketUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding TicketCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="5" Grid.Column="3" Text="{Binding TicketTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0" Text="計" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding FlowerListTotalCount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="7" Grid.Column="3" Text="{Binding FlowerListTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="線香売上" Grid.Row="1" Margin="5,2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="0.1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1"/>
+                            <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding IncenseStick}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding IncenseStickUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding IncenseStickCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding IncenseStickTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="計" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding IncenseStickCount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding IncenseStickTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="その他売上" Grid.Row="2" Margin="5,2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="0.1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1"/>
+                            <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="0" Grid.Column="3" BorderBrush="Black" BorderThickness="0,1,1,1"/>
+                            <Border Grid.Row="1" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <Border Grid.Row="3" Grid.Column="3" BorderBrush="Black" BorderThickness="0,0,1,1"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Sakaki}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SakakiUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding SakakiCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding SakakiTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Anisatum}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AnisatumUnitPrice}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding AnisatumCount,UpdateSourceTrigger=PropertyChanged}" behavior:FocusMovingWhenPressEnterBehavior.PressEnterCommand="True" behavior:TextBoxAttachment.IsSelectAllOnGotFocus="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" InputMethod.PreferredImeState="Off" Margin="5,2"/>
+                            <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding AnisatumTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="計" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                            <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding OtherFlowerListCount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                            <TextBlock Grid.Row="3" Grid.Column="3" Text="{Binding OtherFlowerListTotalAmount}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="総計：" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="売上" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding SalesAmount}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    </Grid>
+                    <TextBlock Text="-" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
+                    <Grid Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="チケット割引" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding TicketTotalAmountValue}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    </Grid>
+                    <TextBlock Text="＝" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock Text="{Binding TotalAmount}" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="14"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="RegistrationButton" Grid.Column="1" Content="{Binding RegistrationButtonContent}" IsEnabled="{Binding IsRegistrationEnabled}" Margin="5">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding RegistrationCommand}" Key="Space"/>
+                    <MouseBinding Command="{Binding RegistrationCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+            <Button x:Name="CloseButton" Grid.Column="2" Margin="5">
+                <StackPanel>
+                    <svgc:SvgViewbox Height="20" behavior:SvgViewboxAttachment.Source="Peke.svg"/>
+                </StackPanel>
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" Key="Space"/>
+                    <MouseBinding Command="{Binding WindowCloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

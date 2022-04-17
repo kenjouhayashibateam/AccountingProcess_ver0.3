@@ -24,9 +24,12 @@ namespace WPF.ViewModels
                 (() => CreateShowWindowCommand(ScreenTransition.ProductSalesRegistration()), () => true);
             ShowPartTimerTransPortCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()), () => true);
+            ShowMangementFeeRegistrationCommand = new DelegateCommand
+                (() => CreateShowWindowCommand(ScreenTransition.ManagementFeePaymentRegistration()), () => true);
         }
         public ShunjuenMenuViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
+        public DelegateCommand ShowMangementFeeRegistrationCommand { get; }
         /// <summary>
         /// パート交通費登録画面表示コマンド
         /// </summary>

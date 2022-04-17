@@ -232,7 +232,7 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.Location == Locations.管理事務所)
             {
                 AccountingProcessLocation.OriginalTotalAmount =
-                    DataBaseConnect.PreviousDayFinalAmount
+                    DataBaseConnect.PreviousFinalAmount
                         (AccountingProcessLocation.IsAccountingGenreShunjuen);
             }
         }
@@ -629,37 +629,26 @@ namespace WPF.ViewModels
                 int withSum = default;
                 int traSum = default;
 
-                PDFA = DataBaseConnect.PreviousDayFinalAmount(true);
+                PDFA = AccountingProcessLocation.Location == Locations.管理事務所 ?
+                    DataBaseConnect.PreviousDayFinalAmount(true) : PreviousDayFinalAccount;
 
                 if (AccountingProcessLocation.Location == Locations.管理事務所)
                 {
                     foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                         (DefaultDate, DateTime.Today, string.Empty, string.Empty, string.Empty, string.Empty,
                             string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
-                            DateTime.Today, DateTime.Today))
-                    {
-                        paySum += rae.Price;
-                    }
+                            DateTime.Today, DateTime.Today)) { paySum += rae.Price; }
 
                     foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                         (DefaultDate, DateTime.Today, string.Empty, string.Empty, string.Empty, string.Empty,
                             string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
-                            DateTime.Today, DateTime.Today))
-                    {
-                        if (rae.Content.Text.Contains("口座入金"))
-                        { traSum += rae.Price; }
-                        else
-                        { withSum += rae.Price; }
-                    }
+                            DateTime.Today, DateTime.Today)) { SetWithdrawal(rae); }
                 }
 
                 foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
+                    (DefaultDate, DateTime.Today, location, string.Empty, string.Empty, string.Empty,
                         string.Empty, string.Empty, true, true, true, true, true, DefaultDate, DateTime.Today,
-                        DefaultDate, DefaultDate))
-                {
-                    paySum += rae.Price;
-                }
+                        DefaultDate, DefaultDate)) { paySum += rae.Price; }
 
                 foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
                     (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
@@ -678,6 +667,12 @@ namespace WPF.ViewModels
                         TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
                         AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
                         IsYokohamaBankCheck, IsCeresaCheck));
+                
+                void SetWithdrawal(ReceiptsAndExpenditure rae)
+                {
+                        if (rae.Content.Text.Contains("口座入金")) { traSum += rae.Price; }
+                        else  { withSum += rae.Price; }
+                }
             }
         }
 
@@ -722,17 +717,9 @@ namespace WPF.ViewModels
         {
             WithdrawalSum = 0;
             TransferSum = 0;
-            //if (AccountingProcessLocation.Location == Locations.管理事務所)
-            //{
-            //    foreach (ReceiptsAndExpenditure rae in TodayWroteList)
-            //    { ContainTodayWroteWithdrawal(rae); }
-            //}
 
             foreach (ReceiptsAndExpenditure rae in AllDataList)
             { if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
-
-            //void ContainTodayWroteWithdrawal(ReceiptsAndExpenditure rae)
-            //{ if (!rae.IsPayment) { WithdrawalAllocation(rae); } }
         }
         /// <summary>
         /// 出金データを出金、振替に振り分けます
@@ -746,9 +733,9 @@ namespace WPF.ViewModels
                 receiptsAndExpenditure.Content.Text.Contains("春秋苑"))
             {
                 TransferSum += receiptsAndExpenditure.Price;
-                PairAmount = AmountWithUnit(IntAmount(PairAmount) + receiptsAndExpenditure.Price); }
-            else
-            { WithdrawalSum += receiptsAndExpenditure.Price; }
+                PairAmount = AmountWithUnit(IntAmount(PairAmount) + receiptsAndExpenditure.Price);
+            }
+            else { WithdrawalSum += receiptsAndExpenditure.Price; }
         }
         /// <summary>
         /// 本日の入金合計を算出します
@@ -756,9 +743,8 @@ namespace WPF.ViewModels
         private void SetPeymentSum()
         {
             int i = 0;
- 
-            foreach (ReceiptsAndExpenditure rae in AllDataList)
-            { if (rae.IsPayment) { i += rae.Price; } }
+
+            foreach (ReceiptsAndExpenditure rae in AllDataList) { if (rae.IsPayment) { i += rae.Price; } }
 
             PaymentSum = i;
         }
@@ -1458,7 +1444,7 @@ namespace WPF.ViewModels
                 {
                     AccountingProcessLocation.OriginalTotalAmount =
                         AccountingProcessLocation.Location == Locations.管理事務所 ?
-                        DataBaseConnect.PreviousDayFinalAmount
+                        DataBaseConnect.PreviousFinalAmount
                             (AccountingProcessLocation.IsAccountingGenreShunjuen) :
                         AccountingProcessLocation.OriginalTotalAmount;
                     SelectedCreditDept = null; }
@@ -1500,7 +1486,7 @@ namespace WPF.ViewModels
 
                     if(AccountingProcessLocation.Location != Locations.管理事務所) { return; }
 
-                    PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount(value);
+                    PreviousDayFinalAccount = DataBaseConnect.PreviousFinalAmount(value);
                     AccountingProcessLocation.OriginalTotalAmount = PreviousDayFinalAccount;
                     ListTitle =
                         $"一覧：{FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}";

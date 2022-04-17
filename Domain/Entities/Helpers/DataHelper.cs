@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using static Domain.Entities.Helpers.TextHelper;
 
 namespace Domain.Entities.Helpers
 {
@@ -9,6 +10,18 @@ namespace Domain.Entities.Helpers
     /// </summary>
     public static class DataHelper
     {
+        /// <summary>
+        /// 消費税率
+        /// </summary>
+        private const double TaxRate = 0.1;
+        /// <summary>
+        /// 基本管理料
+        /// </summary>
+        private const int BasicManagementFee = 2800;
+        /// <summary>
+        /// 管理料下限
+        /// </summary>
+        private const int Minimum = (int)(6000 * (1 + TaxRate));
         /// <summary>
         /// 和暦のイニシャル
         /// </summary>
@@ -58,6 +71,25 @@ namespace Domain.Entities.Helpers
                 {2,"入出金日" },
                 {3,"伝票出力日" }
             };
+        }
+        /// <summary>
+        /// 管理料を計算して返します
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public static string ReturnManagementFee(double area)
+        {
+            double d = 1 + TaxRate;
+
+            double e = area * Math.Pow(10, 1) / Math.Pow(10, 1);
+
+            int i = (int)(BasicManagementFee * e * d);
+
+            i -= i % 10;
+
+            i = i < Minimum ? Minimum : i;
+
+            return AmountWithUnit(i);
         }
     }
 }

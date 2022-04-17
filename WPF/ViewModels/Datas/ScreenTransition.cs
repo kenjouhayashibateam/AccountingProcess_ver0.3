@@ -123,5 +123,16 @@ namespace WPF.ViewModels.Datas
         /// </summary>
         /// <returns></returns>
         public static Window ShunjuenMenu() { return new ShunjuenMenuView(); }
+        /// <summary>
+        /// 管理料入金登録画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window ManagementFeePaymentRegistration()
+        { return new ManagementFeePaymentRegistrationView(); }
+        /// <summary>
+        /// 管理料管理画面を呼び出します
+        /// </summary>
+        /// <returns></returns>
+        public static Window ManagementFeeManagement() { return new ManagementFeeManagementView(); }
     }
 }

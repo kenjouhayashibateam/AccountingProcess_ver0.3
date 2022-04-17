@@ -66,5 +66,16 @@ namespace Infrastructure.Properties {
                 return ((string)(this["SystemAdminConnection"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.115\\SQLEXPRESS;Initial Catalog=COMMON;User ID=sa;Password=" +
+            "sqlserver")]
+        public string COMMONDataBaseConectionString {
+            get {
+                return ((string)(this["COMMONDataBaseConectionString"]));
+            }
+        }
     }
 }

@@ -138,12 +138,14 @@
     <Compile Include="ViewModels\Datas\TransferReceiptsAndExpenditureOperation.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\ManagementFeeManagementViewModel.cs" />
+    <Compile Include="ViewModels\ManagementFeePaymentRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MemorialServiceAccountRegisterViewModel.cs" />
     <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />
     <Compile Include="ViewModels\ProductSalesRegistrationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureOperationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureRegistrationHelperViewModel.cs" />
-    <Compile Include="ViewModels\RegistrationFlowerSellReceiptsAndExpenditureViewModel.cs" />
+    <Compile Include="ViewModels\FlowerSellReceiptsAndExpenditureRegistrationViewModel.cs" />
     <Compile Include="ViewModels\RemainingMoneyCalculationViewModel.cs" />
     <Compile Include="ViewModels\ReceiptsAndExpenditureMangementViewModel.cs" />
     <Compile Include="ViewModels\SearchCondlencesViewModel.cs" />
@@ -166,11 +168,17 @@
     <Compile Include="Views\CashJournalManagementView.xaml.cs">
       <DependentUpon>CashJournalManagementView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ManagementFeeManagementView.xaml.cs">
+      <DependentUpon>ManagementFeeManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ManagementFeePaymentRegistrationView.xaml.cs">
+      <DependentUpon>ManagementFeePaymentRegistrationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MemorialServiceAccountRegisterView.xaml.cs">
       <DependentUpon>MemorialServiceAccountRegisterView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml.cs">
-      <DependentUpon>RegistrationFlowerSellReceiptsAndExpenditureView.xaml</DependentUpon>
+    <Compile Include="Views\FlowerSellReceiptsAndExpenditureRegistrationView.xaml.cs">
+      <DependentUpon>FlowerSellReceiptsAndExpenditureRegistrationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShunjuenMenuView.xaml.cs">
       <DependentUpon>ShunjuenMenuView.xaml</DependentUpon>
@@ -242,11 +250,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ManagementFeeManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManagementFeePaymentRegistrationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MemorialServiceAccountRegisterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RegistrationFlowerSellReceiptsAndExpenditureView.xaml">
+    <Page Include="Views\FlowerSellReceiptsAndExpenditureRegistrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -29,7 +29,6 @@ namespace WPF.ViewModels
         private bool isRegistrationPrecedingYearFinalAccountVisiblity;
         private bool isLogoutEnabled;
         private bool isCreateVoucherEnabled;
-        private bool isPartTransportRegistrationEnabled;
         private bool isShunjuen;
         private bool isShunjuenMenuEnabled;
         private bool isWizeCoreMenuEnabled;
@@ -77,9 +76,6 @@ namespace WPF.ViewModels
             RegistrationPrecedingYearFinalAccountCommand =
                 new DelegateCommand(() => RegistrationPrecedingYearFinalAccount(), () => true);
             LogoutCommand = new DelegateCommand(() => Logout(), () => true);
-            ShowPartTimerTransPortCommand = new DelegateCommand
-                (() => CreateShowWindowCommand(ScreenTransition.PartTimerTransportRegistration()),
-                    () => true);
             ShowCreateCondolencesCommand = new DelegateCommand
                 (() => CreateShowWindowCommand(ScreenTransition.CreateCondolences()), () => true);
             ShowSearchReceiptsAndExpenditureCommand = new DelegateCommand
@@ -223,10 +219,6 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowCreateVoucherCommand { get; }
         /// <summary>
-        /// パート交通費データ登録画面表示コマンド
-        /// </summary>
-        public DelegateCommand ShowPartTimerTransPortCommand { get; }
-        /// <summary>
         /// お布施一覧管理画面表示コマンド
         /// </summary>
         public DelegateCommand ShowCreateCondolencesCommand { get; }
@@ -240,7 +232,6 @@ namespace WPF.ViewModels
             LoginRep.GetInstance().SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
             IsSlipManagementEnabled = false;
             IsCreateVoucherEnabled = false;
-            IsPartTransportRegistrationEnabled = false;
             ShowSlipManagementContent = "出納データ管理";
             IsLogoutEnabled = false;
             IsShunjuenCommonEnabled = false;
@@ -607,18 +598,6 @@ namespace WPF.ViewModels
             }
         }
         /// <summary>
-        /// パート交通費データ登録画面表示ボタンのEnabled
-        /// </summary>
-        public bool IsPartTransportRegistrationEnabled
-        {
-            get => isPartTransportRegistrationEnabled;
-            set
-            {
-                isPartTransportRegistrationEnabled = value;
-                CallPropertyChanged();
-            }
-        }
-        /// <summary>
         /// 春秋苑会計かのチェック
         /// </summary>
         public bool IsShunjuen
@@ -838,12 +817,11 @@ namespace WPF.ViewModels
             }
 
             AccountingProcessLocation.OriginalTotalAmount =
-                DataBaseConnect.PreviousDayFinalAmount(IsShunjuen);
+                DataBaseConnect.PreviousFinalAmount(IsShunjuen);
 
             DepositAmount =
                 CommaDelimitedAmount(AccountingProcessLocation.OriginalTotalAmount);
-            IsSlipManagementEnabled = IsPartTransportRegistrationEnabled =
-                IsCreateVoucherEnabled = IsShunjuenCommonEnabled =
+            IsSlipManagementEnabled = IsCreateVoucherEnabled = IsShunjuenCommonEnabled =
                 LoginRep.GetInstance().Rep.Name != string.Empty;
             ShowSlipManagementContent = "出納データ管理";
         }
@@ -884,7 +862,6 @@ namespace WPF.ViewModels
         {
             ShorendoChecked = true;
             ProcessFeatureEnabled = true;
-            IsPartTransportRegistrationEnabled = false;
             SetMenuEnabled();
             AccountingProcessLocation.OriginalTotalAmount = 0;
             DepositAmount = AccountingProcessLocation.OriginalTotalAmount.ToString();
