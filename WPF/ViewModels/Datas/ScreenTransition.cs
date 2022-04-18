@@ -129,10 +129,5 @@ namespace WPF.ViewModels.Datas
         /// <returns></returns>
         public static Window ManagementFeePaymentRegistration()
         { return new ManagementFeePaymentRegistrationView(); }
-        /// <summary>
-        /// 管理料管理画面を呼び出します
-        /// </summary>
-        /// <returns></returns>
-        public static Window ManagementFeeManagement() { return new ManagementFeeManagementView(); }
     }
 }

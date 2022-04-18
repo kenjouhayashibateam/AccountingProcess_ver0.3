@@ -138,7 +138,6 @@
     <Compile Include="ViewModels\Datas\TransferReceiptsAndExpenditureOperation.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\ManagementFeeManagementViewModel.cs" />
     <Compile Include="ViewModels\ManagementFeePaymentRegistrationViewModel.cs" />
     <Compile Include="ViewModels\MemorialServiceAccountRegisterViewModel.cs" />
     <Compile Include="ViewModels\PartTimerTransportationExpensesRegistrationViewModel.cs" />
@@ -167,9 +166,6 @@
     <Compile Include="Views\Behaviors\WindowCloseBehavior.cs" />
     <Compile Include="Views\CashJournalManagementView.xaml.cs">
       <DependentUpon>CashJournalManagementView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ManagementFeeManagementView.xaml.cs">
-      <DependentUpon>ManagementFeeManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ManagementFeePaymentRegistrationView.xaml.cs">
       <DependentUpon>ManagementFeePaymentRegistrationView.xaml</DependentUpon>
@@ -247,10 +243,6 @@
     <Compile Include="Win32\Api\User32.cs" />
     <Compile Include="Win32\Constant.cs" />
     <Page Include="Views\CashJournalManagementView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ManagementFeeManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

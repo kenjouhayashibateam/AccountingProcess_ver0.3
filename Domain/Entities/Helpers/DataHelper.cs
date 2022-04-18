@@ -81,7 +81,7 @@ namespace Domain.Entities.Helpers
         {
             double d = 1 + TaxRate;
 
-            double e = area * Math.Pow(10, 1) / Math.Pow(10, 1);
+            double e = Math.Truncate(area * Math.Pow(10, 1)) / Math.Pow(10, 1);
 
             int i = (int)(BasicManagementFee * e * d);
 
