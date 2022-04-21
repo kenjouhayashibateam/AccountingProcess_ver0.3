@@ -282,7 +282,6 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand PaymentSlipsOutputCommand { get; set; }
         private void PaymentSlipsOutput() { SlipsOutput(true); }
-
         /// <summary>
         /// 伝票を出力します
         /// </summary>
@@ -394,9 +393,13 @@ namespace WPF.ViewModels
             { todayAmountText += withdrawalText.Length == 0 ? string.Empty : $"、{withdrawalText}"; }
             else { todayAmountText = withdrawalText; }
 
-            PreviousDayFinalAccount =
-                DataBaseConnect.PreviousDayFinalAmount
-                    (AccountingProcessLocation.IsAccountingGenreShunjuen);
+            if (AccountingProcessLocation.Location == Locations.管理事務所)
+            {
+                PreviousDayFinalAccount =
+                    DataBaseConnect.PreviousDayFinalAmount
+                        (AccountingProcessLocation.IsAccountingGenreShunjuen);
+            }
+            else { PreviousDayFinalAccount = AccountingProcessLocation.OriginalTotalAmount; }
 
             ListTitle =
                 $"一覧 : {FinalAccountCategory}{Space}{AmountWithUnit(PreviousDayFinalAccount)}" +
@@ -1515,15 +1518,28 @@ namespace WPF.ViewModels
                 selectedCreditDept = value;
                 ReferenceReceiptsAndExpenditures(true);
                 CallPropertyChanged();
-                if (value != null) { SetPreviousDayFinalAmount(); }
-                else
-                {
-                    PreviousDayFinalAccount = DataBaseConnect.PreviousDayFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
-                    PreviousFinalAccount = DataBaseConnect.PreviousFinalAmount(AccountingProcessLocation.IsAccountingGenreShunjuen);
-
-                }
+                if (value != null) { SetCreditdeptPreviousDayFinalAmount(); }
+                else { SetPreviousDayFinalAmount(); }
 
                 void SetPreviousDayFinalAmount()
+                {
+                    if (AccountingProcessLocation.Location == Locations.管理事務所)
+                    {
+                        PreviousDayFinalAccount =
+                            DataBaseConnect.PreviousDayFinalAmount
+                            (AccountingProcessLocation.IsAccountingGenreShunjuen);
+                        PreviousFinalAccount =
+                            DataBaseConnect.PreviousFinalAmount
+                            (AccountingProcessLocation.IsAccountingGenreShunjuen);
+                    }
+                    else
+                    {
+                        PreviousFinalAccount = PreviousDayFinalAccount =
+                            AccountingProcessLocation.OriginalTotalAmount;
+                    }
+                }
+
+                void SetCreditdeptPreviousDayFinalAmount()
                 {
                     if (!IsLimitCreditDept || AccountingProcessLocation.IsAccountingGenreShunjuen)
                     { return; }
@@ -1629,7 +1645,12 @@ namespace WPF.ViewModels
                 else { ListAmount -= receiptsAndExpenditure.Price; }
             }
 
-            if (AccountingProcessLocation.Location == Locations.青蓮堂) { TodayWroteList.Clear(); }
+            if (AccountingProcessLocation.Location == Locations.青蓮堂)
+            {
+                PreviousFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
+                previousDayFinalAccount=AccountingProcessLocation.OriginalTotalAmount;
+                TodayWroteList.Clear(); 
+            }
 
             int listPayment = default;
             int listWithdrawal = default;
