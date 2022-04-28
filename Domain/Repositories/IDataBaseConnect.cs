@@ -12,13 +12,6 @@ namespace Domain.Repositories
         春秋庵,
         香華
     }
-    public enum WizeCoreAmountCategory
-    {
-        繰越,
-        入金,
-        出金,
-        銀行振替
-    }
     /// <summary>
     /// データベース接続
     /// </summary>

@@ -37,7 +37,7 @@ namespace Infrastructure.ExcelOutputData
             StartRowPosition = 1;
             myWorksheet.PageSetup.PaperSize = SheetPaperSize();
             myWorksheet.Style.Font.FontName = SetSheetFontName();
-            NextPage();
+            SetNextPageStyle();
             PageStyle();
         }
         /// <summary>
@@ -56,7 +56,7 @@ namespace Infrastructure.ExcelOutputData
         /// <summary>
         /// 新しいページのStyleを設定します
         /// </summary>
-        protected void NextPage()
+        protected void SetNextPageStyle()
         {
             PageCount++;
             StartRowPosition = (SetRowSizes().Length * (PageCount - 1)) + 1;

@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using System.Windows;
 using WPF.ViewModels.Commands;
 using WPF.Views.Datas;

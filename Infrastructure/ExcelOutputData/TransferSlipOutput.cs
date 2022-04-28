@@ -86,7 +86,7 @@ namespace Infrastructure.ExcelOutputData
                     isTaxRate = trae.IsReducedTaxRate;
                     contentCount = 1;
                     ItemIndex = 1;
-                    NextPage();//次のページへ
+                    SetNextPageStyle();//次のページへ
                     PageStyle();
                 }
                 //伝票1件目から5件目は一列目、6件目から10件目までは4列目に出力するので、

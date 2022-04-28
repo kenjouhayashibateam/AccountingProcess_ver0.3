@@ -159,7 +159,7 @@ namespace WPF.ViewModels
                 DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20);
 
             //ワイズコア会計で青蓮堂で会計する際の伝票検索設定
-            void ShorendoWizecoreSeachFieldSetting() 
+            void ShorendoWizecoreSeachFieldSetting()
             {
                 if (AccountingProcessLocation.Location == Locations.管理事務所) { return; }
 
@@ -178,7 +178,7 @@ namespace WPF.ViewModels
         private void TodayLimited()
         {
             IsPeriodSearch = false;
-            SearchStartDate= DateTime.Now;
+            SearchStartDate = DateTime.Now;
         }
         /// <summary>
         /// 振替データ管理画面呼び出しコマンド
@@ -187,7 +187,7 @@ namespace WPF.ViewModels
         private void ShowTransferReceiptsAndExpenditureOperation()
         {
             TransferReceiptsAndExpenditureOperation.GetInstance().SetData(null);
-            CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView()); 
+            CreateShowWindowCommand(ScreenTransition.TransferReceiptsAndExpenditureOperationView());
         }
         public DelegateCommand PasswordCheckReversCommand { get; set; }
         /// <summary>
@@ -236,7 +236,7 @@ namespace WPF.ViewModels
                 AccountingProcessLocation.OriginalTotalAmount =
                     DataBaseConnect.PreviousFinalAmount
                         (AccountingProcessLocation.IsAccountingGenreShunjuen);
-                PreviousDayFinalAccount = 
+                PreviousDayFinalAccount =
                     DataBaseConnect.PreviousDayFinalAmount
                         (AccountingProcessLocation.IsAccountingGenreShunjuen);
                 previousFinalAccount =
@@ -293,9 +293,9 @@ namespace WPF.ViewModels
             IsOutputGroupEnabled = false;
             IsClose = false;
 
-            await Task.Run(() => 
+            await Task.Run(() =>
                 DataOutput.PaymentAndWithdrawalSlips(AllDataList, isPayment, IsPreviousDayOutput));
-            
+
             SlipsOutputProcess();
             SetOutputGroupEnabled();
             IsClose = true;
@@ -315,7 +315,7 @@ namespace WPF.ViewModels
                     rae.IsUnprinted = false;
                     _ = DataBaseConnect.Update(rae);
                     if (IsPreviousDayOutput)
-                    { _ = DataBaseConnect.ReceiptsAndExpenditureOutputDateChange(rae,d); }
+                    { _ = DataBaseConnect.ReceiptsAndExpenditureOutputDateChange(rae, d); }
                 }
             }
         }
@@ -388,7 +388,7 @@ namespace WPF.ViewModels
             string paymentText = payment == 0 ? string.Empty : $"入金：{AmountWithUnit(payment)}";
             string withdrawalText = withdrawal == 0 ? string.Empty : $"出金：{AmountWithUnit(withdrawal)}";
             todayAmountText = paymentText.Length == 0 ? string.Empty : paymentText;
-            
+
             if (todayAmountText.Length > 0)
             { todayAmountText += withdrawalText.Length == 0 ? string.Empty : $"、{withdrawalText}"; }
             else { todayAmountText = withdrawalText; }
@@ -455,7 +455,7 @@ namespace WPF.ViewModels
             CashBoxTotalAmount = todayTotalAmount == 0 ?
                 "金庫の金額を計上して下さい" : $"金庫の金額 : {AmountWithUnit(todayTotalAmount)}";
 
-            if (AccountingProcessLocation.IsAccountingGenreShunjuen && IsLimitCreditDept) 
+            if (AccountingProcessLocation.IsAccountingGenreShunjuen && IsLimitCreditDept)
             {
                 TodaysFinalAccount = "この欄は貸方部門を限定すると\r\n正確な金額が出せません。";
                 return;
@@ -676,7 +676,7 @@ namespace WPF.ViewModels
                         DefaultDate, DefaultDate)) { paySum += rae.Price; }
 
                 foreach (ReceiptsAndExpenditure rae in DataBaseConnect.ReferenceReceiptsAndExpenditure
-                    (DefaultDate, DateTime.Today,location, string.Empty, string.Empty, string.Empty,
+                    (DefaultDate, DateTime.Today, location, string.Empty, string.Empty, string.Empty,
                         string.Empty, string.Empty, true, true, false, true, true, DefaultDate, DateTime.Today,
                         DefaultDate, DefaultDate))
                 {
@@ -692,7 +692,7 @@ namespace WPF.ViewModels
                         TodaysFinalAccount, AmountWithUnit(IntAmount(YokohamaBankAmount)),
                         AmountWithUnit(IntAmount(CeresaAmount)), AmountWithUnit(IntAmount(PairAmount)),
                         IsYokohamaBankCheck, IsCeresaCheck));
-                
+
                 void SetWithdrawal(ReceiptsAndExpenditure rae)
                 {
                     if (rae.Content.Text.Contains("口座入金")) { traSum += rae.Price; }
@@ -732,8 +732,8 @@ namespace WPF.ViewModels
         /// 本日の決算額を返します
         /// </summary>
         /// <returns></returns>
-        private int ReturnTodaysFinalAccount()
-        { return PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum; }
+        private int ReturnTodaysFinalAccount() =>
+            PreviousDayFinalAccount - WithdrawalSum - TransferSum + PaymentSum;
 
         /// <summary>
         /// 出納データから出金データを取り出し、出金、振替に振り分けて合計を算出します

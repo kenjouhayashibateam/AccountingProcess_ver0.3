@@ -63,7 +63,6 @@ namespace Domain.Entities
         /// </summary>
         /// <returns>シングルトンの金庫</returns>
         public static Cashbox GetInstance() { return cashbox; }
-
         /// <summary>
         /// 総金額を取得します
         /// </summary>

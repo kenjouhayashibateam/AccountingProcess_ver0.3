@@ -3,17 +3,21 @@ using System.Collections.Generic;
 
 namespace Domain.Entities.ValueObjects
 {
+    /// <summary>
+    /// 前日決算、預り金をメモリに保持して監視するインターフェイス
+    /// </summary>
     public interface IOriginalTotalAmountObserver
     {
         void OriginalTotalAmoutNotify();
     }
-
+    /// <summary>
+    /// 経理担当場所リスト
+    /// </summary>
     public enum Locations
     {
         管理事務所,
         青蓮堂
     }
-
     /// <summary>
     /// 経理担当場所（シングルトン）
     /// </summary>

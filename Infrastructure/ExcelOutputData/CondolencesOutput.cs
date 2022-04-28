@@ -24,9 +24,7 @@ namespace Infrastructure.ExcelOutputData
         private int StartRowIndex => (pageNumber - 1) * SetRowSizes().Length;
 
         public CondolencesOutput(ObservableCollection<Condolence> condolences)
-        {
-            Condolences = condolences;
-        }
+        { Condolences = condolences; }
 
         protected override void SetBorderStyle()
         {

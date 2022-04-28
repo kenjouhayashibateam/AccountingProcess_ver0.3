@@ -3,6 +3,9 @@ using System.Collections;
 
 namespace Infrastructure.ExcelOutputData
 {
+    /// <summary>
+    /// 伝票出力の基底クラス
+    /// </summary>
     internal abstract class SlipOutputBase : OutputList
     {
         protected SlipOutputBase(IEnumerable outputList) : base(outputList)

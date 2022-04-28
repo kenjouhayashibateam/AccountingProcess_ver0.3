@@ -17,17 +17,23 @@ namespace WPF.ViewModels
     /// </summary>
     public class CashJournalManagementViewModel : BaseViewModel, IClosing
     {
+        #region Properties
+        #region Strings
         private string yearString;
         private string monthString = DateTime.Today.AddMonths(0).Month.ToString();
         private string outputButtonContent = "出力";
         private string shunjuenText;
+        #endregion
+        #region Bools
         private bool outputButtonEnabled;
         private bool isClose = true;
         private bool isDeptVisibility;
         private bool isRengean;
         private bool isShunjuan;
         private bool isKouge;
+        #endregion
         private readonly IDataOutput DataOutput;
+        #endregion
         /// <summary>
         /// 出納帳で限定する貸方部門
         /// </summary>

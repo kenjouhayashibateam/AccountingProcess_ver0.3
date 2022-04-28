@@ -21,7 +21,7 @@ namespace Domain.Entities.Helpers
         /// <returns>00,000,000 円</returns>
         public static string AmountWithUnit(int amount)
         {
-            return $"{CommaDelimitedAmount(amount)} {Properties.Resources.Unit}";
+            return $"{CommaDelimitedAmount(amount)}{Space}{Properties.Resources.Unit}";
         }
         /// <summary>
         /// 金額を3桁ごとのカンマ区切りにした文字列を返します
@@ -107,7 +107,9 @@ namespace Domain.Entities.Helpers
         /// <param name="graveNumberBan">番</param>
         /// <param name="graveNumberEdaban">枝番</param>
         /// <returns></returns>
-        public static string AdjustmentGraveNumber(string graveNumberKu, string graveNumberKuiki, string graveNumberGawa, string graveNumberBan, string graveNumberEdaban)
+        public static string AdjustmentGraveNumber
+            (string graveNumberKu, string graveNumberKuiki, string graveNumberGawa, 
+                string graveNumberBan, string graveNumberEdaban)
         {
             StringBuilder value = new StringBuilder();
 
@@ -118,26 +120,26 @@ namespace Domain.Entities.Helpers
             value.Append($"{ConvertNumber(graveNumberEdaban)}番");
 
             return value.ToString();
-
+            
             string ConvertNumber(string number)
             {
                 Regex regex = new Regex(@"^[0-9]+$");
 
                 if(string.IsNullOrEmpty(number)) { return string.Empty; }
-
+                //数字と認識できれば、0を抜いて返す。0010なら10
                 if (regex.IsMatch(number)) { return ReturnString(); }
 
                 int j = default;
-                int k = default;
-
+                int k;
                 for (int i = 0; i < number.Length - 1; i++)
                 {
+                    //数字ではない文字列の場所を特定する
                     if (!regex.IsMatch(number.Substring(i, 1)))
                     {
                         j = i;
                         break;
                     }
-
+                    //0以外の数字の場所を特定する
                     k = number.IndexOf(number.Substring(i, 1));
                     if (k > 0)
                     {
@@ -145,7 +147,7 @@ namespace Domain.Entities.Helpers
                         break;
                     }
                 }
-
+                //0を抜いた文字列を返す
                 return number.Substring(j);
 
                 string ReturnString()
@@ -154,7 +156,7 @@ namespace Domain.Entities.Helpers
                     return i == 0 ? string.Empty : i.ToString();
                 }
             }
-
+            //区の一覧
             string ConvertKu()
             {
                 return graveNumberKu switch

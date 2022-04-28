@@ -68,9 +68,7 @@ namespace WPF.ViewModels
         /// </summary>
         public DelegateCommand ShowVoucherManagementCommand { get; set; }
         private void ShowVoucherManagement()
-        {
-            CreateShowWindowCommand(ScreenTransition.VoucherManagement());
-        }
+        { CreateShowWindowCommand(ScreenTransition.VoucherManagement()); }
 
         /// <summary>
         /// 受納証データを使用して御布施一覧を表示してデータ登録するコマンド
@@ -85,7 +83,6 @@ namespace WPF.ViewModels
             int carAndMealTip = default;
             int socialGethering = default;
             DateTime accountActivityDate = DefaultDate;
-            bool isHeadData = true;
 
             foreach (ReceiptsAndExpenditure rae in VoucherContents)
             {
@@ -104,11 +101,8 @@ namespace WPF.ViewModels
                         break;
                 }
 
-                if (isHeadData)
-                {
-                    addressee = rae.Detail;
-                    accountActivityDate = rae.AccountActivityDate;
-                }
+                addressee = rae.Detail;
+                accountActivityDate = rae.AccountActivityDate;
 
                 void SetAmount()
                 {
@@ -465,9 +459,7 @@ namespace WPF.ViewModels
         }
 
         protected override void SetWindowDefaultTitle()
-        {
-            DefaultWindowTitle = $"受納証作成 : {AccountingProcessLocation.Location}";
-        }
+        { DefaultWindowTitle = $"受納証作成 : {AccountingProcessLocation.Location}"; }
 
         public void ReceiptsAndExpenditureOperationNotify()
         {
@@ -477,17 +469,11 @@ namespace WPF.ViewModels
             SetOutputEnabled();
         }
 
-        public void SortNotify()
-        {
-            CreateReceiptsAndExpenditures(true);
-        }
+        public void SortNotify() { CreateReceiptsAndExpenditures(true); }
 
-        public void PageNotify()
-        {
-            CreateReceiptsAndExpenditures(false);
-        }
+        public void PageNotify() { CreateReceiptsAndExpenditures(false); }
 
-        public bool CancelClose() { return !IsClose; }
+        public bool CancelClose() => !IsClose; 
 
         public int SetCountEachPage() => 10;
     }

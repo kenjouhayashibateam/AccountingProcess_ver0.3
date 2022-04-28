@@ -11,7 +11,6 @@ namespace Domain.Entities.ValueObjects
         /// 金種
         /// </summary>
         private readonly int Category;
-
         /// <summary>
         /// 金種名
         /// </summary>

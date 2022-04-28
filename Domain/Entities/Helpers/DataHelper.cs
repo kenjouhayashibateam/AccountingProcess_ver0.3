@@ -61,7 +61,10 @@ namespace Domain.Entities.Helpers
         /// nullに出来ない場合のdefaultの日付
         /// </summary>
         public static DateTime DefaultDate = DateTime.Parse("1900/01/01");
-
+        /// <summary>
+        /// 出納データ一覧のソートカテゴリ
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<int, string> ReceiptsAndExpenditureListSortColumns()
         {
             return new Dictionary<int, string>()
@@ -77,19 +80,18 @@ namespace Domain.Entities.Helpers
         /// </summary>
         /// <param name="area"></param>
         /// <returns></returns>
-        public static string ReturnManagementFee(double area)
+        public static int ReturnManagementFee(double area)
         {
+            //消費税を設定
             double d = 1 + TaxRate;
-
+            //墓地面積を小数点第一位で切り捨てる
             double e = Math.Truncate(area * Math.Pow(10, 1)) / Math.Pow(10, 1);
-
+            //管理料計算
             int i = (int)(BasicManagementFee * e * d);
-
+            //管理料の一の位を切り捨てる
             i -= i % 10;
-
-            i = i < Minimum ? Minimum : i;
-
-            return AmountWithUnit(i);
+            //管理料下限を下回る金額は下限金額にして返す
+            return i < Minimum ? Minimum : i;
         }
     }
 }

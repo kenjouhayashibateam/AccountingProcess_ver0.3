@@ -83,7 +83,10 @@ namespace Domain.Repositories
         /// </summary>
         /// <param name="condolences"></param>
         void Condolences(ObservableCollection<Condolence> condolences);
-
+        /// <summary>
+        /// 振替データを出力します
+        /// </summary>
+        /// <param name="transferReceiptsAndExpenditures"></param>
         void TransferSlips(ObservableCollection<TransferReceiptsAndExpenditure>
             transferReceiptsAndExpenditures);
     }

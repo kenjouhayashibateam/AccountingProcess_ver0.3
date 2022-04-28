@@ -9,6 +9,9 @@ using static Domain.Entities.Helpers.DataHelper;
 
 namespace Infrastructure
 {
+    /// <summary>
+    /// データベース接続Mock用
+    /// </summary>
     public class LocalConnectInfrastructure : IDataBaseConnect
     {
         public AccountingSubject CallAccountingSubject(string id)

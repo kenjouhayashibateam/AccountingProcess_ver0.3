@@ -34,10 +34,13 @@ namespace WPF.ViewModels
         private Content selectedContent;
         private string paymentFiscalYear;
 
-        public ManagementFeePaymentRegistrationViewModel(IDataBaseConnect dataBaseConnect) : base(dataBaseConnect)
+        public ManagementFeePaymentRegistrationViewModel(IDataBaseConnect dataBaseConnect) :
+            base(dataBaseConnect)
         {
+            SetCode();
         }
-        public ManagementFeePaymentRegistrationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect())
+        public ManagementFeePaymentRegistrationViewModel() : 
+            this(DefaultInfrastructure.GetDefaultDataBaseConnect())
         { }
         public DelegateCommand ShowManagementFeeManagement { get; }
         /// <summary>
@@ -251,29 +254,33 @@ namespace WPF.ViewModels
         {
             Lessee lessee = DataBaseConnect.ReferenceLessee(ManagementNumber);
 
+            //名義人情報を各プロパティに代入
             GraveNumber=lessee.GraveNumber;
             Area = $"{lessee.Area}{Space}㎡";
+            //送付先に名前があればそちらを代入
             if (string.IsNullOrEmpty( lessee.ReceiverName)) { AddresseeName=lessee.LesseeName; }
             else { AddresseeName=lessee.ReceiverName; }
             Payer = AddresseeName;
-            Fee = ReturnManagementFee(lessee.Area);
+            Fee = CommaDelimitedAmount(ReturnManagementFee(lessee.Area));
             SetCode();
         }
-
+        /// <summary>
+        /// 勘定科目コードを設定します
+        /// </summary>
         private void SetCode()
         {
+            //3月以前は前受け金
             if (DateTime.Now.Month < 4)
             { Code = "421"; }
             else
-            {
-                YearCheckSetCode();
-            }
+            { YearCheckSetCode(); }
 
             void YearCheckSetCode()
             {
+                //単年度は管理料
                 if (IsSingleYear) { Code = "851"; }
                 else { Code = "421"; }
-
+                //2年度分は複合勘定
                 if(IsDoubleYear) { Code = "421"; }
                 else { Code = "851"; }
             }

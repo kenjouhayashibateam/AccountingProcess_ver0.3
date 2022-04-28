@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Datas
 {
+    /// <summary>
+    /// 出納データ、振替データの基本クラス
+    /// </summary>
     public class ReceiptsAndExpenditureBase
     {
         /// <summary>

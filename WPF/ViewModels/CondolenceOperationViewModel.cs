@@ -106,6 +106,9 @@ namespace WPF.ViewModels
             }
         }
         public CondolenceOperationViewModel() : this(DefaultInfrastructure.GetDefaultDataBaseConnect()) { }
+        /// <summary>
+        /// 各金額を0にするコマンド
+        /// </summary>
         public DelegateCommand AmountClearCommand { get; set; }
         private void AmountClear()
         {
@@ -146,6 +149,10 @@ namespace WPF.ViewModels
             FieldClear();
             InputProperty();
         }
+        /// <summary>
+        /// 削除確認メッセージボックス
+        /// </summary>
+        /// <returns></returns>
         private MessageBoxResult DeleteConfirmation()
         {
             MessageBox = new MessageBoxInfo()
@@ -891,9 +898,7 @@ namespace WPF.ViewModels
         public void PageNotify() { SetReceiptsAndExpenditures(false); }
 
         public void SetSortColumns()
-        {
-            Pagination.SortColumns = ReceiptsAndExpenditureListSortColumns();
-        }
+        { Pagination.SortColumns = ReceiptsAndExpenditureListSortColumns(); }
 
         public int SetCountEachPage() => 10;
     }

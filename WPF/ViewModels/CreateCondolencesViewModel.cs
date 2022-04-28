@@ -32,7 +32,6 @@ namespace WPF.ViewModels
         private ObservableCollection<Condolence> condolences;
         private ObservableCollection<Condolence> AllList;
         private Condolence selectedCondolence;
-        private readonly CondolenceOperation condolenceOperation;
         private DateTime searchStartDate = DefaultDate;
         private DateTime searchEndDate = DefaultDate;
         private readonly IDataOutput DataOutput;
@@ -43,8 +42,7 @@ namespace WPF.ViewModels
             (IDataBaseConnect dataBaseConnect, IDataOutput dataOutput) : base(dataBaseConnect)
         {
             DataOutput = dataOutput;
-            condolenceOperation = CondolenceOperation.GetInstance();
-            condolenceOperation.Add(this);
+            CondolenceOperation.GetInstance().Add(this);
             Pagination = Pagination.GetPagination();
             Pagination.Add(this);
             LocationLimitingContent = $"{AccountingProcessLocation.Location}のデータのみを表示する";
@@ -82,7 +80,7 @@ namespace WPF.ViewModels
         private async void ShowUpdateView()
         {
             await Task.Delay(1);
-            condolenceOperation.SetData(SelectedCondolence);
+            CondolenceOperation.GetInstance().SetData(SelectedCondolence);
             CreateShowWindowCommand(ScreenTransition.CondolenceOperation());
         }
         /// <summary>
@@ -91,7 +89,7 @@ namespace WPF.ViewModels
         public DelegateCommand ShowRegistrationViewCommand { get; }
         private void ShowRegistrationView()
         {
-            condolenceOperation.SetData(null);
+            CondolenceOperation.GetInstance().SetData(null);
             CreateShowWindowCommand(ScreenTransition.CondolenceOperation());
         }
         /// <summary>
@@ -230,17 +228,6 @@ namespace WPF.ViewModels
                 CallPropertyChanged();
             }
         }
-
-        /// <summary>
-        /// 法事チェックで変換する文字列
-        /// </summary>
-        /// <param name="isMemorialService"></param>
-        /// <returns></returns>
-        public string ConvertContentText(bool isMemorialService)
-        {
-            return isMemorialService ? "法事" : "葬儀";
-        }
-
         /// <summary>
         /// 御布施一覧リストを検索して生成します
         /// </summary>
@@ -292,9 +279,7 @@ namespace WPF.ViewModels
             };
         }
 
-        public bool CancelClose() { return IsClose; }
-
-        public void RefleshList() { CreateCondolences(true); }
+        public bool CancelClose() =>IsClose; 
 
         public int SetCountEachPage() => 10;
     }

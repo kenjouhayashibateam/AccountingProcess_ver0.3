@@ -62,7 +62,6 @@ namespace Infrastructure.ExcelOutputData
             int contentCount = 0;
             int TotalPrice = 0;
             bool isTaxRate = false;
-            bool isNextSlip;
             int inputRow = 0;
             int inputContentColumn = 0;
 
@@ -88,7 +87,7 @@ namespace Infrastructure.ExcelOutputData
                 if (string.IsNullOrEmpty(creditDept)) { creditDept = rae.CreditDept.Dept; }
                 if (string.IsNullOrEmpty(clerk)) { clerk = rae.RegistrationRep.FirstName; }
                 contentCount++;
-
+                //勘定科目
                 string ass =
                     $"{rae.Content.AccountingSubject.Subject} : " +
                     $"{rae.Content.AccountingSubject.SubjectCode}";
@@ -97,15 +96,14 @@ namespace Infrastructure.ExcelOutputData
                 {
                     ass += $"-{DataBaseConnect.GetBranchNumber(rae.Content.AccountingSubject)}";
                 }
-
-                isNextSlip = IsSameData(rae, currentDate, creditDept, subject, content, location, isTaxRate);
                 DateTime WizeCoreAccountingActivityDate = DefaultDate;
-
-                if (isNextSlip)
+                //同一の伝票にデータを入力する処理
+                if (IsSameData(rae, currentDate, creditDept, subject, content, location, isTaxRate))
                 {
                     ItemIndex++;
                     TotalPrice += rae.Price;
                 }
+                //次の伝票の処理
                 else
                 {
                     currentDate = rae.AccountActivityDate;//入出金日を代入
@@ -119,7 +117,7 @@ namespace Infrastructure.ExcelOutputData
                     isTaxRate = rae.IsReducedTaxRate;
                     contentCount = 1;
                     ItemIndex = 1;
-                    NextPage();//次のページへ
+                    SetNextPageStyle();//次のページへ
                     PageStyle();
                 }
 

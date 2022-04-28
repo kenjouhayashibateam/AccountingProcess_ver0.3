@@ -62,7 +62,7 @@ namespace Infrastructure.ExcelOutputData
             string currentContent = string.Empty;
             DateTime currentActivityDate = DefaultDate;
             string currentLocation = string.Empty;
-
+            
             foreach (ReceiptsAndExpenditure rae in ReceiptsAndExpenditures.OrderBy(r => r.OutputDate)
                 .ThenByDescending(r => r.IsPayment)
                 .ThenBy(r => r.CreditDept.ID)
@@ -73,8 +73,9 @@ namespace Infrastructure.ExcelOutputData
                 .ThenBy(r => r.Location)
                 )
             {
+                //ページ変更
                 if (isPageMove) { PageMove(); }
-
+                //ページの最初の処理
                 if (pageRowCount == 1)
                 {
                     CurrentDate = rae.OutputDate;
@@ -86,6 +87,7 @@ namespace Infrastructure.ExcelOutputData
                     SetStyleAndNextIndex();
                     pageRowCount++;
                 }
+                //出力日が違えば日のみエクセルに入力
                 else if (CurrentDate != rae.OutputDate)
                 {
                     SetBalance();
@@ -93,15 +95,17 @@ namespace Infrastructure.ExcelOutputData
                 }
 
                 SetItem();
-
+                //指定の行数に達したら次ページの設定をさせる
                 isPageMove = pageRowCount == OnePageRowCount;
-
+                //ページをわたる際の処理
                 void PageMove()
                 {
+                    //同一の行に入るデータならページを変更しない
                     if (IsSameData
                         (rae, currentActivityDate, currentDept, currentSubject, currentContent,
                         currentLocation, isTaxRate))
                     { return; }
+                    //各合計金額を入力
                     myWorksheet.Cell(StartRowPosition, 4).Value = "計";
                     myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
                     myWorksheet.Cell(StartRowPosition, 8).Value =
@@ -109,19 +113,22 @@ namespace Infrastructure.ExcelOutputData
                     pageBalance += payment - withdrawal;
                     myWorksheet.Cell(StartRowPosition, 9).Value =
                         CommaDelimitedAmount(pageBalance);
+                    //合計を0に戻す
                     payment = withdrawal = 0;
                     SetStyleAndNextIndex();
+                    //ページのカウントを1に戻す
                     pageRowCount = 1;
                     _ = MySheetCellRange(StartRowPosition - 1, 1, StartRowPosition - 1, 9).Style
                         .Border.SetTopBorder(XLBorderStyleValues.Double);
                     PreviousDayBalance = pageBalance;
                     SetStyleAndNextIndex();
                     isPageMove = false;
-                    NextPage();
+                    SetNextPageStyle();
                 }
-
+                //ページの先頭行を書き込みます
                 void SetPageBalance()
                 {
+                    //初めのページの処理
                     if (firstPage)
                     {
                         myWorksheet.Cell(StartRowPosition + 1, 1).Value = CurrentDate.Month;
@@ -147,9 +154,10 @@ namespace Infrastructure.ExcelOutputData
                         payment = pagePayment = withdrawal = pageWithdrawal = 0;
                     }
                 }
-
+                //各プロパティをエクセルに出力
                 void SetItem()
                 {
+                    //同一行に入るデータなら他何件と表記の上、金額を加算する
                     if (IsSameData(rae, currentActivityDate, currentDept, currentSubject,
                        currentContent, currentLocation, isTaxRate))
                     {
@@ -159,6 +167,7 @@ namespace Infrastructure.ExcelOutputData
                         SetPrice(StartRowPosition - 1);
                         ItemIndex++;
                     }
+                    //違えば次の行へ
                     else
                     {
                         currentActivityDate = rae.AccountActivityDate;
@@ -185,7 +194,7 @@ namespace Infrastructure.ExcelOutputData
                         pageRowCount++;
                     }
                 }
-
+                //ワイズコアの出納帳の場合、詳細が空欄なら日付を入力する
                 void SetDetailValue()
                 {
                     if (rae.Content.AccountingSubject.IsShunjuen) { return; }
@@ -193,6 +202,7 @@ namespace Infrastructure.ExcelOutputData
 
                     detailString = rae.AccountActivityDate.ToString("M/d");
                 }
+                //一日の決算を表の左端に入力する
                 void SetBalance()
                 {
                     if (CurrentDate != rae.OutputDate)
@@ -202,11 +212,10 @@ namespace Infrastructure.ExcelOutputData
                         PreviousDayBalance += payment - withdrawal;
                         myWorksheet.Cell(StartRowPosition - 1, 9).Value =
                             CommaDelimitedAmount(PreviousDayBalance);
-                        payment = 0;
-                        withdrawal = 0;
+                        payment =  withdrawal = 0;
                     }
                 }
-
+                //金額入力
                 void SetPrice(int position)
                 {
                     if (rae.IsPayment)
@@ -223,7 +232,9 @@ namespace Infrastructure.ExcelOutputData
                     }
                 }
             }
+            //ここまで出納データリストの処理
 
+            //データの最後が次ページに渡った時の処理
             if (pageRowCount == 1)
             {
                 SetTitle();
@@ -240,7 +251,7 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition - 1, 9).Value =
                     CommaDelimitedAmount(pageBalance + payment - withdrawal);
             }
-
+            //合計などの出納帳の月の締め処理
             myWorksheet.Cell(StartRowPosition, 4).Value = "計";
             myWorksheet.Cell(StartRowPosition, 7).Value = CommaDelimitedAmount(pagePayment);
             myWorksheet.Cell(StartRowPosition, 8).Value = CommaDelimitedAmount(pageWithdrawal);
@@ -252,13 +263,14 @@ namespace Infrastructure.ExcelOutputData
             myWorksheet.Cell(StartRowPosition, 4).Value = "翌月へ繰越";
             myWorksheet.Cell(StartRowPosition, 9).Value = CommaDelimitedAmount(PreviousDayBalance);
             SetStyleAndNextIndex();
+            //エクセルのフッターの処理
             string s = LoginRep.GetInstance().Rep.Name ?? string.Empty;
             _ = myWorksheet.PageSetup.Footer.Center.AddText
                 ($"&09{CurrentDate.ToString($"ggy年", JapanCulture)}" +
                     $"{CurrentDate.Month}{Space}月{Space}-{Space}&P{Space}",
                     XLHFOccurrence.AllPages);
             ExcelOpen();
-
+            //ページのタイトル部分の処理
             void SetTitle()
             {
                 SetMerge();
@@ -393,9 +405,7 @@ namespace Infrastructure.ExcelOutputData
         protected override void PageStyle() { SetStyleAndNextIndex(); }
 
         protected override void SetList(IEnumerable outputList)
-        {
-            ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList;
-        }
+        { ReceiptsAndExpenditures = (ObservableCollection<ReceiptsAndExpenditure>)outputList; }
 
         protected override string SetSheetFontName() { return "ＭＳ Ｐゴシック"; }
     }
