@@ -348,6 +348,7 @@ namespace WPF.ViewModels
             CallCompletedUpdate();
             DataOperationButtonContent = "更新";
 
+            CanClosing = true;
             CanOperation = true;
         }
         /// <summary>

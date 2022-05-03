@@ -1213,17 +1213,23 @@ namespace WPF.ViewModels
 
             if (b) 
             {
-                DataOperationButtonContent = "管理者権限をお持ちでないので更新できません";
-                b = LoginRep.GetInstance().Rep.IsAdminPermisson; }
+                DataOperationButtonContent = LoginRep.GetInstance().Rep.IsAdminPermisson ?
+                    "更新" : "先月以前のデータは管理者権限をお持ちでないので更新できません";
+                b = LoginRep.GetInstance().Rep.IsAdminPermisson; 
+            }
             else { DataOperationButtonContent = "訂正期限が過ぎています。"; }
 
             return b;
 
             bool IsInCorrectionDeadline()
             {
+                //未出力はTrue
                 if (SlipOutputDate == DefaultDate) { return true; }
-                return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20) &&
-                    DateTime.Today > CurrentFiscalYearFirstDate.AddDays(-1);
+                //今年度以前は今日が4月20日以前かで判断
+                if (OperationData.OutputDate < CurrentFiscalYearFirstDate)
+                { return DateTime.Today < CurrentFiscalYearFirstDate.AddDays(20); }
+
+                return DateTime.Today > CurrentFiscalYearFirstDate.AddDays(-1);
             }
 
             bool IsExceptMonthUpdate()
