@@ -6,7 +6,6 @@ using Infrastructure.ExcelOutputData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
 using WPF.ViewModels.Commands;
@@ -198,9 +197,7 @@ namespace WPF.ViewModels
             TransferReceiptsAndExpenditures = new ObservableCollection<ListItem>();
 
             foreach (TransferReceiptsAndExpenditure trae in list)
-            {
-                TransferReceiptsAndExpenditures.Add(new ListItem(!IsOutputDataSelect, trae));
-            }
+            { TransferReceiptsAndExpenditures.Add(new ListItem(!IsOutputDataSelect, trae)); }
 
             list =
                 DataBaseConnect.ReferenceTransferReceiptsAndExpenditure
@@ -210,9 +207,7 @@ namespace WPF.ViewModels
 
             AllDataList = new ObservableCollection<ListItem>();
             foreach (TransferReceiptsAndExpenditure trae in list)
-            {
-                AllDataList.Add(new ListItem(true, trae));
-            }
+            { AllDataList.Add(new ListItem(true, trae)); }
 
             Pagination.TotalRowCount = AllDataList.Count;
             Pagination.SetProperty();
@@ -623,7 +618,6 @@ namespace WPF.ViewModels
                 if (value) { AmountTimer.Start(); }
 
                 TransferReceiptsAndExpenditures = items;
-                SetTotalAmount();
             }
         }
 

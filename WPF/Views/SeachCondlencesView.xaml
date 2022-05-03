@@ -7,12 +7,17 @@
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="480" Width="1200">
     
     <Window.DataContext>
         <vm:SearchCondlencesViewModel/>
     </Window.DataContext>
+
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
 
     <Grid>
         <Grid.RowDefinitions>

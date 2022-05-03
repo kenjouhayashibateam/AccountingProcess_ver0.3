@@ -5,6 +5,7 @@ using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using WPF.ViewModels.Commands;
 using WPF.ViewModels.Datas;
@@ -121,12 +122,14 @@ namespace WPF.ViewModels
         private ObservableCollection<Content> buddhistChantDonationContents;
         private ObservableCollection<Content> stoneWorkPartContents;
         private ObservableCollection<Content> floralTributeCotents;
+        private ObservableCollection<Content> flowerOfferings;
         #endregion
         #region Contents
         private Content selectedGraveCleaningContent;
         private Content selectedStoneWorkPartContent;
         private Content selectedBuddhistChantDonationContent;
         private Content selectedFloralTributeContent;
+        private Content selectedFlowerOfferingContent;
         #endregion
         private DateTime accountActivityDate;
         private Dictionary<string,int> places = new Dictionary<string, int>() 
@@ -151,6 +154,8 @@ namespace WPF.ViewModels
             StoneWorkPartContents = 
                 DataBaseConnect.ReferenceContent(string.Empty, "254", "石材工事部勘定", true, true);
             DataRegistrationCommand = new DelegateCommand(() => DataRegistration(), () => true);
+            FlowerOfferings =
+                DataBaseConnect.ReferenceContent(string.Empty, "828", "その他売上", false, true);
             FieldClear();
         }
         public MemorialServiceAccountRegisterViewModel() : 
@@ -196,6 +201,7 @@ namespace WPF.ViewModels
             IsStoneWorkPartInput = false;
             IsIndoorCemeteryCineration = false;
             SelectedBuddhistChantDonationContent = BuddhistChantDonationContents[0];
+            SelectedFlowerOfferingContent = FlowerOfferings.Where(c => c.Text.Contains("榊")).First();
         }
         /// <summary>
         /// 一括登録コマンド
@@ -683,7 +689,7 @@ namespace WPF.ViewModels
                 {
                     FlowerOfferingData = new ReceiptsAndExpenditure(0, DateTime.Today, rep, location, 
                         wizeCoreDept,
-                        DataBaseConnect.ReferenceContent("献花", "828", string.Empty, false, true)[0],
+                        SelectedFlowerOfferingContent,
                         CustomerName, FlowerOfferingAmount, true, true, AccountActivityDate, DefaultDate, false);
                 }
                 else
@@ -691,6 +697,7 @@ namespace WPF.ViewModels
                     FlowerOfferingData.AccountActivityDate = AccountActivityDate;
                     FlowerOfferingData.Price = FlowerOfferingAmount;
                     FlowerOfferingData.Detail = CustomerName;
+                    FlowerOfferingData.Content = SelectedFlowerOfferingContent;
                 }
                 WizeCoreData.Add(FlowerOfferingData);
 
@@ -2055,6 +2062,32 @@ namespace WPF.ViewModels
                 MemorialServiceDonationAmount = value ? ReturnAmount() : SelectedPlace.Value;
 
                 int ReturnAmount() => SelectedPlace.Key == "青蓮堂" ? 20000 : SelectedPlace.Value;
+            }
+        }
+        /// <summary>
+        /// その他の花売上リスト
+        /// </summary>
+        public ObservableCollection<Content> FlowerOfferings
+        {
+            get => flowerOfferings;
+            set
+            {
+                flowerOfferings = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// 選択されたその他売上内容
+        /// </summary>
+        public Content SelectedFlowerOfferingContent
+        {
+            get => selectedFlowerOfferingContent;
+            set
+            {
+                selectedFlowerOfferingContent = value;
+                CallPropertyChanged();
+                FlowerOfferingFlatRate = value.FlatRate > 0 ?
+                    CommaDelimitedAmount(value.FlatRate) : string.Empty;
             }
         }
 

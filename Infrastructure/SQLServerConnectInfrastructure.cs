@@ -1305,6 +1305,8 @@ namespace Infrastructure
 
         public Lessee ReferenceLessee(string managementNumber)
         {
+            if (string.IsNullOrEmpty(managementNumber)) { return null; }
+
             Parameters = new Dictionary<string, object>()
             { {"@ManagementNumber",managementNumber},{"@LesseeName",string.Empty } };
 
@@ -1343,19 +1345,26 @@ namespace Infrastructure
                 using SqlDataReader reader = Cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    ku = (string)reader["GraveNumberKu"];
-                    kuiki = (string)reader["GraveNumberKuiki"];
-                    gawa = (string)reader["GraveNumberGawa"];
-                    ban = (string)reader["GraveNumberBan"];
-                    edaban = (string)reader["GraveNumberEdaban"];
+                    ku = DBNull.Value.Equals(reader["GraveNumberKu"]) ?
+                        string.Empty : (string)reader["GraveNumberKu"];
+                    kuiki = DBNull.Value.Equals(reader["GraveNumberKuiki"]) ? 
+                        string.Empty : (string)reader["GraveNumberKuiki"];
+                    gawa = DBNull.Value.Equals(reader["GraveNumberGawa"]) ? 
+                        string.Empty : (string)reader["GraveNumberGawa"];
+                    ban = DBNull.Value.Equals(reader["GraveNumberBan"]) ? 
+                        string.Empty : (string)reader["GraveNumberBan"];
+                    edaban = DBNull.Value.Equals(reader["GraveNumberEdaban"]) ? 
+                        string.Empty : (string)reader["GraveNumberEdaban"];
 
                     s = AdjustmentGraveNumber(ku, kuiki, gawa, ban, edaban);
 
                     number = (string)reader["ManagementNumber"];
                     lesseeName = (string)reader["LesseeName"];
-                    receiverName = DBNull.Value.Equals(reader["ReceiverName"]) ? string.Empty : (string)reader["ReceiverName"];
-                    area = (string)reader["AreaOfGrave"];
-                    d = double.Parse(area);
+                    receiverName = DBNull.Value.Equals(reader["ReceiverName"]) ?
+                        string.Empty : (string)reader["ReceiverName"];
+                    area = DBNull.Value.Equals(reader["AreaOfGrave"]) ?
+                        string.Empty : (string)reader["AreaOfGrave"];
+                    d = string.IsNullOrEmpty(area) ? 0 : double.Parse(area);
                     lessee = new Lessee(number, lesseeName, receiverName, s, d);
                 }
             }

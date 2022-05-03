@@ -6,12 +6,17 @@
         xmlns:vm="clr-namespace:WPF.ViewModels"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:behavior="clr-namespace:WPF.Views.Behaviors"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:WPF.Views"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="510" Width="1050">
     <Window.DataContext>
         <vm:SearchReceiptsAndExpenditureViewModel/>
     </Window.DataContext>
+
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+    </i:Interaction.Behaviors>
 
     <Grid>
         <Grid.RowDefinitions>

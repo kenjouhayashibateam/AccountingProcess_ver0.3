@@ -48,7 +48,7 @@ namespace Infrastructure.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.155\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.44.154\\SQLEXPRESS;Initial Catalog=accounting_process;User ID=" +
             "sa;Password=sqlserver")]
         public string TestServerConnectionString {
             get {

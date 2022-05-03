@@ -48,7 +48,7 @@
                 <MouseBinding Command="{Binding ShowPartTimerTransPortCommand}" MouseAction="LeftClick"/>
             </Button.InputBindings>
         </Button>
-        <Button Content="管理料入金登録&#xa;(工事中)" Grid.Row="1" Margin="5,8">
+        <Button Content="管理料入金登録" Grid.Row="1" Margin="5,8">
             <Button.InputBindings>
                 <KeyBinding Command="{Binding ShowMangementFeeRegistrationCommand}" Key="Space"/>
                 <MouseBinding Command="{Binding ShowMangementFeeRegistrationCommand}" MouseAction="LeftClick"/>

@@ -19,7 +19,7 @@ namespace WPF.ViewModels
     /// 出納データ操作画面ViewModel
     /// </summary>
     public class ReceiptsAndExpenditureOperationViewModel : DataOperationViewModel,
-        IReceiptsAndExpenditureOperationObserver
+        IReceiptsAndExpenditureOperationObserver, IClosing
     {
         #region Properties
         #region Strings
@@ -56,6 +56,7 @@ namespace WPF.ViewModels
         private bool isAccountingSubjectEnabled;
         private bool isContentEnabled;
         private bool IsPassDataNotifyProcess = false;
+        private bool CanClose = true;
         /// <summary>
         /// 警告をスルーするか
         /// </summary>
@@ -145,6 +146,7 @@ namespace WPF.ViewModels
         /// </summary>
         private void ReceiptsAndExpenditureDataOperation()
         {
+            CanClose = false;
             switch (CurrentOperation)
             {
                 case DataOperation.登録:
@@ -156,6 +158,7 @@ namespace WPF.ViewModels
                 default:
                     break;
             }
+            CanClose = true;
         }
         /// <summary>
         /// 出納データを更新します
@@ -1348,5 +1351,7 @@ namespace WPF.ViewModels
             ShowWizardCommand = new DelegateCommand
                 (() => ShowWizard(), () => true);
         }
+
+        public bool CancelClose() => !CanClose;
     }
 }

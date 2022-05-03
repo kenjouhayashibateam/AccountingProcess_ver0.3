@@ -489,9 +489,6 @@ namespace WPF.ViewModels
         /// </summary>
         private void BalanceFinalAccountOutput()
         {
-            BalanceFinalAccountOutputButtonContent = "出力中";
-            IsOutputGroupEnabled = false;
-            IsClose = false;
 
             string location = IsLocationSearch ?
                 AccountingProcessLocation.Location.ToString() : string.Empty;
@@ -499,13 +496,16 @@ namespace WPF.ViewModels
             if (AccountingProcessLocation.IsAccountingGenreShunjuen) { SetShunjuenData(); }
             else { SetWizeCoreData(); }
 
-            BalanceFinalAccountOutputButtonContent = "収支日報";
-            IsOutputGroupEnabled = true;
-            IsClose = true;
             AccountingProcessLocation.IsBalanceAccountOutputed = true;
 
             async void SetWizeCoreData()
             {
+
+                IsOutputGroupEnabled = false;
+                IsClose = false;
+
+                BalanceFinalAccountOutputButtonContent = "出力中";
+
                 int rengeanPDFA;
                 int shunjuanPay = default;
                 int shunjuanWith = default;
@@ -530,6 +530,10 @@ namespace WPF.ViewModels
                         shunjuanPay, shunjuanWith, shunjuanBank, shunjuanShunjuen, kougePDFA,
                         kougePay, kougeWith, kougeBank, kougeShunjuen, IntAmount(YokohamaBankAmount),
                         IntAmount(PairAmount)));
+
+                BalanceFinalAccountOutputButtonContent = "収支日報";
+                IsOutputGroupEnabled = true;
+                IsClose = true;
 
                 void SetPreviousDayFinalAmount()
                 {
@@ -649,13 +653,16 @@ namespace WPF.ViewModels
 
             async void SetShunjuenData()
             {
-                int PDFA;
+                IsOutputGroupEnabled = false;
+                IsClose = false;
+
+                BalanceFinalAccountOutputButtonContent = "出力中";
+
+                int PDFA = AccountingProcessLocation.Location == Locations.管理事務所 ?
+                    DataBaseConnect.PreviousDayFinalAmount(true) : PreviousDayFinalAccount;
                 int paySum = default;
                 int withSum = default;
                 int traSum = default;
-
-                PDFA = AccountingProcessLocation.Location == Locations.管理事務所 ?
-                    DataBaseConnect.PreviousDayFinalAmount(true) : PreviousDayFinalAccount;
 
                 if (AccountingProcessLocation.Location == Locations.管理事務所)
                 {
@@ -685,6 +692,10 @@ namespace WPF.ViewModels
                     else
                     { withSum += rae.Price; }
                 }
+               
+                BalanceFinalAccountOutputButtonContent = "収支日報";
+                IsOutputGroupEnabled = true;
+                IsClose = true;
 
                 await Task.Run(() =>
                     DataOutput.BalanceFinalAccount(AmountWithUnit(PDFA),

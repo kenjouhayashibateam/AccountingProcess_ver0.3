@@ -23,6 +23,11 @@
             <behavior:ShowDialogBehavior/>
         </interactions:PropertyChangedTrigger>
     </i:Interaction.Triggers>
+    
+    <i:Interaction.Behaviors>
+        <behavior:SystemMenuBehavior CanMinimize="False"/>
+        <behavior:WindowClosingCancelBehavior/>
+    </i:Interaction.Behaviors>
 
     <ib:Interaction.Triggers>
         <ib:DataTrigger Binding="{Binding CallShowWindow}" Value="true">

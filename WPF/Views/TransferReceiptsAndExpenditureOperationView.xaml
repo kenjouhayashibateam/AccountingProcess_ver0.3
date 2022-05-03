@@ -25,6 +25,7 @@
 
     <i:Interaction.Behaviors>
         <behavior:SystemMenuBehavior CanMinimize="False"/>
+        <behavior:WindowClosingCancelBehavior/>
     </i:Interaction.Behaviors>
 
     <ib:Interaction.Triggers>
