@@ -11,6 +11,7 @@ using WPF.ViewModels.Datas;
 using WPF.Views.Datas;
 using static Domain.Entities.Helpers.TextHelper;
 using static Domain.Entities.Helpers.DataHelper;
+using System.IO;
 
 namespace WPF.ViewModels
 {
@@ -39,6 +40,7 @@ namespace WPF.ViewModels
         private bool isCommonEnabled;
         private bool IsPrecedingYearFinalAccountRegisterVerified = false;
         private bool canOperation;
+        private bool canExport;
         #endregion
         private string depositAmount;
         private string showSlipManagementContent;
@@ -54,7 +56,8 @@ namespace WPF.ViewModels
             LoginRep.GetInstance().SetRep(new Rep(string.Empty, string.Empty, string.Empty, false, false));
             AccountingProcessLocation.GetInstance().Add(this);
             IsShunjuen = true;
-
+            string[] list = Directory.GetFiles(@"./pastData", $"*{DateTime.Now.Year}*.csv");
+            CanExport = list.Length == 0;
             ShowRemainingMoneyCalculationCommand = new DelegateCommand
                 (() => CreateShowWindowCommand
                     (ScreenTransition.RemainingMoneyCalculation()), () => true);
@@ -785,6 +788,18 @@ namespace WPF.ViewModels
             set
             {
                 canOperation = value;
+                CallPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// エクスポート出来るか
+        /// </summary>
+        public bool CanExport
+        {
+            get => canExport;
+            set
+            {
+                canExport = value;
                 CallPropertyChanged();
             }
         }

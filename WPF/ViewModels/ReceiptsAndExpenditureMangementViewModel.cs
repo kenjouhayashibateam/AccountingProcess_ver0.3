@@ -366,8 +366,6 @@ namespace WPF.ViewModels
         {
             SetTodayWroteList();
 
-            //PreviousFinalAccount = AccountingProcessLocation.OriginalTotalAmount;
-
             FinalAccountCategory =
                 AccountingProcessLocation.Location == Locations.管理事務所 ? "前日決算" : "預かり金額";
 
@@ -1493,17 +1491,6 @@ namespace WPF.ViewModels
                     SelectedCreditDept = null;
                     SetBalanceFinalAccount();
                 }
-                //else 
-                //{
-                //    AccountingProcessLocation.OriginalTotalAmount =
-                //        AccountingProcessLocation.Location == Locations.管理事務所 ?
-                //        DataBaseConnect.PreviousFinalAmount
-                //            (AccountingProcessLocation.IsAccountingGenreShunjuen) :
-                //        AccountingProcessLocation.OriginalTotalAmount;
-                //    SelectedCreditDept = null; }
-                //ReferenceReceiptsAndExpenditures(true);
-                //SetOutputGroupEnabled();
-                //SetListTitle();
             }
         }
         /// <summary>
@@ -1675,35 +1662,6 @@ namespace WPF.ViewModels
             string category = AccountingProcessLocation.Location == Locations.管理事務所 ?
                 "前回決算" : "預り金";
 
-            //if (TodayWroteList.Count != 0)
-            //{
-            //    foreach (ReceiptsAndExpenditure receiptsAndExpenditure in TodayWroteList)
-            //    {
-            //        if (receiptsAndExpenditure.IsPayment) { todayPayment += receiptsAndExpenditure.Price; }
-            //        else { todayWithdrawal += receiptsAndExpenditure.Price; }
-            //    }
-            //    ListAmount += todayPayment - todayWithdrawal;
-
-            //    BalanceFinalAccount =
-            //        $"{category}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
-            //        $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-            //        $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
-            //        $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
-            //        $"{Space}={Space}{AmountWithUnit(ListAmount)}";
-            //    //$"\r\n" +
-            //    //$"（本日出力済み伝票{Space}入金{Space}:{Space}{AmountWithUnit(todayPayment)}、" +
-            //    //$"出金{Space}:{Space}{AmountWithUnit(todayWithdrawal)}分を含む）";
-            //}
-            //else
-            //{
-            //    BalanceFinalAccount =
-            //        $"{category}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
-            //        $"{PreviousDayFinalAccountDisplayValue}{Space}+{Space}" +
-            //        $"{AmountWithUnit(PaymentSum)}{Space}-{Space}" +
-            //        $"{AmountWithUnit(WithdrawalSum + TransferSum)}" +
-            //        $"{Space}={Space}{AmountWithUnit(ListAmount)}";
-            //}
-
             BalanceFinalAccount =
                 $"{category}{Space}+{Space}入金伝票{Space}-{Space}出金伝票\r\n" +
                 $"{PreviousFinalAccountDisplayValue}{Space}+{Space}" +
@@ -1846,7 +1804,7 @@ namespace WPF.ViewModels
         protected override void SetWindowDefaultTitle()
         { DefaultWindowTitle = $"出納管理 : {AccountingProcessLocation.Location}"; }
 
-        public void ReceiptsAndExpenditureOperationNotify() { RefreshList(); }
+        public void ReceiptsAndExpenditureOperationNotify() { ReferenceReceiptsAndExpenditures(false); }
 
         public void SortNotify() { ReferenceReceiptsAndExpenditures(true); }
 

@@ -1,5 +1,4 @@
-﻿using Domain.Entities.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Domain.Entities.ValueObjects
 {

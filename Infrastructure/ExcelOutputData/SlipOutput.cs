@@ -1,6 +1,4 @@
-﻿using ClosedXML.Excel;
-using Domain.Entities;
-using Domain.Entities.Helpers;
+﻿using Domain.Entities;
 using Domain.Entities.ValueObjects;
 using Domain.Repositories;
 using System;
@@ -148,6 +146,10 @@ namespace Infrastructure.ExcelOutputData
                 myWorksheet.Cell(StartRowPosition + 2, 16).Value = rae.Location;
                 string s = rae.IsReducedTaxRate ? "※軽減税率" : string.Empty;
                 myWorksheet.Cell(StartRowPosition + 3, 16).Value = s;
+                //金額は加算のみではなくマイナスの金額が入ることもある。
+                //例　１万円の花の売上の次にチケット一枚500円だと9500円なのだが、19500で表記されてしまう
+                //上記の例を防ぐため、トータル金額は一旦空欄にする
+                MySheetCellRange(StartRowPosition + 10, 4, StartRowPosition + 10, 13).Value = string.Empty;
                 for (int i = 0; i < TotalPrice.ToString().Length; i++)
                 {
                     myWorksheet.Cell(StartRowPosition + 10, 13 - i).Value =

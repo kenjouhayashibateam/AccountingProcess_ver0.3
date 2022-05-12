@@ -278,6 +278,12 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="出納データ&#xa;エクスポート" ToolTip="一昨年以前のデータをエクスポートしてください" Visibility="{Binding CanExport,Converter={StaticResource VisibilityConverter}}" Margin="10,15">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding RegistrationPrecedingYearFinalAccountCommand}" Key="Space"/>
+                    <MouseBinding Command="{Binding RegistrationPrecedingYearFinalAccountCommand}" MouseAction="LeftClick"/>
+                </Button.InputBindings>
+            </Button>
             <Button x:Name="PrecedingYearFinalAccountRegistrationButton" Grid.Row="0" Grid.Column="1" IsEnabled="{Binding CanOperation}" Visibility="{Binding IsRegistrationPrecedingYearFinalAccountVisiblity,Converter={StaticResource VisibilityConverter}}" Content="前年度決算登録" Margin="10,15" >
                 <Button.InputBindings>
                     <KeyBinding Command="{Binding RegistrationPrecedingYearFinalAccountCommand}" Key="Space"/>

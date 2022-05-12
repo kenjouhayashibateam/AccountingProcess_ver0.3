@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using static Domain.Entities.Helpers.TextHelper;
 
 namespace Domain.Entities.Helpers
 {

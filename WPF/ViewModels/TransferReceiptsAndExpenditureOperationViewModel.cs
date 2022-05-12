@@ -116,6 +116,7 @@ namespace WPF.ViewModels
                 DataOperationButtonContent = "内容が無効です";
                 return;
             }
+
             Content content = null;
 
             foreach(Content c in contents) { content = trae.ContentText == c.Text ? c : null; }
@@ -129,9 +130,21 @@ namespace WPF.ViewModels
             int i = Contents.IndexOf(content);
             if (i < 0)
             {
+                //貸方勘定からContentを設定する
                 content = DataBaseConnect.ReferenceContent
                     (trae.ContentText, CreditAccountCode, CreditAccount.Subject,
-                        AccountingProcessLocation.IsAccountingGenreShunjuen, false)[0];
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, false).Count != 0 ?
+                        DataBaseConnect.ReferenceContent
+                            (trae.ContentText, CreditAccountCode, CreditAccount.Subject,
+                                AccountingProcessLocation.IsAccountingGenreShunjuen, false)[0] : null;
+                //nullなら借方勘定からContentを設定する
+                if (content == null)
+                {
+                    content= DataBaseConnect.ReferenceContent
+                    (trae.ContentText, DebitAccountCode, DebitAccount.Subject,
+                        AccountingProcessLocation.IsAccountingGenreShunjuen, false)[0] ?? null;
+                }
+                
                 i = Contents.IndexOf(content);
             }
             SelectedContent = Contents[i];
