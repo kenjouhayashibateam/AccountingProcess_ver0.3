@@ -84,8 +84,6 @@ C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.Gene
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CoreCompileInputs.cache
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
-C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RegistrationFlowerSellReceiptsAndExpenditureView.g.cs
-C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\RegistrationFlowerSellReceiptsAndExpenditureView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ProductSalesRegistrationView.g.cs
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ProductSalesRegistrationView.baml
 C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete
@@ -301,3 +299,16 @@ C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csp
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\WPF.csproj.CopyComplete
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.exe
 C:\Users\k_hayashiba\Source\Repos\AccountingProcess_ver0.3\WPF\obj\Debug\春秋苑経理システム.pdb
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ManagementFeePaymentRegistrationView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\MemorialServiceAccountRegisterView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\FlowerSellReceiptsAndExpenditureRegistrationView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShunjuenMenuView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureManagementView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.g.cs
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\App.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ManagementFeePaymentRegistrationView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\MemorialServiceAccountRegisterView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\FlowerSellReceiptsAndExpenditureRegistrationView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\ShunjuenMenuView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureManagementView.baml
+C:\Users\001\source\repos\AccountingProcess_ver0.3\WPF\obj\Debug\Views\TransferReceiptsAndExpenditureOperationView.baml
